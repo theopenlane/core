@@ -3,7 +3,7 @@ package validators
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
@@ -15,7 +15,7 @@ func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 			ContentType: "image/png",
 		}
 
-		assert.NoError(t, mimeTypeValidator(file))
+		assert.Check(t, mimeTypeValidator(file))
 	})
 
 	t.Run("rejects disallowed avatar mime types", func(t *testing.T) {
@@ -24,7 +24,7 @@ func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 			ContentType: "text/plain",
 		}
 
-		assert.Error(t, mimeTypeValidator(file))
+		assert.Check(t, mimeTypeValidator(file) != nil)
 	})
 }
 
@@ -35,7 +35,7 @@ func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 			ContentType: pdfMimeType,
 		}
 
-		assert.NoError(t, mimeTypeValidator(file))
+		assert.Check(t, mimeTypeValidator(file))
 	})
 
 	t.Run("shared defaults reject unsupported types", func(t *testing.T) {
@@ -44,7 +44,7 @@ func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 			ContentType: "application/x-malware",
 		}
 
-		assert.Error(t, mimeTypeValidator(file))
+		assert.Check(t, mimeTypeValidator(file) != nil)
 	})
 }
 
@@ -102,7 +102,7 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 						ContentType: mime,
 					},
 				}
-				assert.NoError(t, mimeTypeValidator(file))
+				assert.Check(t, mimeTypeValidator(file))
 			})
 		}
 
@@ -114,7 +114,7 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 						ContentType: mime,
 					},
 				}
-				assert.Error(t, mimeTypeValidator(file))
+				assert.Check(t, mimeTypeValidator(file) != nil)
 			})
 		}
 	}

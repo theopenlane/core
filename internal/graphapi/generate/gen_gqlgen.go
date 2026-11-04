@@ -41,7 +41,8 @@ var (
 
 	// changes to these paths should trigger history schema generation
 	historyInputPaths = []string{
-		"internal/graphapi/historyschema",
+		"internal/graphapi/schemahistory",
+		"internal/graphapi/schema/common",
 		"internal/ent/historygenerated",
 		graphapiGenDir,
 	}

@@ -4,13 +4,14 @@ import (
 	"testing"
 
 	emailverifier "github.com/AfterShip/email-verifier"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 const ndaApprovalTestDomain = "theopenlane.io"
@@ -96,7 +97,7 @@ func TestValidateEmailRestrictions(t *testing.T) {
 			req := &generated.TrustCenterNDARequest{Email: tt.email}
 
 			blocked := validateEmailRules(t.Context(), client, tt.setting, req)
-			assert.Equal(t, tt.blocked, blocked)
+			assert.Check(t, is.Equal(tt.blocked, blocked))
 		})
 	}
 }
@@ -167,16 +168,16 @@ func TestValidateDomainList(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			approved, matched := validateDomainList(ndaApprovalTestDomain, tt.setting)
-			assert.Equal(t, tt.approved, approved)
-			assert.Equal(t, tt.matched, matched)
+			assert.Check(t, is.Equal(tt.approved, approved))
+			assert.Check(t, is.Equal(tt.matched, matched))
 		})
 	}
 }
 
 func TestValidateContact(t *testing.T) {
 	approved, err := validateContact(t.Context(), nil, "signer@"+ndaApprovalTestDomain, models.TrustCenterNDARequestSetting{})
-	require.NoError(t, err)
-	assert.False(t, approved)
+	assert.NilError(t, err)
+	assert.Check(t, !approved)
 }
 
 func TestValidateExistingDomain(t *testing.T) {
@@ -185,12 +186,12 @@ func TestValidateExistingDomain(t *testing.T) {
 		TrustCenterID: "trust-center",
 	}
 	approved, err := validateDomainFromNDARequest(t.Context(), nil, request, ndaApprovalTestDomain, models.TrustCenterNDARequestSetting{})
-	require.NoError(t, err)
-	assert.False(t, approved)
+	assert.NilError(t, err)
+	assert.Check(t, !approved)
 }
 
 func TestValidateContactDomain(t *testing.T) {
 	approved, err := validateContactDomain(t.Context(), nil, ndaApprovalTestDomain, models.TrustCenterNDARequestSetting{})
-	require.NoError(t, err)
-	assert.False(t, approved)
+	assert.NilError(t, err)
+	assert.Check(t, !approved)
 }

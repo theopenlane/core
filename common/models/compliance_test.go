@@ -3,8 +3,9 @@ package models_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/core/common/models"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestSort(t *testing.T) {
@@ -75,7 +76,7 @@ func TestSort(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := models.Sort(tt.items)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.DeepEqual(tt.expected, result))
 		})
 	}
 }

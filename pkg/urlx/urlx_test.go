@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/iam/tokens"
 
@@ -28,12 +28,12 @@ func TestTokenURL_AppendsToken(t *testing.T) {
 	result := TokenURL(baseURL, "test-token-value")
 
 	parsed, err := url.Parse(result)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "https", parsed.Scheme)
-	assert.Equal(t, "trustcenter.example.com", parsed.Host)
-	assert.Equal(t, "/acme", parsed.Path)
-	assert.Equal(t, "test-token-value", parsed.Query().Get("token"))
+	assert.Check(t, is.Equal("https", parsed.Scheme))
+	assert.Check(t, is.Equal("trustcenter.example.com", parsed.Host))
+	assert.Check(t, is.Equal("/acme", parsed.Path))
+	assert.Check(t, is.Equal("test-token-value", parsed.Query().Get("token")))
 }
 
 func TestTokenURL_PreservesSlugPath(t *testing.T) {
@@ -45,7 +45,7 @@ func TestTokenURL_PreservesSlugPath(t *testing.T) {
 
 	result := TokenURL(baseURL, "jwt-abc123")
 
-	assert.Equal(t, "https://trust.theopenlane.io/my-org?token=jwt-abc123", result)
+	assert.Check(t, is.Equal("https://trust.theopenlane.io/my-org?token=jwt-abc123", result))
 }
 
 func TestTokenURL_CustomDomainNoPath(t *testing.T) {
@@ -56,14 +56,14 @@ func TestTokenURL_CustomDomainNoPath(t *testing.T) {
 
 	result := TokenURL(baseURL, "jwt-xyz")
 
-	assert.Equal(t, "https://trust.acme.com?token=jwt-xyz", result)
+	assert.Check(t, is.Equal("https://trust.acme.com?token=jwt-xyz", result))
 }
 
 func testTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 
 	_, key, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	tm, err := tokens.NewWithKey(key, tokens.Config{
 		Audience:        "https://api.example.com",
@@ -72,7 +72,7 @@ func testTokenManager(t *testing.T) *tokens.TokenManager {
 		RefreshDuration: 24 * time.Hour,
 		RefreshOverlap:  -15 * time.Minute,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return tm
 }
@@ -93,16 +93,16 @@ func TestGenerateAnonTokenURL_DefaultDomainWithSlug(t *testing.T) {
 		Email:     "user@example.com",
 		Duration:  time.Hour,
 	})
-	require.NoError(t, err)
-	require.NotEmpty(t, result.AccessToken)
+	assert.NilError(t, err)
+	assert.Assert(t, result.AccessToken != "")
 
 	parsed, err := url.Parse(result.URL)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "https", parsed.Scheme)
-	assert.Equal(t, "trust.theopenlane.io", parsed.Host)
-	assert.Equal(t, "/my-org", parsed.Path)
-	assert.NotEmpty(t, parsed.Query().Get("token"))
+	assert.Check(t, is.Equal("https", parsed.Scheme))
+	assert.Check(t, is.Equal("trust.theopenlane.io", parsed.Host))
+	assert.Check(t, is.Equal("/my-org", parsed.Path))
+	assert.Check(t, parsed.Query().Get("token") != "")
 }
 
 func TestGenerateAnonTokenURL_CustomDomainNoSlug(t *testing.T) {
@@ -120,19 +120,19 @@ func TestGenerateAnonTokenURL_CustomDomainNoSlug(t *testing.T) {
 		Email:     "user@example.com",
 		Duration:  time.Hour,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	parsed, err := url.Parse(result.URL)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "trust.acme.com", parsed.Host)
-	assert.Empty(t, parsed.Path)
-	assert.NotEmpty(t, parsed.Query().Get("token"))
+	assert.Check(t, is.Equal("trust.acme.com", parsed.Host))
+	assert.Check(t, is.Len(parsed.Path, 0))
+	assert.Check(t, parsed.Query().Get("token") != "")
 }
 
 func TestShorten_ReturnsOriginalWithoutClient(t *testing.T) {
-	assert.Equal(t, "https://console.example.com/verify?token=abc", Shorten(context.Background(), nil, shortlinks.CreateRequest{URL: "https://console.example.com/verify?token=abc"}))
-	assert.Empty(t, Shorten(context.Background(), nil, shortlinks.CreateRequest{}))
+	assert.Check(t, is.Equal("https://console.example.com/verify?token=abc", Shorten(context.Background(), nil, shortlinks.CreateRequest{URL: "https://console.example.com/verify?token=abc"})))
+	assert.Check(t, is.Len(Shorten(context.Background(), nil, shortlinks.CreateRequest{}), 0))
 }
 
 func TestShorten_UsesServiceAndFallsBack(t *testing.T) {
@@ -148,11 +148,11 @@ func TestShorten_UsesServiceAndFallsBack(t *testing.T) {
 	defer server.Close()
 
 	client, err := shortlinks.NewClient("id", "secret", shortlinks.WithEndpointURL(server.URL))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := shortlinks.CreateRequest{URL: "https://www.example.com/welcome"}
-	assert.Equal(t, "https://s.example.com/r/abc", Shorten(context.Background(), client, req))
-	assert.Equal(t, "https://www.example.com/welcome", Shorten(context.Background(), client, req), "service failure falls back to the original")
-	assert.Equal(t, "https://www.example.com/welcome", Shorten(shortlinks.ContextWithoutShortlinks(context.Background()), client, req), "suppressed context never calls the service")
-	assert.Equal(t, 2, calls)
+	assert.Check(t, is.Equal("https://s.example.com/r/abc", Shorten(context.Background(), client, req)))
+	assert.Check(t, is.Equal("https://www.example.com/welcome", Shorten(context.Background(), client, req)), "service failure falls back to the original")
+	assert.Check(t, is.Equal("https://www.example.com/welcome", Shorten(shortlinks.ContextWithoutShortlinks(context.Background()), client, req)), "suppressed context never calls the service")
+	assert.Check(t, is.Equal(2, calls))
 }

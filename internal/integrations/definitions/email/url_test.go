@@ -3,7 +3,8 @@ package email
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
@@ -15,9 +16,9 @@ func TestTrustCenterBaseURL_DefaultDomain(t *testing.T) {
 
 	u := trustCenterBaseURL(tc, "trustcenter.example.com")
 
-	assert.Equal(t, "https", u.Scheme)
-	assert.Equal(t, "trustcenter.example.com", u.Host)
-	assert.Equal(t, "/acme", u.Path)
+	assert.Check(t, is.Equal("https", u.Scheme))
+	assert.Check(t, is.Equal("trustcenter.example.com", u.Host))
+	assert.Check(t, is.Equal("/acme", u.Path))
 }
 
 func TestTrustCenterBaseURL_CustomDomain(t *testing.T) {
@@ -32,8 +33,8 @@ func TestTrustCenterBaseURL_CustomDomain(t *testing.T) {
 
 	u := trustCenterBaseURL(tc, "trustcenter.example.com")
 
-	assert.Equal(t, "https", u.Scheme)
-	assert.Equal(t, "trust.acme.com", u.Host)
+	assert.Check(t, is.Equal("https", u.Scheme))
+	assert.Check(t, is.Equal("trust.acme.com", u.Host))
 }
 
 func TestTrustCenterBaseURL_CustomDomainWithScheme(t *testing.T) {
@@ -48,9 +49,9 @@ func TestTrustCenterBaseURL_CustomDomainWithScheme(t *testing.T) {
 
 	u := trustCenterBaseURL(tc, "trustcenter.example.com")
 
-	assert.Equal(t, "https", u.Scheme)
+	assert.Check(t, is.Equal("https", u.Scheme))
 	// NormalizeHostname strips the scheme, leaving just the hostname
-	assert.Equal(t, "trust.acme.com", u.Host)
+	assert.Check(t, is.Equal("trust.acme.com", u.Host))
 }
 
 func TestTrustCenterNDAURL_PathConstruction(t *testing.T) {
@@ -60,9 +61,9 @@ func TestTrustCenterNDAURL_PathConstruction(t *testing.T) {
 
 	u := trustCenterNDAURL(tc, "trustcenter.example.com")
 
-	assert.Equal(t, "https", u.Scheme)
-	assert.Equal(t, "trustcenter.example.com", u.Host)
-	assert.Equal(t, "/acme-corp/access/sign-nda", u.Path)
+	assert.Check(t, is.Equal("https", u.Scheme))
+	assert.Check(t, is.Equal("trustcenter.example.com", u.Host))
+	assert.Check(t, is.Equal("/acme-corp/access/sign-nda", u.Path))
 }
 
 func TestTrustCenterNDAURL_EmptySlug(t *testing.T) {
@@ -72,7 +73,7 @@ func TestTrustCenterNDAURL_EmptySlug(t *testing.T) {
 
 	u := trustCenterNDAURL(tc, "trustcenter.example.com")
 
-	assert.Equal(t, "//access/sign-nda", u.Path)
+	assert.Check(t, is.Equal("//access/sign-nda", u.Path))
 }
 
 func TestTrustCenterNDAURL_CustomDomain(t *testing.T) {
@@ -87,8 +88,8 @@ func TestTrustCenterNDAURL_CustomDomain(t *testing.T) {
 
 	u := trustCenterNDAURL(tc, "default.example.com")
 
-	assert.Equal(t, "trust.secure.io", u.Host)
-	assert.Equal(t, "/secure/access/sign-nda", u.Path)
+	assert.Check(t, is.Equal("trust.secure.io", u.Host))
+	assert.Check(t, is.Equal("/secure/access/sign-nda", u.Path))
 }
 
 func TestTrustCenterNDAURL_FullString(t *testing.T) {
@@ -98,5 +99,5 @@ func TestTrustCenterNDAURL_FullString(t *testing.T) {
 
 	u := trustCenterNDAURL(tc, "trustcenter.example.com")
 
-	assert.Equal(t, "https://trustcenter.example.com/myorg/access/sign-nda", u.String())
+	assert.Check(t, is.Equal("https://trustcenter.example.com/myorg/access/sign-nda", u.String()))
 }

@@ -213,6 +213,7 @@ type TaskBuilder struct {
 	Due        time.Time
 	GroupID    string
 	RiskID     string
+	DueFunc    func() time.Time
 }
 
 type ProgramBuilder struct {
@@ -1138,6 +1139,35 @@ func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact
 func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 	ctx = SetInternalContext(ctx, c.Client.DB)
 
+	task, err := c.taskCreate(c.Due).Save(ctx)
+	RequireNoError(t, err)
+
+	return task
+}
+
+// MustNewBulk creates count tasks in a single bulk insert, without authz checks
+func (c *TaskBuilder) MustNewBulk(ctx context.Context, t *testing.T, count int) []*ent.Task {
+	ctx = SetInternalContext(ctx, c.Client.DB)
+
+	builders := make([]*ent.TaskCreate, 0, count)
+
+	for range count {
+		due := c.Due
+		if c.DueFunc != nil {
+			due = c.DueFunc()
+		}
+
+		builders = append(builders, c.taskCreate(due))
+	}
+
+	tasks, err := c.Client.DB.Task.CreateBulk(builders...).Save(ctx)
+	RequireNoError(t, err)
+
+	return tasks
+}
+
+// taskCreate builds the task create mutation from the builder fields
+func (c *TaskBuilder) taskCreate(due time.Time) *ent.TaskCreate {
 	if c.Title == "" {
 		c.Title = gofakeit.AppName()
 	}
@@ -1158,8 +1188,8 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 		taskCreate.SetAssigneeID(c.AssigneeID)
 	}
 
-	if !c.Due.IsZero() {
-		taskCreate.SetDue(models.DateTime(c.Due))
+	if !due.IsZero() {
+		taskCreate.SetDue(models.DateTime(due))
 	}
 
 	if c.GroupID != "" {
@@ -1170,10 +1200,7 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 		taskCreate.AddRiskIDs(c.RiskID)
 	}
 
-	task, err := taskCreate.Save(ctx)
-	RequireNoError(t, err)
-
-	return task
+	return taskCreate
 }
 
 // MustNew program builder is used to create, without authz checks, programs in the database
@@ -1418,8 +1445,37 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 		c.Title = gofakeit.HipsterSentence()
 	}
 
+	control, err := c.controlCreate(c.RefCode, c.Title).Save(ctx)
+	RequireNoError(t, err)
+
+	return control
+}
+
+// MustNewBulk creates count controls in a single bulk insert, without authz checks, each with its own ref code
+func (c *ControlBuilder) MustNewBulk(ctx context.Context, t *testing.T, count int) []*ent.Control {
+	ctx = SetInternalContext(ctx, c.Client.DB)
+
+	builders := make([]*ent.ControlCreate, 0, count)
+
+	for range count {
+		title := c.Title
+		if title == "" {
+			title = gofakeit.HipsterSentence()
+		}
+
+		builders = append(builders, c.controlCreate(gofakeit.UUID(), title))
+	}
+
+	controls, err := c.Client.DB.Control.CreateBulk(builders...).Save(ctx)
+	RequireNoError(t, err)
+
+	return controls
+}
+
+// controlCreate builds the control create mutation from the builder fields
+func (c *ControlBuilder) controlCreate(refCode, title string) *ent.ControlCreate {
 	mutation := c.Client.DB.Control.Create().
-		SetRefCode(c.RefCode).SetTitle(c.Title).SetNillableReferenceFramework(c.ReferenceFramework)
+		SetRefCode(refCode).SetTitle(title).SetNillableReferenceFramework(c.ReferenceFramework)
 
 	if c.ProgramID != "" {
 		mutation.AddProgramIDs(c.ProgramID)
@@ -1496,11 +1552,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 		mutation.SetAliases(c.Aliases)
 	}
 
-	control, err := mutation.
-		Save(ctx)
-	RequireNoError(t, err)
-
-	return control
+	return mutation
 }
 
 // MustNew subcontrol builder is used to create, without authz checks, subcontrols in the database

@@ -11,8 +11,8 @@ import (
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/v2"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/objects"
@@ -37,11 +37,11 @@ func TestValidateConfiguredStorageProvidersDevModeDisk(t *testing.T) {
 	}
 
 	errs := ValidateAvailabilityByProvider(context.Background(), cfg, true)
-	assert.Empty(t, errs)
+	assert.Check(t, is.Len(errs, 0))
 
 	// devMode uses the defaultDevStorageBucket - so even if Disk provider is created, this is the directory we want to ensure exists
 	_, err := os.Stat(objects.DefaultDevStorageBucket)
-	assert.NoError(t, err, "expected dev-mode validation to create bucket directory")
+	assert.Check(t, err, "expected dev-mode validation to create bucket directory")
 }
 
 func TestValidateAvailabilityByProviderDevMode(t *testing.T) {
@@ -58,7 +58,7 @@ func TestValidateAvailabilityByProviderDevMode(t *testing.T) {
 	}
 
 	errs := ValidateAvailabilityByProvider(context.Background(), cfg, true)
-	assert.Empty(t, errs)
+	assert.Check(t, is.Len(errs, 0))
 }
 
 func TestValidateAvailabilityByProviderDisk(t *testing.T) {
@@ -79,26 +79,26 @@ func TestValidateAvailabilityByProviderDisk(t *testing.T) {
 	}
 
 	errs := ValidateAvailabilityByProvider(context.Background(), cfg, true)
-	assert.Empty(t, errs)
+	assert.Check(t, is.Len(errs, 0))
 }
 
 func TestValidateBuckets(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		provider := &stubProvider{buckets: []string{"primary"}}
-		assert.NoError(t, validateBuckets(context.Background(), "disk", provider, "primary", true))
+		assert.Check(t, validateBuckets(context.Background(), "disk", provider, "primary", true))
 	})
 
 	t.Run("missing bucket", func(t *testing.T) {
 		provider := &stubProvider{buckets: []string{"secondary"}}
 		err := validateBuckets(context.Background(), "disk", provider, "primary", false)
-		assert.Error(t, err)
-		assert.ErrorIs(t, err, ErrBucketNotFound)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, ErrBucketNotFound))
 	})
 
 	t.Run("list error", func(t *testing.T) {
 		provider := &stubProvider{listErr: errors.New("boom")}
 		err := validateBuckets(context.Background(), "disk", provider, "", false)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -106,10 +106,10 @@ func TestEnsureDirectoryExists(t *testing.T) {
 	tempDir := t.TempDir()
 	target := filepath.Join(tempDir, "nested", "path")
 
-	assert.NoError(t, ensureDirectoryExists(target))
+	assert.Check(t, ensureDirectoryExists(target))
 	info, err := os.Stat(target)
-	assert.NoError(t, err)
-	assert.True(t, info.IsDir())
+	assert.Check(t, err)
+	assert.Check(t, info.IsDir())
 }
 
 func TestStorageAvailabilityCheck(t *testing.T) {
@@ -117,7 +117,7 @@ func TestStorageAvailabilityCheck(t *testing.T) {
 		return storage.ProviderConfig{Enabled: false}
 	})
 
-	assert.NoError(t, check(context.Background()))
+	assert.Check(t, check(context.Background()))
 }
 
 func TestStorageAvailabilityCheckCachesResult(t *testing.T) {
@@ -127,9 +127,9 @@ func TestStorageAvailabilityCheckCachesResult(t *testing.T) {
 		return storage.ProviderConfig{Enabled: false}
 	})
 
-	assert.NoError(t, check(context.Background()))
-	assert.NoError(t, check(context.Background()))
-	assert.Equal(t, 1, calls, "second check within StorageCheckCacheTTL should return the cached result")
+	assert.Check(t, check(context.Background()))
+	assert.Check(t, check(context.Background()))
+	assert.Check(t, is.Equal(1, calls), "second check within StorageCheckCacheTTL should return the cached result")
 }
 
 type stubProvider struct {
@@ -187,15 +187,15 @@ func TestValidateProviderType(t *testing.T) {
 	t.Run("matching provider type succeeds", func(t *testing.T) {
 		provider := &stubProvider{}
 		err := validateProviderType(storage.DiskProvider, provider)
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("mismatched provider type fails", func(t *testing.T) {
 		provider := &stubProvider{}
 		err := validateProviderType(storage.R2Provider, provider)
-		assert.Error(t, err)
-		assert.ErrorIs(t, err, ErrProviderTypeMismatch)
-		assert.Contains(t, err.Error(), "expected r2 but provider reports disk")
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, ErrProviderTypeMismatch))
+		assert.Check(t, is.Contains(err.Error(), "expected r2 but provider reports disk"))
 	})
 }
 
@@ -204,13 +204,13 @@ func loadProviderConfig(t *testing.T, yamlConfig string) storage.ProviderConfig 
 	t.Helper()
 
 	path := filepath.Join(t.TempDir(), "config.yaml")
-	require.NoError(t, os.WriteFile(path, []byte(yamlConfig), 0o600))
+	assert.NilError(t, os.WriteFile(path, []byte(yamlConfig), 0o600))
 
 	k := koanf.New(".")
-	require.NoError(t, k.Load(file.Provider(path), yaml.Parser()))
+	assert.NilError(t, k.Load(file.Provider(path), yaml.Parser()))
 
 	var cfg storage.ProviderConfig
-	require.NoError(t, k.Unmarshal("", &cfg))
+	assert.NilError(t, k.Unmarshal("", &cfg))
 
 	return cfg
 }
@@ -243,22 +243,22 @@ providers:
 	t.Run("cloudflarer2 YAML key does not populate R2 struct field with r2 koanf tag", func(t *testing.T) {
 		cfg := loadProviderConfig(t, yamlWithCloudflareR2Key)
 
-		assert.True(t, cfg.Providers.S3.Enabled, "S3 config should be populated")
-		assert.Equal(t, "opln", cfg.Providers.S3.Bucket)
-		assert.Equal(t, "us-east-2", cfg.Providers.S3.Region)
+		assert.Check(t, cfg.Providers.S3.Enabled, "S3 config should be populated")
+		assert.Check(t, is.Equal("opln", cfg.Providers.S3.Bucket))
+		assert.Check(t, is.Equal("us-east-2", cfg.Providers.S3.Region))
 
-		assert.False(t, cfg.Providers.R2.Enabled, "R2.Enabled defaults to false when YAML uses cloudflarer2 key but struct expects r2")
-		assert.Empty(t, cfg.Providers.R2.Bucket, "R2.Bucket empty when YAML key mismatch")
+		assert.Check(t, !cfg.Providers.R2.Enabled, "R2.Enabled defaults to false when YAML uses cloudflarer2 key but struct expects r2")
+		assert.Check(t, is.Equal(cfg.Providers.R2.Bucket, ""), "R2.Bucket empty when YAML key mismatch")
 	})
 
 	t.Run("r2 YAML key correctly populates R2 struct field with r2 koanf tag", func(t *testing.T) {
 		cfg := loadProviderConfig(t, yamlWithCorrectR2Key)
 
-		assert.True(t, cfg.Providers.S3.Enabled)
-		assert.Equal(t, "opln", cfg.Providers.S3.Bucket)
-		assert.Equal(t, "us-east-2", cfg.Providers.S3.Region)
+		assert.Check(t, cfg.Providers.S3.Enabled)
+		assert.Check(t, is.Equal("opln", cfg.Providers.S3.Bucket))
+		assert.Check(t, is.Equal("us-east-2", cfg.Providers.S3.Region))
 
-		assert.True(t, cfg.Providers.R2.Enabled, "R2.Enabled true when YAML r2 key matches struct r2 koanf tag")
-		assert.Equal(t, "ol-trust-center", cfg.Providers.R2.Bucket, "R2.Bucket populated when keys match")
+		assert.Check(t, cfg.Providers.R2.Enabled, "R2.Enabled true when YAML r2 key matches struct r2 koanf tag")
+		assert.Check(t, is.Equal("ol-trust-center", cfg.Providers.R2.Bucket), "R2.Bucket populated when keys match")
 	})
 }

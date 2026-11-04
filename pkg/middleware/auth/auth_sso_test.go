@@ -8,7 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/echox"
 	iamauth "github.com/theopenlane/iam/auth"
@@ -57,14 +58,14 @@ func TestUnauthorizedSSORequiredReply(t *testing.T) {
 	// the SSO login endpoint is POST-only and takes a JSON body, so an unauthorized API request
 	// gets a 401 carrying the details needed to start the flow rather than a redirect it cannot follow
 	err := unauthorized(c, errors.New("invalid"), &conf, validator)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusUnauthorized, rec.Code)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(http.StatusUnauthorized, rec.Code))
 
 	var reply SSOUnauthorizedReply
-	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &reply))
-	assert.True(t, reply.SSORequired)
-	assert.Equal(t, "org", reply.OrganizationID)
-	assert.Equal(t, sso.SSOLogin(e, ""), reply.SSOLoginPath)
+	assert.Check(t, json.Unmarshal(rec.Body.Bytes(), &reply))
+	assert.Check(t, reply.SSORequired)
+	assert.Check(t, is.Equal("org", reply.OrganizationID))
+	assert.Check(t, is.Equal(sso.SSOLogin(e, ""), reply.SSOLoginPath))
 }
 
 func TestUnauthorizedNoSSORedirect(t *testing.T) {
@@ -90,8 +91,8 @@ func TestUnauthorizedNoSSORedirect(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	err := unauthorized(c, errors.New("invalid"), &conf, validator)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusUnauthorized, rec.Code)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(http.StatusUnauthorized, rec.Code))
 }
 
 // TestAuthenticateSkipperSkipsSupportSession documents the actual mechanism by which an Openlane support
@@ -113,7 +114,7 @@ func TestAuthenticateSkipperSkipsSupportSession(t *testing.T) {
 	req = req.WithContext(iamauth.WithCaller(req.Context(), caller))
 	c := e.NewContext(req, httptest.NewRecorder())
 
-	assert.True(t, AuthenticateSkipperFuncForImpersonation(c))
+	assert.Check(t, AuthenticateSkipperFuncForImpersonation(c))
 }
 
 // TestAuthenticateSkipperDoesNotSkipNormalSession verifies a non-impersonated request is not skipped, so
@@ -123,7 +124,7 @@ func TestAuthenticateSkipperDoesNotSkipNormalSession(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	c := e.NewContext(req, httptest.NewRecorder())
 
-	assert.False(t, AuthenticateSkipperFuncForImpersonation(c))
+	assert.Check(t, !AuthenticateSkipperFuncForImpersonation(c))
 }
 
 // TestUnauthorizedExemptNoRedirect verifies an exempt user (e.g. owner or per-user exemption),
@@ -151,6 +152,6 @@ func TestUnauthorizedExemptNoRedirect(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	err := unauthorized(c, errors.New("invalid"), &conf, validator)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusUnauthorized, rec.Code)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(http.StatusUnauthorized, rec.Code))
 }

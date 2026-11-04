@@ -3,13 +3,12 @@ package hooks_test
 import (
 	"context"
 	"fmt"
+	"slices"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/iam/auth"
 
@@ -22,17 +21,20 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
 	"github.com/theopenlane/core/v2/pkg/gala"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HookTestSuite) TestHookOnboarding() {
-	t := suite.T()
+func TestHookOnboarding(t *testing.T) {
+	s := suite.setupTest(t)
 
-	user := suite.seedUser()
+	user := s.seedUser()
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID)
 
 	// add the client to the context for hooks
-	userCtx = generated.NewContext(userCtx, suite.client)
+	userCtx = generated.NewContext(userCtx, s.client)
 
 	name := "MITB"
 
@@ -90,79 +92,79 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 			ctx := auth.WithInternalOperationContext(userCtx)
 
 			// add the client to the context
-			ctx = generated.NewContext(ctx, suite.client)
+			ctx = generated.NewContext(ctx, s.client)
 
-			onboarding, err := suite.client.Onboarding.Create().SetInput(tc.input).Save(ctx)
+			onboarding, err := s.client.Onboarding.Create().SetInput(tc.input).Save(ctx)
 			if tc.expectedErr != "" {
 
-				require.Error(t, err)
-				assert.Nil(t, onboarding)
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Nil(onboarding))
 
 				return
 			}
 
-			require.NoError(t, err)
-			assert.NotNil(t, onboarding)
+			assert.NilError(t, err)
+			assert.Check(t, onboarding != nil)
 
-			assert.NotEmpty(t, onboarding.ID)
-			assert.NotEmpty(t, onboarding.OrganizationID)
-			assert.Equal(t, name, onboarding.CompanyName)
+			assert.Check(t, onboarding.ID != "")
+			assert.Check(t, onboarding.OrganizationID != "")
+			assert.Check(t, is.Equal(name, onboarding.CompanyName))
 
-			org, err := suite.client.Organization.Query().
+			org, err := s.client.Organization.Query().
 				Where(organization.IDEQ(onboarding.OrganizationID)).
 				WithSetting().
 				Only(ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
-			assert.Equal(t, tc.input.CompanyName, org.DisplayName)
+			assert.Check(t, is.Equal(tc.input.CompanyName, org.DisplayName))
 
 			if i == 0 {
-				assert.Equal(t, tc.input.CompanyName, org.Name)
+				assert.Check(t, is.Equal(tc.input.CompanyName, org.Name))
 			} else {
-				assert.NotEqual(t, tc.input.CompanyName, org.Name)
+				assert.Check(t, tc.input.CompanyName != org.Name)
 			}
 
-			assert.ElementsMatch(t, tc.input.Domains, org.Edges.Setting.Domains)
+			assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values(tc.input.Domains)), slices.Sorted(slices.Values(org.Edges.Setting.Domains))))
 
-			newOrgCtx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, onboarding.OrganizationID), suite.client)
+			newOrgCtx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, onboarding.OrganizationID), s.client)
 			newOrgCtx = auth.WithInternalOperationContext(newOrgCtx)
 
-			managedTagExists, err := suite.client.TagDefinition.Query().
+			managedTagExists, err := s.client.TagDefinition.Query().
 				Where(
 					tagdefinition.OwnerID(onboarding.OrganizationID),
 					tagdefinition.NameEqualFold("managed"),
 				).
 				Exist(newOrgCtx)
-			require.NoError(t, err)
-			assert.True(t, managedTagExists)
+			assert.NilError(t, err)
+			assert.Check(t, managedTagExists)
 
-			slaCount, err := suite.client.SLADefinition.Query().
+			slaCount, err := s.client.SLADefinition.Query().
 				Where(sladefinition.OwnerID(onboarding.OrganizationID)).
 				Count(newOrgCtx)
-			require.NoError(t, err)
-			assert.Equal(t, 4, slaCount)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(4, slaCount))
 		})
 	}
 }
 
-func (suite *HookTestSuite) TestOnboardingProgramControlsLoadableByListeners() {
-	t := suite.T()
+func TestOnboardingProgramControlsLoadableByListeners(t *testing.T) {
+	s := suite.setupTest(t)
 
-	admin := suite.seedSystemAdmin()
-	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), suite.client)
+	admin := s.seedSystemAdmin()
+	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), s.client)
 	framework := gofakeit.UUID()
 
-	std, err := suite.client.Standard.Create().SetName(framework).SetShortName(framework).
+	std, err := s.client.Standard.Create().SetName(framework).SetShortName(framework).
 		SetFramework(framework).SetIsPublic(true).SetSystemOwned(true).
 		SetStatus(enums.StandardActive).Save(sysCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	const controlCount = 8
 
 	for i := range controlCount {
-		_, err = suite.client.Control.Create().SetStandardID(std.ID).
+		_, err = s.client.Control.Create().SetStandardID(std.ID).
 			SetSystemOwned(true).SetRefCode(fmt.Sprintf("LOAD-%d", i)).Save(sysCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 	}
 
 	var (
@@ -171,7 +173,7 @@ func (suite *HookTestSuite) TestOnboardingProgramControlsLoadableByListeners() {
 		missing   []string
 	)
 
-	listenerIDs, err := gala.Register(suite.galaRuntime, gala.Definition[entityops.MutationPayload]{
+	listenerIDs, err := gala.Register(s.galaRuntime, gala.Definition[entityops.MutationPayload]{
 		Topic:      entityops.MutationTopic(entityops.MutationConcernWorkflow, generated.TypeControl),
 		Name:       "test.control.loadable",
 		Operations: []string{entityops.OpCreate},
@@ -179,7 +181,7 @@ func (suite *HookTestSuite) TestOnboardingProgramControlsLoadableByListeners() {
 			return restored
 		},
 		Handle: func(hc gala.HandlerContext, payload entityops.MutationPayload) error {
-			_, ok, loadErr := entityops.LoadEntity(generated.NewContext(hc.Context, suite.client), payload.EntityID, suite.client.Control.Get)
+			_, ok, loadErr := entityops.LoadEntity(generated.NewContext(hc.Context, s.client), payload.EntityID, s.client.Control.Get)
 
 			mu.Lock()
 			defer mu.Unlock()
@@ -193,46 +195,46 @@ func (suite *HookTestSuite) TestOnboardingProgramControlsLoadableByListeners() {
 			return nil
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	t.Cleanup(func() {
-		require.NoError(t, suite.galaRuntime.RemoveListeners(context.Background(), listenerIDs...))
+		assert.NilError(t, s.galaRuntime.RemoveListeners(context.Background(), listenerIDs...))
 	})
 
-	user := suite.seedUser()
-	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
+	user := s.seedUser()
+	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), s.client)
 	ctx = auth.WithInternalOperationContext(ctx)
 
-	_, err = suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
+	_, err = s.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 		CompanyName: "Onboarding Co " + gofakeit.LetterN(8),
 		Compliance:  map[string]interface{}{"frameworks": []string{framework}},
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	suite.waitForEvents()
+	s.waitForEvents()
 
 	mu.Lock()
 	defer mu.Unlock()
 
-	assert.Equal(t, controlCount, delivered)
-	assert.Empty(t, missing)
+	assert.Check(t, is.Equal(controlCount, delivered))
+	assert.Check(t, is.Len(missing, 0))
 }
 
-func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
-	t := suite.T()
+func TestOnboardingProgramFrameworkSelections(t *testing.T) {
+	s := suite.setupTest(t)
 
-	admin := suite.seedSystemAdmin()
-	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), suite.client)
+	admin := s.seedSystemAdmin()
+	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), s.client)
 	framework := gofakeit.UUID()
 
-	std, err := suite.client.Standard.Create().SetName(framework).SetShortName(framework).
+	std, err := s.client.Standard.Create().SetName(framework).SetShortName(framework).
 		SetFramework(framework).SetIsPublic(true).SetSystemOwned(true).
 		SetStatus(enums.StandardActive).Save(sysCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	_, err = suite.client.Control.Create().SetStandardID(std.ID).
+	_, err = s.client.Control.Create().SetStandardID(std.ID).
 		SetSystemOwned(true).SetRefCode("TEST-1").Save(sysCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	for _, tc := range []struct {
 		name         string
@@ -257,44 +259,46 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 	} {
 
 		t.Run(tc.name, func(t *testing.T) {
-			user := suite.seedUser()
-			ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
+			s := s.withT(t)
+
+			user := s.seedUser()
+			ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), s.client)
 			ctx = auth.WithInternalOperationContext(ctx)
 
-			onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
+			onboarding, err := s.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 				CompanyName: "Onboarding Co " + gofakeit.LetterN(8),
 				Compliance:  tc.compliance,
 			}).Save(ctx)
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
-			suite.waitForEvents()
+			s.waitForEvents()
 
-			programs, err := suite.client.Program.Query().Where(program.OwnerIDEQ(onboarding.OrganizationID)).WithControls().All(ctx)
-			require.NoError(t, err)
-			require.Len(t, programs, tc.programCount)
+			programs, err := s.client.Program.Query().Where(program.OwnerIDEQ(onboarding.OrganizationID)).WithControls().All(ctx)
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(programs, tc.programCount))
 
 			if tc.programCount > 0 {
-				assert.Len(t, programs[0].Edges.Controls, tc.controlCount)
+				assert.Check(t, is.Len(programs[0].Edges.Controls, tc.controlCount))
 				year := time.Now().Year()
 				expectedName := fmt.Sprintf("Compliance Program %d", year)
 				if tc.name == "single framework" {
 					expectedName = fmt.Sprintf("%s Program %d", framework, year)
 				}
-				assert.Equal(t, expectedName, programs[0].Name)
-				assert.Equal(t, fmt.Sprintf("Track %s compliance activities, evidence, and audit readiness for %d.", programs[0].FrameworkName, year), programs[0].Description)
+				assert.Check(t, is.Equal(expectedName, programs[0].Name))
+				assert.Check(t, is.Equal(fmt.Sprintf("Track %s compliance activities, evidence, and audit readiness for %d.", programs[0].FrameworkName, year), programs[0].Description))
 			}
 
-			taskCount, err := suite.client.Task.Query().Where(
+			taskCount, err := s.client.Task.Query().Where(
 				task.OwnerIDEQ(onboarding.OrganizationID),
 				task.SourceKeyEQ("onboarding-"+taskrules.RuleFrameworkGeneric),
 			).Count(ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			if tc.programCount == 0 {
-				assert.Equal(t, 1, taskCount)
+				assert.Check(t, is.Equal(1, taskCount))
 			} else {
-				assert.Zero(t, taskCount)
+				assert.Check(t, is.Equal(0, taskCount))
 			}
 		})
 	}

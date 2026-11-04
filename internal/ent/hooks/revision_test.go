@@ -6,24 +6,25 @@ import (
 
 	"entgo.io/ent"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/iam/auth"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HookTestSuite) TestSetNewRevision() {
-	t := suite.T()
+func TestSetNewRevision(t *testing.T) {
+	s := suite.setupTest(t)
 
 	// Create a system admin user (needed right now for standards until we allow other users to create them and we aren't testing permissions here)
-	testUser := suite.seedSystemAdmin()
+	testUser := s.seedSystemAdmin()
 	orgID := testUser.Edges.OrgMemberships[0].ID
 	ctx := auth.NewTestContextForSystemAdmin(testUser.ID, orgID)
 
 	// add the client to the context for hooks
-	ctx = generated.NewContext(ctx, suite.client)
+	ctx = generated.NewContext(ctx, s.client)
 
 	patchCtx := auth.NewTestContextForSystemAdmin(testUser.ID, orgID)
 	models.WithVersionBumpRequestContext(patchCtx, &models.Patch)
@@ -47,13 +48,13 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 		{
 			name: "mutation with revision set",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std).SetRevision("v0.4.3")
+				update := s.client.Standard.UpdateOne(std).SetRevision("v0.4.3")
 
 				err = update.Exec(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -64,13 +65,13 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 		{
 			name: "mutation with nothing set - defaults to patch",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std)
+				update := s.client.Standard.UpdateOne(std)
 
 				err = update.Exec(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -81,13 +82,13 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 		{
 			name: "mutation with revision bump set to patch",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std)
+				update := s.client.Standard.UpdateOne(std)
 
 				err = update.Exec(patchCtx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -98,13 +99,13 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 		{
 			name: "mutation with revision bump set to major",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std)
+				update := s.client.Standard.UpdateOne(std)
 
 				err = update.Exec(majorCtx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -115,13 +116,13 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 		{
 			name: "mutation with revision bump set to minor",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std)
+				update := s.client.Standard.UpdateOne(std)
 
 				err = update.Exec(minorCtx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -132,13 +133,13 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 		{
 			name: "mutation with revision bump set to draft",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std)
+				update := s.client.Standard.UpdateOne(std)
 
 				err = update.Exec(draftCtx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -154,16 +155,16 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 			err := hooks.SetNewRevision(tt.ctx, mut)
 
 			if tt.expectedErr != nil {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			out, ok := mut.Revision()
-			assert.True(t, ok)
-			assert.Equal(t, tt.expectedRevision, out)
+			assert.Check(t, ok)
+			assert.Check(t, is.Equal(tt.expectedRevision, out))
 		})
 	}
 }

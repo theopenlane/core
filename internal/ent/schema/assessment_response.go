@@ -167,7 +167,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 
 		field.Time("started_at").
 			Comment("when the user started the assessment").
-			Default(time.Now()).
+			Default(time.Now).
 			Annotations(
 				entgql.OrderField("started_at"),
 				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),

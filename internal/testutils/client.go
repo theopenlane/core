@@ -127,8 +127,10 @@ func testEchoServer(c *ent.Client, u *objects.Service, includeMiddleware bool) *
 	})
 	e.Logger = loggers.Echo
 
+	// per-request echo context so request-scoped values like the revision bump don't leak across tests
+	e.Use(echocontext.EchoContextToContextMiddleware())
+
 	if includeMiddleware {
-		e.Use(echocontext.EchoContextToContextMiddleware())
 		e.Use(auth.Authenticate(createAuthConfig(c)))
 		e.Use(logx.LoggingMiddleware(logx.Config{
 			Logger:          loggers.Echo,

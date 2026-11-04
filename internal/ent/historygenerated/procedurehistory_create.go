@@ -743,7 +743,10 @@ func (_c *ProcedureHistoryCreate) defaults() error {
 		_c.mutation.SetApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ReviewDue(); !ok {
-		v := procedurehistory.DefaultReviewDue
+		if procedurehistory.DefaultReviewDue == nil {
+			return fmt.Errorf("historygenerated: uninitialized procedurehistory.DefaultReviewDue (forgotten import historygenerated/runtime?)")
+		}
+		v := procedurehistory.DefaultReviewDue()
 		_c.mutation.SetReviewDue(v)
 	}
 	if _, ok := _c.mutation.ReviewFrequency(); !ok {

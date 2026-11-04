@@ -7,16 +7,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestAccountAccessHandler() {
-	t := suite.T()
+func TestAccountAccessHandler(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	// add handler
 	suite.registerTestHandler("POST", "account/access", suite.h.AccountAccessHandler)
@@ -30,7 +29,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 		{
 			name: "happy path, allow access",
 			request: models.AccountAccessRequest{
-				ObjectID:   testUser1.OrganizationID,
+				ObjectID:   suite.testUser1.OrganizationID,
 				ObjectType: "organization",
 				Relation:   "can_view",
 			},
@@ -77,7 +76,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 
 			body, err := json.Marshal(tc.request)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			req := httptest.NewRequest(http.MethodPost, target, strings.NewReader(string(body)))
@@ -87,7 +86,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 			recorder := httptest.NewRecorder()
 
 			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
+			suite.e.ServeHTTP(recorder, req.WithContext(suite.testUser1.UserCtx))
 
 			res := recorder.Result()
 			defer res.Body.Close()
@@ -100,16 +99,16 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 			}
 
 			if tc.errMsg != "" {
-				assert.Equal(t, http.StatusBadRequest, recorder.Code)
-				assert.False(t, out.Success)
-				assert.Equal(t, tc.errMsg, out.Error)
+				assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
+				assert.Check(t, !out.Success)
+				assert.Check(t, is.DeepEqual(tc.errMsg, out.Error))
 
 				return
 			}
 
-			assert.Equal(t, http.StatusOK, recorder.Code)
-			assert.True(t, out.Success)
-			assert.Equal(t, tc.allowed, out.Allowed)
+			assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+			assert.Check(t, out.Success)
+			assert.Check(t, is.DeepEqual(tc.allowed, out.Allowed))
 		})
 	}
 }

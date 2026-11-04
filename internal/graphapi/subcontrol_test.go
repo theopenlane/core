@@ -190,6 +190,8 @@ func TestQuerySubcontrols(t *testing.T) {
 }
 
 func TestQuerySubcontrolsBlockedGroupOnControl(t *testing.T) {
+	t.Parallel()
+
 	users := suite.SeedFreshMinimalOrgUsers(t, true)
 	ownerCtx := users.Owner.UserCtx
 

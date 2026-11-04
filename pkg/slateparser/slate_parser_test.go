@@ -1,10 +1,12 @@
 package slateparser
 
 import (
+	"slices"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestCheckForMentions(t *testing.T) {
@@ -70,22 +72,22 @@ func TestCheckForMentions(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mentions := CheckForMentions(tt.text, tt.objectType, tt.objectID, tt.objectName)
-			assert.Equal(t, tt.expectedCount, len(mentions), "mention count should match")
+			assert.Check(t, is.Equal(tt.expectedCount, len(mentions)), "mention count should match")
 
 			if tt.expectedCount > 0 {
 				// Check first mention
 				foundMatch := false
 				for _, mention := range mentions {
 					if mention.UserID == tt.expectedUserID {
-						assert.Equal(t, tt.expectedName, mention.UserDisplayName)
-						assert.Equal(t, tt.objectType, mention.ObjectType)
-						assert.Equal(t, tt.objectID, mention.ObjectID)
-						assert.Equal(t, tt.objectName, mention.ObjectName)
+						assert.Check(t, is.Equal(tt.expectedName, mention.UserDisplayName))
+						assert.Check(t, is.Equal(tt.objectType, mention.ObjectType))
+						assert.Check(t, is.Equal(tt.objectID, mention.ObjectID))
+						assert.Check(t, is.Equal(tt.objectName, mention.ObjectName))
 						foundMatch = true
 						break
 					}
 				}
-				assert.True(t, foundMatch, "expected user ID should be found in mentions")
+				assert.Check(t, foundMatch, "expected user ID should be found in mentions")
 			}
 		})
 	}
@@ -143,7 +145,7 @@ func TestCheckForNewMentions(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			newMentionIDs := CheckForNewMentions(tt.oldText, tt.newText, tt.objectType, tt.objectID, tt.objectName)
-			assert.Equal(t, tt.expectedCount, len(newMentionIDs), "new mention count should match")
+			assert.Check(t, is.Equal(tt.expectedCount, len(newMentionIDs)), "new mention count should match")
 		})
 	}
 }
@@ -155,16 +157,16 @@ func TestGetNewMentions(t *testing.T) {
 
 	newMentions := GetNewMentions(oldText, newText, "Task", "task001", "Test Task")
 
-	assert.Equal(t, 1, len(newMentions), "should have one new mention")
+	assert.Check(t, is.Equal(1, len(newMentions)), "should have one new mention")
 
 	// Find the new mention
 	mention, exists := newMentions["mention002"]
-	assert.True(t, exists, "mention002 should exist")
-	assert.Equal(t, "user456", mention.UserID)
-	assert.Equal(t, "Jane Smith", mention.UserDisplayName)
-	assert.Equal(t, "Task", mention.ObjectType)
-	assert.Equal(t, "task001", mention.ObjectID)
-	assert.Equal(t, "Test Task", mention.ObjectName)
+	assert.Check(t, exists, "mention002 should exist")
+	assert.Check(t, is.Equal("user456", mention.UserID))
+	assert.Check(t, is.Equal("Jane Smith", mention.UserDisplayName))
+	assert.Check(t, is.Equal("Task", mention.ObjectType))
+	assert.Check(t, is.Equal("task001", mention.ObjectID))
+	assert.Check(t, is.Equal("Test Task", mention.ObjectName))
 }
 
 func TestExtractMentionedUserIDs(t *testing.T) {
@@ -206,10 +208,10 @@ func TestExtractMentionedUserIDs(t *testing.T) {
 
 	userIDs := ExtractMentionedOrgMemberIDs(mentions)
 
-	assert.Equal(t, 2, len(userIDs), "should have 2 unique valid user IDs")
-	assert.Contains(t, userIDs, validUserID1)
-	assert.Contains(t, userIDs, validUserID2)
-	assert.NotContains(t, userIDs, invalidUserID, "invalid ULID should be filtered out")
+	assert.Check(t, is.Equal(2, len(userIDs)), "should have 2 unique valid user IDs")
+	assert.Check(t, is.Contains(userIDs, validUserID1))
+	assert.Check(t, is.Contains(userIDs, validUserID2))
+	assert.Check(t, !slices.Contains(userIDs, invalidUserID), "invalid ULID should be filtered out")
 }
 
 func TestIsValidSlateText(t *testing.T) {
@@ -253,7 +255,7 @@ func TestIsValidSlateText(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := IsValidSlateText(tt.text)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -389,13 +391,13 @@ func TestMentionRegexAttributeOrder(t *testing.T) {
 			mentions := CheckForMentions(tt.text, "Task", "task001", "Test Task")
 
 			if tt.shouldMatch {
-				assert.Equal(t, 1, len(mentions), "should find exactly one mention")
+				assert.Check(t, is.Equal(1, len(mentions)), "should find exactly one mention")
 
 				// Find the mention by slateID
 				mention, exists := mentions[tt.expectedSlateID]
-				assert.True(t, exists, "mention with expected slate ID should exist")
-				assert.Equal(t, tt.expectedUserID, mention.UserID, "UserID should match")
-				assert.Equal(t, tt.expectedDispName, mention.UserDisplayName, "UserDisplayName should match")
+				assert.Check(t, exists, "mention with expected slate ID should exist")
+				assert.Check(t, is.Equal(tt.expectedUserID, mention.UserID), "UserID should match")
+				assert.Check(t, is.Equal(tt.expectedDispName, mention.UserDisplayName), "UserDisplayName should match")
 			} else {
 				// For negative cases, we expect no valid mentions OR partial matches
 				// Since our regex uses lookaheads, we need to verify that if we get a match,
@@ -403,9 +405,9 @@ func TestMentionRegexAttributeOrder(t *testing.T) {
 				for slateID, mention := range mentions {
 					// If we got any match, verify it has all required fields
 					if slateID != "" || mention.UserID != "" || mention.UserDisplayName != "" {
-						assert.NotEmpty(t, slateID, "if matched, slateID should not be empty")
-						assert.NotEmpty(t, mention.UserID, "if matched, UserID should not be empty")
-						assert.NotEmpty(t, mention.UserDisplayName, "if matched, UserDisplayName should not be empty")
+						assert.Check(t, slateID != "", "if matched, slateID should not be empty")
+						assert.Check(t, mention.UserID != "", "if matched, UserID should not be empty")
+						assert.Check(t, mention.UserDisplayName != "", "if matched, UserDisplayName should not be empty")
 					}
 				}
 			}

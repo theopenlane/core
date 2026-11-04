@@ -315,7 +315,7 @@ func init() {
 	// actionplanDescReviewDue is the schema descriptor for review_due field.
 	actionplanDescReviewDue := actionplanMixinFields9[6].Descriptor()
 	// actionplan.DefaultReviewDue holds the default value on creation for the review_due field.
-	actionplan.DefaultReviewDue = actionplanDescReviewDue.Default.(time.Time)
+	actionplan.DefaultReviewDue = actionplanDescReviewDue.Default.(func() time.Time)
 	// actionplanDescTagSuggestions is the schema descriptor for tag_suggestions field.
 	actionplanDescTagSuggestions := actionplanMixinFields9[11].Descriptor()
 	// actionplan.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
@@ -621,7 +621,7 @@ func init() {
 	// assessmentresponseDescStartedAt is the schema descriptor for started_at field.
 	assessmentresponseDescStartedAt := assessmentresponseFields[17].Descriptor()
 	// assessmentresponse.DefaultStartedAt holds the default value on creation for the started_at field.
-	assessmentresponse.DefaultStartedAt = assessmentresponseDescStartedAt.Default.(time.Time)
+	assessmentresponse.DefaultStartedAt = assessmentresponseDescStartedAt.Default.(func() time.Time)
 	// assessmentresponseDescIsDraft is the schema descriptor for is_draft field.
 	assessmentresponseDescIsDraft := assessmentresponseFields[21].Descriptor()
 	// assessmentresponse.DefaultIsDraft holds the default value on creation for the is_draft field.
@@ -4004,7 +4004,7 @@ func init() {
 	// internalpolicyDescReviewDue is the schema descriptor for review_due field.
 	internalpolicyDescReviewDue := internalpolicyMixinFields12[6].Descriptor()
 	// internalpolicy.DefaultReviewDue holds the default value on creation for the review_due field.
-	internalpolicy.DefaultReviewDue = internalpolicyDescReviewDue.Default.(time.Time)
+	internalpolicy.DefaultReviewDue = internalpolicyDescReviewDue.Default.(func() time.Time)
 	// internalpolicyDescTagSuggestions is the schema descriptor for tag_suggestions field.
 	internalpolicyDescTagSuggestions := internalpolicyMixinFields12[11].Descriptor()
 	// internalpolicy.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
@@ -5900,7 +5900,7 @@ func init() {
 	// procedureDescReviewDue is the schema descriptor for review_due field.
 	procedureDescReviewDue := procedureMixinFields11[6].Descriptor()
 	// procedure.DefaultReviewDue holds the default value on creation for the review_due field.
-	procedure.DefaultReviewDue = procedureDescReviewDue.Default.(time.Time)
+	procedure.DefaultReviewDue = procedureDescReviewDue.Default.(func() time.Time)
 	// procedureDescTagSuggestions is the schema descriptor for tag_suggestions field.
 	procedureDescTagSuggestions := procedureMixinFields11[11].Descriptor()
 	// procedure.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.

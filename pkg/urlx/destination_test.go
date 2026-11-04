@@ -6,8 +6,8 @@ import (
 	"net/netip"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestIsPublicAddr(t *testing.T) {
@@ -49,7 +49,7 @@ func TestIsPublicAddr(t *testing.T) {
 		t.Run(tt.addr, func(t *testing.T) {
 			t.Parallel()
 
-			assert.Equal(t, tt.expected, IsPublicAddr(netip.MustParseAddr(tt.addr)))
+			assert.Check(t, is.Equal(tt.expected, IsPublicAddr(netip.MustParseAddr(tt.addr))))
 		})
 	}
 }
@@ -91,11 +91,11 @@ func TestValidatePublicURL(t *testing.T) {
 
 			_, err := ValidatePublicURL(tt.url)
 			if tt.wantErr == nil {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 				return
 			}
 
-			assert.ErrorIs(t, err, tt.wantErr)
+			assert.Check(t, is.ErrorIs(err, tt.wantErr))
 		})
 	}
 }
@@ -109,7 +109,7 @@ func TestPublicOnlyBlocksLoopbackDial(t *testing.T) {
 	t.Cleanup(server.Close)
 
 	publicRequester, err := NewPublicRequester()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name      string
@@ -141,14 +141,14 @@ func TestPublicOnlyBlocksLoopbackDial(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			client, err := tc.newClient()
 			if err != nil {
-				assert.True(t, tc.wantErr)
-				assert.ErrorIs(t, err, ErrNonPublicDestination)
+				assert.Check(t, tc.wantErr)
+				assert.Check(t, is.ErrorIs(err, ErrNonPublicDestination))
 
 				return
 			}
 
 			req, err := http.NewRequestWithContext(t.Context(), http.MethodGet, server.URL, nil)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			resp, err := client.Do(req)
 			if resp != nil {
@@ -156,12 +156,12 @@ func TestPublicOnlyBlocksLoopbackDial(t *testing.T) {
 			}
 
 			if tc.wantErr {
-				assert.ErrorIs(t, err, ErrNonPublicDestination)
+				assert.Check(t, is.ErrorIs(err, ErrNonPublicDestination))
 
 				return
 			}
 
-			assert.NoError(t, err)
+			assert.Check(t, err)
 		})
 	}
 }

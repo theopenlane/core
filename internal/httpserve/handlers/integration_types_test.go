@@ -8,7 +8,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestConfigureIntegrationRequestValidate(t *testing.T) {
@@ -78,9 +79,9 @@ func TestConfigureIntegrationRequestValidate(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			err := tc.payload.Validate()
 			if tc.wantErr {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -118,9 +119,9 @@ func TestIntegrationAuthStartRequestValidate(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			err := tc.req.Validate()
 			if tc.wantErr {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -186,9 +187,9 @@ func TestVerifyWebhookHMACSHA256(t *testing.T) {
 
 			err := verifyWebhookHMACSHA256(req, payload, tc.secret)
 			if tc.wantErr != nil {
-				assert.ErrorIs(t, err, tc.wantErr)
+				assert.Check(t, is.ErrorIs(err, tc.wantErr))
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}

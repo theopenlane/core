@@ -4,7 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestUniqueOrganizationName(t *testing.T) {
@@ -38,10 +39,10 @@ func TestUniqueOrganizationName(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := uniqueOrganizationName(tt.input)
-			assert.Contains(t, result, tt.expected)
+			assert.Check(t, is.Contains(result, tt.expected))
 
 			suffix := strings.Replace(result, tt.expected, "", 1)
-			assert.Len(t, suffix, 6)
+			assert.Check(t, is.Len(suffix, 6))
 		})
 	}
 }

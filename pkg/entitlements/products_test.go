@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/entitlements/mocks"
@@ -43,13 +44,13 @@ func TestListProducts(t *testing.T) {
 	sc, _ := setupProductClient([]*stripe.Product{product}, nil)
 
 	products, err := sc.ListProducts(ctx)
-	assert.NoError(t, err)
-	assert.Equal(t, []*stripe.Product{product}, products)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual([]*stripe.Product{product}, products))
 }
 
 func TestListProductsError(t *testing.T) {
-	sc, _ := setupProductClient(nil, assert.AnError)
+	sc, _ := setupProductClient(nil, errMock)
 	products, err := sc.ListProducts(context.Background())
-	assert.Error(t, err)
-	assert.Nil(t, products)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Nil(products))
 }

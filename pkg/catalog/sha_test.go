@@ -6,7 +6,8 @@ import (
 	"testing"
 
 	yaml "github.com/goccy/go-yaml"
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestComputeSHAAndSaveCatalog(t *testing.T) {
@@ -21,17 +22,17 @@ func TestComputeSHAAndSaveCatalog(t *testing.T) {
 	path := filepath.Join(dir, "catalog.yaml")
 
 	diff, err := c.SaveCatalog(path)
-	assert.NoError(t, err)
-	assert.NotEqual(t, "", diff)
+	assert.Check(t, err)
+	assert.Check(t, "" != diff)
 
 	data, err := os.ReadFile(path)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	var saved Catalog
-	assert.NoError(t, yaml.Unmarshal(data, &saved))
+	assert.Check(t, yaml.Unmarshal(data, &saved))
 
-	assert.Equal(t, c.Version, saved.Version)
-	assert.Equal(t, computeSHA(saved.Version), saved.SHA)
+	assert.Check(t, is.Equal(c.Version, saved.Version))
+	assert.Check(t, is.Equal(computeSHA(saved.Version), saved.SHA))
 }
 
 func TestSaveCatalogNoChanges(t *testing.T) {
@@ -46,14 +47,14 @@ func TestSaveCatalogNoChanges(t *testing.T) {
 	path := filepath.Join(dir, "catalog.yaml")
 
 	_, err := c.SaveCatalog(path)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	firstVersion := c.Version
 	firstSHA := c.SHA
 
 	diff, err := c.SaveCatalog(path)
-	assert.NoError(t, err)
-	assert.Equal(t, "", diff)
-	assert.Equal(t, firstVersion, c.Version)
-	assert.Equal(t, firstSHA, c.SHA)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal("", diff))
+	assert.Check(t, is.Equal(firstVersion, c.Version))
+	assert.Check(t, is.Equal(firstSHA, c.SHA))
 }

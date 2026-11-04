@@ -3,11 +3,12 @@ package hooks
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestGetTupleKeyFromRole(t *testing.T) {
@@ -64,14 +65,14 @@ func TestGetTupleKeyFromRole(t *testing.T) {
 			res, err := getTupleKeyFromRole(req, tc.role)
 
 			if tc.expectedErr != nil {
-				assert.Error(t, err)
-				assert.ErrorIs(t, err, tc.expectedErr)
+				assert.Check(t, err != nil)
+				assert.Check(t, is.ErrorIs(err, tc.expectedErr))
 
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tc.expectedRes, res)
+			assert.NilError(t, err)
+			assert.Check(t, is.DeepEqual(tc.expectedRes, res))
 		})
 	}
 }
@@ -116,14 +117,14 @@ func TestRoleToRelation(t *testing.T) {
 			res, err := roleToRelation(tc.roleInput)
 
 			if tc.expectedErr != nil {
-				assert.Error(t, err)
-				assert.ErrorIs(t, err, tc.expectedErr)
+				assert.Check(t, err != nil)
+				assert.Check(t, is.ErrorIs(err, tc.expectedErr))
 
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tc.expectedRes, res)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.expectedRes, res))
 		})
 	}
 }

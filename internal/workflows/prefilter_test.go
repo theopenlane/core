@@ -3,7 +3,8 @@ package workflows
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/models"
 )
@@ -31,8 +32,8 @@ func TestDeriveTriggerPrefilter(t *testing.T) {
 
 	operations, fields := DeriveTriggerPrefilter(doc)
 
-	assert.Equal(t, []string{"CREATE", "UPDATE"}, operations)
-	assert.Equal(t, []string{"control", "evidence", "name", "priority", "status"}, fields)
+	assert.Check(t, is.DeepEqual([]string{"CREATE", "UPDATE"}, operations))
+	assert.Check(t, is.DeepEqual([]string{"control", "evidence", "name", "priority", "status"}, fields))
 }
 
 // TestDeriveTriggerPrefilterAnyFieldTrigger verifies any-field triggers clear fields
@@ -55,6 +56,6 @@ func TestDeriveTriggerPrefilterAnyFieldTrigger(t *testing.T) {
 
 	operations, fields := DeriveTriggerPrefilter(doc)
 
-	assert.Equal(t, []string{"CREATE", "UPDATE"}, operations)
-	assert.Empty(t, fields)
+	assert.Check(t, is.DeepEqual([]string{"CREATE", "UPDATE"}, operations))
+	assert.Check(t, is.Len(fields, 0))
 }

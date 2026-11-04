@@ -83,6 +83,11 @@ func (d DocumentMixin) Hooks() []ent.Hook {
 	}
 }
 
+// defaultReviewDue returns the default review date, one year from creation
+func defaultReviewDue() time.Time {
+	return time.Now().AddDate(1, 0, 0)
+}
+
 // getDocumentFields returns the fields for a document type schema
 // for example a policy or procedure
 func getDocumentFields(documentType string) []ent.Field {
@@ -135,7 +140,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Optional().
 			Comment(fmt.Sprintf("whether approval is required for edits to the %s", documentType)),
 		field.Time("review_due").
-			Default(time.Now().AddDate(1, 0, 0)).
+			Default(defaultReviewDue).
 			Annotations(
 				entgql.OrderField("review_due"),
 			).

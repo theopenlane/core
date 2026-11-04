@@ -10,10 +10,11 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 var testKey ed25519.PrivateKey
@@ -36,7 +37,7 @@ func setupTestTokenManager(t *testing.T) *tokens.TokenManager {
 	}
 
 	tm, err := tokens.NewWithKey(testKey, conf)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	return tm
 }
@@ -45,8 +46,8 @@ func TestNew(t *testing.T) {
 	tokenManager := setupTestTokenManager(t)
 	middleware := New(tokenManager, "", "")
 
-	assert.NotNil(t, middleware)
-	assert.Equal(t, tokenManager, middleware.tokenManager)
+	assert.Check(t, middleware != nil)
+	assert.Check(t, is.Equal(tokenManager, middleware.tokenManager))
 }
 
 func TestMiddlewareProcessNoToken(t *testing.T) {
@@ -66,10 +67,10 @@ func TestMiddlewareProcessNoToken(t *testing.T) {
 
 	err := middleware.Process(handler)(c)
 
-	assert.NoError(t, err)
-	assert.True(t, nextCalled)
+	assert.Check(t, err)
+	assert.Check(t, nextCalled)
 	caller, ok := auth.CallerFromContext(c.Request().Context())
-	assert.False(t, ok && caller != nil && caller.IsImpersonated())
+	assert.Check(t, !(ok && caller != nil && caller.IsImpersonated()))
 }
 
 func TestMiddlewareProcessInvalidToken(t *testing.T) {
@@ -90,12 +91,12 @@ func TestMiddlewareProcessInvalidToken(t *testing.T) {
 
 	err := middleware.Process(handler)(c)
 
-	assert.Error(t, err)
-	assert.False(t, nextCalled)
+	assert.Check(t, err != nil)
+	assert.Check(t, !nextCalled)
 
 	httpErr, ok := err.(*echo.HTTPError)
-	assert.True(t, ok)
-	assert.Equal(t, http.StatusUnauthorized, httpErr.Code)
+	assert.Check(t, ok)
+	assert.Check(t, is.Equal(http.StatusUnauthorized, httpErr.Code))
 }
 
 func TestMiddlewareProcessValidToken(t *testing.T) {
@@ -115,7 +116,7 @@ func TestMiddlewareProcessValidToken(t *testing.T) {
 	}
 
 	token, err := tokenManager.CreateImpersonationToken(ctx, opts)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	middleware := New(tokenManager, "", "")
 
@@ -129,20 +130,20 @@ func TestMiddlewareProcessValidToken(t *testing.T) {
 		nextCalled = true
 
 		caller, ok := auth.CallerFromContext(c.Request().Context())
-		assert.True(t, ok)
-		assert.NotNil(t, caller)
-		assert.True(t, caller.IsImpersonated())
-		assert.Equal(t, "target-user-123", caller.SubjectID)
-		assert.Equal(t, "target@example.com", caller.SubjectEmail)
-		assert.Equal(t, "admin-123", caller.Impersonation.ImpersonatorID)
+		assert.Check(t, ok)
+		assert.Check(t, caller != nil)
+		assert.Check(t, caller.IsImpersonated())
+		assert.Check(t, is.Equal("target-user-123", caller.SubjectID))
+		assert.Check(t, is.Equal("target@example.com", caller.SubjectEmail))
+		assert.Check(t, is.Equal("admin-123", caller.Impersonation.ImpersonatorID))
 
 		return c.String(http.StatusOK, "OK")
 	}
 
 	err = middleware.Process(handler)(c)
 
-	assert.NoError(t, err)
-	assert.True(t, nextCalled)
+	assert.Check(t, err)
+	assert.Check(t, nextCalled)
 }
 
 func TestCreateImpersonatedCaller(t *testing.T) {
@@ -166,16 +167,16 @@ func TestCreateImpersonatedCaller(t *testing.T) {
 
 	caller, err := middleware.createImpersonatedCaller(claims)
 
-	assert.NoError(t, err)
-	assert.NotNil(t, caller)
-	assert.Equal(t, "user-123", caller.SubjectID)
-	assert.Equal(t, "user@example.com", caller.SubjectEmail)
-	assert.Equal(t, "org-456", caller.OrganizationID)
-	assert.Equal(t, auth.JWTAuthentication, caller.AuthenticationType)
-	assert.NotNil(t, caller.Impersonation)
-	assert.Equal(t, auth.ImpersonationType("support"), caller.Impersonation.Type)
-	assert.Equal(t, "admin-789", caller.Impersonation.ImpersonatorID)
-	assert.Equal(t, "session-123", caller.Impersonation.SessionID)
+	assert.Check(t, err)
+	assert.Check(t, caller != nil)
+	assert.Check(t, is.Equal("user-123", caller.SubjectID))
+	assert.Check(t, is.Equal("user@example.com", caller.SubjectEmail))
+	assert.Check(t, is.Equal("org-456", caller.OrganizationID))
+	assert.Check(t, is.Equal(auth.JWTAuthentication, caller.AuthenticationType))
+	assert.Check(t, caller.Impersonation != nil)
+	assert.Check(t, is.Equal(auth.ImpersonationType("support"), caller.Impersonation.Type))
+	assert.Check(t, is.Equal("admin-789", caller.Impersonation.ImpersonatorID))
+	assert.Check(t, is.Equal("session-123", caller.Impersonation.SessionID))
 }
 
 func TestBlockImpersonation(t *testing.T) {
@@ -219,11 +220,11 @@ func TestBlockImpersonation(t *testing.T) {
 
 			err := middleware(handler)(c)
 			if tt.expectedStatus == http.StatusOK {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			} else {
 				httpErr, ok := err.(*echo.HTTPError)
-				assert.True(t, ok)
-				assert.Equal(t, tt.expectedStatus, httpErr.Code)
+				assert.Check(t, ok)
+				assert.Check(t, is.Equal(tt.expectedStatus, httpErr.Code))
 			}
 		})
 	}
@@ -286,11 +287,11 @@ func TestAllowOnlyImpersonationType(t *testing.T) {
 
 			err := middleware(handler)(c)
 			if tt.expectedStatus == http.StatusOK {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			} else {
 				httpErr, ok := err.(*echo.HTTPError)
-				assert.True(t, ok)
-				assert.Equal(t, tt.expectedStatus, httpErr.Code)
+				assert.Check(t, ok)
+				assert.Check(t, is.Equal(tt.expectedStatus, httpErr.Code))
 			}
 		})
 	}
@@ -323,15 +324,15 @@ func TestSystemAdminUserContextMiddleware(t *testing.T) {
 			},
 			checkContext: func(t *testing.T, c echo.Context) {
 				user, ok := auth.CallerFromContext(c.Request().Context())
-				assert.True(t, ok)
-				assert.Equal(t, "target-user-456", user.SubjectID)
-				assert.Equal(t, "target-org-789", user.OrganizationID)
-				assert.False(t, user.Has(auth.CapSystemAdmin))
+				assert.Check(t, ok)
+				assert.Check(t, is.Equal("target-user-456", user.SubjectID))
+				assert.Check(t, is.Equal("target-org-789", user.OrganizationID))
+				assert.Check(t, !user.Has(auth.CapSystemAdmin))
 
 				adminUser, ok := auth.OriginalSystemAdminCallerFromContext(c.Request().Context())
-				assert.True(t, ok)
-				assert.Equal(t, "admin123", adminUser.SubjectID)
-				assert.True(t, adminUser.Has(auth.CapSystemAdmin))
+				assert.Check(t, ok)
+				assert.Check(t, is.Equal("admin123", adminUser.SubjectID))
+				assert.Check(t, adminUser.Has(auth.CapSystemAdmin))
 			},
 		},
 	}
@@ -354,7 +355,7 @@ func TestSystemAdminUserContextMiddleware(t *testing.T) {
 			}
 
 			err := middleware(handler)(c)
-			assert.NoError(t, err)
+			assert.Check(t, err)
 
 			if tt.checkContext != nil {
 				tt.checkContext(t, c)

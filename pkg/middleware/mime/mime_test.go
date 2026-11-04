@@ -5,8 +5,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/middleware/mime"
 )
@@ -42,8 +43,8 @@ func TestNewWithConfig(t *testing.T) {
 	err := middleware(handler)(c)
 
 	// Assert that the middleware did not return an error
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// Assert that the response header has the expected content type
-	assert.Equal(t, "text/plain", rec.Header().Get(echo.HeaderContentType))
+	assert.Check(t, is.Equal("text/plain", rec.Header().Get(echo.HeaderContentType)))
 }

@@ -5,8 +5,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/middleware/secure"
 )
@@ -26,16 +27,16 @@ func TestSecureMiddleware(t *testing.T) {
 	})(c)
 
 	// Assert that the middleware did not return an error
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// Assert that the response has the expected headers
-	assert.Equal(t, "1; mode=block", rec.Header().Get("X-XSS-Protection"))
-	assert.Equal(t, "nosniff", rec.Header().Get("X-Content-Type-Options"))
-	assert.Equal(t, "SAMEORIGIN", rec.Header().Get("X-Frame-Options"))
-	assert.Equal(t, "default-src 'self'", rec.Header().Get("Content-Security-Policy"))
+	assert.Check(t, is.Equal("1; mode=block", rec.Header().Get("X-XSS-Protection")))
+	assert.Check(t, is.Equal("nosniff", rec.Header().Get("X-Content-Type-Options")))
+	assert.Check(t, is.Equal("SAMEORIGIN", rec.Header().Get("X-Frame-Options")))
+	assert.Check(t, is.Equal("default-src 'self'", rec.Header().Get("Content-Security-Policy")))
 
 	// Assert that the response body is "OK"
-	assert.Equal(t, "OK", rec.Body.String())
+	assert.Check(t, is.Equal("OK", rec.Body.String()))
 }
 
 func TestSecureMiddlewareWithConfig(t *testing.T) {
@@ -56,7 +57,7 @@ func TestSecureMiddlewareWithConfig(t *testing.T) {
 		return c.String(http.StatusOK, "OK")
 	})(c)
 
-	assert.NoError(t, err)
-	assert.Equal(t, "mitb", rec.Header().Get("X-XSS-Protection"))
-	assert.Equal(t, "OK", rec.Body.String())
+	assert.Check(t, err)
+	assert.Check(t, is.Equal("mitb", rec.Header().Get("X-XSS-Protection")))
+	assert.Check(t, is.Equal("OK", rec.Body.String()))
 }

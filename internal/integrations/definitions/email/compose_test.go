@@ -4,15 +4,15 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 func TestStaticAttachmentsFromFiles_EmptyList(t *testing.T) {
 	attachments := staticAttachmentsFromFiles(context.Background(), nil)
-	assert.Empty(t, attachments)
+	assert.Check(t, is.Len(attachments, 0))
 }
 
 func TestStaticAttachmentsFromFiles_SkipsEmptyContent(t *testing.T) {
@@ -21,7 +21,7 @@ func TestStaticAttachmentsFromFiles_SkipsEmptyContent(t *testing.T) {
 	}
 
 	attachments := staticAttachmentsFromFiles(context.Background(), files)
-	assert.Empty(t, attachments)
+	assert.Check(t, is.Len(attachments, 0))
 }
 
 func TestStaticAttachmentsFromFiles_WithExtension(t *testing.T) {
@@ -36,10 +36,10 @@ func TestStaticAttachmentsFromFiles_WithExtension(t *testing.T) {
 
 	attachments := staticAttachmentsFromFiles(context.Background(), files)
 
-	require.Len(t, attachments, 1)
-	assert.Equal(t, "report.pdf", attachments[0].Filename)
-	assert.Equal(t, "application/pdf", attachments[0].ContentType)
-	assert.Equal(t, []byte("pdf-content"), attachments[0].Content)
+	assert.Assert(t, is.Len(attachments, 1))
+	assert.Check(t, is.Equal("report.pdf", attachments[0].Filename))
+	assert.Check(t, is.Equal("application/pdf", attachments[0].ContentType))
+	assert.Check(t, is.DeepEqual([]byte("pdf-content"), attachments[0].Content))
 }
 
 func TestStaticAttachmentsFromFiles_WithoutExtension(t *testing.T) {
@@ -52,8 +52,8 @@ func TestStaticAttachmentsFromFiles_WithoutExtension(t *testing.T) {
 
 	attachments := staticAttachmentsFromFiles(context.Background(), files)
 
-	require.Len(t, attachments, 1)
-	assert.Equal(t, "invoice", attachments[0].Filename)
+	assert.Assert(t, is.Len(attachments, 1))
+	assert.Check(t, is.Equal("invoice", attachments[0].Filename))
 }
 
 func TestStaticAttachmentsFromFiles_MixedContent(t *testing.T) {
@@ -68,6 +68,6 @@ func TestStaticAttachmentsFromFiles_MixedContent(t *testing.T) {
 
 	attachments := staticAttachmentsFromFiles(context.Background(), files)
 
-	require.Len(t, attachments, 1)
-	assert.Equal(t, "doc.txt", attachments[0].Filename)
+	assert.Assert(t, is.Len(attachments, 1))
+	assert.Check(t, is.Equal("doc.txt", attachments[0].Filename))
 }

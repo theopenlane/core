@@ -359,6 +359,13 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 		}
 	}
 
+	switch {
+	case entUser.Edges.Setting.IsTfaEnabled:
+		return h.startTFAAuthentication(ctx, entUser.ID)
+	case orgStatus != nil && orgStatus.OrgTFAEnforced:
+		return h.startTFAEnrollment(ctx, entUser)
+	}
+
 	// create claims for verified user
 	authData, err := h.AuthManager.GenerateUserAuthSession(reqCtx, ctx.Response().Writer, entUser)
 	if err != nil {

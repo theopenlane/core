@@ -6,7 +6,8 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestGooseLoggerPrintfDisabled(t *testing.T) {
@@ -25,7 +26,7 @@ func TestGooseLoggerPrintfDisabled(t *testing.T) {
 
 	newGooseLogger(false).Printf("OK   %s", "migration.sql")
 
-	require.Empty(t, buf.String())
+	assert.Assert(t, is.Equal("", buf.String()))
 }
 
 func TestGooseLoggerPrintfEnabled(t *testing.T) {
@@ -44,6 +45,6 @@ func TestGooseLoggerPrintfEnabled(t *testing.T) {
 
 	newGooseLogger(true).Printf("OK   %s", "migration.sql")
 
-	require.Contains(t, buf.String(), `"component":"goose"`)
-	require.Contains(t, buf.String(), `"message":"OK   migration.sql"`)
+	assert.Assert(t, is.Contains(buf.String(), `"component":"goose"`))
+	assert.Assert(t, is.Contains(buf.String(), `"message":"OK   migration.sql"`))
 }

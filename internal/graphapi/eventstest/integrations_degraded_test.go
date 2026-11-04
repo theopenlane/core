@@ -6,7 +6,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -29,114 +30,114 @@ func TestIntegrationDegradedLifecycle(t *testing.T) {
 	repoSyncOp := testint.RepoSyncOp.Name()
 
 	t.Run("degrading one operation cancels only its loop", func(t *testing.T) {
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, installation, recurringOp, "missing directory permission"))
+		assert.NilError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, installation, recurringOp, "missing directory permission"))
 
 		reloaded := reloadIntegration(t, internalCtx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusDegraded, reloaded.Status)
-		require.Len(t, reloaded.Health.UnhealthyOperations, 1)
-		require.Contains(t, reloaded.Health.UnhealthyOperations, recurringOp)
-		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationOperationDegradedObjectType))
+		assert.Assert(t, is.Equal(enums.IntegrationStatusDegraded, reloaded.Status))
+		assert.Assert(t, is.Len(reloaded.Health.UnhealthyOperations, 1))
+		assert.Assert(t, is.Contains(reloaded.Health.UnhealthyOperations, recurringOp))
+		assert.Assert(t, is.Equal(1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationOperationDegradedObjectType)))
 
 		// the status-change listener reseed must skip the unhealthy operation
 		waitForEvents()
 
-		require.Equal(t, 0, activeReconcileJobs(t, fragment))
+		assert.Assert(t, is.Equal(0, activeReconcileJobs(t, fragment)))
 	})
 
 	t.Run("degrading is idempotent", func(t *testing.T) {
 		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, recurringOp, "missing directory permission again"))
+		assert.NilError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, recurringOp, "missing directory permission again"))
 
-		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationOperationDegradedObjectType))
+		assert.Assert(t, is.Equal(1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationOperationDegradedObjectType)))
 	})
 
 	t.Run("clearing the only degraded operation reconnects and reseeds", func(t *testing.T) {
 		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.ClearOperationUnhealthy(internalCtx, reloaded, recurringOp))
+		assert.NilError(t, suite.IntegrationsRT.ClearOperationUnhealthy(internalCtx, reloaded, recurringOp))
 
 		reloaded = reloadIntegration(t, internalCtx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
-		require.Empty(t, reloaded.Health.UnhealthyOperations)
-		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconnectedObjectType))
+		assert.Assert(t, is.Equal(enums.IntegrationStatusConnected, reloaded.Status))
+		assert.Assert(t, is.Len(reloaded.Health.UnhealthyOperations, 0))
+		assert.Assert(t, is.Equal(1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconnectedObjectType)))
 
 		waitForEvents()
 
-		require.Equal(t, 1, activeReconcileJobs(t, fragment))
+		assert.Assert(t, is.Equal(1, activeReconcileJobs(t, fragment)))
 	})
 
 	t.Run("degrading a non-reconcile operation keeps other loops running", func(t *testing.T) {
 		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, validatedOp, "required config missing upstream"))
+		assert.NilError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, validatedOp, "required config missing upstream"))
 
 		reloaded = reloadIntegration(t, internalCtx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusDegraded, reloaded.Status)
-		require.Equal(t, 2, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationOperationDegradedObjectType))
+		assert.Assert(t, is.Equal(enums.IntegrationStatusDegraded, reloaded.Status))
+		assert.Assert(t, is.Equal(2, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationOperationDegradedObjectType)))
 
 		waitForEvents()
 
-		require.Equal(t, 1, activeReconcileJobs(t, fragment))
+		assert.Assert(t, is.Equal(1, activeReconcileJobs(t, fragment)))
 	})
 
 	t.Run("clearing one of several failing operations stays degraded and reseeds its loop", func(t *testing.T) {
 		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, recurringOp, "missing directory permission"))
+		assert.NilError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, recurringOp, "missing directory permission"))
 
 		waitForEvents()
 
-		require.Equal(t, 0, activeReconcileJobs(t, fragment))
+		assert.Assert(t, is.Equal(0, activeReconcileJobs(t, fragment)))
 
 		reloaded = reloadIntegration(t, internalCtx, installation.ID)
-		require.NoError(t, suite.IntegrationsRT.ClearOperationUnhealthy(internalCtx, reloaded, recurringOp))
+		assert.NilError(t, suite.IntegrationsRT.ClearOperationUnhealthy(internalCtx, reloaded, recurringOp))
 
 		reloaded = reloadIntegration(t, internalCtx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusDegraded, reloaded.Status)
-		require.Len(t, reloaded.Health.UnhealthyOperations, 1)
-		require.Contains(t, reloaded.Health.UnhealthyOperations, validatedOp)
+		assert.Assert(t, is.Equal(enums.IntegrationStatusDegraded, reloaded.Status))
+		assert.Assert(t, is.Len(reloaded.Health.UnhealthyOperations, 1))
+		assert.Assert(t, is.Contains(reloaded.Health.UnhealthyOperations, validatedOp))
 
 		waitForEvents()
 
-		require.Equal(t, 1, activeReconcileJobs(t, fragment))
+		assert.Assert(t, is.Equal(1, activeReconcileJobs(t, fragment)))
 	})
 
 	t.Run("the last healthy workload operation failing escalates to errored", func(t *testing.T) {
 		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, repoSyncOp, "repository access revoked"))
+		assert.NilError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, repoSyncOp, "repository access revoked"))
 
 		reloaded = reloadIntegration(t, internalCtx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusDegraded, reloaded.Status)
+		assert.Assert(t, is.Equal(enums.IntegrationStatusDegraded, reloaded.Status))
 
-		require.NoError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, recurringOp, "missing directory permission"))
+		assert.NilError(t, suite.IntegrationsRT.MarkOperationUnhealthy(internalCtx, reloaded, recurringOp, "missing directory permission"))
 
 		reloaded = reloadIntegration(t, internalCtx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
-		require.NotEmpty(t, reloaded.Health.UnhealthyReason)
+		assert.Assert(t, is.Equal(enums.IntegrationStatusErrored, reloaded.Status))
+		assert.Assert(t, reloaded.Health.UnhealthyReason != "")
 		// escalation keeps the per-operation reasons for recovery surfaces
-		require.Len(t, reloaded.Health.UnhealthyOperations, 3)
-		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
+		assert.Assert(t, is.Len(reloaded.Health.UnhealthyOperations, 3))
+		assert.Assert(t, is.Equal(1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType)))
 
 		waitForEvents()
 
-		require.Equal(t, 0, activeReconcileJobs(t, fragment))
+		assert.Assert(t, is.Equal(0, activeReconcileJobs(t, fragment)))
 	})
 
 	t.Run("full recovery wipes every recorded failure", func(t *testing.T) {
 		reloaded := reloadIntegration(t, internalCtx, installation.ID)
 
-		require.NoError(t, suite.IntegrationsRT.ClearIntegrationUnhealthy(internalCtx, reloaded))
+		assert.NilError(t, suite.IntegrationsRT.ClearIntegrationUnhealthy(internalCtx, reloaded))
 
 		reloaded = reloadIntegration(t, internalCtx, installation.ID)
-		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
-		require.Empty(t, reloaded.Health.UnhealthyReason)
-		require.Empty(t, reloaded.Health.UnhealthyOperations)
-		require.Equal(t, 2, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconnectedObjectType))
+		assert.Assert(t, is.Equal(enums.IntegrationStatusConnected, reloaded.Status))
+		assert.Assert(t, is.Equal(reloaded.Health.UnhealthyReason, ""))
+		assert.Assert(t, is.Len(reloaded.Health.UnhealthyOperations, 0))
+		assert.Assert(t, is.Equal(2, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconnectedObjectType)))
 
 		waitForEvents()
 
-		require.Equal(t, 1, activeReconcileJobs(t, fragment))
+		assert.Assert(t, is.Equal(1, activeReconcileJobs(t, fragment)))
 	})
 }

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/iam/tokens"
 
@@ -28,7 +28,7 @@ func testFederationManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 
 	key, err := rsa.GenerateKey(rand.Reader, testRSAKeySize)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	manager, err := tokens.NewWithKey(key, tokens.Config{
 		Audience:        "https://api.theopenlane.io",
@@ -37,7 +37,7 @@ func testFederationManager(t *testing.T) *tokens.TokenManager {
 		RefreshDuration: 2 * time.Hour,
 		RefreshOverlap:  -15 * time.Minute,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return manager
 }
@@ -49,19 +49,19 @@ func TestFederatedTokenSource(t *testing.T) {
 			Audience: testFederationAudience,
 			Endpoint: "https://sts.googleapis.com/v1/token",
 		})
-		require.NoError(t, err)
-		require.NotNil(t, source)
+		assert.NilError(t, err)
+		assert.Assert(t, source != nil)
 	})
 
 	t.Run("propagates validation errors at build time", func(t *testing.T) {
 		_, err := FederatedTokenSource(context.Background(), testFederationManager(t), testFederationOrganizationID, FederationSpec{
 			Endpoint: "https://sts.googleapis.com/v1/token",
 		})
-		require.ErrorIs(t, err, oidc.ErrAudienceRequired)
+		assert.ErrorIs(t, err, oidc.ErrAudienceRequired)
 
 		_, err = FederatedTokenSource(context.Background(), testFederationManager(t), testFederationOrganizationID, FederationSpec{
 			Audience: testFederationAudience,
 		})
-		require.ErrorIs(t, err, oidc.ErrEndpointRequired)
+		assert.ErrorIs(t, err, oidc.ErrEndpointRequired)
 	})
 }

@@ -4,6 +4,7 @@ package engine_test
 
 import (
 	"context"
+	"testing"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
@@ -13,6 +14,8 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // clearEmitFailedEvents removes emit failure events to isolate test cases.
@@ -21,7 +24,7 @@ func (s *WorkflowEngineTestSuite) clearEmitFailedEvents(ctx context.Context) {
 	_, err := s.client.WorkflowEvent.Delete().
 		Where(workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed)).
 		Exec(allowCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 }
 
 // TestEmitFailureRecorded verifies that when event emission fails (e.g., queue unavailable),
@@ -43,7 +46,8 @@ func (s *WorkflowEngineTestSuite) clearEmitFailedEvents(ctx context.Context) {
 //
 //	Emit failures should not be silently lost. Recording them enables monitoring, alerting,
 //	and automated recovery through the reconciliation process.
-func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
+func TestEmitFailureRecorded(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
@@ -52,7 +56,7 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 		SetRefCode("CTL-TEST-" + ulids.New().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -64,8 +68,8 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType: "UPDATE",
 	})
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
 
 	allowCtx := auth.WithInternalCrossOrgContext(userCtx)
 	event, err := s.client.WorkflowEvent.Query().
@@ -74,21 +78,21 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 			workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed),
 		).
 		Only(allowCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	s.Equal(enums.WorkflowEventTypeEmitFailed, event.EventType)
-	s.Equal(enums.WorkflowEventTypeEmitFailed, event.Payload.EventType)
+	assert.Check(t, is.DeepEqual(enums.WorkflowEventTypeEmitFailed, event.EventType))
+	assert.Check(t, is.DeepEqual(enums.WorkflowEventTypeEmitFailed, event.Payload.EventType))
 
 	details, err := workflows.ParseEmitFailureDetails(event.Payload.Details)
-	s.Require().NoError(err)
-	s.Equal(string(engine.WorkflowTriggeredEventTopic.Name), details.Topic)
-	s.Equal(enums.WorkflowEventTypeInstanceTriggered, details.OriginalEventType)
-	s.Equal(obj.ID, details.ObjectID)
-	s.Equal(obj.Type, details.ObjectType)
-	s.Equal(1, details.Attempts)
-	s.NotEmpty(details.EventID)
-	s.NotEmpty(details.Payload)
-	s.Contains(details.LastError, workflows.ErrEmitNoEmitter.Error())
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(string(engine.WorkflowTriggeredEventTopic.Name), details.Topic))
+	assert.Check(t, is.DeepEqual(enums.WorkflowEventTypeInstanceTriggered, details.OriginalEventType))
+	assert.Check(t, is.DeepEqual(obj.ID, details.ObjectID))
+	assert.Check(t, is.DeepEqual(obj.Type, details.ObjectType))
+	assert.Check(t, is.Equal(1, details.Attempts))
+	assert.Check(t, len(details.EventID) > 0)
+	assert.Check(t, len(details.Payload) > 0)
+	assert.Check(t, is.Contains(details.LastError, workflows.ErrEmitNoEmitter.Error()))
 }
 
 // TestReconcileEmitFailureRecovers verifies that the reconciler can recover from emit failures
@@ -107,7 +111,8 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 //
 //	The reconciliation process enables self-healing. When infrastructure recovers, the
 //	reconciler can retry failed emissions without losing workflow progress.
-func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
+func TestReconcileEmitFailureRecovers(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
@@ -116,7 +121,7 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 		SetRefCode("CTL-TEST-" + ulids.New().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -127,17 +132,17 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType: "UPDATE",
 	})
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
 
 	// Use the suite's real gala runtime for recovery (listeners already registered).
 	rec, err := reconciler.New(s.client, s.galaRuntime)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	result, err := rec.ReconcileEmitFailures(userCtx)
-	s.Require().NoError(err)
-	s.Equal(1, result.Attempted)
-	s.Equal(1, result.Recovered)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(1, result.Attempted))
+	assert.Check(t, is.Equal(1, result.Recovered))
 
 	allowCtx := auth.WithInternalCrossOrgContext(userCtx)
 	recovered, err := s.client.WorkflowEvent.Query().
@@ -146,15 +151,15 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 			workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitRecovered),
 		).
 		Only(allowCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowEventTypeEmitRecovered, recovered.EventType)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowEventTypeEmitRecovered, recovered.EventType))
 
 	// Wait for the re-emitted event to be processed by async listeners
 	s.WaitForEvents()
 
 	updated, err := s.client.WorkflowInstance.Get(allowCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, updated.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updated.State))
 }
 
 // TestReconcileEmitFailureTerminalAfterMaxAttempts verifies that after exhausting the maximum
@@ -179,7 +184,8 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 //	Infinite retries could waste resources on permanently broken workflows. After max
 //	attempts, the system must give up gracefully, mark the failure as terminal, and
 //	fail the workflow instance for human investigation.
-func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttempts() {
+func TestReconcileEmitFailureTerminalAfterMaxAttempts(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 	s.clearEmitFailedEvents(userCtx)
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
@@ -188,7 +194,7 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttemp
 		SetRefCode("CTL-TEST-" + ulids.New().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -199,21 +205,21 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttemp
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType: "UPDATE",
 	})
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
 
 	// an in-memory runtime with no registered topics makes every re-emit fail with
 	// ErrTopicNotRegistered, simulating a persistently broken emitter
 	brokenEmitter, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 3})
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	rec, err := reconciler.New(s.client, brokenEmitter, reconciler.WithMaxAttempts(3))
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	allowCtx := auth.WithInternalCrossOrgContext(userCtx)
 
 	_, err = rec.ReconcileEmitFailures(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	retryEvent, err := s.client.WorkflowEvent.Query().
 		Where(
@@ -221,14 +227,14 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttemp
 			workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed),
 		).
 		Only(allowCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	details, err := workflows.ParseEmitFailureDetails(retryEvent.Payload.Details)
-	s.Require().NoError(err)
-	s.Equal(2, details.Attempts)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(2, details.Attempts))
 
 	_, err = rec.ReconcileEmitFailures(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	terminalEvent, err := s.client.WorkflowEvent.Query().
 		Where(
@@ -236,13 +242,13 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttemp
 			workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailedTerminal),
 		).
 		Only(allowCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	terminalDetails, err := workflows.ParseEmitFailureDetails(terminalEvent.Payload.Details)
-	s.Require().NoError(err)
-	s.Equal(3, terminalDetails.Attempts)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(3, terminalDetails.Attempts))
 
 	updated, err := s.client.WorkflowInstance.Get(allowCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateFailed, updated.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateFailed, updated.State))
 }

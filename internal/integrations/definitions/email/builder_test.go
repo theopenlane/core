@@ -3,8 +3,8 @@ package email
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -33,9 +33,9 @@ func TestStaticWebhooksFollowSelectedProvider(t *testing.T) {
 			t.Parallel()
 
 			reg := registry.New()
-			require.NoError(t, reg.RegisterAll(Builder(tc.cfg, false)))
+			assert.NilError(t, reg.RegisterAll(Builder(tc.cfg, false)))
 
-			assert.Equal(t, tc.want, reg.StaticWebhooks())
+			assert.Check(t, is.DeepEqual(tc.want, reg.StaticWebhooks()))
 		})
 	}
 }

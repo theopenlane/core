@@ -5,18 +5,20 @@ package hooks_test
 import (
 	"context"
 	"database/sql"
+	"flag"
+	"os"
 	"testing"
 	"time"
 
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql/schema"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog"
-	"github.com/stretchr/testify/require"
-	"github.com/stretchr/testify/suite"
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/enttest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/migrate"
+	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/entdb"
@@ -29,6 +31,7 @@ import (
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/testutils"
+	"gotest.tools/v3/assert"
 )
 
 const (
@@ -37,33 +40,64 @@ const (
 	previewMappableZoneIDTest = "preview-zone-id"
 )
 
-// TestHookSuite runs all the tests in the TestHookSuite
-func TestHookTestSuite(t *testing.T) {
-	suite.Run(t, new(HookTestSuite))
-}
-
 // HookTestSuite handles the setup and teardown between tests
 type HookTestSuite struct {
-	suite.Suite
+	t           *testing.T
 	client      *generated.Client
 	tf          *testutils.TestFixture
 	ofgaTF      *fgatest.OpenFGATestFixture
 	galaRuntime *gala.Gala
 }
 
-func (suite *HookTestSuite) waitForEvents() {
-	suite.Require().NoError(suite.galaRuntime.WaitIdle(suite.T().Context()))
+// suite is the shared hook test state set up once in TestMain, each test works on its own copy from setupTest
+var suite = &HookTestSuite{}
+
+func TestMain(m *testing.M) {
+	flag.Parse()
+
+	// only used for setup and teardown, failures there exit through coreutils.RequireNoError
+	suite.t = &testing.T{}
+
+	suite.setupSuite()
+
+	exitCode := m.Run()
+
+	suite.tearDownSuite()
+
+	os.Exit(exitCode)
 }
 
-// SetupSuite runs before the test suite
-func (suite *HookTestSuite) SetupSuite() {
+// T returns the test currently using the suite
+func (s *HookTestSuite) T() *testing.T {
+	return s.t
+}
+
+// setupTest returns a per-test copy of the suite bound to the given test
+func (s *HookTestSuite) setupTest(t *testing.T) *HookTestSuite {
+	return s.withT(t)
+}
+
+// withT returns a copy of the suite bound to the given test or subtest
+func (s *HookTestSuite) withT(t *testing.T) *HookTestSuite {
+	ts := *s
+	ts.t = t
+
+	return &ts
+}
+
+func (s *HookTestSuite) waitForEvents() {
+	assert.NilError(s.T(), s.galaRuntime.WaitIdle(s.T().Context()))
+}
+
+// setupSuite runs before the test suite
+func (s *HookTestSuite) setupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 
 	if testing.Verbose() {
 		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
 	}
 
-	suite.client = suite.setupClient()
+	s.client = s.setupClient()
 
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		CnameTarget:   cnameTargetTest,
@@ -71,38 +105,38 @@ func (suite *HookTestSuite) SetupSuite() {
 	})
 
 	ctx := auth.WithInternalOperationContext(context.Background())
-	_, err := suite.client.MappableDomain.Create().
+	_, err := s.client.MappableDomain.Create().
 		SetName(cnameTargetTest).
 		SetZoneID(previewMappableZoneIDTest).
 		Save(ctx)
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(s.T(), err)
 }
 
-// TearDownSuite runs after the test suite
-func (suite *HookTestSuite) TearDownSuite() {
-	t := suite.T()
+// tearDownSuite runs after the test suite
+func (s *HookTestSuite) tearDownSuite() {
+	t := s.T()
 
 	// close the gala runtime
-	err := suite.galaRuntime.Close()
-	require.NoError(t, err)
+	err := s.galaRuntime.Close()
+	coreutils.RequireNoError(t, err)
 
 	// close the database connection
-	err = suite.client.Close()
-	require.NoError(t, err)
+	err = s.client.Close()
+	coreutils.RequireNoError(t, err)
 
 	// close the database container
-	testutils.TeardownFixture(suite.tf)
+	testutils.TeardownFixture(s.tf)
 }
 
 // setupClient sets up the client for the test suite
 // using enttest
-func (suite *HookTestSuite) setupClient() *generated.Client {
-	t := suite.T()
+func (s *HookTestSuite) setupClient() *generated.Client {
+	t := s.T()
 
 	version, err := fgaversion.GetVersion()
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(t, err)
 
-	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
+	s.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
 		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
@@ -110,10 +144,12 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 
 	ctx := context.Background()
 
-	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
-	require.NoError(t, err)
+	fgaClient, err := s.ofgaTF.NewFgaClient(ctx)
+	coreutils.RequireNoError(t, err)
 
 	tm, err := coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
+	coreutils.RequireNoError(t, err)
+
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
 
@@ -145,60 +181,64 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 		generated.EntitlementManager(entitilements),
 	}
 
-	suite.tf = entdb.NewTestFixture()
+	s.tf = entdb.NewTestFixture()
 
-	db, err := sql.Open("postgres", suite.tf.URI)
-	require.NoError(t, err)
+	db, err := sql.Open("postgres", s.tf.URI)
+	coreutils.RequireNoError(t, err)
 
 	defer db.Close()
 
-	client := enttest.Open(t, dialect.Postgres, suite.tf.URI,
-		enttest.WithMigrateOptions(entdb.EnablePostgresOption(db)),
-		enttest.WithOptions(opts...))
+	client, err := generated.Open(dialect.Postgres, s.tf.URI, opts...)
+	coreutils.RequireNoError(t, err)
+
+	tables, err := schema.CopyTables(migrate.Tables)
+	coreutils.RequireNoError(t, err)
+
+	coreutils.RequireNoError(t, migrate.Create(ctx, client.Schema, tables, entdb.EnablePostgresOption(db)))
 
 	galaRuntime, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 3})
-	require.NoError(t, err)
+	coreutils.RequireNoError(t, err)
 
 	_, err = gala.Register(galaRuntime, hooks.TaskRuleListeners()...)
-	require.NoError(t, err)
+	coreutils.RequireNoError(t, err)
 
 	_, err = gala.Register(galaRuntime, hooks.OnboardingProgramListeners()...)
-	require.NoError(t, err)
+	coreutils.RequireNoError(t, err)
 
 	_, err = gala.Register(galaRuntime, hooks.CampaignRecurringListeners()...)
-	require.NoError(t, err)
+	coreutils.RequireNoError(t, err)
 
-	require.NoError(t, galaRuntime.Attach(
+	coreutils.RequireNoError(t, galaRuntime.Attach(
 		gala.WithValue(client),
 		gala.WithRestoredValue("ent_client", generated.NewContext),
 	))
 
 	client.Use(hooks.EmitGalaEventHook(galaRuntime))
 
-	suite.galaRuntime = galaRuntime
+	s.galaRuntime = galaRuntime
 
 	return client
 }
 
-func (suite *HookTestSuite) seedUser() *generated.User {
-	t := suite.T()
+func (s *HookTestSuite) seedUser() *generated.User {
+	t := s.T()
 
 	// no caller exists for the new user or their personal org yet
 	ctx := auth.WithInternalCrossOrgContext(context.Background())
-	newUser, err := suite.client.User.Create().SetEmail(gofakeit.Email()).Save(ctx)
-	require.NoError(t, err)
+	newUser, err := s.client.User.Create().SetEmail(gofakeit.Email()).Save(ctx)
+	assert.NilError(t, err)
 
 	// get user and their org memberships
-	newUser, err = suite.client.User.Query().Where(user.ID(newUser.ID)).
+	newUser, err = s.client.User.Query().Where(user.ID(newUser.ID)).
 		WithSetting().
 		WithOrgMemberships().Only(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return newUser
 }
 
-func (suite *HookTestSuite) seedSystemAdmin() *generated.User {
-	newUser := suite.seedUser()
+func (s *HookTestSuite) seedSystemAdmin() *generated.User {
+	newUser := s.seedUser()
 
 	req := fgax.TupleRequest{
 		SubjectID:   newUser.ID,
@@ -209,8 +249,8 @@ func (suite *HookTestSuite) seedSystemAdmin() *generated.User {
 	}
 
 	// add system admin relation for user
-	_, err := suite.client.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{fgax.GetTupleKey(req)}, nil)
-	require.NoError(suite.T(), err)
+	_, err := s.client.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{fgax.GetTupleKey(req)}, nil)
+	assert.NilError(s.T(), err)
 
 	return newUser
 }
