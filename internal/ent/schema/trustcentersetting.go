@@ -214,6 +214,7 @@ func (TrustCenterSetting) Fields() []ent.Field {
 		field.Bool("disable_default_domain").
 			Default(true).
 			Comment("if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing").
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipOrderField)).
 			Optional(),
 	}
 }

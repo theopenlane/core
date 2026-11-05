@@ -61,7 +61,8 @@ type trustCenterSettings struct {
 	trustCenterCnameTarget string
 	// defaultTrustCenterDomain is the default domain for trust center
 	defaultTrustCenterDomain string
-
+	// trustCenterPreviewZoneID is the preview zone id for trustcenters.
+	// needed here because the mutation struct does not have the cfg ( applies to the other properties of this struct too)
 	trustCenterPreviewZoneID string
 }
 
