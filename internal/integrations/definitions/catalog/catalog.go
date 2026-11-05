@@ -39,7 +39,7 @@ func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Buil
 		azuresecuritycenter.Builder(cfg.AzureSecurityCenter),
 		cloudflare.Builder(&cfg.CloudflareRuntime),
 		email.Builder(&cfg.Email, devMode),
-		fossa.Builder(),
+		fossa.Builder(devMode),
 		gcpscc.Builder(federationIssuer),
 		githubapp.Builder(cfg.GitHubApp),
 		googledrive.Builder(cfg.GoogleDrive),

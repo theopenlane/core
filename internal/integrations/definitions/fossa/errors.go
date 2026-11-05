@@ -5,10 +5,6 @@ import "errors"
 var (
 	// ErrAPITokenMissing indicates the installation credential has no FOSSA API token
 	ErrAPITokenMissing = errors.New("fossa: api token is required")
-	// ErrCredentialDecode indicates the stored credential could not be decoded
-	ErrCredentialDecode = errors.New("fossa: unable to decode credential")
-	// ErrCredentialMetadataInvalid indicates installation metadata could not be resolved from the credential
-	ErrCredentialMetadataInvalid = errors.New("fossa: unable to resolve credential metadata")
 	// ErrClientBuild indicates the FOSSA API client could not be constructed
 	ErrClientBuild = errors.New("fossa: unable to build api client")
 	// ErrUnauthorized indicates FOSSA rejected the API token
@@ -25,8 +21,6 @@ var (
 	ErrCategoriesFetchFailed = errors.New("fossa: unable to fetch issue categories")
 	// ErrOrganizationFetchFailed indicates the organization details could not be retrieved
 	ErrOrganizationFetchFailed = errors.New("fossa: unable to fetch organization details")
-	// ErrResultEncode indicates an operation result could not be encoded
-	ErrResultEncode = errors.New("fossa: unable to encode operation result")
-	// ErrOperationConfigInvalid indicates the operation configuration could not be decoded
-	ErrOperationConfigInvalid = errors.New("fossa: unable to decode operation config")
+	// ErrOrganizationIDMissing indicates the organization response carried no ID for the installation identity
+	ErrOrganizationIDMissing = errors.New("fossa: organization id missing")
 )

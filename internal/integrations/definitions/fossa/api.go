@@ -29,7 +29,7 @@ const (
 )
 
 // issuesResponse is the envelope returned by the issues endpoint. Each issue is retained as raw
-// JSON so the untouched provider payload is what reaches the mapping layer.
+// JSON so the provider payload reaches the mapping layer with only its null members removed
 type issuesResponse struct {
 	// Issues is the page of issues returned for the requested category
 	Issues []json.RawMessage `json:"issues"`

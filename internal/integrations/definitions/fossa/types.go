@@ -1,7 +1,6 @@
 package fossa
 
 import (
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -9,30 +8,18 @@ var (
 	// definitionID is the stable identifier for the FOSSA integration definition
 	definitionID = types.NewDefinitionRef("def_01K0FOSSA00000000000000001")
 	// installation is the typed installation metadata handle for the FOSSA definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// fossaSchema is the credential schema for the FOSSA API token
-	fossaSchema, fossaCredential = providerkit.CredentialSchema[CredentialSchema]()
-	// fossaClient is the client ref for the FOSSA REST API client used by this definition
-	fossaClient = types.NewClientRef[*APIClient]()
-	// vulnerabilitySyncSchema is the operation schema for the FOSSA vulnerability sync operation
-	vulnerabilitySyncSchema, vulnerabilitySyncOperation = providerkit.OperationSchema[VulnerabilitySync]()
+	installation = types.InstallationOf[InstallationMetadata]()
+	// fossaConnection is the typed connection handle for the FOSSA API token
+	fossaConnection = types.ConnectionOf[CredentialSchema]()
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// VulnerabilitySync includes the configuration for issues collected from FOSSA
-	VulnerabilitySync VulnerabilitySync `json:"vulnerabilitySync,omitempty" jsonschema:"title=FOSSA Issue Sync"`
-}
-
-// VulnerabilitySync are the configuration settings for the FOSSA issue sync.
-// There is deliberately no disable flag; security vulnerability collection is always on.
+// VulnerabilitySync configures the FOSSA issue sync
 type VulnerabilitySync struct {
+	types.OperationSettings
 	// EnableLicenseFindings opts in to OSS license compliance issues, which are not collected by default
 	EnableLicenseFindings bool `json:"enableLicenseFindings,omitempty" jsonschema:"title=Enable License Compliance Findings,description=Also collect FOSSA OSS license policy issues as findings. Security vulnerabilities are always collected."`
-	// IncludeIgnored imports issues already dismissed in FOSSA on the initial import only; later syncs always fetch every status
+	// IncludeIgnored imports issues already dismissed in FOSSA on the initial import only, later syncs always fetch every status
 	IncludeIgnored bool `json:"includeIgnored,omitempty" jsonschema:"title=Include Ignored Issues,description=Include issues already dismissed in FOSSA when the integration is first connected. Later syncs always pick up dismissals so issues closed in FOSSA are closed here too."`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.severity == 'critical' || payload.severity == 'high'"`
 }
 
 // CredentialSchema holds the FOSSA API credentials for one installation

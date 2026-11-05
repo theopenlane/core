@@ -8,9 +8,10 @@ import (
 
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
+	"github.com/theopenlane/logx"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (
@@ -26,10 +27,32 @@ type APIClient struct {
 	requester *httpsling.Requester
 }
 
-// NewAPIClient constructs a FOSSA API client for the supplied base URL and token
-func NewAPIClient(baseURL, token string) (*APIClient, error) {
+// clientBuilder returns the FOSSA client constructor, allowPrivate permits non-public base urls for local development
+func clientBuilder(allowPrivate bool) func(context.Context, types.ConnectionRequest[CredentialSchema]) (*APIClient, error) {
+	return func(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*APIClient, error) {
+		return buildClient(req, allowPrivate)
+	}
+}
+
+// buildClient constructs the FOSSA API client for one installation
+func buildClient(req types.ConnectionRequest[CredentialSchema], allowPrivate bool) (*APIClient, error) {
+	if req.Credential.APIToken == "" {
+		return nil, ErrAPITokenMissing
+	}
+
+	return NewAPIClient(baseURLOrDefault(req.Credential.BaseURL), req.Credential.APIToken, allowPrivate)
+}
+
+// NewAPIClient constructs a FOSSA API client for the supplied base URL and token, the customer supplied
+// base URL must be public unless allowPrivate is set
+func NewAPIClient(baseURL, token string, allowPrivate bool) (*APIClient, error) {
+	httpClient, err := urlx.NewCustomerHTTPClient(baseURL, allowPrivate, httpclient.Timeout(fossaRequestTimeout))
+	if err != nil {
+		return nil, err
+	}
+
 	requester, err := httpsling.New(
-		httpsling.Client(httpclient.Timeout(fossaRequestTimeout)),
+		httpsling.WithHTTPClient(httpClient),
 		httpsling.URL(baseURL),
 	)
 	if err != nil {
@@ -43,11 +66,11 @@ func NewAPIClient(baseURL, token string) (*APIClient, error) {
 	return &APIClient{requester: requester}, nil
 }
 
-// get issues a GET request against the FOSSA API and decodes a successful response into out.
+// get issues a GET request against the FOSSA API and decodes a successful response into out
 //
-// httpsling does not treat a non-2xx status as an error; it unmarshals whatever body came back
+// httpsling does not treat a non-2xx status as an error, it unmarshals whatever body came back
 // into out and returns any unmarshal error. The status is therefore checked before the decode
-// result is trusted, so an auth failure surfaces as ErrUnauthorized rather than a decode error.
+// result is trusted, so an auth failure surfaces as ErrUnauthorized rather than a decode error
 func (c *APIClient) get(ctx context.Context, path string, params map[string]string, out any) error {
 	opts := make([]httpsling.Option, 0, len(params)+1)
 	opts = append(opts, httpsling.Get(path))
@@ -90,33 +113,6 @@ func statusError(status int) error {
 	default:
 		return ErrAPIRequest
 	}
-}
-
-// ClientBuilder builds FOSSA API clients for one installation
-type ClientBuilder struct{}
-
-// Build constructs the FOSSA API client for one installation
-func (ClientBuilder) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	cred, err := resolveCredential(req.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
-	if cred.APIToken == "" {
-		return nil, ErrAPITokenMissing
-	}
-
-	return NewAPIClient(baseURLOrDefault(cred.BaseURL), cred.APIToken)
-}
-
-// resolveCredential extracts the CredentialSchema from the provided credential bindings
-func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
-	cred, ok, err := fossaCredential.Resolve(bindings)
-	if err != nil || !ok {
-		return CredentialSchema{}, ErrCredentialDecode
-	}
-
-	return cred, nil
 }
 
 // baseURLOrDefault normalizes the configured base URL, falling back to the FOSSA SaaS endpoint

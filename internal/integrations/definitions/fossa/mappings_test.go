@@ -7,35 +7,21 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/integrations/mappingtest"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 func TestMappingExpressionsValid(t *testing.T) {
-	def, err := Builder()()
+	def, err := Builder(false)()
 	assert.NilError(t, err)
 
-	for _, m := range def.Mappings {
-		name := m.Schema
-		if m.Variant != "" {
-			name += "/" + m.Variant
-		}
-
-		t.Run(name+"/filter", func(t *testing.T) {
-			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
-		})
-
-		t.Run(name+"/map", func(t *testing.T) {
-			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
-		})
-	}
+	mappingtest.AssertExpressionsValid(t, def.Mappings)
 }
 
 // TestNullArrayPayloads guards against CEL "no such overload: size" errors that occur when
 // array and object fields like projects, cwes, references or source are present in the payload
-// but carry an explicit null value rather than being absent.
+// but carry an explicit null value rather than being absent
 func TestNullArrayPayloads(t *testing.T) {
-	def, err := Builder()()
+	def, err := Builder(false)()
 	assert.NilError(t, err)
 
 	vulnSpec := mappingtest.MappingSpec(t, def.Mappings, "Vulnerability")
@@ -59,7 +45,10 @@ func TestNullArrayPayloads(t *testing.T) {
 		})
 		assert.NilError(t, err)
 
-		mapped := mappingtest.EvalMap(t, vulnSpec, types.MappingEnvelope{Payload: json.RawMessage(payload)})
+		cleaned, err := dropNulls(payload)
+		assert.NilError(t, err)
+
+		mapped := mappingtest.EvalMap(t, vulnSpec, types.MappingEnvelope{Payload: cleaned})
 
 		assert.Equal(t, "20062524", mapped["external_id"])
 		assert.Equal(t, "", mapped["cve_id"])
@@ -89,7 +78,10 @@ func TestNullArrayPayloads(t *testing.T) {
 		})
 		assert.NilError(t, err)
 
-		mapped := mappingtest.EvalMap(t, findingSpec, types.MappingEnvelope{Payload: json.RawMessage(payload)})
+		cleaned, err := dropNulls(payload)
+		assert.NilError(t, err)
+
+		mapped := mappingtest.EvalMap(t, findingSpec, types.MappingEnvelope{Payload: cleaned})
 
 		assert.Equal(t, "20012351", mapped["external_id"])
 		assert.Equal(t, "policy_flag", mapped["category"])
@@ -104,7 +96,7 @@ func TestNullArrayPayloads(t *testing.T) {
 // as JSON integers, and the mapping layer normalizes whole floats to integers before evaluation,
 // so an uncoerced expression would fail to produce a float64 for the score field.
 func TestIntegralCvssScore(t *testing.T) {
-	def, err := Builder()()
+	def, err := Builder(false)()
 	assert.NilError(t, err)
 
 	vulnSpec := mappingtest.MappingSpec(t, def.Mappings, "Vulnerability")
@@ -123,7 +115,7 @@ func TestIntegralCvssScore(t *testing.T) {
 }
 
 func TestExamplePayloads(t *testing.T) {
-	def, err := Builder()()
+	def, err := Builder(false)()
 	assert.NilError(t, err)
 
 	vulnSpec := mappingtest.MappingSpec(t, def.Mappings, "Vulnerability")
@@ -161,7 +153,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "2026-02-11T19:15:50.000Z", mapped["published_at"])
 		assert.Equal(t, "2026-08-18T04:33:32.561Z", mapped["discovered_at"])
 		assert.Equal(t, "2026-08-18T04:33:33.54962+00:00", mapped["source_updated_at"])
-		assert.Equal(t, "FOSSA", mapped["source"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["source"])
 		assert.DeepEqual(t, []any{"CWE-1333", "CWE-400"}, mapped["cwe_ids"])
 
 		// remediation guidance is a ticket requirement: the complete fix is promoted to a first
@@ -205,7 +197,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, true, mapped["open"])
 		assert.Equal(t, "ACTIVE", mapped["finding_status_name"])
 		assert.Equal(t, "2026-08-16T03:49:42.532Z", mapped["reported_at"])
-		assert.Equal(t, "FOSSA", mapped["source"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["source"])
 		assert.DeepEqual(t, []any{"policy_flag"}, mapped["categories"])
 		assert.DeepEqual(t, []any{"git+github.com/example-org/example-repo"}, mapped["targets"])
 	})
