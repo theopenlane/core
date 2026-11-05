@@ -11,7 +11,6 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
@@ -144,7 +143,7 @@ func TestQueryGroupsByOwner(t *testing.T) {
 					ID: &org1,
 				},
 			},
-			IsManaged: lo.ToPtr(false),
+			IsManaged: new(false),
 		}
 
 		resp, err := suite.Client.API.GetGroups(reqCtx, whereInput)
@@ -177,7 +176,7 @@ func TestQueryGroupsByOwner(t *testing.T) {
 					ID: &org2,
 				},
 			},
-			IsManaged: lo.ToPtr(false),
+			IsManaged: new(false),
 		}
 
 		resp, err = suite.Client.API.GetGroups(reqCtx2, whereInput)
@@ -1253,7 +1252,7 @@ func TestManagedGroups(t *testing.T) {
 	t.Parallel()
 
 	whereInput := &testclient.GroupWhereInput{
-		IsManaged: lo.ToPtr(true),
+		IsManaged: new(true),
 	}
 
 	testUser := suite.UserBuilder(context.Background(), t)

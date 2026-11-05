@@ -45,7 +45,7 @@ func TestWebfingerHandler(t *testing.T) {
 	ctx = ent.NewContext(ctx, suite.db)
 
 	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		MultifactorAuthEnforced: lo.ToPtr(true),
+		MultifactorAuthEnforced: new(true),
 	}).SaveX(ctx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
@@ -94,7 +94,7 @@ func TestWebfingerHandlerTFAOnly(t *testing.T) {
 
 	// Create organization setting with only TFA enforced, not SSO
 	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		MultifactorAuthEnforced: lo.ToPtr(true),
+		MultifactorAuthEnforced: new(true),
 	}).SaveX(ctx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
@@ -190,7 +190,7 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/.well-known/openid-configuration", func(w http.ResponseWriter, _ *http.Request) {
-		_ = json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"issuer":                                m.server.URL,
 			"authorization_endpoint":                m.server.URL + "/auth",
 			"token_endpoint":                        m.server.URL + "/token",
@@ -246,7 +246,7 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 			0,
 		)
 		// Manually set the sub claim since the constructor does not include it in the JWT
-		claimsMap := make(map[string]interface{})
+		claimsMap := make(map[string]any)
 		b, _ := json.Marshal(claims)
 		_ = json.Unmarshal(b, &claimsMap)
 		claimsMap["sub"] = "1234"
@@ -255,26 +255,22 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 		claimsMap["email_verified"] = true
 
 		info := &oidc.UserInfo{
-			Subject: "1234",
-			UserInfoProfile: oidc.UserInfoProfile{
-				Name:    m.name,
-				Picture: m.picture,
-			},
-			UserInfoEmail: oidc.UserInfoEmail{
-				Email:         m.email,
-				EmailVerified: true,
-			},
+			Subject:       "1234",
+			Name:          m.name,
+			Picture:       m.picture,
+			Email:         m.email,
+			EmailVerified: true,
 		}
 		claims.SetUserInfo(info)
 
 		// Re-marshal claimsMap to JSON and sign as JWT
 		claimsBytes, _ := json.Marshal(claimsMap)
-		var claimsInterface map[string]interface{}
+		var claimsInterface map[string]any
 		_ = json.Unmarshal(claimsBytes, &claimsInterface)
 		raw, err := oidccrypto.Sign(claimsInterface, m.signer)
 		assert.Check(t, err)
 
-		resp := map[string]interface{}{
+		resp := map[string]any{
 			"access_token": "access-token",
 			"id_token":     raw,
 			"token_type":   "Bearer",
@@ -306,10 +302,10 @@ func TestSSOInitiateHandler(t *testing.T) {
 
 	discovery := oidc.server.URL + "/.well-known/openid-configuration"
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProvider:             lo.ToPtr(enums.SSOProviderOkta),
+		IdentityProvider:             new(enums.SSOProviderOkta),
 		OidcDiscoveryEndpoint:        &discovery,
-		IdentityProviderClientID:     lo.ToPtr("client"),
-		IdentityProviderClientSecret: lo.ToPtr("secret"),
+		IdentityProviderClientID:     new("client"),
+		IdentityProviderClientSecret: new("secret"),
 	}).Save(ctx)
 	assert.NilError(t, err)
 
@@ -377,11 +373,11 @@ func TestSSOLoginAndCallback(t *testing.T) {
 
 	discovery := oidc.server.URL + "/.well-known/openid-configuration"
 	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: lo.ToPtr(true),
-		IdentityProvider:              lo.ToPtr(enums.SSOProviderOkta),
+		IdentityProviderLoginEnforced: new(true),
+		IdentityProvider:              new(enums.SSOProviderOkta),
 		OidcDiscoveryEndpoint:         &discovery,
-		IdentityProviderClientID:      lo.ToPtr("client"),
-		IdentityProviderClientSecret:  lo.ToPtr("secret"),
+		IdentityProviderClientID:      new("client"),
+		IdentityProviderClientSecret:  new("secret"),
 	}).SaveX(ctx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
@@ -547,10 +543,10 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, sc ssoScenario) (boo
 
 	discovery := oidc.server.URL + "/.well-known/openid-configuration"
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProvider:                lo.ToPtr(enums.SSOProviderOkta),
+		IdentityProvider:                new(enums.SSOProviderOkta),
 		OidcDiscoveryEndpoint:           &discovery,
-		IdentityProviderClientID:        lo.ToPtr("client"),
-		IdentityProviderClientSecret:    lo.ToPtr("secret"),
+		IdentityProviderClientID:        new("client"),
+		IdentityProviderClientSecret:    new("secret"),
 		IdentityProviderJitProvisioning: &sc.jit,
 		JitAllowedEmailDomains:          sc.jitDomains,
 	}).Save(ctx)
@@ -665,10 +661,10 @@ func TestSSOCallbackJITProvisioning(t *testing.T) {
 
 	discovery := oidc.server.URL + "/.well-known/openid-configuration"
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProvider:             lo.ToPtr(enums.SSOProviderOkta),
+		IdentityProvider:             new(enums.SSOProviderOkta),
 		OidcDiscoveryEndpoint:        &discovery,
-		IdentityProviderClientID:     lo.ToPtr("client"),
-		IdentityProviderClientSecret: lo.ToPtr("secret"),
+		IdentityProviderClientID:     new("client"),
+		IdentityProviderClientSecret: new("secret"),
 	}).Save(ctx)
 	assert.NilError(t, err)
 

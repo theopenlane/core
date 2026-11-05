@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
+	"maps"
 	"time"
 
 	"entgo.io/ent"
@@ -168,9 +169,7 @@ func StorageFileFromEnt(file *generated.File) *storagetypes.File {
 
 	if file.Metadata != nil {
 		metadata := make(map[string]any)
-		for k, v := range file.Metadata {
-			metadata[k] = v
-		}
+		maps.Copy(metadata, file.Metadata)
 
 		storageFile.Metadata = metadata
 	}

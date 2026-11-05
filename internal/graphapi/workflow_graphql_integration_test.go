@@ -196,10 +196,8 @@ func TestWorkflowGraphQLUpdateControlRespectsPermissions(t *testing.T) {
 
 	required := true
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: initiator.ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: initiator.ID},
 		},
 		Required: &required,
 		Label:    "Control Status Approval",
@@ -679,7 +677,7 @@ func TestWorkflowGraphQLMyAssignments(t *testing.T) {
 
 	// Create 2 controls and trigger workflows
 	var instanceIDs []string
-	for i := 0; i < 2; i++ {
+	for i := range 2 {
 		control, err := suite.Client.DB.Control.Create().
 			SetRefCode("CTL-" + ulids.New().String()).
 			SetTitle("Test Control for MyAssignments").

@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -36,8 +35,8 @@ func TestMutationCreateTrustCenterFAQ(t *testing.T) {
 			request: testclient.CreateTrustCenterFAQInput{
 				NoteID:        note1.ID,
 				TrustCenterID: &trustCenter.ID,
-				ReferenceLink: lo.ToPtr("https://example.com/faq"),
-				DisplayOrder:  lo.ToPtr(int64(1)),
+				ReferenceLink: new("https://example.com/faq"),
+				DisplayOrder:  new(int64(1)),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Admin.UserCtx,
@@ -66,7 +65,7 @@ func TestMutationCreateTrustCenterFAQ(t *testing.T) {
 			name: "trust center not found",
 			request: testclient.CreateTrustCenterFAQInput{
 				NoteID:        note2.ID,
-				TrustCenterID: lo.ToPtr("non-existent-trust-center-id"),
+				TrustCenterID: new("non-existent-trust-center-id"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Owner.UserCtx,
@@ -165,8 +164,8 @@ func TestQueryTrustCenterFAQByID(t *testing.T) {
 
 	createResp, err := suite.Client.API.CreateTrustCenterFaq(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		TrustCenterID: &trustCenter.ID,
-		ReferenceLink: lo.ToPtr("https://example.com/faq"),
-		DisplayOrder:  lo.ToPtr(int64(1)),
+		ReferenceLink: new("https://example.com/faq"),
+		DisplayOrder:  new(int64(1)),
 		CreateNote: &testclient.CreateNoteInput{
 			Text: "faq note for trust center",
 		},
@@ -281,15 +280,15 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				createResp, err := suite.Client.API.CreateTrustCenterFaq(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 					NoteID:        note.ID,
 					TrustCenterID: &trustCenter.ID,
-					ReferenceLink: lo.ToPtr("https://example.com/old"),
-					DisplayOrder:  lo.ToPtr(int64(1)),
+					ReferenceLink: new("https://example.com/old"),
+					DisplayOrder:  new(int64(1)),
 				})
 				assert.NilError(t, err)
 				return createResp.CreateTrustCenterFaq.TrustCenterFaq.ID
 			},
 			request: testclient.UpdateTrustCenterFAQInput{
-				ReferenceLink: lo.ToPtr("https://example.com/new"),
-				DisplayOrder:  lo.ToPtr(int64(5)),
+				ReferenceLink: new("https://example.com/new"),
+				DisplayOrder:  new(int64(5)),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Admin.UserCtx,
@@ -301,13 +300,13 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				createResp, err := suite.Client.API.CreateTrustCenterFaq(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 					NoteID:        note.ID,
 					TrustCenterID: &trustCenter.ID,
-					ReferenceLink: lo.ToPtr("https://example.com/to-clear"),
+					ReferenceLink: new("https://example.com/to-clear"),
 				})
 				assert.NilError(t, err)
 				return createResp.CreateTrustCenterFaq.TrustCenterFaq.ID
 			},
 			request: testclient.UpdateTrustCenterFAQInput{
-				ClearReferenceLink: lo.ToPtr(true),
+				ClearReferenceLink: new(true),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -324,7 +323,7 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				return createResp.CreateTrustCenterFaq.TrustCenterFaq.ID
 			},
 			request: testclient.UpdateTrustCenterFAQInput{
-				ReferenceLink: lo.ToPtr("https://example.com/updated"),
+				ReferenceLink: new("https://example.com/updated"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Member.UserCtx,
@@ -342,7 +341,7 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				return createResp.CreateTrustCenterFaq.TrustCenterFaq.ID
 			},
 			request: testclient.UpdateTrustCenterFAQInput{
-				ReferenceLink: lo.ToPtr("https://example.com/updated"),
+				ReferenceLink: new("https://example.com/updated"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.CreateAnonymousTrustCenterContext(trustCenter.ID, tcOrg.OrganizationID),
@@ -360,7 +359,7 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				return createResp.CreateTrustCenterFaq.TrustCenterFaq.ID
 			},
 			request: testclient.UpdateTrustCenterFAQInput{
-				ReferenceLink: lo.ToPtr("https://example.com/updated"),
+				ReferenceLink: new("https://example.com/updated"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg2.Owner.UserCtx,
@@ -370,7 +369,7 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 			name:      "not found - non-existent ID",
 			setupFunc: func() string { return "non-existent-id" },
 			request: testclient.UpdateTrustCenterFAQInput{
-				ReferenceLink: lo.ToPtr("https://example.com/updated"),
+				ReferenceLink: new("https://example.com/updated"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Owner.UserCtx,
@@ -515,7 +514,7 @@ func TestQueryTrustCenterFAQs(t *testing.T) {
 	_, err := suite.Client.API.CreateTrustCenterFaq(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        note1.ID,
 		TrustCenterID: &trustCenter.ID,
-		ReferenceLink: lo.ToPtr("https://example.com/faq1"),
+		ReferenceLink: new("https://example.com/faq1"),
 	})
 	assert.NilError(t, err)
 
@@ -578,7 +577,7 @@ func TestQueryTrustCenterFAQs(t *testing.T) {
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
 			where: &testclient.TrustCenterFAQWhereInput{
-				ReferenceLinkNotNil: lo.ToPtr(true),
+				ReferenceLinkNotNil: new(true),
 			},
 			expectedResults: 1,
 		},

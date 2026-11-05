@@ -179,11 +179,9 @@ func eventsWebhook(webhook integrationtypes.WebhookRef, events ...integrationtyp
 func previousDefinition(primary retiredSlot, extra ...retiredSlot) registry.Builder {
 	return func() (integrationtypes.Definition, error) {
 		return integrationtypes.Definition{
-			DefinitionSpec: integrationtypes.DefinitionSpec{
-				ID:          testint.DefinitionID.ID(),
-				DisplayName: "Test Integration",
-				Active:      true,
-			},
+			ID:           testint.DefinitionID.ID(),
+			DisplayName:  "Test Integration",
+			Active:       true,
 			Installation: integrationtypes.InstallationOf[testMetadata]().Registration(),
 			Connections: lo.Map(append([]retiredSlot{primary}, extra...), func(slot retiredSlot, _ int) integrationtypes.Connector {
 				return slot.connector
@@ -270,7 +268,7 @@ func seedRetiredLoop(t *testing.T, ctx context.Context, installation *ent.Integr
 
 	emitCtx, headers := intobvs.EmitContext(ctx, oc)
 	headers.SkipUniqueKey = true
-	headers.ScheduledAt = lo.ToPtr(time.Now().Add(time.Hour))
+	headers.ScheduledAt = new(time.Now().Add(time.Hour))
 
 	_, err := suite.GalaRuntime.EmitWithHeaders(emitCtx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
 	assert.NilError(t, err)

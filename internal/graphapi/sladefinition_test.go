@@ -9,7 +9,6 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -203,7 +202,7 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 		{
 			name: "happy path, update field by admin user",
 			request: testclient.UpdateSLADefinitionInput{
-				SLADays: lo.ToPtr(int64(14)),
+				SLADays: new(int64(14)),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -211,7 +210,7 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 		{
 			name: "happy path, update using pat",
 			request: testclient.UpdateSLADefinitionInput{
-				SLADays: lo.ToPtr(int64(7)),
+				SLADays: new(int64(7)),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -219,7 +218,7 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 		{
 			name: "happy path, update using api token",
 			request: testclient.UpdateSLADefinitionInput{
-				SLADays: lo.ToPtr(int64(9)),
+				SLADays: new(int64(9)),
 			},
 			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
@@ -227,7 +226,7 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 		{
 			name: "update not allowed, not enough permissions as view only user",
 			request: testclient.UpdateSLADefinitionInput{
-				SLADays: lo.ToPtr(int64(60)),
+				SLADays: new(int64(60)),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -236,7 +235,7 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateSLADefinitionInput{
-				SLADays: lo.ToPtr(int64(60)),
+				SLADays: new(int64(60)),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,

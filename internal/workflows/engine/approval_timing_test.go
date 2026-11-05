@@ -91,12 +91,10 @@ func TestApprovalTimingPreCommitRoutesToProposal(t *testing.T) {
 	seedCtx := s.SeedContext(approverID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approverID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Status Approval",
 		Fields:   []string{"status"},
 	}
@@ -171,12 +169,10 @@ func TestApprovalTimingPostCommitCreatesReviewAssignments(t *testing.T) {
 	seedCtx := s.SeedContext(approverID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approverID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Status Review",
 		Fields:   []string{"status"},
 	}
@@ -247,12 +243,10 @@ func TestApprovalTimingPostCommitReviewCompletes(t *testing.T) {
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approverID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Status Review",
 		Fields:   []string{"status"},
 	}
@@ -343,12 +337,10 @@ func TestPreCommitAndPostCommitWorkflowsTriggerInSequence(t *testing.T) {
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approverID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Status Approval",
 		Fields:   []string{"status"},
 	}

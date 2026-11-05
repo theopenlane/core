@@ -435,12 +435,10 @@ func TestMultiStepParallelApprovals(t *testing.T) {
 	wfEngine := s.Engine()
 
 	categoryApprovalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Category Review",
 		Fields:   []string{"category"},
 	}
@@ -448,12 +446,10 @@ func TestMultiStepParallelApprovals(t *testing.T) {
 	assert.NilError(t, err)
 
 	statusApprovalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: user2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: user2ID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Compliance Approval",
 		Fields:   []string{"status"},
 	}
@@ -691,13 +687,11 @@ func TestApprovalStatusBasedNotifications(t *testing.T) {
 	wfEngine := s.Engine()
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 2,
 		Label:         "Team Review",
 		Fields:        []string{"status"},
@@ -706,10 +700,8 @@ func TestApprovalStatusBasedNotifications(t *testing.T) {
 	assert.NilError(t, err)
 
 	notifyFirstApprovalParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
 		},
 		Title: "First Approval Received",
 	}
@@ -717,10 +709,8 @@ func TestApprovalStatusBasedNotifications(t *testing.T) {
 	assert.NilError(t, err)
 
 	notifyQuorumParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
 		},
 		Title: "Quorum Reached",
 	}
@@ -728,10 +718,8 @@ func TestApprovalStatusBasedNotifications(t *testing.T) {
 	assert.NilError(t, err)
 
 	notifyRejectionParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
 		},
 		Title: "Request Rejected",
 	}
@@ -1005,12 +993,10 @@ func TestApprovalWithWebhook(t *testing.T) {
 	defer server.Close()
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Evidence Review",
 		Fields:   []string{"status"},
 	}
@@ -1242,10 +1228,8 @@ func TestTriggerExistingInstanceResumes(t *testing.T) {
 		s := s.withT(t)
 
 		approvalParams := workflows.ApprovalActionParams{
-			TargetedActionParams: workflows.TargetedActionParams{
-				Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
-			},
-			Required: boolPtr(true),
+			Targets:  []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+			Required: new(true),
 			Label:    "Resume Test Approval",
 			Fields:   []string{"status"},
 		}
@@ -1382,10 +1366,8 @@ func TestTriggerWorkflowGuardsActiveDomainInstance(t *testing.T) {
 		s := s.withT(t)
 
 		approvalParams := workflows.ApprovalActionParams{
-			TargetedActionParams: workflows.TargetedActionParams{
-				Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
-			},
-			Required:      boolPtr(true),
+			Targets:       []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+			Required:      new(true),
 			RequiredCount: 1,
 			Label:         "Status Approval",
 			Fields:        []string{"status"},
@@ -1769,10 +1751,8 @@ func TestOptionalApprovalSkipped(t *testing.T) {
 		s := s.withT(t)
 
 		approvalParams := workflows.ApprovalActionParams{
-			TargetedActionParams: workflows.TargetedActionParams{
-				Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
-			},
-			Required: boolPtr(false),
+			Targets:  []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+			Required: new(false),
 			Label:    "Optional Approval",
 			Fields:   []string{"status"},
 		}
@@ -1976,10 +1956,8 @@ func TestResolveAssignmentStateTransitions(t *testing.T) {
 	wfEngine := s.Engine()
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
-		},
-		Required:      boolPtr(true),
+		Targets:       []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+		Required:      new(true),
 		RequiredCount: 1,
 		Label:         "Status Approval",
 		Fields:        []string{"status"},

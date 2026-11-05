@@ -56,9 +56,8 @@ func sortSchemas(schemas []*load.Schema) []*load.Schema {
 
 // checkSchemaAnnotations checks annotations on schemas, eliminating not-needed schemas before policy checks
 func checkSchemaAnnotations(schema *load.Schema) (parsedSchema, bool) {
-	si := parsedSchema{SchemaInfo: schemainfo.SchemaInfo{
-		Name: schema.Name,
-	}}
+	si := parsedSchema{
+		Name: schema.Name}
 
 	si.checkEntGQLAnnotation(schema)
 

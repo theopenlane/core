@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -28,7 +27,7 @@ func TestAssessmentDueDateUpdateSyncsToResponses(t *testing.T) {
 	assert.Assert(t, !assessmentResponse.DueDate.IsZero())
 
 	_, err := suite.Client.API.UpdateAssessment(th.SharedTestUser1.UserCtx, assessment.ID, testclient.UpdateAssessmentInput{
-		ResponseDueDuration: lo.ToPtr(int64((2 * time.Hour).Seconds())),
+		ResponseDueDuration: new(int64((2 * time.Hour).Seconds())),
 	})
 	assert.NilError(t, err)
 

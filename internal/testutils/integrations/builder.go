@@ -13,15 +13,13 @@ import (
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "Openlane",
-				DisplayName: "Test Integration",
-				Description: "Shared test integration definition.",
-				Category:    "system",
-				Active:      true,
-				Visible:     true,
-			},
+			ID:           DefinitionID.ID(),
+			Family:       "Openlane",
+			DisplayName:  "Test Integration",
+			Description:  "Shared test integration definition.",
+			Category:     "system",
+			Active:       true,
+			Visible:      true,
 			Installation: installation.Registration(),
 			Connections: []types.Connector{
 				OAuth.

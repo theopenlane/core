@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v86"
 )
 
@@ -70,11 +69,9 @@ func (sc *StripeClient) CreateCustomer(ctx context.Context, c *OrganizationCusto
 // https://docs.stripe.com/search#search-query-language
 func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (customers []*stripe.Customer, err error) {
 	params := &stripe.CustomerSearchParams{
-		Expand: []*string{stripe.String("data.tax"), stripe.String("data.subscriptions")},
-		SearchParams: stripe.SearchParams{
-			Query:   query,
-			Context: ctx,
-		},
+		Expand:  []*string{stripe.String("data.tax"), stripe.String("data.subscriptions")},
+		Query:   query,
+		Context: ctx,
 	}
 
 	result := sc.Client.V1Customers.Search(ctx, params)
@@ -161,10 +158,8 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 
 	start := time.Now()
 	customer, err := sc.Client.V1Customers.Retrieve(ctx, customerID, &stripe.CustomerRetrieveParams{
-		Params: stripe.Params{
-			Context: ctx,
-		},
-		Expand: []*string{stripe.String("tax"), stripe.String("subscriptions")},
+		Context: ctx,
+		Expand:  []*string{stripe.String("tax"), stripe.String("subscriptions")},
 	})
 	duration := time.Since(start).Seconds()
 
@@ -235,7 +230,7 @@ func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Contex
 		_, err := sc.Client.V1Subscriptions.Cancel(ctx, sub.ID,
 			&stripe.SubscriptionCancelParams{
 				CancellationDetails: &stripe.SubscriptionCancelCancellationDetailsParams{
-					Comment: lo.ToPtr("system: organization was deleted - cancelling subscription"),
+					Comment: new("system: organization was deleted - cancelling subscription"),
 				},
 			})
 		if err != nil {

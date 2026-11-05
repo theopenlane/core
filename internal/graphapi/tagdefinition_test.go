@@ -124,8 +124,8 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name:        "mitb",
 				Aliases:     []string{"matt-is-the-best"},
-				Description: lo.ToPtr("Use to mark objects as the premium level of quality"),
-				Color:       lo.ToPtr("#08800a"),
+				Description: new("Use to mark objects as the premium level of quality"),
+				Color:       new("#08800a"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -167,7 +167,7 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 			name: "invalid color format",
 			request: testclient.CreateTagDefinitionInput{
 				Name:  "invalid-color-tag",
-				Color: lo.ToPtr("invalid"),
+				Color: new("invalid"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -216,8 +216,8 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 	baseTagResp, err := suite.Client.API.CreateTagDefinition(th.SharedTestUser1.UserCtx, testclient.CreateTagDefinitionInput{
 		Name:        "red",
 		Aliases:     []string{"maroon", "brick", "crimson"},
-		Description: lo.ToPtr("Red color tag with aliases"),
-		Color:       lo.ToPtr("#ff0000"),
+		Description: new("Red color tag with aliases"),
+		Color:       new("#ff0000"),
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, baseTagResp != nil)
@@ -368,7 +368,7 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateTagDefinitionInput{
-				Color: lo.ToPtr("#abcef0"),
+				Color: new("#abcef0"),
 			},
 			reqID:  tagDefinition.ID,
 			client: suite.Client.API,
@@ -377,7 +377,7 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 		{
 			name: "not allowed to update system tag definition",
 			request: testclient.UpdateTagDefinitionInput{
-				Color: lo.ToPtr("#abcef0"),
+				Color: new("#abcef0"),
 			},
 			reqID:       systemTagDefinition.ID,
 			client:      suite.Client.API,
@@ -388,8 +388,8 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateTagDefinitionInput{
 				Aliases:     []string{"something-else"},
-				Color:       lo.ToPtr("#abcef1"),
-				Description: lo.ToPtr("tag for something cool, yo"),
+				Color:       new("#abcef1"),
+				Description: new("tag for something cool, yo"),
 			},
 			reqID:  tagDefinition.ID,
 			client: suite.Client.APIWithPAT,
@@ -398,7 +398,7 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 		{
 			name: "update not allowed by view only user",
 			request: testclient.UpdateTagDefinitionInput{
-				Color:         lo.ToPtr("#accef0"),
+				Color:         new("#accef0"),
 				AppendAliases: []string{"new-alias"},
 			},
 			reqID:       tagDefinition.ID,
@@ -409,7 +409,7 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 		{
 			name: "happy path, clear aliases",
 			request: testclient.UpdateTagDefinitionInput{
-				ClearAliases: lo.ToPtr(true),
+				ClearAliases: new(true),
 			},
 			reqID:  tagDefinition.ID,
 			client: suite.Client.APIWithPAT,
@@ -418,7 +418,7 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateTagDefinitionInput{
-				Color: lo.ToPtr("#ddce19"),
+				Color: new("#ddce19"),
 			},
 			reqID:       tagDefinition.ID,
 			client:      suite.Client.API,

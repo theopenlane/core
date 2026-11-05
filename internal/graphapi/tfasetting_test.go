@@ -7,7 +7,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -86,7 +85,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			name:   "happy path",
 			userID: localTestUser2.ID,
 			input: testclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
+				TotpAllowed: new(true),
 			},
 			client: suite.Client.API,
 			ctx:    localTestUser2.UserCtx,
@@ -95,7 +94,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			name:   "happy path, using personal access token",
 			userID: localTestUser.Owner.ID,
 			input: testclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
+				TotpAllowed: new(true),
 			},
 			client: localTestUser.PatClient,
 			ctx:    context.Background(),
@@ -104,7 +103,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			name:   "unable to create using api token",
 			userID: localTestUser.Owner.ID,
 			input: testclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
+				TotpAllowed: new(true),
 			},
 			client: localTestUser.APIClient,
 			ctx:    context.Background(),
@@ -114,7 +113,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			name:   "already exists",
 			userID: localTestUser.Owner.ID,
 			input: testclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
+				TotpAllowed: new(true),
 			},
 			client: suite.Client.API,
 			ctx:    localTestUser.Owner.UserCtx,
@@ -124,7 +123,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			name:   "create with not enabling totp should not return qr code",
 			userID: testUserAnother.ID,
 			input: testclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(false),
+				TotpAllowed: new(false),
 			},
 			client: suite.Client.API,
 			ctx:    testUserAnother.UserCtx,
@@ -195,8 +194,8 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		{
 			name: "update verify",
 			input: testclient.UpdateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
-				Verified:    lo.ToPtr(true),
+				TotpAllowed: new(true),
+				Verified:    new(true),
 			},
 			client: suite.Client.API,
 			ctx:    localTestUser.Owner.UserCtx,
@@ -204,7 +203,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		{
 			name: "regen codes using personal access token",
 			input: testclient.UpdateTFASettingInput{
-				RegenBackupCodes: lo.ToPtr(true),
+				RegenBackupCodes: new(true),
 			},
 			client: localTestUser.PatClient,
 			ctx:    context.Background(),
@@ -212,7 +211,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		{
 			name: "regen codes using api token not allowed",
 			input: testclient.UpdateTFASettingInput{
-				RegenBackupCodes: lo.ToPtr(true),
+				RegenBackupCodes: new(true),
 			},
 			client: localTestUser.APIClient,
 			ctx:    context.Background(),
@@ -221,7 +220,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		{
 			name: "regen codes - false",
 			input: testclient.UpdateTFASettingInput{
-				RegenBackupCodes: lo.ToPtr(false),
+				RegenBackupCodes: new(false),
 			},
 			client: suite.Client.API,
 			ctx:    localTestUser.Owner.UserCtx,
@@ -229,7 +228,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		{
 			name: "update totp to false should clear settings",
 			input: testclient.UpdateTFASettingInput{
-				TotpAllowed: lo.ToPtr(false),
+				TotpAllowed: new(false),
 			},
 			client: suite.Client.API,
 			ctx:    localTestUser.Owner.UserCtx,
@@ -237,7 +236,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 		{
 			name: "update TotpAllowed to true should enable TFA",
 			input: testclient.UpdateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
+				TotpAllowed: new(true),
 			},
 			client: suite.Client.API,
 			ctx:    localTestUser.Owner.UserCtx,

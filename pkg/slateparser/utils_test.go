@@ -94,7 +94,7 @@ func TestContainsCommentsInTextJSON(t *testing.T) {
 			input: []any{
 				123,
 				[]string{"not", "a", "map"},
-				map[string]interface{}{
+				map[string]any{
 					"children": "this should be a list",
 				},
 			},

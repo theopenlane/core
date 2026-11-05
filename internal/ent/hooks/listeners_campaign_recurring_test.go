@@ -99,12 +99,10 @@ func (s *HookTestSuite) newRecurringCampaign(orgID, name string) *generated.Camp
 // and waits for the in-memory pool to drain so DB side effects are observable
 func (s *HookTestSuite) emitCampaignMutation(_ *testing.T, ctx context.Context, campaignID string, changedFields ...string) {
 	entityops.EmitMutation(ctx, []*gala.Gala{s.galaRuntime}, entityops.MutationPayload{
-		MutationType: generated.TypeCampaign,
-		Operation:    entityops.OpUpdateOne,
-		EntityID:     campaignID,
-		ChangeSet: entityops.ChangeSet{
-			ChangedFields: changedFields,
-		},
+		MutationType:  generated.TypeCampaign,
+		Operation:     entityops.OpUpdateOne,
+		EntityID:      campaignID,
+		ChangedFields: changedFields,
 	})
 
 	s.waitForEvents()

@@ -5,7 +5,6 @@ package contact
 import (
 	"context"
 
-	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
@@ -41,7 +40,7 @@ func createValidation() (input graphclient.CreateContactInput, err error) {
 		return input, cmd.NewRequiredFieldMissingError("contact name")
 	}
 
-	input.FullName = lo.ToPtr(name)
+	input.FullName = new(name)
 
 	email := cmd.Config.String("email")
 	if email != "" {

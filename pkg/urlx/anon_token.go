@@ -6,8 +6,6 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
-
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/iam/tokens"
 )
@@ -47,12 +45,10 @@ func GenerateAnonTokenURL(ctx context.Context, tm *tokens.TokenManager, sl *shor
 	subject := fmt.Sprintf("%s%s", req.Prefix, req.SubjectID)
 
 	claims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: subject,
-		},
-		UserID: subject,
-		OrgID:  req.OrgID,
-		Email:  req.Email,
+		Subject: subject,
+		UserID:  subject,
+		OrgID:   req.OrgID,
+		Email:   req.Email,
 	}
 
 	if req.ExtraClaims != nil {

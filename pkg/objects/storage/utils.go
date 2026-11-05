@@ -202,11 +202,12 @@ func parseDocx(content []byte) (string, error) {
 					paragraphs = append(paragraphs, line)
 					// If this is the first row, add a markdown separator
 					if rowIdx == 0 {
-						separator := "|"
+						var separator strings.Builder
+						separator.WriteString("|")
 						for range cells {
-							separator += " --- |"
+							separator.WriteString(" --- |")
 						}
-						paragraphs = append(paragraphs, separator)
+						paragraphs = append(paragraphs, separator.String())
 					}
 				}
 			}
@@ -248,10 +249,8 @@ func NewUploadFile(path string) (*File, error) {
 		RawFile:      file,
 		CreatedAt:    time.Now(),
 		OriginalName: stat.Name(),
-		FileMetadata: FileMetadata{
-			Size:        stat.Size(),
-			ContentType: mimeType,
-			Key:         "file_upload",
-		},
+		Size:         stat.Size(),
+		ContentType:  mimeType,
+		Key:          "file_upload",
 	}, nil
 }

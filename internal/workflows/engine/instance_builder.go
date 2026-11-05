@@ -64,8 +64,7 @@ func (e *WorkflowEngine) createInstanceTx(ctx context.Context, def *generated.Wo
 
 // wrapCreationError normalizes workflow instance creation errors
 func wrapCreationError(err error) error {
-	var creationErr *workflows.WorkflowCreationError
-	if errors.As(err, &creationErr) {
+	if creationErr, ok := errors.AsType[*workflows.WorkflowCreationError](err); ok {
 		switch creationErr.Stage {
 		case workflows.WorkflowCreationStageInstance:
 			return fmt.Errorf("failed to create workflow instance: %w", creationErr)

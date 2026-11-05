@@ -3,6 +3,7 @@ package entmapping
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -95,8 +96,8 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription) *ent.OrgSubsc
 		StripeSubscriptionID:     sub.ID,
 		StripeSubscriptionStatus: status,
 		Active:                   entitlements.IsSubscriptionActive(sub.Status),
-		TrialExpiresAt:           timePtr(time.Unix(sub.TrialEnd, 0)),
-		DaysUntilDue:             int64ToStringPtr(sub.DaysUntilDue),
+		TrialExpiresAt:           new(time.Unix(sub.TrialEnd, 0)),
+		DaysUntilDue:             new(strconv.FormatInt(sub.DaysUntilDue, 10)),
 	}
 
 	return orgSub
@@ -142,15 +143,6 @@ func StripeSubscriptionItemToOrgModule(item *stripe.SubscriptionItem) *ent.OrgMo
 		Visibility:      visibility,
 		ModuleLookupKey: item.Price.LookupKey,
 	}
-}
-
-func int64ToStringPtr(i int64) *string {
-	s := fmt.Sprintf("%d", i)
-	return &s
-}
-
-func timePtr(t time.Time) *time.Time {
-	return &t
 }
 
 // OrgPriceSetter defines the methods needed to set OrgPrice fields on ent builders.

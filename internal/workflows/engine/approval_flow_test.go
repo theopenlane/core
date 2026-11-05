@@ -81,13 +81,11 @@ func TestApprovalFlowQuorumAppliesProposal(t *testing.T) {
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 2,
 		Label:         "Reference ID Approval",
 		Fields:        []string{"reference_id"},
@@ -215,12 +213,10 @@ func TestProposalApplyDoesNotCreateRecursiveWorkflow(t *testing.T) {
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approverID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -332,13 +328,11 @@ func TestApprovalFlowOptionalQuorumProceedsEarly(t *testing.T) {
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required: boolPtr(false),
+		Required: new(false),
 		Label:    "Optional Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -456,12 +450,10 @@ func TestApprovalStagingCapturesClearedField(t *testing.T) {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -573,12 +565,10 @@ func TestApprovalTriggerExpressionUsesCurrentObjectState(t *testing.T) {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -692,12 +682,10 @@ func TestApprovalNoTargetsAutoApplies(t *testing.T) {
 	assert.NilError(t, err)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeGroup, ID: group.ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeGroup, ID: group.ID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Group Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -803,12 +791,10 @@ func TestApprovalHookAppliesIneligibleFields(t *testing.T) {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -874,12 +860,10 @@ func TestApprovalChangesRequestedCreatesRequesterAssignment(t *testing.T) {
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approverID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Status Approval",
 		Fields:   []string{"status"},
 	}
@@ -982,13 +966,11 @@ func TestApprovalChangesRequestedClosesApprovalsAndResubmitReopens(t *testing.T)
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 2,
 		Label:         "Status Approval",
 		Fields:        []string{"status"},
@@ -1134,12 +1116,10 @@ func TestApprovalHookCreatesInstancesForAllMatchingDefinitions(t *testing.T) {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -1219,12 +1199,10 @@ func TestApprovalActionWhenUsesProposedChanges(t *testing.T) {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -1329,12 +1307,10 @@ func TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch(t *testing.T) {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -1440,12 +1416,10 @@ func TestSkippedApprovalActionAdvancesWorkflow(t *testing.T) {
 	wfEngine := s.Engine()
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
@@ -1453,10 +1427,8 @@ func TestSkippedApprovalActionAdvancesWorkflow(t *testing.T) {
 	assert.NilError(t, err)
 
 	notificationParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
 		Title: "Skipped approval notification",
 	}
@@ -1565,13 +1537,11 @@ func TestApprovalFlowEditSubmittedProposalInvalidatesApprovals(t *testing.T) {
 
 	// Create approval workflow definition
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		// Require both approvals so the proposal remains SUBMITTED after the first approval.
 		RequiredCount: 2,
 		Label:         "Reference ID Approval",
@@ -1705,12 +1675,10 @@ func TestInternalPolicyDetailsApprovalFlow(t *testing.T) {
 
 	// Create approval workflow definition for InternalPolicy details field
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Policy Content Approval",
 		Fields:   []string{"details"},
 	}

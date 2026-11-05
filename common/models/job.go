@@ -54,7 +54,7 @@ func (job JobConfiguration) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (job *JobConfiguration) UnmarshalGQL(v interface{}) error {
+func (job *JobConfiguration) UnmarshalGQL(v any) error {
 	return unmarshalGQLJSON(v, job)
 }
 

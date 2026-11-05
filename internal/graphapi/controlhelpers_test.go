@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
@@ -110,17 +109,17 @@ func TestNormalizeFramework(t *testing.T) {
 		},
 		{
 			name:      "non-nil framework returns its value",
-			framework: lo.ToPtr("ISO27001"),
+			framework: new("ISO27001"),
 			expected:  "ISO27001",
 		},
 		{
 			name:      "empty string framework returns empty string",
-			framework: lo.ToPtr(""),
+			framework: new(""),
 			expected:  "",
 		},
 		{
 			name:      "SOC2 framework",
-			framework: lo.ToPtr("SOC2"),
+			framework: new("SOC2"),
 			expected:  "SOC2",
 		},
 	}
@@ -146,12 +145,12 @@ func TestGetFrameworkName(t *testing.T) {
 		},
 		{
 			name:     "non-nil reference framework returns its value",
-			control:  &generated.Control{ReferenceFramework: lo.ToPtr("NIST800-53")},
+			control:  &generated.Control{ReferenceFramework: new("NIST800-53")},
 			expected: "NIST800-53",
 		},
 		{
 			name:     "SOC2 reference framework",
-			control:  &generated.Control{ReferenceFramework: lo.ToPtr("SOC2")},
+			control:  &generated.Control{ReferenceFramework: new("SOC2")},
 			expected: "SOC2",
 		},
 	}
@@ -180,13 +179,13 @@ func TestGenerateMapControlKey(t *testing.T) {
 		{
 			name:      "non-nil framework uses framework value",
 			refCode:   "CC1.1",
-			framework: lo.ToPtr("SOC2"),
+			framework: new("SOC2"),
 			expected:  "CC1.1::SOC2",
 		},
 		{
 			name:      "empty ref code",
 			refCode:   "",
-			framework: lo.ToPtr("ISO27001"),
+			framework: new("ISO27001"),
 			expected:  "::ISO27001",
 		},
 	}
@@ -220,7 +219,7 @@ func TestPrepMappedControlQuery(t *testing.T) {
 			name:            "no auth context returns error",
 			ctx:             context.Background(),
 			refCode:         "CC1.1",
-			framework:       lo.ToPtr("SOC2"),
+			framework:       new("SOC2"),
 			parentControlID: nil,
 			wantErr:         true,
 		},
@@ -237,7 +236,7 @@ func TestPrepMappedControlQuery(t *testing.T) {
 			name:            "control query with non-nil framework",
 			ctx:             authedCtx,
 			refCode:         "CC1.1",
-			framework:       lo.ToPtr("SOC2"),
+			framework:       new("SOC2"),
 			parentControlID: nil,
 			wantErr:         false,
 			wantPredicates:  1,
@@ -246,7 +245,7 @@ func TestPrepMappedControlQuery(t *testing.T) {
 			name:            "subcontrol query with parent control ID",
 			ctx:             authedCtx,
 			refCode:         "SC-1",
-			framework:       lo.ToPtr("NIST800-53"),
+			framework:       new("NIST800-53"),
 			parentControlID: &parentID,
 			wantErr:         false,
 			wantPredicates:  1,
@@ -282,7 +281,7 @@ func TestIsSameControlInfo(t *testing.T) {
 		{
 			name:          "different ref codes",
 			refCode:       "CC1.1",
-			framework:     lo.ToPtr("SOC2"),
+			framework:     new("SOC2"),
 			mappedControl: &model.ControlInfo{RefCode: "CC2.1", ReferenceFramework: &soc2},
 			expected:      false,
 		},
@@ -343,7 +342,7 @@ func TestGetControlWherePredicate(t *testing.T) {
 		},
 		{
 			name:    "input with filter returns non-nil predicate",
-			where:   &generated.ControlWhereInput{RefCode: lo.ToPtr("CC1.1")},
+			where:   &generated.ControlWhereInput{RefCode: new("CC1.1")},
 			wantNil: false,
 		},
 	}

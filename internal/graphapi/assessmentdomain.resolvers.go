@@ -8,7 +8,6 @@ package graphapi
 import (
 	"context"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
@@ -47,8 +46,8 @@ func (r *mutationResolver) CreateAssessmentDomain(ctx context.Context, input mod
 	createInput := generated.CreateCustomDomainInput{
 		CnameRecord:      normalizedCname,
 		MappableDomainID: mappableDomainID,
-		DomainType:       lo.ToPtr(enums.CustomDomainTypeExternal),
-		Purpose:          lo.ToPtr(enums.DomainPurposeAssessment),
+		DomainType:       new(enums.CustomDomainTypeExternal),
+		Purpose:          new(enums.DomainPurposeAssessment),
 	}
 
 	customDomain, err := transactionCtx.CustomDomain.Create().

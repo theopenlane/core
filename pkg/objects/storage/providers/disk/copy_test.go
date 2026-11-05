@@ -51,7 +51,7 @@ func TestDiskProviderCopy(t *testing.T) {
 	})
 
 	t.Run("missing source fails", func(t *testing.T) {
-		err := provider.Copy(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "vendors/missing.json"}}, &storage.CopyOptions{Key: "vendors/processed/missing.json"})
+		err := provider.Copy(ctx, &storagetypes.File{Key: "vendors/missing.json"}, &storage.CopyOptions{Key: "vendors/processed/missing.json"})
 		assert.Check(t, os.IsNotExist(err), "expected a not-exist error, got %v", err)
 	})
 }

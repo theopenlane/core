@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -138,7 +137,7 @@ func TestMutationCreateTrustCenterCompliance(t *testing.T) {
 			name: "invalid trust center id",
 			request: testclient.CreateTrustCenterComplianceInput{
 				StandardID:    standard1.ID,
-				TrustCenterID: lo.ToPtr("invalid-id"),
+				TrustCenterID: new("invalid-id"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Owner.UserCtx,

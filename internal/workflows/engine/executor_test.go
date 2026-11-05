@@ -98,10 +98,8 @@ func TestExecuteApproval(t *testing.T) {
 		}
 
 		params := workflows.ApprovalActionParams{
-			TargetedActionParams: workflows.TargetedActionParams{
-				Targets: targets,
-			},
-			Required: boolPtr(true),
+			Targets:  targets,
+			Required: new(true),
 			Label:    "Test Approval",
 		}
 
@@ -138,10 +136,8 @@ func TestExecuteApproval(t *testing.T) {
 
 	t.Run("creates assignment with no targets warns", func(t *testing.T) {
 		params := workflows.ApprovalActionParams{
-			TargetedActionParams: workflows.TargetedActionParams{
-				Targets: []workflows.TargetConfig{},
-			},
-			Required: boolPtr(false),
+			Targets:  []workflows.TargetConfig{},
+			Required: new(false),
 			Label:    "No Targets",
 		}
 

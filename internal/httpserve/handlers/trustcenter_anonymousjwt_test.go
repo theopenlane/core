@@ -196,7 +196,7 @@ func TestCreateTrustCenterAnonymousJWT(t *testing.T) {
 				// For error cases, the response structure might be different
 				// Let's check if we can decode it as a generic error response
 				if out == nil {
-					var errorResp map[string]interface{}
+					var errorResp map[string]any
 					res.Body.Close()
 					req2 := httptest.NewRequest(http.MethodPost, target, nil)
 					if tc.referer != "" {

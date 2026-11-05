@@ -52,12 +52,10 @@ func TestProposalManagerComputeHashUsesDomainKey(t *testing.T) {
 
 	buildApprovalAction := func(key string, fields []string) models.WorkflowAction {
 		params := workflows.ApprovalActionParams{
-			TargetedActionParams: workflows.TargetedActionParams{
-				Targets: []workflows.TargetConfig{
-					{Type: enums.WorkflowTargetTypeUser, ID: userID},
-				},
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: userID},
 			},
-			Required: boolPtr(true),
+			Required: new(true),
 			Label:    "Approval",
 			Fields:   fields,
 		}

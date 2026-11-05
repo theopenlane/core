@@ -303,11 +303,9 @@ func BuilderV2() registry.Builder {
 func sharedVersionBuilder[In, Cred any](input types.UserInputRef[In], token types.ConnectionRef[Cred], tokenOf func(Cred) string) registry.Builder {
 	return func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				DisplayName: "Test Integration",
-				Active:      true,
-			},
+			ID:           DefinitionID.ID(),
+			DisplayName:  "Test Integration",
+			Active:       true,
 			UserInput:    input.Registration(),
 			Installation: types.InstallationOf[versionMetadata]().Registration(),
 			Connections: []types.Connector{
@@ -343,11 +341,9 @@ func BuilderV4() registry.Builder {
 func latestVersionBuilder(input types.UserInputRef[userInputV3], token types.ConnectionRef[tokenV3], operation types.OperationRef[syncCfgV3], webhook types.WebhookRef) registry.Builder {
 	return func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				DisplayName: "Test Integration",
-				Active:      true,
-			},
+			ID:           DefinitionID.ID(),
+			DisplayName:  "Test Integration",
+			Active:       true,
 			UserInput:    input.Registration(),
 			Installation: versionMetadataV3.Registration(),
 			Connections: []types.Connector{

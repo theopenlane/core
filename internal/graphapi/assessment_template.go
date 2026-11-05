@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
@@ -43,11 +42,11 @@ func createAssessmentTemplate(ctx context.Context, input model.CreateAssessmentT
 
 	creationInput := generated.CreateTemplateInput{
 		Name:         name,
-		TemplateType: lo.ToPtr(enums.Document),
-		Kind:         lo.ToPtr(enums.TemplateKindQuestionnaire),
+		TemplateType: new(enums.Document),
+		Kind:         new(enums.TemplateKindQuestionnaire),
 		Jsonconfig:   obj.Jsonconfig,
 		Uischema:     obj.Uischema,
-		OwnerID:      lo.ToPtr(obj.OwnerID),
+		OwnerID:      new(obj.OwnerID),
 	}
 
 	if input.Description != nil {

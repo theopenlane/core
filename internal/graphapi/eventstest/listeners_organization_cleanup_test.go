@@ -52,10 +52,8 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	workflowEngine, workflowRuntime := acquireWorkflowRuntime(t)
 
 	approvalParams, err := json.Marshal(workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: org.ID}},
-		},
-		Label: "Cleanup Approval",
+		Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: org.ID}},
+		Label:   "Cleanup Approval",
 	})
 	assert.NilError(t, err)
 

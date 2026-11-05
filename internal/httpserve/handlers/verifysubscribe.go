@@ -6,8 +6,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
@@ -67,7 +65,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 		case errors.Is(err, ErrExpiredToken):
 			// a fresh link was already emailed; confirmation is still pending on that link
 			return h.Success(ctx, &models.VerifySubscribeResponse{
-				Reply:   rout.Reply{Success: true},
+				Success: true,
 				Message: "The verification link has expired, a new one has been sent - check your inbox to confirm.",
 			})
 		case errors.Is(err, ErrMaxAttempts):
@@ -90,7 +88,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 	// the confirmation UX lives on the trust center's own domain (the page that called this endpoint), so
 	// reply inline; the caller lands the subscriber on the trust center
 	out := &models.VerifySubscribeResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Message: "Subscription confirmed, looking forward to sending you updates!",
 	}
 
@@ -161,7 +159,7 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 		verifyURL, unsubscribeURL, branding := h.subscriberTrustCenterLinks(ctxWithToken, entSubscriber, tokenValue)
 
 		if err := h.sendEmail(ctxWithToken, email.SubscribeOp.Name(), email.SubscribeRequest{
-			RecipientInfo:       email.RecipientInfo{Email: entSubscriber.Email},
+			Email:               entSubscriber.Email,
 			TrustCenterBranding: branding,
 			OrgName:             orgName,
 			Token:               tokenValue,

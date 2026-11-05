@@ -8,7 +8,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -189,7 +188,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	_, err = suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     "Test",
 		LastName:      "User",
-		CompanyName:   lo.ToPtr("Test Company"),
+		CompanyName:   new("Test Company"),
 		Email:         "test@example.com",
 		TrustCenterID: &trustCenter.ID,
 	})

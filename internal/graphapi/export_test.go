@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -28,7 +27,7 @@ func TestMutationCreateExport(t *testing.T) {
 			name: "happy path, create export with regular user",
 			request: testclient.CreateExportInput{
 				ExportType: enums.ExportTypeInternalPolicy,
-				Format:     lo.ToPtr(enums.ExportFormatCsv),
+				Format:     new(enums.ExportFormatCsv),
 				Fields:     []string{"name", "details", "summary", "updatedAt"},
 				Filters:    &emptyFilter,
 			},
@@ -40,7 +39,7 @@ func TestMutationCreateExport(t *testing.T) {
 			request: testclient.CreateExportInput{
 				ExportType: enums.ExportTypeControl,
 				OwnerID:    &th.SharedTestUser1.OrganizationID,
-				Format:     lo.ToPtr(enums.ExportFormatCsv),
+				Format:     new(enums.ExportFormatCsv),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -50,7 +49,7 @@ func TestMutationCreateExport(t *testing.T) {
 			request: testclient.CreateExportInput{
 				ExportType: enums.ExportTypeControl,
 				OwnerID:    &th.SharedTestUser1.OrganizationID,
-				Format:     lo.ToPtr(enums.ExportFormatCsv),
+				Format:     new(enums.ExportFormatCsv),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedSystemAdminUser.UserCtx,
@@ -91,7 +90,7 @@ func TestMutationUpdateExport(t *testing.T) {
 	createResp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
 		ExportType: enums.ExportTypeControl,
 		OwnerID:    &th.SharedTestUser1.OrganizationID,
-		Format:     lo.ToPtr(enums.ExportFormatCsv),
+		Format:     new(enums.ExportFormatCsv),
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, createResp != nil)
@@ -172,7 +171,7 @@ func TestQueryExport(t *testing.T) {
 	createResp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
 		ExportType: enums.ExportTypeControl,
 		OwnerID:    &th.SharedTestUser1.OrganizationID,
-		Format:     lo.ToPtr(enums.ExportFormatCsv),
+		Format:     new(enums.ExportFormatCsv),
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, createResp != nil)
@@ -265,7 +264,7 @@ func TestMutationDeleteExport(t *testing.T) {
 				resp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
 					ExportType: enums.ExportTypeControl,
 					OwnerID:    &th.SharedTestUser1.OrganizationID,
-					Format:     lo.ToPtr(enums.ExportFormatCsv),
+					Format:     new(enums.ExportFormatCsv),
 				})
 				assert.NilError(t, err)
 				return resp.CreateExport.Export.ID
@@ -277,7 +276,7 @@ func TestMutationDeleteExport(t *testing.T) {
 			name: "unauthorized user - regular user cannot delete",
 			setupExport: func() string {
 				resp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
-					Format:     lo.ToPtr(enums.ExportFormatCsv),
+					Format:     new(enums.ExportFormatCsv),
 					OwnerID:    &th.SharedTestUser1.OrganizationID,
 					ExportType: enums.ExportTypeControl,
 				})
@@ -292,7 +291,7 @@ func TestMutationDeleteExport(t *testing.T) {
 			name: "unauthorized user - different org user cannot delete",
 			setupExport: func() string {
 				resp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
-					Format:     lo.ToPtr(enums.ExportFormatCsv),
+					Format:     new(enums.ExportFormatCsv),
 					ExportType: enums.ExportTypeControl,
 					OwnerID:    &th.SharedTestUser1.OrganizationID,
 				})

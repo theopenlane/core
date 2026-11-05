@@ -13,7 +13,6 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -733,7 +732,7 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 // MustNew tfa settings builder is used to create, without authz checks, tfa settings in the database
 func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFASetting {
 	if tf.totpAllowed == nil {
-		tf.totpAllowed = lo.ToPtr(true)
+		tf.totpAllowed = new(true)
 	}
 
 	setting, err := tf.Client.DB.TFASetting.Create().
@@ -1306,7 +1305,7 @@ func (r *ReportBuilder) MustNew(ctx context.Context, t *testing.T) *testclient.C
 	}
 
 	if r.Visibility != "" {
-		input.Visibility = lo.ToPtr(r.Visibility)
+		input.Visibility = new(r.Visibility)
 	}
 
 	if r.ReportOwnerID != "" {

@@ -56,12 +56,10 @@ func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io
 
 	// Validate the file before uploading
 	tempFile := File{
-		FieldName:    opts.Key,
-		OriginalName: fileName,
-		FileMetadata: FileMetadata{
-			ContentType:   contentType,
-			ProviderHints: opts.ProviderHints,
-		},
+		FieldName:     opts.Key,
+		OriginalName:  fileName,
+		ContentType:   contentType,
+		ProviderHints: opts.ProviderHints,
 	}
 
 	seeker, seekable := reader.(io.ReadSeeker)

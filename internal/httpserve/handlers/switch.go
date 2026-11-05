@@ -3,8 +3,6 @@ package handlers
 import (
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 
@@ -61,7 +59,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 		sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, *h.SessionConfig.CookieConfig)
 
 		out := &models.SwitchOrganizationResponse{
-			Reply:       rout.Reply{Success: true},
+			Success:     true,
 			NeedsSSO:    true,
 			RedirectURI: authURL,
 		}
@@ -74,7 +72,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 		// Check if user has TFA enabled
 		if user.Edges.Setting == nil || !user.Edges.Setting.IsTfaEnabled {
 			out := &models.SwitchOrganizationResponse{
-				Reply:    rout.Reply{Success: true},
+				Success:  true,
 				NeedsTFA: true,
 			}
 
@@ -92,7 +90,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 	// set the out attributes we send back to the client only on success
 	out := &models.SwitchOrganizationResponse{
-		Reply:    rout.Reply{Success: true},
+		Success:  true,
 		AuthData: *authData,
 	}
 

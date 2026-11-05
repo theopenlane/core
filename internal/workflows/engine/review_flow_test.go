@@ -44,12 +44,10 @@ func TestReviewWorkflowTriggersAndCompletes(t *testing.T) {
 	reviewerID, reviewerCtx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
 	params := workflows.ReviewActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: reviewerID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: reviewerID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 1,
 		Label:         "Status Review",
 	}
@@ -143,12 +141,10 @@ func TestReviewWorkflowTriggersOnCreate(t *testing.T) {
 	reviewerID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
 	params := workflows.ReviewActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: reviewerID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: reviewerID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 1,
 		Label:         "Create Review",
 	}

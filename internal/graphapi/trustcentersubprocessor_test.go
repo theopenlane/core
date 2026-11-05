@@ -8,7 +8,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -75,7 +74,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 			name: "trust center not found",
 			request: testclient.CreateTrustCenterSubprocessorInput{
 				SubprocessorID:                  subprocessor1.ID,
-				TrustCenterID:                   lo.ToPtr("non-existent-trust-center-id"),
+				TrustCenterID:                   new("non-existent-trust-center-id"),
 				TrustCenterSubprocessorKindName: &kind.Name,
 				Countries:                       []string{"US"},
 			},
@@ -390,7 +389,7 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 				return createResp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID
 			},
 			request: testclient.UpdateTrustCenterSubprocessorInput{
-				ClearCountries: lo.ToPtr(true),
+				ClearCountries: new(true),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -635,7 +634,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 
 	subprocessorWithFile, err := suite.Client.API.CreateSubprocessor(tcOrg.Owner.UserCtx, testclient.CreateSubprocessorInput{
 		Name:        "Subprocessor With File",
-		Description: lo.ToPtr("A subprocessor with a logo file"),
+		Description: new("A subprocessor with a logo file"),
 	}, logoFile, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, subprocessorWithFile != nil)
@@ -733,7 +732,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 			client: suite.Client.API,
 			ctx:    tcOrg.Admin.UserCtx,
 			where: &testclient.TrustCenterSubprocessorWhereInput{
-				TrustCenterSubprocessorKindName: lo.ToPtr("Non-existent"),
+				TrustCenterSubprocessorKindName: new("Non-existent"),
 			},
 			expectedResults: 0,
 		},

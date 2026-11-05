@@ -31,7 +31,7 @@ func WithContextLevelCache(h *handler.Server) {
 // WithResultLimit adds a max result limit to the handler in order to set limits on
 // all nested edges in the graphql request
 func WithResultLimit(h *handler.Server, limit *int) {
-	h.AroundFields(func(ctx context.Context, next graphql.Resolver) (res interface{}, err error) {
+	h.AroundFields(func(ctx context.Context, next graphql.Resolver) (res any, err error) {
 		if limit == nil {
 			return next(ctx)
 		}

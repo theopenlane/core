@@ -60,9 +60,7 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgI
 
 	for subs := range stripeSubsStatuses {
 		it := r.stripe.Client.V1Subscriptions.List(ctx, &stripe.SubscriptionListParams{
-			ListParams: stripe.ListParams{
-				Limit: stripe.Int64(defaultStripePageLimit),
-			},
+			Limit:  stripe.Int64(defaultStripePageLimit),
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
 			Expand: []*string{stripe.String("data.schedule")},
 		})
@@ -163,9 +161,7 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, org
 
 	for subs := range stripeSubsStatuses {
 		it := r.stripe.Client.V1Subscriptions.List(ctx, &stripe.SubscriptionListParams{
-			ListParams: stripe.ListParams{
-				Limit: stripe.Int64(defaultStripePageLimit),
-			},
+			Limit:  stripe.Int64(defaultStripePageLimit),
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
 			Expand: []*string{stripe.String("data.schedule")},
 		})
@@ -447,9 +443,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 
 	// List all Stripe customers
 	customerIt := r.stripe.Client.V1Customers.List(ctx, &stripe.CustomerListParams{
-		ListParams: stripe.ListParams{
-			Limit: stripe.Int64(defaultStripePageLimit),
-		}})
+		Limit: stripe.Int64(defaultStripePageLimit)})
 
 	for customer, err := range customerIt.All(ctx) {
 		if err != nil {
@@ -574,9 +568,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 
 	// List all Stripe customers
 	customerIt := r.stripe.Client.V1Customers.List(ctx, &stripe.CustomerListParams{
-		ListParams: stripe.ListParams{
-			Limit: stripe.Int64(defaultStripePageLimit),
-		}})
+		Limit: stripe.Int64(defaultStripePageLimit)})
 
 	for customer, err := range customerIt.All(ctx) {
 		if err != nil {
@@ -622,9 +614,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 		subscriptionIt := r.stripe.Client.V1Subscriptions.List(ctx, &stripe.SubscriptionListParams{
 			Customer: stripe.String(customer.ID),
 			Status:   stripe.String("active"),
-			ListParams: stripe.ListParams{
-				Limit: stripe.Int64(1),
-			},
+			Limit:    stripe.Int64(1),
 		})
 
 		hasActiveSubscriptions := false

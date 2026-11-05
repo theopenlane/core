@@ -33,7 +33,7 @@ func TestOnboardingProgramListener(t *testing.T) {
 	onboarding, err := tx.Client().Onboarding.Create().
 		SetInput(generated.CreateOnboardingInput{
 			CompanyName: "Program Co one",
-			Compliance: map[string]interface{}{
+			Compliance: map[string]any{
 				"frameworks":    []string{"other", "other"},
 				"auditor_name":  "New Auditor",
 				"auditor_email": "auditor@example.com",

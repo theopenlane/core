@@ -52,8 +52,8 @@ func newFakeServer(t *testing.T, objects ...fakestorage.Object) *fakestorage.Ser
 
 func fakeObject(bucket, name, content string) fakestorage.Object {
 	return fakestorage.Object{
-		ObjectAttrs: fakestorage.ObjectAttrs{BucketName: bucket, Name: name, ContentType: "text/plain"},
-		Content:     []byte(content),
+		BucketName: bucket, Name: name, ContentType: "text/plain",
+		Content: []byte(content),
 	}
 }
 
@@ -154,7 +154,7 @@ func TestNewProvider(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, provider != nil)
 
-			exists, err := provider.Exists(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "seeded.txt"}})
+			exists, err := provider.Exists(context.Background(), &storagetypes.File{Key: "seeded.txt"})
 			assert.NilError(t, err)
 			assert.Check(t, exists)
 			assert.Check(t, provider.Close())
@@ -243,7 +243,7 @@ func TestProviderUploadReaderFailure(t *testing.T) {
 	assert.Check(t, is.ErrorIs(err, errReadFailed))
 	assert.Check(t, is.Nil(uploaded))
 
-	exists, err := provider.Exists(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "broken.txt"}})
+	exists, err := provider.Exists(context.Background(), &storagetypes.File{Key: "broken.txt"})
 	assert.NilError(t, err)
 	assert.Check(t, !exists)
 }
@@ -266,22 +266,22 @@ func TestProviderDownload(t *testing.T) {
 	}{
 		{
 			name:     "provider bucket",
-			file:     &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "file.txt"}},
+			file:     &storagetypes.File{Key: "file.txt"},
 			expected: "default bucket content",
 		},
 		{
 			name:     "file bucket",
-			file:     &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "file.txt", Bucket: otherBucket}},
+			file:     &storagetypes.File{Key: "file.txt", Bucket: otherBucket},
 			expected: "other bucket content",
 		},
 		{
 			name:      "missing object",
-			file:      &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "missing.txt"}},
+			file:      &storagetypes.File{Key: "missing.txt"},
 			expectErr: gstorage.ErrObjectNotExist,
 		},
 		{
 			name:    "stopped server",
-			file:    &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "file.txt"}},
+			file:    &storagetypes.File{Key: "file.txt"},
 			stopped: true,
 		},
 	}
@@ -326,19 +326,19 @@ func TestProviderDelete(t *testing.T) {
 	}{
 		{
 			name: "existing object",
-			file: &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "file.txt"}},
+			file: &storagetypes.File{Key: "file.txt"},
 		},
 		{
 			name: "file bucket",
-			file: &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "file.txt", Bucket: otherBucket}},
+			file: &storagetypes.File{Key: "file.txt", Bucket: otherBucket},
 		},
 		{
 			name: "missing object",
-			file: &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "missing.txt"}},
+			file: &storagetypes.File{Key: "missing.txt"},
 		},
 		{
 			name:    "stopped server",
-			file:    &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "file.txt"}},
+			file:    &storagetypes.File{Key: "file.txt"},
 			stopped: true,
 		},
 	}
@@ -380,22 +380,22 @@ func TestProviderExists(t *testing.T) {
 	}{
 		{
 			name:     "existing object",
-			file:     &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "file.txt"}},
+			file:     &storagetypes.File{Key: "file.txt"},
 			expected: true,
 		},
 		{
 			name:     "missing object",
-			file:     &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "missing.txt"}},
+			file:     &storagetypes.File{Key: "missing.txt"},
 			expected: false,
 		},
 		{
 			name:     "missing bucket",
-			file:     &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "file.txt", Bucket: "missing-bucket"}},
+			file:     &storagetypes.File{Key: "file.txt", Bucket: "missing-bucket"},
 			expected: false,
 		},
 		{
 			name:    "stopped server",
-			file:    &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "file.txt"}},
+			file:    &storagetypes.File{Key: "file.txt"},
 			stopped: true,
 		},
 	}
@@ -533,14 +533,14 @@ func TestProviderGetPresignedURL(t *testing.T) {
 		}{
 			{
 				name:           "explicit duration",
-				file:           &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "folder/object.txt"}},
+				file:           &storagetypes.File{Key: "folder/object.txt"},
 				opts:           &storagetypes.PresignedURLOptions{Duration: time.Minute},
 				expectedBucket: testBucket,
 				expectedExpiry: time.Minute,
 			},
 			{
 				name:           "default duration",
-				file:           &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "folder/object.txt", Bucket: otherBucket}},
+				file:           &storagetypes.File{Key: "folder/object.txt", Bucket: otherBucket},
 				expectedBucket: otherBucket,
 				expectedExpiry: gcs.DefaultPresignedURLExpiry,
 			},
@@ -569,7 +569,7 @@ func TestProviderGetPresignedURL(t *testing.T) {
 	t.Run("without signing credentials", func(t *testing.T) {
 		provider := newFakeProvider(t, server)
 
-		signed, err := provider.GetPresignedURL(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "object.txt"}}, nil)
+		signed, err := provider.GetPresignedURL(context.Background(), &storagetypes.File{Key: "object.txt"}, nil)
 		assert.Check(t, err != nil)
 		assert.Check(t, is.Len(signed, 0))
 	})

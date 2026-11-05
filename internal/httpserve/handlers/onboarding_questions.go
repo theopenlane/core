@@ -2,7 +2,6 @@ package handlers
 
 import (
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/utils/rout"
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/onboarding"
@@ -22,7 +21,7 @@ func (h *Handler) ListOnboardingQuestions(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, models.OnboardingQuestionsResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Version: questionnaire.Version,
 		Steps:   questionnaire.Steps,
 	})

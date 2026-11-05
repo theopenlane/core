@@ -47,8 +47,8 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 
 	input := testclient.CreateCampaignInput{
 		Name:            "Recurring Schedule Test",
-		EmailTemplateID: lo.ToPtr(emailTemplate.ID),
-		IsActive:        lo.ToPtr(true),
+		EmailTemplateID: new(emailTemplate.ID),
+		IsActive:        new(true),
 		Status:          &enums.CampaignStatusActive,
 		NextRunAt:       &pastRun,
 	}
@@ -59,10 +59,10 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 
 	updateInput := testclient.UpdateCampaignInput{
 		RecurrenceFrequency:  &enums.FrequencyYearly,
-		RecurrenceTimezone:   lo.ToPtr("America/Denver"),
-		RecurrenceInterval:   lo.ToPtr(int64(1)),
-		ClearRecurrenceEndAt: lo.ToPtr(true),
-		IsRecurring:          lo.ToPtr(true),
+		RecurrenceTimezone:   new("America/Denver"),
+		RecurrenceInterval:   new(int64(1)),
+		ClearRecurrenceEndAt: new(true),
+		IsRecurring:          new(true),
 	}
 
 	_, err = suite.Client.API.UpdateCampaign(ctx, campaignObj.ID, updateInput)
@@ -104,10 +104,8 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 	}
 
 	cfg := email.SendBrandedCampaignRequest{
-		CampaignDispatchInput: email.CampaignDispatchInput{
-			CampaignID: campaignObj.ID,
-			Resend:     true,
-		},
+		CampaignID: campaignObj.ID,
+		Resend:     true,
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -199,10 +197,8 @@ func TestRecurringCampaignExhaustion(t *testing.T) {
 	}
 
 	cfg := email.SendBrandedCampaignRequest{
-		CampaignDispatchInput: email.CampaignDispatchInput{
-			CampaignID: campaignObj.ID,
-			Resend:     true,
-		},
+		CampaignID: campaignObj.ID,
+		Resend:     true,
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -479,7 +475,7 @@ func TestDueCampaignPredicatesFiltering(t *testing.T) {
 // TestTargetDispatchableMatrix verifies all combinations of target status,
 // sent_at, resend, and includeOverdue flags
 func TestTargetDispatchableMatrix(t *testing.T) {
-	sentAt := lo.ToPtr(models.DateTime(time.Now()))
+	sentAt := new(models.DateTime(time.Now()))
 
 	tests := []struct {
 		name           string

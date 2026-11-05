@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
@@ -37,7 +36,7 @@ func createValidation() (input graphclient.CreateDocumentDataInput, err error) {
 		return input, cmd.NewRequiredFieldMissingError("template id")
 	}
 
-	input.TemplateID = lo.ToPtr(templateID)
+	input.TemplateID = new(templateID)
 
 	dataFile := cmd.Config.String("data")
 	if dataFile == "" {

@@ -9,8 +9,6 @@ import (
 	"github.com/oklog/ulid/v2"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/utils/passwd"
@@ -117,11 +115,9 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	}
 
 	if err := h.sendEmail(userCtx, email.ResetSuccessOp.Name(), email.PasswordResetSuccessRequest{
-		RecipientInfo: email.RecipientInfo{
-			Email:     entUser.Email,
-			FirstName: entUser.FirstName,
-			LastName:  entUser.LastName,
-		},
+		Email:     entUser.Email,
+		FirstName: entUser.FirstName,
+		LastName:  entUser.LastName,
 	}); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending password reset success email")
 
@@ -129,7 +125,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	}
 
 	out := &models.ResetPasswordResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Message: "password has been re-set successfully",
 	}
 

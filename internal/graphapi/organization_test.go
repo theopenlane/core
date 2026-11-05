@@ -9,7 +9,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -271,7 +270,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			settings: &testclient.CreateOrganizationSettingInput{
 				Domains:                      []string{"meow.theopenlane.io"},
 				AllowedEmailDomains:          []string{"theopenlane.io"},
-				AllowMatchingDomainsAutojoin: lo.ToPtr(true),
+				AllowMatchingDomainsAutojoin: new(true),
 				BillingAddress: &models.Address{
 					Line1:      gofakeit.StreetNumber() + " " + gofakeit.Street(),
 					City:       gofakeit.City(),
@@ -564,7 +563,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 
 			// ensure managed groups are created
 			managedGroups, err := suite.Client.API.GetGroups(newCtx, &testclient.GroupWhereInput{
-				IsManaged: lo.ToPtr(true),
+				IsManaged: new(true),
 			})
 			assert.NilError(t, err)
 

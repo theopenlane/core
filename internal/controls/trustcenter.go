@@ -45,8 +45,7 @@ func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*g
 	// ensure we get the public, system owned standard
 	std, err := findStandard(ctx, client, trustCenterStandardFilter, standard.IsPublic(true), standard.SystemOwned(true))
 	if err != nil {
-		var notFound common.NotFoundError
-		if errors.As(err, &notFound) {
+		if _, ok := errors.AsType[common.NotFoundError](err); ok {
 			logx.FromContext(ctx).Error().Msg("trust center standard not found")
 
 			return nil, nil

@@ -15,7 +15,7 @@ func WithPriceProduct(productID string) PriceCreateOption {
 // WithPriceAmount sets the unit amount for the price
 func WithPriceAmount(amount int64) PriceCreateOption {
 	return func(params *stripe.PriceCreateParams) {
-		params.UnitAmount = stripe.Int64(amount)
+		params.UnitAmount = new(amount)
 	}
 }
 

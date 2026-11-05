@@ -151,7 +151,7 @@ func initExtensionResponse(resp *graphql.Response) *graphql.Response {
 	}
 
 	if resp.Extensions == nil {
-		resp.Extensions = make(map[string]interface{})
+		resp.Extensions = make(map[string]any)
 	}
 
 	return resp

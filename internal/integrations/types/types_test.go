@@ -80,7 +80,7 @@ func TestDefinitionResolveOperation(t *testing.T) {
 	t.Parallel()
 
 	def := Definition{
-		DefinitionSpec: DefinitionSpec{ID: "test-def"},
+		ID: "test-def",
 		Operations: []OperationRegistration{
 			{Name: "sync.users"},
 			{Name: "sync.groups", Replaces: []string{"sync.teams"}},
@@ -118,7 +118,7 @@ func TestDefinitionProviderState(t *testing.T) {
 	t.Parallel()
 
 	def := Definition{
-		DefinitionSpec: DefinitionSpec{ID: "github_app"},
+		ID: "github_app",
 	}
 
 	t.Run("nil providers map", func(t *testing.T) {
@@ -178,7 +178,7 @@ func TestDefinitionWithProviderState(t *testing.T) {
 	t.Parallel()
 
 	def := Definition{
-		DefinitionSpec: DefinitionSpec{ID: "github_app"},
+		ID: "github_app",
 	}
 
 	next := DefinitionProviderState{

@@ -6,8 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/common/enums"
@@ -93,7 +91,7 @@ func TestHandlerCheckAndCreateUser(t *testing.T) {
 				Email:             "wmaximoff@marvel.com",
 				AuthProvider:      enums.AuthProviderGitHub,
 				LastLoginProvider: enums.AuthProviderGitHub,
-				AvatarRemoteURL:   lo.ToPtr("https://example.com/images/photo.jpg"),
+				AvatarRemoteURL:   new("https://example.com/images/photo.jpg"),
 			},
 			writes: true,
 		},
@@ -114,7 +112,7 @@ func TestHandlerCheckAndCreateUser(t *testing.T) {
 				Email:             "wmaximoff@marvel.com",
 				AuthProvider:      enums.AuthProviderGitHub,
 				LastLoginProvider: enums.AuthProviderGoogle,
-				AvatarRemoteURL:   lo.ToPtr("https://example.com/images/photo.jpg"),
+				AvatarRemoteURL:   new("https://example.com/images/photo.jpg"),
 			},
 			writes:  true,
 			wantErr: false,
@@ -136,7 +134,7 @@ func TestHandlerCheckAndCreateUser(t *testing.T) {
 				Email:             "wmaximoff@marvel.com",
 				AuthProvider:      enums.AuthProviderGitHub,
 				LastLoginProvider: enums.AuthProviderGitHub,
-				AvatarRemoteURL:   lo.ToPtr("https://example.com/images/photo.jpg"),
+				AvatarRemoteURL:   new("https://example.com/images/photo.jpg"),
 			},
 			writes: false,
 		},

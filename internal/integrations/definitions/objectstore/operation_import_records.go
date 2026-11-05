@@ -244,7 +244,7 @@ func moveProcessed(ctx context.Context, client storage.Provider, key, destinatio
 		return ErrProviderCannotCopy
 	}
 
-	file := &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: key}}
+	file := &storagetypes.File{Key: key}
 
 	if err := copier.Copy(ctx, file, &storage.CopyOptions{Key: destination}); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("key", key).Str("destination", destination).Msg("objectstore: processed object copy failed")
@@ -294,7 +294,7 @@ func loadRecords(ctx context.Context, client storage.Provider, key string) ([]js
 
 // downloadObject reads the bytes of one object
 func downloadObject(ctx context.Context, client storage.Provider, key string) ([]byte, error) {
-	downloaded, err := client.Download(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: key}}, &storagetypes.DownloadFileOptions{})
+	downloaded, err := client.Download(ctx, &storagetypes.File{Key: key}, &storagetypes.DownloadFileOptions{})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("key", key).Msg("objectstore: object download failed")
 

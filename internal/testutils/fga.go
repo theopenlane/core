@@ -2,6 +2,8 @@
 
 package testutils
 
+import "maps"
+
 import "os"
 
 // FGACacheEnvVar enables the production openfga cache settings in the test container when set to true
@@ -19,9 +21,7 @@ func GetDefaultFGAEnvs() map[string]string {
 	}
 
 	if os.Getenv(FGACacheEnvVar) == "true" {
-		for k, v := range fgaCacheEnvs() {
-			envs[k] = v
-		}
+		maps.Copy(envs, fgaCacheEnvs())
 	}
 
 	return envs

@@ -9,7 +9,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
@@ -174,7 +173,7 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 
 	t.Run("duplicate email returns existing request with NEEDS_APPROVAL status", func(t *testing.T) {
 		_, err := suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
-			Status: lo.ToPtr(enums.TrustCenterNDARequestStatusNeedsApproval),
+			Status: new(enums.TrustCenterNDARequestStatusNeedsApproval),
 		})
 		assert.NilError(t, err)
 
@@ -190,7 +189,7 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 
 	t.Run("duplicate email returns existing request with APPROVED status", func(t *testing.T) {
 		_, err := suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
-			Status: lo.ToPtr(enums.TrustCenterNDARequestStatusApproved),
+			Status: new(enums.TrustCenterNDARequestStatusApproved),
 		})
 		assert.NilError(t, err)
 
@@ -444,7 +443,7 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 			LastName:      gofakeit.LastName(),
 			Email:         gofakeit.Email(),
 			TrustCenterID: &trustCenter.ID,
-			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+			Status:        new(enums.TrustCenterNDARequestStatusSigned),
 		})
 		assert.NilError(t, err)
 
@@ -469,7 +468,7 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 			LastName:      gofakeit.LastName(),
 			Email:         gofakeit.Email(),
 			TrustCenterID: &trustCenter.ID,
-			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+			Status:        new(enums.TrustCenterNDARequestStatusSigned),
 			SignedAt:      signedAt,
 		})
 		assert.NilError(t, err)
@@ -495,7 +494,7 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 			LastName:      gofakeit.LastName(),
 			Email:         email,
 			TrustCenterID: &trustCenter.ID,
-			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+			Status:        new(enums.TrustCenterNDARequestStatusSigned),
 		})
 		assert.NilError(t, err)
 
@@ -528,7 +527,7 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 				LastName:      gofakeit.LastName(),
 				Email:         gofakeit.Email(),
 				TrustCenterID: &trustCenter.ID,
-				Status:        lo.ToPtr(status),
+				Status:        new(status),
 			})
 			assert.ErrorContains(t, err, "not authorized")
 		})

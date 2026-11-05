@@ -53,10 +53,10 @@ func listProblems(ctx context.Context, c *cloudguard.CloudGuardClient, compartme
 	problems := make([]cloudguard.ProblemSummary, 0)
 
 	req := cloudguard.ListProblemsRequest{
-		CompartmentId:          lo.ToPtr(compartmentID),
-		CompartmentIdInSubtree: lo.ToPtr(true),
+		CompartmentId:          new(compartmentID),
+		CompartmentIdInSubtree: new(true),
 		AccessLevel:            cloudguard.ListProblemsAccessLevelAccessible,
-		Limit:                  lo.ToPtr(findingsPageSize),
+		Limit:                  new(findingsPageSize),
 	}
 
 	for page := 0; ; page++ {

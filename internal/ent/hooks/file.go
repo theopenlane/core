@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"maps"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/common/storagetypes"
@@ -78,9 +79,7 @@ func HookFileDelete() ent.Hook {
 
 						if f.Metadata != nil {
 							metadata := make(map[string]any)
-							for k, v := range f.Metadata {
-								metadata[k] = v
-							}
+							maps.Copy(metadata, f.Metadata)
 							storageFile.Metadata = metadata
 						}
 
