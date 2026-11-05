@@ -13,7 +13,7 @@ tool (
 require (
 	ariga.io/atlas v1.3.0
 	ariga.io/entcache v0.1.0
-	cel.dev/cel-go v0.32.0
+	cel.dev/cel-go v0.33.2
 	cloud.google.com/go/securitycenter v1.49.1
 	cloud.google.com/go/storage v1.70.0
 	entgo.io/contrib v0.7.0
