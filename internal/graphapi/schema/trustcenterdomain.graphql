@@ -17,6 +17,22 @@ extend type Mutation{
         """
         trustCenterID: ID!
     ): TrustCenterPreviewDomainCreatePayload!
+    """
+    enqueues the creation of a preview domain and enables the default domain for the trustcenter
+    """
+    setupTrustCenterDomains(
+        """
+        trust center ID
+        """
+        trustCenterID: ID!
+    ): TrustCenterDomainsSetupPayload!
+}
+
+"""
+Return response for setupTrustCenterDomains mutation
+"""
+type TrustCenterDomainsSetupPayload {
+    success: Boolean!
 }
 
 """

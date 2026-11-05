@@ -36910,6 +36910,11 @@ type TrustCenterDomainCreatePayload struct {
 	CustomDomain *CustomDomain `json:"customDomain"`
 }
 
+// Return response for setupTrustCenterDomains mutation
+type TrustCenterDomainsSetupPayload struct {
+	Success bool `json:"success"`
+}
+
 // An edge in a connection.
 type TrustCenterEdge struct {
 	// The item at the end of the edge.

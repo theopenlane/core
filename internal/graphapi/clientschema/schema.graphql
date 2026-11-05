@@ -50876,6 +50876,15 @@ type Mutation {
 		trustCenterID: ID!
 	): TrustCenterPreviewDomainCreatePayload!
 	"""
+	enqueues the creation of a preview domain and enables the default domain for the trustcenter
+	"""
+	setupTrustCenterDomains(
+		"""
+		trust center ID
+		"""
+		trustCenterID: ID!
+	): TrustCenterDomainsSetupPayload!
+	"""
 	Create a new trustCenterEntity
 	"""
 	createTrustCenterEntity(
@@ -86854,6 +86863,12 @@ Return response for createTrustCenterDomain mutation
 """
 type TrustCenterDomainCreatePayload {
 	customDomain: CustomDomain!
+}
+"""
+Return response for setupTrustCenterDomains mutation
+"""
+type TrustCenterDomainsSetupPayload {
+	success: Boolean!
 }
 """
 An edge in a connection.

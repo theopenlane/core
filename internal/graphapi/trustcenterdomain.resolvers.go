@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/urlx"
@@ -145,6 +146,30 @@ func (r *mutationResolver) CreateTrustCenterPreviewDomain(ctx context.Context, t
 	}
 
 	return &model.TrustCenterPreviewDomainCreatePayload{
+		Success: true,
+	}, nil
+}
+
+// SetupTrustCenterDomains is the resolver for the setupTrustCenterDomains field.
+func (r *mutationResolver) SetupTrustCenterDomains(ctx context.Context, trustCenterID string) (*model.TrustCenterDomainsSetupPayload, error) {
+	setting, err := withTransactionalMutation(ctx).TrustCenterSetting.Query().Where(
+		trustcentersetting.TrustCenterID(trustCenterID),
+		trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
+	).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcentersetting"})
+	}
+
+	_, err = setting.Update().SetDisableDefaultDomain(false).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
+	}
+
+	if _, err := r.CreateTrustCenterPreviewDomain(ctx, trustCenterID); err != nil {
+		return nil, err
+	}
+
+	return &model.TrustCenterDomainsSetupPayload{
 		Success: true,
 	}, nil
 }

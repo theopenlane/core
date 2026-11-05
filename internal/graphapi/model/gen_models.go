@@ -3669,6 +3669,11 @@ type TrustCenterDomainCreatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
+// Return response for setupTrustCenterDomains mutation
+type TrustCenterDomainsSetupPayload struct {
+	Success bool `json:"success"`
+}
+
 // Return response for createBulkTrustCenterEntity mutation
 type TrustCenterEntityBulkCreatePayload struct {
 	// Created trustCenterEntitys

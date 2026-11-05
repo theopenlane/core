@@ -639,6 +639,7 @@ type TestGraphClient interface {
 	GetTrustCenterDocByID(ctx context.Context, trustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterDocByID, error)
 	GetTrustCenterDocs(ctx context.Context, first *int64, last *int64, where *TrustCenterDocWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterDocs, error)
 	UpdateTrustCenterDoc(ctx context.Context, updateTrustCenterDocID string, input UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterDoc, error)
+	SetupTrustCenterDomains(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*SetupTrustCenterDomains, error)
 	CreateTrustCenterPreviewDomain(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterPreviewDomain, error)
 	CreateTrustCenterDomain(ctx context.Context, input CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDomain, error)
 	CreateBulkCSVTrustCenterEntity(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterEntity, error)
@@ -145761,6 +145762,17 @@ func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc) GetTrustCenterDoc() *UpdateT
 	return &t.TrustCenterDoc
 }
 
+type SetupTrustCenterDomains_SetupTrustCenterDomains struct {
+	Success bool "json:\"success\" graphql:\"success\""
+}
+
+func (t *SetupTrustCenterDomains_SetupTrustCenterDomains) GetSuccess() bool {
+	if t == nil {
+		t = &SetupTrustCenterDomains_SetupTrustCenterDomains{}
+	}
+	return t.Success
+}
+
 type CreateTrustCenterPreviewDomain_CreateTrustCenterPreviewDomain struct {
 	Success bool "json:\"success\" graphql:\"success\""
 }
@@ -182925,6 +182937,17 @@ func (t *UpdateTrustCenterDoc) GetUpdateTrustCenterDoc() *UpdateTrustCenterDoc_U
 		t = &UpdateTrustCenterDoc{}
 	}
 	return &t.UpdateTrustCenterDoc
+}
+
+type SetupTrustCenterDomains struct {
+	SetupTrustCenterDomains SetupTrustCenterDomains_SetupTrustCenterDomains "json:\"setupTrustCenterDomains\" graphql:\"setupTrustCenterDomains\""
+}
+
+func (t *SetupTrustCenterDomains) GetSetupTrustCenterDomains() *SetupTrustCenterDomains_SetupTrustCenterDomains {
+	if t == nil {
+		t = &SetupTrustCenterDomains{}
+	}
+	return &t.SetupTrustCenterDomains
 }
 
 type CreateTrustCenterPreviewDomain struct {
@@ -220812,6 +220835,30 @@ func (c *Client) UpdateTrustCenterDoc(ctx context.Context, updateTrustCenterDocI
 	return &res, nil
 }
 
+const SetupTrustCenterDomainsDocument = `mutation SetupTrustCenterDomains ($trustCenterID: ID!) {
+	setupTrustCenterDomains(trustCenterID: $trustCenterID) {
+		success
+	}
+}
+`
+
+func (c *Client) SetupTrustCenterDomains(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*SetupTrustCenterDomains, error) {
+	vars := map[string]any{
+		"trustCenterID": trustCenterID,
+	}
+
+	var res SetupTrustCenterDomains
+	if err := c.Client.Post(ctx, "SetupTrustCenterDomains", SetupTrustCenterDomainsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTrustCenterPreviewDomainDocument = `mutation CreateTrustCenterPreviewDomain ($trustCenterID: ID!) {
 	createTrustCenterPreviewDomain(trustCenterID: $trustCenterID) {
 		success
@@ -229773,6 +229820,7 @@ var DocumentOperationNames = map[string]string{
 	GetTrustCenterDocByIDDocument:                       "GetTrustCenterDocByID",
 	GetTrustCenterDocsDocument:                          "GetTrustCenterDocs",
 	UpdateTrustCenterDocDocument:                        "UpdateTrustCenterDoc",
+	SetupTrustCenterDomainsDocument:                     "SetupTrustCenterDomains",
 	CreateTrustCenterPreviewDomainDocument:              "CreateTrustCenterPreviewDomain",
 	CreateTrustCenterDomainDocument:                     "CreateTrustCenterDomain",
 	CreateBulkCSVTrustCenterEntityDocument:              "CreateBulkCSVTrustCenterEntity",

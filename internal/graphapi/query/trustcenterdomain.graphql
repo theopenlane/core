@@ -1,3 +1,9 @@
+mutation SetupTrustCenterDomains($trustCenterID: ID!) {
+  setupTrustCenterDomains(trustCenterID: $trustCenterID) {
+    success
+  }
+}
+
 mutation CreateTrustCenterPreviewDomain($trustCenterID: ID!) {
   createTrustCenterPreviewDomain(trustCenterID: $trustCenterID) {
     success
