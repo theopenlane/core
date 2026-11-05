@@ -4,13 +4,14 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/jsonx"
 )
 
 // init registers the NDA attestation listeners so gala setup picks them up automatically
@@ -26,6 +27,13 @@ func NDAAttestationListeners() []gala.Registration {
 			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return restored.WithCapabilities(auth.CapBypassOrgFilter)
 			},
+			RowMatch: []entityops.FieldMatch{
+				{
+					Field:  documentdata.FieldTemplateID,
+					In:     []string{""},
+					Negate: true,
+				},
+			},
 			Handle: handleNDAAttestationCreated,
 		},
 	}
@@ -35,10 +43,6 @@ func NDAAttestationListeners() []gala.Registration {
 // the NDA request, and emails the signer a copy
 func handleNDAAttestationCreated(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	templateID, _ := payload.StringValue(documentdata.FieldTemplateID)
-	if templateID == "" {
-		logx.FromContext(inv.Context).Error().Msg("nda attestation listener: no template")
-		return nil
-	}
 
 	docTemplate, ok, err := entityops.LoadEntity(inv.Context, templateID, inv.Client.Template.Get)
 	if err != nil || !ok {
