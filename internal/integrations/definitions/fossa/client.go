@@ -66,11 +66,8 @@ func NewAPIClient(baseURL, token string, allowPrivate bool) (*APIClient, error) 
 	return &APIClient{requester: requester}, nil
 }
 
-// get issues a GET request against the FOSSA API and decodes a successful response into out
-//
-// httpsling does not treat a non-2xx status as an error, it unmarshals whatever body came back
-// into out and returns any unmarshal error. The status is therefore checked before the decode
-// result is trusted, so an auth failure surfaces as ErrUnauthorized rather than a decode error
+// get issues a GET request and decodes a successful response into out, checking the status first
+// because httpsling decodes non-2xx bodies too and an auth failure must not surface as a decode error
 func (c *APIClient) get(ctx context.Context, path string, params map[string]string, out any) error {
 	opts := make([]httpsling.Option, 0, len(params)+1)
 	opts = append(opts, httpsling.Get(path))

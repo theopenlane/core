@@ -1,6 +1,6 @@
 {
-  "hash": "3c2d8fa4a6cc78936c24c6e3c57df1f26e1185b021894d3358d27b4f1b5127a5",
-  "version": "01M6PY3C0E2BD88C0C0AY8G9KS",
+  "hash": "06e6427c38db1f79f7f6d3acc8f91b3e9c4dc68b19c53a3558414c1f8e7e3de9",
+  "version": "01M6Q13CWMK8CCSHXZY2X5VJ8B",
   "surface": {
     "id": "def_01K0FOSSA00000000000000001",
     "credentials": [
@@ -88,11 +88,6 @@
                   "type": "boolean",
                   "title": "Enable License Compliance Findings",
                   "description": "Also collect FOSSA OSS license policy issues as findings. Security vulnerabilities are always collected."
-                },
-                "includeIgnored": {
-                  "type": "boolean",
-                  "title": "Include Ignored Issues",
-                  "description": "Include issues already dismissed in FOSSA when the integration is first connected. Later syncs always pick up dismissals so issues closed in FOSSA are closed here too."
                 }
               },
               "additionalProperties": false,

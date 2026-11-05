@@ -18,8 +18,6 @@ type VulnerabilitySync struct {
 	types.OperationSettings
 	// EnableLicenseFindings opts in to OSS license compliance issues, which are not collected by default
 	EnableLicenseFindings bool `json:"enableLicenseFindings,omitempty" jsonschema:"title=Enable License Compliance Findings,description=Also collect FOSSA OSS license policy issues as findings. Security vulnerabilities are always collected."`
-	// IncludeIgnored imports issues already dismissed in FOSSA on the initial import only, later syncs always fetch every status
-	IncludeIgnored bool `json:"includeIgnored,omitempty" jsonschema:"title=Include Ignored Issues,description=Include issues already dismissed in FOSSA when the integration is first connected. Later syncs always pick up dismissals so issues closed in FOSSA are closed here too."`
 }
 
 // CredentialSchema holds the FOSSA API credentials for one installation

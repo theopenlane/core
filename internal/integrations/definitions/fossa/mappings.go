@@ -5,15 +5,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprVulnerability is the CEL mapping expression for FOSSA security vulnerability issues
-//
-// Three provider quirks drive the shape of these expressions:
-//   - cvss arrives as a whole number for integral scores, so it is coerced with double()
-//   - FOSSA reports exploitability as a string enum, which cannot satisfy the numeric
-//     exploitability field, so the EPSS probability is used instead
-//   - affectedVersionRanges is a list while vulnerable_version_range is a single string
-//
-// Issues have their null members removed by dropNulls before mapping, orValue does not replace a null
+// mapExprVulnerability maps FOSSA vulnerability issues, exploitability uses the EPSS probability since FOSSA's own value is a string enum
+// issues are pruned with mapx.PruneMapZeroAny first because orValue does not replace a null
 var mapExprVulnerability = providerkit.CelMapExpr(
 	entityops.VulnerabilityFields.ExternalID.Expr(`string(payload.?id.orValue(""))`),
 	entityops.VulnerabilityFields.CveID.Expr(`payload.?cve.orValue("")`),
@@ -33,7 +26,7 @@ var mapExprVulnerability = providerkit.CelMapExpr(
 	entityops.VulnerabilityFields.DependencyScope.Expr(`payload.?depths.?direct.orValue(0) > 0 ? "DIRECT" : "TRANSITIVE"`),
 	entityops.VulnerabilityFields.References.Expr(`payload.?references.orValue([])`),
 	entityops.VulnerabilityFields.ExternalURI.Expr(`payload.?url.orValue("")`),
-	entityops.VulnerabilityFields.ExternalOwnerID.Expr(`resource != "" ? resource : ""`),
+	entityops.VulnerabilityFields.ExternalOwnerID.Expr("resource"),
 	entityops.VulnerabilityFields.Category.Expr(`payload.?type.orValue("")`),
 	entityops.VulnerabilityFields.Open.Expr(`payload.?statuses.?active.orValue(0) > 0`),
 	entityops.VulnerabilityFields.VulnerabilityStatusName.Expr(`payload.?statuses.?active.orValue(0) > 0 ? "ACTIVE" : "IGNORED"`),
@@ -55,10 +48,7 @@ var mapExprVulnerability = providerkit.CelMapExpr(
 	entityops.VulnerabilityFields.RawPayload.Expr("payload"),
 )
 
-// mapExprFinding is the CEL mapping expression for FOSSA OSS license compliance issues
-//
-// Licensing issues carry no severity or score, so those fields are deliberately left unmapped
-// rather than given a fabricated value
+// mapExprFinding maps FOSSA license issues, which carry no severity or score so those stay unmapped
 var mapExprFinding = providerkit.CelMapExpr(
 	entityops.FindingFields.ExternalID.Expr(`string(payload.?id.orValue(""))`),
 	entityops.FindingFields.DisplayName.Expr(`(payload.?license.orValue("") != "" ? payload.license : "License policy issue") + (payload.?source.?name.orValue("") != "" ? " in " + payload.source.name : "")`),
@@ -66,7 +56,7 @@ var mapExprFinding = providerkit.CelMapExpr(
 	entityops.FindingFields.Category.Expr(`payload.?type.orValue("")`),
 	entityops.FindingFields.Categories.Expr(`payload.?type.optMap(t, [t]).orValue([])`),
 	entityops.FindingFields.ResourceName.Expr(`payload.?source.?name.orValue("")`),
-	entityops.FindingFields.ExternalOwnerID.Expr(`resource != "" ? resource : ""`),
+	entityops.FindingFields.ExternalOwnerID.Expr("resource"),
 	entityops.FindingFields.ExternalURI.Expr(`payload.?url.orValue("")`),
 	entityops.FindingFields.Open.Expr(`payload.?statuses.?active.orValue(0) > 0`),
 	entityops.FindingFields.FindingStatusName.Expr(`payload.?statuses.?active.orValue(0) > 0 ? "ACTIVE" : "IGNORED"`),

@@ -15,6 +15,8 @@ var (
 	ErrAPIRequest = errors.New("fossa: unexpected api response")
 	// ErrIssuesFetchFailed indicates issues could not be listed
 	ErrIssuesFetchFailed = errors.New("fossa: unable to list issues")
+	// ErrIssuePageLimit indicates a sweep reached the page cap, so its issues would be incomplete
+	ErrIssuePageLimit = errors.New("fossa: reached the maximum page count before collecting every issue")
 	// ErrIssueEncode indicates an issue payload could not be encoded into an ingest envelope
 	ErrIssueEncode = errors.New("fossa: unable to encode issue payload")
 	// ErrCategoriesFetchFailed indicates the issue category counts could not be retrieved

@@ -34,7 +34,7 @@ func Builder(devMode bool) registry.Builder {
 				types.OperationRefOf[VulnerabilitySync]().
 					Ingests(runVulnerabilitySync).
 					HealthCheck(probeAccess).
-					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Schedule(gala.NewFullFetchSchedule()).
 					SkipDefaultLookback().
 					Ingest(

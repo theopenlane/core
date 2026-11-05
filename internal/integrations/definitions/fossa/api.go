@@ -2,7 +2,6 @@ package fossa
 
 import (
 	"context"
-	"encoding/json"
 	"strconv"
 )
 
@@ -20,44 +19,16 @@ const (
 	categoryVulnerability = "vulnerability"
 	// categoryLicensing identifies OSS license compliance issues
 	categoryLicensing = "licensing"
-	// statusActive limits collection to issues that still require attention
-	statusActive = "active"
-	// statusAll includes issues that have been dismissed in FOSSA
+	// statusAll requests active and ignored issues so a dismissal in FOSSA closes the record here
 	statusAll = "all"
 	// scopeGlobal collects issues across every project in the organization
 	scopeGlobal = "global"
 )
 
-// issuesResponse is the envelope returned by the issues endpoint. Each issue is retained as raw
-// JSON so the provider payload reaches the mapping layer with only its null members removed
+// issuesResponse is the envelope returned by the issues endpoint
 type issuesResponse struct {
 	// Issues is the page of issues returned for the requested category
-	Issues []json.RawMessage `json:"issues"`
-}
-
-// issueIdentity is the minimal projection of an issue needed to build an ingest envelope
-type issueIdentity struct {
-	// ID is the numeric FOSSA issue identifier
-	ID int64 `json:"id"`
-	// Projects lists the FOSSA projects the issue was found in
-	Projects []issueProject `json:"projects"`
-}
-
-// issueProject is a FOSSA project reference attached to an issue
-type issueProject struct {
-	// ID is the FOSSA project locator, for example git+github.com/org/repo
-	ID string `json:"id"`
-}
-
-// resourceID returns the project locator used as the ingest envelope resource
-func (i issueIdentity) resourceID() string {
-	for _, project := range i.Projects {
-		if project.ID != "" {
-			return project.ID
-		}
-	}
-
-	return ""
+	Issues []map[string]any `json:"issues"`
 }
 
 // organizationResponse holds the organization details reported for the authenticated token
@@ -99,11 +70,11 @@ func (c *APIClient) organization(ctx context.Context) (organizationResponse, err
 	return org, nil
 }
 
-// listIssues fetches one page of issues for the supplied category and status
-func (c *APIClient) listIssues(ctx context.Context, category, status string, page int) ([]json.RawMessage, error) {
+// listIssues fetches one page of issues for the supplied category
+func (c *APIClient) listIssues(ctx context.Context, category string, page int) ([]map[string]any, error) {
 	params := map[string]string{
 		"category":    category,
-		"status":      status,
+		"status":      statusAll,
 		"scope[type]": scopeGlobal,
 		"page":        strconv.Itoa(page),
 		"count":       strconv.Itoa(issuePageSize),

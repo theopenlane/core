@@ -24,7 +24,6 @@ func newTestClient(t *testing.T, handler http.HandlerFunc) *APIClient {
 	return client
 }
 
-// TestBaseURLOrDefault verifies base URL normalization and the SaaS fallback
 func TestBaseURLOrDefault(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -44,7 +43,6 @@ func TestBaseURLOrDefault(t *testing.T) {
 	}
 }
 
-// TestClientBuilderRequiresToken verifies a bound credential with no token is rejected up front
 func TestClientBuilderRequiresToken(t *testing.T) {
 	_, err := buildClient(types.ConnectionRequest[CredentialSchema]{}, true)
 	assert.Check(t, is.ErrorIs(err, ErrAPITokenMissing))
@@ -60,8 +58,6 @@ func TestClientRejectsNonPublicBaseURL(t *testing.T) {
 	assert.Check(t, is.Nil(err))
 }
 
-// TestClientSendsBearerTokenAndEncodesQuery verifies the auth header is applied and that bracketed
-// query keys such as scope[type] are percent-encoded rather than passed through literally
 func TestClientSendsBearerTokenAndEncodesQuery(t *testing.T) {
 	var (
 		gotAuth     string
@@ -78,7 +74,7 @@ func TestClientSendsBearerTokenAndEncodesQuery(t *testing.T) {
 		_, _ = w.Write([]byte(`{"issues":[]}`))
 	})
 
-	issues, err := client.listIssues(context.Background(), categoryVulnerability, statusActive, 1)
+	issues, err := client.listIssues(context.Background(), categoryVulnerability, 1)
 	assert.NilError(t, err)
 	assert.Check(t, is.Len(issues, 0))
 
@@ -87,9 +83,6 @@ func TestClientSendsBearerTokenAndEncodesQuery(t *testing.T) {
 	assert.Check(t, is.Contains(gotRawQuery, "scope%5Btype%5D=global"))
 }
 
-// TestClientStatusErrors verifies non-success responses map to sentinels rather than decode errors
-// httpsling does not treat a non-2xx status as an error and still unmarshals the body, so this
-// guards the ordering of the status check against the decode result
 func TestClientStatusErrors(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -117,7 +110,6 @@ func TestClientStatusErrors(t *testing.T) {
 	}
 }
 
-// TestOrganizationIdentifier verifies the numeric organization ID is rendered as a stable string
 func TestOrganizationIdentifier(t *testing.T) {
 	client := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
