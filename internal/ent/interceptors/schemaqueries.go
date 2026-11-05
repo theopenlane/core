@@ -5,8 +5,9 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/stoewer/go-strcase"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 )
 
 // SchemaQuery holds the graphql root query field names generated for an ent schema
@@ -25,7 +26,7 @@ var SchemaQueries = sync.OnceValue(func() map[string]SchemaQuery {
 		single := lowerFirst(schema.Name)
 
 		// like ent, a name with no distinct plural gets a slice suffix for its list query
-		list := utils.Plural(single)
+		list := strcase.LowerCamelCase(schema.Plural)
 		if list == single {
 			list += "Slice"
 		}
@@ -36,13 +37,9 @@ var SchemaQueries = sync.OnceValue(func() map[string]SchemaQuery {
 	return queries
 })
 
-// listQueryName returns the graphql list query name for an ent schema type, falling back to the pluralized type
+// listQueryName returns the graphql list query name for an ent schema type
 func listQueryName(schemaType string) string {
-	if query, ok := SchemaQueries()[schemaType]; ok {
-		return query.List
-	}
-
-	return utils.Plural(lowerFirst(schemaType))
+	return SchemaQueries()[schemaType].List
 }
 
 // lowerFirst lowercases the first rune, turning a schema name into its graphql field name
