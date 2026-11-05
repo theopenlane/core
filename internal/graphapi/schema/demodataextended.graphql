@@ -1,0 +1,87 @@
+"""
+DemoDataProfile names the seed time rules applied to a demo dataset's records
+"""
+enum DemoDataProfile @goModel(model: "github.com/theopenlane/core/common/enums.DemoDataProfile") {
+  """
+  fills the dataset out with statuses, program links and assignments
+  """
+  DEMO
+  """
+  seeds the dataset's controls, policies and procedures as drafts with nothing linked or assigned
+  """
+  DRAFT
+}
+
+"""
+Input for seedDemoData mutation
+"""
+input SeedDemoDataInput {
+    """
+    the demo dataset to seed into the current organization, e.g. soc2
+    """
+    dataset: String!
+    """
+    the seed profile, DEMO when not set
+    """
+    profile: DemoDataProfile
+}
+
+"""
+Return response for seedDemoData mutation. Seeding happens asynchronously, so this only confirms
+the seed was queued - the outcome surfaces via a follow-up Notification once it finishes
+"""
+type SeedDemoDataPayload {
+    """
+    whether the seed was queued
+    """
+    accepted: Boolean!
+}
+
+"""
+Input for deleteDemoData mutation
+"""
+input DeleteDemoDataInput {
+    """
+    the demo dataset to remove from the current organization, e.g. soc2
+    """
+    dataset: String!
+    """
+    dataset object types whose seeded records are kept, by snake_case schema name, e.g. custom_type_enum
+    """
+    keep: [String!]
+}
+
+"""
+Return response for deleteDemoData mutation. Removal happens asynchronously, so this only confirms
+the removal was queued - the outcome surfaces via a follow-up Notification once it finishes
+"""
+type DeleteDemoDataPayload {
+    """
+    whether the removal was queued
+    """
+    accepted: Boolean!
+}
+
+extend type Mutation {
+    """
+    Seed the current organization with a demo dataset, asynchronously creating its programs,
+    controls, policies, risks and related records
+    """
+    seedDemoData(
+        """
+        the demo dataset to seed
+        """
+        input: SeedDemoDataInput!
+    ): SeedDemoDataPayload!
+    """
+    Remove a seeded demo dataset from the current organization, asynchronously deleting every
+    record it imported except the object types listed in keep. Controls cloned from catalog
+    standards such as SOC 2 are left in place
+    """
+    deleteDemoData(
+        """
+        the demo dataset to remove
+        """
+        input: DeleteDemoDataInput!
+    ): DeleteDemoDataPayload!
+}

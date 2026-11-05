@@ -207,6 +207,20 @@ func (_c *NarrativeCreate) SetNillableIntegrationRunID(v *string) *NarrativeCrea
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *NarrativeCreate) SetSourceKey(v string) *NarrativeCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *NarrativeCreate) SetNillableSourceKey(v *string) *NarrativeCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *NarrativeCreate) SetExternalID(v string) *NarrativeCreate {
 	_c.mutation.SetExternalID(v)
@@ -632,6 +646,10 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(narrative.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(narrative.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(narrative.FieldExternalID, field.TypeString, value)

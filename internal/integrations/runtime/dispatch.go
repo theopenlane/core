@@ -106,7 +106,7 @@ func (r *Runtime) Dispatch(ctx context.Context, req types.DispatchRequest) (type
 
 	if req.UniqueKey != "" {
 		headers.UniqueKey = req.UniqueKey
-		headers.UniqueOnce = true
+		headers.UniqueOnce = req.UniqueOnce
 	}
 
 	eventID, err := r.Gala().EmitWithHeaders(emitCtx, operation.Topic, operations.Envelope{

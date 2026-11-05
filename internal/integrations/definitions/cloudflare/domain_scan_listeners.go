@@ -19,6 +19,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/vendorenrich"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
@@ -32,6 +33,9 @@ import (
 // gathered concurrently with URL Scanner submission and polling, until the poll cycle
 // finishes and needs it to build the final report
 const domainScanEnrichmentMetadataKey = "enrichment"
+
+// domainScanNotificationObjectType is the notification object type for a finished domain scan
+const domainScanNotificationObjectType = "scan.created"
 
 // domainScanSaga orchestrates the durable domain scan flow: submit, poll, finalize
 type domainScanSaga struct {
@@ -152,17 +156,12 @@ func (s domainScanSaga) sendBrandDesignNotification(ctx context.Context, opts br
 		return err
 	}
 
-	_, err = s.services.DB().Notification.Create().
-		SetOwnerID(opts.organizationID).
-		SetNotificationType(enums.NotificationTypeOrganization).
-		SetObjectType("scan.created").
-		SetTitle("Domain Branding is ready").
-		SetBody(body).
-		SetData(data).
-		SetTopic(enums.NotificationTopicDomainScan).
-		Save(domainScanSystemContext(ctx, opts.organizationID))
-
-	return err
+	return operations.NotifyOutcome(domainScanSystemContext(ctx, opts.organizationID), domainScanNotificationObjectType, entityops.NotificationContent{
+		TitleTemplate: "Domain Branding is ready",
+		BodyTemplate:  body,
+		Data:          data,
+		Topic:         enums.NotificationTopicDomainScan,
+	})
 }
 
 // domainScanListeners declares the standalone gala listeners implementing the domain scan saga
@@ -696,15 +695,10 @@ func (s domainScanSaga) maybeNotifyDomainScanGroup(ctx context.Context, organiza
 		body = fmt.Sprintf("%s (%d domain(s) failed)", body, failed)
 	}
 
-	_, err = s.services.DB().Notification.Create().
-		SetOwnerID(organizationID).
-		SetNotificationType(enums.NotificationTypeOrganization).
-		SetObjectType("scan.created").
-		SetTitle("Domain scan completed").
-		SetBody(body).
-		SetData(data).
-		SetTopic(enums.NotificationTopicDomainScan).
-		Save(systemCtx)
-
-	return err
+	return operations.NotifyOutcome(systemCtx, domainScanNotificationObjectType, entityops.NotificationContent{
+		TitleTemplate: "Domain scan completed",
+		BodyTemplate:  body,
+		Data:          data,
+		Topic:         enums.NotificationTopicDomainScan,
+	})
 }

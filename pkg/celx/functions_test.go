@@ -3,6 +3,7 @@ package celx
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/google/cel-go/cel"
 	"gotest.tools/v3/assert"
@@ -80,4 +81,21 @@ func TestParagraphsNull(t *testing.T) {
 	out, _, err := eval.Evaluate(context.Background(), "paragraphs(s)", map[string]any{"s": nil})
 	assert.Check(t, err)
 	assert.Check(t, is.Equal("", out.Value()))
+}
+
+func TestMerge(t *testing.T) {
+	env, err := NewEnv(EnvConfig{}, cel.Variable("payload", cel.DynType))
+	assert.NilError(t, err)
+
+	eval := NewEvaluator(env, EvalConfig{Timeout: time.Second})
+
+	out, err := eval.EvaluateJSONMap(context.Background(), `merge(payload, {"status": "DRAFT", "approver_group_name": "Admins"})`, map[string]any{
+		"payload": map[string]any{"name": "policy", "status": "PUBLISHED"},
+	})
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(map[string]any{"name": "policy", "status": "DRAFT", "approver_group_name": "Admins"}, out))
+
+	out, err = eval.EvaluateJSONMap(context.Background(), `merge(payload, {"status": "DRAFT"})`, map[string]any{"payload": nil})
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(map[string]any{"status": "DRAFT"}, out))
 }

@@ -54,6 +54,8 @@ type EmailTemplateHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -120,7 +122,7 @@ func (*EmailTemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case emailtemplatehistory.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldUpdatedByImpersonator, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldRevision, emailtemplatehistory.FieldSourceDefinitionID, emailtemplatehistory.FieldSourceDefinitionVersion, emailtemplatehistory.FieldSourceInstanceID, emailtemplatehistory.FieldManagedBy, emailtemplatehistory.FieldIntegrationRunID, emailtemplatehistory.FieldExternalID, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldTemplateContext, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID, emailtemplatehistory.FieldTrustCenterID:
+		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldUpdatedByImpersonator, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldRevision, emailtemplatehistory.FieldSourceDefinitionID, emailtemplatehistory.FieldSourceDefinitionVersion, emailtemplatehistory.FieldSourceInstanceID, emailtemplatehistory.FieldManagedBy, emailtemplatehistory.FieldIntegrationRunID, emailtemplatehistory.FieldSourceKey, emailtemplatehistory.FieldExternalID, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldTemplateContext, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID, emailtemplatehistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case emailtemplatehistory.FieldHistoryTime, emailtemplatehistory.FieldCreatedAt, emailtemplatehistory.FieldUpdatedAt, emailtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -241,6 +243,12 @@ func (_m *EmailTemplateHistory) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case emailtemplatehistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case emailtemplatehistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -487,6 +495,9 @@ func (_m *EmailTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

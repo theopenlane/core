@@ -47,6 +47,8 @@ type Contact struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
@@ -179,7 +181,7 @@ func (*Contact) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case contact.FieldTags:
 			values[i] = new([]byte)
-		case contact.FieldID, contact.FieldCreatedBy, contact.FieldUpdatedBy, contact.FieldUpdatedByImpersonator, contact.FieldDeletedBy, contact.FieldSourceDefinitionID, contact.FieldSourceDefinitionVersion, contact.FieldSourceInstanceID, contact.FieldManagedBy, contact.FieldIntegrationRunID, contact.FieldExternalID, contact.FieldOwnerID, contact.FieldFullName, contact.FieldTitle, contact.FieldCompany, contact.FieldEmail, contact.FieldPhoneNumber, contact.FieldAddress, contact.FieldStatus, contact.FieldIntegrationID:
+		case contact.FieldID, contact.FieldCreatedBy, contact.FieldUpdatedBy, contact.FieldUpdatedByImpersonator, contact.FieldDeletedBy, contact.FieldSourceDefinitionID, contact.FieldSourceDefinitionVersion, contact.FieldSourceInstanceID, contact.FieldManagedBy, contact.FieldIntegrationRunID, contact.FieldSourceKey, contact.FieldExternalID, contact.FieldOwnerID, contact.FieldFullName, contact.FieldTitle, contact.FieldCompany, contact.FieldEmail, contact.FieldPhoneNumber, contact.FieldAddress, contact.FieldStatus, contact.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case contact.FieldCreatedAt, contact.FieldUpdatedAt, contact.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -284,6 +286,12 @@ func (_m *Contact) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case contact.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case contact.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -463,6 +471,9 @@ func (_m *Contact) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

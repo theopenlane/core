@@ -16,6 +16,7 @@ mutation CreateBulkCSVMappedControl ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -43,6 +44,7 @@ mutation CreateBulkMappedControl ($input: [CreateMappedControlInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -102,6 +104,7 @@ mutation CreateMappedControl ($input: CreateMappedControlInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -224,6 +227,7 @@ query GetMappedControlByID ($mappedControlId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		tags
@@ -341,6 +345,7 @@ mutation UpdateMappedControl ($updateMappedControlId: ID!, $input: UpdateMappedC
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags

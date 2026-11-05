@@ -1,6 +1,7 @@
 package runtime
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"testing"
@@ -32,6 +33,24 @@ func TestRegisterListenersRequiresGala(t *testing.T) {
 	err := NewForTesting(registry.New()).registerListeners()
 	if !errors.Is(err, operations.ErrGalaRequired) {
 		t.Fatalf("expected ErrGalaRequired, got %v", err)
+	}
+}
+
+func TestOperationCancel(t *testing.T) {
+	t.Parallel()
+
+	envelope := operations.Envelope{OperationContext: types.NewOperationContext("org-1", "SeedDemoData", types.IntegrationSource{DefinitionID: "test-def", Runtime: true})}
+
+	if !operationCancel(types.ExecutionPolicy{NoRetry: true})(context.Background(), envelope, errTestCycle) {
+		t.Fatalf("expected a no-retry operation to cancel on any error")
+	}
+
+	if operationCancel(types.ExecutionPolicy{})(context.Background(), envelope, errTestCycle) {
+		t.Fatalf("expected a retryable operation to retry a provider error")
+	}
+
+	if !operationCancel(types.ExecutionPolicy{})(context.Background(), envelope, &ent.NotFoundError{}) {
+		t.Fatalf("expected a missing integration to cancel")
 	}
 }
 

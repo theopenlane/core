@@ -52,6 +52,7 @@ query GetAllCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				tags
 				templateID
@@ -118,6 +119,7 @@ query GetCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				tags
 				templateID

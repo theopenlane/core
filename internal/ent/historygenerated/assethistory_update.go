@@ -112,6 +112,9 @@ func (_u *AssetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(assethistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(assethistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(assethistory.FieldExternalID, field.TypeString)
 	}
@@ -367,6 +370,9 @@ func (_u *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHisto
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(assethistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(assethistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(assethistory.FieldExternalID, field.TypeString)

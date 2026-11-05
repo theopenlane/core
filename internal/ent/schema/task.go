@@ -164,9 +164,6 @@ func (Task) Fields() []ent.Field {
 		field.String("source").
 			Comment("the system or workflow that created or suggested the task").
 			Optional(),
-		field.String("source_key").
-			Comment("stable source-specific key for the task").
-			Optional(),
 		field.String("idempotency_key").
 			Comment("key to prevent duplicates for auto-generated task based on rules").
 			Annotations(

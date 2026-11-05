@@ -89,3 +89,6 @@ internal/integrations/cli/config/.integrations.yaml
 
 # generated files
 docker/pg-init-scripts/init_*.sql
+
+# demo data
+internal/integrations/definitions/objectstore/examples/runtime/demo/**/*.json

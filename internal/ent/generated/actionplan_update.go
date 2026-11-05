@@ -278,6 +278,26 @@ func (_u *ActionPlanUpdate) ClearIntegrationRunID() *ActionPlanUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *ActionPlanUpdate) SetSourceKey(v string) *ActionPlanUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableSourceKey(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ActionPlanUpdate) ClearSourceKey() *ActionPlanUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *ActionPlanUpdate) SetExternalID(v string) *ActionPlanUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1874,6 +1894,12 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(actionplan.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(actionplan.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(actionplan.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(actionplan.FieldExternalID, field.TypeString, value)
 	}
@@ -3237,6 +3263,26 @@ func (_u *ActionPlanUpdateOne) SetNillableIntegrationRunID(v *string) *ActionPla
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *ActionPlanUpdateOne) ClearIntegrationRunID() *ActionPlanUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *ActionPlanUpdateOne) SetSourceKey(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableSourceKey(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ActionPlanUpdateOne) ClearSourceKey() *ActionPlanUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -4865,6 +4911,12 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(actionplan.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(actionplan.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(actionplan.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(actionplan.FieldExternalID, field.TypeString, value)

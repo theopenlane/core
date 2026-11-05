@@ -128,20 +128,31 @@ func (s *Schema) WorkflowOwnerID(ctx context.Context, client *generated.Client, 
 	return ownerID, nil
 }
 
-// ApplyWorkflowFields validates and applies workflow updates through the schema's existing updater.
-func (s *Schema) ApplyWorkflowFields(ctx context.Context, client *generated.Client, objectID string, updates map[string]any) error {
+// ApplyWorkflowFields validates a JSON object of field updates against the schema's workflow
+// eligibility and clearability rules, re-keys each entry to its field name, and applies the result
+// through the schema's updater. Values pass through as raw JSON
+func (s *Schema) ApplyWorkflowFields(ctx context.Context, client *generated.Client, objectID string, updates json.RawMessage) error {
 	if s == nil || !s.SchemaDescriptor.WorkflowEligible || s.Update == nil {
 		return fmt.Errorf("%w: workflow updates for %s", ErrUpdateFailed, objectID)
 	}
 
-	normalized := make(map[string]any, len(updates))
-	for name, value := range updates {
+	if jsonx.IsEmptyRawMessage(updates) {
+		return nil
+	}
+
+	entries, err := jsonx.Decode[map[string]json.RawMessage](updates)
+	if err != nil {
+		return logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpUpdate, EntityID: objectID}, ErrDecodeFailed, err)
+	}
+
+	normalized := make(map[string]json.RawMessage, len(entries))
+	for name, value := range entries {
 		field, ok := s.FieldByName(name)
 		if !ok || !field.WorkflowEligible {
 			return fmt.Errorf("%w: workflow field %s.%s", ErrValidationFailed, s.Name, name)
 		}
 
-		if value == nil && !field.Clearable {
+		if jsonx.IsEmptyRawMessage(value) && !field.Clearable {
 			return fmt.Errorf("%w: workflow field %s.%s cannot be cleared", ErrValidationFailed, s.Name, name)
 		}
 
@@ -160,21 +171,22 @@ func (s *Schema) ApplyWorkflowFields(ctx context.Context, client *generated.Clie
 	return s.Update(ctx, client, objectID, raw)
 }
 
-// EnrichWorkflowPayload copies designated object fields into a webhook payload. Schemas without
-// designated payload fields contribute only their object ID, preserving the existing contract.
-func (s *Schema) EnrichWorkflowPayload(ctx context.Context, client *generated.Client, objectID string, payload map[string]any) error {
+// EnrichWorkflowPayload returns the webhook payload with the schema's designated payload fields
+// copied in from the loaded object. Schemas without designated payload fields contribute only the
+// object id, preserving the existing contract
+func (s *Schema) EnrichWorkflowPayload(ctx context.Context, client *generated.Client, objectID string, payload json.RawMessage) (json.RawMessage, error) {
 	if s == nil || !s.SchemaDescriptor.WorkflowEligible || s.Load == nil {
-		return fmt.Errorf("%w: workflow object %s", ErrLoadFailed, objectID)
+		return nil, fmt.Errorf("%w: workflow object %s", ErrLoadFailed, objectID)
 	}
 
 	raw, err := s.Load(ctx, client, objectID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	row, err := jsonx.Decode[map[string]json.RawMessage](raw)
 	if err != nil {
-		return logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrDecodeFailed, err)
+		return nil, logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrDecodeFailed, err)
 	}
 
 	selected := false
@@ -185,18 +197,27 @@ func (s *Schema) EnrichWorkflowPayload(ctx context.Context, client *generated.Cl
 
 		value, err := workflowPayloadFieldValue(s.ProjectionType, field, row[field.Name])
 		if err != nil {
-			return logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrDecodeFailed, err)
+			return nil, logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrDecodeFailed, err)
 		}
 
-		payload[field.Name] = value
+		payload, _, err = jsonx.SetObjectKey(payload, field.Name, value)
+		if err != nil {
+			return nil, logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrMarshalFailed, err)
+		}
+
 		selected = true
 	}
 
-	if !selected {
-		payload["id"] = objectID
+	if selected {
+		return payload, nil
 	}
 
-	return nil
+	payload, _, err = jsonx.SetObjectKey(payload, "id", objectID)
+	if err != nil {
+		return nil, logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrMarshalFailed, err)
+	}
+
+	return payload, nil
 }
 
 // workflowObjectEdge resolves the owning foreign-key edge from a workflow container to a schema.

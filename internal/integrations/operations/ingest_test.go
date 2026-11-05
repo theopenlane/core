@@ -8,6 +8,9 @@ import (
 
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/common/openapi"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -544,12 +547,18 @@ func TestProcessPayloadSets_RuntimeRejectsSchemaWithoutSystemOwned(t *testing.T)
 func TestIngestContextOwnerID(t *testing.T) {
 	t.Parallel()
 
+	orgID := ulids.New().String()
+	orgCtx := auth.WithCaller(context.Background(), auth.NewIntegrationCaller(orgID))
+	systemCtx := auth.WithCaller(context.Background(), auth.NewSystemAdminCaller(auth.IntegrationSubjectID, auth.IntegrationDisplayName, auth.IntegrationEmail))
+
 	installed := IngestContext{Integration: &ent.Integration{OwnerID: "org_1", DefinitionID: "def_installed"}, DefinitionID: "def_runtime"}
-	assert.Equal(t, installed.ownerID(), "org_1")
+	assert.Equal(t, installed.ownerID(orgCtx), "org_1")
 	assert.Equal(t, installed.definitionID(), "def_installed")
 
 	runtime := IngestContext{DefinitionID: "def_runtime"}
-	assert.Equal(t, runtime.ownerID(), "")
+	assert.Equal(t, runtime.ownerID(orgCtx), orgID)
+	assert.Equal(t, runtime.ownerID(systemCtx), "")
+	assert.Equal(t, runtime.ownerID(context.Background()), "")
 	assert.Equal(t, runtime.definitionID(), "def_runtime")
 }
 
@@ -867,7 +876,7 @@ func TestStampProvenanceOverridesMappedValues(t *testing.T) {
 
 	payload := json.RawMessage(`{"external_id":"acct-1","managed_by":"int_other","source_instance_id":"tenant-other","owner_id":"org_other","source_definition_id":"def_other"}`)
 
-	stamped := entityops.StampProvenance(payload, entityops.SchemaDirectoryAccount, installation, installation.DefinitionID, "run_1")
+	stamped := entityops.StampProvenance(payload, entityops.SchemaDirectoryAccount, entityops.ProvenanceSource{Integration: installation, DefinitionID: installation.DefinitionID, RunID: "run_1"})
 
 	assert.Equal(t, "int_owner", entityops.FieldValue(stamped, entityops.FieldManagedBy), "a mapping must not pick the managing installation")
 	assert.Equal(t, "tenant-test", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID), "a mapping must not pick the source instance")
@@ -875,4 +884,30 @@ func TestStampProvenanceOverridesMappedValues(t *testing.T) {
 	assert.Equal(t, "def_dir", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID), "a mapping must not pick the source definition")
 	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
 	assert.Equal(t, "acct-1", entityops.FieldValue(stamped, "external_id"), "mapped non-provenance fields pass through")
+}
+
+func TestStampProvenanceRuntime(t *testing.T) {
+	t.Parallel()
+
+	payload := json.RawMessage(`{"name":"Acme","source_key":"other"}`)
+
+	stamped := entityops.StampProvenance(payload, entityops.SchemaEntity, entityops.ProvenanceSource{
+		DefinitionID: "def_objectstore",
+		SourceKey:    "source_demo_data",
+		RunID:        "run_1",
+	})
+
+	assert.Equal(t, "source_demo_data", entityops.FieldValue(stamped, entityops.FieldSourceKey))
+	assert.Equal(t, "", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID))
+	assert.Equal(t, "def_objectstore", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID))
+	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
+	assert.Equal(t, "Acme", entityops.FieldValue(stamped, "name"))
+}
+
+func TestStampProvenanceRuntimeWithoutValues(t *testing.T) {
+	t.Parallel()
+
+	payload := json.RawMessage(`{"name":"Acme"}`)
+
+	assert.Equal(t, string(payload), string(entityops.StampProvenance(payload, entityops.SchemaEntity, entityops.ProvenanceSource{})))
 }

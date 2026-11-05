@@ -2,17 +2,11 @@ package graphapi
 
 import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
-	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 )
 
 // emailRuntimeClient resolves the runtime email client from the process-wide integrations runtime
 func (r *queryResolver) emailRuntimeClient() (*email.Client, error) {
-	rt := integrationsruntime.Default()
-	if rt == nil {
-		return nil, ErrEmailClientNotAvailable
-	}
-
-	client, ok := rt.Registry().RuntimeClient(email.DefinitionID.ID())
+	_, client, ok := runtimeClient(email.DefinitionID.ID())
 	if !ok {
 		return nil, ErrEmailClientNotAvailable
 	}

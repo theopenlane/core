@@ -50,6 +50,8 @@ type ControlObjective struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -270,7 +272,7 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlobjective.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldUpdatedByImpersonator, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldRevision, controlobjective.FieldSourceDefinitionID, controlobjective.FieldSourceDefinitionVersion, controlobjective.FieldSourceInstanceID, controlobjective.FieldManagedBy, controlobjective.FieldIntegrationRunID, controlobjective.FieldExternalID, controlobjective.FieldOwnerID, controlobjective.FieldInternalNotes, controlobjective.FieldSystemInternalID, controlobjective.FieldName, controlobjective.FieldDesiredOutcome, controlobjective.FieldStatus, controlobjective.FieldSource, controlobjective.FieldControlObjectiveType, controlobjective.FieldCategory, controlobjective.FieldSubcategory:
+		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldUpdatedByImpersonator, controlobjective.FieldDeletedBy, controlobjective.FieldDisplayID, controlobjective.FieldRevision, controlobjective.FieldSourceDefinitionID, controlobjective.FieldSourceDefinitionVersion, controlobjective.FieldSourceInstanceID, controlobjective.FieldManagedBy, controlobjective.FieldIntegrationRunID, controlobjective.FieldSourceKey, controlobjective.FieldExternalID, controlobjective.FieldOwnerID, controlobjective.FieldInternalNotes, controlobjective.FieldSystemInternalID, controlobjective.FieldName, controlobjective.FieldDesiredOutcome, controlobjective.FieldStatus, controlobjective.FieldSource, controlobjective.FieldControlObjectiveType, controlobjective.FieldCategory, controlobjective.FieldSubcategory:
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -387,6 +389,12 @@ func (_m *ControlObjective) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case controlobjective.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case controlobjective.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -622,6 +630,9 @@ func (_m *ControlObjective) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

@@ -55,6 +55,8 @@ type ReviewHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -125,7 +127,7 @@ func (*ReviewHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case reviewhistory.FieldSystemOwned, reviewhistory.FieldApproved:
 			values[i] = new(sql.NullBool)
-		case reviewhistory.FieldID, reviewhistory.FieldRef, reviewhistory.FieldCreatedBy, reviewhistory.FieldUpdatedBy, reviewhistory.FieldUpdatedByImpersonator, reviewhistory.FieldDeletedBy, reviewhistory.FieldSourceDefinitionID, reviewhistory.FieldSourceDefinitionVersion, reviewhistory.FieldSourceInstanceID, reviewhistory.FieldManagedBy, reviewhistory.FieldIntegrationRunID, reviewhistory.FieldExternalID, reviewhistory.FieldOwnerID, reviewhistory.FieldInternalNotes, reviewhistory.FieldSystemInternalID, reviewhistory.FieldEnvironmentName, reviewhistory.FieldEnvironmentID, reviewhistory.FieldScopeName, reviewhistory.FieldScopeID, reviewhistory.FieldExternalOwnerID, reviewhistory.FieldTitle, reviewhistory.FieldState, reviewhistory.FieldStatus, reviewhistory.FieldCategory, reviewhistory.FieldClassification, reviewhistory.FieldSummary, reviewhistory.FieldDetails, reviewhistory.FieldReporter, reviewhistory.FieldReviewerID, reviewhistory.FieldSource, reviewhistory.FieldExternalURI:
+		case reviewhistory.FieldID, reviewhistory.FieldRef, reviewhistory.FieldCreatedBy, reviewhistory.FieldUpdatedBy, reviewhistory.FieldUpdatedByImpersonator, reviewhistory.FieldDeletedBy, reviewhistory.FieldSourceDefinitionID, reviewhistory.FieldSourceDefinitionVersion, reviewhistory.FieldSourceInstanceID, reviewhistory.FieldManagedBy, reviewhistory.FieldIntegrationRunID, reviewhistory.FieldSourceKey, reviewhistory.FieldExternalID, reviewhistory.FieldOwnerID, reviewhistory.FieldInternalNotes, reviewhistory.FieldSystemInternalID, reviewhistory.FieldEnvironmentName, reviewhistory.FieldEnvironmentID, reviewhistory.FieldScopeName, reviewhistory.FieldScopeID, reviewhistory.FieldExternalOwnerID, reviewhistory.FieldTitle, reviewhistory.FieldState, reviewhistory.FieldStatus, reviewhistory.FieldCategory, reviewhistory.FieldClassification, reviewhistory.FieldSummary, reviewhistory.FieldDetails, reviewhistory.FieldReporter, reviewhistory.FieldReviewerID, reviewhistory.FieldSource, reviewhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case reviewhistory.FieldHistoryTime, reviewhistory.FieldCreatedAt, reviewhistory.FieldUpdatedAt, reviewhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -248,6 +250,12 @@ func (_m *ReviewHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case reviewhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case reviewhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -505,6 +513,9 @@ func (_m *ReviewHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

@@ -57,6 +57,8 @@ type PlatformHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -183,7 +185,7 @@ func (*PlatformHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case platformhistory.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case platformhistory.FieldID, platformhistory.FieldRef, platformhistory.FieldCreatedBy, platformhistory.FieldUpdatedBy, platformhistory.FieldUpdatedByImpersonator, platformhistory.FieldDeletedBy, platformhistory.FieldDisplayID, platformhistory.FieldSourceDefinitionID, platformhistory.FieldSourceDefinitionVersion, platformhistory.FieldSourceInstanceID, platformhistory.FieldManagedBy, platformhistory.FieldIntegrationRunID, platformhistory.FieldExternalID, platformhistory.FieldOwnerID, platformhistory.FieldInternalOwner, platformhistory.FieldInternalOwnerUserID, platformhistory.FieldInternalOwnerGroupID, platformhistory.FieldInternalOwnerIdentityHolderID, platformhistory.FieldBusinessOwner, platformhistory.FieldBusinessOwnerUserID, platformhistory.FieldBusinessOwnerGroupID, platformhistory.FieldBusinessOwnerIdentityHolderID, platformhistory.FieldTechnicalOwner, platformhistory.FieldTechnicalOwnerUserID, platformhistory.FieldTechnicalOwnerGroupID, platformhistory.FieldTechnicalOwnerIdentityHolderID, platformhistory.FieldSecurityOwner, platformhistory.FieldSecurityOwnerUserID, platformhistory.FieldSecurityOwnerGroupID, platformhistory.FieldSecurityOwnerIdentityHolderID, platformhistory.FieldPlatformKindName, platformhistory.FieldPlatformKindID, platformhistory.FieldPlatformDataClassificationName, platformhistory.FieldPlatformDataClassificationID, platformhistory.FieldEnvironmentName, platformhistory.FieldEnvironmentID, platformhistory.FieldScopeName, platformhistory.FieldScopeID, platformhistory.FieldAccessModelName, platformhistory.FieldAccessModelID, platformhistory.FieldEncryptionStatusName, platformhistory.FieldEncryptionStatusID, platformhistory.FieldSecurityTierName, platformhistory.FieldSecurityTierID, platformhistory.FieldCriticalityName, platformhistory.FieldCriticalityID, platformhistory.FieldExternalUUID, platformhistory.FieldName, platformhistory.FieldDescription, platformhistory.FieldBusinessPurpose, platformhistory.FieldScopeStatement, platformhistory.FieldTrustBoundaryDescription, platformhistory.FieldDataFlowSummary, platformhistory.FieldStatus, platformhistory.FieldPhysicalLocation, platformhistory.FieldRegion, platformhistory.FieldSourceType, platformhistory.FieldSourceIdentifier, platformhistory.FieldCostCenter, platformhistory.FieldPlatformOwnerID, platformhistory.FieldExternalReferenceID:
+		case platformhistory.FieldID, platformhistory.FieldRef, platformhistory.FieldCreatedBy, platformhistory.FieldUpdatedBy, platformhistory.FieldUpdatedByImpersonator, platformhistory.FieldDeletedBy, platformhistory.FieldDisplayID, platformhistory.FieldSourceDefinitionID, platformhistory.FieldSourceDefinitionVersion, platformhistory.FieldSourceInstanceID, platformhistory.FieldManagedBy, platformhistory.FieldIntegrationRunID, platformhistory.FieldSourceKey, platformhistory.FieldExternalID, platformhistory.FieldOwnerID, platformhistory.FieldInternalOwner, platformhistory.FieldInternalOwnerUserID, platformhistory.FieldInternalOwnerGroupID, platformhistory.FieldInternalOwnerIdentityHolderID, platformhistory.FieldBusinessOwner, platformhistory.FieldBusinessOwnerUserID, platformhistory.FieldBusinessOwnerGroupID, platformhistory.FieldBusinessOwnerIdentityHolderID, platformhistory.FieldTechnicalOwner, platformhistory.FieldTechnicalOwnerUserID, platformhistory.FieldTechnicalOwnerGroupID, platformhistory.FieldTechnicalOwnerIdentityHolderID, platformhistory.FieldSecurityOwner, platformhistory.FieldSecurityOwnerUserID, platformhistory.FieldSecurityOwnerGroupID, platformhistory.FieldSecurityOwnerIdentityHolderID, platformhistory.FieldPlatformKindName, platformhistory.FieldPlatformKindID, platformhistory.FieldPlatformDataClassificationName, platformhistory.FieldPlatformDataClassificationID, platformhistory.FieldEnvironmentName, platformhistory.FieldEnvironmentID, platformhistory.FieldScopeName, platformhistory.FieldScopeID, platformhistory.FieldAccessModelName, platformhistory.FieldAccessModelID, platformhistory.FieldEncryptionStatusName, platformhistory.FieldEncryptionStatusID, platformhistory.FieldSecurityTierName, platformhistory.FieldSecurityTierID, platformhistory.FieldCriticalityName, platformhistory.FieldCriticalityID, platformhistory.FieldExternalUUID, platformhistory.FieldName, platformhistory.FieldDescription, platformhistory.FieldBusinessPurpose, platformhistory.FieldScopeStatement, platformhistory.FieldTrustBoundaryDescription, platformhistory.FieldDataFlowSummary, platformhistory.FieldStatus, platformhistory.FieldPhysicalLocation, platformhistory.FieldRegion, platformhistory.FieldSourceType, platformhistory.FieldSourceIdentifier, platformhistory.FieldCostCenter, platformhistory.FieldPlatformOwnerID, platformhistory.FieldExternalReferenceID:
 			values[i] = new(sql.NullString)
 		case platformhistory.FieldHistoryTime, platformhistory.FieldCreatedAt, platformhistory.FieldUpdatedAt, platformhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -312,6 +314,12 @@ func (_m *PlatformHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case platformhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case platformhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -729,6 +737,9 @@ func (_m *PlatformHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

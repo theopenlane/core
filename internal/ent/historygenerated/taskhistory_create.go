@@ -239,6 +239,20 @@ func (_c *TaskHistoryCreate) SetNillableIntegrationRunID(v *string) *TaskHistory
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *TaskHistoryCreate) SetSourceKey(v string) *TaskHistoryCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableSourceKey(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *TaskHistoryCreate) SetExternalID(v string) *TaskHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -551,20 +565,6 @@ func (_c *TaskHistoryCreate) SetNillableSource(v *string) *TaskHistoryCreate {
 	return _c
 }
 
-// SetSourceKey sets the "source_key" field.
-func (_c *TaskHistoryCreate) SetSourceKey(v string) *TaskHistoryCreate {
-	_c.mutation.SetSourceKey(v)
-	return _c
-}
-
-// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
-func (_c *TaskHistoryCreate) SetNillableSourceKey(v *string) *TaskHistoryCreate {
-	if v != nil {
-		_c.SetSourceKey(*v)
-	}
-	return _c
-}
-
 // SetIdempotencyKey sets the "idempotency_key" field.
 func (_c *TaskHistoryCreate) SetIdempotencyKey(v string) *TaskHistoryCreate {
 	_c.mutation.SetIdempotencyKey(v)
@@ -851,6 +851,10 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 		_spec.SetField(taskhistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(taskhistory.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
+	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(taskhistory.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
@@ -946,10 +950,6 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(taskhistory.FieldSource, field.TypeString, value)
 		_node.Source = value
-	}
-	if value, ok := _c.mutation.SourceKey(); ok {
-		_spec.SetField(taskhistory.FieldSourceKey, field.TypeString, value)
-		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.IdempotencyKey(); ok {
 		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)

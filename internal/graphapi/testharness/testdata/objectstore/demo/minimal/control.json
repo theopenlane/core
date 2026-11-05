@@ -1,0 +1,16 @@
+[
+  {
+    "external_id": "control::minimal-control-1",
+    "ref_code": "MIN-01",
+    "title": "Minimal Control One",
+    "description": "{{ORG_NAME}} reviews access quarterly",
+    "status": "{{STATUS|APPROVED}}"
+  },
+  {
+    "external_id": "control::minimal-control-2",
+    "ref_code": "MIN-02",
+    "title": "Minimal Control Two",
+    "description": "{{ORG_NAME}} encrypts data at rest",
+    "status": "{{STATUS|APPROVED}}"
+  }
+]

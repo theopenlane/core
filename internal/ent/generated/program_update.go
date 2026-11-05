@@ -264,6 +264,26 @@ func (_u *ProgramUpdate) ClearIntegrationRunID() *ProgramUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *ProgramUpdate) SetSourceKey(v string) *ProgramUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableSourceKey(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ProgramUpdate) ClearSourceKey() *ProgramUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *ProgramUpdate) SetExternalID(v string) *ProgramUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1701,6 +1721,12 @@ func (_u *ProgramUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(program.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(program.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(program.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(program.FieldExternalID, field.TypeString, value)
@@ -3176,6 +3202,26 @@ func (_u *ProgramUpdateOne) ClearIntegrationRunID() *ProgramUpdateOne {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *ProgramUpdateOne) SetSourceKey(v string) *ProgramUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableSourceKey(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ProgramUpdateOne) ClearSourceKey() *ProgramUpdateOne {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *ProgramUpdateOne) SetExternalID(v string) *ProgramUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -4643,6 +4689,12 @@ func (_u *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err er
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(program.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(program.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(program.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(program.FieldExternalID, field.TypeString, value)

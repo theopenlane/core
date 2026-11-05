@@ -55,6 +55,8 @@ type EntityHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -203,7 +205,7 @@ func (*EntityHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entityhistory.FieldTerminationNoticeDays, entityhistory.FieldRiskScore, entityhistory.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldUpdatedByImpersonator, entityhistory.FieldDeletedBy, entityhistory.FieldSourceDefinitionID, entityhistory.FieldSourceDefinitionVersion, entityhistory.FieldSourceInstanceID, entityhistory.FieldManagedBy, entityhistory.FieldIntegrationRunID, entityhistory.FieldExternalID, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldInternalOwnerIdentityHolderID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldReviewedByIdentityHolderID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldCatalogID, entityhistory.FieldCatalogKey, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency, entityhistory.FieldLogoRemoteURL, entityhistory.FieldLogoFileID:
+		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldUpdatedByImpersonator, entityhistory.FieldDeletedBy, entityhistory.FieldSourceDefinitionID, entityhistory.FieldSourceDefinitionVersion, entityhistory.FieldSourceInstanceID, entityhistory.FieldManagedBy, entityhistory.FieldIntegrationRunID, entityhistory.FieldSourceKey, entityhistory.FieldExternalID, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldInternalOwnerIdentityHolderID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldReviewedByIdentityHolderID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldCatalogID, entityhistory.FieldCatalogKey, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency, entityhistory.FieldLogoRemoteURL, entityhistory.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case entityhistory.FieldHistoryTime, entityhistory.FieldCreatedAt, entityhistory.FieldUpdatedAt, entityhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -326,6 +328,12 @@ func (_m *EntityHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case entityhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case entityhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -821,6 +829,9 @@ func (_m *EntityHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

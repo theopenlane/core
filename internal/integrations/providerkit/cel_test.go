@@ -231,6 +231,29 @@ func TestEvalMap_PayloadTransform(t *testing.T) {
 	}
 }
 
+func TestEvalMap_Merge(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	env := types.MappingEnvelope{
+		Payload: json.RawMessage(`{"name":"policy","status":"PUBLISHED"}`),
+	}
+
+	got, err := EvalMap(ctx, `merge(payload, {"status": dyn("DRAFT")})`, env, types.MappingInstallation{})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var m map[string]any
+	if err := json.Unmarshal(got, &m); err != nil {
+		t.Fatalf("unmarshal result: %v", err)
+	}
+
+	if m["name"] != "policy" || m["status"] != "DRAFT" {
+		t.Fatalf("expected the payload kept with the status overridden, got %v", m)
+	}
+}
+
 func TestEnvelopeToVars(t *testing.T) {
 	t.Parallel()
 

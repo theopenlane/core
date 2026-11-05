@@ -40,6 +40,7 @@ mutation CreateBulkCSVSubcontrol ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			status
 			subcategory
@@ -107,6 +108,7 @@ mutation CreateBulkSubcontrol ($input: [CreateSubcontrolInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			status
 			subcategory
@@ -174,6 +176,7 @@ mutation CreateSubcontrol ($input: CreateSubcontrolInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			status
 			subcategory
@@ -292,6 +295,7 @@ query GetSubcontrolByID ($subcontrolId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceName
 		status
 		subcategory
@@ -411,6 +415,7 @@ mutation UpdateSubcontrol ($updateSubcontrolId: ID!, $input: UpdateSubcontrolInp
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			status
 			subcategory

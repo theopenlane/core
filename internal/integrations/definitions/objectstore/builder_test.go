@@ -9,10 +9,11 @@ import (
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 func TestBuilderRegisters(t *testing.T) {
@@ -21,8 +22,8 @@ func TestBuilderRegisters(t *testing.T) {
 	def, err := Builder(&RuntimeConfig{}, "", Config{})()
 	assert.NilError(t, err)
 	assert.Equal(t, DefinitionID.ID(), def.ID)
-	assert.Equal(t, 2, len(def.Operations))
-	assert.Equal(t, 1, len(def.Mappings))
+	assert.Equal(t, 3, len(def.Operations))
+	assert.Equal(t, len(recordSchemas), len(def.Mappings))
 	assert.Equal(t, 5, len(def.ConnectionList()))
 	assert.Assert(t, def.RuntimeIntegration == nil)
 
@@ -31,8 +32,7 @@ func TestBuilderRegisters(t *testing.T) {
 		assert.Assert(t, connection.Verify.Handle != nil, "connection %s must verify", connection.Credential.Name)
 	}
 
-	assert.Equal(t, entityops.SchemaEntity.Name, def.Mappings[0].Schema)
-	assert.Equal(t, "", def.Mappings[0].Variant)
+	assert.Check(t, lo.EveryBy(def.Mappings, func(m types.MappingRegistration) bool { return m.Variant == "" }), "every schema has a single mapping")
 
 	importRecords, found := lo.Find(def.Operations, func(op types.OperationRegistration) bool {
 		return op.Name == ImportRecordsOp.Name()
@@ -44,12 +44,22 @@ func TestBuilderRegisters(t *testing.T) {
 	assert.Assert(t, importRecords.Schedule == nil, "the import runs on the default adaptive schedule")
 	assert.Assert(t, !importRecords.Internal, "the runtime shares the customer-selectable import")
 	assert.Assert(t, !importRecords.DisabledForAll)
-	assert.DeepEqual(t, []types.IngestContract{{Schema: entityops.SchemaEntity.Name}}, importRecords.Ingest)
+	assert.DeepEqual(t, importContracts, importRecords.Ingest)
+	assert.DeepEqual(t, json.RawMessage(jsonx.SchemaFrom[DatasetBuiltinVariables]()), importRecords.Variables)
+	assert.Check(t, len(importRecords.Ingest) == len(recordSchemas), "the import ingests every ingestable schema once")
 
 	_, found = lo.Find(def.Operations, func(op types.OperationRegistration) bool {
 		return op.Name == "SystemImport"
 	})
 	assert.Assert(t, !found, "the runtime import is the record import, not a second operation")
+
+	deleteSource, found := lo.Find(def.Operations, func(op types.OperationRegistration) bool {
+		return op.Name == operations.DeleteSourceOp.Name()
+	})
+	assert.Assert(t, found)
+	assert.Check(t, deleteSource.Internal)
+	assert.Check(t, deleteSource.Handle != nil)
+	assert.Check(t, deleteSource.IngestHandle == nil)
 
 	assert.NilError(t, reg.Register(def))
 }

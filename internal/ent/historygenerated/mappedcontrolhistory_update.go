@@ -112,6 +112,9 @@ func (_u *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldExternalID, field.TypeString)
 	}
@@ -268,6 +271,9 @@ func (_u *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ma
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldExternalID, field.TypeString)

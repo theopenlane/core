@@ -12,7 +12,7 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/theopenlane/core/v2 v2.9.1
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.36.3
+	github.com/theopenlane/entx v0.37.0
 	github.com/theopenlane/utils v0.7.4
 	github.com/zitadel/oidc/v3 v3.51.16
 	golang.org/x/oauth2 v0.37.0
@@ -30,7 +30,6 @@ require (
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v17 v17.0.1 // indirect
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
-	github.com/brianvoe/gofakeit/v7 v7.18.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.3.3 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.6 // indirect

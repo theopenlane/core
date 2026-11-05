@@ -136,6 +136,11 @@ func IntegrationRunID(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldIntegrationRunID, v))
 }
 
+// SourceKey applies equality check predicate on the "source_key" field. It's identical to SourceKeyEQ.
+func SourceKey(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldSourceKey, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldExternalID, v))
@@ -1229,6 +1234,81 @@ func IntegrationRunIDEqualFold(v string) predicate.InternalPolicy {
 // IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
 func IntegrationRunIDContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldIntegrationRunID, v))
+}
+
+// SourceKeyEQ applies the EQ predicate on the "source_key" field.
+func SourceKeyEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldSourceKey, v))
+}
+
+// SourceKeyNEQ applies the NEQ predicate on the "source_key" field.
+func SourceKeyNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldSourceKey, v))
+}
+
+// SourceKeyIn applies the In predicate on the "source_key" field.
+func SourceKeyIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyNotIn applies the NotIn predicate on the "source_key" field.
+func SourceKeyNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyGT applies the GT predicate on the "source_key" field.
+func SourceKeyGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldSourceKey, v))
+}
+
+// SourceKeyGTE applies the GTE predicate on the "source_key" field.
+func SourceKeyGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldSourceKey, v))
+}
+
+// SourceKeyLT applies the LT predicate on the "source_key" field.
+func SourceKeyLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldSourceKey, v))
+}
+
+// SourceKeyLTE applies the LTE predicate on the "source_key" field.
+func SourceKeyLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldSourceKey, v))
+}
+
+// SourceKeyContains applies the Contains predicate on the "source_key" field.
+func SourceKeyContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldSourceKey, v))
+}
+
+// SourceKeyHasPrefix applies the HasPrefix predicate on the "source_key" field.
+func SourceKeyHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldSourceKey, v))
+}
+
+// SourceKeyHasSuffix applies the HasSuffix predicate on the "source_key" field.
+func SourceKeyHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldSourceKey, v))
+}
+
+// SourceKeyIsNil applies the IsNil predicate on the "source_key" field.
+func SourceKeyIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldSourceKey))
+}
+
+// SourceKeyNotNil applies the NotNil predicate on the "source_key" field.
+func SourceKeyNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldSourceKey))
+}
+
+// SourceKeyEqualFold applies the EqualFold predicate on the "source_key" field.
+func SourceKeyEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldSourceKey, v))
+}
+
+// SourceKeyContainsFold applies the ContainsFold predicate on the "source_key" field.
+func SourceKeyContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldSourceKey, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.

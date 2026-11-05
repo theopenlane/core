@@ -1075,6 +1075,21 @@ type DNSVerificationUpdatePayload struct {
 	DNSVerification *generated.DNSVerification `json:"dnsVerification"`
 }
 
+// Input for deleteDemoData mutation
+type DeleteDemoDataInput struct {
+	// the demo dataset to remove from the current organization, e.g. soc2
+	Dataset string `json:"dataset"`
+	// dataset object types whose seeded records are kept, by snake_case schema name, e.g. custom_type_enum
+	Keep []string `json:"keep,omitempty"`
+}
+
+// Return response for deleteDemoData mutation. Removal happens asynchronously, so this only confirms
+// the removal was queued - the outcome surfaces via a follow-up Notification once it finishes
+type DeleteDemoDataPayload struct {
+	// whether the removal was queued
+	Accepted bool `json:"accepted"`
+}
+
 // Return response for createBulkDirectoryAccount mutation
 type DirectoryAccountBulkCreatePayload struct {
 	// Created directoryAccounts
@@ -3203,6 +3218,21 @@ type SearchResults struct {
 	TrustCenterEntities   *generated.TrustCenterEntityConnection    `json:"trustCenterEntities,omitempty"`
 	Vulnerabilities       *generated.VulnerabilityConnection        `json:"vulnerabilities,omitempty"`
 	SearchContext         []*models.SearchContext                   `json:"searchContext,omitempty"`
+}
+
+// Input for seedDemoData mutation
+type SeedDemoDataInput struct {
+	// the demo dataset to seed into the current organization, e.g. soc2
+	Dataset string `json:"dataset"`
+	// the seed profile, DEMO when not set
+	Profile *enums.DemoDataProfile `json:"profile,omitempty"`
+}
+
+// Return response for seedDemoData mutation. Seeding happens asynchronously, so this only confirms
+// the seed was queued - the outcome surfaces via a follow-up Notification once it finishes
+type SeedDemoDataPayload struct {
+	// whether the seed was queued
+	Accepted bool `json:"accepted"`
 }
 
 // Input for sendCampaignTestEmail mutation

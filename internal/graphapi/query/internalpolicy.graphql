@@ -38,6 +38,7 @@ mutation CreateBulkCSVInternalPolicy ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -100,6 +101,7 @@ mutation CreateBulkInternalPolicy ($input: [CreateInternalPolicyInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -162,6 +164,7 @@ mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -315,6 +318,7 @@ query GetAllInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: 
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				summary
 				systemInternalID
@@ -402,6 +406,7 @@ query GetInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				summary
 				systemInternalID
@@ -480,6 +485,7 @@ query GetInternalPolicyByID ($internalPolicyId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		summary
 		systemInternalID
@@ -596,6 +602,7 @@ mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInp
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -661,6 +668,7 @@ mutation UpdateInternalPolicy ($updateInternalPolicyId: ID!, $input: UpdateInter
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID

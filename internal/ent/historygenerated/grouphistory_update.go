@@ -112,6 +112,9 @@ func (_u *GroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(grouphistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(grouphistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(grouphistory.FieldExternalID, field.TypeString)
 	}
@@ -286,6 +289,9 @@ func (_u *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHisto
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(grouphistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(grouphistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(grouphistory.FieldExternalID, field.TypeString)

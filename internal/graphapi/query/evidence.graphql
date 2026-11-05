@@ -26,6 +26,7 @@ mutation CreateBulkCSVEvidence ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt
@@ -240,6 +241,7 @@ query GetEvidenceByID ($evidenceId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		tags
 		updatedAt
@@ -424,6 +426,7 @@ mutation UpdateBulkEvidence ($ids: [ID!]!, $input: UpdateEvidenceInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt

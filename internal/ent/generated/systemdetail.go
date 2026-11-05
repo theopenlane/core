@@ -49,6 +49,8 @@ type SystemDetail struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -167,7 +169,7 @@ func (*SystemDetail) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case systemdetail.FieldTags, systemdetail.FieldRevisionHistory, systemdetail.FieldOscalMetadataJSON:
 			values[i] = new([]byte)
-		case systemdetail.FieldID, systemdetail.FieldCreatedBy, systemdetail.FieldUpdatedBy, systemdetail.FieldUpdatedByImpersonator, systemdetail.FieldDeletedBy, systemdetail.FieldDisplayID, systemdetail.FieldSourceDefinitionID, systemdetail.FieldSourceDefinitionVersion, systemdetail.FieldSourceInstanceID, systemdetail.FieldManagedBy, systemdetail.FieldIntegrationRunID, systemdetail.FieldExternalID, systemdetail.FieldOwnerID, systemdetail.FieldSystemName, systemdetail.FieldVersion, systemdetail.FieldDescription, systemdetail.FieldAuthorizationBoundary, systemdetail.FieldSensitivityLevel:
+		case systemdetail.FieldID, systemdetail.FieldCreatedBy, systemdetail.FieldUpdatedBy, systemdetail.FieldUpdatedByImpersonator, systemdetail.FieldDeletedBy, systemdetail.FieldDisplayID, systemdetail.FieldSourceDefinitionID, systemdetail.FieldSourceDefinitionVersion, systemdetail.FieldSourceInstanceID, systemdetail.FieldManagedBy, systemdetail.FieldIntegrationRunID, systemdetail.FieldSourceKey, systemdetail.FieldExternalID, systemdetail.FieldOwnerID, systemdetail.FieldSystemName, systemdetail.FieldVersion, systemdetail.FieldDescription, systemdetail.FieldAuthorizationBoundary, systemdetail.FieldSensitivityLevel:
 			values[i] = new(sql.NullString)
 		case systemdetail.FieldCreatedAt, systemdetail.FieldUpdatedAt, systemdetail.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -278,6 +280,12 @@ func (_m *SystemDetail) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case systemdetail.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case systemdetail.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -453,6 +461,9 @@ func (_m *SystemDetail) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

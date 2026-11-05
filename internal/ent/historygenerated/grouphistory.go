@@ -55,6 +55,8 @@ type GroupHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
@@ -101,7 +103,7 @@ func (*GroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case grouphistory.FieldIsManaged, grouphistory.FieldScimActive:
 			values[i] = new(sql.NullBool)
-		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldUpdatedByImpersonator, grouphistory.FieldDeletedBy, grouphistory.FieldDisplayID, grouphistory.FieldSourceDefinitionID, grouphistory.FieldSourceDefinitionVersion, grouphistory.FieldSourceInstanceID, grouphistory.FieldManagedBy, grouphistory.FieldIntegrationRunID, grouphistory.FieldExternalID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldAvatarLocalFileID, grouphistory.FieldDisplayName, grouphistory.FieldOscalRole, grouphistory.FieldOscalPartyUUID, grouphistory.FieldScimExternalID, grouphistory.FieldScimDisplayName, grouphistory.FieldScimGroupMailing:
+		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldUpdatedByImpersonator, grouphistory.FieldDeletedBy, grouphistory.FieldDisplayID, grouphistory.FieldSourceDefinitionID, grouphistory.FieldSourceDefinitionVersion, grouphistory.FieldSourceInstanceID, grouphistory.FieldManagedBy, grouphistory.FieldIntegrationRunID, grouphistory.FieldSourceKey, grouphistory.FieldExternalID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldAvatarLocalFileID, grouphistory.FieldDisplayName, grouphistory.FieldOscalRole, grouphistory.FieldOscalPartyUUID, grouphistory.FieldScimExternalID, grouphistory.FieldScimDisplayName, grouphistory.FieldScimGroupMailing:
 			values[i] = new(sql.NullString)
 		case grouphistory.FieldHistoryTime, grouphistory.FieldCreatedAt, grouphistory.FieldUpdatedAt, grouphistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -230,6 +232,12 @@ func (_m *GroupHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case grouphistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case grouphistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -423,6 +431,9 @@ func (_m *GroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

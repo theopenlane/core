@@ -26104,7 +26104,6 @@ type CreateTaskInput struct {
 	IsSuggested              *bool                  `json:"is_suggested,omitempty"`
 	Priority                 *int                   `json:"priority,omitempty"`
 	Source                   *string                `json:"source,omitempty"`
-	SourceKey                *string                `json:"source_key,omitempty"`
 	ExternalReferenceURL     []string               `json:"external_reference_url,omitempty"`
 	IntegrationRunIDs        []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                  *string                `json:"owner_id,omitempty"`
@@ -26191,9 +26190,6 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
-	}
-	if v := i.SourceKey; v != nil {
-		m.SetSourceKey(*v)
 	}
 	if v := i.ExternalReferenceURL; v != nil {
 		m.SetExternalReferenceURL(v)
@@ -26323,8 +26319,6 @@ type UpdateTaskInput struct {
 	Priority                       *int             `json:"priority,omitempty"`
 	ClearSource                    bool
 	Source                         *string `json:"source,omitempty"`
-	ClearSourceKey                 bool
-	SourceKey                      *string `json:"source_key,omitempty"`
 	ClearExternalReferenceURL      bool
 	ExternalReferenceURL           []string `json:"external_reference_url,omitempty"`
 	AppendExternalReferenceURL     []string
@@ -26505,12 +26499,6 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
-	}
-	if i.ClearSourceKey {
-		m.ClearSourceKey()
-	}
-	if v := i.SourceKey; v != nil {
-		m.SetSourceKey(*v)
 	}
 	if i.ClearExternalReferenceURL {
 		m.ClearExternalReferenceURL()

@@ -257,6 +257,26 @@ func (_u *EvidenceUpdate) ClearIntegrationRunID() *EvidenceUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *EvidenceUpdate) SetSourceKey(v string) *EvidenceUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableSourceKey(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *EvidenceUpdate) ClearSourceKey() *EvidenceUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *EvidenceUpdate) SetExternalID(v string) *EvidenceUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1298,6 +1318,12 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(evidence.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(evidence.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(evidence.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(evidence.FieldExternalID, field.TypeString, value)
 	}
@@ -2305,6 +2331,26 @@ func (_u *EvidenceUpdateOne) SetNillableIntegrationRunID(v *string) *EvidenceUpd
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *EvidenceUpdateOne) ClearIntegrationRunID() *EvidenceUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *EvidenceUpdateOne) SetSourceKey(v string) *EvidenceUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableSourceKey(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *EvidenceUpdateOne) ClearSourceKey() *EvidenceUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -3378,6 +3424,12 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(evidence.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(evidence.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(evidence.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(evidence.FieldExternalID, field.TypeString, value)

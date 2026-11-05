@@ -10,7 +10,6 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
@@ -97,26 +96,25 @@ func TestDirectorySameDefinitionTwoTenantsIsolated(t *testing.T) {
 	assert.Check(t, t1After.UpdatedAt.Equal(t1Before.UpdatedAt), "T1's row must not be touched by T2's ingest")
 }
 
-// TestDirectoryLegacyRowsTakenOverThenProtected verifies an unclaimed row (no source_definition_id,
-// no source_instance_id, no managed_by) is claimed in full by the first matching installation, and
-// is then read-only for a different definition sharing the same tenant
-func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
+// TestDirectoryRowsProtectedFromOtherDefinition verifies rows an installation wrote are read-only for a different
+// definition sharing the same tenant
+func TestDirectoryRowsProtectedFromOtherDefinition(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
-	const prefix = "legacytakeover"
+	const prefix = "otherdefinition"
 	const tenant = "tenant-" + prefix
 
 	installationA, err := suite.Client.DB.Integration.Create().
-		SetName("Legacy Takeover A").
-		SetKind("legacytakeovera").
+		SetName("Other Definition A").
+		SetKind("otherdefinitiona").
 		SetDefinitionID("def_dirsynctest").
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: tenant}}).
 		Save(ctx)
 	th.RequireNoError(t, err)
 
 	installationC, err := suite.Client.DB.Integration.Create().
-		SetName("Legacy Takeover C").
-		SetKind("legacytakeoverc").
+		SetName("Other Definition C").
+		SetKind("otherdefinitionc").
 		SetDefinitionID("def_dirsynctest_other").
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: tenant}}).
 		Save(ctx)
@@ -126,61 +124,17 @@ func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
 
 	base := newDirectorySnapshot(prefix)
 
-	// seed legacy rows exactly as pre-provenance rows were stored: integration_id set, no
-	// source_definition_id, no source_instance_id, no managed_by
-	legacyAccounts := make(map[string]*ent.DirectoryAccount, len(base.Accounts))
-	for _, a := range base.Accounts {
-		row, err := suite.Client.DB.DirectoryAccount.Create().
-			SetExternalID(a.ExternalID).
-			SetDisplayName(a.DisplayName).
-			SetCanonicalEmail(a.CanonicalEmail).
-			SetOwnerID(installationA.OwnerID).
-			SetIntegrationID(installationA.ID).
-			Save(ctx)
-		th.RequireNoError(t, err)
-
-		legacyAccounts[a.ExternalID] = row
-	}
-
-	legacyGroups := make(map[string]*ent.DirectoryGroup, len(base.Groups))
-	for _, g := range base.Groups {
-		row, err := suite.Client.DB.DirectoryGroup.Create().
-			SetExternalID(g.ExternalID).
-			SetDisplayName(g.DisplayName).
-			SetOwnerID(installationA.OwnerID).
-			SetIntegrationID(installationA.ID).
-			Save(ctx)
-		th.RequireNoError(t, err)
-
-		legacyGroups[g.ExternalID] = row
-	}
-
-	for _, m := range base.Memberships {
-		_, err := suite.Client.DB.DirectoryMembership.Create().
-			SetOwnerID(installationA.OwnerID).
-			SetIntegrationID(installationA.ID).
-			SetDirectoryAccountID(legacyAccounts[m.DirectoryAccountID].ID).
-			SetDirectoryGroupID(legacyGroups[m.DirectoryGroupID].ID).
-			SetRole(enums.DirectoryMembershipRole(m.Role)).
-			Save(ctx)
-		th.RequireNoError(t, err)
-	}
-
-	claimed := ingestDirectorySnapshotFixture(ctx, t, installationA, base, true)
+	seeded := ingestDirectorySnapshotFixture(ctx, t, installationA, base, true)
 	waitForGala(t, suite.GalaRuntime)
 
-	assert.Check(t, is.Equal(0, claimed.Failed))
-	assert.Check(t, is.Equal(len(base.Accounts)+len(base.Groups)+len(base.Memberships), claimed.Changed), "claiming an unclaimed row is a material change")
+	assert.Check(t, is.Equal(0, seeded.Failed))
+	assert.Check(t, is.Equal(len(base.Accounts)+len(base.Groups)+len(base.Memberships), seeded.Changed))
 
-	// events emitted while claiming the legacy rows are expected and out of scope for this test;
-	// only events from here on (the protection check) are asserted. Duplication is ruled out below
-	// by the exact-one-row lookups: a duplicate external id would fail th.RequireNoError there.
 	counters, teardown := directoryEventCounters(t)
 	defer teardown()
 
 	claimedAccounts := lo.Map(base.Accounts, func(a directoryAccountRecord, _ int) *ent.DirectoryAccount {
 		row := directoryAccountByExternalID(ctx, t, a.ExternalID)
-		assert.Check(t, is.Equal(legacyAccounts[a.ExternalID].ID, row.ID), "the legacy account row must be claimed, not duplicated")
 		assert.Check(t, is.Equal(installationA.DefinitionID, row.SourceDefinitionID))
 		assert.Check(t, is.Equal(tenant, row.SourceInstanceID))
 		assert.Check(t, is.Equal(installationA.ID, row.ManagedBy))
@@ -189,7 +143,6 @@ func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
 	})
 	claimedGroups := lo.Map(base.Groups, func(g directoryGroupRecord, _ int) *ent.DirectoryGroup {
 		row := directoryGroupByExternalID(ctx, t, g.ExternalID)
-		assert.Check(t, is.Equal(legacyGroups[g.ExternalID].ID, row.ID), "the legacy group row must be claimed, not duplicated")
 		assert.Check(t, is.Equal(installationA.DefinitionID, row.SourceDefinitionID))
 		assert.Check(t, is.Equal(tenant, row.SourceInstanceID))
 		assert.Check(t, is.Equal(installationA.ID, row.ManagedBy))
@@ -243,7 +196,8 @@ func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
 
 // TestDirectoryRemoveAndReaddKeepsFlowing verifies a same-tenant, same-definition reinstall keeps
 // ingesting normally when the very next sync after reinstall carries a material change, converging
-// every row onto the new installation without duplicating rows or removal-inferring memberships
+// every row onto the new installation without duplicating rows or removal-inferring memberships, and
+// a membership first seen after the reinstall links to the rows the old installation wrote
 func TestDirectoryRemoveAndReaddKeepsFlowing(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -283,14 +237,17 @@ func TestDirectoryRemoveAndReaddKeepsFlowing(t *testing.T) {
 	changedExternalID := base.Accounts[0].ExternalID
 	materialChange := base.withAccountMaterialChange(changedExternalID)
 
+	newMembership := newDirectoryMembershipRecord(base.Accounts[1], base.Groups[1].ExternalID, base.Memberships[0].Role)
+	materialChange.Memberships = append(materialChange.Memberships, newMembership)
+
 	result := ingestDirectorySnapshotFixture(ctx, t, installationB, materialChange, true)
 	waitForGala(t, counters.Runtime)
 
 	assert.Check(t, is.Equal(0, result.Failed))
-	assert.Check(t, is.Equal(1, result.Changed), "a reinstall carrying one material account change must count as exactly one changed record")
+	assert.Check(t, is.Equal(2, result.Changed), "a reinstall carrying one material account change and one new membership must count as exactly two changed records")
 	assert.Check(t, is.Equal(int64(0), counters.AccountCreates.Load()), "a same-tenant reinstall must not duplicate accounts")
 	assert.Check(t, is.Equal(int64(0), counters.GroupCreates.Load()), "a same-tenant reinstall must not duplicate groups")
-	assert.Check(t, is.Equal(int64(0), counters.MembershipCreates.Load()), "a same-tenant reinstall must not duplicate memberships")
+	assert.Check(t, is.Equal(int64(1), counters.MembershipCreates.Load()), "only the new membership may be created by a same-tenant reinstall")
 	assert.Check(t, is.Equal(int64(1), counters.AccountUpdates.Load()), "the reinstall must emit exactly one account update event")
 	assert.Check(t, is.Equal(int64(0), counters.GroupUpdates.Load()), "unchanged groups must not emit an update event")
 	assert.Check(t, is.Equal(int64(0), counters.MembershipUpdates.Load()), "unchanged memberships must not emit an update event")
@@ -311,6 +268,9 @@ func TestDirectoryRemoveAndReaddKeepsFlowing(t *testing.T) {
 		assert.Check(t, is.Equal(installationB.ID, row.ManagedBy), "every membership's managed_by must repoint to the adopting installation")
 		assert.Check(t, row.RemovedAt == nil, "no membership must be removed by the reinstall's material-change ingest")
 	}
+
+	added := directoryMembershipByExternalIDs(ctx, t, newMembership.DirectoryAccountID, newMembership.DirectoryGroupID)
+	assert.Check(t, is.Equal(installationB.ID, added.IntegrationID), "the new membership must link to the rows the old installation wrote")
 
 	assert.Check(t, is.Equal(0, directoryRemovedMembershipCount(ctx, t, installationB.ID)), "no membership must be removal-inferred by the reinstall")
 

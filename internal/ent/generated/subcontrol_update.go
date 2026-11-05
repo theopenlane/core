@@ -267,6 +267,26 @@ func (_u *SubcontrolUpdate) ClearIntegrationRunID() *SubcontrolUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *SubcontrolUpdate) SetSourceKey(v string) *SubcontrolUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableSourceKey(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *SubcontrolUpdate) ClearSourceKey() *SubcontrolUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *SubcontrolUpdate) SetExternalID(v string) *SubcontrolUpdate {
 	_u.mutation.SetExternalID(v)
@@ -2056,6 +2076,12 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(subcontrol.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(subcontrol.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(subcontrol.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(subcontrol.FieldExternalID, field.TypeString, value)
 	}
@@ -3718,6 +3744,26 @@ func (_u *SubcontrolUpdateOne) SetNillableIntegrationRunID(v *string) *Subcontro
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *SubcontrolUpdateOne) ClearIntegrationRunID() *SubcontrolUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *SubcontrolUpdateOne) SetSourceKey(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableSourceKey(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *SubcontrolUpdateOne) ClearSourceKey() *SubcontrolUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -5539,6 +5585,12 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(subcontrol.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(subcontrol.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(subcontrol.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(subcontrol.FieldExternalID, field.TypeString, value)

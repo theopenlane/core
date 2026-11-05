@@ -60,6 +60,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -139,6 +140,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -218,6 +220,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -386,6 +389,7 @@ query GetFindingByID ($findingId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceUpdatedAt
 		state
 		stepsToReproduce
@@ -562,6 +566,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -644,6 +649,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -726,6 +732,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce

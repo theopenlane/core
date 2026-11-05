@@ -43,6 +43,7 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -97,6 +98,7 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -151,6 +153,7 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -250,6 +253,7 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceVersion
 		status
 		tags
@@ -344,6 +348,7 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags

@@ -174,9 +174,9 @@ func TestCatalogUpsertDuplicateKeyInOneRunConvergesOnOneRow(t *testing.T) {
 	assert.Check(t, is.Equal("Second", rows[0].Name), "the second record in the run must update the row the first record created")
 }
 
-// TestCatalogClaimUnclaimedRowTakenOverInOneWrite verifies an ingest payload takes over a row that
-// carries no recorded source definition, in the same write that applies its other field changes
-func TestCatalogClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
+// TestCatalogUnclaimedRowFilledNotClaimed verifies an ingest payload matching an organization's own row fills its empty
+// fields without overwriting its values or claiming it
+func TestCatalogUnclaimedRowFilledNotClaimed(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	integration, err := suite.Client.DB.Integration.Create().
@@ -198,16 +198,18 @@ func TestCatalogClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 		(&th.Cleanup[*ent.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: integration.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
-	result := ingestAssetPayloads(ctx, t, integration, `{"source_identifier":"catclaim-unclaimed-1","name":"Claimed Asset"}`)
+	result := ingestAssetPayloads(ctx, t, integration, `{"source_identifier":"catclaim-unclaimed-1","name":"Claimed Asset","description":"filled"}`)
 	assert.Check(t, is.Equal(0, result.Failed))
-	assert.Check(t, is.Equal(1, result.Persisted))
-	assert.Check(t, is.Equal(1, result.Changed), "the name change and the claim land in the same write")
+	assert.Check(t, is.Equal(0, result.Persisted))
+	assert.Check(t, is.Equal(1, result.Skipped))
+	assert.Check(t, is.Equal(0, result.Changed))
 
 	after := catalogAssetBySourceIdentifier(ctx, t, "catclaim-unclaimed-1")
-	assert.Check(t, is.Equal(unclaimed.ID, after.ID), "the takeover must update the existing row, not create a new one")
-	assert.Check(t, is.Equal("Claimed Asset", after.Name))
-	assert.Check(t, is.Equal(integration.ID, after.IntegrationID))
-	assert.Check(t, is.Equal(integration.ID, after.ManagedBy))
+	assert.Check(t, is.Equal(unclaimed.ID, after.ID))
+	assert.Check(t, is.Equal("Pre-existing Asset", after.Name))
+	assert.Check(t, is.Equal("filled", after.Description))
+	assert.Check(t, is.Equal("", after.IntegrationID))
+	assert.Check(t, is.Equal("", after.ManagedBy))
 }
 
 // TestCatalogClaimActiveOtherInstallationReadOnly verifies a row managed by another still-active

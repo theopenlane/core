@@ -124,4 +124,11 @@ import (
 			   return nil
 			}
 	{{ end }}
+
+	// registers each schema's edge cleanup for EdgeCleanupFor, outside of code generation only
+	func init() {
+	{{- range $node := $.Nodes }}
+		edgeCleanups["{{ $node.Name }}"] = {{ $node.Name }}EdgeCleanup
+	{{- end }}
+	}
 {{ end }}

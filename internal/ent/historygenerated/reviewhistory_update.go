@@ -112,6 +112,9 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(reviewhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(reviewhistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(reviewhistory.FieldExternalID, field.TypeString)
 	}
@@ -322,6 +325,9 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(reviewhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(reviewhistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(reviewhistory.FieldExternalID, field.TypeString)

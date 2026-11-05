@@ -144,6 +144,11 @@ func IntegrationRunID(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldIntegrationRunID, v))
 }
 
+// SourceKey applies equality check predicate on the "source_key" field. It's identical to SourceKeyEQ.
+func SourceKey(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldSourceKey, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldExternalID, v))
@@ -1432,6 +1437,81 @@ func IntegrationRunIDEqualFold(v string) predicate.PlatformHistory {
 // IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
 func IntegrationRunIDContainsFold(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldContainsFold(FieldIntegrationRunID, v))
+}
+
+// SourceKeyEQ applies the EQ predicate on the "source_key" field.
+func SourceKeyEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldSourceKey, v))
+}
+
+// SourceKeyNEQ applies the NEQ predicate on the "source_key" field.
+func SourceKeyNEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNEQ(FieldSourceKey, v))
+}
+
+// SourceKeyIn applies the In predicate on the "source_key" field.
+func SourceKeyIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyNotIn applies the NotIn predicate on the "source_key" field.
+func SourceKeyNotIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyGT applies the GT predicate on the "source_key" field.
+func SourceKeyGT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGT(FieldSourceKey, v))
+}
+
+// SourceKeyGTE applies the GTE predicate on the "source_key" field.
+func SourceKeyGTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGTE(FieldSourceKey, v))
+}
+
+// SourceKeyLT applies the LT predicate on the "source_key" field.
+func SourceKeyLT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLT(FieldSourceKey, v))
+}
+
+// SourceKeyLTE applies the LTE predicate on the "source_key" field.
+func SourceKeyLTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLTE(FieldSourceKey, v))
+}
+
+// SourceKeyContains applies the Contains predicate on the "source_key" field.
+func SourceKeyContains(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContains(FieldSourceKey, v))
+}
+
+// SourceKeyHasPrefix applies the HasPrefix predicate on the "source_key" field.
+func SourceKeyHasPrefix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasPrefix(FieldSourceKey, v))
+}
+
+// SourceKeyHasSuffix applies the HasSuffix predicate on the "source_key" field.
+func SourceKeyHasSuffix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasSuffix(FieldSourceKey, v))
+}
+
+// SourceKeyIsNil applies the IsNil predicate on the "source_key" field.
+func SourceKeyIsNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIsNull(FieldSourceKey))
+}
+
+// SourceKeyNotNil applies the NotNil predicate on the "source_key" field.
+func SourceKeyNotNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotNull(FieldSourceKey))
+}
+
+// SourceKeyEqualFold applies the EqualFold predicate on the "source_key" field.
+func SourceKeyEqualFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEqualFold(FieldSourceKey, v))
+}
+
+// SourceKeyContainsFold applies the ContainsFold predicate on the "source_key" field.
+func SourceKeyContainsFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContainsFold(FieldSourceKey, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.

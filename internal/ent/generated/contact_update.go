@@ -249,6 +249,26 @@ func (_u *ContactUpdate) ClearIntegrationRunID() *ContactUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *ContactUpdate) SetSourceKey(v string) *ContactUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ContactUpdate) SetNillableSourceKey(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ContactUpdate) ClearSourceKey() *ContactUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *ContactUpdate) SetExternalID(v string) *ContactUpdate {
 	_u.mutation.SetExternalID(v)
@@ -862,6 +882,12 @@ func (_u *ContactUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(contact.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(contact.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(contact.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(contact.FieldExternalID, field.TypeString, value)
 	}
@@ -1447,6 +1473,26 @@ func (_u *ContactUpdateOne) SetNillableIntegrationRunID(v *string) *ContactUpdat
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *ContactUpdateOne) ClearIntegrationRunID() *ContactUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *ContactUpdateOne) SetSourceKey(v string) *ContactUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ContactUpdateOne) SetNillableSourceKey(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ContactUpdateOne) ClearSourceKey() *ContactUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -2092,6 +2138,12 @@ func (_u *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err er
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(contact.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(contact.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(contact.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(contact.FieldExternalID, field.TypeString, value)

@@ -9,11 +9,14 @@ import (
 
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 func TestExecuteOperationNilInstallation(t *testing.T) {
@@ -332,4 +335,51 @@ func TestExecuteOperationExplicitConfigWinsOverStored(t *testing.T) {
 	}, json.RawMessage(`{"key":"value"}`))
 	assert.NilError(t, err)
 	assert.Equal(t, string(captured.Config), `{"key":"value"}`)
+}
+
+func TestExecuteRuntimeOperationKeepsDispatchCaller(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name   string
+		caller *auth.Caller
+	}{
+		{name: "user caller", caller: &auth.Caller{SubjectID: "user_1", OrganizationID: "org_1"}},
+		{name: "no caller"},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			ctx := gala.WithOperationContext(context.Background(), gala.OperationContext{OwnerID: "org_1"})
+			if tc.caller != nil {
+				ctx = auth.WithCaller(ctx, tc.caller)
+			}
+
+			var (
+				captured *auth.Caller
+				found    bool
+			)
+
+			_, _, err := NewForTesting(registry.New()).executeResolvedOperation(ctx, nil, types.OperationRegistration{
+				Name: "test-op",
+				Handle: func(ctx context.Context, _ types.OperationRequest) (json.RawMessage, error) {
+					captured, found = auth.CallerFromContext(ctx)
+					return nil, nil
+				},
+			}, nil, false, operations.IngestOptions{})
+			assert.NilError(t, err)
+
+			if tc.caller == nil {
+				assert.Check(t, !found, "a non-ingest runtime operation must not gain an integration caller")
+				return
+			}
+
+			assert.Assert(t, found)
+			assert.Equal(t, tc.caller.SubjectID, captured.SubjectID)
+			assert.Check(t, !captured.Has(auth.CapBypassAuditLog))
+			assert.Check(t, !captured.Has(auth.CapBypassOrgFilter))
+		})
+	}
 }

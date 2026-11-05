@@ -1,0 +1,9 @@
+[
+  {
+    "external_id": "entity::fixture-mixed",
+    "system_internal_id": "entity::fixture-mixed",
+    "externally_visible": true,
+    "name": "fixture-mixed-vendor",
+    "display_name": "Fixture Mixed"
+  }
+]

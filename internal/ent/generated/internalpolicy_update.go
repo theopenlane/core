@@ -285,6 +285,26 @@ func (_u *InternalPolicyUpdate) ClearIntegrationRunID() *InternalPolicyUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *InternalPolicyUpdate) SetSourceKey(v string) *InternalPolicyUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableSourceKey(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *InternalPolicyUpdate) ClearSourceKey() *InternalPolicyUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *InternalPolicyUpdate) SetExternalID(v string) *InternalPolicyUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1977,6 +1997,12 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(internalpolicy.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(internalpolicy.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(internalpolicy.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(internalpolicy.FieldExternalID, field.TypeString, value)
 	}
@@ -3631,6 +3657,26 @@ func (_u *InternalPolicyUpdateOne) SetNillableIntegrationRunID(v *string) *Inter
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *InternalPolicyUpdateOne) ClearIntegrationRunID() *InternalPolicyUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *InternalPolicyUpdateOne) SetSourceKey(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableSourceKey(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *InternalPolicyUpdateOne) ClearSourceKey() *InternalPolicyUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -5355,6 +5401,12 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(internalpolicy.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(internalpolicy.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(internalpolicy.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(internalpolicy.FieldExternalID, field.TypeString, value)

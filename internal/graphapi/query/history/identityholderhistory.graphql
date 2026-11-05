@@ -47,6 +47,7 @@ query GetAllIdentityHolderHistories ($first: Int, $last: Int, $after: Cursor, $b
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				startDate
 				status
 				tags
@@ -110,6 +111,7 @@ query GetIdentityHolderHistories ($first: Int, $last: Int, $after: Cursor, $befo
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				startDate
 				status
 				tags

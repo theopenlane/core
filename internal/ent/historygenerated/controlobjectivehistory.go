@@ -58,6 +58,8 @@ type ControlObjectiveHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -98,7 +100,7 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case controlobjectivehistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldUpdatedByImpersonator, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldRevision, controlobjectivehistory.FieldSourceDefinitionID, controlobjectivehistory.FieldSourceDefinitionVersion, controlobjectivehistory.FieldSourceInstanceID, controlobjectivehistory.FieldManagedBy, controlobjectivehistory.FieldIntegrationRunID, controlobjectivehistory.FieldExternalID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldInternalNotes, controlobjectivehistory.FieldSystemInternalID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDesiredOutcome, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldCategory, controlobjectivehistory.FieldSubcategory:
+		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldUpdatedByImpersonator, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldDisplayID, controlobjectivehistory.FieldRevision, controlobjectivehistory.FieldSourceDefinitionID, controlobjectivehistory.FieldSourceDefinitionVersion, controlobjectivehistory.FieldSourceInstanceID, controlobjectivehistory.FieldManagedBy, controlobjectivehistory.FieldIntegrationRunID, controlobjectivehistory.FieldSourceKey, controlobjectivehistory.FieldExternalID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldInternalNotes, controlobjectivehistory.FieldSystemInternalID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDesiredOutcome, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldCategory, controlobjectivehistory.FieldSubcategory:
 			values[i] = new(sql.NullString)
 		case controlobjectivehistory.FieldHistoryTime, controlobjectivehistory.FieldCreatedAt, controlobjectivehistory.FieldUpdatedAt, controlobjectivehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -233,6 +235,12 @@ func (_m *ControlObjectiveHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case controlobjectivehistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case controlobjectivehistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -407,6 +415,9 @@ func (_m *ControlObjectiveHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

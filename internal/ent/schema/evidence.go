@@ -113,7 +113,7 @@ func (Evidence) Fields() []ent.Field {
 		field.Time("renewal_date").
 			Comment("the date the evidence should be renewed, defaults to a year from entry date").
 			Default(func() models.DateTime {
-				defaultRenewal := time.Now().AddDate(1, 0, 0)
+				defaultRenewal := time.Now().UTC().AddDate(1, 0, 0)
 				return models.DateTime(defaultRenewal)
 			}).
 			GoType(models.DateTime{}).

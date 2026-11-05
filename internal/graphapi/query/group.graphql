@@ -26,6 +26,7 @@ mutation CreateBulkCSVGroup ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -86,6 +87,7 @@ mutation CreateBulkGroup ($input: [CreateGroupInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -146,6 +148,7 @@ mutation CreateGroup ($input: CreateGroupInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -330,6 +333,7 @@ query GetGroupByID ($groupId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		tags
 		updatedAt
 		updatedBy
@@ -493,6 +497,7 @@ mutation UpdateGroup ($updateGroupId: ID!, $input: UpdateGroupInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy

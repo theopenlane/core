@@ -208,6 +208,26 @@ func (_u *DirectoryGroupUpdate) ClearIntegrationRunID() *DirectoryGroupUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *DirectoryGroupUpdate) SetSourceKey(v string) *DirectoryGroupUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *DirectoryGroupUpdate) SetNillableSourceKey(v *string) *DirectoryGroupUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *DirectoryGroupUpdate) ClearSourceKey() *DirectoryGroupUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *DirectoryGroupUpdate) SetOwnerID(v string) *DirectoryGroupUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -932,6 +952,12 @@ func (_u *DirectoryGroupUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(directorygroup.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(directorygroup.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(directorygroup.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorygroup.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -1531,6 +1557,26 @@ func (_u *DirectoryGroupUpdateOne) SetNillableIntegrationRunID(v *string) *Direc
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *DirectoryGroupUpdateOne) ClearIntegrationRunID() *DirectoryGroupUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *DirectoryGroupUpdateOne) SetSourceKey(v string) *DirectoryGroupUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *DirectoryGroupUpdateOne) SetNillableSourceKey(v *string) *DirectoryGroupUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *DirectoryGroupUpdateOne) ClearSourceKey() *DirectoryGroupUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -2287,6 +2333,12 @@ func (_u *DirectoryGroupUpdateOne) sqlSave(ctx context.Context) (_node *Director
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(directorygroup.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(directorygroup.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(directorygroup.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorygroup.FieldEnvironmentName, field.TypeString, value)

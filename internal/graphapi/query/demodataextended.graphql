@@ -1,0 +1,11 @@
+mutation DeleteDemoData($input: DeleteDemoDataInput!) {
+  deleteDemoData(input: $input) {
+    accepted
+  }
+}
+
+mutation SeedDemoData($input: SeedDemoDataInput!) {
+  seedDemoData(input: $input) {
+    accepted
+  }
+}

@@ -46,6 +46,7 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID
@@ -116,6 +117,7 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID
@@ -186,6 +188,7 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID
@@ -301,6 +304,7 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				stakeholderGroupID
 				stakeholderID
 				stakeholderIdentityHolderID
@@ -403,6 +407,7 @@ query GetRiskByID ($riskId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		stakeholderGroupID
 		stakeholderID
 		stakeholderIdentityHolderID
@@ -512,6 +517,7 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				stakeholderGroupID
 				stakeholderID
 				stakeholderIdentityHolderID
@@ -615,6 +621,7 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID
@@ -688,6 +695,7 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID

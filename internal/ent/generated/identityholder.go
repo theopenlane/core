@@ -53,6 +53,8 @@ type IdentityHolder struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -488,7 +490,7 @@ func (*IdentityHolder) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case identityholder.FieldWorkflowEligibleMarker, identityholder.FieldIsOpenlaneUser, identityholder.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldUpdatedByImpersonator, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldSourceDefinitionID, identityholder.FieldSourceDefinitionVersion, identityholder.FieldSourceInstanceID, identityholder.FieldManagedBy, identityholder.FieldIntegrationRunID, identityholder.FieldExternalID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldInternalOwnerIdentityHolderID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID, identityholder.FieldAvatarRemoteURL:
+		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldUpdatedByImpersonator, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldSourceDefinitionID, identityholder.FieldSourceDefinitionVersion, identityholder.FieldSourceInstanceID, identityholder.FieldManagedBy, identityholder.FieldIntegrationRunID, identityholder.FieldSourceKey, identityholder.FieldExternalID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldInternalOwnerIdentityHolderID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID, identityholder.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholder.FieldCreatedAt, identityholder.FieldUpdatedAt, identityholder.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -599,6 +601,12 @@ func (_m *IdentityHolder) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case identityholder.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case identityholder.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1018,6 +1026,9 @@ func (_m *IdentityHolder) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

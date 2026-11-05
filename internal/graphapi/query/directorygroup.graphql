@@ -31,6 +31,7 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -73,6 +74,7 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -115,6 +117,7 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -197,6 +200,7 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceVersion
 		status
 		tags
@@ -274,6 +278,7 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
