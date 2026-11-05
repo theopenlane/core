@@ -139,8 +139,8 @@ func createWithTargetsValidation() (input graphclient.CreateCampaignWithTargetsI
 func parseEmailList(emails string) ([]*graphclient.CreateCampaignTargetInput, error) {
 	var targets []*graphclient.CreateCampaignTargetInput
 
-	emailList := strings.Split(emails, ",")
-	for _, email := range emailList {
+	emailList := strings.SplitSeq(emails, ",")
+	for email := range emailList {
 		email = strings.TrimSpace(email)
 		if email == "" {
 			continue

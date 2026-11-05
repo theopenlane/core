@@ -57,12 +57,10 @@ func runLifecycle(ctx context.Context, out io.Writer, svc *storage.ObjectService
 
 	fmt.Fprintln(out, "\n2. Downloading file...")
 	storageFile := &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			Key:         uploadedFile.Key,
-			Bucket:      uploadedFile.Bucket,
-			Size:        uploadedFile.Size,
-			ContentType: uploadedFile.ContentType,
-		},
+		Key:         uploadedFile.Key,
+		Bucket:      uploadedFile.Bucket,
+		Size:        uploadedFile.Size,
+		ContentType: uploadedFile.ContentType,
 	}
 
 	downloaded, err := svc.Download(ctx, provider, storageFile, &storage.DownloadOptions{})

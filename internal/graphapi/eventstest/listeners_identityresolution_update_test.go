@@ -8,7 +8,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -39,7 +38,7 @@ func TestIdentityResolutionUpdateCascade(t *testing.T) {
 			Client:         suite.Client,
 			CanonicalEmail: &originalEmail,
 			DisplayName:    "Keep Link User",
-			DirectoryName:  lo.ToPtr("googleworkspace"),
+			DirectoryName:  new("googleworkspace"),
 			Status:         enums.DirectoryAccountStatusActive,
 			OwnerID:        idUser.OrganizationID,
 		}).MustNew(ctx, t)
@@ -76,7 +75,7 @@ func TestIdentityResolutionUpdateCascade(t *testing.T) {
 			Client:         suite.Client,
 			CanonicalEmail: &email,
 			DisplayName:    "Still Enrich User",
-			DirectoryName:  lo.ToPtr("googleworkspace"),
+			DirectoryName:  new("googleworkspace"),
 			PrimarySource:  true,
 			Status:         enums.DirectoryAccountStatusActive,
 			OwnerID:        idUser.OrganizationID,
@@ -129,7 +128,7 @@ func TestIdentityResolutionUpdateCascade(t *testing.T) {
 		da := (&th.DirectoryAccountBuilder{
 			Client:        suite.Client,
 			DisplayName:   "Late Link User",
-			DirectoryName: lo.ToPtr("github"),
+			DirectoryName: new("github"),
 			Status:        enums.DirectoryAccountStatusActive,
 			OwnerID:       idUser.OrganizationID,
 		}).MustNew(ctx, t)

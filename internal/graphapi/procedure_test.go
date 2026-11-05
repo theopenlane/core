@@ -2,12 +2,12 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"testing"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -163,7 +163,7 @@ func TestQueryProcedureTaskTemplates(t *testing.T) {
 
 	templateTask, err := suite.Client.API.CreateTask(th.SharedTestUser1.UserCtx, testclient.CreateTaskInput{
 		Title:        "procedure task template",
-		IsTemplate:   lo.ToPtr(true),
+		IsTemplate:   new(true),
 		ProcedureIDs: []string{procedure.ID},
 	})
 	assert.NilError(t, err)
@@ -177,10 +177,10 @@ func TestQueryProcedureTaskTemplates(t *testing.T) {
 	assert.Assert(t, task != nil)
 
 	resp, err := suite.Client.API.GetTasks(th.SharedTestUser1.UserCtx, nil, nil, nil, nil, nil, &testclient.TaskWhereInput{
-		IsTemplate: lo.ToPtr(true),
+		IsTemplate: new(true),
 		HasProceduresWith: []*testclient.ProcedureWhereInput{
 			{
-				ID: lo.ToPtr(procedure.ID),
+				ID: new(procedure.ID),
 			},
 		},
 	})
@@ -225,9 +225,9 @@ func TestMutationCreateProcedure(t *testing.T) {
 			name: "happy path, all input except edges, you should have to have view access to a group to add it as an edge on this object",
 			request: testclient.CreateProcedureInput{
 				Name:       "Releasing a new version",
-				Details:    lo.ToPtr("instructions on how to release a new version"),
+				Details:    new("instructions on how to release a new version"),
 				Status:     &enums.DocumentDraft,
-				Revision:   lo.ToPtr("v1.0.0"),
+				Revision:   new("v1.0.0"),
 				ApproverID: &approverGroup.ID,
 				DelegateID: &delegateGroup.ID,
 			},
@@ -268,7 +268,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 			request: testclient.CreateProcedureInput{
 				Name:    "Test Procedure",
 				OwnerID: &th.SharedTestUser1.OrganizationID,
-				Details: lo.ToPtr(gofakeit.Sentence()),
+				Details: new(gofakeit.Sentence()),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -302,7 +302,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		{
 			name: "missing required field",
 			request: testclient.CreateProcedureInput{
-				Details: lo.ToPtr("instructions on how to release a new version"),
+				Details: new("instructions on how to release a new version"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -426,7 +426,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		{
 			name: "happy path, update name field, and add group",
 			request: testclient.UpdateProcedureInput{
-				Name:         lo.ToPtr("Updated Procedure Name"),
+				Name:         new("Updated Procedure Name"),
 				AddEditorIDs: []string{th.SharedTestUser1.GroupID}, // add the group to the editor groups for subsequent tests
 				ApproverID:   &approverGroup.ID,
 				DelegateID:   &delegateGroup.ID,
@@ -438,7 +438,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateProcedureInput{
 				Status:       &enums.DocumentPublished,
-				Details:      lo.ToPtr("Updated description"),
+				Details:      new("Updated description"),
 				RevisionBump: &models.Minor,
 				ApproverID:   &anotherApproverGroup.ID,
 				DelegateID:   &anotherDelegateGroup.ID,
@@ -449,7 +449,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		{
 			name: "update not allowed, not enough permissions",
 			request: testclient.UpdateProcedureInput{
-				Name: lo.ToPtr("Updated Procedure Name"),
+				Name: new("Updated Procedure Name"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -458,7 +458,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		{
 			name: "update allowed by admin user",
 			request: testclient.UpdateProcedureInput{
-				Name: lo.ToPtr("Updated Procedure Name Meow"),
+				Name: new("Updated Procedure Name Meow"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -466,7 +466,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		{
 			name: "update allowed, details updated by admin",
 			request: testclient.UpdateProcedureInput{
-				Details: lo.ToPtr(gofakeit.Sentence()),
+				Details: new(gofakeit.Sentence()),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -474,7 +474,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		{
 			name: "member update allowed, user in editor group",
 			request: testclient.UpdateProcedureInput{
-				Name: lo.ToPtr("Updated Procedure Name Again"),
+				Name: new("Updated Procedure Name Again"),
 			},
 			client: suite.Client.API,
 			ctx:    anotherViewerUser.UserCtx, // user assigned to the group which has editor permissions
@@ -490,7 +490,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		{
 			name: "member update no longer allowed, user in blocked group",
 			request: testclient.UpdateProcedureInput{
-				Name: lo.ToPtr("Updated Procedure Name Again"),
+				Name: new("Updated Procedure Name Again"),
 			},
 			client:      suite.Client.API,
 			ctx:         anotherViewerUser.UserCtx, // user assigned to the group which was blocked
@@ -507,7 +507,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		{
 			name: "update not allowed, editor group was removed",
 			request: testclient.UpdateProcedureInput{
-				Name: lo.ToPtr("Updated Procedure Name Again Again"),
+				Name: new("Updated Procedure Name Again Again"),
 			},
 			client:      suite.Client.API,
 			ctx:         anotherViewerUser.UserCtx,
@@ -516,7 +516,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateProcedureInput{
-				Details: lo.ToPtr("Updated details"),
+				Details: new("Updated details"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -657,7 +657,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 
 	// ensure the user does not currently have access to update the procedure
 	res, err := suite.Client.API.UpdateBulkProcedure(th.SharedTestUser2.UserCtx, []string{procedure1.ID}, testclient.UpdateProcedureInput{
-		Status: lo.ToPtr(enums.DocumentPublished),
+		Status: new(enums.DocumentPublished),
 	})
 
 	assert.Assert(t, is.Nil(err))
@@ -699,7 +699,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       testclient.UpdateProcedureInput{Details: lo.ToPtr("test")},
+			input:       testclient.UpdateProcedureInput{Details: new("test")},
 			client:      suite.Client.API,
 			ctx:         newUser.UserCtx,
 			expectedErr: "ids is required",
@@ -800,13 +800,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 			}
 
 			for _, updatedID := range resp.UpdateBulkProcedure.UpdatedIDs {
-				found := false
-				for _, expectedID := range tc.ids {
-					if expectedID == updatedID {
-						found = true
-						break
-					}
-				}
+				found := slices.Contains(tc.ids, updatedID)
 				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
 			}
 		})

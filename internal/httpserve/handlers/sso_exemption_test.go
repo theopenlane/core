@@ -9,8 +9,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
@@ -94,7 +92,7 @@ func TestLoginHandlerSSOExemptMember(t *testing.T) {
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
-		SSOExempt:      lo.ToPtr(true),
+		SSOExempt:      new(true),
 	}).Exec(memberCtx))
 
 	assert.NilError(t, suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
@@ -174,7 +172,7 @@ func TestWebfingerHandlerExemptMember(t *testing.T) {
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
-		SSOExempt:      lo.ToPtr(true),
+		SSOExempt:      new(true),
 	}).Exec(memberCtx))
 
 	assert.NilError(t, suite.db.UserSetting.Update().Where(usersetting.UserID(member.ID)).SetDefaultOrgID(org.ID).Exec(memberCtx))
@@ -238,7 +236,7 @@ func TestSwitchHandlerSSOExemptMember(t *testing.T) {
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
-		SSOExempt:      lo.ToPtr(true),
+		SSOExempt:      new(true),
 	}).Exec(memberCtx))
 
 	body, _ := json.Marshal(models.SwitchOrganizationRequest{TargetOrganizationID: org.ID})
@@ -372,7 +370,7 @@ func TestAutoJoinSuppressedWhenSSOEnforced(t *testing.T) {
 	// an organization that has domain auto-join configured AND enforces SSO
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		AllowedEmailDomains:          []string{allowedDomain},
-		AllowMatchingDomainsAutojoin: lo.ToPtr(true),
+		AllowMatchingDomainsAutojoin: new(true),
 	}).Save(ctx)
 	assert.NilError(t, err)
 

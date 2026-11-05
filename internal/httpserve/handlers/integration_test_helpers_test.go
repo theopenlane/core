@@ -64,12 +64,10 @@ func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 			Disconnects("Remove the persisted GitHub test credential and disconnect this installation.", nil)
 
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "GitHub",
-				Active:      true,
-				Visible:     true,
-			},
+			ID:           definitionID,
+			DisplayName:  "GitHub",
+			Active:       true,
+			Visible:      true,
 			Installation: types.InstallationOf[githubTestInstallation]().Registration(),
 			Connections:  []types.Connector{connection},
 		}, nil
@@ -118,12 +116,10 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 			})
 
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "Webhook Test",
-				Active:      true,
-				Visible:     true,
-			},
+			ID:           definitionID,
+			DisplayName:  "Webhook Test",
+			Active:       true,
+			Visible:      true,
 			Installation: types.InstallationOf[webhookTestInstallation]().Registration(),
 			Connections:  []types.Connector{connection},
 			Webhooks: []types.WebhookRegistration{
@@ -182,12 +178,10 @@ var opTestSystemSweepOperation = types.OperationPayloadOf[OperationTestSystemSwe
 func operationTestSystemDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "Operation Test System",
-				Active:      true,
-				Visible:     false,
-			},
+			ID:          definitionID,
+			DisplayName: "Operation Test System",
+			Active:      true,
+			Visible:     false,
 			Operations: []types.OperationRegistration{
 				opTestSystemSweepOperation.Description("System sweep").HandlesRequest(func(context.Context, types.OperationRequest, OperationTestSystemSweep) (json.RawMessage, error) {
 					return json.RawMessage(`{"swept":true}`), nil
@@ -241,12 +235,10 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 			})
 
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "Operation Test",
-				Active:      true,
-				Visible:     true,
-			},
+			ID:           definitionID,
+			DisplayName:  "Operation Test",
+			Active:       true,
+			Visible:      true,
 			Installation: types.InstallationOf[operationTestInstallation]().Registration(),
 			Connections:  []types.Connector{connection},
 			Operations: []types.OperationRegistration{
@@ -370,12 +362,10 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 			})
 
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "Config Test",
-				Active:      true,
-				Visible:     true,
-			},
+			ID:           definitionID,
+			DisplayName:  "Config Test",
+			Active:       true,
+			Visible:      true,
 			UserInput:    configTestUserInputRef.Registration(),
 			Installation: types.InstallationOf[configTestInstallation]().Registration(),
 			Connections:  []types.Connector{connection},
@@ -386,13 +376,11 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 func userInputOnlyTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "User Input Test",
-				Active:      true,
-				Visible:     true,
-			},
-			UserInput: configTestUserInputRef.Registration(),
+			ID:          definitionID,
+			DisplayName: "User Input Test",
+			Active:      true,
+			Visible:     true,
+			UserInput:   configTestUserInputRef.Registration(),
 		}, nil
 	})
 }
@@ -421,12 +409,10 @@ const operatorOnlyTestDefinitionID = "def_01K0TESTOPONLY00000000001"
 func operatorOnlyTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "Operator Only Test",
-				Active:      true,
-				Visible:     true,
-			},
+			ID:          definitionID,
+			DisplayName: "Operator Only Test",
+			Active:      true,
+			Visible:     true,
 			Operations: []types.OperationRegistration{
 				staticWebhookHiddenOperation.Description("Hidden sweep").HandlesRequest(func(context.Context, types.OperationRequest, WebhookTestHealthCheck) (json.RawMessage, error) {
 					return json.RawMessage(`{"ok":true}`), nil
@@ -474,12 +460,10 @@ func staticWebhookTestDefinitionBuilder(definitionID string) registry.Builder {
 		}
 
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "Static Webhook Test",
-				Active:      true,
-				Visible:     true,
-			},
+			ID:           definitionID,
+			DisplayName:  "Static Webhook Test",
+			Active:       true,
+			Visible:      true,
 			Installation: types.InstallationOf[webhookTestInstallation]().Registration(),
 			Connections:  []types.Connector{connection},
 			RuntimeIntegration: &types.RuntimeIntegrationRegistration{

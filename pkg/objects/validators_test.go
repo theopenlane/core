@@ -114,10 +114,8 @@ func TestMimeTypeValidator(t *testing.T) {
 func TestChainValidators(t *testing.T) {
 	t.Run("all validators pass", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-				Size:        1024,
-			},
+			ContentType: "image/png",
+			Size:        1024,
 		}
 
 		validator1 := MimeTypeValidator("image/png", "image/jpeg")
@@ -136,10 +134,8 @@ func TestChainValidators(t *testing.T) {
 
 	t.Run("first validator fails", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: pdftext.ContentType,
-				Size:        1024,
-			},
+			ContentType: pdftext.ContentType,
+			Size:        1024,
 		}
 
 		validator1 := MimeTypeValidator("image/png", "image/jpeg")
@@ -156,10 +152,8 @@ func TestChainValidators(t *testing.T) {
 
 	t.Run("second validator fails", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-				Size:        3000,
-			},
+			ContentType: "image/png",
+			Size:        3000,
 		}
 
 		validator1 := MimeTypeValidator("image/png", "image/jpeg")
@@ -179,9 +173,7 @@ func TestChainValidators(t *testing.T) {
 
 	t.Run("empty validator chain", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-			},
+			ContentType: "image/png",
 		}
 
 		chainedValidator := ChainValidators()
@@ -192,9 +184,7 @@ func TestChainValidators(t *testing.T) {
 
 	t.Run("single validator", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-			},
+			ContentType: "image/png",
 		}
 
 		validator := MimeTypeValidator("image/png")
@@ -206,10 +196,8 @@ func TestChainValidators(t *testing.T) {
 
 	t.Run("multiple validators with custom logic", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-				Size:        1024,
-			},
+			ContentType:  "image/png",
+			Size:         1024,
 			OriginalName: "test.png",
 		}
 
@@ -235,10 +223,8 @@ func TestChainValidators(t *testing.T) {
 
 	t.Run("stops at first error", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: pdftext.ContentType,
-				Size:        0,
-			},
+			ContentType: pdftext.ContentType,
+			Size:        0,
 		}
 
 		validationOrder := []string{}

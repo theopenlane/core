@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/common/enums"
@@ -263,9 +262,9 @@ func createBrandedTemplate(ctx context.Context, client *openlaneclient.Client, k
 	input := graphclient.CreateEmailTemplateInput{
 		Key:             key,
 		Name:            name,
-		TemplateContext: lo.ToPtr(enums.TemplateContextCampaignRecipient),
+		TemplateContext: new(enums.TemplateContextCampaignRecipient),
 		Defaults:        defaults,
-		Active:          lo.ToPtr(true),
+		Active:          new(true),
 	}
 
 	resp, err := client.CreateEmailTemplate(ctx, input)
@@ -286,8 +285,8 @@ func createBrandedCampaign(ctx context.Context, client *openlaneclient.Client, t
 
 	campaign := &graphclient.CreateCampaignInput{
 		Name:            campaignName,
-		Description:     lo.ToPtr(campaignDesc),
-		CampaignType:    lo.ToPtr(enums.CampaignTypePolicyAttestation),
+		Description:     new(campaignDesc),
+		CampaignType:    new(enums.CampaignTypePolicyAttestation),
 		EmailTemplateID: &templateID,
 		DueDate:         &dueDate,
 		Tags:            []string{quickstartTag},
@@ -297,7 +296,7 @@ func createBrandedCampaign(ctx context.Context, client *openlaneclient.Client, t
 		Campaign: campaign,
 		Targets: []*graphclient.CreateCampaignTargetInput{{
 			Email:    recipient,
-			FullName: lo.ToPtr(recipientFullName),
+			FullName: new(recipientFullName),
 		}},
 	}
 
@@ -317,7 +316,7 @@ func createBrandedCampaign(ctx context.Context, client *openlaneclient.Client, t
 func createAssessment(ctx context.Context, client *openlaneclient.Client) (string, error) {
 	input := graphclient.CreateAssessmentInput{
 		Name:           "Quickstart assessment",
-		AssessmentType: lo.ToPtr(enums.AssessmentTypeInternal),
+		AssessmentType: new(enums.AssessmentTypeInternal),
 		Tags:           []string{quickstartTag},
 		Jsonconfig: map[string]any{
 			"type": "object",
@@ -350,8 +349,8 @@ func createQuestionnaireCampaign(ctx context.Context, client *openlaneclient.Cli
 
 	campaign := &graphclient.CreateCampaignInput{
 		Name:         "Acknowledge Matt is the Greatest",
-		Description:  lo.ToPtr("Questionnaire campaign end-to-end smoke test"),
-		CampaignType: lo.ToPtr(enums.CampaignTypeQuestionnaire),
+		Description:  new("Questionnaire campaign end-to-end smoke test"),
+		CampaignType: new(enums.CampaignTypeQuestionnaire),
 		AssessmentID: &assessmentID,
 		DueDate:      &dueDate,
 		Tags:         []string{quickstartTag},
@@ -361,7 +360,7 @@ func createQuestionnaireCampaign(ctx context.Context, client *openlaneclient.Cli
 		Campaign: campaign,
 		Targets: []*graphclient.CreateCampaignTargetInput{{
 			Email:    recipient,
-			FullName: lo.ToPtr(recipientFullName),
+			FullName: new(recipientFullName),
 		}},
 	}
 

@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -100,7 +99,7 @@ func (suite *HandlerTestSuite) tfaEnforcedUser(t *testing.T, ctx context.Context
 	testCtx = ent.NewContext(testCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(ent.CreateOrganizationSettingInput{
-		MultifactorAuthEnforced: lo.ToPtr(true),
+		MultifactorAuthEnforced: new(true),
 	}).Save(testCtx)
 	assert.NilError(t, err)
 

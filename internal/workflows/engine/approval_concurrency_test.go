@@ -51,13 +51,11 @@ func TestApprovalFlowConcurrentApprovalsResumesOnce(t *testing.T) {
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 2,
 		Label:         "Concurrent Approval",
 		Fields:        []string{"status"},
@@ -195,13 +193,11 @@ func TestApprovalFlowLateApprovalDoesNotReapply(t *testing.T) {
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 1,
 		Label:         "Single Approval",
 		Fields:        []string{"status"},
@@ -339,23 +335,19 @@ func TestConcurrentApprovalActionsGateUntilAllSatisfied(t *testing.T) {
 	wfEngine := s.Engine()
 
 	paramsA := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 1,
 		Label:         "Approval A",
 		Fields:        []string{"status"},
 	}
 	paramsB := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 1,
 		Label:         "Approval B",
 		Fields:        []string{"reference_id"},

@@ -194,14 +194,14 @@ func TestQueryAllControls(t *testing.T) {
 		{
 			name:            "happy path, with first set",
 			client:          suite.Client.API,
-			first:           lo.ToPtr(int64(5)),
+			first:           new(int64(5)),
 			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: 5,
 		},
 		{
 			name:            "happy path, with last set",
 			client:          suite.Client.API,
-			first:           lo.ToPtr(int64(3)),
+			first:           new(int64(3)),
 			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: 3,
 		},
@@ -329,7 +329,7 @@ func TestMultipleOrgCheckForQueryControls(t *testing.T) {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			// ensure system owned controls are not counted here
 			resp, err := tc.client.GetControls(tc.ctx, nil, nil, nil, nil, nil, &testclient.ControlWhereInput{
-				SystemOwned: lo.ToPtr(false),
+				SystemOwned: new(false),
 			})
 			assert.NilError(t, err)
 			assert.Check(t, resp != nil)
@@ -387,12 +387,12 @@ func TestMutationCreateControl(t *testing.T) {
 			name: "happy path, all input",
 			request: testclient.CreateControlInput{
 				RefCode:          "A-2",
-				Description:      lo.ToPtr("A description of the Control"),
+				Description:      new("A description of the Control"),
 				Status:           &enums.ControlStatusPreparing,
 				Tags:             []string{"tag1", "tag2"},
-				Category:         lo.ToPtr("Availability"),
-				CategoryID:       lo.ToPtr("A"),
-				Subcategory:      lo.ToPtr("Additional Criteria for Availability"),
+				Category:         new("Availability"),
+				CategoryID:       new("A"),
+				Subcategory:      new("Additional Criteria for Availability"),
 				MappedCategories: []string{"Govern", "Protect"},
 				ControlQuestions: []string{"What is the control question?"},
 				StandardID:       &standard.ID,
@@ -505,7 +505,7 @@ func TestMutationCreateControl(t *testing.T) {
 		{
 			name: "missing required ref code",
 			request: testclient.CreateControlInput{
-				Description: lo.ToPtr("A description of the Control"),
+				Description: new("A description of the Control"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -778,7 +778,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: testclient.CloneControlInput{
 				StandardID: &publicStandard.ID,
 			},
-			expectedStandard: lo.ToPtr(publicStandard.ShortName),
+			expectedStandard: new(publicStandard.ShortName),
 			expectedControls: controls,
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser1.UserCtx,
@@ -789,7 +789,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				StandardID: &publicStandard2.ID,
 				ProgramID:  &program.ID,
 			},
-			expectedStandard: lo.ToPtr(publicStandard2.ShortName),
+			expectedStandard: new(publicStandard2.ShortName),
 			expectedControls: controls2,
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser1.UserCtx,
@@ -900,7 +900,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: testclient.CloneControlInput{
 				ControlIDs: []string{orgOwnedControl.ID},
 			},
-			expectedStandard: lo.ToPtr("CUSTOM"),
+			expectedStandard: new("CUSTOM"),
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser2.UserCtx,
@@ -909,7 +909,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		{
 			name:             "clone control under org, empty request",
 			request:          testclient.CloneControlInput{},
-			expectedStandard: lo.ToPtr("CUSTOM"),
+			expectedStandard: new("CUSTOM"),
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser2.UserCtx,
@@ -1412,7 +1412,7 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 		{
 			name: "fail, unable to update ref code",
 			request: testclient.UpdateControlInput{
-				RefCode: lo.ToPtr("NEW-REF-CODE"),
+				RefCode: new("NEW-REF-CODE"),
 			},
 			controlID:   resp.CreateControlsByClone.Controls[0].ID,
 			client:      suite.Client.API,
@@ -1422,7 +1422,7 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 		{
 			name: "fail, unable to update description",
 			request: testclient.UpdateControlInput{
-				Description: lo.ToPtr("New Description"),
+				Description: new("New Description"),
 			},
 			controlID:   resp.CreateControlsByClone.Controls[0].ID,
 			client:      suite.Client.API,
@@ -1432,7 +1432,7 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 		{
 			name: "fail, unable to update title",
 			request: testclient.UpdateControlInput{
-				Title: lo.ToPtr("New Title"),
+				Title: new("New Title"),
 			},
 			controlID:   resp.CreateControlsByClone.Controls[0].ID,
 			client:      suite.Client.API,
@@ -1582,13 +1582,13 @@ func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
 	clonedControl := resp.CreateControlsByClone.Controls[0]
 
 	// add comment
-	comment := []interface{}{
-		map[string]interface{}{
-			"children": []interface{}{
-				map[string]interface{}{
+	comment := []any{
+		map[string]any{
+			"children": []any{
+				map[string]any{
 					"text": "my first text",
 				},
-				map[string]interface{}{
+				map[string]any{
 					"comment":           true,
 					"comment_random_id": true,
 					"text":              "another sub comment",
@@ -1659,7 +1659,7 @@ func TestMutationUpdateControl(t *testing.T) {
 
 	// ensure the user does not currently have access to update the control
 	_, err := suite.Client.API.UpdateControl(anotherViewerUser.UserCtx, control.ID, testclient.UpdateControlInput{
-		Status: lo.ToPtr(enums.ControlStatusPreparing),
+		Status: new(enums.ControlStatusPreparing),
 	})
 	assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 
@@ -1680,7 +1680,7 @@ func TestMutationUpdateControl(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateControlInput{
-				Description:     lo.ToPtr("Updated description"),
+				Description:     new("Updated description"),
 				ControlKindName: &kindCustom.Name,
 				AddProgramIDs:   []string{program1.ID, program2.ID}, // add multiple programs (one already associated)
 				AddEditorIDs:    []string{groupMember.GroupID},
@@ -1698,9 +1698,9 @@ func TestMutationUpdateControl(t *testing.T) {
 				Status:          &enums.ControlStatusPreparing,
 				Tags:            []string{"tag1", "tag2"},
 				ControlKindName: &kind.Name,
-				Category:        lo.ToPtr("Availability"),
-				CategoryID:      lo.ToPtr("A"),
-				Subcategory:     lo.ToPtr("Additional Criteria for Availability"),
+				Category:        new("Availability"),
+				CategoryID:      new("A"),
+				Subcategory:     new("Additional Criteria for Availability"),
 				AppendReferences: []*models.Reference{
 					{
 						Name: "name of ref",
@@ -1748,8 +1748,8 @@ func TestMutationUpdateControl(t *testing.T) {
 		{
 			name: "happy path, remove some things",
 			request: testclient.UpdateControlInput{
-				ClearReferences:       lo.ToPtr(true),
-				ClearMappedCategories: lo.ToPtr(true),
+				ClearReferences:       new(true),
+				ClearMappedCategories: new(true),
 			},
 			controlID: control.ID,
 			client:    suite.Client.APIWithPAT,
@@ -1758,7 +1758,7 @@ func TestMutationUpdateControl(t *testing.T) {
 		{
 			name: "auto-create custom control enum for control kind",
 			request: testclient.UpdateControlInput{
-				ControlKindName: lo.ToPtr("InvalidKind"),
+				ControlKindName: new("InvalidKind"),
 			},
 			controlID: control.ID,
 			client:    suite.Client.APIWithPAT,
@@ -1767,7 +1767,7 @@ func TestMutationUpdateControl(t *testing.T) {
 		{
 			name: "update ref code to empty",
 			request: testclient.UpdateControlInput{
-				RefCode: lo.ToPtr(""),
+				RefCode: new(""),
 			},
 			controlID:   control.ID,
 			client:      suite.Client.API,
@@ -2051,7 +2051,7 @@ func TestMutationUpdateControlDescription(t *testing.T) {
 		{
 			name: "complex slate JSON with comments and multiple blocks",
 			request: testclient.UpdateControlInput{
-				Description: lo.ToPtr(`<div class="slate-editor group/editor relative w-full cursor-text overflow-x-hidden break-words whitespace-pre-wrap select-text rounded-md ring-offset-background focus-visible:outline-hidden placeholder:text-muted-foreground/80 **:data-slate-placeholder:top-[auto_!important] **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100! [&_strong]:font-bold" data-slate-editor="true" data-slate-node="value"><div data-slate-node="element" data-block-id="b_bwtnb9l8" data-slate-id="b_bwtnb9l8" data-slate-type="p" class="slate-p m-0 px-0 py-1" style="position:relative"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">asfsadfsd</span></span></span></div><div data-slate-node="element" data-block-id="lqbGHj_l70" data-slate-id="lqbGHj_l70" data-slate-type="p" class="slate-p m-0 px-0 py-1" style="position:relative"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"></span></span></span></div><div data-slate-node="element" data-block-id="qfPeKFLe13" data-slate-id="qfPeKFLe13" data-slate-type="p" class="slate-p m-0 px-0 py-1" style="position:relative"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">for a comment with update</span></span></span></div></div>`),
+				Description: new(`<div class="slate-editor group/editor relative w-full cursor-text overflow-x-hidden break-words whitespace-pre-wrap select-text rounded-md ring-offset-background focus-visible:outline-hidden placeholder:text-muted-foreground/80 **:data-slate-placeholder:top-[auto_!important] **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100! [&_strong]:font-bold" data-slate-editor="true" data-slate-node="value"><div data-slate-node="element" data-block-id="b_bwtnb9l8" data-slate-id="b_bwtnb9l8" data-slate-type="p" class="slate-p m-0 px-0 py-1" style="position:relative"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">asfsadfsd</span></span></span></div><div data-slate-node="element" data-block-id="lqbGHj_l70" data-slate-id="lqbGHj_l70" data-slate-type="p" class="slate-p m-0 px-0 py-1" style="position:relative"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"></span></span></span></div><div data-slate-node="element" data-block-id="qfPeKFLe13" data-slate-id="qfPeKFLe13" data-slate-type="p" class="slate-p m-0 px-0 py-1" style="position:relative"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">for a comment with update</span></span></span></div></div>`),
 			},
 			controlID: control.ID,
 			client:    suite.Client.API,
@@ -2250,13 +2250,7 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 
 			// verify that the returned IDs match the ones that were actually deleted
 			for _, deletedID := range resp.DeleteBulkControl.DeletedIDs {
-				found := false
-				for _, expectedID := range tc.idsToDelete {
-					if expectedID == deletedID {
-						found = true
-						break
-					}
-				}
+				found := slices.Contains(tc.idsToDelete, deletedID)
 				assert.Check(t, found, "Deleted ID %s should be in the original request", deletedID)
 			}
 
@@ -2767,7 +2761,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 			where:  defaultWhere,
 			client: suite.Client.API,
 			ctx:    user1.UserCtx,
-			first:  lo.ToPtr(int64(1)), // test pagination
+			first:  new(int64(1)), // test pagination
 		},
 		{
 			name:   "filter by standard, two results expected",
@@ -2786,7 +2780,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 			where:    defaultWhere,
 			client:   suite.Client.API,
 			ctx:      user1.UserCtx,
-			category: lo.ToPtr("No Category"),
+			category: new("No Category"),
 			expectedCategories: map[string]struct{}{
 				"No Category": {},
 			},
@@ -2865,7 +2859,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 
 	// ensure the user does not currently have access to update the control
 	res, err := suite.Client.API.UpdateBulkControl(th.SharedTestUser2.UserCtx, []string{control1.ID}, testclient.UpdateControlInput{
-		Status: lo.ToPtr(enums.ControlStatusPreparing),
+		Status: new(enums.ControlStatusPreparing),
 	})
 
 	assert.Assert(t, is.Nil(err))
@@ -2895,8 +2889,8 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 			name: "happy path, clear operations and editor permissions",
 			ids:  []string{control1.ID, control2.ID},
 			input: testclient.UpdateControlInput{
-				ClearReferences:       lo.ToPtr(true),
-				ClearMappedCategories: lo.ToPtr(true),
+				ClearReferences:       new(true),
+				ClearMappedCategories: new(true),
 				AddEditorIDs:          []string{groupMember.GroupID},
 			},
 			client:               suite.Client.API,
@@ -2906,7 +2900,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       testclient.UpdateControlInput{Description: lo.ToPtr("test")},
+			input:       testclient.UpdateControlInput{Description: new("test")},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -2945,7 +2939,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 			name: "update control type and category on multiple controls",
 			ids:  []string{control1.ID, control2.ID, control3.ID},
 			input: testclient.UpdateControlInput{
-				Category:       lo.ToPtr("Availability"),
+				Category:       new("Availability"),
 				ControlOwnerID: &ownerGroup.ID,
 			},
 			client:               suite.Client.API,
@@ -3053,11 +3047,8 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 				if len(tc.input.AddEditorIDs) > 0 {
 					found := false
 					for _, edge := range control.Editors.Edges {
-						for _, editorID := range tc.input.AddEditorIDs {
-							if edge.Node.ID == editorID {
-								found = true
-								break
-							}
+						if slices.Contains(tc.input.AddEditorIDs, edge.Node.ID) {
+							found = true
 						}
 					}
 					assert.Check(t, found)
@@ -3075,13 +3066,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 
 			// verify that the returned IDs match the ones that were actually updated
 			for _, updatedID := range resp.UpdateBulkControl.UpdatedIDs {
-				found := false
-				for _, expectedID := range tc.ids {
-					if expectedID == updatedID {
-						found = true
-						break
-					}
-				}
+				found := slices.Contains(tc.ids, updatedID)
 				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
 			}
 		})

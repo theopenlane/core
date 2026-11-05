@@ -180,8 +180,8 @@ func TestMutationAddNoteForControl(t *testing.T) {
 			name: "happy path, add discussion",
 			request: testclient.UpdateControlInput{
 				AddDiscussion: &testclient.CreateDiscussionInput{
-					ExternalID: lo.ToPtr("DISC-12345"),
-					IsResolved: lo.ToPtr(false),
+					ExternalID: new("DISC-12345"),
+					IsResolved: new(false),
 					AddComment: &testclient.CreateNoteInput{
 						Text: "This is a test note as part of a discussion",
 					},
@@ -267,8 +267,8 @@ func TestMutationUpdateDiscussionForControl(t *testing.T) {
 	// add initial discussion to update
 	resp, err := suite.Client.API.UpdateControl(th.SharedTestUser1.UserCtx, control.ID, testclient.UpdateControlInput{
 		AddDiscussion: &testclient.CreateDiscussionInput{
-			ExternalID: lo.ToPtr("DISC-22401"),
-			IsResolved: lo.ToPtr(false),
+			ExternalID: new("DISC-22401"),
+			IsResolved: new(false),
 			AddComment: &testclient.CreateNoteInput{
 				Text: "This is a test note as part of a discussion",
 			},
@@ -373,8 +373,8 @@ func TestMutationUpdateDiscussionForPolicy(t *testing.T) {
 	// add initial discussion to update
 	resp, err := suite.Client.API.UpdateInternalPolicy(th.SharedTestUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
 		AddDiscussion: &testclient.CreateDiscussionInput{
-			ExternalID: lo.ToPtr("DISC-22402"),
-			IsResolved: lo.ToPtr(false),
+			ExternalID: new("DISC-22402"),
+			IsResolved: new(false),
 			AddComment: &testclient.CreateNoteInput{
 				Text: "This is a test note as part of a discussion",
 			},
@@ -718,12 +718,12 @@ func TestMutationCommentsForVulnerability(t *testing.T) {
 		name  string
 		input testclient.UpdateVulnerabilityInput
 	}{
-		{name: "set a field", input: testclient.UpdateVulnerabilityInput{DisplayName: lo.ToPtr("renamed by viewer")}},
-		{name: "clear a field", input: testclient.UpdateVulnerabilityInput{ClearDisplayName: lo.ToPtr(true)}},
-		{name: "clear all comments", input: testclient.UpdateVulnerabilityInput{ClearComments: lo.ToPtr(true)}},
+		{name: "set a field", input: testclient.UpdateVulnerabilityInput{DisplayName: new("renamed by viewer")}},
+		{name: "clear a field", input: testclient.UpdateVulnerabilityInput{ClearDisplayName: new(true)}},
+		{name: "clear all comments", input: testclient.UpdateVulnerabilityInput{ClearComments: new(true)}},
 		{name: "add a comment while clearing a field", input: testclient.UpdateVulnerabilityInput{
 			AddComment:       &testclient.CreateNoteInput{Text: "sneaky comment"},
-			ClearDisplayName: lo.ToPtr(true),
+			ClearDisplayName: new(true),
 		}},
 	}
 
@@ -762,7 +762,7 @@ func TestMutationCommentsForVulnerability(t *testing.T) {
 
 	t.Run("owner can update their comment", func(t *testing.T) {
 		resp, err := suite.Client.API.UpdateVulnerabilityComment(th.SharedTestUser1.UserCtx, ownerComment.ID, testclient.UpdateNoteInput{
-			Text: lo.ToPtr("edited comment from the owner"),
+			Text: new("edited comment from the owner"),
 		}, nil)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(vuln.ID, resp.UpdateVulnerabilityComment.Vulnerability.ID))
@@ -776,7 +776,7 @@ func TestMutationCommentsForVulnerability(t *testing.T) {
 
 	t.Run("user in another org cannot update the comment", func(t *testing.T) {
 		_, err := suite.Client.API.UpdateVulnerabilityComment(th.SharedTestUser2.UserCtx, ownerComment.ID, testclient.UpdateNoteInput{
-			Text: lo.ToPtr("hijacked"),
+			Text: new("hijacked"),
 		}, nil)
 		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 	})
@@ -865,12 +865,12 @@ func TestMutationCommentsForFinding(t *testing.T) {
 		name  string
 		input testclient.UpdateFindingInput
 	}{
-		{name: "set a field", input: testclient.UpdateFindingInput{DisplayName: lo.ToPtr("renamed by viewer")}},
-		{name: "clear a field", input: testclient.UpdateFindingInput{ClearDisplayName: lo.ToPtr(true)}},
-		{name: "clear all comments", input: testclient.UpdateFindingInput{ClearComments: lo.ToPtr(true)}},
+		{name: "set a field", input: testclient.UpdateFindingInput{DisplayName: new("renamed by viewer")}},
+		{name: "clear a field", input: testclient.UpdateFindingInput{ClearDisplayName: new(true)}},
+		{name: "clear all comments", input: testclient.UpdateFindingInput{ClearComments: new(true)}},
 		{name: "add a comment while clearing a field", input: testclient.UpdateFindingInput{
 			AddComment:       &testclient.CreateNoteInput{Text: "sneaky comment"},
-			ClearDisplayName: lo.ToPtr(true),
+			ClearDisplayName: new(true),
 		}},
 	}
 
@@ -909,7 +909,7 @@ func TestMutationCommentsForFinding(t *testing.T) {
 
 	t.Run("owner can update their comment", func(t *testing.T) {
 		resp, err := suite.Client.API.UpdateFindingComment(th.SharedTestUser1.UserCtx, ownerComment.ID, testclient.UpdateNoteInput{
-			Text: lo.ToPtr("edited comment from the owner"),
+			Text: new("edited comment from the owner"),
 		}, nil)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(finding.ID, resp.UpdateFindingComment.Finding.ID))
@@ -923,7 +923,7 @@ func TestMutationCommentsForFinding(t *testing.T) {
 
 	t.Run("user in another org cannot update the comment", func(t *testing.T) {
 		_, err := suite.Client.API.UpdateFindingComment(th.SharedTestUser2.UserCtx, ownerComment.ID, testclient.UpdateNoteInput{
-			Text: lo.ToPtr("hijacked"),
+			Text: new("hijacked"),
 		}, nil)
 		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 	})

@@ -45,9 +45,7 @@ func TestDatabaseFileDownloadHandler_Success(t *testing.T) {
 			FieldName:            "uploadFile",
 			CorrelatedObjectID:   user.PersonalOrgID,
 			CorrelatedObjectType: "organization",
-			FileMetadata: pkgobjects.FileMetadata{
-				ContentType: "text/plain",
-			},
+			ContentType:          "text/plain",
 		},
 	})
 	assert.NilError(t, err)
@@ -112,9 +110,7 @@ func TestDatabaseFileDownloadHandler_WithUserID(t *testing.T) {
 			FieldName:            "uploadFile",
 			CorrelatedObjectID:   user.PersonalOrgID,
 			CorrelatedObjectType: "organization",
-			FileMetadata: pkgobjects.FileMetadata{
-				ContentType: "text/plain",
-			},
+			ContentType:          "text/plain",
 		},
 	})
 	assert.NilError(t, err)
@@ -202,9 +198,7 @@ func TestDatabaseFileDownloadHandler_PresignedURLGeneration(t *testing.T) {
 			FieldName:            "uploadFile",
 			CorrelatedObjectID:   user.PersonalOrgID,
 			CorrelatedObjectType: "organization",
-			FileMetadata: pkgobjects.FileMetadata{
-				ContentType: "text/plain",
-			},
+			ContentType:          "text/plain",
 		},
 	})
 	assert.NilError(t, err)

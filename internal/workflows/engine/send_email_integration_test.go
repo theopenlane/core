@@ -203,10 +203,8 @@ func TestExecuteSendEmail_WithTargetUser(t *testing.T) {
 	params := workflows.SendEmailActionParams{
 		EmailTemplateKey: emaildef.BrandedMessageOp.Name(),
 		From:             "sender@example.com",
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
 	}
 

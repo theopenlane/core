@@ -86,13 +86,11 @@ type subscriptionSettings struct {
 func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	defaultWorkflows := workflows.NewDefaultConfig()
 	return &Resolver{
-		db:              db,
-		uploader:        u,
-		workflowsConfig: *defaultWorkflows,
-		subscriptionSettings: subscriptionSettings{
-			websocketPingInterval: defaultWebsocketPingInterval,
-			sseKeepAliveInterval:  defaultSSEKeepAliveInterval,
-		},
+		db:                    db,
+		uploader:              u,
+		workflowsConfig:       *defaultWorkflows,
+		websocketPingInterval: defaultWebsocketPingInterval,
+		sseKeepAliveInterval:  defaultSSEKeepAliveInterval,
 	}
 }
 

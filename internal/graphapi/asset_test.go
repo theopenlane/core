@@ -9,7 +9,6 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
@@ -156,7 +155,7 @@ func TestMutationCreateAsset(t *testing.T) {
 			name: "happy path, all input as org admin",
 			request: testclient.CreateAssetInput{
 				Name:                "theopenlane.io",
-				Description:         lo.ToPtr("description"),
+				Description:         new("description"),
 				InternalOwnerUserID: &th.SharedViewOnlyUser.ID,
 			},
 			client: suite.Client.API,
@@ -166,7 +165,7 @@ func TestMutationCreateAsset(t *testing.T) {
 			name: "happy path, using pat",
 			request: testclient.CreateAssetInput{
 				Name:                "theopenlane.io",
-				Description:         lo.ToPtr("description"),
+				Description:         new("description"),
 				InternalOwnerUserID: &th.SharedViewOnlyUser.ID,
 			},
 			client: suite.Client.APIWithPAT,
@@ -176,7 +175,7 @@ func TestMutationCreateAsset(t *testing.T) {
 			name: "happy path, using api token",
 			request: testclient.CreateAssetInput{
 				Name:        "theopenlane.io",
-				Description: lo.ToPtr("description"),
+				Description: new("description"),
 			},
 			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
@@ -250,7 +249,7 @@ func TestMutationUpdateAsset(t *testing.T) {
 		{
 			name: "happy path, update field by admin user",
 			request: testclient.UpdateAssetInput{
-				Description: lo.ToPtr("updated description"),
+				Description: new("updated description"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -292,7 +291,7 @@ func TestMutationUpdateAsset(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateAssetInput{
-				Description: lo.ToPtr("updated description again"),
+				Description: new("updated description again"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,

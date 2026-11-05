@@ -36,9 +36,7 @@ func TestResolveDefinitionForInstallationSuccess(t *testing.T) {
 
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{
-			ID: "test-def",
-		},
+		ID: "test-def",
 	})
 
 	rt := NewForTesting(reg)
@@ -59,9 +57,7 @@ func TestNewForTestingRegistry(t *testing.T) {
 
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{
-			ID: "def-1",
-		},
+		ID: "def-1",
 	})
 
 	rt := NewForTesting(reg)

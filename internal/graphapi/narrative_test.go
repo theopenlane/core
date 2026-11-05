@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -223,8 +222,8 @@ func TestMutationCreateNarrative(t *testing.T) {
 			name: "happy path, all input",
 			request: testclient.CreateNarrativeInput{
 				Name:        "Another Narrative",
-				Description: lo.ToPtr("A description of the Narrative"),
-				Details:     lo.ToPtr("Details of the Narrative"),
+				Description: new("A description of the Narrative"),
+				Details:     new("Details of the Narrative"),
 				ProgramIDs:  []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.Client.API,
@@ -429,7 +428,7 @@ func TestMutationUpdateNarrative(t *testing.T) {
 			name: "happy path, update field",
 			request: testclient.UpdateNarrativeInput{
 				Tags:         []string{"tag1", "tag2"},
-				Description:  lo.ToPtr("Updated description"),
+				Description:  new("Updated description"),
 				AddViewerIDs: []string{groupMember.GroupID},
 			},
 			client: suite.Client.API,
@@ -439,9 +438,9 @@ func TestMutationUpdateNarrative(t *testing.T) {
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateNarrativeInput{
 				AppendTags:  []string{"tag3", "tag4"},
-				Name:        lo.ToPtr("Updated Name"),
-				Description: lo.ToPtr("Updated Description"),
-				Details:     lo.ToPtr("Updated Details"),
+				Name:        new("Updated Name"),
+				Description: new("Updated Description"),
+				Details:     new("Updated Details"),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),

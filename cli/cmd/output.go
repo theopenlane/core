@@ -12,7 +12,7 @@ import (
 
 // JSONPrint prints a JSON formatted string with color
 func JSONPrint(s []byte) error {
-	var obj map[string]interface{}
+	var obj map[string]any
 
 	err := json.Unmarshal(s, &obj)
 	cobra.CheckErr(err)
@@ -29,8 +29,8 @@ func JSONPrint(s []byte) error {
 }
 
 // ParseJSON parses a JSON formatted string into a map
-func ParseJSON(v string) (map[string]interface{}, error) {
-	var m map[string]interface{}
+func ParseJSON(v string) (map[string]any, error) {
+	var m map[string]any
 
 	if err := json.Unmarshal([]byte(v), &m); err != nil {
 		return nil, err
@@ -40,8 +40,8 @@ func ParseJSON(v string) (map[string]interface{}, error) {
 }
 
 // ParseBytes parses buffered bytes into a map
-func ParseBytes(v []byte) (map[string]interface{}, error) {
-	var m map[string]interface{}
+func ParseBytes(v []byte) (map[string]any, error) {
+	var m map[string]any
 
 	if err := json.Unmarshal(v, &m); err != nil {
 		return nil, err

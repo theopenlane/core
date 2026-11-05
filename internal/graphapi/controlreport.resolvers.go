@@ -26,7 +26,7 @@ func (r *queryResolver) ControlReportsByCategory(ctx context.Context, where *gen
 	}
 
 	where.And = append(where.And, &generated.ControlWhereInput{
-		SystemOwned: lo.ToPtr(false),
+		SystemOwned: new(false),
 	})
 
 	controlFields := getControlFieldsForCategory(ctx)
@@ -82,7 +82,7 @@ func (r *queryResolver) ControlReports(ctx context.Context, after *entgql.Cursor
 	}
 
 	where.And = append(where.And, &generated.ControlWhereInput{
-		SystemOwned: lo.ToPtr(false),
+		SystemOwned: new(false),
 	})
 
 	controlFields := getControlFields(ctx)

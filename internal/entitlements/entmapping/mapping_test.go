@@ -202,8 +202,8 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 		StripeSubscriptionID:     "sub_123",
 		StripeSubscriptionStatus: "active",
 		Active:                   true,
-		TrialExpiresAt:           timePtr(time.Unix(1700000000, 0)),
-		DaysUntilDue:             int64ToStringPtr(7),
+		TrialExpiresAt:           new(time.Unix(1700000000, 0)),
+		DaysUntilDue:             new("7"),
 	}
 
 	assert.Assert(t, is.Equal(want.StripeSubscriptionID, got.StripeSubscriptionID))

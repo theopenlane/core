@@ -79,10 +79,10 @@ func (h *Handler) WebfingerHandler(c echo.Context) error {
 	orgID, _ := h.DB.GetUserDefaultOrgID(u.ID)
 	status, _ := h.DB.FetchSSOStatus(orgID, u.ID)
 
-	resp := map[string]interface{}{
+	resp := map[string]any{
 		"subject": resource,
-		"links": []interface{}{
-			map[string]interface{}{
+		"links": []any{
+			map[string]any{
 				"href":         "https://example.com/sso",
 				"rel":          "self",
 				"ssoStatus":    status,
@@ -119,10 +119,10 @@ func TestWebfingerHandler(t *testing.T) {
 
 			if tc.status == http.StatusOK {
 				assert.NilError(t, err)
-				var resp map[string]interface{}
+				var resp map[string]any
 				assert.NilError(t, json.NewDecoder(rec.Body).Decode(&resp))
 				assert.Assert(t, is.Equal(tc.resource, resp["subject"]))
-				links, _ := resp["links"].([]interface{})
+				links, _ := resp["links"].([]any)
 				assert.Assert(t, len(links) > 0)
 			} else {
 				assert.Assert(t, err != nil)

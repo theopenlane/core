@@ -179,7 +179,7 @@ func generateSchema(c schemaConfig, cfg *config.Config, commentMap map[string]st
 
 // generateJSONSchema creates the JSON schema file from the config structure using the invopop/jsonschema package.
 // It reuses a prebuilt Go comment map for documentation.
-func generateJSONSchema(jsonSchemaPath string, structure interface{}, commentMap map[string]string) error {
+func generateJSONSchema(jsonSchemaPath string, structure any, commentMap map[string]string) error {
 	r := jsonschema.Reflector{Namer: namePkg, Mapper: mapUnsupportedTypes}
 	r.ExpandedStruct = true
 	r.RequiredFromJSONSchemaTags = true
@@ -251,7 +251,7 @@ func structToKoanfMap(val reflect.Value) map[string]any {
 		}
 
 		fieldValue := val.FieldByIndex(field.Index)
-		for fieldValue.Kind() == reflect.Ptr {
+		for fieldValue.Kind() == reflect.Pointer {
 			if fieldValue.IsNil() {
 				break
 			}
@@ -421,7 +421,7 @@ func buildCollectionIndex(cfg *config.Config) collectionIndex {
 	}
 
 	root := reflect.ValueOf(cfg)
-	for root.Kind() == reflect.Ptr {
+	for root.Kind() == reflect.Pointer {
 		if root.IsNil() {
 			return index
 		}
@@ -446,7 +446,7 @@ func indexCollections(val reflect.Value, prefix string, index *collectionIndex) 
 		}
 
 		fieldValue := val.FieldByIndex(field.Index)
-		for fieldValue.Kind() == reflect.Ptr {
+		for fieldValue.Kind() == reflect.Pointer {
 			if fieldValue.IsNil() {
 				fieldValue = reflect.Value{}
 				break
@@ -536,7 +536,7 @@ func getMapEntriesForPath(cfg *config.Config, fullPath string) ([]mapEntry, erro
 			for _, field := range promotedFields(current.Type()) {
 				if field.Tag.Get(tagName) == part {
 					current = current.FieldByIndex(field.Index)
-					if current.Kind() == reflect.Ptr && !current.IsNil() {
+					if current.Kind() == reflect.Pointer && !current.IsNil() {
 						current = current.Elem()
 					}
 					found = true
@@ -605,7 +605,7 @@ func getSliceValuesForPath(cfg *config.Config, fullPath string) ([]reflect.Value
 			for _, field := range promotedFields(current.Type()) {
 				if field.Tag.Get(tagName) == part {
 					current = current.FieldByIndex(field.Index)
-					if current.Kind() == reflect.Ptr && !current.IsNil() {
+					if current.Kind() == reflect.Pointer && !current.IsNil() {
 						current = current.Elem()
 					}
 					found = true
@@ -624,7 +624,7 @@ func getSliceValuesForPath(cfg *config.Config, fullPath string) ([]reflect.Value
 				return nil, nil
 			}
 			current = current.Index(idx)
-			if current.Kind() == reflect.Ptr && !current.IsNil() {
+			if current.Kind() == reflect.Pointer && !current.IsNil() {
 				current = current.Elem()
 			}
 		default:
@@ -702,7 +702,7 @@ func appendMapValueEnvVars(envVars *strings.Builder, baseKey, basePath string, v
 		return
 	}
 
-	for value.Kind() == reflect.Ptr {
+	for value.Kind() == reflect.Pointer {
 		if value.IsNil() {
 			return
 		}
@@ -815,7 +815,7 @@ func structValueToMap(val reflect.Value) map[string]any {
 		}
 
 		tag := field.Tag.Get("json")
-		name := strings.Split(tag, ",")[0]
+		name, _, _ := strings.Cut(tag, ",")
 		if name == "" || name == "-" {
 			name = strings.ToLower(field.Name)
 		}
@@ -844,7 +844,7 @@ func convertValueForYAML(val reflect.Value) any {
 		return nil
 	}
 
-	for val.Kind() == reflect.Ptr {
+	for val.Kind() == reflect.Pointer {
 		if val.IsNil() {
 			return nil
 		}
@@ -862,7 +862,7 @@ func convertValueForYAML(val reflect.Value) any {
 	case reflect.Slice, reflect.Array:
 		length := val.Len()
 		items := make([]any, 0, length)
-		for i := 0; i < length; i++ {
+		for i := range length {
 			items = append(items, convertValueForYAML(val.Index(i)))
 		}
 		return items
@@ -1126,12 +1126,12 @@ func needsQuotes(value reflect.Value) bool {
 
 // isDurationType checks if the provided type is a time.Duration.
 func isDurationType(t reflect.Type) bool {
-	return t == reflect.TypeOf(time.Duration(0))
+	return t == reflect.TypeFor[time.Duration]()
 }
 
 // unwrapValue dereferences pointer values and returns the underlying value.
 func unwrapValue(v reflect.Value) reflect.Value {
-	for v.IsValid() && v.Kind() == reflect.Ptr {
+	for v.IsValid() && v.Kind() == reflect.Pointer {
 		if v.IsNil() {
 			return reflect.Zero(v.Type().Elem())
 		}
@@ -1282,7 +1282,7 @@ func renderStaticYAMLValue(value any, indent int, emptyLiteral string) string {
 }
 
 // generateAndWriteHelmValues generates Helm values and writes them to a file
-func generateAndWriteHelmValues(helmValuesPath string, structure interface{}, commentMap map[string]string) error {
+func generateAndWriteHelmValues(helmValuesPath string, structure any, commentMap map[string]string) error {
 	helmValues, err := generateHelmValues(structure, commentMap)
 	if err != nil {
 		return fmt.Errorf("failed to generate Helm values: %w", err)
@@ -1312,7 +1312,7 @@ func mapUnsupportedTypes(t reflect.Type) *jsonschema.Schema {
 }
 
 // generateHelmValues creates a Helm-compatible values.yaml from a pre-defaulted config structure
-func generateHelmValues(structure interface{}, commentMap map[string]string) (string, error) {
+func generateHelmValues(structure any, commentMap map[string]string) (string, error) {
 	// Generate values with comments
 	var regularResult strings.Builder
 
@@ -1398,9 +1398,9 @@ func handleSliceField(result *strings.Builder, fieldName, description, indentStr
 			}
 
 			if data, err := yaml.Marshal(items); err == nil {
-				lines := strings.Split(strings.TrimRight(string(data), "\n"), "\n")
+				lines := strings.SplitSeq(strings.TrimRight(string(data), "\n"), "\n")
 
-				for _, line := range lines {
+				for line := range lines {
 					if strings.TrimSpace(line) == "" {
 						continue
 					}
@@ -1461,7 +1461,7 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 			continue
 		}
 
-		fieldName := strings.Split(jsonTag, ",")[0]
+		fieldName, _, _ := strings.Cut(jsonTag, ",")
 		if fieldName == "" {
 			fieldName = strings.ToLower(field.Name)
 		}
@@ -1536,7 +1536,7 @@ func generateYAMLWithCommentsAllFields(result *strings.Builder, prefix string, v
 			continue
 		}
 
-		fieldName := strings.Split(jsonTag, ",")[0]
+		fieldName, _, _ := strings.Cut(jsonTag, ",")
 		if fieldName == "" {
 			fieldName = strings.ToLower(field.Name)
 		}
@@ -1667,7 +1667,7 @@ func getTypeSchemaInfo(field reflect.StructField, defaultTag string) string {
 // formatValue formats a value for YAML output (compatible with Helm templating)
 func formatValue(v any) string {
 	// Check if v is a nil pointer
-	if v == nil || (reflect.ValueOf(v).Kind() == reflect.Ptr && reflect.ValueOf(v).IsNil()) {
+	if v == nil || (reflect.ValueOf(v).Kind() == reflect.Pointer && reflect.ValueOf(v).IsNil()) {
 		return "\"\""
 	}
 
@@ -1708,7 +1708,7 @@ func hasSecretChildren(v reflect.Value, prefix string) bool {
 			continue
 		}
 
-		fieldName := strings.Split(jsonTag, ",")[0]
+		fieldName, _, _ := strings.Cut(jsonTag, ",")
 		if fieldName == "" {
 			fieldName = strings.ToLower(field.Name)
 		}
@@ -1746,7 +1746,7 @@ func hasNonSecretChildren(v reflect.Value, prefix string) bool {
 			continue
 		}
 
-		fieldName := strings.Split(jsonTag, ",")[0]
+		fieldName, _, _ := strings.Cut(jsonTag, ",")
 		if fieldName == "" {
 			fieldName = strings.ToLower(field.Name)
 		}
@@ -1909,10 +1909,10 @@ func findSensitiveFields(v reflect.Value, prefix string) []SensitiveField {
 		}
 
 		// Recursively check nested structs
-		if fieldValue.Kind() == reflect.Struct && fieldValue.Type() != reflect.TypeOf(time.Time{}) {
+		if fieldValue.Kind() == reflect.Struct && fieldValue.Type() != reflect.TypeFor[time.Time]() {
 			nestedFields := findSensitiveFields(fieldValue, currentPath)
 			fields = append(fields, nestedFields...)
-		} else if fieldValue.Kind() == reflect.Ptr && !fieldValue.IsNil() && fieldValue.Elem().Kind() == reflect.Struct {
+		} else if fieldValue.Kind() == reflect.Pointer && !fieldValue.IsNil() && fieldValue.Elem().Kind() == reflect.Struct {
 			nestedFields := findSensitiveFields(fieldValue.Elem(), currentPath)
 			fields = append(fields, nestedFields...)
 		}

@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"testing"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -248,8 +249,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			request: testclient.CreateInternalPolicyInput{
 				Name:       "Releasing a new version",
 				Status:     &enums.DocumentDraft,
-				Revision:   lo.ToPtr("v1.1.0"),
-				Details:    lo.ToPtr("do stuff"),
+				Revision:   new("v1.1.0"),
+				Details:    new("do stuff"),
 				ApproverID: &approverGroup.ID,
 				DelegateID: &delegateGroup.ID,
 			},
@@ -261,8 +262,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			request: testclient.CreateInternalPolicyInput{
 				Name:       "Releasing a new version",
 				Status:     &enums.DocumentDraft,
-				Revision:   lo.ToPtr("v1.1.0"),
-				Details:    lo.ToPtr(gofakeit.Sentence()),
+				Revision:   new("v1.1.0"),
+				Details:    new(gofakeit.Sentence()),
 				ApproverID: &approverGroup.ID,
 				DelegateID: &delegateGroup.ID,
 			},
@@ -274,8 +275,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			request: testclient.CreateInternalPolicyInput{
 				Name:          "Releasing a new version",
 				Status:        &enums.DocumentDraft,
-				Revision:      lo.ToPtr("v1.1.0"),
-				Details:       lo.ToPtr("do stuff"),
+				Revision:      new("v1.1.0"),
+				Details:       new("do stuff"),
 				ControlIDs:    []string{control.ID},
 				SubcontrolIDs: []string{subcontrol.ID},
 				TaskIDs:       []string{task.ID},
@@ -381,7 +382,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		{
 			name: "missing required field",
 			request: testclient.CreateInternalPolicyInput{
-				Details: lo.ToPtr("instructions on how to release a new version"),
+				Details: new("instructions on how to release a new version"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -526,7 +527,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "happy path, update details field",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Details: lo.ToPtr(gofakeit.Sentence()),
+				Details: new(gofakeit.Sentence()),
 			},
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser1.UserCtx,
@@ -536,7 +537,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "happy path, update details field on policy created by another user",
 			policyID: internalPolicyAdminUser.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Details: lo.ToPtr(gofakeit.Sentence()),
+				Details: new(gofakeit.Sentence()),
 			},
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser1.UserCtx, // org owner should always be able to update the policy
@@ -546,7 +547,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "happy path, update name field",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Name:         lo.ToPtr("Updated InternalPolicy Name"),
+				Name:         new("Updated InternalPolicy Name"),
 				AddEditorIDs: []string{th.SharedTestUser1.GroupID}, // add the group to the editor groups for subsequent tests
 			},
 			client:           suite.Client.API,
@@ -558,7 +559,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
 				Status:           &enums.DocumentPublished,
-				Details:          lo.ToPtr("Updated details"),
+				Details:          new("Updated details"),
 				RevisionBump:     &models.Major,
 				AddControlIDs:    []string{control.ID},
 				AddSubcontrolIDs: []string{subcontrol.ID},
@@ -597,7 +598,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "update not allowed, not enough permissions",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Name: lo.ToPtr("Updated InternalPolicy Name"),
+				Name: new("Updated InternalPolicy Name"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -607,7 +608,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "update allowed, org admins have edit access to all policies in the org",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Name: lo.ToPtr("Updated Procedure Name Again"),
+				Name: new("Updated Procedure Name Again"),
 			},
 			client:           suite.Client.API,
 			ctx:              th.SharedAdminUser.UserCtx,
@@ -617,7 +618,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "member update allowed, user in editor group",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Name: lo.ToPtr("Updated Procedure Name Again"),
+				Name: new("Updated Procedure Name Again"),
 			},
 			client:           suite.Client.API,
 			ctx:              anotherViewerUser.UserCtx, // user assigned to the group which has editor permissions
@@ -627,7 +628,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "member update allowed, user in editor group as admin",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Name: lo.ToPtr("Updated Procedure Name Again by Group Admin"),
+				Name: new("Updated Procedure Name Again by Group Admin"),
 			},
 			client:           suite.Client.API,
 			ctx:              anotherViewerGroupAdminUser.UserCtx, // user assigned to the group which has editor permissions as admin
@@ -647,7 +648,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "member update no longer allowed, user in blocked group",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Name: lo.ToPtr("Updated Procedure Name Again"),
+				Name: new("Updated Procedure Name Again"),
 			},
 			client:      suite.Client.API,
 			ctx:         anotherViewerUser.UserCtx, // user assigned to the group which was blocked
@@ -667,7 +668,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "update not allowed, editor group was removed",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Name: lo.ToPtr("Updated Procedure Name Again Again"),
+				Name: new("Updated Procedure Name Again Again"),
 			},
 			client:      suite.Client.API,
 			ctx:         anotherViewerUser.UserCtx, // user assigned to the group which no longer has editor permissions
@@ -677,7 +678,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			name:     "update not allowed, no permissions",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				Details: lo.ToPtr("Updated details"),
+				Details: new("Updated details"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -820,7 +821,7 @@ func TestMutationRoleChangesCanAccessPolicy(t *testing.T) {
 			policyToDelete := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
 
 			_, err := suite.Client.API.UpdateInternalPolicy(localTestOrg.Member.UserCtx, policyToUpdate.ID, testclient.UpdateInternalPolicyInput{
-				Name: lo.ToPtr("member cannot edit or delete without policy role"),
+				Name: new("member cannot edit or delete without policy role"),
 			})
 			assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 
@@ -842,7 +843,7 @@ func TestMutationRoleChangesCanAccessPolicy(t *testing.T) {
 			updatedName := tc.role + " can edit or delete any policy"
 
 			updateResp, err := suite.Client.API.UpdateInternalPolicy(localTestOrg.Member.UserCtx, policyToUpdate.ID, testclient.UpdateInternalPolicyInput{
-				Name: lo.ToPtr(updatedName),
+				Name: new(updatedName),
 			})
 			assert.NilError(t, err)
 			assert.Assert(t, updateResp != nil)
@@ -877,7 +878,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 
 	// ensure the user does not currently have access to update the policy
 	res, err := suite.Client.API.UpdateBulkInternalPolicy(th.SharedTestUser2.UserCtx, []string{policy1.ID}, testclient.UpdateInternalPolicyInput{
-		Status: lo.ToPtr(enums.DocumentPublished),
+		Status: new(enums.DocumentPublished),
 	})
 
 	assert.Assert(t, is.Nil(err))
@@ -917,7 +918,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       testclient.UpdateInternalPolicyInput{Details: lo.ToPtr("test")},
+			input:       testclient.UpdateInternalPolicyInput{Details: new("test")},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -946,7 +947,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 			name: "update multiple policies with controls and tasks",
 			ids:  []string{policy1.ID, policy2.ID, policy3.ID},
 			input: testclient.UpdateInternalPolicyInput{
-				Details:          lo.ToPtr("Updated details for all policies"),
+				Details:          new("Updated details for all policies"),
 				AddControlIDs:    []string{control.ID},
 				AddSubcontrolIDs: []string{subcontrol.ID},
 				AddTaskIDs:       []string{task.ID},
@@ -1012,13 +1013,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 
 			// verify that the returned IDs match the ones that were actually updated
 			for _, updatedID := range resp.UpdateBulkInternalPolicy.UpdatedIDs {
-				found := false
-				for _, expectedID := range tc.ids {
-					if expectedID == updatedID {
-						found = true
-						break
-					}
-				}
+				found := slices.Contains(tc.ids, updatedID)
 				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
 			}
 		})
@@ -1110,7 +1105,7 @@ func TestMutationResolveInternalPolicyDiscussion(t *testing.T) {
 
 	// org admins can edit the policy, so they should be able to resolve a discussion on it
 	resolved, err := suite.Client.API.UpdateDiscussion(th.SharedAdminUser.UserCtx, discussionID, testclient.UpdateDiscussionInput{
-		IsResolved: lo.ToPtr(true),
+		IsResolved: new(true),
 	})
 	assert.NilError(t, err)
 	assert.Check(t, resolved.UpdateDiscussion.Discussion.IsResolved)
@@ -1136,14 +1131,14 @@ func TestMutationResolveOwnInternalPolicyDiscussion(t *testing.T) {
 
 	// the creator owns the discussion, so they can resolve it without edit access to the policy
 	resolved, err := suite.Client.API.UpdateDiscussion(th.SharedViewOnlyUser.UserCtx, discussionID, testclient.UpdateDiscussionInput{
-		IsResolved: lo.ToPtr(true),
+		IsResolved: new(true),
 	})
 	assert.NilError(t, err)
 	assert.Check(t, resolved.UpdateDiscussion.Discussion.IsResolved)
 
 	// another user with only view access cannot resolve someone else's thread
 	_, err = suite.Client.API.UpdateDiscussion(th.SharedAuditorUser.UserCtx, discussionID, testclient.UpdateDiscussionInput{
-		IsResolved: lo.ToPtr(false),
+		IsResolved: new(false),
 	})
 	assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 

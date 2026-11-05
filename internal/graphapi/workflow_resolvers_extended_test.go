@@ -600,11 +600,9 @@ func createPreCommitApprovalDefinition(t *testing.T, ctx context.Context, ownerI
 	t.Helper()
 
 	params, err := json.Marshal(workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: approverID}},
-		},
-		Label:  "Status Approval",
-		Fields: []string{"status"},
+		Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: approverID}},
+		Label:   "Status Approval",
+		Fields:  []string{"status"},
 	})
 	assert.NilError(t, err)
 

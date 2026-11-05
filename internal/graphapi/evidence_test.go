@@ -8,7 +8,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -381,13 +380,13 @@ func TestMutationCreateEvidence(t *testing.T) {
 			name: "happy path, all input",
 			request: testclient.CreateEvidenceInput{
 				Name:                "Test Evidence",
-				Description:         lo.ToPtr("This is a test Evidence"),
-				CollectionProcedure: lo.ToPtr("This is how we collected the Evidence"),
-				Source:              lo.ToPtr("meows"),
-				CreationDate:        lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
-				RenewalDate:         lo.ToPtr(models.DateTime(time.Now().Add(365 * 24 * time.Hour))),
-				IsAutomated:         lo.ToPtr(true),
-				URL:                 lo.ToPtr("https://example.com/my-evidence.png"),
+				Description:         new("This is a test Evidence"),
+				CollectionProcedure: new("This is how we collected the Evidence"),
+				Source:              new("meows"),
+				CreationDate:        new(models.DateTime(time.Now().Add(-time.Hour))),
+				RenewalDate:         new(models.DateTime(time.Now().Add(365 * 24 * time.Hour))),
+				IsAutomated:         new(true),
+				URL:                 new("https://example.com/my-evidence.png"),
 				ProgramIDs:          []string{program.ID},
 				TaskIDs:             []string{task.ID},
 				ControlIDs:          []string{control1.ID, control2.ID},
@@ -407,13 +406,13 @@ func TestMutationCreateEvidence(t *testing.T) {
 			name: "happy path, admin user in org",
 			request: testclient.CreateEvidenceInput{
 				Name:                "Test Evidence",
-				Description:         lo.ToPtr("This is a test Evidence"),
-				CollectionProcedure: lo.ToPtr("This is how we collected the Evidence"),
-				Source:              lo.ToPtr("meows"),
-				CreationDate:        lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
-				RenewalDate:         lo.ToPtr(models.DateTime(time.Now().Add(365 * 24 * time.Hour))),
-				IsAutomated:         lo.ToPtr(true),
-				URL:                 lo.ToPtr("https://example.com/my-evidence.png"),
+				Description:         new("This is a test Evidence"),
+				CollectionProcedure: new("This is how we collected the Evidence"),
+				Source:              new("meows"),
+				CreationDate:        new(models.DateTime(time.Now().Add(-time.Hour))),
+				RenewalDate:         new(models.DateTime(time.Now().Add(365 * 24 * time.Hour))),
+				IsAutomated:         new(true),
+				URL:                 new("https://example.com/my-evidence.png"),
 				ControlIDs:          []string{control1.ID, control2.ID},                   // ensure the same controls can be added to multiple evidences
 				ControlObjectiveIDs: []string{controlObjective1.ID, controlObjective2.ID}, // ensure the same control objectives can be added to multiple evidences
 				SubcontrolIDs:       []string{subcontrol1.ID, subcontrol2.ID},             // ensure the same subcontrols can be added to multiple evidences
@@ -532,7 +531,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			name: "no access to linked control",
 			request: testclient.CreateEvidenceInput{
 				Name:        "Test Evidence",
-				Description: lo.ToPtr("This is a test Evidence"),
+				Description: new("This is a test Evidence"),
 				ControlIDs:  []string{control1.ID, control2.ID},
 			},
 			client:      suite.Client.API,
@@ -542,7 +541,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		{
 			name: "missing required field",
 			request: testclient.CreateEvidenceInput{
-				Description: lo.ToPtr("This is a test Evidence"),
+				Description: new("This is a test Evidence"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -552,7 +551,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			name: "invalid url",
 			request: testclient.CreateEvidenceInput{
 				Name: "TSK-11123F Evidence",
-				URL:  lo.ToPtr("invalid"),
+				URL:  new("invalid"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -562,7 +561,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			name: "creation date in the future",
 			request: testclient.CreateEvidenceInput{
 				Name:         "Test Evidence",
-				CreationDate: lo.ToPtr(models.DateTime(time.Now().Add(time.Hour))),
+				CreationDate: new(models.DateTime(time.Now().Add(time.Hour))),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -572,7 +571,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			name: "renewal date in the past",
 			request: testclient.CreateEvidenceInput{
 				Name:        "Test Evidence",
-				RenewalDate: lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
+				RenewalDate: new(models.DateTime(time.Now().Add(-time.Hour))),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -818,7 +817,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateEvidenceInput{
-				CollectionProcedure: lo.ToPtr("This is how we collected the updated Evidence"),
+				CollectionProcedure: new("This is how we collected the updated Evidence"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -826,10 +825,10 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		{
 			name: "happy path, update multiple fields using PAT",
 			request: testclient.UpdateEvidenceInput{
-				Name:                lo.ToPtr("Updated Evidence"),
-				Description:         lo.ToPtr("This is an updated Evidence"),
-				CollectionProcedure: lo.ToPtr("This is how we collected the updated Evidence"),
-				Source:              lo.ToPtr("meows"),
+				Name:                new("Updated Evidence"),
+				Description:         new("This is an updated Evidence"),
+				CollectionProcedure: new("This is how we collected the updated Evidence"),
+				Source:              new("meows"),
 			},
 			files: []*graphql.Upload{
 				pdfFile,
@@ -882,8 +881,8 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		{
 			name: "clear internal policies and procedures",
 			request: testclient.UpdateEvidenceInput{
-				ClearInternalPolicies: lo.ToPtr(true),
-				ClearProcedures:       lo.ToPtr(true),
+				ClearInternalPolicies: new(true),
+				ClearProcedures:       new(true),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -891,7 +890,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		{
 			name: "update not allowed, no permissions to update but can view due to program membership",
 			request: testclient.UpdateEvidenceInput{
-				Description: lo.ToPtr("This is an updated description of evidence"),
+				Description: new("This is an updated description of evidence"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -900,7 +899,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateEvidenceInput{
-				Source: lo.ToPtr("woofs"),
+				Source: new("woofs"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -909,7 +908,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		{
 			name: "update not allowed, creation date is in the future",
 			request: testclient.UpdateEvidenceInput{
-				CreationDate: lo.ToPtr(models.DateTime(time.Now().Add(time.Minute))),
+				CreationDate: new(models.DateTime(time.Now().Add(time.Minute))),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedAdminUser.UserCtx,
@@ -918,7 +917,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		{
 			name: "update not allowed, renewal date is in the past",
 			request: testclient.UpdateEvidenceInput{
-				RenewalDate: lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
+				RenewalDate: new(models.DateTime(time.Now().Add(-time.Hour))),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedAdminUser.UserCtx,
@@ -1086,7 +1085,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 			name: "create evidence with URL should not set MISSING_ARTIFACT",
 			createInput: testclient.CreateEvidenceInput{
 				Name: "Evidence with URL",
-				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
+				URL:  new("https://example.com/evidence.pdf"),
 			},
 			expectedStatus: enums.EvidenceStatusSubmitted,
 			description:    "Evidence created with URL should not have MISSING_ARTIFACT status",
@@ -1095,7 +1094,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 			name: "create evidence with both files and URL should not set MISSING_ARTIFACT",
 			createInput: testclient.CreateEvidenceInput{
 				Name: "Evidence with files and URL",
-				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
+				URL:  new("https://example.com/evidence.pdf"),
 			},
 			createFiles: []*graphql.Upload{
 				pngFile,
@@ -1107,10 +1106,10 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 			name: "update evidence to clear URL when no files should set MISSING_ARTIFACT",
 			createInput: testclient.CreateEvidenceInput{
 				Name: "Evidence with URL only",
-				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
+				URL:  new("https://example.com/evidence.pdf"),
 			},
 			updateInput: &testclient.UpdateEvidenceInput{
-				ClearURL: lo.ToPtr(true),
+				ClearURL: new(true),
 			},
 			expectedStatus: enums.EvidenceStatusMissingArtifact,
 			description:    "Evidence updated to clear URL when no files and without explicit status should have MISSING_ARTIFACT status",
@@ -1121,7 +1120,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 				Name: "Evidence without artifacts",
 			},
 			updateInput: &testclient.UpdateEvidenceInput{
-				URL: lo.ToPtr("https://example.com/evidence.pdf"),
+				URL: new("https://example.com/evidence.pdf"),
 			},
 			expectedStatus: enums.EvidenceStatusSubmitted,
 			description:    "Evidence updated to add URL should not have MISSING_ARTIFACT status",
@@ -1130,7 +1129,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 			name: "create evidence without files and without URL but with explicit status should respect explicit status",
 			createInput: testclient.CreateEvidenceInput{
 				Name:   "Evidence without artifacts but explicit status",
-				Status: lo.ToPtr(enums.EvidenceStatusSubmitted),
+				Status: new(enums.EvidenceStatusSubmitted),
 			},
 			expectedStatus: enums.EvidenceStatusSubmitted,
 			description:    "Explicit status should always be respected, even when evidence has no files or URL",
@@ -1139,7 +1138,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 			name: "create evidence with files but explicit MISSING_ARTIFACT status should respect explicit status",
 			createInput: testclient.CreateEvidenceInput{
 				Name:   "Evidence with files but explicit MISSING_ARTIFACT",
-				Status: lo.ToPtr(enums.EvidenceStatusMissingArtifact),
+				Status: new(enums.EvidenceStatusMissingArtifact),
 			},
 			createFiles: []*graphql.Upload{
 				pngFile,
@@ -1153,7 +1152,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 				Name: "Evidence without artifacts",
 			},
 			updateInput: &testclient.UpdateEvidenceInput{
-				Status: lo.ToPtr(enums.EvidenceStatusSubmitted),
+				Status: new(enums.EvidenceStatusSubmitted),
 			},
 			expectedStatus: enums.EvidenceStatusSubmitted,
 			description:    "Explicit status should always be respected on update, even when evidence has no files or URL",
@@ -1162,11 +1161,11 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 			name: "update evidence to clear URL when no files but with explicit status should respect explicit status",
 			createInput: testclient.CreateEvidenceInput{
 				Name: "Evidence with URL only",
-				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
+				URL:  new("https://example.com/evidence.pdf"),
 			},
 			updateInput: &testclient.UpdateEvidenceInput{
-				ClearURL: lo.ToPtr(true),
-				Status:   lo.ToPtr(enums.EvidenceStatusSubmitted),
+				ClearURL: new(true),
+				Status:   new(enums.EvidenceStatusSubmitted),
 			},
 			expectedStatus: enums.EvidenceStatusSubmitted,
 			description:    "Explicit status should always be respected on update, even when clearing URL and no files remain",
@@ -1215,8 +1214,8 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 
 	createResp, err := suite.Client.API.CreateEvidence(th.SharedAdminUser.UserCtx, testclient.CreateEvidenceInput{
 		Name:            "Evidence review date",
-		CreationDate:    lo.ToPtr(initialCreationDate),
-		ReviewFrequency: lo.ToPtr(monthlyFreq),
+		CreationDate:    new(initialCreationDate),
+		ReviewFrequency: new(monthlyFreq),
 	}, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, createResp != nil)
@@ -1225,8 +1224,8 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 
 	bulkUpdateResp, err := suite.Client.API.CreateEvidence(th.SharedAdminUser.UserCtx, testclient.CreateEvidenceInput{
 		Name:            "Bulk evidence review date",
-		CreationDate:    lo.ToPtr(initialCreationDate),
-		ReviewFrequency: lo.ToPtr(quarterlyFreq),
+		CreationDate:    new(initialCreationDate),
+		ReviewFrequency: new(quarterlyFreq),
 	}, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, bulkUpdateResp != nil)
@@ -1242,7 +1241,7 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 	assert.Check(t, is.Equal(monthlyFreq, *resp.Evidence.ReviewFrequency))
 
 	_, err = suite.Client.API.UpdateEvidence(th.SharedAdminUser.UserCtx, id, testclient.UpdateEvidenceInput{
-		CreationDate: lo.ToPtr(updatedCreationDate),
+		CreationDate: new(updatedCreationDate),
 	}, nil)
 	assert.NilError(t, err)
 
@@ -1253,7 +1252,7 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 	assert.Check(t, is.Equal(time.Time(updatedCreationDate).AddDate(0, 1, 0), time.Time(*resp.Evidence.RenewalDate)))
 
 	_, err = suite.Client.API.UpdateEvidence(th.SharedAdminUser.UserCtx, id, testclient.UpdateEvidenceInput{
-		ReviewFrequency: lo.ToPtr(quarterlyFreq),
+		ReviewFrequency: new(quarterlyFreq),
 	}, nil)
 	assert.NilError(t, err)
 
@@ -1264,7 +1263,7 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 	assert.Check(t, is.Equal(time.Time(updatedCreationDate).AddDate(0, 3, 0), time.Time(*resp.Evidence.RenewalDate)))
 
 	updateBulkResp, err := suite.Client.API.UpdateBulkEvidence(th.SharedAdminUser.UserCtx, []string{id, bulkUpdateID}, testclient.UpdateEvidenceInput{
-		ReviewFrequency: lo.ToPtr(monthlyFreq),
+		ReviewFrequency: new(monthlyFreq),
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, updateBulkResp != nil)

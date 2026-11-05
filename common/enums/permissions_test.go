@@ -74,7 +74,7 @@ func TestPermissionMarshalGQL(t *testing.T) {
 
 func TestPermissionUnmarshalGQL(t *testing.T) {
 	tests := []struct {
-		input    interface{}
+		input    any
 		expected Permission
 		hasError bool
 	}{

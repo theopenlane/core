@@ -96,7 +96,7 @@ func DefinitionSurface(def types.Definition) Surface {
 	declared := def.ConnectionList()
 
 	credentials := sortedProjection(declared, func(connection types.Connection) SurfaceCredential {
-		return SurfaceCredential{Ref: connection.Credential.Name, SurfaceSchema: SurfaceSchema{Schema: connection.Credential.Schema, Upgrade: connection.Credential.Upgrade != nil}, Replaces: connection.Replaces}
+		return SurfaceCredential{Ref: connection.Credential.Name, Schema: connection.Credential.Schema, Upgrade: connection.Credential.Upgrade != nil, Replaces: connection.Replaces}
 	}, func(credential SurfaceCredential) string { return credential.Ref })
 
 	connections := lo.Map(declared, func(connection types.Connection, _ int) string {

@@ -65,8 +65,10 @@ const (
 )
 
 // boolPtr returns a pointer to the provided bool
+//
+//go:fix inline
 func boolPtr(v bool) *bool {
-	return &v
+	return new(v)
 }
 
 // WorkflowEngineTestSuite handles the setup and teardown between tests

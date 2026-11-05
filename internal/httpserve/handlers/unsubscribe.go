@@ -5,8 +5,6 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/utils/rout"
-
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
@@ -47,7 +45,7 @@ func (h *Handler) UnsubscribeHandler(ctx echo.Context) error {
 	// idempotent replay
 	if entSubscriber.Unsubscribed {
 		out := &models.UnsubscribeResponse{
-			Reply:   rout.Reply{Success: true},
+			Success: true,
 			Message: "You are already unsubscribed and will not receive updates.",
 		}
 
@@ -61,7 +59,7 @@ func (h *Handler) UnsubscribeHandler(ctx echo.Context) error {
 	}
 
 	out := &models.UnsubscribeResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Message: "You have been unsubscribed and will no longer receive updates.",
 	}
 

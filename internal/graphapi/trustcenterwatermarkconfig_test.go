@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -45,7 +44,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 		{
 			name: "happy path, minimal, text",
 			input: testclient.CreateTrustCenterWatermarkConfigInput{
-				Text: lo.ToPtr("Test Text"),
+				Text: new("Test Text"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -63,11 +62,11 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 			name: "happy path, all fields as admin",
 			input: testclient.CreateTrustCenterWatermarkConfigInput{
 				TrustCenterID: &trustCenter.ID,
-				Text:          lo.ToPtr("Test Text"),
-				FontSize:      lo.ToPtr(48.0),
-				Opacity:       lo.ToPtr(0.3),
-				Rotation:      lo.ToPtr(45.0),
-				Color:         lo.ToPtr("#808080"),
+				Text:          new("Test Text"),
+				FontSize:      new(48.0),
+				Opacity:       new(0.3),
+				Rotation:      new(45.0),
+				Color:         new("#808080"),
 				Font:          &enums.FontHelvetica,
 			},
 			client: suite.Client.API,
@@ -77,7 +76,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 			name: "not authorized",
 			input: testclient.CreateTrustCenterWatermarkConfigInput{
 				TrustCenterID: &trustCenter.ID,
-				Text:          lo.ToPtr("Test Text"),
+				Text:          new("Test Text"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -86,7 +85,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 		{
 			name: "missing required field, trust center id, no trust center found for org",
 			input: testclient.CreateTrustCenterWatermarkConfigInput{
-				Text: lo.ToPtr("Test Text"),
+				Text: new("Test Text"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -270,7 +269,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 		{
 			name: "happy path, update text as admin",
 			input: testclient.UpdateTrustCenterWatermarkConfigInput{
-				Text: lo.ToPtr("Updated Text"),
+				Text: new("Updated Text"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Admin.UserCtx,
@@ -278,7 +277,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 		{
 			name: "happy path, update logo",
 			input: testclient.UpdateTrustCenterWatermarkConfigInput{
-				Text: lo.ToPtr("Updated Text"),
+				Text: new("Updated Text"),
 			},
 			watermarkFile: createImageUpload(),
 			client:        suite.Client.API,
@@ -287,11 +286,11 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 		{
 			name: "happy path, update all fields as admin",
 			input: testclient.UpdateTrustCenterWatermarkConfigInput{
-				Text:     lo.ToPtr("Updated Text"),
-				FontSize: lo.ToPtr(48.0),
-				Opacity:  lo.ToPtr(0.3),
-				Rotation: lo.ToPtr(45.0),
-				Color:    lo.ToPtr("#808080"),
+				Text:     new("Updated Text"),
+				FontSize: new(48.0),
+				Opacity:  new(0.3),
+				Rotation: new(45.0),
+				Color:    new("#808080"),
 				Font:     &enums.FontHelvetica,
 			},
 			client: suite.Client.API,
@@ -300,7 +299,7 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 		{
 			name: "not authorized",
 			input: testclient.UpdateTrustCenterWatermarkConfigInput{
-				Text: lo.ToPtr("Updated Text"),
+				Text: new("Updated Text"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,

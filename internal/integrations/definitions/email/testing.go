@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/samber/lo"
 	"github.com/theopenlane/newman/providers/mock"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -66,7 +65,7 @@ func MockSenderFromClient(client any) *mock.EmailSender {
 func TrustCenterSettingFixture() *generated.TrustCenterSetting {
 	return &generated.TrustCenterSetting{
 		CompanyName:              "SecureCorp",
-		LogoRemoteURL:            lo.ToPtr("https://securecorp.example.com/logo.png"),
+		LogoRemoteURL:            new("https://securecorp.example.com/logo.png"),
 		PrimaryColor:             "#0f3d3a",
 		AccentColor:              "#3fc2b4",
 		BackgroundColor:          "#e8eaed",
@@ -317,8 +316,8 @@ const (
 func MockProviderRuntimeConfig(provider string) *RuntimeEmailConfig {
 	cfg := MockRuntimeConfig()
 	cfg.Provider = provider
-	cfg.Resend = ResendConfig{ResendCredential: ResendCredential{APIKey: "mock-api-key"}, WebhookSecret: MockResendWebhookSecret}                     //nolint:gosec // test-only mock credential
-	cfg.Postmark = PostmarkConfig{PostmarkCredential: PostmarkCredential{ServerToken: "mock-server-token"}, WebhookSecret: MockPostmarkWebhookSecret} //nolint:gosec // test-only mock credential
+	cfg.Resend = ResendConfig{APIKey: "mock-api-key", WebhookSecret: MockResendWebhookSecret}                 //nolint:gosec // test-only mock credential
+	cfg.Postmark = PostmarkConfig{ServerToken: "mock-server-token", WebhookSecret: MockPostmarkWebhookSecret} //nolint:gosec // test-only mock credential
 
 	return cfg
 }

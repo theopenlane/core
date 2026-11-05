@@ -63,7 +63,7 @@ func SeedDemoRequest(ctx context.Context, dataset DemoDataset, profile enums.Dem
 		return types.DispatchRequest{}, err
 	}
 
-	cfg := ImportRecords{ImportSpec: ImportSpec{Prefix: prefix, Manifest: true, Profile: profileName}}
+	cfg := ImportRecords{Prefix: prefix, Manifest: true, Profile: profileName}
 
 	return demoRequest(orgID, ImportRecordsOp.Name(), cfg, DemoSeedUniqueKey(orgID, dataset, profileName))
 }

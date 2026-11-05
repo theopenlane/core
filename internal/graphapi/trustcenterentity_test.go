@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -204,7 +203,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 			name: "happy path, full input",
 			request: testclient.CreateTrustCenterEntityInput{
 				Name: "Full Test Entity",
-				URL:  lo.ToPtr("https://example.com"),
+				URL:  new("https://example.com"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.SuperAdmin.UserCtx,
@@ -213,7 +212,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 			name: "happy path, with logo file",
 			request: testclient.CreateTrustCenterEntityInput{
 				Name: "Entity With Logo",
-				URL:  lo.ToPtr("https://example.com"),
+				URL:  new("https://example.com"),
 			},
 			logoFile: createLogoUpload(),
 			client:   suite.Client.API,
@@ -223,7 +222,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 			name: "happy path, using api token",
 			request: testclient.CreateTrustCenterEntityInput{
 				Name: "API Token Entity",
-				URL:  lo.ToPtr("https://example.com"),
+				URL:  new("https://example.com"),
 			},
 			client: tcOrg.AdminAPIClient,
 			ctx:    context.Background(),
@@ -232,7 +231,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 			name: "happy path, using pat",
 			request: testclient.CreateTrustCenterEntityInput{
 				Name: "PAT Entity",
-				URL:  lo.ToPtr("https://example.com"),
+				URL:  new("https://example.com"),
 			},
 			client: tcOrg.AdminPatClient,
 			ctx:    context.Background(),
@@ -250,7 +249,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 			name: "invalid URL",
 			request: testclient.CreateTrustCenterEntityInput{
 				Name: "Invalid URL Entity",
-				URL:  lo.ToPtr("not-a-valid-url"),
+				URL:  new("not-a-valid-url"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Admin.UserCtx,
@@ -321,7 +320,7 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 		{
 			name: "happy path, full input as admin",
 			request: testclient.UpdateTrustCenterEntityInput{
-				URL: lo.ToPtr("https://example.com"),
+				URL: new("https://example.com"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Admin.UserCtx,
@@ -329,7 +328,7 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 		{
 			name: "happy path, with logo file",
 			request: testclient.UpdateTrustCenterEntityInput{
-				URL: lo.ToPtr("https://example.com"),
+				URL: new("https://example.com"),
 			},
 			logoFile: createLogoUpload(),
 			client:   suite.Client.API,
@@ -338,7 +337,7 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.UpdateTrustCenterEntityInput{
-				URL: lo.ToPtr("https://example.com"),
+				URL: new("https://example.com"),
 			},
 			client: tcOrg.AdminAPIClient,
 			ctx:    context.Background(),
@@ -346,7 +345,7 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 		{
 			name: "happy path, using pat",
 			request: testclient.UpdateTrustCenterEntityInput{
-				URL: lo.ToPtr("https://example.com"),
+				URL: new("https://example.com"),
 			},
 			client: tcOrg.AdminPatClient,
 			ctx:    context.Background(),
@@ -361,7 +360,7 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 		{
 			name: "invalid URL",
 			request: testclient.UpdateTrustCenterEntityInput{
-				URL: lo.ToPtr("not-a-valid-url"),
+				URL: new("not-a-valid-url"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Owner.UserCtx,

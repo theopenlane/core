@@ -60,9 +60,9 @@ func TestNotificationCreated(t *testing.T) {
 			assert.NilError(t, err)
 
 			// Send connection_init
-			initMsg := map[string]interface{}{
+			initMsg := map[string]any{
 				"type": "connection_init",
-				"payload": map[string]interface{}{
+				"payload": map[string]any{
 					"Authorization": fmt.Sprintf("Bearer %s", access),
 				},
 			}
@@ -74,10 +74,10 @@ func TestNotificationCreated(t *testing.T) {
 			assert.Assert(t, string(ackMsg) != "", "Expected connection_ack message")
 
 			// Send the subscription start message
-			startMsg := map[string]interface{}{
+			startMsg := map[string]any{
 				"id":   "1",
 				"type": "start",
-				"payload": map[string]interface{}{
+				"payload": map[string]any{
 					"query": "subscription { notificationCreated { id } }",
 				},
 			}

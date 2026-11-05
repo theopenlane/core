@@ -394,11 +394,9 @@ func testDefinition(t *testing.T, mappings []types.MappingRegistration) (*regist
 	t.Helper()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{
-			ID:          "test-def",
-			DisplayName: "Test",
-			Active:      true,
-		},
+		ID:          "test-def",
+		DisplayName: "Test",
+		Active:      true,
 		Operations: []types.OperationRegistration{
 			{
 				Name:  "sync",
@@ -761,10 +759,8 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{
-			ID:     "test-def",
-			Active: true,
-		},
+		ID:     "test-def",
+		Active: true,
 		Operations: []types.OperationRegistration{
 			{
 				Name: "repo-sync",
@@ -810,10 +806,8 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{
-			ID:     "test-def",
-			Active: true,
-		},
+		ID:     "test-def",
+		Active: true,
 		Operations: []types.OperationRegistration{
 			{
 				Name:  "finding-sync",

@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
@@ -87,11 +86,11 @@ func TestGetQuestionnaire(t *testing.T) {
 	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 
 	accessToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(&tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{Subject: anonUserID},
-		UserID:           anonUserID,
-		OrgID:            assessment.OwnerID,
-		AssessmentID:     assessment.ID,
-		Email:            testEmail,
+		Subject:      anonUserID,
+		UserID:       anonUserID,
+		OrgID:        assessment.OwnerID,
+		AssessmentID: assessment.ID,
+		Email:        testEmail,
 	})
 	assert.NilError(t, err)
 
@@ -112,7 +111,7 @@ func TestGetQuestionnaire(t *testing.T) {
 				assert.Check(t, resp.Jsonconfig != nil)
 				assert.Check(t, is.Equal("Test Assessment Template", resp.Jsonconfig["title"]))
 				assert.Check(t, is.Equal("A test questionnaire template", resp.Jsonconfig["description"]))
-				questions, ok := resp.Jsonconfig["questions"].([]interface{})
+				questions, ok := resp.Jsonconfig["questions"].([]any)
 				assert.Check(t, ok)
 				assert.Check(t, is.Len(questions, 2))
 				assert.Check(t, resp.RemoveBranding)
@@ -163,7 +162,7 @@ func TestGetQuestionnaire(t *testing.T) {
 					tc.validateJSON(t, out)
 				}
 			} else {
-				var errorResp map[string]interface{}
+				var errorResp map[string]any
 				err := json.NewDecoder(res.Body).Decode(&errorResp)
 				if err == nil && tc.expectedError != "" {
 					if errorMsg, ok := errorResp["error"].(string); ok {
@@ -233,11 +232,11 @@ func TestGetQuestionnaireNoTemplate(t *testing.T) {
 	noTemplateAnonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 
 	noTemplateToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(&tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{Subject: noTemplateAnonUserID},
-		UserID:           noTemplateAnonUserID,
-		OrgID:            assessment.OwnerID,
-		AssessmentID:     assessment.ID,
-		Email:            testEmail,
+		Subject:      noTemplateAnonUserID,
+		UserID:       noTemplateAnonUserID,
+		OrgID:        assessment.OwnerID,
+		AssessmentID: assessment.ID,
+		Email:        testEmail,
 	})
 	assert.NilError(t, err)
 
@@ -333,9 +332,7 @@ func TestGetQuestionnaireAlreadyCompleted(t *testing.T) {
 
 	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
+		Subject:      anonUserID,
 		UserID:       anonUserID,
 		OrgID:        assessment.OwnerID,
 		AssessmentID: assessment.ID,
@@ -358,7 +355,7 @@ func TestGetQuestionnaireAlreadyCompleted(t *testing.T) {
 
 	assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
 
-	var errorResp map[string]interface{}
+	var errorResp map[string]any
 	err = json.NewDecoder(res.Body).Decode(&errorResp)
 	assert.NilError(t, err)
 
@@ -451,12 +448,12 @@ func TestQuestionnaireWithCampaign(t *testing.T) {
 
 	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 	accessToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(&tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{Subject: anonUserID},
-		UserID:           anonUserID,
-		OrgID:            assessment.OwnerID,
-		AssessmentID:     assessment.ID,
-		CampaignID:       campaign.ID,
-		Email:            testEmail,
+		Subject:      anonUserID,
+		UserID:       anonUserID,
+		OrgID:        assessment.OwnerID,
+		AssessmentID: assessment.ID,
+		CampaignID:   campaign.ID,
+		Email:        testEmail,
 	})
 	assert.NilError(t, err)
 
@@ -562,9 +559,7 @@ func TestAnonymousQuestionnaireRejectsDraft(t *testing.T) {
 	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 
 	anonClaims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
+		Subject:      anonUserID,
 		UserID:       anonUserID,
 		OrgID:        assessment.OwnerID,
 		AssessmentID: assessment.ID,
@@ -591,7 +586,7 @@ func TestAnonymousQuestionnaireRejectsDraft(t *testing.T) {
 
 		assert.Assert(t, is.Equal(http.StatusBadRequest, recorder.Code))
 
-		var errorResp map[string]interface{}
+		var errorResp map[string]any
 		err = json.NewDecoder(recorder.Result().Body).Decode(&errorResp)
 		assert.NilError(t, err)
 
@@ -654,9 +649,7 @@ func TestIdentifiedQuestionnaireAllowsDraft(t *testing.T) {
 
 	// identified token — has email, like a campaign-sent questionnaire link
 	identifiedClaims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
+		Subject:      anonUserID,
 		UserID:       anonUserID,
 		OrgID:        assessment.OwnerID,
 		AssessmentID: assessment.ID,
@@ -795,9 +788,7 @@ func TestSubmitQuestionnaire(t *testing.T) {
 
 	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
+		Subject:      anonUserID,
 		UserID:       anonUserID,
 		OrgID:        assessment.OwnerID,
 		AssessmentID: assessment.ID,
@@ -920,7 +911,7 @@ func TestSubmitQuestionnaire(t *testing.T) {
 
 				createdDocumentDataIDs = append(createdDocumentDataIDs, documentData.ID)
 			} else {
-				var errorResp map[string]interface{}
+				var errorResp map[string]any
 				err := json.NewDecoder(res.Body).Decode(&errorResp)
 				if err == nil && tc.expectedError != "" {
 					if errorMsg, ok := errorResp["error"].(string); ok {
@@ -1011,9 +1002,7 @@ func TestSubmitQuestionnaireAlreadyCompleted(t *testing.T) {
 
 	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
+		Subject:      anonUserID,
 		UserID:       anonUserID,
 		OrgID:        assessment.OwnerID,
 		AssessmentID: assessment.ID,
@@ -1049,7 +1038,7 @@ func TestSubmitQuestionnaireAlreadyCompleted(t *testing.T) {
 
 	assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
 
-	var errorResp map[string]interface{}
+	var errorResp map[string]any
 	err = json.NewDecoder(res.Body).Decode(&errorResp)
 	assert.NilError(t, err)
 
@@ -1230,7 +1219,7 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 				documentDataIDs = append(documentDataIDs, documentData.ID)
 
 			} else {
-				var errorResp map[string]interface{}
+				var errorResp map[string]any
 				err := json.NewDecoder(res.Body).Decode(&errorResp)
 				if err == nil && tc.expectedError != "" {
 					if errorMsg, ok := errorResp["error"].(string); ok {

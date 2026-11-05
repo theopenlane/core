@@ -5,8 +5,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
@@ -21,9 +19,7 @@ func (h *Handler) ForgotPassword(ctx echo.Context) error {
 	}
 
 	out := &models.ForgotPasswordResponse{
-		Reply: rout.Reply{
-			Success: true,
-		},
+		Success: true,
 		Message: "We've received your request to have the password associated with this email reset. Please check your email.",
 	}
 
@@ -80,8 +76,8 @@ func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User
 	}
 
 	if err := h.sendEmail(ctx, email.ResetRequestOp.Name(), email.PasswordResetEmailRequest{
-		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
-		Token:         meowtoken.Token,
+		Email: user.Email, FirstName: user.FirstName, LastName: user.LastName,
+		Token: meowtoken.Token,
 	}); err != nil {
 		return nil, err
 	}

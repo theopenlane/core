@@ -82,7 +82,7 @@ func TestStartImpersonation(t *testing.T) {
 				TargetUserID: targetUser.ID,
 				Type:         "support",
 				Reason:       "debugging issue for customer support",
-				Duration:     intPtr(2),
+				Duration:     new(2),
 			},
 			setupContext: func() context.Context {
 				ctx := context.Background()
@@ -380,7 +380,7 @@ func TestExtractSessionIDFromToken(t *testing.T) {
 		TargetUserID: targetUser.ID,
 		Type:         "support",
 		Reason:       "testing session ID extraction",
-		Duration:     intPtr(1),
+		Duration:     new(1),
 	}
 
 	reqBody, err := json.Marshal(request)
@@ -418,6 +418,8 @@ func TestExtractSessionIDFromToken(t *testing.T) {
 }
 
 // Helper functions
+//
+//go:fix inline
 func intPtr(i int) *int {
-	return &i
+	return new(i)
 }

@@ -32,12 +32,12 @@ func consoleOutput(e any) error {
 	}
 
 	// otherwise print the mappable domains in a table
-	var nodes []map[string]interface{}
+	var nodes []map[string]any
 
 	switch v := e.(type) {
 	case *graphclient.GetAllMappableDomains:
 		for _, edge := range v.MappableDomains.Edges {
-			nodeMap := map[string]interface{}{
+			nodeMap := map[string]any{
 				"ID":        edge.Node.ID,
 				"Name":      edge.Node.Name,
 				"CreatedAt": edge.Node.CreatedAt,
@@ -48,7 +48,7 @@ func consoleOutput(e any) error {
 		e = nodes
 	case *graphclient.GetMappableDomains:
 		for _, edge := range v.MappableDomains.Edges {
-			nodeMap := map[string]interface{}{
+			nodeMap := map[string]any{
 				"ID":        edge.Node.ID,
 				"Name":      edge.Node.Name,
 				"CreatedAt": edge.Node.CreatedAt,
@@ -96,12 +96,12 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out interface{}) {
+func tableOutput(out any) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "ZoneID", "Created At", "Created By")
 
 	switch v := out.(type) {
-	case []map[string]interface{}:
+	case []map[string]any:
 		for _, i := range v {
 			writer.AddRow(i["ID"], i["Name"], i["ZoneID"], i["CreatedAt"], i["CreatedBy"])
 		}

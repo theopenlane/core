@@ -9,7 +9,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
@@ -226,7 +225,7 @@ func TestMutationCreateContact(t *testing.T) {
 		{
 			name: "happy path, minimal input",
 			request: testclient.CreateContactInput{
-				FullName: lo.ToPtr("Aemond Targaryen"),
+				FullName: new("Aemond Targaryen"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -234,7 +233,7 @@ func TestMutationCreateContact(t *testing.T) {
 		{
 			name: "view only user cannot create",
 			request: testclient.CreateContactInput{
-				FullName: lo.ToPtr("Aemond Targaryen"),
+				FullName: new("Aemond Targaryen"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -243,7 +242,7 @@ func TestMutationCreateContact(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateContactInput{
-				FullName: lo.ToPtr("Rhaenys Targaryen"),
+				FullName: new("Rhaenys Targaryen"),
 			},
 			client: apiClientWithSpecificScope,
 			ctx:    context.Background(),
@@ -251,7 +250,7 @@ func TestMutationCreateContact(t *testing.T) {
 		{
 			name: "using api token without required scope",
 			request: testclient.CreateContactInput{
-				FullName: lo.ToPtr("Rhaenys Targaryen"),
+				FullName: new("Rhaenys Targaryen"),
 			},
 			client:      apiClientNoContactScope,
 			ctx:         context.Background(),
@@ -260,7 +259,7 @@ func TestMutationCreateContact(t *testing.T) {
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateContactInput{
-				FullName: lo.ToPtr("Aegon Targaryen"),
+				FullName: new("Aegon Targaryen"),
 				OwnerID:  &th.SharedTestUser1.OrganizationID,
 			},
 			client: suite.Client.APIWithPAT,
@@ -269,11 +268,11 @@ func TestMutationCreateContact(t *testing.T) {
 		{
 			name: "happy path, all input",
 			request: testclient.CreateContactInput{
-				FullName:    lo.ToPtr("Aemond Targaryen"),
-				Email:       lo.ToPtr("Atargarygen@dragon.com"),
-				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
-				Title:       lo.ToPtr("Prince of the Targaryen Dynasty"),
-				Company:     lo.ToPtr("Targaryen Dynasty"),
+				FullName:    new("Aemond Targaryen"),
+				Email:       new("Atargarygen@dragon.com"),
+				PhoneNumber: new(gofakeit.Phone()),
+				Title:       new("Prince of the Targaryen Dynasty"),
+				Company:     new("Targaryen Dynasty"),
 				Status:      &enums.UserStatusOnboarding,
 			},
 			client: suite.Client.API,
@@ -351,7 +350,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		{
 			name: "happy path, update name",
 			request: testclient.UpdateContactInput{
-				FullName: lo.ToPtr("Alicent Hightower"),
+				FullName: new("Alicent Hightower"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -359,7 +358,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		{
 			name: "view only user cannot update",
 			request: testclient.UpdateContactInput{
-				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
+				PhoneNumber: new(gofakeit.Phone()),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -368,7 +367,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		{
 			name: "no access, cannot update",
 			request: testclient.UpdateContactInput{
-				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
+				PhoneNumber: new(gofakeit.Phone()),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -377,7 +376,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		{
 			name: "update phone number, using api token",
 			request: testclient.UpdateContactInput{
-				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
+				PhoneNumber: new(gofakeit.Phone()),
 			},
 			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
@@ -393,7 +392,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		{
 			name: "update email",
 			request: testclient.UpdateContactInput{
-				Email: lo.ToPtr("a.hightower@dragon.net"),
+				Email: new("a.hightower@dragon.net"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -401,7 +400,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		{
 			name: "update phone number, invalid",
 			request: testclient.UpdateContactInput{
-				PhoneNumber: lo.ToPtr("not a phone number"),
+				PhoneNumber: new("not a phone number"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -410,7 +409,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		{
 			name: "update email, invalid",
 			request: testclient.UpdateContactInput{
-				Email: lo.ToPtr("a.hightower"),
+				Email: new("a.hightower"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -419,7 +418,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		{
 			name: "update title",
 			request: testclient.UpdateContactInput{
-				Title: lo.ToPtr("Queen of the Seven Kingdoms"),
+				Title: new("Queen of the Seven Kingdoms"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -427,7 +426,7 @@ func TestMutationUpdateContact(t *testing.T) {
 		{
 			name: "update company",
 			request: testclient.UpdateContactInput{
-				Company: lo.ToPtr("House Targaryen"),
+				Company: new("House Targaryen"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -569,8 +568,8 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 			name: "happy path, clear tags on multiple contacts",
 			ids:  []string{contact1.ID, contact2.ID},
 			input: testclient.UpdateContactInput{
-				ClearTags: lo.ToPtr(true),
-				Title:     lo.ToPtr("Cleared Title"),
+				ClearTags: new(true),
+				Title:     new("Cleared Title"),
 			},
 			client:               suite.Client.API,
 			ctx:                  th.SharedTestUser1.UserCtx,
@@ -579,7 +578,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       testclient.UpdateContactInput{FullName: lo.ToPtr("test")},
+			input:       testclient.UpdateContactInput{FullName: new("test")},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -588,7 +587,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 			name: "mixed success and failure - some contacts not authorized",
 			ids:  []string{contact1.ID, contactAnotherUser.ID}, // second contact should fail authorization
 			input: testclient.UpdateContactInput{
-				FullName: lo.ToPtr("Updated by authorized user"),
+				FullName: new("Updated by authorized user"),
 			},
 			client:               suite.Client.API,
 			ctx:                  th.SharedTestUser1.UserCtx,
@@ -598,7 +597,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 			name: "update not allowed, view only user",
 			ids:  []string{contact1.ID},
 			input: testclient.UpdateContactInput{
-				FullName: lo.ToPtr("Should not update"),
+				FullName: new("Should not update"),
 			},
 			client:               suite.Client.API,
 			ctx:                  th.SharedViewOnlyUser.UserCtx,
@@ -608,7 +607,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 			name: "update not allowed, no permissions to contacts",
 			ids:  []string{contact1.ID},
 			input: testclient.UpdateContactInput{
-				FullName: lo.ToPtr("Should not update"),
+				FullName: new("Should not update"),
 			},
 			client:               suite.Client.API,
 			ctx:                  th.SharedTestUser2.UserCtx,
@@ -628,7 +627,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 			name: "update company on multiple contacts",
 			ids:  []string{contact1.ID, contact2.ID},
 			input: testclient.UpdateContactInput{
-				Company: lo.ToPtr("Updated Company"),
+				Company: new("Updated Company"),
 			},
 			client:               suite.Client.API,
 			ctx:                  th.SharedTestUser1.UserCtx,
@@ -711,13 +710,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 
 			// verify that the returned IDs match the ones that were actually updated
 			for _, updatedID := range resp.UpdateBulkContact.UpdatedIDs {
-				found := false
-				for _, expectedID := range tc.ids {
-					if expectedID == updatedID {
-						found = true
-						break
-					}
-				}
+				found := slices.Contains(tc.ids, updatedID)
 				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
 			}
 		})

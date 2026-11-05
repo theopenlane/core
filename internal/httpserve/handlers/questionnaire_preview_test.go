@@ -8,7 +8,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
@@ -74,7 +73,7 @@ func TestGetQuestionnairePreviewAndRealResponse(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 			accessToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(&tokens.Claims{
-				RegisteredClaims:  jwt.RegisteredClaims{Subject: anonUserID},
+				Subject:           anonUserID,
 				UserID:            anonUserID,
 				OrgID:             assessment.OwnerID,
 				AssessmentID:      assessment.ID,

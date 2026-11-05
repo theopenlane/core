@@ -108,7 +108,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -266,7 +266,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -344,7 +344,7 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -406,7 +406,7 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -475,8 +475,8 @@ func TestQuestionnaireTestEmailDispatch(t *testing.T) {
 
 	recipient := "test-recipient@test.example"
 	cfg := email.SendQuestionnaireCampaignRequest{
-		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
-		TestEmail:             recipient,
+		CampaignID: campaignObj.ID,
+		TestEmail:  recipient,
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -581,7 +581,7 @@ func TestQuestionnaireCampaignDispatchAsUserMarksTargetSent(t *testing.T) {
 	}
 
 	cfg := email.SendQuestionnaireCampaignRequest{
-		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+		CampaignID: campaignObj.ID,
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -734,7 +734,7 @@ func TestCustomCampaignCompletesWhenAllSent(t *testing.T) {
 				},
 			}
 
-			cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+			cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 
 			_, err = email.SendBrandedCampaign{}.Run(ctx, types.OperationRequest{Client: emailClient, DB: suite.Client.DB}, emailClient, cfg)
 			assert.NilError(t, err)
@@ -799,7 +799,7 @@ func TestCampaignEmailDispatchWithoutTrustCenterModule(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 
 	userCtx := generated.NewContext(graphql.WithResponseContext(user.UserCtx, gqlerrors.ErrorPresenter, graphql.DefaultRecover), suite.Client.DB)
 

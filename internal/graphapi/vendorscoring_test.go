@@ -263,7 +263,7 @@ func TestVendorRiskScoreComputedValues(t *testing.T) {
 
 	// Update impact — should recompute with new impact but answer "true" still zeroes it
 	updatedImpactResp, err := suite.Client.API.UpdateVendorRiskScore(scoringUser.UserCtx, scoreID, testclient.UpdateVendorRiskScoreInput{
-		Impact: lo.ToPtr(enums.VendorRiskImpactLow),
+		Impact: new(enums.VendorRiskImpactLow),
 	})
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(0.0, updatedImpactResp.UpdateVendorRiskScore.VendorRiskScore.Score))
@@ -278,7 +278,7 @@ func TestVendorRiskScoreComputedValues(t *testing.T) {
 
 	// Clear answer — score drops to 0, coverage drops to 0
 	clearedResp, err := suite.Client.API.UpdateVendorRiskScore(scoringUser.UserCtx, scoreID, testclient.UpdateVendorRiskScoreInput{
-		ClearAnswer: lo.ToPtr(true),
+		ClearAnswer: new(true),
 	})
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(0.0, clearedResp.UpdateVendorRiskScore.VendorRiskScore.Score))
@@ -332,7 +332,7 @@ func TestVendorRiskScorePartialSubmissions(t *testing.T) {
 	secondScoreID := secondScoreResp.CreateVendorRiskScore.VendorRiskScore.ID
 
 	updatedFirstScoreResp, err := suite.Client.API.UpdateVendorRiskScore(scoringUser.UserCtx, firstScoreID, testclient.UpdateVendorRiskScoreInput{
-		ClearAnswer: lo.ToPtr(true),
+		ClearAnswer: new(true),
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, updatedFirstScoreResp != nil)
@@ -683,7 +683,7 @@ func TestVendorScoringConfigManualModeSkipsAggregation(t *testing.T) {
 
 	// Update the score — entity should still not be touched
 	updatedResp, err := suite.Client.API.UpdateVendorRiskScore(scoringUser.UserCtx, scoreResp.CreateVendorRiskScore.VendorRiskScore.ID, testclient.UpdateVendorRiskScoreInput{
-		Impact: lo.ToPtr(enums.VendorRiskImpactLow),
+		Impact: new(enums.VendorRiskImpactLow),
 	})
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(8.0, updatedResp.UpdateVendorRiskScore.VendorRiskScore.Score))
@@ -806,7 +806,7 @@ func TestVendorScoringConfigSwitchModeRecomputes(t *testing.T) {
 
 	// Update the score — aggregate hook should skip in MANUAL mode
 	_, err = suite.Client.API.UpdateVendorRiskScore(scoringUser.UserCtx, scoreResp.CreateVendorRiskScore.VendorRiskScore.ID, testclient.UpdateVendorRiskScoreInput{
-		Impact: lo.ToPtr(enums.VendorRiskImpactCritical),
+		Impact: new(enums.VendorRiskImpactCritical),
 	})
 	assert.NilError(t, err)
 
@@ -825,7 +825,7 @@ func TestVendorScoringConfigSwitchModeRecomputes(t *testing.T) {
 
 	// Trigger recomputation by updating the score again
 	_, err = suite.Client.API.UpdateVendorRiskScore(scoringUser.UserCtx, scoreResp.CreateVendorRiskScore.VendorRiskScore.ID, testclient.UpdateVendorRiskScoreInput{
-		Impact: lo.ToPtr(enums.VendorRiskImpactHigh),
+		Impact: new(enums.VendorRiskImpactHigh),
 	})
 	assert.NilError(t, err)
 
@@ -883,7 +883,7 @@ func TestVendorScoringConfigThresholdUpdateChangesRating(t *testing.T) {
 
 	// Trigger recomputation via a no-op score update (change impact then change it back)
 	_, err = suite.Client.API.UpdateVendorRiskScore(scoringUser.UserCtx, scoreResp.CreateVendorRiskScore.VendorRiskScore.ID, testclient.UpdateVendorRiskScoreInput{
-		Impact: lo.ToPtr(enums.VendorRiskImpactMedium),
+		Impact: new(enums.VendorRiskImpactMedium),
 	})
 	assert.NilError(t, err)
 

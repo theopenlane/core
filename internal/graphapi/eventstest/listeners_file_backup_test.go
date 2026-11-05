@@ -82,11 +82,9 @@ func TestFileBackupListener(t *testing.T) {
 				assert.Check(t, bytes.Equal(got, body), "replica should carry the source bytes")
 
 				return &storagetypes.UploadedFileMetadata{
-					FileMetadata: storagetypes.FileMetadata{
-						Key:     "backups/replica.txt",
-						Bucket:  "backup-bucket",
-						FullURI: "mock://backup-bucket/backups/replica.txt",
-					},
+					Key:     "backups/replica.txt",
+					Bucket:  "backup-bucket",
+					FullURI: "mock://backup-bucket/backups/replica.txt",
 				}, nil
 			}).
 			Once()
@@ -177,10 +175,8 @@ func TestFileBackupListener(t *testing.T) {
 		backup.EXPECT().
 			Upload(mock.Anything, mock.Anything, mock.Anything).
 			Return(&storagetypes.UploadedFileMetadata{
-				FileMetadata: storagetypes.FileMetadata{
-					Key:    "backups/requested.txt",
-					Bucket: "backup-bucket",
-				},
+				Key:    "backups/requested.txt",
+				Bucket: "backup-bucket",
 			}, nil).
 			Once()
 
@@ -231,10 +227,8 @@ func TestFileBackupListener(t *testing.T) {
 		backup.EXPECT().
 			Upload(mock.Anything, mock.Anything, mock.Anything).
 			Return(&storagetypes.UploadedFileMetadata{
-				FileMetadata: storagetypes.FileMetadata{
-					Key:    "backups/replica.txt",
-					Bucket: "backup-bucket",
-				},
+				Key:    "backups/replica.txt",
+				Bucket: "backup-bucket",
 			}, nil).
 			Once()
 
@@ -294,10 +288,8 @@ func setupReplicatingBackup(t *testing.T, key string) {
 	backup.EXPECT().
 		Upload(mock.Anything, mock.Anything, mock.Anything).
 		Return(&storagetypes.UploadedFileMetadata{
-			FileMetadata: storagetypes.FileMetadata{
-				Key:    key,
-				Bucket: "backup-bucket",
-			},
+			Key:    key,
+			Bucket: "backup-bucket",
 		}, nil).
 		Once()
 }

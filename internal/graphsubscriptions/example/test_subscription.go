@@ -21,14 +21,14 @@ var token = os.Getenv("API_TOKEN")
 
 // GraphQL WebSocket protocol messages
 type ConnectionInit struct {
-	Type    string                 `json:"type"`
-	Payload map[string]interface{} `json:"payload,omitempty"`
+	Type    string         `json:"type"`
+	Payload map[string]any `json:"payload,omitempty"`
 }
 
 type Subscribe struct {
-	ID      string                 `json:"id"`
-	Type    string                 `json:"type"`
-	Payload map[string]interface{} `json:"payload"`
+	ID      string         `json:"id"`
+	Type    string         `json:"type"`
+	Payload map[string]any `json:"payload"`
 }
 
 func main() {
@@ -58,7 +58,7 @@ func main() {
 	// Send connection_init (graphql-ws protocol)
 	initMsg := ConnectionInit{
 		Type: "connection_init",
-		Payload: map[string]interface{}{
+		Payload: map[string]any{
 			"Authorization": "Bearer " + token,
 		},
 	}
@@ -78,7 +78,7 @@ func main() {
 	subMsg := Subscribe{
 		ID:   "1",
 		Type: "subscribe",
-		Payload: map[string]interface{}{
+		Payload: map[string]any{
 			"query": `subscription NotificationCreated {
 				notificationCreated {
 					id
@@ -108,7 +108,7 @@ func main() {
 				return
 			}
 
-			var response map[string]interface{}
+			var response map[string]any
 			if err := json.Unmarshal(message, &response); err != nil {
 				log.Printf("Raw message: %s", string(message))
 				continue

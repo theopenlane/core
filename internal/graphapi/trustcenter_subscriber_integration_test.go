@@ -217,7 +217,7 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 		Config: *email.MockRuntimeConfig(),
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 
 	configBytes, err := json.Marshal(cfg)
 	assert.NilError(t, err)

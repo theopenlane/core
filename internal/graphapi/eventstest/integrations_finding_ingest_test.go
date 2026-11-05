@@ -35,11 +35,9 @@ func findingIngestTestDefinition(defID string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
 	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          defID,
-			DisplayName: "Finding Ingest Test",
-			Active:      true,
-		},
+		ID:          defID,
+		DisplayName: "Finding Ingest Test",
+		Active:      true,
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:  findingIngestTestOperation,

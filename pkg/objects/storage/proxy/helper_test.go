@@ -26,12 +26,10 @@ func TestGenerateDownloadURLWithSecret_BaseHandling(t *testing.T) {
 	assert.NilError(t, err)
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILE00000000000000",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket:  "test-bucket",
-			Key:     "path/to/object.txt",
-			FullURI: "database://test-bucket/path/to/object.txt",
-		},
+		ID:      "01HZZTESTFILE00000000000000",
+		Bucket:  "test-bucket",
+		Key:     "path/to/object.txt",
+		FullURI: "database://test-bucket/path/to/object.txt",
 	}
 
 	escapedID := url.PathEscape(file.ID)
@@ -55,7 +53,6 @@ func TestGenerateDownloadURLWithSecret_BaseHandling(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Helper()
 

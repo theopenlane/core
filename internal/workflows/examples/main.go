@@ -224,10 +224,8 @@ func runDualApprovalDemo(ctx context.Context, config openlane.Config, apiClient 
 	}
 
 	approvalParams1 := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: targets1,
-		},
-		Required: ptr(true),
+		Targets:  targets1,
+		Required: new(true),
 		Label:    "First Level Approval - Compliance Review",
 		Fields:   []string{"status"},
 	}
@@ -245,10 +243,8 @@ func runDualApprovalDemo(ctx context.Context, config openlane.Config, apiClient 
 	}
 
 	approvalParams2 := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: targets2,
-		},
-		Required: ptr(true),
+		Targets:  targets2,
+		Required: new(true),
 		Label:    "Second Level Approval - Category Sign-off",
 		Fields:   []string{"category"},
 	}
@@ -259,12 +255,10 @@ func runDualApprovalDemo(ctx context.Context, config openlane.Config, apiClient 
 	}
 
 	notificationParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{
-					Type: enums.WorkflowTargetTypeUser,
-					ID:   currentUserID,
-				},
+		Targets: []workflows.TargetConfig{
+			{
+				Type: enums.WorkflowTargetTypeUser,
+				ID:   currentUserID,
 			},
 		},
 
@@ -313,11 +307,11 @@ func runDualApprovalDemo(ctx context.Context, config openlane.Config, apiClient 
 
 	workflowDefResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
 		Name:           "Control Status + Category Change - Dual Approval Workflow",
-		Description:    ptr("Two-tier approval workflow for control status/category changes with notification on completion"),
+		Description:    new("Two-tier approval workflow for control status/category changes with notification on completion"),
 		SchemaType:     string(enums.WorkflowObjectTypeControl),
 		WorkflowKind:   enums.WorkflowKindApproval,
-		Active:         ptr(true),
-		Draft:          ptr(false),
+		Active:         new(true),
+		Draft:          new(false),
 		OwnerID:        &seed.OrganizationID,
 		DefinitionJSON: &workflowDefDoc,
 	})
@@ -447,15 +441,13 @@ func runQueueApprovalDemo(ctx context.Context, config openlane.Config, apiClient
 	fmt.Println("\n3. Creating workflow definition for queued approvals...")
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{
-					Type: enums.WorkflowTargetTypeUser,
-					ID:   currentUserID,
-				},
+		Targets: []workflows.TargetConfig{
+			{
+				Type: enums.WorkflowTargetTypeUser,
+				ID:   currentUserID,
 			},
 		},
-		Required: ptr(true),
+		Required: new(true),
 		Label:    "Control category approval",
 		Fields:   []string{"category"},
 	}
@@ -489,11 +481,11 @@ func runQueueApprovalDemo(ctx context.Context, config openlane.Config, apiClient
 
 	workflowDefResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
 		Name:           "Control Category Change - Approval Queue",
-		Description:    ptr("Queue approvals when control category changes"),
+		Description:    new("Queue approvals when control category changes"),
 		SchemaType:     string(enums.WorkflowObjectTypeControl),
 		WorkflowKind:   enums.WorkflowKindApproval,
-		Active:         ptr(true),
-		Draft:          ptr(false),
+		Active:         new(true),
+		Draft:          new(false),
 		OwnerID:        &seed.OrganizationID,
 		DefinitionJSON: &workflowDefDoc,
 	})
@@ -653,11 +645,11 @@ func createControlWithRefCode(ctx context.Context, apiClient *openlane.Client, o
 
 	input := graphclient.CreateControlInput{
 		RefCode:     refCode,
-		Title:       ptr(title),
-		Description: ptr(description),
-		Status:      ptr(enums.ControlStatusNotImplemented),
-		Source:      ptr(enums.ControlSourceUserDefined),
-		Category:    ptr(category),
+		Title:       new(title),
+		Description: new(description),
+		Status:      new(enums.ControlStatusNotImplemented),
+		Source:      new(enums.ControlSourceUserDefined),
+		Category:    new(category),
 		OwnerID:     &orgID,
 	}
 
@@ -787,8 +779,8 @@ func ensureNotificationPreference(ctx context.Context, apiClient *openlane.Clien
 		Channel: channel,
 		OwnerID: &ownerID,
 		UserID:  userID,
-		Enabled: ptr(true),
-		Status:  ptr(enums.NotificationChannelStatusEnabled),
+		Enabled: new(true),
+		Status:  new(enums.NotificationChannelStatusEnabled),
 	}
 	if destination != "" {
 		input.Destination = &destination
@@ -866,12 +858,10 @@ func runWebhookDemo(ctx context.Context, config openlane.Config, apiClient *open
 	}
 
 	notificationParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{
-					Type: enums.WorkflowTargetTypeUser,
-					ID:   currentUserID,
-				},
+		Targets: []workflows.TargetConfig{
+			{
+				Type: enums.WorkflowTargetTypeUser,
+				ID:   currentUserID,
 			},
 		},
 
@@ -910,11 +900,11 @@ func runWebhookDemo(ctx context.Context, config openlane.Config, apiClient *open
 
 	defResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
 		Name:           "Control Description Webhook Workflow",
-		Description:    ptr("Sends a webhook + notification when control description changes"),
+		Description:    new("Sends a webhook + notification when control description changes"),
 		SchemaType:     string(enums.WorkflowObjectTypeControl),
 		WorkflowKind:   enums.WorkflowKindNotification,
-		Active:         ptr(true),
-		Draft:          ptr(false),
+		Active:         new(true),
+		Draft:          new(false),
 		OwnerID:        &seed.OrganizationID,
 		DefinitionJSON: &defDoc,
 	})
@@ -1005,13 +995,13 @@ func runWebhookTemplateDemo(ctx context.Context, config openlane.Config, apiClie
 	templateInput := graphclient.CreateNotificationTemplateInput{
 		Key:           templateKey,
 		Name:          "Control Description Updated (Template)",
-		Description:   ptr("Template-driven notification for control description updates"),
-		Format:        ptr(enums.NotificationTemplateFormatText),
+		Description:   new("Template-driven notification for control description updates"),
+		Format:        new(enums.NotificationTemplateFormatText),
 		TopicPattern:  topicPattern,
 		TitleTemplate: &titleTemplate,
 		BodyTemplate:  &bodyTemplate,
 		OwnerID:       &seed.OrganizationID,
-		Active:        ptr(true),
+		Active:        new(true),
 	}
 	if integrationID != "" {
 		templateInput.IntegrationID = &integrationID
@@ -1030,12 +1020,10 @@ func runWebhookTemplateDemo(ctx context.Context, config openlane.Config, apiClie
 	}
 
 	notificationParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{
-					Type: enums.WorkflowTargetTypeUser,
-					ID:   currentUserID,
-				},
+		Targets: []workflows.TargetConfig{
+			{
+				Type: enums.WorkflowTargetTypeUser,
+				ID:   currentUserID,
 			},
 		},
 		Title: "Control status changed",
@@ -1071,11 +1059,11 @@ func runWebhookTemplateDemo(ctx context.Context, config openlane.Config, apiClie
 
 	defResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
 		Name:           "Template Notification (Control Description Update)",
-		Description:    ptr("Sends a template-based notification when control description changes"),
+		Description:    new("Sends a template-based notification when control description changes"),
 		SchemaType:     string(enums.WorkflowObjectTypeControl),
 		WorkflowKind:   enums.WorkflowKindNotification,
-		Active:         ptr(true),
-		Draft:          ptr(false),
+		Active:         new(true),
+		Draft:          new(false),
 		OwnerID:        &seed.OrganizationID,
 		DefinitionJSON: &defDoc,
 	})
@@ -1245,11 +1233,11 @@ func runSlackWebhookDemo(ctx context.Context, config openlane.Config, apiClient 
 
 	defResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
 		Name:           "Slack Alert on Control Approval",
-		Description:    ptr("Posts to Slack when a control is approved"),
+		Description:    new("Posts to Slack when a control is approved"),
 		SchemaType:     string(enums.WorkflowObjectTypeControl),
 		WorkflowKind:   enums.WorkflowKindNotification,
-		Active:         ptr(true),
-		Draft:          ptr(false),
+		Active:         new(true),
+		Draft:          new(false),
 		OwnerID:        &seed.OrganizationID,
 		DefinitionJSON: &defDoc,
 	})
@@ -1339,14 +1327,14 @@ func runSlackTemplateDemo(ctx context.Context, config openlane.Config, apiClient
 	templateInput := graphclient.CreateNotificationTemplateInput{
 		Key:           templateKey,
 		Name:          "Slack Control Approved (Template)",
-		Description:   ptr("Template-driven Slack notification for control approvals"),
-		Format:        ptr(enums.NotificationTemplateFormatText),
+		Description:   new("Template-driven Slack notification for control approvals"),
+		Format:        new(enums.NotificationTemplateFormatText),
 		TopicPattern:  topicPattern,
 		TitleTemplate: &titleTemplate,
 		BodyTemplate:  &bodyTemplate,
 		OwnerID:       &seed.OrganizationID,
 		IntegrationID: &integrationID,
-		Active:        ptr(true),
+		Active:        new(true),
 	}
 
 	template, err := createNotificationTemplate(ctx, client, templateInput)
@@ -1360,12 +1348,10 @@ func runSlackTemplateDemo(ctx context.Context, config openlane.Config, apiClient
 	}
 
 	notificationParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{
-					Type: enums.WorkflowTargetTypeUser,
-					ID:   currentUserID,
-				},
+		Targets: []workflows.TargetConfig{
+			{
+				Type: enums.WorkflowTargetTypeUser,
+				ID:   currentUserID,
 			},
 		},
 		Title: "Control status changed",
@@ -1401,11 +1387,11 @@ func runSlackTemplateDemo(ctx context.Context, config openlane.Config, apiClient
 
 	defResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
 		Name:           "Slack Template Alert on Control Approval",
-		Description:    ptr("Uses a notification template to post to Slack when a control is approved"),
+		Description:    new("Uses a notification template to post to Slack when a control is approved"),
 		SchemaType:     string(enums.WorkflowObjectTypeControl),
 		WorkflowKind:   enums.WorkflowKindNotification,
-		Active:         ptr(true),
-		Draft:          ptr(false),
+		Active:         new(true),
+		Draft:          new(false),
 		OwnerID:        &seed.OrganizationID,
 		DefinitionJSON: &defDoc,
 	})
@@ -1490,12 +1476,10 @@ func runFieldUpdateDemo(ctx context.Context, config openlane.Config, apiClient *
 	}
 
 	notificationParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{
-					Type: enums.WorkflowTargetTypeUser,
-					ID:   currentUserID,
-				},
+		Targets: []workflows.TargetConfig{
+			{
+				Type: enums.WorkflowTargetTypeUser,
+				ID:   currentUserID,
 			},
 		},
 
@@ -1534,11 +1518,11 @@ func runFieldUpdateDemo(ctx context.Context, config openlane.Config, apiClient *
 
 	defResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
 		Name:           "Control Auto-Enrichment Workflow",
-		Description:    ptr("Automatically updates control metadata and notifies stakeholders"),
+		Description:    new("Automatically updates control metadata and notifies stakeholders"),
 		SchemaType:     string(enums.WorkflowObjectTypeControl),
 		WorkflowKind:   enums.WorkflowKindLifecycle,
-		Active:         ptr(true),
-		Draft:          ptr(false),
+		Active:         new(true),
+		Draft:          new(false),
 		OwnerID:        &seed.OrganizationID,
 		DefinitionJSON: &defDoc,
 	})
@@ -1616,15 +1600,13 @@ func runEvidenceReviewDemo(ctx context.Context, config openlane.Config, apiClien
 	currentUserID := userResp.Self.ID
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{
-					Type: enums.WorkflowTargetTypeUser,
-					ID:   currentUserID,
-				},
+		Targets: []workflows.TargetConfig{
+			{
+				Type: enums.WorkflowTargetTypeUser,
+				ID:   currentUserID,
 			},
 		},
-		Required: ptr(true),
+		Required: new(true),
 		Label:    "Evidence Review",
 		Fields:   []string{"workflow_eligible_marker"},
 	}
@@ -1704,11 +1686,11 @@ func runEvidenceReviewDemo(ctx context.Context, config openlane.Config, apiClien
 
 	workflowDefResp, err := client.CreateWorkflowDefinition(ctx, graphclient.CreateWorkflowDefinitionInput{
 		Name:           "Evidence Review Workflow",
-		Description:    ptr("Request approval when evidence is linked to a control"),
+		Description:    new("Request approval when evidence is linked to a control"),
 		SchemaType:     string(enums.WorkflowObjectTypeEvidence),
 		WorkflowKind:   enums.WorkflowKindApproval,
-		Active:         ptr(true),
-		Draft:          ptr(false),
+		Active:         new(true),
+		Draft:          new(false),
 		OwnerID:        &seed.OrganizationID,
 		DefinitionJSON: &workflowDefDoc,
 	})
@@ -1738,8 +1720,8 @@ func runEvidenceReviewDemo(ctx context.Context, config openlane.Config, apiClien
 	fmt.Println("\n4. Creating evidence in SUBMITTED status...")
 	evidenceResp, err := client.CreateEvidence(ctx, graphclient.CreateEvidenceInput{
 		Name:        "Q4 Access Control Logs",
-		Description: ptr("Access control audit logs for Q4 2024 showing user authentication and authorization events"),
-		Status:      ptr(enums.EvidenceStatusSubmitted),
+		Description: new("Access control audit logs for Q4 2024 showing user authentication and authorization events"),
+		Status:      new(enums.EvidenceStatusSubmitted),
 		OwnerID:     &seed.OrganizationID,
 	}, nil)
 	if err != nil {
@@ -1814,13 +1796,13 @@ func runExamplesDemo(ctx context.Context, config openlane.Config, apiClient *ope
 			Name:           doc.Name,
 			SchemaType:     doc.SchemaType,
 			WorkflowKind:   doc.WorkflowKind,
-			Active:         ptr(true),
-			Draft:          ptr(false),
+			Active:         new(true),
+			Draft:          new(false),
 			OwnerID:        &seed.OrganizationID,
 			DefinitionJSON: &doc,
 		}
 		if doc.Description != "" {
-			input.Description = ptr(doc.Description)
+			input.Description = new(doc.Description)
 		}
 
 		resp, err := client.CreateWorkflowDefinition(ctx, input)
@@ -1916,8 +1898,8 @@ func bootstrapNewOrg(ctx context.Context, config openlane.Config, apiClient *ope
 	orgName := fmt.Sprintf("workflow-demo-%s", ulids.New().String())
 	orgResp, err := apiClient.CreateOrganization(ctx, graphclient.CreateOrganizationInput{
 		Name:        orgName,
-		DisplayName: ptr(fmt.Sprintf("Workflow Demo Organization %s", time.Now().Format("2006-01-02"))),
-		Description: ptr("Organization for demonstrating workflow automation"),
+		DisplayName: new(fmt.Sprintf("Workflow Demo Organization %s", time.Now().Format("2006-01-02"))),
+		Description: new("Organization for demonstrating workflow automation"),
 	}, nil)
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("failed to create organization: %w", err)
@@ -1988,7 +1970,7 @@ func waitForWorkflowInstance(ctx context.Context, apiClient *openlane.Client, se
 		},
 	}
 
-	for i := 0; i < attempts; i++ {
+	for i := range attempts {
 		if i > 0 {
 			time.Sleep(interval)
 		}
@@ -2055,7 +2037,7 @@ func waitForPendingAssignments(ctx context.Context, apiClient *openlane.Client, 
 		},
 	}
 
-	for i := 0; i < attempts; i++ {
+	for i := range attempts {
 		if i > 0 {
 			time.Sleep(interval)
 		}
@@ -2115,7 +2097,7 @@ func listPendingAssignments(ctx context.Context, apiClient *openlane.Client, see
 func waitForInstanceState(ctx context.Context, apiClient *openlane.Client, instanceID string, desired enums.WorkflowInstanceState, attempts int, interval time.Duration) (enums.WorkflowInstanceState, error) {
 	lastState := enums.WorkflowInstanceStateRunning
 
-	for i := 0; i < attempts; i++ {
+	for i := range attempts {
 		if i > 0 {
 			time.Sleep(interval)
 		}
@@ -2225,8 +2207,10 @@ func safeString(s *string) string {
 }
 
 // ptr returns a pointer to the provided value
+//
+//go:fix inline
 func ptr[T any](v T) *T {
-	return &v
+	return new(v)
 }
 
 // syncOrgFromDefinition updates seed.OrganizationID to match the workflow definition's actual owner.

@@ -9,8 +9,6 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/utils/ulids"
 
@@ -73,7 +71,7 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 	(&th.EvidenceBuilder{
 		Client:    suite.Client,
 		ControlID: primaryControlID,
-		Status:    lo.ToPtr(enums.EvidenceStatusAuditorApproved),
+		Status:    new(enums.EvidenceStatusAuditorApproved),
 	}).MustNew(ctx, t)
 
 	policy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
@@ -113,7 +111,7 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 	// system mapping scenario: unique refCodes per call prevent cross-test interference
 	sysRefA := ulids.New().String()
 	sysRefB := ulids.New().String()
-	sysFramework := lo.ToPtr("SOC 2")
+	sysFramework := new("SOC 2")
 
 	sysControlA := (&th.ControlBuilder{
 		Client:             suite.Client,
@@ -208,13 +206,13 @@ func TestQueryControlReports(t *testing.T) {
 		},
 		{
 			name:            "happy path, with first set",
-			first:           lo.ToPtr(int64(5)),
+			first:           new(int64(5)),
 			ctx:             localTestOrg.Owner.UserCtx,
 			expectedResults: 5,
 		},
 		{
 			name:            "happy path, with last set by admin",
-			last:            lo.ToPtr(int64(3)),
+			last:            new(int64(3)),
 			ctx:             localTestOrg.Admin.UserCtx,
 			expectedResults: 3,
 		},
@@ -393,7 +391,7 @@ func TestControlReportEvidence_ProgramFilters(t *testing.T) {
 	for _, tc := range tt {
 		t.Run(tc.name, func(t *testing.T) {
 
-			where := &testclient.ControlWhereInput{ID: lo.ToPtr(tc.controlID)}
+			where := &testclient.ControlWhereInput{ID: new(tc.controlID)}
 			if tc.shouldFilter {
 				where.HasProgramsWith = []*testclient.ProgramWhereInput{{IDIn: []string{program.ID}}}
 			}
@@ -453,7 +451,7 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 		{
 			name:               "happy path, filter by category",
 			ctx:                localTestOrg.Owner.UserCtx,
-			where:              &testclient.ControlWhereInput{Category: lo.ToPtr(cat1)},
+			where:              &testclient.ControlWhereInput{Category: new(cat1)},
 			expectedCategories: 1,
 		},
 		{

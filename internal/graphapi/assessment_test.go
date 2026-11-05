@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -125,7 +124,7 @@ func TestQueryAssessments(t *testing.T) {
 			Name: &assessment1.Name,
 		}
 
-		resp, err := suite.Client.API.GetAssessments(th.SharedTestUser1.UserCtx, lo.ToPtr(int64(10)), nil, whereInput)
+		resp, err := suite.Client.API.GetAssessments(th.SharedTestUser1.UserCtx, new(int64(10)), nil, whereInput)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -142,7 +141,7 @@ func TestQueryAssessments(t *testing.T) {
 	})
 
 	t.Run("Get assessments with pagination", func(t *testing.T) {
-		resp, err := suite.Client.API.GetAssessments(th.SharedTestUser1.UserCtx, lo.ToPtr(int64(2)), nil, nil)
+		resp, err := suite.Client.API.GetAssessments(th.SharedTestUser1.UserCtx, new(int64(2)), nil, nil)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -182,7 +181,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			name: "happy path, minimal fields",
 			request: testclient.CreateAssessmentInput{
 				Name:       gofakeit.Company(),
-				TemplateID: lo.ToPtr(template.ID),
+				TemplateID: new(template.ID),
 				OwnerID:    &th.SharedTestUser1.OrganizationID,
 				Jsonconfig: jsonConfig,
 			},
@@ -193,10 +192,10 @@ func TestMutationCreateAssessment(t *testing.T) {
 			name: "happy path, all fields",
 			request: testclient.CreateAssessmentInput{
 				Name:                gofakeit.Company(),
-				TemplateID:          lo.ToPtr(template.ID),
-				AssessmentType:      lo.ToPtr(enums.AssessmentTypeInternal),
+				TemplateID:          new(template.ID),
+				AssessmentType:      new(enums.AssessmentTypeInternal),
 				Tags:                []string{"tag1", "tag2"},
-				ResponseDueDuration: lo.ToPtr(int64(86400)), // 1 day
+				ResponseDueDuration: new(int64(86400)), // 1 day
 				Jsonconfig:          jsonConfig,
 			},
 			client: suite.Client.API,
@@ -206,7 +205,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			name: "happy path using personal access token",
 			request: testclient.CreateAssessmentInput{
 				Name:       gofakeit.Company(),
-				TemplateID: lo.ToPtr(template.ID),
+				TemplateID: new(template.ID),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -224,7 +223,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 		{
 			name: "missing required field - name",
 			request: testclient.CreateAssessmentInput{
-				TemplateID: lo.ToPtr(template.ID),
+				TemplateID: new(template.ID),
 				OwnerID:    &th.SharedTestUser1.OrganizationID,
 				Jsonconfig: jsonConfig,
 			},
@@ -236,7 +235,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			name: "invalid template_id",
 			request: testclient.CreateAssessmentInput{
 				Name:       gofakeit.Company(),
-				TemplateID: lo.ToPtr(ulids.New().String()),
+				TemplateID: new(ulids.New().String()),
 				OwnerID:    &th.SharedTestUser1.OrganizationID,
 				Jsonconfig: jsonConfig,
 			},
@@ -311,7 +310,7 @@ func TestMutationTemplateFromAssessment(t *testing.T) {
 			name: "creating template from existing assessment can use alternate name",
 			input: testclient.CreateAssessmentTemplateInput{
 				AssessmentID: assess.ID,
-				Name:         lo.ToPtr(newName),
+				Name:         new(newName),
 			},
 			expectedName: newName,
 		},
@@ -319,12 +318,12 @@ func TestMutationTemplateFromAssessment(t *testing.T) {
 			name: "creating template from existing assessment can use alternate description and tags",
 			input: testclient.CreateAssessmentTemplateInput{
 				AssessmentID: assess.ID,
-				Name:         lo.ToPtr(fullName),
-				Description:  lo.ToPtr(description),
+				Name:         new(fullName),
+				Description:  new(description),
 				Tags:         tags,
 			},
 			expectedName:        fullName,
-			expectedDescription: lo.ToPtr(description),
+			expectedDescription: new(description),
 			expectedTags:        tags,
 		},
 	}
@@ -385,7 +384,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 	}
 
 	assessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-	templateIDPtr := lo.ToPtr(assessment.TemplateID)
+	templateIDPtr := new(assessment.TemplateID)
 
 	systemAssessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
@@ -403,7 +402,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "happy path, update name",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
-				Name:       lo.ToPtr(gofakeit.Company()),
+				Name:       new(gofakeit.Company()),
 				TemplateID: templateIDPtr,
 				Jsonconfig: jsonConfig,
 			},
@@ -414,7 +413,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "happy path, update due date",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
-				ResponseDueDuration: lo.ToPtr(int64(86400)), // 1 day,
+				ResponseDueDuration: new(int64(86400)), // 1 day,
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -445,7 +444,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "happy path using personal access token",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
-				Name:       lo.ToPtr(gofakeit.Company()),
+				Name:       new(gofakeit.Company()),
 				TemplateID: templateIDPtr,
 				Jsonconfig: jsonConfig,
 			},
@@ -456,7 +455,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "not found, invalid ID",
 			id:   ulids.New().String(),
 			request: testclient.UpdateAssessmentInput{
-				Name:       lo.ToPtr(gofakeit.Company()),
+				Name:       new(gofakeit.Company()),
 				TemplateID: templateIDPtr,
 				Jsonconfig: jsonConfig,
 			},
@@ -468,7 +467,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "no access, user of different org",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
-				Name:       lo.ToPtr(gofakeit.Company()),
+				Name:       new(gofakeit.Company()),
 				Jsonconfig: jsonConfig,
 				TemplateID: templateIDPtr,
 			},
@@ -617,7 +616,7 @@ func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
 
 		request := testclient.CreateAssessmentInput{
 			Name:       "Duplicate Test",
-			TemplateID: lo.ToPtr(template.ID),
+			TemplateID: new(template.ID),
 			OwnerID:    &th.SharedTestUser1.OrganizationID,
 		}
 
@@ -637,7 +636,7 @@ func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
 
 		request := testclient.CreateAssessmentInput{
 			Name:       "Duplicate Test",
-			TemplateID: lo.ToPtr(template.ID),
+			TemplateID: new(template.ID),
 			OwnerID:    &anotherUser.OrganizationID,
 		}
 

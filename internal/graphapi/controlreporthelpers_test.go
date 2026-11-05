@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"entgo.io/contrib/entgql"
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
@@ -89,25 +88,25 @@ func TestShouldCheckForControl(t *testing.T) {
 		},
 		{
 			name:            "empty string framework always included",
-			control:         &model.ControlInfo{ReferenceFramework: lo.ToPtr("")},
+			control:         &model.ControlInfo{ReferenceFramework: new("")},
 			frameworksInOrg: []string{"SOC2"},
 			expected:        true,
 		},
 		{
 			name:            "framework present in org list",
-			control:         &model.ControlInfo{ReferenceFramework: lo.ToPtr("SOC2")},
+			control:         &model.ControlInfo{ReferenceFramework: new("SOC2")},
 			frameworksInOrg: []string{"SOC2", "ISO27001"},
 			expected:        true,
 		},
 		{
 			name:            "framework absent from org list",
-			control:         &model.ControlInfo{ReferenceFramework: lo.ToPtr("NIST800-53")},
+			control:         &model.ControlInfo{ReferenceFramework: new("NIST800-53")},
 			frameworksInOrg: []string{"SOC2", "ISO27001"},
 			expected:        false,
 		},
 		{
 			name:            "non-nil framework with empty org list",
-			control:         &model.ControlInfo{ReferenceFramework: lo.ToPtr("SOC2")},
+			control:         &model.ControlInfo{ReferenceFramework: new("SOC2")},
 			frameworksInOrg: []string{},
 			expected:        false,
 		},
@@ -122,9 +121,9 @@ func TestShouldCheckForControl(t *testing.T) {
 }
 
 func TestGroupControlReportsByCategory(t *testing.T) {
-	c1 := &model.ControlReport{ID: "1", RefCode: "CC1.1", Category: lo.ToPtr("Access")}
-	c2 := &model.ControlReport{ID: "2", RefCode: "CC1.2", Category: lo.ToPtr("Access")}
-	c3 := &model.ControlReport{ID: "3", RefCode: "CC2.1", Category: lo.ToPtr("Availability")}
+	c1 := &model.ControlReport{ID: "1", RefCode: "CC1.1", Category: new("Access")}
+	c2 := &model.ControlReport{ID: "2", RefCode: "CC1.2", Category: new("Access")}
+	c3 := &model.ControlReport{ID: "3", RefCode: "CC2.1", Category: new("Availability")}
 	c4 := &model.ControlReport{ID: "4", RefCode: "CC3.1", Category: nil}
 
 	tests := []struct {

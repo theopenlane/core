@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -214,12 +213,12 @@ func TestMutationCreateControlObjective(t *testing.T) {
 			name: "happy path, all input",
 			request: testclient.CreateControlObjectiveInput{
 				Name:                 "Another ControlObjective",
-				Category:             lo.ToPtr("Category"),
-				Subcategory:          lo.ToPtr("Subcategory"),
-				DesiredOutcome:       lo.ToPtr("Desired Outcome"),
+				Category:             new("Category"),
+				Subcategory:          new("Subcategory"),
+				DesiredOutcome:       new("Desired Outcome"),
 				Status:               &enums.ObjectiveActiveStatus,
-				ControlObjectiveType: lo.ToPtr("operational"),
-				Revision:             lo.ToPtr("v1.0.0"),
+				ControlObjectiveType: new("operational"),
+				Revision:             new("v1.0.0"),
 				ProgramIDs:           []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.Client.API,
@@ -418,7 +417,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateControlObjectiveInput{
-				DesiredOutcome: lo.ToPtr("Updated outcome"),
+				DesiredOutcome: new("Updated outcome"),
 				AddViewerIDs:   []string{groupMember.GroupID},
 			},
 			client: suite.Client.API,
@@ -429,12 +428,12 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 			request: testclient.UpdateControlObjectiveInput{
 				Status:               &enums.ObjectiveActiveStatus,
 				Tags:                 []string{"tag1", "tag2"},
-				Category:             lo.ToPtr("Category Updated"),
-				Subcategory:          lo.ToPtr("Subcategory Updated"),
-				ControlObjectiveType: lo.ToPtr("operational"),
+				Category:             new("Category Updated"),
+				Subcategory:          new("Subcategory Updated"),
+				ControlObjectiveType: new("operational"),
 				Source:               &enums.ControlSourceUserDefined,
-				DesiredOutcome:       lo.ToPtr("Updated outcome again"),
-				Revision:             lo.ToPtr("v1.1.0"),
+				DesiredOutcome:       new("Updated outcome again"),
+				Revision:             new("v1.1.0"),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -451,7 +450,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 		{
 			name: "invalid revision",
 			request: testclient.UpdateControlObjectiveInput{
-				Revision: lo.ToPtr("1.1"),
+				Revision: new("1.1"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -469,7 +468,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateControlObjectiveInput{
-				DesiredOutcome: lo.ToPtr("update this"),
+				DesiredOutcome: new("update this"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,

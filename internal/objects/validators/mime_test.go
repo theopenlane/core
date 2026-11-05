@@ -97,10 +97,8 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 		for _, mime := range allowed {
 			t.Run(field+" allows "+mime, func(t *testing.T) {
 				file := storage.File{
-					FieldName: field,
-					FileMetadata: storage.FileMetadata{
-						ContentType: mime,
-					},
+					FieldName:   field,
+					ContentType: mime,
 				}
 				assert.Check(t, mimeTypeValidator(file))
 			})
@@ -109,10 +107,8 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 		for _, mime := range rejected {
 			t.Run(field+" rejects "+mime, func(t *testing.T) {
 				file := storage.File{
-					FieldName: field,
-					FileMetadata: storage.FileMetadata{
-						ContentType: mime,
-					},
+					FieldName:   field,
+					ContentType: mime,
 				}
 				assert.Check(t, mimeTypeValidator(file) != nil)
 			})

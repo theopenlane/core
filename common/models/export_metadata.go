@@ -14,6 +14,6 @@ func (e ExportMetadata) MarshalGQL(w io.Writer) {
 	marshalGQLJSON(w, e)
 }
 
-func (e *ExportMetadata) UnmarshalGQL(v interface{}) error {
+func (e *ExportMetadata) UnmarshalGQL(v any) error {
 	return unmarshalGQLJSON(v, e)
 }

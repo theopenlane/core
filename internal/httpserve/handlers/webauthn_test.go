@@ -503,13 +503,11 @@ func passkeyPublicKey(t *testing.T, key *ecdsa.PrivateKey) []byte {
 	assert.NilError(t, err)
 
 	publicKey, err := webauthncbor.Marshal(webauthncose.EC2PublicKeyData{
-		PublicKeyData: webauthncose.PublicKeyData{
-			KeyType:   int64(webauthncose.EllipticKey),
-			Algorithm: int64(webauthncose.AlgES256),
-		},
-		Curve:  int64(webauthncose.P256),
-		XCoord: point[1:33],
-		YCoord: point[33:65],
+		KeyType:   int64(webauthncose.EllipticKey),
+		Algorithm: int64(webauthncose.AlgES256),
+		Curve:     int64(webauthncose.P256),
+		XCoord:    point[1:33],
+		YCoord:    point[33:65],
 	})
 	assert.NilError(t, err)
 

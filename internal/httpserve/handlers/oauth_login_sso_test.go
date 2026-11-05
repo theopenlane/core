@@ -17,7 +17,8 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 )
 
-func ptr[T any](v T) *T { return &v }
+//go:fix inline
+func ptr[T any](v T) *T { return new(v) }
 
 func TestGoogleLoginHandlerSSOEnforced(t *testing.T) {
 	suite := suite.setupParallelTest(t)
@@ -137,7 +138,7 @@ func TestGoogleLoginHandlerTFAEnforced(t *testing.T) {
 
 	// Create org with TFA enforced
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		MultifactorAuthEnforced: ptr(true),
+		MultifactorAuthEnforced: new(true),
 	}).Save(ownerCtx)
 	assert.Check(t, err)
 
@@ -201,7 +202,7 @@ func TestGithubLoginHandlerTFAEnforced(t *testing.T) {
 
 	// Create org with TFA enforced
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		MultifactorAuthEnforced: ptr(true),
+		MultifactorAuthEnforced: new(true),
 	}).Save(ownerCtx)
 	assert.Check(t, err)
 

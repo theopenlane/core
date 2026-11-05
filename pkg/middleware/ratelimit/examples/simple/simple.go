@@ -25,7 +25,7 @@ func main() {
 	// allow 5 requests per windowSize (1 minute)
 	rateLimiter := ratelimit.New(dataStore, maxLimit, windowSize)
 
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		limitStatus, err := rateLimiter.Check(limitedKey)
 		if err != nil {
 			log.Fatal(err)

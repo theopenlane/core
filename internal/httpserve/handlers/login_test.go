@@ -178,7 +178,7 @@ func TestLoginHandler(t *testing.T) {
 		expectedOrgID   string
 		expectedErr     error
 		expectedStatus  int
-		expectedModules []interface{}
+		expectedModules []any
 	}{
 		{
 			name:            "happy path, valid credentials",

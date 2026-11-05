@@ -44,7 +44,7 @@ func TestResendQuestionnaireEmail(t *testing.T) {
 		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
-	send := func(t *testing.T, email, assessmentID string) (*httptest.ResponseRecorder, map[string]interface{}) {
+	send := func(t *testing.T, email, assessmentID string) (*httptest.ResponseRecorder, map[string]any) {
 		reqBody := models.ResendQuestionnaireRequest{
 			Email:        email,
 			AssessmentID: assessmentID,
@@ -63,7 +63,7 @@ func TestResendQuestionnaireEmail(t *testing.T) {
 		res := recorder.Result()
 		defer res.Body.Close()
 
-		var out map[string]interface{}
+		var out map[string]any
 		if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
 			t.Error("error parsing response", err)
 		}

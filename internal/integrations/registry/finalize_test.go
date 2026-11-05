@@ -45,8 +45,8 @@ func finalizeOperation[Cfg integrationtypes.OperationInput]() integrationtypes.O
 // operationDefinition returns a definition with the given operations
 func operationDefinition(operations ...integrationtypes.OperationRegistration) integrationtypes.Definition {
 	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: finalizeDefinitionRef.ID()},
-		Operations:     operations,
+		ID:         finalizeDefinitionRef.ID(),
+		Operations: operations,
 	}
 }
 

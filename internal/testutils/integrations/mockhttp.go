@@ -158,15 +158,13 @@ func mockHTTPEnvelopes(records []json.RawMessage) []types.MappingEnvelope {
 func MockHTTPBuilder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          MockHTTPDefinitionID.ID(),
-				Family:      "Openlane",
-				DisplayName: "Mock HTTP Provider",
-				Description: "Test provider backed by an httptest server for connect/health/resolve flows.",
-				Category:    "system",
-				Active:      true,
-				Visible:     true,
-			},
+			ID:           MockHTTPDefinitionID.ID(),
+			Family:       "Openlane",
+			DisplayName:  "Mock HTTP Provider",
+			Description:  "Test provider backed by an httptest server for connect/health/resolve flows.",
+			Category:     "system",
+			Active:       true,
+			Visible:      true,
 			Installation: mockHTTPInstallation.Registration(),
 			Connections: []types.Connector{
 				MockHTTPConnection.

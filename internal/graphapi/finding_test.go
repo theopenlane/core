@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -23,8 +22,8 @@ func TestMutationCreateFinding(t *testing.T) {
 	groupMember := (&th.GroupMemberBuilder{Client: suite.Client, GroupID: editingGroup.ID, UserID: th.SharedAuditorUser.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	firstControlFindingResp, err := suite.Client.API.CreateFinding(th.SharedTestUser1.UserCtx, testclient.CreateFindingInput{
-		DisplayName: lo.ToPtr("First Control Finding"),
-		ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+		DisplayName: new("First Control Finding"),
+		ExternalID:  new("finding-" + ulids.New().String()),
 	})
 	assert.NilError(t, err)
 	assert.Check(t, firstControlFindingResp != nil)
@@ -44,9 +43,9 @@ func TestMutationCreateFinding(t *testing.T) {
 		{
 			name: "happy path",
 			request: testclient.CreateFindingInput{
-				DisplayName:       lo.ToPtr("Finding"),
-				ExternalID:        lo.ToPtr("finding-" + ulids.New().String()),
-				ExternalOwnerID:   lo.ToPtr("external-owner"),
+				DisplayName:       new("Finding"),
+				ExternalID:        new("finding-" + ulids.New().String()),
+				ExternalOwnerID:   new("external-owner"),
 				OwnerID:           &th.SharedTestUser1.OrganizationID,
 				AssignedToUserID:  &th.SharedViewOnlyUser.ID,
 				AssignedToGroupID: &th.SharedTestUser1.GroupID,
@@ -57,23 +56,23 @@ func TestMutationCreateFinding(t *testing.T) {
 		{
 			name: "happy path, minimal input",
 			request: testclient.CreateFindingInput{
-				DisplayName: lo.ToPtr("Finding"),
-				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				DisplayName: new("Finding"),
+				ExternalID:  new("finding-" + ulids.New().String()),
 			},
 		},
 		{
 			name: "happy path, auditor",
 			request: testclient.CreateFindingInput{
-				DisplayName: lo.ToPtr("Auditor"),
-				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				DisplayName: new("Auditor"),
+				ExternalID:  new("finding-" + ulids.New().String()),
 			},
 			ctx: th.SharedAuditorUser.UserCtx,
 		},
 		{
 			name: "happy path, auditor under review",
 			request: testclient.CreateFindingInput{
-				DisplayName: lo.ToPtr("Auditor Review Finding"),
-				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				DisplayName: new("Auditor Review Finding"),
+				ExternalID:  new("finding-" + ulids.New().String()),
 				ReviewIDs:   []string{resp.CreateReview.Review.ID},
 			},
 			ctx: th.SharedAuditorUser.UserCtx,
@@ -156,16 +155,16 @@ func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
 		{
 			name: "auditor can create under review",
 			request: testclient.CreateFindingInput{
-				DisplayName: lo.ToPtr("Finding review"),
-				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				DisplayName: new("Finding review"),
+				ExternalID:  new("finding-" + ulids.New().String()),
 				ReviewIDs:   []string{resp.CreateReview.Review.ID},
 			},
 		},
 		{
 			name: "auditor can create without linking to a parent object",
 			request: testclient.CreateFindingInput{
-				DisplayName: lo.ToPtr("finding not linked to an object"),
-				ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+				DisplayName: new("finding not linked to an object"),
+				ExternalID:  new("finding-" + ulids.New().String()),
 			},
 		},
 	}
@@ -192,8 +191,8 @@ func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
 	// through CreateFindingInput, so exercise CreateFindingControl separately
 	t.Run("auditor can create finding control under multiple controls", func(t *testing.T) {
 		findingResp, err := suite.Client.API.CreateFinding(th.SharedAuditorUser.UserCtx, testclient.CreateFindingInput{
-			DisplayName: lo.ToPtr("Finding multiple controls"),
-			ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+			DisplayName: new("Finding multiple controls"),
+			ExternalID:  new("finding-" + ulids.New().String()),
 			ReviewIDs:   []string{resp.CreateReview.Review.ID},
 		})
 		assert.NilError(t, err)
@@ -231,8 +230,8 @@ func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
 
 	t.Run("auditor cannot create finding control link to unauthorized control", func(t *testing.T) {
 		findingResp, err := suite.Client.API.CreateFinding(th.SharedAuditorUser.UserCtx, testclient.CreateFindingInput{
-			DisplayName: lo.ToPtr("Finding linked to control from org 2"),
-			ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+			DisplayName: new("Finding linked to control from org 2"),
+			ExternalID:  new("finding-" + ulids.New().String()),
 			ReviewIDs:   []string{resp.CreateReview.Review.ID},
 		})
 		assert.NilError(t, err)
@@ -260,21 +259,21 @@ func TestMutationCreateBulkFinding(t *testing.T) {
 
 	creationRequests := []*testclient.CreateFindingInput{
 		{
-			DisplayName:     lo.ToPtr("Bulk Finding 1"),
-			ExternalID:      lo.ToPtr("finding-" + ulids.New().String()),
-			ExternalOwnerID: lo.ToPtr("external-owner"),
+			DisplayName:     new("Bulk Finding 1"),
+			ExternalID:      new("finding-" + ulids.New().String()),
+			ExternalOwnerID: new("external-owner"),
 			OwnerID:         &th.SharedTestUser1.OrganizationID,
 		},
 		{
-			DisplayName:     lo.ToPtr("Bulk Finding 2"),
-			ExternalID:      lo.ToPtr("finding-" + ulids.New().String()),
-			ExternalOwnerID: lo.ToPtr("external-owner"),
+			DisplayName:     new("Bulk Finding 2"),
+			ExternalID:      new("finding-" + ulids.New().String()),
+			ExternalOwnerID: new("external-owner"),
 			OwnerID:         &th.SharedTestUser1.OrganizationID,
 		},
 		{
-			DisplayName:     lo.ToPtr("Bulk Finding 3"),
-			ExternalID:      lo.ToPtr("finding-" + ulids.New().String()),
-			ExternalOwnerID: lo.ToPtr("external-owner"),
+			DisplayName:     new("Bulk Finding 3"),
+			ExternalID:      new("finding-" + ulids.New().String()),
+			ExternalOwnerID: new("external-owner"),
 			OwnerID:         &th.SharedTestUser1.OrganizationID,
 		},
 	}
@@ -300,8 +299,8 @@ func TestMutationCreateBulkFinding(t *testing.T) {
 			name: "auditor without parent is authorized",
 			requests: []*testclient.CreateFindingInput{
 				{
-					DisplayName: lo.ToPtr("Auditor Bulk Finding Without Parent"),
-					ExternalID:  lo.ToPtr("finding-" + ulids.New().String()),
+					DisplayName: new("Auditor Bulk Finding Without Parent"),
+					ExternalID:  new("finding-" + ulids.New().String()),
 					OwnerID:     &th.SharedTestUser1.OrganizationID,
 				},
 			},
@@ -359,10 +358,10 @@ func TestMutationUpdateFinding(t *testing.T) {
 			name: "happy path",
 			id:   finding.ID,
 			request: testclient.UpdateFindingInput{
-				DisplayName:       lo.ToPtr("Updated Finding"),
-				Description:       lo.ToPtr("Updated description"),
-				Severity:          lo.ToPtr("critical"),
-				Open:              lo.ToPtr(false),
+				DisplayName:       new("Updated Finding"),
+				Description:       new("Updated description"),
+				Severity:          new("critical"),
+				Open:              new(false),
 				Tags:              []string{"updated", "finding"},
 				AssignedToUserID:  &th.SharedViewOnlyUser.ID,
 				AssignedToGroupID: &th.SharedTestUser1.GroupID,
@@ -393,7 +392,7 @@ func TestMutationUpdateFinding(t *testing.T) {
 			name: "auditor can update existing finding",
 			id:   finding.ID,
 			request: testclient.UpdateFindingInput{
-				DisplayName: lo.ToPtr("Auditor Update"),
+				DisplayName: new("Auditor Update"),
 			},
 			ctx: th.SharedAuditorUser.UserCtx,
 		},
@@ -401,7 +400,7 @@ func TestMutationUpdateFinding(t *testing.T) {
 			name: "not authorized, valid id",
 			id:   anotherOrgFinding.ID,
 			request: testclient.UpdateFindingInput{
-				DisplayName: lo.ToPtr("Unauthorized Update"),
+				DisplayName: new("Unauthorized Update"),
 			},
 			expectedErr: th.NotFoundErrorMsg,
 		},
@@ -409,7 +408,7 @@ func TestMutationUpdateFinding(t *testing.T) {
 			name: "invalid id",
 			id:   "invalid",
 			request: testclient.UpdateFindingInput{
-				DisplayName: lo.ToPtr("Invalid ID Update"),
+				DisplayName: new("Invalid ID Update"),
 			},
 			expectedErr: th.NotFoundErrorMsg,
 		},
@@ -417,7 +416,7 @@ func TestMutationUpdateFinding(t *testing.T) {
 			name: "unknown id",
 			id:   ulids.New().String(),
 			request: testclient.UpdateFindingInput{
-				DisplayName: lo.ToPtr("Unknown ID Update"),
+				DisplayName: new("Unknown ID Update"),
 			},
 			expectedErr: th.NotFoundErrorMsg,
 		},
@@ -642,8 +641,8 @@ func createFinding(t *testing.T, ctx context.Context, displayName string) *testc
 
 	resp, err := suite.Client.API.CreateFinding(ctx, testclient.CreateFindingInput{
 		DisplayName:     &displayName,
-		ExternalID:      lo.ToPtr("finding-" + ulids.New().String()),
-		ExternalOwnerID: lo.ToPtr("external-owner"),
+		ExternalID:      new("finding-" + ulids.New().String()),
+		ExternalOwnerID: new("external-owner"),
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)

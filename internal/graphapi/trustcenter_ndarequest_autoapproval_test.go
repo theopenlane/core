@@ -59,7 +59,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 			FirstName:     gofakeit.FirstName(),
 			LastName:      gofakeit.LastName(),
 			Email:         email,
-			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusApproved),
+			Status:        new(enums.TrustCenterNDARequestStatusApproved),
 		})
 	}
 
@@ -71,7 +71,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.LetterN(12) + "@" + org2ContactDomain,
-		Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusApproved),
+		Status:        new(enums.TrustCenterNDARequestStatusApproved),
 	})
 	assert.NilError(t, err)
 
@@ -87,7 +87,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		restrictedContactEmail,
 	} {
 		contacts = append(contacts, &testclient.CreateContactInput{
-			Email:   lo.ToPtr(email),
+			Email:   new(email),
 			OwnerID: &tcOrg.OrganizationID,
 		})
 	}
@@ -97,7 +97,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 	_, err = suite.Client.API.CreateContact(tcOrg.Owner.UserCtx, testclient.CreateContactInput{
 		Email:   &inactiveContactEmail,
 		OwnerID: &tcOrg.OrganizationID,
-		Status:  lo.ToPtr(enums.UserStatusInactive),
+		Status:  new(enums.UserStatusInactive),
 	})
 	assert.NilError(t, err)
 
@@ -392,7 +392,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 				UseDomainAllowlist: true,
 				DomainAllowlist:    []string{allowedDomain},
 			},
-			initialStatus: lo.ToPtr(enums.TrustCenterNDARequestStatusRequested),
+			initialStatus: new(enums.TrustCenterNDARequestStatusRequested),
 			status:        enums.TrustCenterNDARequestStatusApproved,
 		},
 		{
@@ -403,7 +403,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 				UseDomainAllowlist: true,
 				DomainAllowlist:    []string{allowedDomain},
 			},
-			initialStatus: lo.ToPtr(enums.TrustCenterNDARequestStatusDeclined),
+			initialStatus: new(enums.TrustCenterNDARequestStatusDeclined),
 			status:        enums.TrustCenterNDARequestStatusDeclined,
 		},
 		{
@@ -414,7 +414,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 				UseDomainBlocklist: true,
 				DomainBlocklist:    []string{allowedDomain},
 			},
-			initialStatus: lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+			initialStatus: new(enums.TrustCenterNDARequestStatusSigned),
 			status:        enums.TrustCenterNDARequestStatusSigned,
 		},
 	}
@@ -425,8 +425,8 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 
 			// update each test run with our new config
 			_, err := suite.Client.API.UpdateTrustCenterSetting(tcOrg.Owner.UserCtx, setting.ID, testclient.UpdateTrustCenterSettingInput{
-				NdaApprovalRequired: lo.ToPtr(true),
-				EnableAutoApproval:  lo.ToPtr(true),
+				NdaApprovalRequired: new(true),
+				EnableAutoApproval:  new(true),
 				AutoApprovalRules:   &tt.options,
 			}, nil, nil, nil, nil, nil, nil)
 			assert.NilError(t, err)
@@ -474,8 +474,8 @@ func TestNDAAutoApproval_Update(t *testing.T) {
 	contact := (&th.ContactBuilder{Client: suite.Client}).MustNew(tcOrg.Owner.UserCtx, t)
 
 	_, err = suite.Client.API.UpdateTrustCenterSetting(tcOrg.Owner.UserCtx, tcOrg.TrustCenter.Edges.Setting.ID, testclient.UpdateTrustCenterSettingInput{
-		NdaApprovalRequired: lo.ToPtr(true),
-		EnableAutoApproval:  lo.ToPtr(true),
+		NdaApprovalRequired: new(true),
+		EnableAutoApproval:  new(true),
 		AutoApprovalRules: &models.TrustCenterNDARequestSetting{
 			ApproveIfContactExists:  true,
 			ManualApprovalOnFailure: true,
@@ -519,7 +519,7 @@ func TestNDAAutoApproval_Update(t *testing.T) {
 	(&th.ContactBuilder{Client: suite.Client, Email: email}).MustNew(tcOrg.Owner.UserCtx, t)
 
 	_, err = suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, requestID, testclient.UpdateTrustCenterNDARequestInput{
-		Status: lo.ToPtr(enums.TrustCenterNDARequestStatusRequested),
+		Status: new(enums.TrustCenterNDARequestStatusRequested),
 	})
 	assert.NilError(t, err)
 	assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))

@@ -81,7 +81,7 @@ func TestBuilderHiddenButActive(t *testing.T) {
 }
 
 func TestValidateImportRecords(t *testing.T) {
-	assert.NilError(t, validateImportRecords(context.Background(), types.InstallationRequest{}, &ImportRecords{ImportSpec: ImportSpec{Prefix: "records/"}}))
+	assert.NilError(t, validateImportRecords(context.Background(), types.InstallationRequest{}, &ImportRecords{Prefix: "records/"}))
 
 	err := validateImportRecords(context.Background(), types.InstallationRequest{}, &ImportRecords{})
 	assert.Assert(t, errors.Is(err, ErrPrefixRequired))

@@ -31,11 +31,9 @@ func catalogFixtureDefinition(defID, schemaName string) integrationtypes.Definit
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
 	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          defID,
-			DisplayName: "Catalog Fixture Ingest Test",
-			Active:      true,
-		},
+		ID:          defID,
+		DisplayName: "Catalog Fixture Ingest Test",
+		Active:      true,
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:  catalogFixtureIngestOperation,

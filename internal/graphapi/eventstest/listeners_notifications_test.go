@@ -7,7 +7,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
@@ -60,7 +59,7 @@ func TestNotificationListenerStandardUpdate(t *testing.T) {
 	assert.NilError(t, suite.Client.DB.Control.UpdateOneID(ctrl.ID).SetReferenceFrameworkRevision("v1.0.0").Exec(org.Owner.UserCtx))
 
 	_, err = suite.Client.API.UpdateStandard(th.SharedSystemAdminUser.UserCtx, std.ID, testclient.UpdateStandardInput{
-		Revision: lo.ToPtr("v2.0.0"),
+		Revision: new("v2.0.0"),
 	}, nil, nil)
 	assert.NilError(t, err)
 

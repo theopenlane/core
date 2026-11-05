@@ -596,12 +596,10 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 		Disconnects("Remove the persisted test OAuth credential and disconnect this installation.", nil)
 
 	return types.Definition{
-		DefinitionSpec: types.DefinitionSpec{
-			ID:          testAuthDefinitionID,
-			DisplayName: "Test OAuth",
-			Active:      true,
-			Visible:     true,
-		},
+		ID:           testAuthDefinitionID,
+		DisplayName:  "Test OAuth",
+		Active:       true,
+		Visible:      true,
 		Installation: types.InstallationOf[testOAuthInstallation]().Registration(),
 		Connections:  []types.Connector{connection},
 	}, nil

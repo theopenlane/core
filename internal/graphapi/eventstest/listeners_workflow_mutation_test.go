@@ -9,7 +9,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -155,10 +154,8 @@ func TestWorkflowMutationListenerInternalPolicy(t *testing.T) {
 	assert.Assert(t, err != nil)
 
 	reviewParams, err := json.Marshal(workflows.ReviewActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: owner.ID}},
-		},
-		Label: "Policy Name Review",
+		Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: owner.ID}},
+		Label:   "Policy Name Review",
 	})
 	assert.NilError(t, err)
 
@@ -196,7 +193,7 @@ func TestWorkflowMutationListenerInternalPolicy(t *testing.T) {
 			kind:                enums.WorkflowKindApproval,
 			trigger:             models.WorkflowTrigger{Operation: "UPDATE", Fields: []string{"name"}},
 			action:              models.WorkflowAction{Type: enums.WorkflowActionTypeReview.String(), Key: "policy_name_review", Params: reviewParams},
-			update:              &testclient.UpdateInternalPolicyInput{Name: lo.ToPtr("workflow review policy renamed " + ulids.New().String())},
+			update:              &testclient.UpdateInternalPolicyInput{Name: new("workflow review policy renamed " + ulids.New().String())},
 			expectedAssignments: 1,
 		},
 		{
@@ -207,7 +204,7 @@ func TestWorkflowMutationListenerInternalPolicy(t *testing.T) {
 			trigger:   models.WorkflowTrigger{Operation: "UPDATE", Fields: []string{"details"}, Selector: models.WorkflowSelector{GroupIDs: []string{privateGroup.ID}}},
 			action:    models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "private_group_policy_notification"},
 			editorIDs: []string{privateGroup.ID},
-			update:    &testclient.UpdateInternalPolicyInput{Details: lo.ToPtr("updated by the policy manager")},
+			update:    &testclient.UpdateInternalPolicyInput{Details: new("updated by the policy manager")},
 		},
 	}
 

@@ -34,7 +34,7 @@ func GetInviteStatusEnum(status string) (enums.InviteStatus, error) {
 func ParseIDList(ids string) []string {
 	var result []string
 
-	for _, id := range strings.Split(ids, ",") {
+	for id := range strings.SplitSeq(ids, ",") {
 		id = strings.TrimSpace(id)
 		if id != "" {
 			result = append(result, id)
