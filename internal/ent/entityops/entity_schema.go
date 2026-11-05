@@ -24,6 +24,8 @@ type SchemaDescriptor struct {
 	Snake string `json:"-"`
 	// Lower is the lowercase no-separator form used for fuzzy lookup
 	Lower string `json:"-"`
+	// Plural is the plural snake_case form, the schema's table name
+	Plural string `json:"-"`
 	// WorkflowEligible reports whether this schema participates in workflow operations
 	WorkflowEligible bool `json:"-"`
 }

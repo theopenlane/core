@@ -16,9 +16,6 @@ import (
 	"github.com/theopenlane/logx"
 )
 
-// permissionGroupMetaLabelKey is the meta attribute holding a permission group's human readable label
-const permissionGroupMetaLabelKey = "label"
-
 // cloudflareMemberPayload is the normalized payload for a Cloudflare account member
 type cloudflareMemberPayload struct {
 	// ID is the Cloudflare membership identifier
@@ -215,7 +212,7 @@ func listDirectoryGroups(ctx context.Context, client *Client, accountID string) 
 		return cloudflareGroupPayload{
 			ID:          g.ID,
 			Name:        g.Name,
-			Description: permissionGroupLabel(g),
+			Description: g.Meta.Label,
 			Payload:     rawPayload(g.JSON.RawJSON(), g),
 		}
 	})
@@ -227,25 +224,6 @@ func listDirectoryGroups(ctx context.Context, client *Client, accountID string) 
 	groups = append(groups, permissionGroups...)
 
 	return groups, nil
-}
-
-// permissionGroupLabel pulls the human readable label out of a permission group's meta attributes
-func permissionGroupLabel(g iam.PermissionGroupListResponse) string {
-	if g.Meta.Key == permissionGroupMetaLabelKey {
-		return g.Meta.Value
-	}
-
-	var raw struct {
-		Meta struct {
-			Label string `json:"label"`
-		} `json:"meta"`
-	}
-
-	if err := json.Unmarshal([]byte(g.JSON.RawJSON()), &raw); err != nil {
-		return ""
-	}
-
-	return raw.Meta.Label
 }
 
 // rawPayload prefers the untouched API response so fields the typed SDK struct omits survive
