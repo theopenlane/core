@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/cel-go/cel"
-	"github.com/google/cel-go/common/decls"
-	celtypes "github.com/google/cel-go/common/types"
+	"cel.dev/cel-go/cel"
+	"cel.dev/cel-go/common/decls"
+	celtypes "cel.dev/cel-go/common/types"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/celx"

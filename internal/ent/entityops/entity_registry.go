@@ -2052,9 +2052,10 @@ func jsonArrayMatch(column string, values []string) func(*sql.Selector) {
 var (
 	SchemaAPIToken = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "APIToken",
-			Snake: "api_token",
-			Lower: "apitoken",
+			Name:   "APIToken",
+			Snake:  "api_token",
+			Lower:  "apitoken",
+			Plural: "api_tokens",
 		},
 		OwnerField: apitoken.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -2078,6 +2079,7 @@ var (
 			Name:             "ActionPlan",
 			Snake:            "action_plan",
 			Lower:            "actionplan",
+			Plural:           "action_plans",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[ActionPlanProjection](),
@@ -2187,6 +2189,7 @@ var (
 			Name:             "Assessment",
 			Snake:            "assessment",
 			Lower:            "assessment",
+			Plural:           "assessments",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[AssessmentProjection](),
@@ -2288,9 +2291,10 @@ var (
 	}
 	SchemaAssessmentPolicy = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "AssessmentPolicy",
-			Snake: "assessment_policy",
-			Lower: "assessmentpolicy",
+			Name:   "AssessmentPolicy",
+			Snake:  "assessment_policy",
+			Lower:  "assessmentpolicy",
+			Plural: "assessment_policies",
 		},
 		ProjectionType:        reflect.TypeFor[AssessmentPolicyProjection](),
 		OwnerField:            assessmentpolicy.FieldOwnerID,
@@ -2386,6 +2390,7 @@ var (
 			Name:             "AssessmentResponse",
 			Snake:            "assessment_response",
 			Lower:            "assessmentresponse",
+			Plural:           "assessment_responses",
 			WorkflowEligible: true,
 		},
 		ProjectionType: reflect.TypeFor[AssessmentResponseProjection](),
@@ -2439,9 +2444,10 @@ var (
 	}
 	SchemaAsset = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Asset",
-			Snake: "asset",
-			Lower: "asset",
+			Name:   "Asset",
+			Snake:  "asset",
+			Lower:  "asset",
+			Plural: "assets",
 		},
 		ProjectionType:        reflect.TypeFor[AssetProjection](),
 		OwnerField:            asset.FieldOwnerID,
@@ -2540,6 +2546,7 @@ var (
 			Name:             "Campaign",
 			Snake:            "campaign",
 			Lower:            "campaign",
+			Plural:           "campaigns",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[CampaignProjection](),
@@ -2645,6 +2652,7 @@ var (
 			Name:             "CampaignTarget",
 			Snake:            "campaign_target",
 			Lower:            "campaigntarget",
+			Plural:           "campaign_targets",
 			WorkflowEligible: true,
 		},
 		ProjectionType: reflect.TypeFor[CampaignTargetProjection](),
@@ -2714,9 +2722,10 @@ var (
 	}
 	SchemaCheckResult = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "CheckResult",
-			Snake: "check_result",
-			Lower: "checkresult",
+			Name:   "CheckResult",
+			Snake:  "check_result",
+			Lower:  "checkresult",
+			Plural: "check_results",
 		},
 		ProjectionType:        reflect.TypeFor[CheckResultProjection](),
 		OwnerField:            checkresult.FieldOwnerID,
@@ -2811,9 +2820,10 @@ var (
 	}
 	SchemaContact = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Contact",
-			Snake: "contact",
-			Lower: "contact",
+			Name:   "Contact",
+			Snake:  "contact",
+			Lower:  "contact",
+			Plural: "contacts",
 		},
 		ProjectionType:        reflect.TypeFor[ContactProjection](),
 		OwnerField:            contact.FieldOwnerID,
@@ -2910,6 +2920,7 @@ var (
 			Name:             "Control",
 			Snake:            "control",
 			Lower:            "control",
+			Plural:           "controls",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[ControlProjection](),
@@ -3013,9 +3024,10 @@ var (
 	}
 	SchemaControlImplementation = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "ControlImplementation",
-			Snake: "control_implementation",
-			Lower: "controlimplementation",
+			Name:   "ControlImplementation",
+			Snake:  "control_implementation",
+			Lower:  "controlimplementation",
+			Plural: "control_implementations",
 		},
 		ProjectionType:        reflect.TypeFor[ControlImplementationProjection](),
 		OwnerField:            controlimplementation.FieldOwnerID,
@@ -3108,9 +3120,10 @@ var (
 	}
 	SchemaControlObjective = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "ControlObjective",
-			Snake: "control_objective",
-			Lower: "controlobjective",
+			Name:   "ControlObjective",
+			Snake:  "control_objective",
+			Lower:  "controlobjective",
+			Plural: "control_objectives",
 		},
 		ProjectionType:        reflect.TypeFor[ControlObjectiveProjection](),
 		OwnerField:            controlobjective.FieldOwnerID,
@@ -3203,9 +3216,10 @@ var (
 	}
 	SchemaCustomDomain = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "CustomDomain",
-			Snake: "custom_domain",
-			Lower: "customdomain",
+			Name:   "CustomDomain",
+			Snake:  "custom_domain",
+			Lower:  "customdomain",
+			Plural: "custom_domains",
 		},
 		OwnerField: customdomain.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -3226,9 +3240,10 @@ var (
 	}
 	SchemaCustomTypeEnum = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "CustomTypeEnum",
-			Snake: "custom_type_enum",
-			Lower: "customtypeenum",
+			Name:   "CustomTypeEnum",
+			Snake:  "custom_type_enum",
+			Lower:  "customtypeenum",
+			Plural: "custom_type_enums",
 		},
 		ProjectionType:        reflect.TypeFor[CustomTypeEnumProjection](),
 		OwnerField:            customtypeenum.FieldOwnerID,
@@ -3321,9 +3336,10 @@ var (
 	}
 	SchemaDNSVerification = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "DNSVerification",
-			Snake: "dns_verification",
-			Lower: "dnsverification",
+			Name:   "DNSVerification",
+			Snake:  "dns_verification",
+			Lower:  "dnsverification",
+			Plural: "dns_verifications",
 		},
 		OwnerField: dnsverification.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -3344,9 +3360,10 @@ var (
 	}
 	SchemaDirectoryAccount = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "DirectoryAccount",
-			Snake: "directory_account",
-			Lower: "directoryaccount",
+			Name:   "DirectoryAccount",
+			Snake:  "directory_account",
+			Lower:  "directoryaccount",
+			Plural: "directory_accounts",
 		},
 		ProjectionType:        reflect.TypeFor[DirectoryAccountProjection](),
 		OwnerField:            directoryaccount.FieldOwnerID,
@@ -3442,9 +3459,10 @@ var (
 	}
 	SchemaDirectoryGroup = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "DirectoryGroup",
-			Snake: "directory_group",
-			Lower: "directorygroup",
+			Name:   "DirectoryGroup",
+			Snake:  "directory_group",
+			Lower:  "directorygroup",
+			Plural: "directory_groups",
 		},
 		ProjectionType:        reflect.TypeFor[DirectoryGroupProjection](),
 		OwnerField:            directorygroup.FieldOwnerID,
@@ -3540,9 +3558,10 @@ var (
 	}
 	SchemaDirectoryMembership = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "DirectoryMembership",
-			Snake: "directory_membership",
-			Lower: "directorymembership",
+			Name:   "DirectoryMembership",
+			Snake:  "directory_membership",
+			Lower:  "directorymembership",
+			Plural: "directory_memberships",
 		},
 		ProjectionType:        reflect.TypeFor[DirectoryMembershipProjection](),
 		OwnerField:            directorymembership.FieldOwnerID,
@@ -3639,9 +3658,10 @@ var (
 	}
 	SchemaDiscussion = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Discussion",
-			Snake: "discussion",
-			Lower: "discussion",
+			Name:   "Discussion",
+			Snake:  "discussion",
+			Lower:  "discussion",
+			Plural: "discussions",
 		},
 		ProjectionType: reflect.TypeFor[DiscussionProjection](),
 		OwnerField:     discussion.FieldOwnerID,
@@ -3686,9 +3706,10 @@ var (
 	}
 	SchemaDocumentData = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "DocumentData",
-			Snake: "document_data",
-			Lower: "documentdata",
+			Name:   "DocumentData",
+			Snake:  "document_data",
+			Lower:  "documentdata",
+			Plural: "document_data",
 		},
 		ProjectionType: reflect.TypeFor[DocumentDataProjection](),
 		OwnerField:     documentdata.FieldOwnerID,
@@ -3733,9 +3754,10 @@ var (
 	}
 	SchemaEmailTemplate = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "EmailTemplate",
-			Snake: "email_template",
-			Lower: "emailtemplate",
+			Name:   "EmailTemplate",
+			Snake:  "email_template",
+			Lower:  "emailtemplate",
+			Plural: "email_templates",
 		},
 		ProjectionType:        reflect.TypeFor[EmailTemplateProjection](),
 		OwnerField:            emailtemplate.FieldOwnerID,
@@ -3829,9 +3851,10 @@ var (
 	}
 	SchemaEmailVerificationToken = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "EmailVerificationToken",
-			Snake: "email_verification_token",
-			Lower: "emailverificationtoken",
+			Name:   "EmailVerificationToken",
+			Snake:  "email_verification_token",
+			Lower:  "emailverificationtoken",
+			Plural: "email_verification_tokens",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "email_verification_token", Operation: refOpLoad, EntityID: entityID}
@@ -3851,9 +3874,10 @@ var (
 	}
 	SchemaEntity = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Entity",
-			Snake: "entity",
-			Lower: "entity",
+			Name:   "Entity",
+			Snake:  "entity",
+			Lower:  "entity",
+			Plural: "entities",
 		},
 		ProjectionType:        reflect.TypeFor[EntityProjection](),
 		OwnerField:            entity.FieldOwnerID,
@@ -3948,9 +3972,10 @@ var (
 	}
 	SchemaEntityType = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "EntityType",
-			Snake: "entity_type",
-			Lower: "entitytype",
+			Name:   "EntityType",
+			Snake:  "entity_type",
+			Lower:  "entitytype",
+			Plural: "entity_types",
 		},
 		ProjectionType: reflect.TypeFor[EntityTypeProjection](),
 		OwnerField:     entitytype.FieldOwnerID,
@@ -3995,9 +4020,10 @@ var (
 	}
 	SchemaEvent = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Event",
-			Snake: "event",
-			Lower: "event",
+			Name:   "Event",
+			Snake:  "event",
+			Lower:  "event",
+			Plural: "events",
 		},
 		ProjectionType:     reflect.TypeFor[EventProjection](),
 		IntegrationM2MEdge: "integrations",
@@ -4022,6 +4048,7 @@ var (
 			Name:             "Evidence",
 			Snake:            "evidence",
 			Lower:            "evidence",
+			Plural:           "evidences",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[EvidenceProjection](),
@@ -4124,9 +4151,10 @@ var (
 	}
 	SchemaExport = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Export",
-			Snake: "export",
-			Lower: "export",
+			Name:   "Export",
+			Snake:  "export",
+			Lower:  "export",
+			Plural: "exports",
 		},
 		OwnerField: export.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -4147,9 +4175,10 @@ var (
 	}
 	SchemaFile = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "File",
-			Snake: "file",
-			Lower: "file",
+			Name:   "File",
+			Snake:  "file",
+			Lower:  "file",
+			Plural: "files",
 		},
 		ProjectionType:     reflect.TypeFor[FileProjection](),
 		IntegrationM2MEdge: "integrations",
@@ -4171,9 +4200,10 @@ var (
 	}
 	SchemaFileDownloadToken = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "FileDownloadToken",
-			Snake: "file_download_token",
-			Lower: "filedownloadtoken",
+			Name:   "FileDownloadToken",
+			Snake:  "file_download_token",
+			Lower:  "filedownloadtoken",
+			Plural: "file_download_tokens",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "file_download_token", Operation: refOpLoad, EntityID: entityID}
@@ -4196,6 +4226,7 @@ var (
 			Name:             "Finding",
 			Snake:            "finding",
 			Lower:            "finding",
+			Plural:           "findings",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[FindingProjection](),
@@ -4300,9 +4331,10 @@ var (
 	}
 	SchemaFindingControl = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "FindingControl",
-			Snake: "finding_control",
-			Lower: "findingcontrol",
+			Name:   "FindingControl",
+			Snake:  "finding_control",
+			Lower:  "findingcontrol",
+			Plural: "finding_controls",
 		},
 		ProjectionType: reflect.TypeFor[FindingControlProjection](),
 		OwnerField:     findingcontrol.FieldOwnerID,
@@ -4347,9 +4379,10 @@ var (
 	}
 	SchemaGroup = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Group",
-			Snake: "group",
-			Lower: "group",
+			Name:   "Group",
+			Snake:  "group",
+			Lower:  "group",
+			Plural: "groups",
 		},
 		ProjectionType:        reflect.TypeFor[GroupProjection](),
 		OwnerField:            group.FieldOwnerID,
@@ -4444,9 +4477,10 @@ var (
 	}
 	SchemaGroupMembership = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "GroupMembership",
-			Snake: "group_membership",
-			Lower: "groupmembership",
+			Name:   "GroupMembership",
+			Snake:  "group_membership",
+			Lower:  "groupmembership",
+			Plural: "group_memberships",
 		},
 		ProjectionType: reflect.TypeFor[GroupMembershipProjection](),
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -4467,9 +4501,10 @@ var (
 	}
 	SchemaGroupSetting = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "GroupSetting",
-			Snake: "group_setting",
-			Lower: "groupsetting",
+			Name:   "GroupSetting",
+			Snake:  "group_setting",
+			Lower:  "groupsetting",
+			Plural: "group_settings",
 		},
 		ProjectionType: reflect.TypeFor[GroupSettingProjection](),
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -4490,9 +4525,10 @@ var (
 	}
 	SchemaHush = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Hush",
-			Snake: "hush",
-			Lower: "hush",
+			Name:   "Hush",
+			Snake:  "hush",
+			Lower:  "hush",
+			Plural: "hushes",
 		},
 		OwnerField:         hush.FieldOwnerID,
 		IntegrationM2MEdge: "integrations",
@@ -4517,6 +4553,7 @@ var (
 			Name:             "IdentityHolder",
 			Snake:            "identity_holder",
 			Lower:            "identityholder",
+			Plural:           "identity_holders",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[IdentityHolderProjection](),
@@ -4620,9 +4657,10 @@ var (
 	}
 	SchemaImpersonationEvent = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "ImpersonationEvent",
-			Snake: "impersonation_event",
-			Lower: "impersonationevent",
+			Name:   "ImpersonationEvent",
+			Snake:  "impersonation_event",
+			Lower:  "impersonationevent",
+			Plural: "impersonation_events",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "impersonation_event", Operation: refOpLoad, EntityID: entityID}
@@ -4642,9 +4680,10 @@ var (
 	}
 	SchemaIntegration = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Integration",
-			Snake: "integration",
-			Lower: "integration",
+			Name:   "Integration",
+			Snake:  "integration",
+			Lower:  "integration",
+			Plural: "integrations",
 		},
 		ProjectionType:        reflect.TypeFor[IntegrationProjection](),
 		ConsoleRoute:          &ConsoleRoute{Base: "automation/integrations"},
@@ -4691,9 +4730,10 @@ var (
 	}
 	SchemaIntegrationRun = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "IntegrationRun",
-			Snake: "integration_run",
-			Lower: "integrationrun",
+			Name:   "IntegrationRun",
+			Snake:  "integration_run",
+			Lower:  "integrationrun",
+			Plural: "integration_runs",
 		},
 		ProjectionType:     reflect.TypeFor[IntegrationRunProjection](),
 		OwnerField:         integrationrun.FieldOwnerID,
@@ -4739,9 +4779,10 @@ var (
 	}
 	SchemaIntegrationWebhook = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "IntegrationWebhook",
-			Snake: "integration_webhook",
-			Lower: "integrationwebhook",
+			Name:   "IntegrationWebhook",
+			Snake:  "integration_webhook",
+			Lower:  "integrationwebhook",
+			Plural: "integration_webhooks",
 		},
 		OwnerField:         integrationwebhook.FieldOwnerID,
 		IntegrationFKField: "integration_id",
@@ -4766,6 +4807,7 @@ var (
 			Name:             "InternalPolicy",
 			Snake:            "internal_policy",
 			Lower:            "internalpolicy",
+			Plural:           "internal_policies",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[InternalPolicyProjection](),
@@ -4873,9 +4915,10 @@ var (
 	}
 	SchemaInvite = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Invite",
-			Snake: "invite",
-			Lower: "invite",
+			Name:   "Invite",
+			Snake:  "invite",
+			Lower:  "invite",
+			Plural: "invites",
 		},
 		ProjectionType: reflect.TypeFor[InviteProjection](),
 		OwnerField:     invite.FieldOwnerID,
@@ -4920,9 +4963,10 @@ var (
 	}
 	SchemaMappableDomain = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "MappableDomain",
-			Snake: "mappable_domain",
-			Lower: "mappabledomain",
+			Name:   "MappableDomain",
+			Snake:  "mappable_domain",
+			Lower:  "mappabledomain",
+			Plural: "mappable_domains",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "mappable_domain", Operation: refOpLoad, EntityID: entityID}
@@ -4942,9 +4986,10 @@ var (
 	}
 	SchemaMappedControl = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "MappedControl",
-			Snake: "mapped_control",
-			Lower: "mappedcontrol",
+			Name:   "MappedControl",
+			Snake:  "mapped_control",
+			Lower:  "mappedcontrol",
+			Plural: "mapped_controls",
 		},
 		ProjectionType:        reflect.TypeFor[MappedControlProjection](),
 		OwnerField:            mappedcontrol.FieldOwnerID,
@@ -5037,9 +5082,10 @@ var (
 	}
 	SchemaNarrative = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Narrative",
-			Snake: "narrative",
-			Lower: "narrative",
+			Name:   "Narrative",
+			Snake:  "narrative",
+			Lower:  "narrative",
+			Plural: "narratives",
 		},
 		ProjectionType:        reflect.TypeFor[NarrativeProjection](),
 		OwnerField:            narrative.FieldOwnerID,
@@ -5132,9 +5178,10 @@ var (
 	}
 	SchemaNote = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Note",
-			Snake: "note",
-			Lower: "note",
+			Name:   "Note",
+			Snake:  "note",
+			Lower:  "note",
+			Plural: "notes",
 		},
 		ProjectionType: reflect.TypeFor[NoteProjection](),
 		MentionSpec:    &MentionSpec{Schema: "Note", NameField: "title", DetailsField: "text", DetailsJSONField: "text_json", OwnerField: "owner_id"},
@@ -5180,9 +5227,10 @@ var (
 	}
 	SchemaNotification = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Notification",
-			Snake: "notification",
-			Lower: "notification",
+			Name:   "Notification",
+			Snake:  "notification",
+			Lower:  "notification",
+			Plural: "notifications",
 		},
 		OwnerField: notification.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -5203,9 +5251,10 @@ var (
 	}
 	SchemaNotificationPreference = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "NotificationPreference",
-			Snake: "notification_preference",
-			Lower: "notificationpreference",
+			Name:   "NotificationPreference",
+			Snake:  "notification_preference",
+			Lower:  "notificationpreference",
+			Plural: "notification_preferences",
 		},
 		OwnerField: notificationpreference.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -5226,9 +5275,10 @@ var (
 	}
 	SchemaNotificationTemplate = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "NotificationTemplate",
-			Snake: "notification_template",
-			Lower: "notificationtemplate",
+			Name:   "NotificationTemplate",
+			Snake:  "notification_template",
+			Lower:  "notificationtemplate",
+			Plural: "notification_templates",
 		},
 		ProjectionType:     reflect.TypeFor[NotificationTemplateProjection](),
 		OwnerField:         notificationtemplate.FieldOwnerID,
@@ -5274,9 +5324,10 @@ var (
 	}
 	SchemaOnboarding = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Onboarding",
-			Snake: "onboarding",
-			Lower: "onboarding",
+			Name:   "Onboarding",
+			Snake:  "onboarding",
+			Lower:  "onboarding",
+			Plural: "onboardings",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "onboarding", Operation: refOpLoad, EntityID: entityID}
@@ -5296,9 +5347,10 @@ var (
 	}
 	SchemaOrgMembership = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "OrgMembership",
-			Snake: "org_membership",
-			Lower: "orgmembership",
+			Name:   "OrgMembership",
+			Snake:  "org_membership",
+			Lower:  "orgmembership",
+			Plural: "org_memberships",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "org_membership", Operation: refOpLoad, EntityID: entityID}
@@ -5318,9 +5370,10 @@ var (
 	}
 	SchemaOrgModule = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "OrgModule",
-			Snake: "org_module",
-			Lower: "orgmodule",
+			Name:   "OrgModule",
+			Snake:  "org_module",
+			Lower:  "orgmodule",
+			Plural: "org_modules",
 		},
 		OwnerField: orgmodule.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -5341,9 +5394,10 @@ var (
 	}
 	SchemaOrgPrice = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "OrgPrice",
-			Snake: "org_price",
-			Lower: "orgprice",
+			Name:   "OrgPrice",
+			Snake:  "org_price",
+			Lower:  "orgprice",
+			Plural: "org_prices",
 		},
 		OwnerField: orgprice.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -5364,9 +5418,10 @@ var (
 	}
 	SchemaOrgProduct = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "OrgProduct",
-			Snake: "org_product",
-			Lower: "orgproduct",
+			Name:   "OrgProduct",
+			Snake:  "org_product",
+			Lower:  "orgproduct",
+			Plural: "org_products",
 		},
 		OwnerField: orgproduct.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -5387,9 +5442,10 @@ var (
 	}
 	SchemaOrgSubscription = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "OrgSubscription",
-			Snake: "org_subscription",
-			Lower: "orgsubscription",
+			Name:   "OrgSubscription",
+			Snake:  "org_subscription",
+			Lower:  "orgsubscription",
+			Plural: "org_subscriptions",
 		},
 		OwnerField: orgsubscription.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -5410,9 +5466,10 @@ var (
 	}
 	SchemaOrganization = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Organization",
-			Snake: "organization",
-			Lower: "organization",
+			Name:   "Organization",
+			Snake:  "organization",
+			Lower:  "organization",
+			Plural: "organizations",
 		},
 		ProjectionType:        reflect.TypeFor[OrganizationProjection](),
 		IntegrationM2MEdge:    "integrations",
@@ -5435,9 +5492,10 @@ var (
 	}
 	SchemaOrganizationBrandingSetting = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "OrganizationBrandingSetting",
-			Snake: "organization_branding_setting",
-			Lower: "organizationbrandingsetting",
+			Name:   "OrganizationBrandingSetting",
+			Snake:  "organization_branding_setting",
+			Lower:  "organizationbrandingsetting",
+			Plural: "organization_branding_settings",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "organization_branding_setting", Operation: refOpLoad, EntityID: entityID}
@@ -5457,9 +5515,10 @@ var (
 	}
 	SchemaOrganizationSetting = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "OrganizationSetting",
-			Snake: "organization_setting",
-			Lower: "organizationsetting",
+			Name:   "OrganizationSetting",
+			Snake:  "organization_setting",
+			Lower:  "organizationsetting",
+			Plural: "organization_settings",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "organization_setting", Operation: refOpLoad, EntityID: entityID}
@@ -5479,9 +5538,10 @@ var (
 	}
 	SchemaPasswordResetToken = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "PasswordResetToken",
-			Snake: "password_reset_token",
-			Lower: "passwordresettoken",
+			Name:   "PasswordResetToken",
+			Snake:  "password_reset_token",
+			Lower:  "passwordresettoken",
+			Plural: "password_reset_tokens",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "password_reset_token", Operation: refOpLoad, EntityID: entityID}
@@ -5501,9 +5561,10 @@ var (
 	}
 	SchemaPersonalAccessToken = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "PersonalAccessToken",
-			Snake: "personal_access_token",
-			Lower: "personalaccesstoken",
+			Name:   "PersonalAccessToken",
+			Snake:  "personal_access_token",
+			Lower:  "personalaccesstoken",
+			Plural: "personal_access_tokens",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "personal_access_token", Operation: refOpLoad, EntityID: entityID}
@@ -5526,6 +5587,7 @@ var (
 			Name:             "Platform",
 			Snake:            "platform",
 			Lower:            "platform",
+			Plural:           "platforms",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[PlatformProjection](),
@@ -5632,6 +5694,7 @@ var (
 			Name:             "Procedure",
 			Snake:            "procedure",
 			Lower:            "procedure",
+			Plural:           "procedures",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[ProcedureProjection](),
@@ -5738,9 +5801,10 @@ var (
 	}
 	SchemaProgram = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Program",
-			Snake: "program",
-			Lower: "program",
+			Name:   "Program",
+			Snake:  "program",
+			Lower:  "program",
+			Plural: "programs",
 		},
 		ProjectionType:        reflect.TypeFor[ProgramProjection](),
 		ConsoleRoute:          &ConsoleRoute{Base: "programs"},
@@ -5835,9 +5899,10 @@ var (
 	}
 	SchemaProgramMembership = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "ProgramMembership",
-			Snake: "program_membership",
-			Lower: "programmembership",
+			Name:   "ProgramMembership",
+			Snake:  "program_membership",
+			Lower:  "programmembership",
+			Plural: "program_memberships",
 		},
 		ProjectionType: reflect.TypeFor[ProgramMembershipProjection](),
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -5861,6 +5926,7 @@ var (
 			Name:             "Remediation",
 			Snake:            "remediation",
 			Lower:            "remediation",
+			Plural:           "remediations",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[RemediationProjection](),
@@ -5964,9 +6030,10 @@ var (
 	}
 	SchemaReport = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Report",
-			Snake: "report",
-			Lower: "report",
+			Name:   "Report",
+			Snake:  "report",
+			Lower:  "report",
+			Plural: "reports",
 		},
 		ProjectionType: reflect.TypeFor[ReportProjection](),
 		ConsoleRoute:   &ConsoleRoute{Base: "reports"},
@@ -6012,9 +6079,10 @@ var (
 	}
 	SchemaReportMembership = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "ReportMembership",
-			Snake: "report_membership",
-			Lower: "reportmembership",
+			Name:   "ReportMembership",
+			Snake:  "report_membership",
+			Lower:  "reportmembership",
+			Plural: "report_memberships",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "report_membership", Operation: refOpLoad, EntityID: entityID}
@@ -6034,9 +6102,10 @@ var (
 	}
 	SchemaReview = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Review",
-			Snake: "review",
-			Lower: "review",
+			Name:   "Review",
+			Snake:  "review",
+			Lower:  "review",
+			Plural: "reviews",
 		},
 		ProjectionType:        reflect.TypeFor[ReviewProjection](),
 		OwnerField:            review.FieldOwnerID,
@@ -6134,6 +6203,7 @@ var (
 			Name:             "Risk",
 			Snake:            "risk",
 			Lower:            "risk",
+			Plural:           "risks",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[RiskProjection](),
@@ -6237,9 +6307,10 @@ var (
 	}
 	SchemaSLADefinition = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "SLADefinition",
-			Snake: "sla_definition",
-			Lower: "sladefinition",
+			Name:   "SLADefinition",
+			Snake:  "sla_definition",
+			Lower:  "sladefinition",
+			Plural: "sla_definitions",
 		},
 		OwnerField: sladefinition.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -6260,9 +6331,10 @@ var (
 	}
 	SchemaScan = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Scan",
-			Snake: "scan",
-			Lower: "scan",
+			Name:   "Scan",
+			Snake:  "scan",
+			Lower:  "scan",
+			Plural: "scans",
 		},
 		ProjectionType:        reflect.TypeFor[ScanProjection](),
 		OwnerField:            scan.FieldOwnerID,
@@ -6355,9 +6427,10 @@ var (
 	}
 	SchemaStandard = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Standard",
-			Snake: "standard",
-			Lower: "standard",
+			Name:   "Standard",
+			Snake:  "standard",
+			Lower:  "standard",
+			Plural: "standards",
 		},
 		ProjectionType: reflect.TypeFor[StandardProjection](),
 		ConsoleRoute:   &ConsoleRoute{Base: "standards"},
@@ -6406,6 +6479,7 @@ var (
 			Name:             "Subcontrol",
 			Snake:            "subcontrol",
 			Lower:            "subcontrol",
+			Plural:           "subcontrols",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[SubcontrolProjection](),
@@ -6508,9 +6582,10 @@ var (
 	}
 	SchemaSubprocessor = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Subprocessor",
-			Snake: "subprocessor",
-			Lower: "subprocessor",
+			Name:   "Subprocessor",
+			Snake:  "subprocessor",
+			Lower:  "subprocessor",
+			Plural: "subprocessors",
 		},
 		ProjectionType: reflect.TypeFor[SubprocessorProjection](),
 		OwnerField:     subprocessor.FieldOwnerID,
@@ -6555,9 +6630,10 @@ var (
 	}
 	SchemaSubscriber = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Subscriber",
-			Snake: "subscriber",
-			Lower: "subscriber",
+			Name:   "Subscriber",
+			Snake:  "subscriber",
+			Lower:  "subscriber",
+			Plural: "subscribers",
 		},
 		ProjectionType:       reflect.TypeFor[SubscriberProjection](),
 		AnonymousInputFields: []string{"trustCenterID", "email"},
@@ -6603,9 +6679,10 @@ var (
 	}
 	SchemaSystemDetail = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "SystemDetail",
-			Snake: "system_detail",
-			Lower: "systemdetail",
+			Name:   "SystemDetail",
+			Snake:  "system_detail",
+			Lower:  "systemdetail",
+			Plural: "system_details",
 		},
 		ProjectionType:        reflect.TypeFor[SystemDetailProjection](),
 		OwnerField:            systemdetail.FieldOwnerID,
@@ -6699,9 +6776,10 @@ var (
 	}
 	SchemaTFASetting = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TFASetting",
-			Snake: "tfa_setting",
-			Lower: "tfasetting",
+			Name:   "TFASetting",
+			Snake:  "tfa_setting",
+			Lower:  "tfasetting",
+			Plural: "tfa_settings",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "tfa_setting", Operation: refOpLoad, EntityID: entityID}
@@ -6721,9 +6799,10 @@ var (
 	}
 	SchemaTagDefinition = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TagDefinition",
-			Snake: "tag_definition",
-			Lower: "tagdefinition",
+			Name:   "TagDefinition",
+			Snake:  "tag_definition",
+			Lower:  "tagdefinition",
+			Plural: "tag_definitions",
 		},
 		ProjectionType:        reflect.TypeFor[TagDefinitionProjection](),
 		OwnerField:            tagdefinition.FieldOwnerID,
@@ -6820,6 +6899,7 @@ var (
 			Name:             "Task",
 			Snake:            "task",
 			Lower:            "task",
+			Plural:           "tasks",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[TaskProjection](),
@@ -6923,9 +7003,10 @@ var (
 	}
 	SchemaTemplate = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Template",
-			Snake: "template",
-			Lower: "template",
+			Name:   "Template",
+			Snake:  "template",
+			Lower:  "template",
+			Plural: "templates",
 		},
 		ProjectionType:        reflect.TypeFor[TemplateProjection](),
 		OwnerField:            template.FieldOwnerID,
@@ -7019,9 +7100,10 @@ var (
 	}
 	SchemaTrustCenter = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TrustCenter",
-			Snake: "trust_center",
-			Lower: "trustcenter",
+			Name:   "TrustCenter",
+			Snake:  "trust_center",
+			Lower:  "trustcenter",
+			Plural: "trust_centers",
 		},
 		ProjectionType: reflect.TypeFor[TrustCenterProjection](),
 		ConsoleRoute:   &ConsoleRoute{Base: "trust-center"},
@@ -7067,9 +7149,10 @@ var (
 	}
 	SchemaTrustCenterCompliance = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TrustCenterCompliance",
-			Snake: "trust_center_compliance",
-			Lower: "trustcentercompliance",
+			Name:   "TrustCenterCompliance",
+			Snake:  "trust_center_compliance",
+			Lower:  "trustcentercompliance",
+			Plural: "trust_center_compliances",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center_compliance", Operation: refOpLoad, EntityID: entityID}
@@ -7089,9 +7172,10 @@ var (
 	}
 	SchemaTrustCenterDoc = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TrustCenterDoc",
-			Snake: "trust_center_doc",
-			Lower: "trustcenterdoc",
+			Name:   "TrustCenterDoc",
+			Snake:  "trust_center_doc",
+			Lower:  "trustcenterdoc",
+			Plural: "trust_center_docs",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center_doc", Operation: refOpLoad, EntityID: entityID}
@@ -7111,9 +7195,10 @@ var (
 	}
 	SchemaTrustCenterEntity = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TrustCenterEntity",
-			Snake: "trust_center_entity",
-			Lower: "trustcenterentity",
+			Name:   "TrustCenterEntity",
+			Snake:  "trust_center_entity",
+			Lower:  "trustcenterentity",
+			Plural: "trust_center_entities",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center_entity", Operation: refOpLoad, EntityID: entityID}
@@ -7133,9 +7218,10 @@ var (
 	}
 	SchemaTrustCenterFAQ = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TrustCenterFAQ",
-			Snake: "trust_center_faq",
-			Lower: "trustcenterfaq",
+			Name:   "TrustCenterFAQ",
+			Snake:  "trust_center_faq",
+			Lower:  "trustcenterfaq",
+			Plural: "trust_center_faqs",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center_faq", Operation: refOpLoad, EntityID: entityID}
@@ -7155,9 +7241,10 @@ var (
 	}
 	SchemaTrustCenterNDARequest = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TrustCenterNDARequest",
-			Snake: "trust_center_nda_request",
-			Lower: "trustcenterndarequest",
+			Name:   "TrustCenterNDARequest",
+			Snake:  "trust_center_nda_request",
+			Lower:  "trustcenterndarequest",
+			Plural: "trust_center_nda_requests",
 		},
 		AnonymousInputFields: []string{"trustCenterID", "firstName", "lastName", "email", "companyName", "reason", "accessLevel"},
 		ConsoleRoute:         &ConsoleRoute{Base: "trust-center/NDAs"},
@@ -7179,9 +7266,10 @@ var (
 	}
 	SchemaTrustCenterSetting = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TrustCenterSetting",
-			Snake: "trust_center_setting",
-			Lower: "trustcentersetting",
+			Name:   "TrustCenterSetting",
+			Snake:  "trust_center_setting",
+			Lower:  "trustcentersetting",
+			Plural: "trust_center_settings",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center_setting", Operation: refOpLoad, EntityID: entityID}
@@ -7201,9 +7289,10 @@ var (
 	}
 	SchemaTrustCenterSubprocessor = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TrustCenterSubprocessor",
-			Snake: "trust_center_subprocessor",
-			Lower: "trustcentersubprocessor",
+			Name:   "TrustCenterSubprocessor",
+			Snake:  "trust_center_subprocessor",
+			Lower:  "trustcentersubprocessor",
+			Plural: "trust_center_subprocessors",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center_subprocessor", Operation: refOpLoad, EntityID: entityID}
@@ -7223,9 +7312,10 @@ var (
 	}
 	SchemaTrustCenterWatermarkConfig = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "TrustCenterWatermarkConfig",
-			Snake: "trust_center_watermark_config",
-			Lower: "trustcenterwatermarkconfig",
+			Name:   "TrustCenterWatermarkConfig",
+			Snake:  "trust_center_watermark_config",
+			Lower:  "trustcenterwatermarkconfig",
+			Plural: "trust_center_watermark_configs",
 		},
 		OwnerField: trustcenterwatermarkconfig.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -7246,9 +7336,10 @@ var (
 	}
 	SchemaUser = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "User",
-			Snake: "user",
-			Lower: "user",
+			Name:   "User",
+			Snake:  "user",
+			Lower:  "user",
+			Plural: "users",
 		},
 		ProjectionType: reflect.TypeFor[UserProjection](),
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -7269,9 +7360,10 @@ var (
 	}
 	SchemaUserSetting = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "UserSetting",
-			Snake: "user_setting",
-			Lower: "usersetting",
+			Name:   "UserSetting",
+			Snake:  "user_setting",
+			Lower:  "usersetting",
+			Plural: "user_settings",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "user_setting", Operation: refOpLoad, EntityID: entityID}
@@ -7291,9 +7383,10 @@ var (
 	}
 	SchemaVendorRiskScore = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "VendorRiskScore",
-			Snake: "vendor_risk_score",
-			Lower: "vendorriskscore",
+			Name:   "VendorRiskScore",
+			Snake:  "vendor_risk_score",
+			Lower:  "vendorriskscore",
+			Plural: "vendor_risk_scores",
 		},
 		ProjectionType: reflect.TypeFor[VendorRiskScoreProjection](),
 		OwnerField:     vendorriskscore.FieldOwnerID,
@@ -7338,9 +7431,10 @@ var (
 	}
 	SchemaVendorScoringConfig = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "VendorScoringConfig",
-			Snake: "vendor_scoring_config",
-			Lower: "vendorscoringconfig",
+			Name:   "VendorScoringConfig",
+			Snake:  "vendor_scoring_config",
+			Lower:  "vendorscoringconfig",
+			Plural: "vendor_scoring_configs",
 		},
 		OwnerField: vendorscoringconfig.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -7364,6 +7458,7 @@ var (
 			Name:             "Vulnerability",
 			Snake:            "vulnerability",
 			Lower:            "vulnerability",
+			Plural:           "vulnerabilities",
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[VulnerabilityProjection](),
@@ -7467,9 +7562,10 @@ var (
 	}
 	SchemaWebauthn = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "Webauthn",
-			Snake: "webauthn",
-			Lower: "webauthn",
+			Name:   "Webauthn",
+			Snake:  "webauthn",
+			Lower:  "webauthn",
+			Plural: "webauthns",
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "webauthn", Operation: refOpLoad, EntityID: entityID}
@@ -7489,9 +7585,10 @@ var (
 	}
 	SchemaWorkflowAssignment = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "WorkflowAssignment",
-			Snake: "workflow_assignment",
-			Lower: "workflowassignment",
+			Name:   "WorkflowAssignment",
+			Snake:  "workflow_assignment",
+			Lower:  "workflowassignment",
+			Plural: "workflow_assignments",
 		},
 		OwnerField: workflowassignment.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -7512,9 +7609,10 @@ var (
 	}
 	SchemaWorkflowAssignmentTarget = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "WorkflowAssignmentTarget",
-			Snake: "workflow_assignment_target",
-			Lower: "workflowassignmenttarget",
+			Name:   "WorkflowAssignmentTarget",
+			Snake:  "workflow_assignment_target",
+			Lower:  "workflowassignmenttarget",
+			Plural: "workflow_assignment_targets",
 		},
 		OwnerField: workflowassignmenttarget.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -7535,9 +7633,10 @@ var (
 	}
 	SchemaWorkflowDefinition = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "WorkflowDefinition",
-			Snake: "workflow_definition",
-			Lower: "workflowdefinition",
+			Name:   "WorkflowDefinition",
+			Snake:  "workflow_definition",
+			Lower:  "workflowdefinition",
+			Plural: "workflow_definitions",
 		},
 		ProjectionType: reflect.TypeFor[WorkflowDefinitionProjection](),
 		OwnerField:     workflowdefinition.FieldOwnerID,
@@ -7582,9 +7681,10 @@ var (
 	}
 	SchemaWorkflowEvent = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "WorkflowEvent",
-			Snake: "workflow_event",
-			Lower: "workflowevent",
+			Name:   "WorkflowEvent",
+			Snake:  "workflow_event",
+			Lower:  "workflowevent",
+			Plural: "workflow_events",
 		},
 		OwnerField: workflowevent.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
@@ -7605,9 +7705,10 @@ var (
 	}
 	SchemaWorkflowInstance = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "WorkflowInstance",
-			Snake: "workflow_instance",
-			Lower: "workflowinstance",
+			Name:   "WorkflowInstance",
+			Snake:  "workflow_instance",
+			Lower:  "workflowinstance",
+			Plural: "workflow_instances",
 		},
 		ProjectionType:     reflect.TypeFor[WorkflowInstanceProjection](),
 		OwnerField:         workflowinstance.FieldOwnerID,
@@ -7653,9 +7754,10 @@ var (
 	}
 	SchemaWorkflowObjectRef = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "WorkflowObjectRef",
-			Snake: "workflow_object_ref",
-			Lower: "workflowobjectref",
+			Name:   "WorkflowObjectRef",
+			Snake:  "workflow_object_ref",
+			Lower:  "workflowobjectref",
+			Plural: "workflow_object_refs",
 		},
 		ProjectionType: reflect.TypeFor[WorkflowObjectRefProjection](),
 		OwnerField:     workflowobjectref.FieldOwnerID,
@@ -7700,9 +7802,10 @@ var (
 	}
 	SchemaWorkflowProposal = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:  "WorkflowProposal",
-			Snake: "workflow_proposal",
-			Lower: "workflowproposal",
+			Name:   "WorkflowProposal",
+			Snake:  "workflow_proposal",
+			Lower:  "workflowproposal",
+			Plural: "workflow_proposals",
 		},
 		OwnerField: workflowproposal.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {

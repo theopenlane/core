@@ -10,7 +10,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/storagetypes"
@@ -35,7 +34,7 @@ var (
 	})
 	// schemaDirectories maps each import schema's directory name, its plural snake_case name, to the schema
 	schemaDirectories = lo.SliceToMap(recordSchemas, func(schema *entityops.Schema) (string, *entityops.Schema) {
-		return pluralize.NewClient().Plural(schema.Snake), schema
+		return schema.Plural, schema
 	})
 )
 

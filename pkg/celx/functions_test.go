@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/cel-go/cel"
+	"cel.dev/cel-go/cel"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )

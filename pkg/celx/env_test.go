@@ -3,7 +3,7 @@ package celx
 import (
 	"testing"
 
-	"github.com/google/cel-go/cel"
+	"cel.dev/cel-go/cel"
 	"gotest.tools/v3/assert"
 )
 

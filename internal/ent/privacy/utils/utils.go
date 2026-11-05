@@ -3,6 +3,8 @@ package utils
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"sync"
 
 	"entgo.io/ent"
@@ -10,6 +12,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
@@ -21,6 +24,8 @@ var (
 	pluralizer = pluralize.NewClient()
 	// pluralCache memoizes Plural results for the schema and edge names hit on every mutation and query
 	pluralCache sync.Map
+	// ErrUnknownObjectType is returned when an object type does not match any registered schema
+	ErrUnknownObjectType = errors.New("object type does not match a known schema")
 )
 
 // Plural returns the plural form of word using a shared pluralize client, caching the result
@@ -33,6 +38,16 @@ func Plural(word string) string {
 	pluralCache.Store(word, plural)
 
 	return plural
+}
+
+// ObjectTable returns the database table for the schema matching objectType
+func ObjectTable(objectType string) (string, error) {
+	schema, ok := entityops.LookupSchema(objectType)
+	if !ok {
+		return "", fmt.Errorf("%w: %q", ErrUnknownObjectType, objectType)
+	}
+
+	return schema.Plural, nil
 }
 
 // GenericMutation is an interface for getting a mutation ID and type

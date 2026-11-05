@@ -6,13 +6,13 @@ require (
 	entgo.io/ent v0.14.6
 	github.com/go-webauthn/webauthn v0.18.2
 	github.com/google/uuid v1.6.0
-	github.com/riverqueue/river v0.47.0
+	github.com/riverqueue/river v0.49.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/theopenlane/core/v2 v2.9.1
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.37.0
+	github.com/theopenlane/entx v0.38.1
 	github.com/theopenlane/utils v0.7.4
 	github.com/zitadel/oidc/v3 v3.51.16
 	golang.org/x/oauth2 v0.37.0
@@ -57,12 +57,12 @@ require (
 	github.com/openfga/language/pkg/go v0.3.2 // indirect
 	github.com/philhofer/fwd v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/riverqueue/river/riverdriver v0.47.0 // indirect
-	github.com/riverqueue/river/rivershared v0.47.0 // indirect
-	github.com/riverqueue/river/rivertype v0.47.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.49.0 // indirect
+	github.com/riverqueue/river/rivershared v0.49.0 // indirect
+	github.com/riverqueue/river/rivertype v0.49.0 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/sosodev/duration v1.4.0 // indirect
-	github.com/tidwall/gjson v1.19.0 // indirect
+	github.com/tidwall/gjson v1.20.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
 	github.com/tidwall/pretty v1.2.2 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect

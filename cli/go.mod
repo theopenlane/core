@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/v2 v2.9.4
 	github.com/theopenlane/go-client v0.15.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.41.3
+	github.com/theopenlane/iam v0.42.0
 	github.com/theopenlane/utils v0.7.4
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/term v0.47.0
@@ -40,7 +40,7 @@ require (
 	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.6 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.15 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.16 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-webauthn/webauthn v0.18.2 // indirect
@@ -57,7 +57,7 @@ require (
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jwx-go/jwkfetch/v4 v4.0.4 // indirect
-	github.com/knadh/koanf/maps v0.1.2 // indirect
+	github.com/knadh/koanf/maps v0.1.3 // indirect
 	github.com/labstack/echo/v5 v5.4.2 // indirect
 	github.com/labstack/gommon v0.5.0 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
