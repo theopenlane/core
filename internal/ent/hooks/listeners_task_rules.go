@@ -9,7 +9,7 @@ import (
 	"sync"
 	"text/template"
 
-	"github.com/google/cel-go/cel"
+	"cel.dev/cel-go/cel"
 	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"

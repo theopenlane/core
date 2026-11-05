@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cenkalti/backoff/v5"
+	"github.com/cenkalti/backoff/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
