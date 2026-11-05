@@ -3,7 +3,7 @@
         "config:recommended"
     ],
     "postUpdateOptions": [
-        "gomodTidy"
+        "gomodTidyAll"
     ],
     "labels": [
         "dependencies"
