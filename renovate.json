@@ -5,6 +5,9 @@
     "postUpdateOptions": [
         "gomodTidyAll"
     ],
+    "gitIgnoredAuthors": [
+        "*bender*"
+    ],
     "labels": [
         "dependencies"
     ],
