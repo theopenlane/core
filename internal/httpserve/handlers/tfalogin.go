@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"time"
 
 	echo "github.com/theopenlane/echox"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+
 	"github.com/theopenlane/core/v2/pkg/metrics"
 )
 
@@ -20,6 +22,11 @@ const (
 	tfaPendingTTL = 5 * time.Minute
 )
 
+type tfaAuthenticationRequest struct {
+	UserID         string `json:"user_id"`
+	OrganizationID string `json:"organization_id,omitempty"`
+}
+
 // ValidateLoginTOTP completes a pending login by validating the second factor of the user tied to the pending cookie
 func (h *Handler) ValidateLoginTOTP(ctx echo.Context) error {
 	cookie, err := sessions.GetCookie(ctx.Request(), tfaPendingCookieName)
@@ -27,18 +34,26 @@ func (h *Handler) ValidateLoginTOTP(ctx echo.Context) error {
 		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
 
-	subjectID, err := h.SessionConfig.RedisStore.GetSession(ctx.Request().Context(), tfaPendingKeyPrefix+cookie.Value)
-	if err != nil || subjectID == "" {
+	data, err := h.SessionConfig.RedisStore.GetSession(ctx.Request().Context(), tfaPendingKeyPrefix+cookie.Value)
+	if err != nil || data == "" {
 		h.clearAuthFlowCookies(ctx.Response().Writer, tfaPendingCookieName)
 
 		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
 
-	return h.validateTOTP(ctx, subjectID, cookie.Value)
+	var pendingAuthRequest tfaAuthenticationRequest
+	if err := json.Unmarshal([]byte(data), &pendingAuthRequest); err != nil || pendingAuthRequest.UserID == "" {
+		return h.Unauthorized(ctx, ErrAuthenticationRequired)
+	}
+
+	return h.validateTOTP(ctx, pendingAuthRequest.UserID, cookie.Value)
 }
 
 // startTFAAuthentication parks the login behind a one time pending cookie until the second factor is validated
-func (h *Handler) startTFAAuthentication(ctx echo.Context, userID string) error {
+// the orgID if provided is preserved as that would be the identifier for the org the user is to be logged into. In
+// cases where the sso starts with the org level sso login url, we need to bring the user back into that org.
+// Without tracking, we cannot generate a sesion for the specific org
+func (h *Handler) startTFAAuthentication(ctx echo.Context, userID, orgID string) error {
 	state, err := auth.GenerateOAuthState(stateLength)
 	if err != nil {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
@@ -46,8 +61,18 @@ func (h *Handler) startTFAAuthentication(ctx echo.Context, userID string) error 
 
 	reqCtx := ctx.Request().Context()
 
+	data := tfaAuthenticationRequest{
+		OrganizationID: orgID,
+		UserID:         userID,
+	}
+
+	buf, err := json.Marshal(data)
+	if err != nil {
+		return h.InternalServerError(ctx, ErrProcessingRequest)
+	}
+
 	// the pending state is consumed on completion so the cookie can only ever mint one session
-	if err := h.SessionConfig.RedisStore.StoreSessionWithExpiration(reqCtx, tfaPendingKeyPrefix+state, userID, tfaPendingTTL); err != nil {
+	if err := h.SessionConfig.RedisStore.StoreSessionWithExpiration(reqCtx, tfaPendingKeyPrefix+state, string(buf), tfaPendingTTL); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("could not store tfa auth requirement in redis")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
@@ -66,13 +91,18 @@ func (h *Handler) startTFAAuthentication(ctx echo.Context, userID string) error 
 }
 
 // completeTFALogin responds to a proven second factor, issuing a full session
-func (h *Handler) completeTFALogin(ctx echo.Context, state, subjectID string) error {
+func (h *Handler) completeTFALogin(ctx echo.Context, state, subjectID, orgID string) error {
 	reqCtx := ctx.Request().Context()
 
 	switch {
 	case state != "":
-		return h.issueTFALoginSession(ctx, subjectID)
+		return h.issueTFALoginSession(ctx, subjectID, orgID)
 	case auth.IsTFAEnrollmentRequiredFromContext(reqCtx):
+		orgID, err := auth.GetOrganizationIDFromContext(reqCtx)
+		if err != nil {
+			return h.Unauthorized(ctx, err)
+		}
+
 		accessToken, err := auth.GetBearerToken(ctx)
 		if err != nil {
 			return h.Unauthorized(ctx, err)
@@ -83,7 +113,7 @@ func (h *Handler) completeTFALogin(ctx echo.Context, state, subjectID string) er
 			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 
-		return h.issueTFALoginSession(ctx, subjectID)
+		return h.issueTFALoginSession(ctx, subjectID, orgID)
 	default:
 		return h.Success(ctx, models.TFAResponse{
 			Success: true,
@@ -92,7 +122,7 @@ func (h *Handler) completeTFALogin(ctx echo.Context, state, subjectID string) er
 }
 
 // issueTFALoginSession mints the full session once the second factor is proven
-func (h *Handler) issueTFALoginSession(ctx echo.Context, userID string) error {
+func (h *Handler) issueTFALoginSession(ctx echo.Context, userID, orgID string) error {
 	reqCtx := ctx.Request().Context()
 
 	user, err := h.getUserDetailsByID(auth.WithInternalReadContext(reqCtx), userID)
@@ -109,7 +139,7 @@ func (h *Handler) issueTFALoginSession(ctx echo.Context, userID string) error {
 		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
-	authData, err := h.generateAuthSession(ctx, user, false)
+	authData, err := h.generateAuthSession(ctx, user, false, orgID)
 	if err != nil {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"encoding/json"
 	"slices"
 
 	models "github.com/theopenlane/core/common/openapi"
@@ -81,10 +82,16 @@ func (h *Handler) validateTOTP(ctx echo.Context, subjectID, state string) error 
 		}
 	}
 
+	var pendingAuthRequest tfaAuthenticationRequest
+
 	// the pending state is taken before a recovery code is spent so a replayed cookie cannot burn one
 	if state != "" {
-		userID, err := h.SessionConfig.RedisStore.TakeSession(reqCtx, tfaPendingKeyPrefix+state)
-		if err != nil || userID != subjectID {
+		data, err := h.SessionConfig.RedisStore.TakeSession(reqCtx, tfaPendingKeyPrefix+state)
+		if err != nil {
+			return h.Unauthorized(ctx, ErrAuthenticationRequired)
+		}
+
+		if err := json.Unmarshal([]byte(data), &pendingAuthRequest); err != nil || pendingAuthRequest.UserID != subjectID {
 			return h.Unauthorized(ctx, ErrAuthenticationRequired)
 		}
 
@@ -102,5 +109,5 @@ func (h *Handler) validateTOTP(ctx echo.Context, subjectID, state string) error 
 		}
 	}
 
-	return h.completeTFALogin(ctx, state, subjectID)
+	return h.completeTFALogin(ctx, state, subjectID, pendingAuthRequest.OrganizationID)
 }

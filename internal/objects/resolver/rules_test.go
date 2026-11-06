@@ -353,8 +353,8 @@ func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
 		resolver,
 		WithProviderConfig(storage.ProviderConfig{
 			Providers: storage.Providers{
-				S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: false}},
-				R2: storage.R2Config{ProviderCommon: storage.ProviderCommon{Enabled: true}},
+				S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: true}},
+				R2: storage.R2Config{ProviderCommon: storage.ProviderCommon{Enabled: false}},
 			},
 		}),
 		WithProviderBuilders(providerBuilders{
@@ -367,7 +367,7 @@ func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
 
 	option := resolver.Resolve(context.Background())
 	assert.Check(t, option.IsPresent())
-	assert.Check(t, is.Equal("r2", option.MustGet().Builder.ProviderType()))
+	assert.Check(t, is.Equal("s3", option.MustGet().Builder.ProviderType()))
 }
 
 type oldProvidersStructWithCloudflareR2 struct {

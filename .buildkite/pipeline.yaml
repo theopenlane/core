@@ -136,6 +136,29 @@ common:
   if-main-untagged: &if-main-untagged build.branch == "main" && build.tag == null
 
 steps:
+  - label: ":renovate: go work sync"
+    retry: *disk-full-retry
+    key: "renovate_go_work_sync"
+    if: build.branch =~ /^renovate\//
+    agents: *small-runner
+    if_changed:
+      - go.{mod,sum}
+      - cli/go.{mod,sum}
+      - common/go.{mod,sum}
+      - tools/linters/privacyallow/go.{mod,sum}
+    plugins:
+      - docker#v5.14.0:
+          !!merge <<: *build-image
+          command: ["bash", ".buildkite/renovate-go-work-sync.sh"]
+          volumes: *go-cache-volumes
+          environment:
+            - "GITHUB_TOKEN"
+            - "CGO_ENABLED=0"
+            - "GOTOOLCHAIN=auto"
+            - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+  # a pushed sync commit supersedes this build, so nothing else should start
+  - wait: ~
+    if: build.branch =~ /^renovate\//
   - group: ":knife: Pre-check"
     key: "precheck"
     steps:

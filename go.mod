@@ -26,16 +26,16 @@ require (
 	github.com/Nerzal/gocloak/v13 v13.9.0
 	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/alicebob/miniredis/v2 v2.40.0
-	github.com/alitto/pond/v2 v2.7.2
+	github.com/alitto/pond/v2 v2.7.3
 	github.com/aws/aws-sdk-go-v2 v1.47.5
-	github.com/aws/aws-sdk-go-v2/config v1.33.12
-	github.com/aws/aws-sdk-go-v2/credentials v1.20.12
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.23.14
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.5.1
-	github.com/aws/aws-sdk-go-v2/service/configservice v1.74.4
-	github.com/aws/aws-sdk-go-v2/service/iam v1.64.4
+	github.com/aws/aws-sdk-go-v2/config v1.33.13
+	github.com/aws/aws-sdk-go-v2/credentials v1.20.13
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.23.19
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.5.2
+	github.com/aws/aws-sdk-go-v2/service/configservice v1.74.8
+	github.com/aws/aws-sdk-go-v2/service/iam v1.64.6
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.6
-	github.com/aws/aws-sdk-go-v2/service/securityhub v1.85.0
+	github.com/aws/aws-sdk-go-v2/service/securityhub v1.85.4
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.6
 	github.com/brianvoe/gofakeit/v7 v7.18.1
 	github.com/cenkalti/backoff/v7 v7.0.3
@@ -50,7 +50,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.16
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.151.0
-	github.com/go-jose/go-jose/v4 v4.1.6
+	github.com/go-jose/go-jose/v4 v4.1.7
 	github.com/go-webauthn/webauthn v0.18.2
 	github.com/gocarina/gocsv v0.0.0-20261012193826-401c25af6907
 	github.com/goccy/go-yaml v1.19.2
@@ -71,7 +71,7 @@ require (
 	github.com/knadh/koanf/providers/posflag v1.0.2
 	github.com/knadh/koanf/v2 v2.4.1
 	github.com/labstack/echo-contrib v0.50.1
-	github.com/labstack/echo/v4 v4.16.2
+	github.com/labstack/echo/v4 v4.16.3
 	github.com/labstack/gommon v0.5.0
 	github.com/lestrrat-go/httprc/v3 v3.0.6
 	github.com/lestrrat-go/jwx/v4 v4.6.0
@@ -83,7 +83,7 @@ require (
 	github.com/microsoftgraph/msgraph-sdk-go v1.104.0
 	github.com/nyaruka/phonenumbers v1.8.1
 	github.com/oklog/ulid/v2 v2.1.2
-	github.com/okta/okta-sdk-golang/v6 v6.1.7
+	github.com/okta/okta-sdk-golang/v8 v8.0.0
 	github.com/olekukonko/tablewriter v1.1.5
 	github.com/openfga/go-sdk v0.8.3
 	github.com/openfga/language/pkg/go v0.3.2
@@ -96,16 +96,16 @@ require (
 	github.com/prometheus/client_golang v1.25.0
 	github.com/redis/go-redis/v9 v9.23.0
 	github.com/resend/resend-go/v3 v3.17.0
-	github.com/riverqueue/river v0.49.0
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.49.0
-	github.com/riverqueue/river/rivertype v0.49.0
+	github.com/riverqueue/river v0.50.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.50.0
+	github.com/riverqueue/river/rivertype v0.50.0
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/do/v2 v2.1.0
 	github.com/samber/lo v1.53.0
 	github.com/samber/mo v1.17.0
 	github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf
-	github.com/slack-go/slack v0.32.0
+	github.com/slack-go/slack v0.33.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	github.com/stoewer/go-strcase v1.3.1
@@ -130,7 +130,7 @@ require (
 	github.com/urfave/cli/v3 v3.14.0
 	github.com/vektah/gqlparser/v2 v2.5.64
 	github.com/vmihailenco/msgpack/v5 v5.4.1
-	github.com/yuin/goldmark v1.8.6
+	github.com/yuin/goldmark v1.8.7
 	github.com/zitadel/oidc/v3 v3.51.16
 	github.com/zitadel/zitadel-go/v3 v3.30.0
 	goauthentik.io/api/v3 v3.2026020.16
@@ -144,7 +144,7 @@ require (
 	golang.org/x/text v0.43.0
 	golang.org/x/tools v0.52.0
 	google.golang.org/api v0.310.0
-	google.golang.org/grpc v1.84.0
+	google.golang.org/grpc v1.85.0
 	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
@@ -190,9 +190,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.9 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.8 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.8 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.12.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.39.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.44.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.12.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.39.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.44.1 // indirect
 	github.com/aws/smithy-go v1.28.7 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
@@ -226,7 +226,7 @@ require (
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/ebitengine/purego v0.11.2 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
-	github.com/envoyproxy/go-control-plane/envoy v1.39.0 // indirect
+	github.com/envoyproxy/go-control-plane/envoy v1.39.1-0.20260819172001-e6e3fd93e4be // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.3.3 // indirect
 	github.com/fatih/color v1.19.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
@@ -343,8 +343,8 @@ require (
 	github.com/prometheus/procfs v0.23.0 // indirect
 	github.com/q-uint/parser v0.3.1 // indirect
 	github.com/q-uint/xsd-datetime v1.0.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.49.0 // indirect
-	github.com/riverqueue/river/rivershared v0.49.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.50.0 // indirect
+	github.com/riverqueue/river/rivershared v0.50.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.12.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect

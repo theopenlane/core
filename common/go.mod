@@ -6,11 +6,11 @@ require (
 	entgo.io/ent v0.14.6
 	github.com/go-webauthn/webauthn v0.18.2
 	github.com/google/uuid v1.6.0
-	github.com/riverqueue/river v0.49.0
+	github.com/riverqueue/river v0.50.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
-	github.com/theopenlane/core/v2 v2.13.1
+	github.com/theopenlane/core/v2 v2.13.2
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.38.2
 	github.com/theopenlane/utils v0.7.4
@@ -33,7 +33,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.3.3 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.6 // indirect
-	github.com/go-jose/go-jose/v4 v4.1.6 // indirect
+	github.com/go-jose/go-jose/v4 v4.1.7 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/inflect v1.0.1 // indirect
@@ -56,9 +56,9 @@ require (
 	github.com/openfga/language/pkg/go v0.3.2 // indirect
 	github.com/philhofer/fwd v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/riverqueue/river/riverdriver v0.49.0 // indirect
-	github.com/riverqueue/river/rivershared v0.49.0 // indirect
-	github.com/riverqueue/river/rivertype v0.49.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.50.0 // indirect
+	github.com/riverqueue/river/rivershared v0.50.0 // indirect
+	github.com/riverqueue/river/rivertype v0.50.0 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/tidwall/gjson v1.20.0 // indirect
@@ -88,7 +88,7 @@ require (
 	golang.org/x/tools v0.52.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20261019180522-ce908d29299b // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20261026165753-2ffab32bce7e // indirect
-	google.golang.org/grpc v1.84.0 // indirect
+	google.golang.org/grpc v1.85.0 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
