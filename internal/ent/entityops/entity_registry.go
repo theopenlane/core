@@ -7398,6 +7398,7 @@ var (
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
+			{Fields: []string{"external_id", "question_key"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpCreate}
