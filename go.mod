@@ -95,7 +95,7 @@ require (
 	github.com/pressly/goose/v3 v3.29.0
 	github.com/prometheus/client_golang v1.25.0
 	github.com/redis/go-redis/v9 v9.23.0
-	github.com/resend/resend-go/v3 v3.17.0
+	github.com/resend/resend-go/v4 v4.11.0
 	github.com/riverqueue/river v0.50.0
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.50.0
 	github.com/riverqueue/river/rivertype v0.50.0
@@ -343,6 +343,7 @@ require (
 	github.com/prometheus/procfs v0.23.0 // indirect
 	github.com/q-uint/parser v0.3.1 // indirect
 	github.com/q-uint/xsd-datetime v1.0.0 // indirect
+	github.com/resend/resend-go/v3 v3.17.0 // indirect
 	github.com/riverqueue/river/riverdriver v0.50.0 // indirect
 	github.com/riverqueue/river/rivershared v0.50.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.12.0 // indirect
