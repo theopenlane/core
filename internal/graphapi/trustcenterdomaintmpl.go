@@ -7,7 +7,10 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/logx"
 
+	"github.com/theopenlane/core/common/jobspec"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
 )
 
 func (r *mutationResolver) validateTrustcenterAccess(ctx context.Context, trustCenter *generated.TrustCenter) error {
@@ -38,6 +41,19 @@ func (r *mutationResolver) validateTrustcenterAccess(ctx context.Context, trustC
 	if !ok {
 		logx.FromContext(ctx).Warn().Msg("access denied to create a trust center preview domain")
 		return newPermissionDeniedError()
+	}
+
+	return nil
+}
+
+func enqueueTrustCenterPreviewDomain(ctx context.Context, trustCenterID string, r *mutationResolver) error {
+	_, err := r.db.Job.Insert(ctx, jobspec.CreatePreviewDomainArgs{
+		TrustCenterID:            trustCenterID,
+		TrustCenterPreviewZoneID: r.trustCenterPreviewZoneID,
+		TrustCenterCnameTarget:   r.trustCenterCnameTarget,
+	}, nil)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterpreviewdomain"})
 	}
 
 	return nil
