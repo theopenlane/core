@@ -253,6 +253,29 @@ func TestQueryPrograms(t *testing.T) {
 	// we can ignore the cleanup for the new user, it won't conflict with other tests
 }
 
+func TestMutationCreateBulkProgram(t *testing.T) {
+	name := "Bulk Program " + ulids.New().String()
+
+	resp, err := suite.Client.API.CreateBulkProgram(th.SharedTestUser1.UserCtx, []*testclient.CreateProgramInput{
+		{Name: name + " 1"},
+		{Name: name + " 2"},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkProgram.Programs, 2))
+
+	programIDs := make([]string, 0, len(resp.CreateBulkProgram.Programs))
+	for _, program := range resp.CreateBulkProgram.Programs {
+		programIDs = append(programIDs, program.ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, IDs: programIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeProgram, programIDs)
+}
+
 func TestMutationCreateProgram(t *testing.T) {
 	startDate := time.Now().AddDate(0, 0, 1)
 	endDate := time.Now().AddDate(0, 0, 360)

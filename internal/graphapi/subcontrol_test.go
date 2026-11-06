@@ -237,6 +237,35 @@ func TestQuerySubcontrolsBlockedGroupOnControl(t *testing.T) {
 	th.CleanupOrganizationDataWithContext(ownerCtx, t)
 }
 
+func TestMutationCreateBulkSubcontrol(t *testing.T) {
+	control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: control.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	refCode := "BULK-" + ulids.New().String()
+
+	resp, err := suite.Client.API.CreateBulkSubcontrol(th.SharedTestUser1.UserCtx, []*testclient.CreateSubcontrolInput{
+		{RefCode: refCode + "-1", ControlID: control.ID},
+		{RefCode: refCode + "-2", ControlID: control.ID},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkSubcontrol.Subcontrols, 2))
+
+	subcontrolIDs := make([]string, 0, len(resp.CreateBulkSubcontrol.Subcontrols))
+	for _, subcontrol := range resp.CreateBulkSubcontrol.Subcontrols {
+		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, IDs: subcontrolIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeSubcontrol, subcontrolIDs)
+}
+
 func TestMutationCreateSubcontrol(t *testing.T) {
 	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 

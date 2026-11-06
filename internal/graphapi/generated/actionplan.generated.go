@@ -584,8 +584,6 @@ type MutationResolver interface {
 	UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.UserUpdatePayload, error)
 	DeleteUser(ctx context.Context, id string) (*model.UserDeletePayload, error)
 	CreateUserSetting(ctx context.Context, input generated.CreateUserSettingInput) (*model.UserSettingCreatePayload, error)
-	CreateBulkUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error)
-	CreateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*model.UserSettingBulkCreatePayload, error)
 	UpdateUserSetting(ctx context.Context, id string, input generated.UpdateUserSettingInput) (*model.UserSettingUpdatePayload, error)
 	DeleteBulkUserSetting(ctx context.Context, ids []string) (*model.UserSettingBulkDeletePayload, error)
 	UpdateBulkUserSetting(ctx context.Context, ids []string, input generated.UpdateUserSettingInput) (*model.UserSettingBulkUpdatePayload, error)
@@ -37077,24 +37075,7 @@ func (ec *executionContext) fieldContext_Mutation_createUserSetting(ctx context.
 }
 
 func (ec *executionContext) _Mutation_createBulkUserSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkUserSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkUserSetting(ctx, fc.Args["input"].([]*generated.CreateUserSettingInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.UserSettingBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNUserSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_createBulkUserSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -37121,24 +37102,7 @@ func (ec *executionContext) fieldContext_Mutation_createBulkUserSetting(ctx cont
 }
 
 func (ec *executionContext) _Mutation_createBulkCSVUserSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkCSVUserSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkCSVUserSetting(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.UserSettingBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNUserSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_createBulkCSVUserSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
