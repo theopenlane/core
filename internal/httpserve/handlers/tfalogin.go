@@ -98,6 +98,11 @@ func (h *Handler) completeTFALogin(ctx echo.Context, state, subjectID, orgID str
 	case state != "":
 		return h.issueTFALoginSession(ctx, subjectID, orgID)
 	case auth.IsTFAEnrollmentRequiredFromContext(reqCtx):
+		orgID, err := auth.GetOrganizationIDFromContext(reqCtx)
+		if err != nil {
+			return h.Unauthorized(ctx, err)
+		}
+
 		accessToken, err := auth.GetBearerToken(ctx)
 		if err != nil {
 			return h.Unauthorized(ctx, err)

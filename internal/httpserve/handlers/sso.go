@@ -268,7 +268,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		case entUser.Edges.Setting.IsTfaEnabled:
 			return h.startTFAAuthentication(ctx, entUser.ID, in.OrganizationID)
 		case orgStatus.OrgTFAEnforced:
-			return h.startTFAEnrollment(ctx, entUser)
+			return h.startTFAEnrollment(ctx, entUser, in.OrganizationID)
 		}
 	}
 

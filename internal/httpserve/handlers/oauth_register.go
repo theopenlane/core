@@ -73,7 +73,7 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 	case user.Edges.Setting.IsTfaEnabled:
 		return h.startTFAAuthentication(ctx, user.ID, "")
 	case orgStatus != nil && orgStatus.OrgTFAEnforced:
-		return h.startTFAEnrollment(ctx, user)
+		return h.startTFAEnrollment(ctx, user, "")
 	}
 
 	// create claims for verified user, with the user as the caller so the org access check runs

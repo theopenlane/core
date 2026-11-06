@@ -92,7 +92,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	case user.Edges.Setting.IsTfaEnabled:
 		return h.startTFAAuthentication(ctx, user.ID, "")
 	case orgTFAEnforced:
-		return h.startTFAEnrollment(ctx, user)
+		return h.startTFAEnrollment(ctx, user, "")
 	}
 
 	authData, err := h.generateAuthSession(ctx, user, false, "")
@@ -111,8 +111,8 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 
 // startTFAEnrollment issues an enrollment-only session when the organization enforces two factor authentication
 // and the user has not enrolled yet
-func (h *Handler) startTFAEnrollment(ctx echo.Context, user *ent.User) error {
-	authData, err := h.generateAuthSession(ctx, user, true, "")
+func (h *Handler) startTFAEnrollment(ctx echo.Context, user *ent.User, orgID string) error {
+	authData, err := h.generateAuthSession(ctx, user, true, orgID)
 	if err != nil {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
