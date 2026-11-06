@@ -7,14 +7,18 @@ package graphapi
 
 import (
 	"context"
+	"errors"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/urlx"
@@ -127,7 +131,7 @@ func (r *mutationResolver) CreateTrustCenterPreviewDomain(ctx context.Context, t
 		return nil, rout.ErrPermissionDenied
 	}
 
-	if err := r.validateTrustcenterAccess(ctx, trustCenter); err != nil {
+	if err := rule.CheckTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID); !errors.Is(err, privacy.Allow) {
 		return nil, err
 	}
 
@@ -156,10 +160,6 @@ func (r *mutationResolver) SetupTrustCenterDomains(ctx context.Context, trustCen
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
-	}
-
-	if err := r.validateTrustcenterAccess(ctx, trustCenter); err != nil {
-		return nil, err
 	}
 
 	if trustCenter.PreviewDomainID != "" {

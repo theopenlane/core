@@ -49,10 +49,10 @@ func TestMutationCreatePreviewDomain(t *testing.T) {
 			trustCenterID: org.TrustCenter.ID,
 		},
 		{
-			name:          "view only user can create a preview domain",
+			name:          "view only user cannot create a preview domain",
 			ctx:           org.Member.UserCtx,
 			trustCenterID: org.TrustCenter.ID,
-			expectedErr:   th.NotAuthorizedErrorMsg,
+			expectedErr:   "request denied by access for user in trust center",
 		},
 
 		{
