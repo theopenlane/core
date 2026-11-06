@@ -66,7 +66,7 @@ func (rc *ruleCoordinator) configure() {
 	rc.addKnownProviderRule()
 	rc.addTemplateKindRule(enums.TemplateKindTrustCenterNda, storage.R2Provider)
 	rc.addModuleRule(models.CatalogTrustCenterModule, storage.R2Provider)
-	rc.addModuleRule(models.CatalogComplianceModule, storage.S3Provider)
+	rc.addModuleRule(models.CatalogComplianceModule, storage.R2Provider)
 	rc.addDefaultProviderRule()
 }
 
@@ -262,8 +262,8 @@ func (rc *ruleCoordinator) addDefaultProviderRule() {
 // defaultProvider determines the provider to use when no other rule applies.
 func (rc *ruleCoordinator) defaultProvider() (storage.ProviderType, bool) {
 	for _, provider := range []storage.ProviderType{
-		storage.S3Provider,
 		storage.R2Provider,
+		storage.S3Provider,
 		storage.GCSProvider,
 		storage.DiskProvider,
 		storage.DatabaseProvider,
