@@ -18,7 +18,7 @@ func newTestClient(t *testing.T, handler http.HandlerFunc) *APIClient {
 	server := httptest.NewServer(handler)
 	t.Cleanup(server.Close)
 
-	client, err := NewAPIClient(server.URL, "token-123", true)
+	client, err := NewAPIClient(context.Background(), server.URL, "token-123", true)
 	assert.NilError(t, err)
 
 	return client
@@ -44,17 +44,17 @@ func TestBaseURLOrDefault(t *testing.T) {
 }
 
 func TestClientBuilderRequiresToken(t *testing.T) {
-	_, err := buildClient(types.ConnectionRequest[CredentialSchema]{}, true)
+	_, err := buildClient(context.Background(), types.ConnectionRequest[CredentialSchema]{}, true)
 	assert.Check(t, is.ErrorIs(err, ErrAPITokenMissing))
 }
 
 func TestClientRejectsNonPublicBaseURL(t *testing.T) {
 	req := types.ConnectionRequest[CredentialSchema]{Credential: CredentialSchema{APIToken: "token-123", BaseURL: "http://127.0.0.1:8080"}}
 
-	_, err := buildClient(req, false)
+	_, err := buildClient(context.Background(), req, false)
 	assert.Check(t, err != nil)
 
-	_, err = buildClient(req, true)
+	_, err = buildClient(context.Background(), req, true)
 	assert.Check(t, is.Nil(err))
 }
 

@@ -29,23 +29,23 @@ type APIClient struct {
 
 // clientBuilder returns the FOSSA client constructor, allowPrivate permits non-public base urls for local development
 func clientBuilder(allowPrivate bool) func(context.Context, types.ConnectionRequest[CredentialSchema]) (*APIClient, error) {
-	return func(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*APIClient, error) {
-		return buildClient(req, allowPrivate)
+	return func(ctx context.Context, req types.ConnectionRequest[CredentialSchema]) (*APIClient, error) {
+		return buildClient(ctx, req, allowPrivate)
 	}
 }
 
 // buildClient constructs the FOSSA API client for one installation
-func buildClient(req types.ConnectionRequest[CredentialSchema], allowPrivate bool) (*APIClient, error) {
+func buildClient(ctx context.Context, req types.ConnectionRequest[CredentialSchema], allowPrivate bool) (*APIClient, error) {
 	if req.Credential.APIToken == "" {
 		return nil, ErrAPITokenMissing
 	}
 
-	return NewAPIClient(baseURLOrDefault(req.Credential.BaseURL), req.Credential.APIToken, allowPrivate)
+	return NewAPIClient(ctx, baseURLOrDefault(req.Credential.BaseURL), req.Credential.APIToken, allowPrivate)
 }
 
 // NewAPIClient constructs a FOSSA API client for the supplied base URL and token, the customer supplied
 // base URL must be public unless allowPrivate is set
-func NewAPIClient(baseURL, token string, allowPrivate bool) (*APIClient, error) {
+func NewAPIClient(ctx context.Context, baseURL, token string, allowPrivate bool) (*APIClient, error) {
 	httpClient, err := urlx.NewCustomerHTTPClient(baseURL, allowPrivate, httpclient.Timeout(fossaRequestTimeout))
 	if err != nil {
 		return nil, err
@@ -56,10 +56,14 @@ func NewAPIClient(baseURL, token string, allowPrivate bool) (*APIClient, error) 
 		httpsling.URL(baseURL),
 	)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("fossa: failed to create requester")
+
 		return nil, ErrClientBuild
 	}
 
 	if err := requester.Apply(httpsling.BearerAuth(token)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("fossa: failed to apply bearer auth")
+
 		return nil, ErrClientBuild
 	}
 
@@ -88,6 +92,8 @@ func (c *APIClient) get(ctx context.Context, path string, params map[string]stri
 	}
 
 	if !httpsling.IsSuccess(resp) {
+		logx.FromContext(ctx).Error().Err(err).Str("path", path).Int("status", resp.StatusCode).Msg("fossa: unexpected response status")
+
 		return statusError(resp.StatusCode)
 	}
 
