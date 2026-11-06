@@ -158,6 +158,46 @@ func (_u *OnboardingUpdate) ClearDemoRequested() *OnboardingUpdate {
 	return _u
 }
 
+// SetSeedDemoData sets the "seed_demo_data" field.
+func (_u *OnboardingUpdate) SetSeedDemoData(v bool) *OnboardingUpdate {
+	_u.mutation.SetSeedDemoData(v)
+	return _u
+}
+
+// SetNillableSeedDemoData sets the "seed_demo_data" field if the given value is not nil.
+func (_u *OnboardingUpdate) SetNillableSeedDemoData(v *bool) *OnboardingUpdate {
+	if v != nil {
+		_u.SetSeedDemoData(*v)
+	}
+	return _u
+}
+
+// ClearSeedDemoData clears the value of the "seed_demo_data" field.
+func (_u *OnboardingUpdate) ClearSeedDemoData() *OnboardingUpdate {
+	_u.mutation.ClearSeedDemoData()
+	return _u
+}
+
+// SetDemoDataset sets the "demo_dataset" field.
+func (_u *OnboardingUpdate) SetDemoDataset(v string) *OnboardingUpdate {
+	_u.mutation.SetDemoDataset(v)
+	return _u
+}
+
+// SetNillableDemoDataset sets the "demo_dataset" field if the given value is not nil.
+func (_u *OnboardingUpdate) SetNillableDemoDataset(v *string) *OnboardingUpdate {
+	if v != nil {
+		_u.SetDemoDataset(*v)
+	}
+	return _u
+}
+
+// ClearDemoDataset clears the value of the "demo_dataset" field.
+func (_u *OnboardingUpdate) ClearDemoDataset() *OnboardingUpdate {
+	_u.mutation.ClearDemoDataset()
+	return _u
+}
+
 // Mutation returns the OnboardingMutation object of the builder.
 func (_u *OnboardingUpdate) Mutation() *OnboardingMutation {
 	return _u.mutation
@@ -254,6 +294,18 @@ func (_u *OnboardingUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.DemoRequestedCleared() {
 		_spec.ClearField(onboarding.FieldDemoRequested, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SeedDemoData(); ok {
+		_spec.SetField(onboarding.FieldSeedDemoData, field.TypeBool, value)
+	}
+	if _u.mutation.SeedDemoDataCleared() {
+		_spec.ClearField(onboarding.FieldSeedDemoData, field.TypeBool)
+	}
+	if value, ok := _u.mutation.DemoDataset(); ok {
+		_spec.SetField(onboarding.FieldDemoDataset, field.TypeString, value)
+	}
+	if _u.mutation.DemoDatasetCleared() {
+		_spec.ClearField(onboarding.FieldDemoDataset, field.TypeString)
 	}
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
@@ -405,6 +457,46 @@ func (_u *OnboardingUpdateOne) ClearDemoRequested() *OnboardingUpdateOne {
 	return _u
 }
 
+// SetSeedDemoData sets the "seed_demo_data" field.
+func (_u *OnboardingUpdateOne) SetSeedDemoData(v bool) *OnboardingUpdateOne {
+	_u.mutation.SetSeedDemoData(v)
+	return _u
+}
+
+// SetNillableSeedDemoData sets the "seed_demo_data" field if the given value is not nil.
+func (_u *OnboardingUpdateOne) SetNillableSeedDemoData(v *bool) *OnboardingUpdateOne {
+	if v != nil {
+		_u.SetSeedDemoData(*v)
+	}
+	return _u
+}
+
+// ClearSeedDemoData clears the value of the "seed_demo_data" field.
+func (_u *OnboardingUpdateOne) ClearSeedDemoData() *OnboardingUpdateOne {
+	_u.mutation.ClearSeedDemoData()
+	return _u
+}
+
+// SetDemoDataset sets the "demo_dataset" field.
+func (_u *OnboardingUpdateOne) SetDemoDataset(v string) *OnboardingUpdateOne {
+	_u.mutation.SetDemoDataset(v)
+	return _u
+}
+
+// SetNillableDemoDataset sets the "demo_dataset" field if the given value is not nil.
+func (_u *OnboardingUpdateOne) SetNillableDemoDataset(v *string) *OnboardingUpdateOne {
+	if v != nil {
+		_u.SetDemoDataset(*v)
+	}
+	return _u
+}
+
+// ClearDemoDataset clears the value of the "demo_dataset" field.
+func (_u *OnboardingUpdateOne) ClearDemoDataset() *OnboardingUpdateOne {
+	_u.mutation.ClearDemoDataset()
+	return _u
+}
+
 // Mutation returns the OnboardingMutation object of the builder.
 func (_u *OnboardingUpdateOne) Mutation() *OnboardingMutation {
 	return _u.mutation
@@ -531,6 +623,18 @@ func (_u *OnboardingUpdateOne) sqlSave(ctx context.Context) (_node *Onboarding, 
 	}
 	if _u.mutation.DemoRequestedCleared() {
 		_spec.ClearField(onboarding.FieldDemoRequested, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SeedDemoData(); ok {
+		_spec.SetField(onboarding.FieldSeedDemoData, field.TypeBool, value)
+	}
+	if _u.mutation.SeedDemoDataCleared() {
+		_spec.ClearField(onboarding.FieldSeedDemoData, field.TypeBool)
+	}
+	if value, ok := _u.mutation.DemoDataset(); ok {
+		_spec.SetField(onboarding.FieldDemoDataset, field.TypeString, value)
+	}
+	if _u.mutation.DemoDatasetCleared() {
+		_spec.ClearField(onboarding.FieldDemoDataset, field.TypeString)
 	}
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &Onboarding{config: _u.config}

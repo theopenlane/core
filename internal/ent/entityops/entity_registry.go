@@ -9427,9 +9427,11 @@ func init() {
 		{Name: "compliance", Label: "Compliance", Type: "map[string]interface {}", Clearable: true, TaskRules: []TaskRuleDescriptor{{RuleID: "framework-generic", Expression: "!(has(value.frameworks) && size(value.frameworks) > 0)", Trigger: "createOnly"}, {RuleID: "import-existing-controls", Expression: "value.existing_controls == true", Trigger: "createOnly"}, {RuleID: "import-template-controls", Expression: "!(has(value.existing_controls) && value.existing_controls == true)", Trigger: "createOnly"}, {RuleID: "import-existing-policies", Expression: "value.existing_policies_procedures == true", Trigger: "createOnly"}, {RuleID: "import-policy-templates", Expression: "!(has(value.existing_policies_procedures) && value.existing_policies_procedures == true)", Trigger: "createOnly"}, {RuleID: "has-auditor-at-onboarding", Expression: "value.has_auditor == true", Trigger: "createOnly"}, {RuleID: "wants-auditor-recommendation", Expression: "value.recommend_auditors == true", Trigger: "createOnly"}, {RuleID: "wants-partner-recommendation", Expression: "value.recommend_vciso_partner == true", Trigger: "createOnly"}}},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "demo_dataset", Label: "DemoDataset", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "demo_requested", Label: "DemoRequested", Type: "bool", Clearable: true, TaskRules: []TaskRuleDescriptor{{RuleID: "demo-requested", Expression: "value == true", Trigger: "createOnly"}}},
 		{Name: "domains", Label: "Domains", Type: "[]string", Clearable: true},
 		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "seed_demo_data", Label: "SeedDemoData", Type: "bool", Clearable: true, TaskRules: []TaskRuleDescriptor{{RuleID: "add-demo-data-later", Expression: "value == false", Trigger: "createOnly"}}},
 		{Name: "user_details", Label: "UserDetails", Type: "map[string]interface {}", Clearable: true},
 	}
 	SchemaOrgMembership.Fields = []FieldDescriptor{

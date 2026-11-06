@@ -37,6 +37,10 @@ type Onboarding struct {
 	Compliance map[string]interface{} `json:"compliance,omitempty"`
 	// DemoRequested holds the value of the "demo_requested" field.
 	DemoRequested bool `json:"demo_requested,omitempty"`
+	// whether the organization starts with demo data, unset when the question was not answered
+	SeedDemoData *bool `json:"seed_demo_data,omitempty"`
+	// the demo dataset to seed when seed_demo_data is true
+	DemoDataset string `json:"demo_dataset,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OnboardingQuery when eager-loading is set.
 	Edges        OnboardingEdges `json:"edges"`
@@ -72,9 +76,9 @@ func (*Onboarding) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case onboarding.FieldDomains, onboarding.FieldCompanyDetails, onboarding.FieldUserDetails, onboarding.FieldCompliance:
 			values[i] = new([]byte)
-		case onboarding.FieldDemoRequested:
+		case onboarding.FieldDemoRequested, onboarding.FieldSeedDemoData:
 			values[i] = new(sql.NullBool)
-		case onboarding.FieldID, onboarding.FieldDeletedBy, onboarding.FieldOrganizationID, onboarding.FieldCompanyName:
+		case onboarding.FieldID, onboarding.FieldDeletedBy, onboarding.FieldOrganizationID, onboarding.FieldCompanyName, onboarding.FieldDemoDataset:
 			values[i] = new(sql.NullString)
 		case onboarding.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -161,6 +165,19 @@ func (_m *Onboarding) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DemoRequested = value.Bool
 			}
+		case onboarding.FieldSeedDemoData:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field seed_demo_data", values[i])
+			} else if value.Valid {
+				_m.SeedDemoData = new(bool)
+				*_m.SeedDemoData = value.Bool
+			}
+		case onboarding.FieldDemoDataset:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field demo_dataset", values[i])
+			} else if value.Valid {
+				_m.DemoDataset = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -228,6 +245,14 @@ func (_m *Onboarding) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("demo_requested=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DemoRequested))
+	builder.WriteString(", ")
+	if v := _m.SeedDemoData; v != nil {
+		builder.WriteString("seed_demo_data=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("demo_dataset=")
+	builder.WriteString(_m.DemoDataset)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -72,6 +72,15 @@ func (Onboarding) Fields() []ent.Field {
 			Default(false).
 			Optional().
 			Annotations(entx.FieldTaskRule(taskrules.OnboardingDemoRequestedRule...)),
+		field.Bool("seed_demo_data").
+			Comment("whether the organization starts with demo data, unset when the question was not answered").
+			Optional().
+			Nillable().
+			Annotations(entx.FieldTaskRule(taskrules.OnboardingSeedDemoDataRule...)),
+		field.String("demo_dataset").
+			Comment("the demo dataset to seed when seed_demo_data is true").
+			Optional().
+			Default("soc2"),
 	}
 }
 

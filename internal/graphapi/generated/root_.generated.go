@@ -4517,11 +4517,13 @@ type ComplexityRoot struct {
 		CompanyDetails func(childComplexity int) int
 		CompanyName    func(childComplexity int) int
 		Compliance     func(childComplexity int) int
+		DemoDataset    func(childComplexity int) int
 		DemoRequested  func(childComplexity int) int
 		Domains        func(childComplexity int) int
 		ID             func(childComplexity int) int
 		Organization   func(childComplexity int) int
 		OrganizationID func(childComplexity int) int
+		SeedDemoData   func(childComplexity int) int
 		UserDetails    func(childComplexity int) int
 	}
 
@@ -33334,6 +33336,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Onboarding.Compliance(childComplexity), true
+	case "Onboarding.demoDataset":
+		if e.ComplexityRoot.Onboarding.DemoDataset == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Onboarding.DemoDataset(childComplexity), true
 	case "Onboarding.demoRequested":
 		if e.ComplexityRoot.Onboarding.DemoRequested == nil {
 			break
@@ -33364,6 +33372,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Onboarding.OrganizationID(childComplexity), true
+	case "Onboarding.seedDemoData":
+		if e.ComplexityRoot.Onboarding.SeedDemoData == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Onboarding.SeedDemoData(childComplexity), true
 	case "Onboarding.userDetails":
 		if e.ComplexityRoot.Onboarding.UserDetails == nil {
 			break
@@ -74312,6 +74326,14 @@ input CreateOnboardingInput {
   """
   compliance: Map
   demoRequested: Boolean
+  """
+  whether the organization starts with demo data, unset when the question was not answered
+  """
+  seedDemoData: Boolean
+  """
+  the demo dataset to seed when seed_demo_data is true
+  """
+  demoDataset: String
   organizationID: ID
 }
 """
@@ -102966,6 +102988,14 @@ type Onboarding implements Node {
   """
   compliance: Map
   demoRequested: Boolean
+  """
+  whether the organization starts with demo data, unset when the question was not answered
+  """
+  seedDemoData: Boolean
+  """
+  the demo dataset to seed when seed_demo_data is true
+  """
+  demoDataset: String
   organization: Organization
 }
 """
@@ -103018,6 +103048,27 @@ input OnboardingWhereInput {
   demoRequestedNEQ: Boolean
   demoRequestedIsNil: Boolean
   demoRequestedNotNil: Boolean
+  """
+  seed_demo_data field predicates
+  """
+  seedDemoData: Boolean
+  seedDemoDataNEQ: Boolean
+  seedDemoDataIsNil: Boolean
+  seedDemoDataNotNil: Boolean
+  """
+  demo_dataset field predicates
+  """
+  demoDataset: String
+  demoDatasetNEQ: String
+  demoDatasetIn: [String!]
+  demoDatasetNotIn: [String!]
+  demoDatasetContains: String
+  demoDatasetHasPrefix: String
+  demoDatasetHasSuffix: String
+  demoDatasetIsNil: Boolean
+  demoDatasetNotNil: Boolean
+  demoDatasetEqualFold: String
+  demoDatasetContainsFold: String
   """
   organization edge predicates
   """
@@ -170869,6 +170920,10 @@ func (ec *executionContext) childFields_Onboarding(ctx context.Context, field gr
 		return ec.fieldContext_Onboarding_compliance(ctx, field)
 	case "demoRequested":
 		return ec.fieldContext_Onboarding_demoRequested(ctx, field)
+	case "seedDemoData":
+		return ec.fieldContext_Onboarding_seedDemoData(ctx, field)
+	case "demoDataset":
+		return ec.fieldContext_Onboarding_demoDataset(ctx, field)
 	case "organization":
 		return ec.fieldContext_Onboarding_organization(ctx, field)
 	}

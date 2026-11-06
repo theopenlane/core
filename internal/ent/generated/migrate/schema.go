@@ -6113,6 +6113,8 @@ var (
 		{Name: "user_details", Type: field.TypeJSON, Nullable: true},
 		{Name: "compliance", Type: field.TypeJSON, Nullable: true},
 		{Name: "demo_requested", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "seed_demo_data", Type: field.TypeBool, Nullable: true},
+		{Name: "demo_dataset", Type: field.TypeString, Nullable: true, Default: "soc2"},
 		{Name: "organization_id", Type: field.TypeString, Nullable: true},
 	}
 	// OnboardingsTable holds the schema information for the "onboardings" table.
@@ -6123,7 +6125,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "onboardings_organizations_organization",
-				Columns:    []*schema.Column{OnboardingsColumns[9]},
+				Columns:    []*schema.Column{OnboardingsColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

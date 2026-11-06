@@ -13,6 +13,7 @@ const (
 	RuleWantsAuditorRecommendation = "wants-auditor-recommendation"
 	RuleWantsPartnerRecommendation = "wants-partner-recommendation"
 	RuleDemoRequested              = "demo-requested"
+	RuleAddDemoDataLater           = "add-demo-data-later"
 )
 
 // OnboardingComplianceRules generate suggested tasks from the onboarding compliance answers
@@ -66,6 +67,15 @@ var OnboardingDemoRequestedRule = []entx.TaskRuleSpec{
 	{
 		RuleID:     RuleDemoRequested,
 		Expression: "value == true",
+		Trigger:    entx.TaskRuleOnCreateOnly,
+	},
+}
+
+// OnboardingSeedDemoDataRule suggests adding demo data when the user chose to start without it
+var OnboardingSeedDemoDataRule = []entx.TaskRuleSpec{
+	{
+		RuleID:     RuleAddDemoDataLater,
+		Expression: "value == false",
 		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
 }
