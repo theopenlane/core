@@ -258,7 +258,7 @@ func (r Remediation) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "RMD",
 		additionalMixins: []ent.Mixin{
-			newProvenanceMixin(r, withSearchableExternalID(), withoutExternalIDIndex()),
+			newProvenanceMixin(r, withSearchableExternalID(), withoutExternalIDIndex(), withoutExternalIDLookupKey()),
 			newObjectOwnedMixin[generated.Remediation](r,
 				withParents(
 					ActionPlan{},

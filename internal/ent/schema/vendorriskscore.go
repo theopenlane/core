@@ -121,7 +121,7 @@ func (v VendorRiskScore) Mixin() []ent.Mixin {
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
 			),
-			newProvenanceMixin(v),
+			newProvenanceMixin(v, withoutExternalIDIndex(), withoutExternalIDLookupKey()),
 		},
 	}.getMixins(v)
 }

@@ -140,7 +140,6 @@ func (SystemDetail) Annotations() []schema.Annotation {
 		),
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			LookupAlternative(externalIDFieldName).
 			LookupAlternative("system_name"),
 	}
 }

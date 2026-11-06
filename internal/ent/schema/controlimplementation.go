@@ -163,8 +163,7 @@ func (c ControlImplementation) Annotations() []schema.Annotation {
 		),
 		entx.FGACrudParent(Control{}.Name()),
 		entx.IntegrationMappingSchema().
-			StockPersist().
-			LookupAlternative(externalIDFieldName),
+			StockPersist(),
 	}
 }
 

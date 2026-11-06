@@ -391,8 +391,7 @@ func (Task) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALAssembly("poam-item"),
 		),
 		entx.IntegrationMappingSchema().
-			StockPersist().
-			LookupAlternative(externalIDFieldName),
+			StockPersist(),
 	}
 }
 

@@ -130,8 +130,7 @@ func (n Narrative) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALAssembly("statement"),
 		),
 		entx.IntegrationMappingSchema().
-			StockPersist().
-			LookupAlternative(externalIDFieldName),
+			StockPersist(),
 	}
 }
 

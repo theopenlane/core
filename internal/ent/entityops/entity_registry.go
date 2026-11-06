@@ -4240,8 +4240,8 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_id", "external_owner_id"}},
+			{Fields: []string{"external_id"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "finding", Operation: refOpCreate}
@@ -5939,8 +5939,8 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_id", "external_owner_id"}},
+			{Fields: []string{"external_id"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "remediation", Operation: refOpCreate}
@@ -6117,8 +6117,8 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_id", "external_owner_id"}},
+			{Fields: []string{"external_id"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "review", Operation: refOpCreate}
@@ -7397,7 +7397,6 @@ var (
 		OwnerField:            vendorriskscore.FieldOwnerID,
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_id", "question_key"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {

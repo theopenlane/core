@@ -266,7 +266,6 @@ func (EmailTemplate) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaEmailTemplate),
 		entfga.SelfAccessChecks(),
 		entx.IntegrationMappingSchema().
-			StockPersist().
-			LookupAlternative(externalIDFieldName),
+			StockPersist(),
 	}
 }

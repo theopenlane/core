@@ -381,7 +381,6 @@ func (Platform) Annotations() []schema.Annotation {
 		),
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			LookupAlternative(externalIDFieldName).
 			LookupAlternative("name"),
 	}
 }
