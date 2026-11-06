@@ -1,6 +1,8 @@
 package objectstore
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"testing"
 
@@ -8,6 +10,9 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func TestDemoTestDatasetIsDeletable(t *testing.T) {
@@ -48,6 +53,18 @@ func TestDemoDatasetPrefix(t *testing.T) {
 			assert.Equal(t, tc.prefix, prefix)
 		})
 	}
+}
+
+func TestDeleteDemoRequestNamesSubject(t *testing.T) {
+	ctx := auth.WithCaller(context.Background(), &auth.Caller{OrganizationID: ulids.New().String()})
+
+	req, err := DeleteDemoRequest(ctx, "soc2", []string{"internal_policy"})
+	assert.NilError(t, err)
+
+	var cfg operations.DeleteSource
+	assert.NilError(t, json.Unmarshal(req.Config, &cfg))
+
+	assert.DeepEqual(t, operations.DeleteSource{SourceKey: "demo/soc2", Keep: []string{"internal_policy"}, Subject: "Demo data"}, cfg)
 }
 
 func TestDemoSeedUniqueKey(t *testing.T) {

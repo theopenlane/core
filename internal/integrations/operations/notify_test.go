@@ -17,6 +17,7 @@ func TestImportOutcome(t *testing.T) {
 		result    IngestResult
 		ingestErr error
 		detail    string
+		url       string
 		wantTitle string
 		wantBody  string
 		wantData  map[string]any
@@ -27,6 +28,15 @@ func TestImportOutcome(t *testing.T) {
 			wantTitle: "Demo data import completed",
 			wantBody:  "Imported 3 record(s)",
 			wantData:  map[string]any{"succeeded": 3, "persisted": 3, "skipped": 0, "failed": 0, "failure_summary": ""},
+		},
+		{
+			name:      "completed with detail and url",
+			result:    IngestResult{Attempted: 3, Succeeded: 3, Persisted: 3},
+			detail:    "you can remove this data from your organization settings",
+			url:       "/organization-settings/general-settings#demo-data",
+			wantTitle: "Demo data import completed",
+			wantBody:  "Imported 3 record(s), you can remove this data from your organization settings",
+			wantData:  map[string]any{"succeeded": 3, "persisted": 3, "skipped": 0, "failed": 0, "failure_summary": "", "url": "/organization-settings/general-settings#demo-data"},
 		},
 		{
 			name:      "matched existing records",
@@ -57,7 +67,7 @@ func TestImportOutcome(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			content := importOutcome("Demo data", tc.result, tc.ingestErr, tc.detail)
+			content := importOutcome("Demo data", tc.result, tc.ingestErr, tc.detail, tc.url)
 
 			assert.Equal(t, tc.wantTitle, content.TitleTemplate)
 			assert.Equal(t, tc.wantBody, content.BodyTemplate)

@@ -13,6 +13,18 @@ steps:
         label: Company Domains
         description: We'll use this to setup auto-join to your organization for your teammates and discovery of your vendors and assets automatically.
         inputType: multi-input
+      - key: seed_demo_data
+        label: How would you like to get started?
+        description: Choose whether to start with demo data or an empty organization.
+        inputType: boolean
+        required: true
+        options:
+          - value: "true"
+            label: Explore with demo data
+            description: Start with sample records. You can remove demo data anytime under Organization Settings → General Settings.
+          - value: "false"
+            label: Start with my own data
+            description: Create an empty organization. You can add demo data later if you'd like.
       - key: company_size
         label: Company Size
         inputType: select

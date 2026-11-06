@@ -64007,6 +64007,25 @@ type OnboardingWhereInput struct {
 	DemoRequestedIsNil  bool  `json:"demoRequestedIsNil,omitempty"`
 	DemoRequestedNotNil bool  `json:"demoRequestedNotNil,omitempty"`
 
+	// "seed_demo_data" field predicates.
+	SeedDemoData       *bool `json:"seedDemoData,omitempty"`
+	SeedDemoDataNEQ    *bool `json:"seedDemoDataNEQ,omitempty"`
+	SeedDemoDataIsNil  bool  `json:"seedDemoDataIsNil,omitempty"`
+	SeedDemoDataNotNil bool  `json:"seedDemoDataNotNil,omitempty"`
+
+	// "demo_dataset" field predicates.
+	DemoDataset             *string  `json:"demoDataset,omitempty"`
+	DemoDatasetNEQ          *string  `json:"demoDatasetNEQ,omitempty"`
+	DemoDatasetIn           []string `json:"demoDatasetIn,omitempty"`
+	DemoDatasetNotIn        []string `json:"demoDatasetNotIn,omitempty"`
+	DemoDatasetContains     *string  `json:"demoDatasetContains,omitempty"`
+	DemoDatasetHasPrefix    *string  `json:"demoDatasetHasPrefix,omitempty"`
+	DemoDatasetHasSuffix    *string  `json:"demoDatasetHasSuffix,omitempty"`
+	DemoDatasetIsNil        bool     `json:"demoDatasetIsNil,omitempty"`
+	DemoDatasetNotNil       bool     `json:"demoDatasetNotNil,omitempty"`
+	DemoDatasetEqualFold    *string  `json:"demoDatasetEqualFold,omitempty"`
+	DemoDatasetContainsFold *string  `json:"demoDatasetContainsFold,omitempty"`
+
 	// "domains" JSON-string-array predicates.
 	DomainsHas *string `json:"domainsHas,omitempty"`
 
@@ -64175,6 +64194,51 @@ func (i *OnboardingWhereInput) P() (predicate.Onboarding, error) {
 	}
 	if i.DemoRequestedNotNil {
 		predicates = append(predicates, onboarding.DemoRequestedNotNil())
+	}
+	if i.SeedDemoData != nil {
+		predicates = append(predicates, onboarding.SeedDemoDataEQ(*i.SeedDemoData))
+	}
+	if i.SeedDemoDataNEQ != nil {
+		predicates = append(predicates, onboarding.SeedDemoDataNEQ(*i.SeedDemoDataNEQ))
+	}
+	if i.SeedDemoDataIsNil {
+		predicates = append(predicates, onboarding.SeedDemoDataIsNil())
+	}
+	if i.SeedDemoDataNotNil {
+		predicates = append(predicates, onboarding.SeedDemoDataNotNil())
+	}
+	if i.DemoDataset != nil {
+		predicates = append(predicates, onboarding.DemoDatasetEQ(*i.DemoDataset))
+	}
+	if i.DemoDatasetNEQ != nil {
+		predicates = append(predicates, onboarding.DemoDatasetNEQ(*i.DemoDatasetNEQ))
+	}
+	if len(i.DemoDatasetIn) > 0 {
+		predicates = append(predicates, onboarding.DemoDatasetIn(i.DemoDatasetIn...))
+	}
+	if len(i.DemoDatasetNotIn) > 0 {
+		predicates = append(predicates, onboarding.DemoDatasetNotIn(i.DemoDatasetNotIn...))
+	}
+	if i.DemoDatasetContains != nil {
+		predicates = append(predicates, onboarding.DemoDatasetContains(*i.DemoDatasetContains))
+	}
+	if i.DemoDatasetHasPrefix != nil {
+		predicates = append(predicates, onboarding.DemoDatasetHasPrefix(*i.DemoDatasetHasPrefix))
+	}
+	if i.DemoDatasetHasSuffix != nil {
+		predicates = append(predicates, onboarding.DemoDatasetHasSuffix(*i.DemoDatasetHasSuffix))
+	}
+	if i.DemoDatasetIsNil {
+		predicates = append(predicates, onboarding.DemoDatasetIsNil())
+	}
+	if i.DemoDatasetNotNil {
+		predicates = append(predicates, onboarding.DemoDatasetNotNil())
+	}
+	if i.DemoDatasetEqualFold != nil {
+		predicates = append(predicates, onboarding.DemoDatasetEqualFold(*i.DemoDatasetEqualFold))
+	}
+	if i.DemoDatasetContainsFold != nil {
+		predicates = append(predicates, onboarding.DemoDatasetContainsFold(*i.DemoDatasetContainsFold))
 	}
 
 	if i.DomainsHas != nil {
