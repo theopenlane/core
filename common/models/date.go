@@ -33,7 +33,7 @@ var _ json.Marshaler = DateTime{}
 var _ json.Unmarshaler = (*DateTime)(nil)
 
 // Scan implements the sql.Scanner interface for DateTime
-func (d *DateTime) Scan(value interface{}) error {
+func (d *DateTime) Scan(value any) error {
 	if value == nil {
 		value = time.Time{} // Handle nil value as zero time
 	}

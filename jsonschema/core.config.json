@@ -1539,6 +1539,9 @@
         "FetchCooldown": {
           "type": "integer"
         },
+        "FetchOnlyKnownKinds": {
+          "type": "boolean"
+        },
         "FetchPollInterval": {
           "type": "integer"
         },
@@ -1560,6 +1563,9 @@
         },
         "Hooks": {
           "$ref": "#/$defs/[]rivertype.Hook"
+        },
+        "LeaderElectionDisabled": {
+          "type": "boolean"
         },
         "Logger": {
           "$ref": "#/$defs/slog.Logger"

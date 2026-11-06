@@ -1,7 +1,7 @@
 package workflows
 
 import (
-	"github.com/google/cel-go/cel"
+	"cel.dev/cel-go/cel"
 
 	"github.com/theopenlane/core/v2/pkg/celx"
 )

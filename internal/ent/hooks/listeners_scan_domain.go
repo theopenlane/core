@@ -132,7 +132,8 @@ func dispatchDomainScan(ctx context.Context, rt *intruntime.Runtime, uniqueKey s
 		RunType:      enums.IntegrationRunTypeEvent,
 		Runtime:      true,
 		// a listener retry after a crashed cycle must not enqueue the scan twice
-		UniqueKey: uniqueKey,
+		UniqueKey:  uniqueKey,
+		UniqueOnce: true,
 	})
 
 	return err

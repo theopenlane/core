@@ -6,7 +6,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
@@ -50,7 +49,7 @@ func createValidation() (input graphclient.CreatePersonalAccessTokenInput, err e
 
 	expiration := cmd.Config.Duration("expiration")
 	if expiration != 0 {
-		input.ExpiresAt = lo.ToPtr(time.Now().Add(expiration))
+		input.ExpiresAt = new(time.Now().Add(expiration))
 	}
 
 	return input, nil

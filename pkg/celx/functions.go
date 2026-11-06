@@ -1,18 +1,19 @@
 package celx
 
 import (
+	"maps"
 	"reflect"
 	"regexp"
 	"strings"
 
-	"github.com/google/cel-go/cel"
-	celtypes "github.com/google/cel-go/common/types"
-	"github.com/google/cel-go/common/types/ref"
-	"github.com/google/cel-go/common/types/traits"
+	"cel.dev/cel-go/cel"
+	celtypes "cel.dev/cel-go/common/types"
+	"cel.dev/cel-go/common/types/ref"
+	"cel.dev/cel-go/common/types/traits"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 )
 
-var jsonValueType = reflect.TypeOf(&structpb.Value{})
+var jsonValueType = reflect.TypeFor[*structpb.Value]()
 
 // paragraphSeparatorRe matches runs of three or more spaces used as a paragraph separator in
 // single-line provider descriptions
@@ -107,5 +108,32 @@ var paragraphsFunc = cel.Function("paragraphs",
 		[]*cel.Type{cel.DynType},
 		cel.StringType,
 		cel.UnaryBinding(paragraphsBinding),
+	),
+)
+
+// mergeBinding implements the merge(base, overrides) CEL function, returning base with every key of overrides set on it,
+// so a map expression can keep a payload and change a few fields, a null base yields the overrides
+func mergeBinding(lhs, rhs ref.Val) ref.Val {
+	base, err := ToJSONMap(lhs)
+	if err != nil {
+		return celtypes.NewErr("merge: first argument must be a map")
+	}
+
+	overrides, err := ToJSONMap(rhs)
+	if err != nil {
+		return celtypes.NewErr("merge: second argument must be a map")
+	}
+
+	maps.Copy(base, overrides)
+
+	return celtypes.DefaultTypeAdapter.NativeToValue(base)
+}
+
+// mergeFunc is the CEL function declaration for merge, the base is dyn so a null payload reaches the binding
+var mergeFunc = cel.Function("merge",
+	cel.Overload("merge_dyn_map",
+		[]*cel.Type{cel.DynType, cel.MapType(cel.StringType, cel.DynType)},
+		cel.MapType(cel.StringType, cel.DynType),
+		cel.BinaryBinding(mergeBinding),
 	),
 )

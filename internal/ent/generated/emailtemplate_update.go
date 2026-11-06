@@ -251,6 +251,26 @@ func (_u *EmailTemplateUpdate) ClearIntegrationRunID() *EmailTemplateUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *EmailTemplateUpdate) SetSourceKey(v string) *EmailTemplateUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *EmailTemplateUpdate) SetNillableSourceKey(v *string) *EmailTemplateUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *EmailTemplateUpdate) ClearSourceKey() *EmailTemplateUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *EmailTemplateUpdate) SetExternalID(v string) *EmailTemplateUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1119,6 +1139,12 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(emailtemplate.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(emailtemplate.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(emailtemplate.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(emailtemplate.FieldExternalID, field.TypeString, value)
 	}
@@ -1886,6 +1912,26 @@ func (_u *EmailTemplateUpdateOne) SetNillableIntegrationRunID(v *string) *EmailT
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *EmailTemplateUpdateOne) ClearIntegrationRunID() *EmailTemplateUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *EmailTemplateUpdateOne) SetSourceKey(v string) *EmailTemplateUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *EmailTemplateUpdateOne) SetNillableSourceKey(v *string) *EmailTemplateUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *EmailTemplateUpdateOne) ClearSourceKey() *EmailTemplateUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -2786,6 +2832,12 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(emailtemplate.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(emailtemplate.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(emailtemplate.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(emailtemplate.FieldExternalID, field.TypeString, value)

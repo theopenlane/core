@@ -12,7 +12,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
@@ -170,15 +169,15 @@ func TestMutationCreatePlatform(t *testing.T) {
 			name: "happy path, admin user edges and files",
 			request: testclient.CreatePlatformInput{
 				Name:                     gofakeit.AppName() + ulids.New().String(),
-				Description:              lo.ToPtr(gofakeit.Paragraph()),
-				TrustBoundaryDescription: lo.ToPtr(gofakeit.Paragraph()),
-				DataFlowSummary:          lo.ToPtr(gofakeit.Paragraph()),
-				ScopeStatement:           lo.ToPtr(gofakeit.Paragraph()),
-				ExternalUUID:             lo.ToPtr(uuid.New().String()),
-				ExternalReferenceID:      lo.ToPtr("PLT-123"),
+				Description:              new(gofakeit.Paragraph()),
+				TrustBoundaryDescription: new(gofakeit.Paragraph()),
+				DataFlowSummary:          new(gofakeit.Paragraph()),
+				ScopeStatement:           new(gofakeit.Paragraph()),
+				ExternalUUID:             new(uuid.New().String()),
+				ExternalReferenceID:      new("PLT-123"),
 				SourceAssetIDs:           []string{asset.ID},
 				SourceEntityIDs:          []string{vendor.ID},
-				ContainsPii:              lo.ToPtr(true),
+				ContainsPii:              new(true),
 			},
 			archDiagrams:          []*graphql.Upload{pngFile, pdfFile},
 			dataFlowDiagrams:      []*graphql.Upload{pdfFile},
@@ -200,10 +199,10 @@ func TestMutationCreatePlatform(t *testing.T) {
 			name: "happy path, using api token",
 			request: testclient.CreatePlatformInput{
 				Name:                     gofakeit.AppName() + ulids.New().String(),
-				Description:              lo.ToPtr(gofakeit.Paragraph()),
-				TrustBoundaryDescription: lo.ToPtr(gofakeit.Paragraph()),
-				DataFlowSummary:          lo.ToPtr(gofakeit.Paragraph()),
-				ScopeStatement:           lo.ToPtr(gofakeit.Paragraph()),
+				Description:              new(gofakeit.Paragraph()),
+				TrustBoundaryDescription: new(gofakeit.Paragraph()),
+				DataFlowSummary:          new(gofakeit.Paragraph()),
+				ScopeStatement:           new(gofakeit.Paragraph()),
 			},
 			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
@@ -212,10 +211,10 @@ func TestMutationCreatePlatform(t *testing.T) {
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreatePlatformInput{
 				Name:                     gofakeit.AppName() + ulids.New().String(),
-				Description:              lo.ToPtr(gofakeit.Paragraph()),
-				TrustBoundaryDescription: lo.ToPtr(gofakeit.Paragraph()),
-				DataFlowSummary:          lo.ToPtr(gofakeit.Paragraph()),
-				ScopeStatement:           lo.ToPtr(gofakeit.Paragraph()),
+				Description:              new(gofakeit.Paragraph()),
+				TrustBoundaryDescription: new(gofakeit.Paragraph()),
+				DataFlowSummary:          new(gofakeit.Paragraph()),
+				ScopeStatement:           new(gofakeit.Paragraph()),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -354,13 +353,13 @@ func TestMutationUpdatePlatform(t *testing.T) {
 		{
 			name: "happy path, update field as admin",
 			request: testclient.UpdatePlatformInput{
-				Description:            lo.ToPtr(gofakeit.Paragraph()),
+				Description:            new(gofakeit.Paragraph()),
 				AddEntityIDs:           []string{vendor.ID},
 				AddAssetIDs:            []string{asset.ID},
 				AddOutOfScopeAssetIDs:  []string{outOfScopeAsset.ID},
 				AddOutOfScopeVendorIDs: []string{outOfScopeVendor.ID},
-				ExternalReferenceID:    lo.ToPtr("PLT-456"),
-				ContainsPii:            lo.ToPtr(true),
+				ExternalReferenceID:    new("PLT-456"),
+				ContainsPii:            new(true),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -368,12 +367,12 @@ func TestMutationUpdatePlatform(t *testing.T) {
 		{
 			name: "happy path, update multiple fields with personal access token",
 			request: testclient.UpdatePlatformInput{
-				Description:              lo.ToPtr(gofakeit.Paragraph()),
-				ScopeStatement:           lo.ToPtr(gofakeit.Paragraph()),
-				DataFlowSummary:          lo.ToPtr(gofakeit.Paragraph()),
-				TrustBoundaryDescription: lo.ToPtr(gofakeit.Paragraph()),
-				ExternalReferenceID:      lo.ToPtr("PLT-456"),
-				ContainsPii:              lo.ToPtr(false),
+				Description:              new(gofakeit.Paragraph()),
+				ScopeStatement:           new(gofakeit.Paragraph()),
+				DataFlowSummary:          new(gofakeit.Paragraph()),
+				TrustBoundaryDescription: new(gofakeit.Paragraph()),
+				ExternalReferenceID:      new("PLT-456"),
+				ContainsPii:              new(false),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -395,7 +394,7 @@ func TestMutationUpdatePlatform(t *testing.T) {
 		{
 			name: "update not allowed, not enough permissions",
 			request: testclient.UpdatePlatformInput{
-				Name: lo.ToPtr("New Name"),
+				Name: new("New Name"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -404,7 +403,7 @@ func TestMutationUpdatePlatform(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdatePlatformInput{
-				Name: lo.ToPtr("New Name"),
+				Name: new("New Name"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,

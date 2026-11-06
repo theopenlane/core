@@ -5,6 +5,7 @@ package apitokens
 import (
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/spf13/cobra"
 	fgamodel "github.com/theopenlane/core/v2/fga/model"
@@ -41,15 +42,16 @@ func allScopes() error {
 	}
 	sort.Strings(objects)
 
-	desc := fmt.Sprintf(boldStart + "Available Scopes: \n\n" + boldEnd)
+	var desc strings.Builder
+	desc.WriteString(fmt.Sprintf(boldStart + "Available Scopes: \n\n" + boldEnd))
 	for _, obj := range objects {
 		for _, v := range scopes[obj] {
-			desc += fmt.Sprintf(boldStart+"%s"+boldEnd+":%s ", obj, v)
+			desc.WriteString(fmt.Sprintf(boldStart+"%s"+boldEnd+":%s ", obj, v))
 		}
-		desc += fmt.Sprintf("\n")
+		desc.WriteString(fmt.Sprintf("\n"))
 	}
 
-	fmt.Println(desc)
+	fmt.Println(desc.String())
 
 	return nil
 }

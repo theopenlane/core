@@ -36,7 +36,7 @@ type webhookBinder struct {
 }
 
 // Bind is the echo binder override that preserves the request body for repeated reads
-func (b *webhookBinder) Bind(c echo.Context, i interface{}) error {
+func (b *webhookBinder) Bind(c echo.Context, i any) error {
 	inner := b.Binder
 	if inner == nil {
 		inner = new(echo.DefaultBinder)
@@ -189,7 +189,7 @@ func TestWebhookReceiverHandler(t *testing.T) {
 	}
 
 	parseDate := func(version string) time.Time {
-		datePart := strings.SplitN(version, ".", 2)[0]
+		datePart, _, _ := strings.Cut(version, ".")
 		parsed, perr := time.Parse("2006-01-02", datePart)
 		if perr != nil {
 			return time.Now()
@@ -477,7 +477,6 @@ func TestWebhookReceiverHandler(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		tc := tc
 
 		t.Run(tc.name, func(t *testing.T) {
 			suite.stripeMockBackend.ExpectedCalls = suite.stripeMockBackend.ExpectedCalls[:0]

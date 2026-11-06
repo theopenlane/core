@@ -53,6 +53,8 @@ type Risk struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -604,7 +606,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case risk.FieldScore, risk.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldUpdatedByImpersonator, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldSourceDefinitionID, risk.FieldSourceDefinitionVersion, risk.FieldSourceInstanceID, risk.FieldManagedBy, risk.FieldIntegrationRunID, risk.FieldExternalID, risk.FieldOwnerID, risk.FieldStakeholderName, risk.FieldStakeholderUserID, risk.FieldStakeholderGroupID, risk.FieldStakeholderIdentityHolderID, risk.FieldDelegateName, risk.FieldDelegateUserID, risk.FieldDelegateGroupID, risk.FieldDelegateIdentityHolderID, risk.FieldRiskKindName, risk.FieldRiskKindID, risk.FieldRiskCategoryName, risk.FieldRiskCategoryID, risk.FieldEnvironmentName, risk.FieldEnvironmentID, risk.FieldScopeName, risk.FieldScopeID, risk.FieldIntegrationID, risk.FieldExternalUUID, risk.FieldName, risk.FieldStatus, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts, risk.FieldStakeholderID, risk.FieldDelegateID, risk.FieldReviewFrequency, risk.FieldRiskDecision:
+		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldUpdatedByImpersonator, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldSourceDefinitionID, risk.FieldSourceDefinitionVersion, risk.FieldSourceInstanceID, risk.FieldManagedBy, risk.FieldIntegrationRunID, risk.FieldSourceKey, risk.FieldExternalID, risk.FieldOwnerID, risk.FieldStakeholderName, risk.FieldStakeholderUserID, risk.FieldStakeholderGroupID, risk.FieldStakeholderIdentityHolderID, risk.FieldDelegateName, risk.FieldDelegateUserID, risk.FieldDelegateGroupID, risk.FieldDelegateIdentityHolderID, risk.FieldRiskKindName, risk.FieldRiskKindID, risk.FieldRiskCategoryName, risk.FieldRiskCategoryID, risk.FieldEnvironmentName, risk.FieldEnvironmentID, risk.FieldScopeName, risk.FieldScopeID, risk.FieldIntegrationID, risk.FieldExternalUUID, risk.FieldName, risk.FieldStatus, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts, risk.FieldStakeholderID, risk.FieldDelegateID, risk.FieldReviewFrequency, risk.FieldRiskDecision:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -721,6 +723,12 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case risk.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case risk.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1267,6 +1275,9 @@ func (_m *Risk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

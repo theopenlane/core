@@ -77,6 +77,10 @@ type ActionPlanHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -546,6 +550,10 @@ type AssessmentHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -825,6 +833,10 @@ type AssessmentPolicyHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -1384,6 +1396,10 @@ type AssetHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -1817,6 +1833,10 @@ type CampaignHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -2503,6 +2523,10 @@ type ContactHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -2797,6 +2821,10 @@ type ControlHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -3249,6 +3277,10 @@ type ControlImplementationHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -3536,6 +3568,10 @@ type ControlObjectiveHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -4553,6 +4589,10 @@ type EmailTemplateHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -4889,6 +4929,10 @@ type EntityHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -5007,19 +5051,19 @@ type EntityHistory implements Node {
 	"""
 	The entity's displayed 'friendly' name
 	"""
-	displayName: String
+	displayName: String @catalogManaged
 	"""
 	An optional description of the entity
 	"""
-	description: String
+	description: String @catalogManaged
 	"""
 	domains associated with the entity
 	"""
-	domains: [String!]
+	domains: [String!] @catalogManaged
 	"""
 	common matching names that should match with the entity
 	"""
-	aliases: [String!]
+	aliases: [String!] @catalogManaged
 	"""
 	The type of the entity
 	"""
@@ -5091,15 +5135,15 @@ type EntityHistory implements Node {
 	"""
 	status page URL for the entity
 	"""
-	statusPageURL: String
+	statusPageURL: String @catalogManaged
 	"""
 	services provided by the entity
 	"""
-	providedServices: [String!]
+	providedServices: [String!] @catalogManaged
 	"""
 	external links associated with the entity
 	"""
-	links: [String!]
+	links: [String!] @catalogManaged
 	"""
 	the risk rating label for the entity
 	"""
@@ -5135,7 +5179,7 @@ type EntityHistory implements Node {
 	"""
 	URL of the logo for the entity
 	"""
-	logoRemoteURL: String
+	logoRemoteURL: String @catalogManaged
 	"""
 	The logo file id for the entity
 	"""
@@ -5654,6 +5698,10 @@ type EvidenceHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -6520,6 +6568,10 @@ type FindingHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -7001,6 +7053,10 @@ type GroupHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -7945,6 +8001,10 @@ type IdentityHolderHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -8347,6 +8407,10 @@ type InternalPolicyHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -8960,6 +9024,10 @@ type MappedControlHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -9240,6 +9308,10 @@ type NarrativeHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -11448,6 +11520,10 @@ type PlatformHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -11930,6 +12006,10 @@ type ProcedureHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -12334,6 +12414,10 @@ type ProgramHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -15056,6 +15140,10 @@ type RemediationHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -15857,6 +15945,10 @@ type ReviewHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -16202,6 +16294,10 @@ type RiskHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -17209,6 +17305,10 @@ type SubcontrolHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -17866,6 +17966,10 @@ type SystemDetailHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -18141,6 +18245,10 @@ type TaskHistory implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -18236,10 +18344,6 @@ type TaskHistory implements Node {
 	the system or workflow that created or suggested the task
 	"""
 	source: String
-	"""
-	stable source-specific key for the task
-	"""
-	sourceKey: String
 	"""
 	key to prevent duplicates for auto-generated task based on rules
 	"""
@@ -18490,6 +18594,10 @@ type TemplateHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -21980,6 +22088,10 @@ type VulnerabilityHistory implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""

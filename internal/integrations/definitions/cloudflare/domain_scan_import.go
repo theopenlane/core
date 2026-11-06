@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
@@ -19,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/logx"
@@ -68,11 +70,11 @@ func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelo
 		return err
 	}
 
-	return s.notifyDomainScanImportComplete(domainScanSystemContext(ctx, envelope.OrganizationID), envelope.OrganizationID, summary)
+	return s.notifyDomainScanImportComplete(domainScanSystemContext(ctx, envelope.OrganizationID), summary)
 }
 
 // notifyDomainScanImportComplete sends the Notification that surfaces an import's results
-func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, organizationID string, summary importSummary) error {
+func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, summary importSummary) error {
 	data, err := jsonx.ToMap(summary)
 	if err != nil {
 		return err
@@ -96,17 +98,11 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 		body += "; updated trust center branding"
 	}
 
-	_, err = s.services.DB().Notification.Create().
-		SetOwnerID(organizationID).
-		SetNotificationType(enums.NotificationTypeOrganization).
-		SetObjectType("scan.import.completed").
-		SetTitle("Domain scan import completed").
-		SetBody(body).
-		SetData(data).
-		SetTopic(enums.NotificationTopicImportComplete).
-		Save(ctx)
-
-	return err
+	return operations.NotifyOutcome(ctx, "scan.import.completed", entityops.NotificationContent{
+		TitleTemplate: "Domain scan import completed",
+		BodyTemplate:  body,
+		Data:          data,
+	})
 }
 
 // importDomainScanReview creates every accepted object in order: vendors and assets first (so
@@ -426,7 +422,7 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 			Name:           &entityName,
 			DisplayName:    &vendor.Name,
 			OwnerID:        &ownerID,
-			ApprovedForUse: lo.ToPtr(true),
+			ApprovedForUse: new(true),
 			EntityTypeID:   &vendorEntityTypeID,
 			ScanIDs:        scanIDs,
 			Tags:           vendor.Categories,

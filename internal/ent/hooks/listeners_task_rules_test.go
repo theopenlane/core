@@ -94,7 +94,7 @@ func TestTaskRuleListenersNotificationTaskOwnerAttribution(t *testing.T) {
 		SetObjectType("scan.created").
 		SetTitle("Domain scan completed").
 		SetBody("test").
-		SetData(map[string]interface{}{}).
+		SetData(map[string]any{}).
 		SetTopic(enums.NotificationTopicDomainScan).
 		Save(scanSystemCtx)
 	assert.NilError(t, err)
@@ -160,8 +160,8 @@ func TestOnboardingCreatesProgramWithSelectedFrameworks(t *testing.T) {
 
 	onboarding, err := s.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 		CompanyName: "Framework Program Co",
-		Compliance: map[string]interface{}{
-			"frameworks":    []interface{}{"soc2", "iso27001", "soc2"},
+		Compliance: map[string]any{
+			"frameworks":    []any{"soc2", "iso27001", "soc2"},
 			"auditor_name":  "Jane Doe",
 			"auditor_email": "jane@example.com",
 		},
@@ -234,11 +234,9 @@ func taskRuleListenerFor(schemaName string) (entityops.MutationListener, bool) {
 
 func notificationCreatePayload(topic enums.NotificationTopic) entityops.MutationPayload {
 	return entityops.MutationPayload{
-		MutationType: generated.TypeNotification,
-		Operation:    entityops.OpCreate,
-		EntityID:     "notification-1",
-		ChangeSet: entityops.ChangeSet{
-			ProposedChanges: map[string]any{notification.FieldTopic: topic},
-		},
+		MutationType:    generated.TypeNotification,
+		Operation:       entityops.OpCreate,
+		EntityID:        "notification-1",
+		ProposedChanges: map[string]any{notification.FieldTopic: topic},
 	}
 }

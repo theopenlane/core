@@ -626,6 +626,8 @@ components:
                                             properties:
                                                 inline:
                                                     type: boolean
+                                                noRetry:
+                                                    type: boolean
                                                 reconcile:
                                                     type: boolean
                                                 scheduled:
@@ -643,6 +645,7 @@ components:
                                             type: boolean
                                         topic:
                                             type: string
+                                        variables: {}
                                     type: object
                                 type: array
                             operatorConfig:

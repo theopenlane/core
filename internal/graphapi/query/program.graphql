@@ -30,6 +30,7 @@ mutation CreateBulkCSVProgram ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -71,6 +72,7 @@ mutation CreateBulkProgram ($input: [CreateProgramInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -205,6 +207,7 @@ mutation CreateProgram ($input: CreateProgramInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -431,6 +434,7 @@ query GetProgramByID ($programId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		startDate
 		status
 		tags
@@ -639,6 +643,7 @@ mutation UpdateProgram ($updateProgramId: ID!, $input: UpdateProgramInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags

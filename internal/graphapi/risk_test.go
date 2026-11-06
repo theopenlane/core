@@ -2,12 +2,12 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"testing"
 	"time"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -240,13 +240,13 @@ func TestMutationCreateRisk(t *testing.T) {
 			name: "happy path, all input",
 			request: testclient.CreateRiskInput{
 				Name:          "Another Risk",
-				Details:       lo.ToPtr("details of the Risk"),
+				Details:       new("details of the Risk"),
 				Status:        &enums.RiskMitigated,
-				BusinessCosts: lo.ToPtr("much money"),
+				BusinessCosts: new("much money"),
 				Impact:        &enums.RiskImpactLow,
 				Likelihood:    &enums.RiskLikelihoodHigh,
-				Mitigation:    lo.ToPtr("did the thing"),
-				Score:         lo.ToPtr(int64(5)),
+				Mitigation:    new("did the thing"),
+				Score:         new(int64(5)),
 				ProgramIDs:    []string{program1.ID, program2.ID}, // multiple programs
 				StakeholderID: &stakeholderGroup.ID,
 				DelegateID:    &delegateGroup.ID,
@@ -258,7 +258,7 @@ func TestMutationCreateRisk(t *testing.T) {
 			name: "happy path, hook defaults are applied",
 			request: testclient.CreateRiskInput{
 				Name:  "Another Risk",
-				Score: lo.ToPtr(int64(19)),
+				Score: new(int64(19)),
 			},
 			client:         suite.Client.API,
 			ctx:            th.SharedTestUser1.UserCtx,
@@ -531,8 +531,8 @@ func TestMutationUpdateRisk(t *testing.T) {
 	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 
 	createRemediation, err := suite.Client.API.CreateRemediation(th.SharedTestUser1.UserCtx, testclient.CreateRemediationInput{
-		Title:   lo.ToPtr("Test Remediation"),
-		Summary: lo.ToPtr("Test summary for query"),
+		Title:   new("Test Remediation"),
+		Summary: new("Test summary for query"),
 		Status:  &enums.RemediationStatusCompleted,
 	})
 	assert.NilError(t, err)
@@ -559,7 +559,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateRiskInput{
-				Details:       lo.ToPtr("Updated details"),
+				Details:       new("Updated details"),
 				AddViewerIDs:  []string{groupMember.GroupID},
 				StakeholderID: &stakeholderGroup.ID,
 				DelegateID:    &delegateGroup.ID,
@@ -580,7 +580,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateRiskInput{
 				Tags:              []string{"tag1", "tag2"},
-				Mitigation:        lo.ToPtr("Updated mitigation"),
+				Mitigation:        new("Updated mitigation"),
 				Impact:            &enums.RiskImpactModerate,
 				Likelihood:        &enums.RiskLikelihoodLow,
 				StakeholderID:     &anotherStakeholderGroup.ID,
@@ -820,7 +820,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 
 	// ensure the user does not currently have access to update the risk
 	res, err := suite.Client.API.UpdateBulkRisk(th.SharedTestUser2.UserCtx, []string{risk1.ID}, testclient.UpdateRiskInput{
-		Status: lo.ToPtr(enums.RiskArchived),
+		Status: new(enums.RiskArchived),
 	})
 
 	assert.Assert(t, is.Nil(err))
@@ -840,7 +840,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			name: "happy path, update multiple risks with same fields",
 			ids:  []string{risk1.ID, risk2.ID, risk3.ID},
 			input: testclient.UpdateRiskInput{
-				Details: lo.ToPtr("Updated details for all risks"),
+				Details: new("Updated details for all risks"),
 				Impact:  &enums.RiskImpactModerate,
 			},
 			client:               suite.Client.API,
@@ -851,7 +851,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			name: "happy path, update risk type and score",
 			ids:  []string{risk1.ID, risk2.ID},
 			input: testclient.UpdateRiskInput{
-				Score: lo.ToPtr(int64(8)),
+				Score: new(int64(8)),
 			},
 			client:               suite.Client.API,
 			ctx:                  th.SharedTestUser1.UserCtx,
@@ -860,7 +860,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       testclient.UpdateRiskInput{Details: lo.ToPtr("test")},
+			input:       testclient.UpdateRiskInput{Details: new("test")},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "ids is required",
@@ -957,13 +957,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			}
 
 			for _, updatedID := range resp.UpdateBulkRisk.UpdatedIDs {
-				found := false
-				for _, expectedID := range tc.ids {
-					if expectedID == updatedID {
-						found = true
-						break
-					}
-				}
+				found := slices.Contains(tc.ids, updatedID)
 				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
 			}
 		})

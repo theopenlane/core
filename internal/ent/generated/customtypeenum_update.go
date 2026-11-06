@@ -232,6 +232,26 @@ func (_u *CustomTypeEnumUpdate) ClearIntegrationRunID() *CustomTypeEnumUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *CustomTypeEnumUpdate) SetSourceKey(v string) *CustomTypeEnumUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdate) SetNillableSourceKey(v *string) *CustomTypeEnumUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *CustomTypeEnumUpdate) ClearSourceKey() *CustomTypeEnumUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *CustomTypeEnumUpdate) SetExternalID(v string) *CustomTypeEnumUpdate {
 	_u.mutation.SetExternalID(v)
@@ -919,6 +939,12 @@ func (_u *CustomTypeEnumUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(customtypeenum.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(customtypeenum.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(customtypeenum.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(customtypeenum.FieldExternalID, field.TypeString, value)
@@ -1697,6 +1723,26 @@ func (_u *CustomTypeEnumUpdateOne) ClearIntegrationRunID() *CustomTypeEnumUpdate
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *CustomTypeEnumUpdateOne) SetSourceKey(v string) *CustomTypeEnumUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdateOne) SetNillableSourceKey(v *string) *CustomTypeEnumUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *CustomTypeEnumUpdateOne) ClearSourceKey() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *CustomTypeEnumUpdateOne) SetExternalID(v string) *CustomTypeEnumUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -2414,6 +2460,12 @@ func (_u *CustomTypeEnumUpdateOne) sqlSave(ctx context.Context) (_node *CustomTy
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(customtypeenum.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(customtypeenum.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(customtypeenum.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(customtypeenum.FieldExternalID, field.TypeString, value)

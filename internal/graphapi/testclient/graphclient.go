@@ -163,6 +163,8 @@ type TestGraphClient interface {
 	GetCustomTypeEnumByID(ctx context.Context, customTypeEnumID string, interceptors ...clientv2.RequestInterceptor) (*GetCustomTypeEnumByID, error)
 	GetCustomTypeEnums(ctx context.Context, first *int64, last *int64, where *CustomTypeEnumWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCustomTypeEnums, error)
 	UpdateCustomTypeEnum(ctx context.Context, updateCustomTypeEnumID string, input UpdateCustomTypeEnumInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCustomTypeEnum, error)
+	DeleteDemoData(ctx context.Context, input DeleteDemoDataInput, interceptors ...clientv2.RequestInterceptor) (*DeleteDemoData, error)
+	SeedDemoData(ctx context.Context, input SeedDemoDataInput, interceptors ...clientv2.RequestInterceptor) (*SeedDemoData, error)
 	CreateBulkCSVDirectoryAccount(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVDirectoryAccount, error)
 	CreateBulkDirectoryAccount(ctx context.Context, input []*CreateDirectoryAccountInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkDirectoryAccount, error)
 	CreateDirectoryAccount(ctx context.Context, input CreateDirectoryAccountInput, interceptors ...clientv2.RequestInterceptor) (*CreateDirectoryAccount, error)
@@ -859,6 +861,7 @@ type CreateActionPlan_CreateActionPlan_ActionPlan struct {
 	SourceDefinitionID              *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus         "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                       "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                       "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -1143,6 +1146,12 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetSourceInstanceID() *st
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.SourceKey
+}
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
@@ -1273,6 +1282,7 @@ type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
 	SourceDefinitionID              *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus         "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                       "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                       "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -1557,6 +1567,12 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetSourceInstanc
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
@@ -1687,6 +1703,7 @@ type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
 	SourceDefinitionID              *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus         "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                       "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                       "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -1971,6 +1988,12 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetSourceI
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
@@ -2112,6 +2135,7 @@ type GetActionPlanByID_ActionPlan struct {
 	SourceDefinitionID              *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus         "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                       "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                       "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -2395,6 +2419,12 @@ func (t *GetActionPlanByID_ActionPlan) GetSourceInstanceID() *string {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetActionPlanByID_ActionPlan) GetSourceKey() *string {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.SourceKey
 }
 func (t *GetActionPlanByID_ActionPlan) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -2791,6 +2821,7 @@ type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
 	SourceDefinitionID              *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus         "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                       "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                       "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -3075,6 +3106,12 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetSourceInstanceID() *st
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
@@ -3205,6 +3242,7 @@ type UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans struct {
 	SourceDefinitionID              *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus         "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                       "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                       "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -3488,6 +3526,12 @@ func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetSourceInstanc
 		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -4369,6 +4413,7 @@ type CreateAssessment_CreateAssessment_Assessment struct {
 	SourceDefinitionID      *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -4469,6 +4514,12 @@ func (t *CreateAssessment_CreateAssessment_Assessment) GetSourceInstanceID() *st
 		t = &CreateAssessment_CreateAssessment_Assessment{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.SourceKey
 }
 func (t *CreateAssessment_CreateAssessment_Assessment) GetSystemInternalID() *string {
 	if t == nil {
@@ -5068,6 +5119,7 @@ type GetAssessmentByID_Assessment struct {
 	SourceDefinitionID      *string                                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                                  "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -5174,6 +5226,12 @@ func (t *GetAssessmentByID_Assessment) GetSourceInstanceID() *string {
 		t = &GetAssessmentByID_Assessment{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetAssessmentByID_Assessment) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.SourceKey
 }
 func (t *GetAssessmentByID_Assessment) GetSystemInternalID() *string {
 	if t == nil {
@@ -5449,6 +5507,7 @@ type UpdateAssessment_UpdateAssessment_Assessment struct {
 	SourceDefinitionID      *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -5549,6 +5608,12 @@ func (t *UpdateAssessment_UpdateAssessment_Assessment) GetSourceInstanceID() *st
 		t = &UpdateAssessment_UpdateAssessment_Assessment{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateAssessment_UpdateAssessment_Assessment) GetSystemInternalID() *string {
 	if t == nil {
@@ -5698,6 +5763,7 @@ type CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -5781,6 +5847,12 @@ func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.SourceKey
+}
 func (t *CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateAssessmentPolicy_CreateAssessmentPolicy_AssessmentPolicy{}
@@ -5825,6 +5897,7 @@ type CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies st
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -5908,6 +5981,12 @@ func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicie
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkAssessmentPolicy_CreateBulkAssessmentPolicy_AssessmentPolicies{}
@@ -5952,6 +6031,7 @@ type CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolic
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -6034,6 +6114,12 @@ func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentP
 		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkCSVAssessmentPolicy_CreateBulkCSVAssessmentPolicy_AssessmentPolicies) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -6133,6 +6219,7 @@ type GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -6215,6 +6302,12 @@ func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetSourceInstan
 		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.SourceKey
 }
 func (t *GetAllAssessmentPolicies_AssessmentPolicies_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -6317,6 +6410,7 @@ type GetAssessmentPolicies_AssessmentPolicies_Edges_Node struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -6400,6 +6494,12 @@ func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetSourceInstanceI
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetAssessmentPolicies_AssessmentPolicies_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetAssessmentPolicies_AssessmentPolicies_Edges_Node{}
@@ -6469,6 +6569,7 @@ type GetAssessmentPolicyByID_AssessmentPolicy struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -6552,6 +6653,12 @@ func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetSourceInstanceID() *string
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
+	}
+	return t.SourceKey
+}
 func (t *GetAssessmentPolicyByID_AssessmentPolicy) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetAssessmentPolicyByID_AssessmentPolicy{}
@@ -6585,6 +6692,7 @@ type UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -6668,6 +6776,12 @@ func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateAssessmentPolicy_UpdateAssessmentPolicy_AssessmentPolicy{}
@@ -6712,6 +6826,7 @@ type UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies st
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -6795,6 +6910,12 @@ func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicie
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateBulkAssessmentPolicy_UpdateBulkAssessmentPolicy_AssessmentPolicies{}
@@ -6846,6 +6967,7 @@ type UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolic
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -6928,6 +7050,12 @@ func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentP
 		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkCSVAssessmentPolicy_UpdateBulkCSVAssessmentPolicy_AssessmentPolicies) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -7818,6 +7946,7 @@ type CreateAsset_CreateAsset_Asset struct {
 	SourceDefinitionVersion       *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier              *string          "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID              *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourcePlatformID              *string          "json:\"sourcePlatformID,omitempty\" graphql:\"sourcePlatformID\""
 	SourceType                    enums.SourceType "json:\"sourceType\" graphql:\"sourceType\""
 	SystemInternalID              *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -8111,6 +8240,12 @@ func (t *CreateAsset_CreateAsset_Asset) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateAsset_CreateAsset_Asset) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.SourceKey
+}
 func (t *CreateAsset_CreateAsset_Asset) GetSourcePlatformID() *string {
 	if t == nil {
 		t = &CreateAsset_CreateAsset_Asset{}
@@ -8225,6 +8360,7 @@ type CreateBulkAsset_CreateBulkAsset_Assets struct {
 	SourceDefinitionVersion       *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier              *string          "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID              *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourcePlatformID              *string          "json:\"sourcePlatformID,omitempty\" graphql:\"sourcePlatformID\""
 	SourceType                    enums.SourceType "json:\"sourceType\" graphql:\"sourceType\""
 	SystemInternalID              *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -8518,6 +8654,12 @@ func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetSourcePlatformID() *string {
 	if t == nil {
 		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
@@ -8632,6 +8774,7 @@ type CreateBulkCSVAsset_CreateBulkCSVAsset_Assets struct {
 	SourceDefinitionVersion       *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier              *string          "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID              *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourcePlatformID              *string          "json:\"sourcePlatformID,omitempty\" graphql:\"sourcePlatformID\""
 	SourceType                    enums.SourceType "json:\"sourceType\" graphql:\"sourceType\""
 	SystemInternalID              *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -8925,6 +9068,12 @@ func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetSourceInstanceID() *st
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetSourcePlatformID() *string {
 	if t == nil {
 		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
@@ -9107,6 +9256,7 @@ type GetAllAssets_Assets_Edges_Node struct {
 	SourceDefinitionVersion       *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier              *string          "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID              *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourcePlatformID              *string          "json:\"sourcePlatformID,omitempty\" graphql:\"sourcePlatformID\""
 	SourceType                    enums.SourceType "json:\"sourceType\" graphql:\"sourceType\""
 	SystemInternalID              *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -9400,6 +9550,12 @@ func (t *GetAllAssets_Assets_Edges_Node) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAllAssets_Assets_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetAllAssets_Assets_Edges_Node) GetSourcePlatformID() *string {
 	if t == nil {
 		t = &GetAllAssets_Assets_Edges_Node{}
@@ -9539,6 +9695,7 @@ type GetAssetByID_Asset struct {
 	SourceDefinitionVersion       *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier              *string          "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID              *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourcePlatformID              *string          "json:\"sourcePlatformID,omitempty\" graphql:\"sourcePlatformID\""
 	SourceType                    enums.SourceType "json:\"sourceType\" graphql:\"sourceType\""
 	SystemInternalID              *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -9832,6 +9989,12 @@ func (t *GetAssetByID_Asset) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAssetByID_Asset) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.SourceKey
+}
 func (t *GetAssetByID_Asset) GetSourcePlatformID() *string {
 	if t == nil {
 		t = &GetAssetByID_Asset{}
@@ -9967,6 +10130,7 @@ type GetAssets_Assets_Edges_Node struct {
 	SourceDefinitionVersion       *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier              *string          "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID              *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourcePlatformID              *string          "json:\"sourcePlatformID,omitempty\" graphql:\"sourcePlatformID\""
 	SourceType                    enums.SourceType "json:\"sourceType\" graphql:\"sourceType\""
 	SystemInternalID              *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -10260,6 +10424,12 @@ func (t *GetAssets_Assets_Edges_Node) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAssets_Assets_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetAssets_Assets_Edges_Node) GetSourcePlatformID() *string {
 	if t == nil {
 		t = &GetAssets_Assets_Edges_Node{}
@@ -10399,6 +10569,7 @@ type UpdateAsset_UpdateAsset_Asset struct {
 	SourceDefinitionVersion       *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier              *string          "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID              *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourcePlatformID              *string          "json:\"sourcePlatformID,omitempty\" graphql:\"sourcePlatformID\""
 	SourceType                    enums.SourceType "json:\"sourceType\" graphql:\"sourceType\""
 	SystemInternalID              *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -10692,6 +10863,12 @@ func (t *UpdateAsset_UpdateAsset_Asset) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateAsset_UpdateAsset_Asset) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateAsset_UpdateAsset_Asset) GetSourcePlatformID() *string {
 	if t == nil {
 		t = &UpdateAsset_UpdateAsset_Asset{}
@@ -10806,6 +10983,7 @@ type UpdateBulkAsset_UpdateBulkAsset_Assets struct {
 	SourceDefinitionVersion       *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier              *string          "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID              *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourcePlatformID              *string          "json:\"sourcePlatformID,omitempty\" graphql:\"sourcePlatformID\""
 	SourceType                    enums.SourceType "json:\"sourceType\" graphql:\"sourceType\""
 	SystemInternalID              *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -11099,6 +11277,12 @@ func (t *UpdateBulkAsset_UpdateBulkAsset_Assets) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkAsset_UpdateBulkAsset_Assets) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkAsset_UpdateBulkAsset_Assets{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkAsset_UpdateBulkAsset_Assets) GetSourcePlatformID() *string {
 	if t == nil {
 		t = &UpdateBulkAsset_UpdateBulkAsset_Assets{}
@@ -11234,6 +11418,7 @@ type UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets struct {
 	SourceDefinitionVersion       *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier              *string          "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID              *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourcePlatformID              *string          "json:\"sourcePlatformID,omitempty\" graphql:\"sourcePlatformID\""
 	SourceType                    enums.SourceType "json:\"sourceType\" graphql:\"sourceType\""
 	SystemInternalID              *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -11527,6 +11712,12 @@ func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets) GetSourceInstanceID() *st
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets) GetSourcePlatformID() *string {
 	if t == nil {
 		t = &UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets{}
@@ -11655,6 +11846,7 @@ type CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                        enums.CampaignStatus "json:\"status\" graphql:\"status\""
 	Tags                          []string             "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID                    *string              "json:\"templateID,omitempty\" graphql:\"templateID\""
@@ -11905,6 +12097,12 @@ func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetSourceInstanc
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetStatus() *enums.CampaignStatus {
 	if t == nil {
 		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
@@ -12006,6 +12204,7 @@ type CreateBulkCampaign_CreateBulkCampaign_Campaigns struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                        enums.CampaignStatus "json:\"status\" graphql:\"status\""
 	Tags                          []string             "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID                    *string              "json:\"templateID,omitempty\" graphql:\"templateID\""
@@ -12256,6 +12455,12 @@ func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetSourceInstanceID() 
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetStatus() *enums.CampaignStatus {
 	if t == nil {
 		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
@@ -12357,6 +12562,7 @@ type CreateCampaign_CreateCampaign_Campaign struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                        enums.CampaignStatus "json:\"status\" graphql:\"status\""
 	Tags                          []string             "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID                    *string              "json:\"templateID,omitempty\" graphql:\"templateID\""
@@ -12607,6 +12813,12 @@ func (t *CreateCampaign_CreateCampaign_Campaign) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateCampaign_CreateCampaign_Campaign) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateCampaign_CreateCampaign_Campaign{}
+	}
+	return t.SourceKey
+}
 func (t *CreateCampaign_CreateCampaign_Campaign) GetStatus() *enums.CampaignStatus {
 	if t == nil {
 		t = &CreateCampaign_CreateCampaign_Campaign{}
@@ -12827,6 +13039,7 @@ type GetAllCampaigns_Campaigns_Edges_Node struct {
 	SourceDefinitionID            *string                                              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                                              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                                              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                                              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                        enums.CampaignStatus                                 "json:\"status\" graphql:\"status\""
 	Tags                          []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID                    *string                                              "json:\"templateID,omitempty\" graphql:\"templateID\""
@@ -13083,6 +13296,12 @@ func (t *GetAllCampaigns_Campaigns_Edges_Node) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAllCampaigns_Campaigns_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllCampaigns_Campaigns_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetAllCampaigns_Campaigns_Edges_Node) GetStatus() *enums.CampaignStatus {
 	if t == nil {
 		t = &GetAllCampaigns_Campaigns_Edges_Node{}
@@ -13285,6 +13504,7 @@ type GetCampaignByID_Campaign struct {
 	SourceDefinitionID            *string                                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                        enums.CampaignStatus                     "json:\"status\" graphql:\"status\""
 	Tags                          []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID                    *string                                  "json:\"templateID,omitempty\" graphql:\"templateID\""
@@ -13541,6 +13761,12 @@ func (t *GetCampaignByID_Campaign) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetCampaignByID_Campaign) GetSourceKey() *string {
+	if t == nil {
+		t = &GetCampaignByID_Campaign{}
+	}
+	return t.SourceKey
+}
 func (t *GetCampaignByID_Campaign) GetStatus() *enums.CampaignStatus {
 	if t == nil {
 		t = &GetCampaignByID_Campaign{}
@@ -13739,6 +13965,7 @@ type GetCampaigns_Campaigns_Edges_Node struct {
 	SourceDefinitionID            *string                                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                        enums.CampaignStatus                              "json:\"status\" graphql:\"status\""
 	Tags                          []string                                          "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID                    *string                                           "json:\"templateID,omitempty\" graphql:\"templateID\""
@@ -13995,6 +14222,12 @@ func (t *GetCampaigns_Campaigns_Edges_Node) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetCampaigns_Campaigns_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetCampaigns_Campaigns_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetCampaigns_Campaigns_Edges_Node) GetStatus() *enums.CampaignStatus {
 	if t == nil {
 		t = &GetCampaigns_Campaigns_Edges_Node{}
@@ -14121,6 +14354,7 @@ type UpdateCampaign_UpdateCampaign_Campaign struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                        enums.CampaignStatus "json:\"status\" graphql:\"status\""
 	Tags                          []string             "json:\"tags,omitempty\" graphql:\"tags\""
 	TemplateID                    *string              "json:\"templateID,omitempty\" graphql:\"templateID\""
@@ -14370,6 +14604,12 @@ func (t *UpdateCampaign_UpdateCampaign_Campaign) GetSourceInstanceID() *string {
 		t = &UpdateCampaign_UpdateCampaign_Campaign{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateCampaign_UpdateCampaign_Campaign) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateCampaign_UpdateCampaign_Campaign{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateCampaign_UpdateCampaign_Campaign) GetStatus() *enums.CampaignStatus {
 	if t == nil {
@@ -17199,6 +17439,7 @@ type CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults struct {
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -17296,6 +17537,12 @@ func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
 	if t == nil {
 		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
@@ -17354,6 +17601,7 @@ type CreateBulkCheckResult_CreateBulkCheckResult_CheckResults struct {
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -17451,6 +17699,12 @@ func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSourceInst
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
 	if t == nil {
 		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
@@ -17509,6 +17763,7 @@ type CreateCheckResult_CreateCheckResult_CheckResult struct {
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -17605,6 +17860,12 @@ func (t *CreateCheckResult_CreateCheckResult_CheckResult) GetSourceInstanceID() 
 		t = &CreateCheckResult_CreateCheckResult_CheckResult{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateCheckResult_CreateCheckResult_CheckResult) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateCheckResult_CreateCheckResult_CheckResult{}
+	}
+	return t.SourceKey
 }
 func (t *CreateCheckResult_CreateCheckResult_CheckResult) GetStatus() *enums.CheckStatus {
 	if t == nil {
@@ -17732,6 +17993,7 @@ type GetAllCheckResults_CheckResults_Edges_Node struct {
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -17829,6 +18091,12 @@ func (t *GetAllCheckResults_CheckResults_Edges_Node) GetSourceInstanceID() *stri
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAllCheckResults_CheckResults_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllCheckResults_CheckResults_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetAllCheckResults_CheckResults_Edges_Node) GetStatus() *enums.CheckStatus {
 	if t == nil {
 		t = &GetAllCheckResults_CheckResults_Edges_Node{}
@@ -17912,6 +18180,7 @@ type GetCheckResultByID_CheckResult struct {
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -18009,6 +18278,12 @@ func (t *GetCheckResultByID_CheckResult) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetCheckResultByID_CheckResult) GetSourceKey() *string {
+	if t == nil {
+		t = &GetCheckResultByID_CheckResult{}
+	}
+	return t.SourceKey
+}
 func (t *GetCheckResultByID_CheckResult) GetStatus() *enums.CheckStatus {
 	if t == nil {
 		t = &GetCheckResultByID_CheckResult{}
@@ -18088,6 +18363,7 @@ type GetCheckResults_CheckResults_Edges_Node struct {
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -18185,6 +18461,12 @@ func (t *GetCheckResults_CheckResults_Edges_Node) GetSourceInstanceID() *string 
 	}
 	return t.SourceInstanceID
 }
+func (t *GetCheckResults_CheckResults_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetCheckResults_CheckResults_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetCheckResults_CheckResults_Edges_Node) GetStatus() *enums.CheckStatus {
 	if t == nil {
 		t = &GetCheckResults_CheckResults_Edges_Node{}
@@ -18268,6 +18550,7 @@ type UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults struct {
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -18365,6 +18648,12 @@ func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
 	if t == nil {
 		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
@@ -18444,6 +18733,7 @@ type UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults struct {
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -18541,6 +18831,12 @@ func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSourceInst
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
 	if t == nil {
 		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
@@ -18620,6 +18916,7 @@ type UpdateCheckResult_UpdateCheckResult_CheckResult struct {
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -18717,6 +19014,12 @@ func (t *UpdateCheckResult_UpdateCheckResult_CheckResult) GetSourceInstanceID() 
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateCheckResult_UpdateCheckResult_CheckResult) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateCheckResult_UpdateCheckResult_CheckResult{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateCheckResult_UpdateCheckResult_CheckResult) GetStatus() *enums.CheckStatus {
 	if t == nil {
 		t = &UpdateCheckResult_UpdateCheckResult_CheckResult{}
@@ -18777,6 +19080,7 @@ type CreateBulkCSVContact_CreateBulkCSVContact_Contacts struct {
 	SourceDefinitionID      *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.UserStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title                   *string          "json:\"title,omitempty\" graphql:\"title\""
@@ -18887,6 +19191,12 @@ func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetSourceInstanceID
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetStatus() *enums.UserStatus {
 	if t == nil {
 		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
@@ -18953,6 +19263,7 @@ type CreateBulkContact_CreateBulkContact_Contacts struct {
 	SourceDefinitionID      *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.UserStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title                   *string          "json:\"title,omitempty\" graphql:\"title\""
@@ -19063,6 +19374,12 @@ func (t *CreateBulkContact_CreateBulkContact_Contacts) GetSourceInstanceID() *st
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkContact_CreateBulkContact_Contacts) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkContact_CreateBulkContact_Contacts{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkContact_CreateBulkContact_Contacts) GetStatus() *enums.UserStatus {
 	if t == nil {
 		t = &CreateBulkContact_CreateBulkContact_Contacts{}
@@ -19129,6 +19446,7 @@ type CreateContact_CreateContact_Contact struct {
 	SourceDefinitionID      *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.UserStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title                   *string          "json:\"title,omitempty\" graphql:\"title\""
@@ -19238,6 +19556,12 @@ func (t *CreateContact_CreateContact_Contact) GetSourceInstanceID() *string {
 		t = &CreateContact_CreateContact_Contact{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateContact_CreateContact_Contact) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateContact_CreateContact_Contact{}
+	}
+	return t.SourceKey
 }
 func (t *CreateContact_CreateContact_Contact) GetStatus() *enums.UserStatus {
 	if t == nil {
@@ -19440,6 +19764,7 @@ type GetContactByID_Contact struct {
 	SourceDefinitionID      *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.UserStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title                   *string          "json:\"title,omitempty\" graphql:\"title\""
@@ -19549,6 +19874,12 @@ func (t *GetContactByID_Contact) GetSourceInstanceID() *string {
 		t = &GetContactByID_Contact{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetContactByID_Contact) GetSourceKey() *string {
+	if t == nil {
+		t = &GetContactByID_Contact{}
+	}
+	return t.SourceKey
 }
 func (t *GetContactByID_Contact) GetStatus() *enums.UserStatus {
 	if t == nil {
@@ -19729,6 +20060,7 @@ type UpdateBulkContact_UpdateBulkContact_Contacts struct {
 	SourceDefinitionID      *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.UserStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title                   *string          "json:\"title,omitempty\" graphql:\"title\""
@@ -19839,6 +20171,12 @@ func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetSourceInstanceID() *st
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetStatus() *enums.UserStatus {
 	if t == nil {
 		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
@@ -19926,6 +20264,7 @@ type UpdateContact_UpdateContact_Contact struct {
 	SourceDefinitionID      *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  enums.UserStatus "json:\"status\" graphql:\"status\""
 	Tags                    []string         "json:\"tags,omitempty\" graphql:\"tags\""
 	Title                   *string          "json:\"title,omitempty\" graphql:\"title\""
@@ -20036,6 +20375,12 @@ func (t *UpdateContact_UpdateContact_Contact) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateContact_UpdateContact_Contact) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateContact_UpdateContact_Contact{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateContact_UpdateContact_Contact) GetStatus() *enums.UserStatus {
 	if t == nil {
 		t = &UpdateContact_UpdateContact_Contact{}
@@ -20130,6 +20475,7 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	SourceDefinitionID         *string                             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                             "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	StandardID                 *string                             "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                     *enums.ControlStatus                "json:\"status,omitempty\" graphql:\"status\""
@@ -20416,6 +20762,12 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceInstanceID
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSourceName() *string {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
@@ -20558,6 +20910,7 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	SourceDefinitionID         *string                             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                             "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	StandardID                 *string                             "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                     *enums.ControlStatus                "json:\"status,omitempty\" graphql:\"status\""
@@ -20843,6 +21196,12 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetSourceInstanceID() *st
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetSourceName() *string {
 	if t == nil {
@@ -21202,6 +21561,7 @@ type CreateControl_CreateControl_Control struct {
 	SourceDefinitionID         *string                                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                                    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                                    "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	StandardID                 *string                                                    "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                     *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
@@ -21523,6 +21883,12 @@ func (t *CreateControl_CreateControl_Control) GetSourceInstanceID() *string {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateControl_CreateControl_Control) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.SourceKey
 }
 func (t *CreateControl_CreateControl_Control) GetSourceName() *string {
 	if t == nil {
@@ -22671,6 +23037,7 @@ type GetControlByID_Control struct {
 	SourceDefinitionID         *string                                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                       "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Standard                   *GetControlByID_Control_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID                 *string                                       "json:\"standardID,omitempty\" graphql:\"standardID\""
@@ -23000,6 +23367,12 @@ func (t *GetControlByID_Control) GetSourceInstanceID() *string {
 		t = &GetControlByID_Control{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetControlByID_Control) GetSourceKey() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.SourceKey
 }
 func (t *GetControlByID_Control) GetSourceName() *string {
 	if t == nil {
@@ -23471,6 +23844,7 @@ type GetControls_Controls_Edges_Node struct {
 	SourceDefinitionID         *string                                                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                                "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Standard                   *GetControls_Controls_Edges_Node_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID                 *string                                                "json:\"standardID,omitempty\" graphql:\"standardID\""
@@ -23794,6 +24168,12 @@ func (t *GetControls_Controls_Edges_Node) GetSourceInstanceID() *string {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetControls_Controls_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.SourceKey
 }
 func (t *GetControls_Controls_Edges_Node) GetSourceName() *string {
 	if t == nil {
@@ -24392,6 +24772,7 @@ type UpdateBulkControl_UpdateBulkControl_Controls struct {
 	SourceDefinitionID         *string                                                             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                                             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                                             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                                             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                                             "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	StandardID                 *string                                                             "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                     *enums.ControlStatus                                                "json:\"status,omitempty\" graphql:\"status\""
@@ -24713,6 +25094,12 @@ func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSourceInstanceID() *st
 		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetSourceName() *string {
 	if t == nil {
@@ -25371,6 +25758,7 @@ type UpdateControl_UpdateControl_Control struct {
 	SourceDefinitionID         *string                                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                                    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                                    "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Standard                   *UpdateControl_UpdateControl_Control_Standard              "json:\"standard,omitempty\" graphql:\"standard\""
 	StandardID                 *string                                                    "json:\"standardID,omitempty\" graphql:\"standardID\""
@@ -25706,6 +26094,12 @@ func (t *UpdateControl_UpdateControl_Control) GetSourceInstanceID() *string {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateControl_UpdateControl_Control) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateControl_UpdateControl_Control) GetSourceName() *string {
 	if t == nil {
@@ -27000,6 +27394,7 @@ type CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_Contr
 	SourceDefinitionID      *string                                                                                                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                                                                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                                                                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                                                                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.DocumentStatus                                                                                    "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols             CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
 	SystemInternalID        *string                                                                                                  "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -27101,6 +27496,12 @@ func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_C
 		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkCSVControlImplementation_CreateBulkCSVControlImplementation_ControlImplementations) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -27284,6 +27685,7 @@ type CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImpl
 	SourceDefinitionID      *string                                                                                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                                                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                                                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                                                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.DocumentStatus                                                                              "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols             CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
 	SystemInternalID        *string                                                                                            "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -27385,6 +27787,12 @@ func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_Control
 		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkControlImplementation_CreateBulkControlImplementation_ControlImplementations) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -27568,6 +27976,7 @@ type CreateControlImplementation_CreateControlImplementation_ControlImplementati
 	SourceDefinitionID      *string                                                                                   "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                                                   "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                                                   "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                                                   "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.DocumentStatus                                                                     "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols             CreateControlImplementation_CreateControlImplementation_ControlImplementation_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
 	SystemInternalID        *string                                                                                   "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -27669,6 +28078,12 @@ func (t *CreateControlImplementation_CreateControlImplementation_ControlImplemen
 		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateControlImplementation_CreateControlImplementation_ControlImplementation{}
+	}
+	return t.SourceKey
 }
 func (t *CreateControlImplementation_CreateControlImplementation_ControlImplementation) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -28120,6 +28535,7 @@ type GetControlImplementationByID_ControlImplementation struct {
 	SourceDefinitionID      *string                                                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.DocumentStatus                                          "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols             GetControlImplementationByID_ControlImplementation_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
 	SystemInternalID        *string                                                        "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -28221,6 +28637,12 @@ func (t *GetControlImplementationByID_ControlImplementation) GetSourceInstanceID
 		t = &GetControlImplementationByID_ControlImplementation{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetControlImplementationByID_ControlImplementation) GetSourceKey() *string {
+	if t == nil {
+		t = &GetControlImplementationByID_ControlImplementation{}
+	}
+	return t.SourceKey
 }
 func (t *GetControlImplementationByID_ControlImplementation) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -28650,6 +29072,7 @@ type UpdateControlImplementation_UpdateControlImplementation_ControlImplementati
 	SourceDefinitionID      *string                                                                                   "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                                                   "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                                                   "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                                                   "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.DocumentStatus                                                                     "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols             UpdateControlImplementation_UpdateControlImplementation_ControlImplementation_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
 	SystemInternalID        *string                                                                                   "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -28752,6 +29175,12 @@ func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplemen
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateControlImplementation_UpdateControlImplementation_ControlImplementation) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &UpdateControlImplementation_UpdateControlImplementation_ControlImplementation{}
@@ -28844,6 +29273,7 @@ type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectiv
 	SourceDefinitionID      *string                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.ObjectiveStatus "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory             *string                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	SystemInternalID        *string                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -28968,6 +29398,12 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
@@ -29048,6 +29484,7 @@ type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives str
 	SourceDefinitionID      *string                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.ObjectiveStatus "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory             *string                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	SystemInternalID        *string                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -29171,6 +29608,12 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
@@ -29477,6 +29920,7 @@ type CreateControlObjective_CreateControlObjective_ControlObjective struct {
 	SourceDefinitionID      *string                                                                      "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                                      "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                                      "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                                      "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.ObjectiveStatus                                                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory             *string                                                                      "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	SystemInternalID        *string                                                                      "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -29625,6 +30069,12 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetSour
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
+	}
+	return t.SourceKey
 }
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
@@ -30342,6 +30792,7 @@ type GetControlObjectiveByID_ControlObjective struct {
 	SourceDefinitionID      *string                                                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.ObjectiveStatus                                 "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory             *string                                                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	SystemInternalID        *string                                                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -30490,6 +30941,12 @@ func (t *GetControlObjectiveByID_ControlObjective) GetSourceInstanceID() *string
 		t = &GetControlObjectiveByID_ControlObjective{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetControlObjectiveByID_ControlObjective) GetSourceKey() *string {
+	if t == nil {
+		t = &GetControlObjectiveByID_ControlObjective{}
+	}
+	return t.SourceKey
 }
 func (t *GetControlObjectiveByID_ControlObjective) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
@@ -31185,6 +31642,7 @@ type UpdateControlObjective_UpdateControlObjective_ControlObjective struct {
 	SourceDefinitionID      *string                                                                      "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                                      "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                                      "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                                      "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.ObjectiveStatus                                                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory             *string                                                                      "json:\"subcategory,omitempty\" graphql:\"subcategory\""
 	SystemInternalID        *string                                                                      "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -31333,6 +31791,12 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetSour
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetStatus() *enums.ObjectiveStatus {
 	if t == nil {
@@ -34352,6 +34816,7 @@ type CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums str
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -34461,6 +34926,12 @@ func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums) GetSystemInternalID() *string {
 	if t == nil {
 		t = &CreateBulkCSVCustomTypeEnum_CreateBulkCSVCustomTypeEnum_CustomTypeEnums{}
@@ -34521,6 +34992,7 @@ type CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -34630,6 +35102,12 @@ func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetS
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums) GetSystemInternalID() *string {
 	if t == nil {
 		t = &CreateBulkCustomTypeEnum_CreateBulkCustomTypeEnum_CustomTypeEnums{}
@@ -34690,6 +35168,7 @@ type CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -34798,6 +35277,12 @@ func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetSourceInst
 		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.SourceKey
 }
 func (t *CreateCustomTypeEnum_CreateCustomTypeEnum_CustomTypeEnum) GetSystemInternalID() *string {
 	if t == nil {
@@ -35040,6 +35525,7 @@ type GetCustomTypeEnumByID_CustomTypeEnum struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -35148,6 +35634,12 @@ func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetSourceInstanceID() *string {
 		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetSourceKey() *string {
+	if t == nil {
+		t = &GetCustomTypeEnumByID_CustomTypeEnum{}
+	}
+	return t.SourceKey
 }
 func (t *GetCustomTypeEnumByID_CustomTypeEnum) GetSystemInternalID() *string {
 	if t == nil {
@@ -35368,6 +35860,7 @@ type UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -35477,6 +35970,12 @@ func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetSourceInst
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum) GetSystemInternalID() *string {
 	if t == nil {
 		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum_CustomTypeEnum{}
@@ -35517,6 +36016,28 @@ func (t *UpdateCustomTypeEnum_UpdateCustomTypeEnum) GetCustomTypeEnum() *UpdateC
 		t = &UpdateCustomTypeEnum_UpdateCustomTypeEnum{}
 	}
 	return &t.CustomTypeEnum
+}
+
+type DeleteDemoData_DeleteDemoData struct {
+	Accepted bool "json:\"accepted\" graphql:\"accepted\""
+}
+
+func (t *DeleteDemoData_DeleteDemoData) GetAccepted() bool {
+	if t == nil {
+		t = &DeleteDemoData_DeleteDemoData{}
+	}
+	return t.Accepted
+}
+
+type SeedDemoData_SeedDemoData struct {
+	Accepted bool "json:\"accepted\" graphql:\"accepted\""
+}
+
+func (t *SeedDemoData_SeedDemoData) GetAccepted() bool {
+	if t == nil {
+		t = &SeedDemoData_SeedDemoData{}
+	}
+	return t.Accepted
 }
 
 type CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts struct {
@@ -35562,6 +36083,7 @@ type CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccoun
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
 	Tags                    []string                       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -35822,6 +36344,12 @@ func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAc
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetSourceVersion() *string {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
@@ -35913,6 +36441,7 @@ type CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts str
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
 	Tags                    []string                       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -36173,6 +36702,12 @@ func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetSourceVersion() *string {
 	if t == nil {
 		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
@@ -36264,6 +36799,7 @@ type CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount struct {
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
 	Tags                    []string                       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -36523,6 +37059,12 @@ func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetSour
 		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
+	}
+	return t.SourceKey
 }
 func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetSourceVersion() *string {
 	if t == nil {
@@ -36880,6 +37422,7 @@ type GetDirectoryAccountByID_DirectoryAccount struct {
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
 	Tags                    []string                       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37139,6 +37682,12 @@ func (t *GetDirectoryAccountByID_DirectoryAccount) GetSourceInstanceID() *string
 		t = &GetDirectoryAccountByID_DirectoryAccount{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetDirectoryAccountByID_DirectoryAccount) GetSourceKey() *string {
+	if t == nil {
+		t = &GetDirectoryAccountByID_DirectoryAccount{}
+	}
+	return t.SourceKey
 }
 func (t *GetDirectoryAccountByID_DirectoryAccount) GetSourceVersion() *string {
 	if t == nil {
@@ -37474,6 +38023,7 @@ type UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount struct {
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
 	Tags                    []string                       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37734,6 +38284,12 @@ func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetSourceVersion() *string {
 	if t == nil {
 		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
@@ -37813,6 +38369,7 @@ type CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups str
 	SourceDefinitionID      *string                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                            "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryGroupStatus         "json:\"status\" graphql:\"status\""
 	Tags                    []string                           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -38001,6 +38558,12 @@ func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetSourceVersion() *string {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
@@ -38080,6 +38643,7 @@ type CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups struct {
 	SourceDefinitionID      *string                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                            "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryGroupStatus         "json:\"status\" graphql:\"status\""
 	Tags                    []string                           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -38268,6 +38832,12 @@ func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetS
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetSourceVersion() *string {
 	if t == nil {
 		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
@@ -38347,6 +38917,7 @@ type CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup struct {
 	SourceDefinitionID      *string                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                            "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryGroupStatus         "json:\"status\" graphql:\"status\""
 	Tags                    []string                           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -38534,6 +39105,12 @@ func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetSourceInst
 		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
+	}
+	return t.SourceKey
 }
 func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetSourceVersion() *string {
 	if t == nil {
@@ -38844,6 +39421,7 @@ type GetDirectoryGroupByID_DirectoryGroup struct {
 	SourceDefinitionID      *string                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                            "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryGroupStatus         "json:\"status\" graphql:\"status\""
 	Tags                    []string                           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -39031,6 +39609,12 @@ func (t *GetDirectoryGroupByID_DirectoryGroup) GetSourceInstanceID() *string {
 		t = &GetDirectoryGroupByID_DirectoryGroup{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetDirectoryGroupByID_DirectoryGroup) GetSourceKey() *string {
+	if t == nil {
+		t = &GetDirectoryGroupByID_DirectoryGroup{}
+	}
+	return t.SourceKey
 }
 func (t *GetDirectoryGroupByID_DirectoryGroup) GetSourceVersion() *string {
 	if t == nil {
@@ -39319,6 +39903,7 @@ type UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup struct {
 	SourceDefinitionID      *string                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceVersion           *string                            "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                  enums.DirectoryGroupStatus         "json:\"status\" graphql:\"status\""
 	Tags                    []string                           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -39507,6 +40092,12 @@ func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetSourceInst
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetSourceVersion() *string {
 	if t == nil {
 		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
@@ -39581,6 +40172,7 @@ type CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_Directory
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -39736,6 +40328,12 @@ func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_Direc
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
@@ -39792,6 +40390,7 @@ type CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMember
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -39947,6 +40546,12 @@ func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMe
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
@@ -40003,6 +40608,7 @@ type CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership str
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -40157,6 +40763,12 @@ func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership
 		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
+	}
+	return t.SourceKey
 }
 func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -40395,6 +41007,7 @@ type GetDirectoryMembershipByID_DirectoryMembership struct {
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -40549,6 +41162,12 @@ func (t *GetDirectoryMembershipByID_DirectoryMembership) GetSourceInstanceID() *
 		t = &GetDirectoryMembershipByID_DirectoryMembership{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetDirectoryMembershipByID_DirectoryMembership) GetSourceKey() *string {
+	if t == nil {
+		t = &GetDirectoryMembershipByID_DirectoryMembership{}
+	}
+	return t.SourceKey
 }
 func (t *GetDirectoryMembershipByID_DirectoryMembership) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -40765,6 +41384,7 @@ type UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership str
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	UpdatedAt               *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 	UpdatedByImpersonator   *string                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
@@ -40919,6 +41539,12 @@ func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership
 		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -42957,6 +43583,7 @@ type CreateBulkCSVEmailTemplate_CreateBulkCSVEmailTemplate_EmailTemplates struct
 	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
@@ -43095,6 +43722,12 @@ func (t *CreateBulkCSVEmailTemplate_CreateBulkCSVEmailTemplate_EmailTemplates) G
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVEmailTemplate_CreateBulkCSVEmailTemplate_EmailTemplates) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVEmailTemplate_CreateBulkCSVEmailTemplate_EmailTemplates{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVEmailTemplate_CreateBulkCSVEmailTemplate_EmailTemplates) GetSystemInternalID() *string {
 	if t == nil {
 		t = &CreateBulkCSVEmailTemplate_CreateBulkCSVEmailTemplate_EmailTemplates{}
@@ -43189,6 +43822,7 @@ type CreateBulkEmailTemplate_CreateBulkEmailTemplate_EmailTemplates struct {
 	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
@@ -43327,6 +43961,12 @@ func (t *CreateBulkEmailTemplate_CreateBulkEmailTemplate_EmailTemplates) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkEmailTemplate_CreateBulkEmailTemplate_EmailTemplates) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkEmailTemplate_CreateBulkEmailTemplate_EmailTemplates{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkEmailTemplate_CreateBulkEmailTemplate_EmailTemplates) GetSystemInternalID() *string {
 	if t == nil {
 		t = &CreateBulkEmailTemplate_CreateBulkEmailTemplate_EmailTemplates{}
@@ -43421,6 +44061,7 @@ type CreateEmailTemplate_CreateEmailTemplate_EmailTemplate struct {
 	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
@@ -43558,6 +44199,12 @@ func (t *CreateEmailTemplate_CreateEmailTemplate_EmailTemplate) GetSourceInstanc
 		t = &CreateEmailTemplate_CreateEmailTemplate_EmailTemplate{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateEmailTemplate_CreateEmailTemplate_EmailTemplate) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateEmailTemplate_CreateEmailTemplate_EmailTemplate{}
+	}
+	return t.SourceKey
 }
 func (t *CreateEmailTemplate_CreateEmailTemplate_EmailTemplate) GetSystemInternalID() *string {
 	if t == nil {
@@ -43721,6 +44368,7 @@ type GetAllEmailTemplates_EmailTemplates_Edges_Node struct {
 	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
@@ -43859,6 +44507,12 @@ func (t *GetAllEmailTemplates_EmailTemplates_Edges_Node) GetSourceInstanceID() *
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAllEmailTemplates_EmailTemplates_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllEmailTemplates_EmailTemplates_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetAllEmailTemplates_EmailTemplates_Edges_Node) GetSystemInternalID() *string {
 	if t == nil {
 		t = &GetAllEmailTemplates_EmailTemplates_Edges_Node{}
@@ -43978,6 +44632,7 @@ type GetEmailTemplateByID_EmailTemplate struct {
 	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
@@ -44116,6 +44771,12 @@ func (t *GetEmailTemplateByID_EmailTemplate) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetEmailTemplateByID_EmailTemplate) GetSourceKey() *string {
+	if t == nil {
+		t = &GetEmailTemplateByID_EmailTemplate{}
+	}
+	return t.SourceKey
+}
 func (t *GetEmailTemplateByID_EmailTemplate) GetSystemInternalID() *string {
 	if t == nil {
 		t = &GetEmailTemplateByID_EmailTemplate{}
@@ -44231,6 +44892,7 @@ type GetEmailTemplates_EmailTemplates_Edges_Node struct {
 	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
@@ -44369,6 +45031,12 @@ func (t *GetEmailTemplates_EmailTemplates_Edges_Node) GetSourceInstanceID() *str
 	}
 	return t.SourceInstanceID
 }
+func (t *GetEmailTemplates_EmailTemplates_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetEmailTemplates_EmailTemplates_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetEmailTemplates_EmailTemplates_Edges_Node) GetSystemInternalID() *string {
 	if t == nil {
 		t = &GetEmailTemplates_EmailTemplates_Edges_Node{}
@@ -44488,6 +45156,7 @@ type UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates struct
 	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
@@ -44626,6 +45295,12 @@ func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) G
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetSystemInternalID() *string {
 	if t == nil {
 		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
@@ -44741,6 +45416,7 @@ type UpdateBulkEmailTemplate_UpdateBulkEmailTemplate_EmailTemplates struct {
 	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
@@ -44879,6 +45555,12 @@ func (t *UpdateBulkEmailTemplate_UpdateBulkEmailTemplate_EmailTemplates) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkEmailTemplate_UpdateBulkEmailTemplate_EmailTemplates) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkEmailTemplate_UpdateBulkEmailTemplate_EmailTemplates{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkEmailTemplate_UpdateBulkEmailTemplate_EmailTemplates) GetSystemInternalID() *string {
 	if t == nil {
 		t = &UpdateBulkEmailTemplate_UpdateBulkEmailTemplate_EmailTemplates{}
@@ -44994,6 +45676,7 @@ type UpdateEmailTemplate_UpdateEmailTemplate_EmailTemplate struct {
 	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
@@ -45131,6 +45814,12 @@ func (t *UpdateEmailTemplate_UpdateEmailTemplate_EmailTemplate) GetSourceInstanc
 		t = &UpdateEmailTemplate_UpdateEmailTemplate_EmailTemplate{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateEmailTemplate_UpdateEmailTemplate_EmailTemplate) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateEmailTemplate_UpdateEmailTemplate_EmailTemplate{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateEmailTemplate_UpdateEmailTemplate_EmailTemplate) GetSystemInternalID() *string {
 	if t == nil {
@@ -46536,6 +47225,7 @@ type GetEntityByID_Entity struct {
 	SourceDefinitionID                    *string                          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion               *string                          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                      *string                          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                             *string                          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SpendCurrency                         *string                          "json:\"spendCurrency,omitempty\" graphql:\"spendCurrency\""
 	SsoEnforced                           *bool                            "json:\"ssoEnforced,omitempty\" graphql:\"ssoEnforced\""
 	Status                                *enums.EntityStatus              "json:\"status,omitempty\" graphql:\"status\""
@@ -46958,6 +47648,12 @@ func (t *GetEntityByID_Entity) GetSourceInstanceID() *string {
 		t = &GetEntityByID_Entity{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetEntityByID_Entity) GetSourceKey() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.SourceKey
 }
 func (t *GetEntityByID_Entity) GetSpendCurrency() *string {
 	if t == nil {
@@ -49060,6 +49756,7 @@ type CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences struct {
 	SourceDefinitionID      *string               "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string               "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.EvidenceStatus "json:\"status,omitempty\" graphql:\"status\""
 	Tags                    []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -49218,6 +49915,12 @@ func (t *CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences) GetSourceInstanc
 		t = &CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences) GetStatus() *enums.EvidenceStatus {
 	if t == nil {
@@ -50699,6 +51402,7 @@ type GetEvidenceByID_Evidence struct {
 	SourceDefinitionID      *string                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.EvidenceStatus                      "json:\"status,omitempty\" graphql:\"status\""
 	Subcontrols             GetEvidenceByID_Evidence_Subcontrols       "json:\"subcontrols\" graphql:\"subcontrols\""
 	Tags                    []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
@@ -50895,6 +51599,12 @@ func (t *GetEvidenceByID_Evidence) GetSourceInstanceID() *string {
 		t = &GetEvidenceByID_Evidence{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetEvidenceByID_Evidence) GetSourceKey() *string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence{}
+	}
+	return t.SourceKey
 }
 func (t *GetEvidenceByID_Evidence) GetStatus() *enums.EvidenceStatus {
 	if t == nil {
@@ -51432,6 +52142,7 @@ type UpdateBulkEvidence_UpdateBulkEvidence_Evidences struct {
 	SourceDefinitionID      *string               "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string               "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                  *enums.EvidenceStatus "json:\"status,omitempty\" graphql:\"status\""
 	Tags                    []string              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -51590,6 +52301,12 @@ func (t *UpdateBulkEvidence_UpdateBulkEvidence_Evidences) GetSourceInstanceID() 
 		t = &UpdateBulkEvidence_UpdateBulkEvidence_Evidences{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateBulkEvidence_UpdateBulkEvidence_Evidences) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkEvidence_UpdateBulkEvidence_Evidences{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkEvidence_UpdateBulkEvidence_Evidences) GetStatus() *enums.EvidenceStatus {
 	if t == nil {
@@ -54332,6 +55049,7 @@ type CreateBulkCSVFinding_CreateBulkCSVFinding_Findings struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	State                         *string              "json:\"state,omitempty\" graphql:\"state\""
 	StepsToReproduce              []string             "json:\"stepsToReproduce,omitempty\" graphql:\"stepsToReproduce\""
@@ -54702,6 +55420,12 @@ func (t *CreateBulkCSVFinding_CreateBulkCSVFinding_Findings) GetSourceInstanceID
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVFinding_CreateBulkCSVFinding_Findings) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVFinding_CreateBulkCSVFinding_Findings{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVFinding_CreateBulkCSVFinding_Findings) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkCSVFinding_CreateBulkCSVFinding_Findings{}
@@ -54858,6 +55582,7 @@ type CreateBulkFinding_CreateBulkFinding_Findings struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	State                         *string              "json:\"state,omitempty\" graphql:\"state\""
 	StepsToReproduce              []string             "json:\"stepsToReproduce,omitempty\" graphql:\"stepsToReproduce\""
@@ -55228,6 +55953,12 @@ func (t *CreateBulkFinding_CreateBulkFinding_Findings) GetSourceInstanceID() *st
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkFinding_CreateBulkFinding_Findings) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkFinding_CreateBulkFinding_Findings{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkFinding_CreateBulkFinding_Findings) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkFinding_CreateBulkFinding_Findings{}
@@ -55384,6 +56115,7 @@ type CreateFinding_CreateFinding_Finding struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	State                         *string              "json:\"state,omitempty\" graphql:\"state\""
 	StepsToReproduce              []string             "json:\"stepsToReproduce,omitempty\" graphql:\"stepsToReproduce\""
@@ -55753,6 +56485,12 @@ func (t *CreateFinding_CreateFinding_Finding) GetSourceInstanceID() *string {
 		t = &CreateFinding_CreateFinding_Finding{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateFinding_CreateFinding_Finding) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateFinding_CreateFinding_Finding{}
+	}
+	return t.SourceKey
 }
 func (t *CreateFinding_CreateFinding_Finding) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
@@ -56550,6 +57288,7 @@ type GetFindingByID_Finding struct {
 	SourceDefinitionID            *string                                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime                       "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	State                         *string                                "json:\"state,omitempty\" graphql:\"state\""
 	StepsToReproduce              []string                               "json:\"stepsToReproduce,omitempty\" graphql:\"stepsToReproduce\""
@@ -56926,6 +57665,12 @@ func (t *GetFindingByID_Finding) GetSourceInstanceID() *string {
 		t = &GetFindingByID_Finding{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetFindingByID_Finding) GetSourceKey() *string {
+	if t == nil {
+		t = &GetFindingByID_Finding{}
+	}
+	return t.SourceKey
 }
 func (t *GetFindingByID_Finding) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
@@ -57573,6 +58318,7 @@ type UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	State                         *string              "json:\"state,omitempty\" graphql:\"state\""
 	StepsToReproduce              []string             "json:\"stepsToReproduce,omitempty\" graphql:\"stepsToReproduce\""
@@ -57943,6 +58689,12 @@ func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings) GetSourceInstanceID
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings{}
@@ -58120,6 +58872,7 @@ type UpdateBulkFinding_UpdateBulkFinding_Findings struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	State                         *string              "json:\"state,omitempty\" graphql:\"state\""
 	StepsToReproduce              []string             "json:\"stepsToReproduce,omitempty\" graphql:\"stepsToReproduce\""
@@ -58490,6 +59243,12 @@ func (t *UpdateBulkFinding_UpdateBulkFinding_Findings) GetSourceInstanceID() *st
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkFinding_UpdateBulkFinding_Findings) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkFinding_UpdateBulkFinding_Findings{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkFinding_UpdateBulkFinding_Findings) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &UpdateBulkFinding_UpdateBulkFinding_Findings{}
@@ -58667,6 +59426,7 @@ type UpdateFinding_UpdateFinding_Finding struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	State                         *string              "json:\"state,omitempty\" graphql:\"state\""
 	StepsToReproduce              []string             "json:\"stepsToReproduce,omitempty\" graphql:\"stepsToReproduce\""
@@ -59036,6 +59796,12 @@ func (t *UpdateFinding_UpdateFinding_Finding) GetSourceInstanceID() *string {
 		t = &UpdateFinding_UpdateFinding_Finding{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateFinding_UpdateFinding_Finding) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateFinding_UpdateFinding_Finding{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateFinding_UpdateFinding_Finding) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
@@ -60470,6 +61236,7 @@ type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups struct {
 	SourceDefinitionID      *string                                               "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                               "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Tags                    []string                                              "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -60643,6 +61410,12 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetSourceInstanceID() *st
 		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetTags() []string {
 	if t == nil {
@@ -60845,6 +61618,7 @@ type CreateBulkGroup_CreateBulkGroup_Groups struct {
 	SourceDefinitionID      *string                                         "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                         "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                         "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                         "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Tags                    []string                                        "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -61018,6 +61792,12 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetSourceInstanceID() *string {
 		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetTags() []string {
 	if t == nil {
@@ -61275,6 +62055,7 @@ type CreateGroup_CreateGroup_Group struct {
 	SourceDefinitionID      *string                                   "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                   "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                   "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                   "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Tags                    []string                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -61454,6 +62235,12 @@ func (t *CreateGroup_CreateGroup_Group) GetSourceInstanceID() *string {
 		t = &CreateGroup_CreateGroup_Group{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateGroup_CreateGroup_Group) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group{}
+	}
+	return t.SourceKey
 }
 func (t *CreateGroup_CreateGroup_Group) GetTags() []string {
 	if t == nil {
@@ -62362,6 +63149,7 @@ type GetGroupByID_Group struct {
 	SourceDefinitionID      *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Tags                    []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -62541,6 +63329,12 @@ func (t *GetGroupByID_Group) GetSourceInstanceID() *string {
 		t = &GetGroupByID_Group{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetGroupByID_Group) GetSourceKey() *string {
+	if t == nil {
+		t = &GetGroupByID_Group{}
+	}
+	return t.SourceKey
 }
 func (t *GetGroupByID_Group) GetTags() []string {
 	if t == nil {
@@ -63355,6 +64149,7 @@ type UpdateGroup_UpdateGroup_Group struct {
 	SourceDefinitionID      *string                                   "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                   "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                   "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                   "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Tags                    []string                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy               *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -63534,6 +64329,12 @@ func (t *UpdateGroup_UpdateGroup_Group) GetSourceInstanceID() *string {
 		t = &UpdateGroup_UpdateGroup_Group{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateGroup_UpdateGroup_Group) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateGroup_UpdateGroup_Group) GetTags() []string {
 	if t == nil {
@@ -65781,6 +66582,7 @@ type CreateBulkCSVIdentityHolder_CreateBulkCSVIdentityHolder_IdentityHolders str
 	SourceDefinitionID            *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                     *models.DateTime         "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                        enums.UserStatus         "json:\"status\" graphql:\"status\""
 	Tags                          []string                 "json:\"tags,omitempty\" graphql:\"tags\""
@@ -66003,6 +66805,12 @@ func (t *CreateBulkCSVIdentityHolder_CreateBulkCSVIdentityHolder_IdentityHolders
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVIdentityHolder_CreateBulkCSVIdentityHolder_IdentityHolders) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVIdentityHolder_CreateBulkCSVIdentityHolder_IdentityHolders{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVIdentityHolder_CreateBulkCSVIdentityHolder_IdentityHolders) GetStartDate() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkCSVIdentityHolder_CreateBulkCSVIdentityHolder_IdentityHolders{}
@@ -66111,6 +66919,7 @@ type CreateBulkIdentityHolder_CreateBulkIdentityHolder_IdentityHolders struct {
 	SourceDefinitionID            *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                     *models.DateTime         "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                        enums.UserStatus         "json:\"status\" graphql:\"status\""
 	Tags                          []string                 "json:\"tags,omitempty\" graphql:\"tags\""
@@ -66333,6 +67142,12 @@ func (t *CreateBulkIdentityHolder_CreateBulkIdentityHolder_IdentityHolders) GetS
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkIdentityHolder_CreateBulkIdentityHolder_IdentityHolders) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkIdentityHolder_CreateBulkIdentityHolder_IdentityHolders{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkIdentityHolder_CreateBulkIdentityHolder_IdentityHolders) GetStartDate() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkIdentityHolder_CreateBulkIdentityHolder_IdentityHolders{}
@@ -66441,6 +67256,7 @@ type CreateIdentityHolder_CreateIdentityHolder_IdentityHolder struct {
 	SourceDefinitionID            *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                     *models.DateTime         "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                        enums.UserStatus         "json:\"status\" graphql:\"status\""
 	Tags                          []string                 "json:\"tags,omitempty\" graphql:\"tags\""
@@ -66662,6 +67478,12 @@ func (t *CreateIdentityHolder_CreateIdentityHolder_IdentityHolder) GetSourceInst
 		t = &CreateIdentityHolder_CreateIdentityHolder_IdentityHolder{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateIdentityHolder_CreateIdentityHolder_IdentityHolder) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateIdentityHolder_CreateIdentityHolder_IdentityHolder{}
+	}
+	return t.SourceKey
 }
 func (t *CreateIdentityHolder_CreateIdentityHolder_IdentityHolder) GetStartDate() *models.DateTime {
 	if t == nil {
@@ -66952,6 +67774,7 @@ type GetAllIdentityHolders_IdentityHolders_Edges_Node struct {
 	SourceDefinitionID            *string                                                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                                                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                                                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                                                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                     *models.DateTime                                                   "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                        enums.UserStatus                                                   "json:\"status\" graphql:\"status\""
 	Tags                          []string                                                           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -67185,6 +68008,12 @@ func (t *GetAllIdentityHolders_IdentityHolders_Edges_Node) GetSourceInstanceID()
 		t = &GetAllIdentityHolders_IdentityHolders_Edges_Node{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetAllIdentityHolders_IdentityHolders_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllIdentityHolders_IdentityHolders_Edges_Node{}
+	}
+	return t.SourceKey
 }
 func (t *GetAllIdentityHolders_IdentityHolders_Edges_Node) GetStartDate() *models.DateTime {
 	if t == nil {
@@ -67457,6 +68286,7 @@ type GetIdentityHolderByID_IdentityHolder struct {
 	SourceDefinitionID            *string                                                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                                                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                                                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                                                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                     *models.DateTime                                       "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                        enums.UserStatus                                       "json:\"status\" graphql:\"status\""
 	Tags                          []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -67690,6 +68520,12 @@ func (t *GetIdentityHolderByID_IdentityHolder) GetSourceInstanceID() *string {
 		t = &GetIdentityHolderByID_IdentityHolder{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetIdentityHolderByID_IdentityHolder) GetSourceKey() *string {
+	if t == nil {
+		t = &GetIdentityHolderByID_IdentityHolder{}
+	}
+	return t.SourceKey
 }
 func (t *GetIdentityHolderByID_IdentityHolder) GetStartDate() *models.DateTime {
 	if t == nil {
@@ -68259,6 +69095,7 @@ type GetIdentityHolders_IdentityHolders_Edges_Node struct {
 	SourceDefinitionID            *string                                                 "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                                                 "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                                                 "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                                                 "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                     *models.DateTime                                        "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                        enums.UserStatus                                        "json:\"status\" graphql:\"status\""
 	Tags                          []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
@@ -68487,6 +69324,12 @@ func (t *GetIdentityHolders_IdentityHolders_Edges_Node) GetSourceInstanceID() *s
 	}
 	return t.SourceInstanceID
 }
+func (t *GetIdentityHolders_IdentityHolders_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetIdentityHolders_IdentityHolders_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetIdentityHolders_IdentityHolders_Edges_Node) GetStartDate() *models.DateTime {
 	if t == nil {
 		t = &GetIdentityHolders_IdentityHolders_Edges_Node{}
@@ -68620,6 +69463,7 @@ type UpdateIdentityHolder_UpdateIdentityHolder_IdentityHolder struct {
 	SourceDefinitionID            *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                     *models.DateTime         "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                        enums.UserStatus         "json:\"status\" graphql:\"status\""
 	Tags                          []string                 "json:\"tags,omitempty\" graphql:\"tags\""
@@ -68841,6 +69685,12 @@ func (t *UpdateIdentityHolder_UpdateIdentityHolder_IdentityHolder) GetSourceInst
 		t = &UpdateIdentityHolder_UpdateIdentityHolder_IdentityHolder{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateIdentityHolder_UpdateIdentityHolder_IdentityHolder) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateIdentityHolder_UpdateIdentityHolder_IdentityHolder{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateIdentityHolder_UpdateIdentityHolder_IdentityHolder) GetStartDate() *models.DateTime {
 	if t == nil {
@@ -69635,6 +70485,7 @@ type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies st
 	SourceDefinitionID              *string                                                                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                                              "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                                            "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                                            "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -69882,6 +70733,12 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
@@ -70036,6 +70893,7 @@ type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies struct {
 	SourceDefinitionID              *string                                                                      "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                                      "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                                      "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                                      "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                                        "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                                      "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                                      "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -70282,6 +71140,12 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -70560,6 +71424,7 @@ type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
 	SourceDefinitionID              *string                                                                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                                  "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                                "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -70824,6 +71689,12 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetSourceInst
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.SourceKey
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -71422,6 +72293,7 @@ type GetAllInternalPolicies_InternalPolicies_Edges_Node struct {
 	SourceDefinitionID              *string                                                          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                            "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                          "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -71680,6 +72552,12 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetSourceInstanceID
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.SourceKey
 }
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -71974,6 +72852,7 @@ type GetInternalPolicies_InternalPolicies_Edges_Node struct {
 	SourceDefinitionID              *string                                                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                         "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                       "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                       "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -72232,6 +73111,12 @@ func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetSourceInstanceID() 
 		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.SourceKey
 }
 func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -72728,6 +73613,7 @@ type GetInternalPolicyByID_InternalPolicy struct {
 	SourceDefinitionID              *string                                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                              "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                            "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                            "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -72999,6 +73885,12 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetInternalPolicyByID_InternalPolicy) GetSourceKey() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.SourceKey
+}
 func (t *GetInternalPolicyByID_InternalPolicy) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
@@ -73142,6 +74034,7 @@ type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies struct {
 	SourceDefinitionID              *string                                                                      "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                                      "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                                      "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                                      "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                                        "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                                      "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                                      "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -73388,6 +74281,12 @@ func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) Get
 		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -73845,6 +74744,7 @@ type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy struct {
 	SourceDefinitionID              *string                                                                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                                  "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                                "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -74115,6 +75015,12 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetSourceInst
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -75802,6 +76708,7 @@ type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls struct
 	SourceDefinitionID      *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -75899,6 +76806,12 @@ func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) G
 		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetSystemInternalID() *string {
 	if t == nil {
@@ -76126,6 +77039,7 @@ type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls struct {
 	SourceDefinitionID      *string                                                                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                                                                        "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                                                                          "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                                                                       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -76237,6 +77151,12 @@ func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSour
 		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSystemInternalID() *string {
 	if t == nil {
@@ -76476,6 +77396,7 @@ type CreateMappedControl_CreateMappedControl_MappedControl struct {
 	SourceDefinitionID      *string                                                               "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                               "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                                                               "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                                                                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
@@ -76587,6 +77508,12 @@ func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSourceInstanc
 		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
+	}
+	return t.SourceKey
 }
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSystemInternalID() *string {
 	if t == nil {
@@ -77181,6 +78108,7 @@ type GetMappedControlByID_MappedControl struct {
 	SourceDefinitionID      *string                                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                                            "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                                              "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                                           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -77292,6 +78220,12 @@ func (t *GetMappedControlByID_MappedControl) GetSourceInstanceID() *string {
 		t = &GetMappedControlByID_MappedControl{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetMappedControlByID_MappedControl) GetSourceKey() *string {
+	if t == nil {
+		t = &GetMappedControlByID_MappedControl{}
+	}
+	return t.SourceKey
 }
 func (t *GetMappedControlByID_MappedControl) GetSystemInternalID() *string {
 	if t == nil {
@@ -77864,6 +78798,7 @@ type UpdateMappedControl_UpdateMappedControl_MappedControl struct {
 	SourceDefinitionID      *string                                                               "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                               "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                                                               "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                                                                 "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
@@ -77976,6 +78911,12 @@ func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSourceInstanc
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSystemInternalID() *string {
 	if t == nil {
 		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
@@ -78052,6 +78993,7 @@ type CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string   "json:\"tags,omitempty\" graphql:\"tags\""
@@ -78150,6 +79092,12 @@ func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetSourceInst
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetSystemInternalID() *string {
 	if t == nil {
 		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives{}
@@ -78214,6 +79162,7 @@ type CreateBulkNarrative_CreateBulkNarrative_Narratives struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string   "json:\"tags,omitempty\" graphql:\"tags\""
@@ -78311,6 +79260,12 @@ func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetSourceInstanceID
 		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetSystemInternalID() *string {
 	if t == nil {
@@ -78539,6 +79494,7 @@ type CreateNarrative_CreateNarrative_Narrative struct {
 	SourceDefinitionID      *string                                                 "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                 "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                 "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                 "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                                                 "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                                                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
@@ -78655,6 +79611,12 @@ func (t *CreateNarrative_CreateNarrative_Narrative) GetSourceInstanceID() *strin
 		t = &CreateNarrative_CreateNarrative_Narrative{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateNarrative_CreateNarrative_Narrative) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative{}
+	}
+	return t.SourceKey
 }
 func (t *CreateNarrative_CreateNarrative_Narrative) GetSystemInternalID() *string {
 	if t == nil {
@@ -79184,6 +80146,7 @@ type GetNarrativeByID_Narrative struct {
 	SourceDefinitionID      *string                                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                                  "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                                    "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
@@ -79300,6 +80263,12 @@ func (t *GetNarrativeByID_Narrative) GetSourceInstanceID() *string {
 		t = &GetNarrativeByID_Narrative{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetNarrativeByID_Narrative) GetSourceKey() *string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative{}
+	}
+	return t.SourceKey
 }
 func (t *GetNarrativeByID_Narrative) GetSystemInternalID() *string {
 	if t == nil {
@@ -79807,6 +80776,7 @@ type UpdateNarrative_UpdateNarrative_Narrative struct {
 	SourceDefinitionID      *string                                                 "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                                                 "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                                                 "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                                                 "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                                                 "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                                                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
@@ -79923,6 +80893,12 @@ func (t *UpdateNarrative_UpdateNarrative_Narrative) GetSourceInstanceID() *strin
 		t = &UpdateNarrative_UpdateNarrative_Narrative{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateNarrative_UpdateNarrative_Narrative) GetSystemInternalID() *string {
 	if t == nil {
@@ -91042,6 +92018,7 @@ type CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms struct {
 	SourceDefinitionVersion        *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string              "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID               *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                      *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceType                     enums.SourceType     "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus "json:\"status\" graphql:\"status\""
 	Tags                           []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -91386,6 +92363,12 @@ func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetSourceInstanc
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms) GetSourceType() *enums.SourceType {
 	if t == nil {
 		t = &CreateBulkCSVPlatform_CreateBulkCSVPlatform_Platforms{}
@@ -91690,6 +92673,7 @@ type CreateBulkPlatform_CreateBulkPlatform_Platforms struct {
 	SourceDefinitionVersion        *string                                                               "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string                                                               "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID               *string                                                               "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                      *string                                                               "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceType                     enums.SourceType                                                      "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus                                                  "json:\"status\" graphql:\"status\""
 	Tags                           []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
@@ -92046,6 +93030,12 @@ func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetSourceInstanceID() 
 		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms) GetSourceType() *enums.SourceType {
 	if t == nil {
@@ -93233,6 +94223,7 @@ type GetAllPlatforms_Platforms_Edges_Node struct {
 	SourceDefinitionVersion        *string                                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string                                                    "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID               *string                                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                      *string                                                    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceType                     enums.SourceType                                           "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus                                       "json:\"status\" graphql:\"status\""
 	Tags                           []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
@@ -93596,6 +94587,12 @@ func (t *GetAllPlatforms_Platforms_Edges_Node) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAllPlatforms_Platforms_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllPlatforms_Platforms_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetAllPlatforms_Platforms_Edges_Node) GetSourceType() *enums.SourceType {
 	if t == nil {
 		t = &GetAllPlatforms_Platforms_Edges_Node{}
@@ -93931,6 +94928,7 @@ type GetPlatformByID_Platform struct {
 	SourceDefinitionVersion        *string                                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string                                        "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID               *string                                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                      *string                                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceType                     enums.SourceType                               "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus                           "json:\"status\" graphql:\"status\""
 	Tags                           []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -94288,6 +95286,12 @@ func (t *GetPlatformByID_Platform) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetPlatformByID_Platform) GetSourceKey() *string {
+	if t == nil {
+		t = &GetPlatformByID_Platform{}
+	}
+	return t.SourceKey
+}
 func (t *GetPlatformByID_Platform) GetSourceType() *enums.SourceType {
 	if t == nil {
 		t = &GetPlatformByID_Platform{}
@@ -94455,6 +95459,7 @@ type GetPlatforms_Platforms_Edges_Node struct {
 	SourceDefinitionVersion        *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceIdentifier               *string              "json:\"sourceIdentifier,omitempty\" graphql:\"sourceIdentifier\""
 	SourceInstanceID               *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                      *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceType                     enums.SourceType     "json:\"sourceType\" graphql:\"sourceType\""
 	Status                         enums.PlatformStatus "json:\"status\" graphql:\"status\""
 	Tags                           []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -94798,6 +95803,12 @@ func (t *GetPlatforms_Platforms_Edges_Node) GetSourceInstanceID() *string {
 		t = &GetPlatforms_Platforms_Edges_Node{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetPlatforms_Platforms_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetPlatforms_Platforms_Edges_Node{}
+	}
+	return t.SourceKey
 }
 func (t *GetPlatforms_Platforms_Edges_Node) GetSourceType() *enums.SourceType {
 	if t == nil {
@@ -95855,6 +96866,7 @@ type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures struct {
 	SourceDefinitionID              *string                                                            "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                            "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                            "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                            "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                              "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                            "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                            "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -96096,6 +97108,12 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetSourceInst
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
@@ -96249,6 +97267,7 @@ type CreateBulkProcedure_CreateBulkProcedure_Procedures struct {
 	SourceDefinitionID              *string                                                      "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                      "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                      "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                      "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                        "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                      "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                      "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -96490,6 +97509,12 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetSourceInstanceID
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
@@ -96725,6 +97750,7 @@ type CreateProcedure_CreateProcedure_Procedure struct {
 	SourceDefinitionID              *string                                                 "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                 "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                 "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                 "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                   "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                 "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                 "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -96977,6 +98003,12 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetSourceInstanceID() *strin
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateProcedure_CreateProcedure_Procedure) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure{}
+	}
+	return t.SourceKey
 }
 func (t *CreateProcedure_CreateProcedure_Procedure) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -97802,6 +98834,7 @@ type GetProcedureByID_Procedure struct {
 	SourceDefinitionID              *string                                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                    "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                  "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                  "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -98054,6 +99087,12 @@ func (t *GetProcedureByID_Procedure) GetSourceInstanceID() *string {
 		t = &GetProcedureByID_Procedure{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetProcedureByID_Procedure) GetSourceKey() *string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure{}
+	}
+	return t.SourceKey
 }
 func (t *GetProcedureByID_Procedure) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -98472,6 +99511,7 @@ type UpdateBulkProcedure_UpdateBulkProcedure_Procedures struct {
 	SourceDefinitionID              *string                                                      "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                      "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                      "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                      "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                        "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                      "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                      "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -98712,6 +99752,12 @@ func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetSourceInstanceID
 		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetStatus() *enums.DocumentStatus {
 	if t == nil {
@@ -98969,6 +100015,7 @@ type UpdateProcedure_UpdateProcedure_Procedure struct {
 	SourceDefinitionID              *string                                                 "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion         *string                                                 "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID                *string                                                 "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                       *string                                                 "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                          *enums.DocumentStatus                                   "json:\"status,omitempty\" graphql:\"status\""
 	Summary                         *string                                                 "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID                *string                                                 "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -99222,6 +100269,12 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetSourceInstanceID() *strin
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetStatus() *enums.DocumentStatus {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
@@ -99330,6 +100383,7 @@ type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
 	SourceDefinitionID         *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                  *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                       []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -99512,6 +100566,12 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetSourceInstanceID
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetStartDate() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
@@ -99590,6 +100650,7 @@ type CreateBulkProgram_CreateBulkProgram_Programs struct {
 	SourceDefinitionID         *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                  *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                       []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -99771,6 +100832,12 @@ func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetSourceInstanceID() *st
 		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetStartDate() *time.Time {
 	if t == nil {
@@ -100678,6 +101745,7 @@ type CreateProgram_CreateProgram_Program struct {
 	SourceDefinitionID         *string                                              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                  *time.Time                                           "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus                                  "json:\"status\" graphql:\"status\""
 	Tags                       []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -100884,6 +101952,12 @@ func (t *CreateProgram_CreateProgram_Program) GetSourceInstanceID() *string {
 		t = &CreateProgram_CreateProgram_Program{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateProgram_CreateProgram_Program) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.SourceKey
 }
 func (t *CreateProgram_CreateProgram_Program) GetStartDate() *time.Time {
 	if t == nil {
@@ -102111,6 +103185,7 @@ type GetProgramByID_Program struct {
 	SourceDefinitionID         *string                                 "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                 "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                 "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                 "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                  *time.Time                              "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus                     "json:\"status\" graphql:\"status\""
 	Tags                       []string                                "json:\"tags,omitempty\" graphql:\"tags\""
@@ -102323,6 +103398,12 @@ func (t *GetProgramByID_Program) GetSourceInstanceID() *string {
 		t = &GetProgramByID_Program{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetProgramByID_Program) GetSourceKey() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.SourceKey
 }
 func (t *GetProgramByID_Program) GetStartDate() *time.Time {
 	if t == nil {
@@ -103392,6 +104473,7 @@ type UpdateProgram_UpdateProgram_Program struct {
 	SourceDefinitionID         *string                                              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	StartDate                  *time.Time                                           "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status                     enums.ProgramStatus                                  "json:\"status\" graphql:\"status\""
 	Tags                       []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -103604,6 +104686,12 @@ func (t *UpdateProgram_UpdateProgram_Program) GetSourceInstanceID() *string {
 		t = &UpdateProgram_UpdateProgram_Program{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateProgram_UpdateProgram_Program) GetStartDate() *time.Time {
 	if t == nil {
@@ -104928,6 +106016,7 @@ type CreateBulkCSVRemediation_CreateBulkCSVRemediation_Remediations struct {
 	SourceDefinitionID      *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string                  "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.RemediationStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string                  "json:\"summary,omitempty\" graphql:\"summary\""
@@ -105122,6 +106211,12 @@ func (t *CreateBulkCSVRemediation_CreateBulkCSVRemediation_Remediations) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVRemediation_CreateBulkCSVRemediation_Remediations) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVRemediation_CreateBulkCSVRemediation_Remediations{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVRemediation_CreateBulkCSVRemediation_Remediations) GetState() *string {
 	if t == nil {
 		t = &CreateBulkCSVRemediation_CreateBulkCSVRemediation_Remediations{}
@@ -105237,6 +106332,7 @@ type CreateBulkRemediation_CreateBulkRemediation_Remediations struct {
 	SourceDefinitionID      *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string                  "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.RemediationStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string                  "json:\"summary,omitempty\" graphql:\"summary\""
@@ -105431,6 +106527,12 @@ func (t *CreateBulkRemediation_CreateBulkRemediation_Remediations) GetSourceInst
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkRemediation_CreateBulkRemediation_Remediations) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkRemediation_CreateBulkRemediation_Remediations{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkRemediation_CreateBulkRemediation_Remediations) GetState() *string {
 	if t == nil {
 		t = &CreateBulkRemediation_CreateBulkRemediation_Remediations{}
@@ -105546,6 +106648,7 @@ type CreateRemediation_CreateRemediation_Remediation struct {
 	SourceDefinitionID      *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string                  "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.RemediationStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string                  "json:\"summary,omitempty\" graphql:\"summary\""
@@ -105739,6 +106842,12 @@ func (t *CreateRemediation_CreateRemediation_Remediation) GetSourceInstanceID() 
 		t = &CreateRemediation_CreateRemediation_Remediation{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateRemediation_CreateRemediation_Remediation) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateRemediation_CreateRemediation_Remediation{}
+	}
+	return t.SourceKey
 }
 func (t *CreateRemediation_CreateRemediation_Remediation) GetState() *string {
 	if t == nil {
@@ -106138,6 +107247,7 @@ type GetRemediationByID_Remediation struct {
 	SourceDefinitionID      *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string                  "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.RemediationStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string                  "json:\"summary,omitempty\" graphql:\"summary\""
@@ -106331,6 +107441,12 @@ func (t *GetRemediationByID_Remediation) GetSourceInstanceID() *string {
 		t = &GetRemediationByID_Remediation{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetRemediationByID_Remediation) GetSourceKey() *string {
+	if t == nil {
+		t = &GetRemediationByID_Remediation{}
+	}
+	return t.SourceKey
 }
 func (t *GetRemediationByID_Remediation) GetState() *string {
 	if t == nil {
@@ -106683,6 +107799,7 @@ type UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations struct {
 	SourceDefinitionID      *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string                  "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.RemediationStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string                  "json:\"summary,omitempty\" graphql:\"summary\""
@@ -106877,6 +107994,12 @@ func (t *UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations) GetState() *string {
 	if t == nil {
 		t = &UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations{}
@@ -107013,6 +108136,7 @@ type UpdateBulkRemediation_UpdateBulkRemediation_Remediations struct {
 	SourceDefinitionID      *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string                  "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.RemediationStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string                  "json:\"summary,omitempty\" graphql:\"summary\""
@@ -107207,6 +108331,12 @@ func (t *UpdateBulkRemediation_UpdateBulkRemediation_Remediations) GetSourceInst
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkRemediation_UpdateBulkRemediation_Remediations) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkRemediation_UpdateBulkRemediation_Remediations{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkRemediation_UpdateBulkRemediation_Remediations) GetState() *string {
 	if t == nil {
 		t = &UpdateBulkRemediation_UpdateBulkRemediation_Remediations{}
@@ -107343,6 +108473,7 @@ type UpdateRemediation_UpdateRemediation_Remediation struct {
 	SourceDefinitionID      *string                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string                  "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.RemediationStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string                  "json:\"summary,omitempty\" graphql:\"summary\""
@@ -107536,6 +108667,12 @@ func (t *UpdateRemediation_UpdateRemediation_Remediation) GetSourceInstanceID() 
 		t = &UpdateRemediation_UpdateRemediation_Remediation{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateRemediation_UpdateRemediation_Remediation) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateRemediation_UpdateRemediation_Remediation{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateRemediation_UpdateRemediation_Remediation) GetState() *string {
 	if t == nil {
@@ -110324,6 +111461,7 @@ type CreateBulkCSVReview_CreateBulkCSVReview_Reviews struct {
 	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
@@ -110510,6 +111648,12 @@ func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetSourceInstanceID() 
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVReview_CreateBulkCSVReview_Reviews{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVReview_CreateBulkCSVReview_Reviews) GetState() *string {
 	if t == nil {
 		t = &CreateBulkCSVReview_CreateBulkCSVReview_Reviews{}
@@ -110612,6 +111756,7 @@ type CreateBulkReview_CreateBulkReview_Reviews struct {
 	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
@@ -110798,6 +111943,12 @@ func (t *CreateBulkReview_CreateBulkReview_Reviews) GetSourceInstanceID() *strin
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkReview_CreateBulkReview_Reviews) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkReview_CreateBulkReview_Reviews{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkReview_CreateBulkReview_Reviews) GetState() *string {
 	if t == nil {
 		t = &CreateBulkReview_CreateBulkReview_Reviews{}
@@ -110900,6 +112051,7 @@ type CreateReview_CreateReview_Review struct {
 	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
@@ -111085,6 +112237,12 @@ func (t *CreateReview_CreateReview_Review) GetSourceInstanceID() *string {
 		t = &CreateReview_CreateReview_Review{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateReview_CreateReview_Review) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateReview_CreateReview_Review{}
+	}
+	return t.SourceKey
 }
 func (t *CreateReview_CreateReview_Review) GetState() *string {
 	if t == nil {
@@ -111464,6 +112622,7 @@ type GetReviewByID_Review struct {
 	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
@@ -111649,6 +112808,12 @@ func (t *GetReviewByID_Review) GetSourceInstanceID() *string {
 		t = &GetReviewByID_Review{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetReviewByID_Review) GetSourceKey() *string {
+	if t == nil {
+		t = &GetReviewByID_Review{}
+	}
+	return t.SourceKey
 }
 func (t *GetReviewByID_Review) GetState() *string {
 	if t == nil {
@@ -111981,6 +113146,7 @@ type UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews struct {
 	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
@@ -112167,6 +113333,12 @@ func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetSourceInstanceID() 
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetState() *string {
 	if t == nil {
 		t = &UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews{}
@@ -112290,6 +113462,7 @@ type UpdateBulkReview_UpdateBulkReview_Reviews struct {
 	SourceDefinitionID      *string             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	State                   *string             "json:\"state,omitempty\" graphql:\"state\""
 	Status                  *enums.ReviewStatus "json:\"status,omitempty\" graphql:\"status\""
 	Summary                 *string             "json:\"summary,omitempty\" graphql:\"summary\""
@@ -112475,6 +113648,12 @@ func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetSourceInstanceID() *strin
 		t = &UpdateBulkReview_UpdateBulkReview_Reviews{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkReview_UpdateBulkReview_Reviews{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetState() *string {
 	if t == nil {
@@ -113161,6 +114340,7 @@ type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	SourceDefinitionID          *string                                                "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion     *string                                                "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID            *string                                                "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                   *string                                                "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Stakeholder                 *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_Stakeholder "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
 	StakeholderGroupID          *string                                                "json:\"stakeholderGroupID,omitempty\" graphql:\"stakeholderGroupID\""
 	StakeholderID               *string                                                "json:\"stakeholderID,omitempty\" graphql:\"stakeholderID\""
@@ -113451,6 +114631,12 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetSourceInstanceID() *strin
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetStakeholder() *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks_Stakeholder {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
@@ -113618,6 +114804,7 @@ type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	SourceDefinitionID          *string                                          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion     *string                                          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID            *string                                          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                   *string                                          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Stakeholder                 *CreateBulkRisk_CreateBulkRisk_Risks_Stakeholder "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
 	StakeholderGroupID          *string                                          "json:\"stakeholderGroupID,omitempty\" graphql:\"stakeholderGroupID\""
 	StakeholderID               *string                                          "json:\"stakeholderID,omitempty\" graphql:\"stakeholderID\""
@@ -113907,6 +115094,12 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetSourceInstanceID() *string {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetStakeholder() *CreateBulkRisk_CreateBulkRisk_Risks_Stakeholder {
 	if t == nil {
@@ -114238,6 +115431,7 @@ type CreateRisk_CreateRisk_Risk struct {
 	SourceDefinitionID          *string                                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion     *string                                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID            *string                                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                   *string                                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Stakeholder                 *CreateRisk_CreateRisk_Risk_Stakeholder  "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
 	StakeholderGroupID          *string                                  "json:\"stakeholderGroupID,omitempty\" graphql:\"stakeholderGroupID\""
 	StakeholderID               *string                                  "json:\"stakeholderID,omitempty\" graphql:\"stakeholderID\""
@@ -114546,6 +115740,12 @@ func (t *CreateRisk_CreateRisk_Risk) GetSourceInstanceID() *string {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateRisk_CreateRisk_Risk) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.SourceKey
 }
 func (t *CreateRisk_CreateRisk_Risk) GetStakeholder() *CreateRisk_CreateRisk_Risk_Stakeholder {
 	if t == nil {
@@ -114926,6 +116126,7 @@ type GetAllRisks_Risks_Edges_Node struct {
 	SourceDefinitionID          *string                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion     *string                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID            *string                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                   *string                                    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Stakeholder                 *GetAllRisks_Risks_Edges_Node_Stakeholder  "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
 	StakeholderGroupID          *string                                    "json:\"stakeholderGroupID,omitempty\" graphql:\"stakeholderGroupID\""
 	StakeholderID               *string                                    "json:\"stakeholderID,omitempty\" graphql:\"stakeholderID\""
@@ -115234,6 +116435,12 @@ func (t *GetAllRisks_Risks_Edges_Node) GetSourceInstanceID() *string {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.SourceKey
 }
 func (t *GetAllRisks_Risks_Edges_Node) GetStakeholder() *GetAllRisks_Risks_Edges_Node_Stakeholder {
 	if t == nil {
@@ -115596,6 +116803,7 @@ type GetRiskByID_Risk struct {
 	SourceDefinitionID          *string                        "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion     *string                        "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID            *string                        "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                   *string                        "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Stakeholder                 *GetRiskByID_Risk_Stakeholder  "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
 	StakeholderGroupID          *string                        "json:\"stakeholderGroupID,omitempty\" graphql:\"stakeholderGroupID\""
 	StakeholderID               *string                        "json:\"stakeholderID,omitempty\" graphql:\"stakeholderID\""
@@ -115904,6 +117112,12 @@ func (t *GetRiskByID_Risk) GetSourceInstanceID() *string {
 		t = &GetRiskByID_Risk{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetRiskByID_Risk) GetSourceKey() *string {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.SourceKey
 }
 func (t *GetRiskByID_Risk) GetStakeholder() *GetRiskByID_Risk_Stakeholder {
 	if t == nil {
@@ -116262,6 +117476,7 @@ type GetRisks_Risks_Edges_Node struct {
 	SourceDefinitionID          *string                                 "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion     *string                                 "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID            *string                                 "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                   *string                                 "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Stakeholder                 *GetRisks_Risks_Edges_Node_Stakeholder  "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
 	StakeholderGroupID          *string                                 "json:\"stakeholderGroupID,omitempty\" graphql:\"stakeholderGroupID\""
 	StakeholderID               *string                                 "json:\"stakeholderID,omitempty\" graphql:\"stakeholderID\""
@@ -116571,6 +117786,12 @@ func (t *GetRisks_Risks_Edges_Node) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetRisks_Risks_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetRisks_Risks_Edges_Node) GetStakeholder() *GetRisks_Risks_Edges_Node_Stakeholder {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
@@ -116769,6 +117990,7 @@ type UpdateBulkRisk_UpdateBulkRisk_Risks struct {
 	SourceDefinitionID          *string                                          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion     *string                                          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID            *string                                          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                   *string                                          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Stakeholder                 *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
 	StakeholderGroupID          *string                                          "json:\"stakeholderGroupID,omitempty\" graphql:\"stakeholderGroupID\""
 	StakeholderID               *string                                          "json:\"stakeholderID,omitempty\" graphql:\"stakeholderID\""
@@ -117058,6 +118280,12 @@ func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetSourceInstanceID() *string {
 		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetStakeholder() *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder {
 	if t == nil {
@@ -117410,6 +118638,7 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	SourceDefinitionID          *string                                  "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion     *string                                  "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID            *string                                  "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                   *string                                  "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Stakeholder                 *UpdateRisk_UpdateRisk_Risk_Stakeholder  "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
 	StakeholderGroupID          *string                                  "json:\"stakeholderGroupID,omitempty\" graphql:\"stakeholderGroupID\""
 	StakeholderID               *string                                  "json:\"stakeholderID,omitempty\" graphql:\"stakeholderID\""
@@ -117719,6 +118948,12 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateRisk_UpdateRisk_Risk) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateRisk_UpdateRisk_Risk) GetStakeholder() *UpdateRisk_UpdateRisk_Risk_Stakeholder {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
@@ -117843,6 +119078,7 @@ type CreateBulkCSVScan_CreateBulkCSVScan_Scans struct {
 	SourceDefinitionID         *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                     enums.ScanStatus "json:\"status\" graphql:\"status\""
 	SystemInternalID           *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned                *bool            "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -118051,6 +119287,12 @@ func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetSourceInstanceID() *strin
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetStatus() *enums.ScanStatus {
 	if t == nil {
 		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
@@ -118145,6 +119387,7 @@ type CreateBulkScan_CreateBulkScan_Scans struct {
 	SourceDefinitionID         *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                     enums.ScanStatus "json:\"status\" graphql:\"status\""
 	SystemInternalID           *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned                *bool            "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -118353,6 +119596,12 @@ func (t *CreateBulkScan_CreateBulkScan_Scans) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkScan_CreateBulkScan_Scans) GetStatus() *enums.ScanStatus {
 	if t == nil {
 		t = &CreateBulkScan_CreateBulkScan_Scans{}
@@ -118447,6 +119696,7 @@ type CreateScan_CreateScan_Scan struct {
 	SourceDefinitionID         *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                     enums.ScanStatus "json:\"status\" graphql:\"status\""
 	SystemInternalID           *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned                *bool            "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -118654,6 +119904,12 @@ func (t *CreateScan_CreateScan_Scan) GetSourceInstanceID() *string {
 		t = &CreateScan_CreateScan_Scan{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateScan_CreateScan_Scan) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.SourceKey
 }
 func (t *CreateScan_CreateScan_Scan) GetStatus() *enums.ScanStatus {
 	if t == nil {
@@ -118909,6 +120165,7 @@ type GetScanByID_Scan struct {
 	SourceDefinitionID         *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                     enums.ScanStatus "json:\"status\" graphql:\"status\""
 	SystemInternalID           *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned                *bool            "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -119116,6 +120373,12 @@ func (t *GetScanByID_Scan) GetSourceInstanceID() *string {
 		t = &GetScanByID_Scan{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetScanByID_Scan) GetSourceKey() *string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.SourceKey
 }
 func (t *GetScanByID_Scan) GetStatus() *enums.ScanStatus {
 	if t == nil {
@@ -119349,6 +120612,7 @@ type UpdateScan_UpdateScan_Scan struct {
 	SourceDefinitionID         *string          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	Status                     enums.ScanStatus "json:\"status\" graphql:\"status\""
 	SystemInternalID           *string          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned                *bool            "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -119556,6 +120820,12 @@ func (t *UpdateScan_UpdateScan_Scan) GetSourceInstanceID() *string {
 		t = &UpdateScan_UpdateScan_Scan{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateScan_UpdateScan_Scan) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateScan_UpdateScan_Scan) GetStatus() *enums.ScanStatus {
 	if t == nil {
@@ -126805,6 +128075,7 @@ type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	SourceDefinitionID         *string                                                                   "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                                                   "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                                                   "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                                                   "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                                                   "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Status                     *enums.ControlStatus                                                      "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory                *string                                                                   "json:\"subcategory,omitempty\" graphql:\"subcategory\""
@@ -127067,6 +128338,12 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetSourceI
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetSourceName() *string {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
@@ -127241,6 +128518,7 @@ type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	SourceDefinitionID         *string                                                             "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                                             "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                                             "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                                             "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                                             "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Status                     *enums.ControlStatus                                                "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory                *string                                                             "json:\"subcategory,omitempty\" graphql:\"subcategory\""
@@ -127503,6 +128781,12 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetSourceInstanc
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetSourceName() *string {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
@@ -127677,6 +128961,7 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	SourceDefinitionID         *string                                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                                    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                                    "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Status                     *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory                *string                                                    "json:\"subcategory,omitempty\" graphql:\"subcategory\""
@@ -127938,6 +129223,12 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetSourceInstanceID() *st
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.SourceKey
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetSourceName() *string {
 	if t == nil {
@@ -128447,6 +129738,7 @@ type GetSubcontrolByID_Subcontrol struct {
 	SourceDefinitionID         *string                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                    "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Status                     *enums.ControlStatus                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory                *string                                    "json:\"subcategory,omitempty\" graphql:\"subcategory\""
@@ -128714,6 +130006,12 @@ func (t *GetSubcontrolByID_Subcontrol) GetSourceInstanceID() *string {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetSubcontrolByID_Subcontrol) GetSourceKey() *string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.SourceKey
 }
 func (t *GetSubcontrolByID_Subcontrol) GetSourceName() *string {
 	if t == nil {
@@ -129201,6 +130499,7 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	SourceDefinitionID         *string                                                    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion    *string                                                    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID           *string                                                    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                  *string                                                    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceName                 *string                                                    "json:\"sourceName,omitempty\" graphql:\"sourceName\""
 	Status                     *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory                *string                                                    "json:\"subcategory,omitempty\" graphql:\"subcategory\""
@@ -129468,6 +130767,12 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetSourceInstanceID() *st
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetSourceName() *string {
 	if t == nil {
@@ -131920,6 +133225,7 @@ type CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails struct {
 	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
 	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -132030,6 +133336,12 @@ func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetS
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails) GetSystemName() string {
 	if t == nil {
 		t = &CreateBulkCSVSystemDetail_CreateBulkCSVSystemDetail_SystemDetails{}
@@ -132096,6 +133408,7 @@ type CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails struct {
 	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
 	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -132206,6 +133519,12 @@ func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetSourceI
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails) GetSystemName() string {
 	if t == nil {
 		t = &CreateBulkSystemDetail_CreateBulkSystemDetail_SystemDetails{}
@@ -132272,6 +133591,7 @@ type CreateSystemDetail_CreateSystemDetail_SystemDetail struct {
 	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
 	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -132381,6 +133701,12 @@ func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetSourceInstanceID
 		t = &CreateSystemDetail_CreateSystemDetail_SystemDetail{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateSystemDetail_CreateSystemDetail_SystemDetail{}
+	}
+	return t.SourceKey
 }
 func (t *CreateSystemDetail_CreateSystemDetail_SystemDetail) GetSystemName() string {
 	if t == nil {
@@ -132516,6 +133842,7 @@ type GetAllSystemDetails_SystemDetails_Edges_Node struct {
 	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
 	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -132626,6 +133953,12 @@ func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetSourceInstanceID() *st
 	}
 	return t.SourceInstanceID
 }
+func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetAllSystemDetails_SystemDetails_Edges_Node) GetSystemName() string {
 	if t == nil {
 		t = &GetAllSystemDetails_SystemDetails_Edges_Node{}
@@ -132717,6 +134050,7 @@ type GetSystemDetailByID_SystemDetail struct {
 	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
 	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -132827,6 +134161,12 @@ func (t *GetSystemDetailByID_SystemDetail) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetSystemDetailByID_SystemDetail) GetSourceKey() *string {
+	if t == nil {
+		t = &GetSystemDetailByID_SystemDetail{}
+	}
+	return t.SourceKey
+}
 func (t *GetSystemDetailByID_SystemDetail) GetSystemName() string {
 	if t == nil {
 		t = &GetSystemDetailByID_SystemDetail{}
@@ -132914,6 +134254,7 @@ type GetSystemDetails_SystemDetails_Edges_Node struct {
 	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
 	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -133024,6 +134365,12 @@ func (t *GetSystemDetails_SystemDetails_Edges_Node) GetSourceInstanceID() *strin
 	}
 	return t.SourceInstanceID
 }
+func (t *GetSystemDetails_SystemDetails_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetSystemDetails_SystemDetails_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetSystemDetails_SystemDetails_Edges_Node) GetSystemName() string {
 	if t == nil {
 		t = &GetSystemDetails_SystemDetails_Edges_Node{}
@@ -133115,6 +134462,7 @@ type UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails struct {
 	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
 	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -133225,6 +134573,12 @@ func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetS
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetSystemName() string {
 	if t == nil {
 		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails{}
@@ -133312,6 +134666,7 @@ type UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails struct {
 	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
 	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -133422,6 +134777,12 @@ func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetSourceI
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetSystemName() string {
 	if t == nil {
 		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails{}
@@ -133509,6 +134870,7 @@ type UpdateSystemDetail_UpdateSystemDetail_SystemDetail struct {
 	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemName              string                        "json:\"systemName\" graphql:\"systemName\""
 	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -133619,6 +134981,12 @@ func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetSourceInstanceID
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateSystemDetail_UpdateSystemDetail_SystemDetail{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateSystemDetail_UpdateSystemDetail_SystemDetail) GetSystemName() string {
 	if t == nil {
 		t = &UpdateSystemDetail_UpdateSystemDetail_SystemDetail{}
@@ -133684,6 +135052,7 @@ type CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions struct
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -133787,6 +135156,12 @@ func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) G
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions) GetSystemInternalID() *string {
 	if t == nil {
 		t = &CreateBulkCSVTagDefinition_CreateBulkCSVTagDefinition_TagDefinitions{}
@@ -133846,6 +135221,7 @@ type CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -133949,6 +135325,12 @@ func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetSour
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions) GetSystemInternalID() *string {
 	if t == nil {
 		t = &CreateBulkTagDefinition_CreateBulkTagDefinition_TagDefinitions{}
@@ -134008,6 +135390,7 @@ type CreateTagDefinition_CreateTagDefinition_TagDefinition struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -134110,6 +135493,12 @@ func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetSourceInstanc
 		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateTagDefinition_CreateTagDefinition_TagDefinition{}
+	}
+	return t.SourceKey
 }
 func (t *CreateTagDefinition_CreateTagDefinition_TagDefinition) GetSystemInternalID() *string {
 	if t == nil {
@@ -134351,6 +135740,7 @@ type GetTagDefinitionByID_TagDefinition struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -134453,6 +135843,12 @@ func (t *GetTagDefinitionByID_TagDefinition) GetSourceInstanceID() *string {
 		t = &GetTagDefinitionByID_TagDefinition{}
 	}
 	return t.SourceInstanceID
+}
+func (t *GetTagDefinitionByID_TagDefinition) GetSourceKey() *string {
+	if t == nil {
+		t = &GetTagDefinitionByID_TagDefinition{}
+	}
+	return t.SourceKey
 }
 func (t *GetTagDefinitionByID_TagDefinition) GetSystemInternalID() *string {
 	if t == nil {
@@ -134672,6 +136068,7 @@ type UpdateTagDefinition_UpdateTagDefinition_TagDefinition struct {
 	SourceDefinitionID      *string    "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string    "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string    "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string    "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	UpdatedAt               *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -134774,6 +136171,12 @@ func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetSourceInstanc
 		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateTagDefinition_UpdateTagDefinition_TagDefinition{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateTagDefinition_UpdateTagDefinition_TagDefinition) GetSystemInternalID() *string {
 	if t == nil {
@@ -139095,6 +140498,7 @@ type CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates struct {
 	SourceDefinitionID      *string                          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                            "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                         "json:\"tags,omitempty\" graphql:\"tags\""
@@ -139221,6 +140625,12 @@ func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetSourceInstanc
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates) GetSystemInternalID() *string {
 	if t == nil {
 		t = &CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates{}
@@ -139313,6 +140723,7 @@ type CreateBulkTemplate_CreateBulkTemplate_Templates struct {
 	SourceDefinitionID      *string                          "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion *string                          "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID        *string                          "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                          "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SystemInternalID        *string                          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned             *bool                            "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                    []string                         "json:\"tags,omitempty\" graphql:\"tags\""
@@ -139438,6 +140849,12 @@ func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetSourceInstanceID() 
 		t = &CreateBulkTemplate_CreateBulkTemplate_Templates{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkTemplate_CreateBulkTemplate_Templates{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkTemplate_CreateBulkTemplate_Templates) GetSystemInternalID() *string {
 	if t == nil {
@@ -158054,6 +159471,7 @@ type CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities struc
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	Summary                       *string              "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID              *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -158454,6 +159872,12 @@ func (t *CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities) 
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities{}
@@ -158615,6 +160039,7 @@ type CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	Summary                       *string              "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID              *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -159015,6 +160440,12 @@ func (t *CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities) GetSou
 	}
 	return t.SourceInstanceID
 }
+func (t *CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities{}
+	}
+	return t.SourceKey
+}
 func (t *CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities{}
@@ -159176,6 +160607,7 @@ type CreateVulnerability_CreateVulnerability_Vulnerability struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	Summary                       *string              "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID              *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -159575,6 +161007,12 @@ func (t *CreateVulnerability_CreateVulnerability_Vulnerability) GetSourceInstanc
 		t = &CreateVulnerability_CreateVulnerability_Vulnerability{}
 	}
 	return t.SourceInstanceID
+}
+func (t *CreateVulnerability_CreateVulnerability_Vulnerability) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateVulnerability_CreateVulnerability_Vulnerability{}
+	}
+	return t.SourceKey
 }
 func (t *CreateVulnerability_CreateVulnerability_Vulnerability) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
@@ -160122,6 +161560,7 @@ type GetVulnerabilities_Vulnerabilities_Edges_Node struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	Summary                       *string              "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID              *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -160522,6 +161961,12 @@ func (t *GetVulnerabilities_Vulnerabilities_Edges_Node) GetSourceInstanceID() *s
 	}
 	return t.SourceInstanceID
 }
+func (t *GetVulnerabilities_Vulnerabilities_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetVulnerabilities_Vulnerabilities_Edges_Node{}
+	}
+	return t.SourceKey
+}
 func (t *GetVulnerabilities_Vulnerabilities_Edges_Node) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &GetVulnerabilities_Vulnerabilities_Edges_Node{}
@@ -160708,6 +162153,7 @@ type GetVulnerabilityByID_Vulnerability struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	Summary                       *string              "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID              *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -161108,6 +162554,12 @@ func (t *GetVulnerabilityByID_Vulnerability) GetSourceInstanceID() *string {
 	}
 	return t.SourceInstanceID
 }
+func (t *GetVulnerabilityByID_Vulnerability) GetSourceKey() *string {
+	if t == nil {
+		t = &GetVulnerabilityByID_Vulnerability{}
+	}
+	return t.SourceKey
+}
 func (t *GetVulnerabilityByID_Vulnerability) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &GetVulnerabilityByID_Vulnerability{}
@@ -161258,6 +162710,7 @@ type UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities struc
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	Summary                       *string              "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID              *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -161658,6 +163111,12 @@ func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities) 
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities{}
@@ -161840,6 +163299,7 @@ type UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	Summary                       *string              "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID              *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -162240,6 +163700,12 @@ func (t *UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities) GetSou
 	}
 	return t.SourceInstanceID
 }
+func (t *UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities{}
+	}
+	return t.SourceKey
+}
 func (t *UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
 		t = &UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities{}
@@ -162422,6 +163888,7 @@ type UpdateVulnerability_UpdateVulnerability_Vulnerability struct {
 	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
 	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
 	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey                     *string              "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
 	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
 	Summary                       *string              "json:\"summary,omitempty\" graphql:\"summary\""
 	SystemInternalID              *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
@@ -162821,6 +164288,12 @@ func (t *UpdateVulnerability_UpdateVulnerability_Vulnerability) GetSourceInstanc
 		t = &UpdateVulnerability_UpdateVulnerability_Vulnerability{}
 	}
 	return t.SourceInstanceID
+}
+func (t *UpdateVulnerability_UpdateVulnerability_Vulnerability) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateVulnerability_UpdateVulnerability_Vulnerability{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateVulnerability_UpdateVulnerability_Vulnerability) GetSourceUpdatedAt() *models.DateTime {
 	if t == nil {
@@ -177696,6 +179169,28 @@ func (t *UpdateCustomTypeEnum) GetUpdateCustomTypeEnum() *UpdateCustomTypeEnum_U
 	return &t.UpdateCustomTypeEnum
 }
 
+type DeleteDemoData struct {
+	DeleteDemoData DeleteDemoData_DeleteDemoData "json:\"deleteDemoData\" graphql:\"deleteDemoData\""
+}
+
+func (t *DeleteDemoData) GetDeleteDemoData() *DeleteDemoData_DeleteDemoData {
+	if t == nil {
+		t = &DeleteDemoData{}
+	}
+	return &t.DeleteDemoData
+}
+
+type SeedDemoData struct {
+	SeedDemoData SeedDemoData_SeedDemoData "json:\"seedDemoData\" graphql:\"seedDemoData\""
+}
+
+func (t *SeedDemoData) GetSeedDemoData() *SeedDemoData_SeedDemoData {
+	if t == nil {
+		t = &SeedDemoData{}
+	}
+	return &t.SeedDemoData
+}
+
 type CreateBulkCSVDirectoryAccount struct {
 	CreateBulkCSVDirectoryAccount CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount "json:\"createBulkCSVDirectoryAccount\" graphql:\"createBulkCSVDirectoryAccount\""
 }
@@ -184791,6 +186286,7 @@ const CreateActionPlanDocument = `mutation CreateActionPlan ($input: CreateActio
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -184873,6 +186369,7 @@ const CreateBulkActionPlanDocument = `mutation CreateBulkActionPlan ($input: [Cr
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -184955,6 +186452,7 @@ const CreateBulkCSVActionPlanDocument = `mutation CreateBulkCSVActionPlan ($inpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -185060,6 +186558,7 @@ const GetActionPlanByIDDocument = `query GetActionPlanByID ($actionPlanId: ID!) 
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		summary
 		systemInternalID
@@ -185225,6 +186724,7 @@ const UpdateActionPlanDocument = `mutation UpdateActionPlan ($updateActionPlanId
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -185308,6 +186808,7 @@ const UpdateBulkActionPlanDocument = `mutation UpdateBulkActionPlan ($ids: [ID!]
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -185609,6 +187110,7 @@ const CreateAssessmentDocument = `mutation CreateAssessment ($input: CreateAsses
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -185840,6 +187342,7 @@ const GetAssessmentByIDDocument = `query GetAssessmentByID ($assessmentId: ID!) 
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		tags
@@ -185954,6 +187457,7 @@ const UpdateAssessmentDocument = `mutation UpdateAssessment ($updateAssessmentId
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -186035,6 +187539,7 @@ const CreateAssessmentPolicyDocument = `mutation CreateAssessmentPolicy ($input:
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -186076,6 +187581,7 @@ const CreateBulkAssessmentPolicyDocument = `mutation CreateBulkAssessmentPolicy 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -186117,6 +187623,7 @@ const CreateBulkCSVAssessmentPolicyDocument = `mutation CreateBulkCSVAssessmentP
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -186214,6 +187721,7 @@ const GetAllAssessmentPoliciesDocument = `query GetAllAssessmentPolicies ($first
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				updatedAt
 				updatedBy
 				updatedByImpersonator
@@ -186268,6 +187776,7 @@ const GetAssessmentPoliciesDocument = `query GetAssessmentPolicies ($first: Int,
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				updatedAt
 				updatedBy
 				updatedByImpersonator
@@ -186314,6 +187823,7 @@ const GetAssessmentPolicyByIDDocument = `query GetAssessmentPolicyByID ($assessm
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		updatedAt
 		updatedBy
 		updatedByImpersonator
@@ -186354,6 +187864,7 @@ const UpdateAssessmentPolicyDocument = `mutation UpdateAssessmentPolicy ($update
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -186396,6 +187907,7 @@ const UpdateBulkAssessmentPolicyDocument = `mutation UpdateBulkAssessmentPolicy 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -186439,6 +187951,7 @@ const UpdateBulkCSVAssessmentPolicyDocument = `mutation UpdateBulkCSVAssessmentP
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -186745,6 +188258,7 @@ const CreateAssetDocument = `mutation CreateAsset ($input: CreateAssetInput!) {
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -186826,6 +188340,7 @@ const CreateBulkAssetDocument = `mutation CreateBulkAsset ($input: [CreateAssetI
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -186907,6 +188422,7 @@ const CreateBulkCSVAssetDocument = `mutation CreateBulkCSVAsset ($input: Upload!
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -187046,6 +188562,7 @@ const GetAllAssetsDocument = `query GetAllAssets ($first: Int, $last: Int, $afte
 				sourceDefinitionVersion
 				sourceIdentifier
 				sourceInstanceID
+				sourceKey
 				sourcePlatformID
 				sourceType
 				systemInternalID
@@ -187131,6 +188648,7 @@ const GetAssetByIDDocument = `query GetAssetByID ($assetId: ID!) {
 		sourceDefinitionVersion
 		sourceIdentifier
 		sourceInstanceID
+		sourceKey
 		sourcePlatformID
 		sourceType
 		systemInternalID
@@ -187219,6 +188737,7 @@ const GetAssetsDocument = `query GetAssets ($first: Int, $last: Int, $after: Cur
 				sourceDefinitionVersion
 				sourceIdentifier
 				sourceInstanceID
+				sourceKey
 				sourcePlatformID
 				sourceType
 				systemInternalID
@@ -187306,6 +188825,7 @@ const UpdateAssetDocument = `mutation UpdateAsset ($updateAssetId: ID!, $input: 
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -187388,6 +188908,7 @@ const UpdateBulkAssetDocument = `mutation UpdateBulkAsset ($ids: [ID!]!, $input:
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -187473,6 +188994,7 @@ const UpdateBulkCSVAssetDocument = `mutation UpdateBulkCSVAsset ($input: Upload!
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -187550,6 +189072,7 @@ const CreateBulkCSVCampaignDocument = `mutation CreateBulkCSVCampaign ($input: U
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			templateID
@@ -187623,6 +189146,7 @@ const CreateBulkCampaignDocument = `mutation CreateBulkCampaign ($input: [Create
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			templateID
@@ -187696,6 +189220,7 @@ const CreateCampaignDocument = `mutation CreateCampaign ($input: CreateCampaignI
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			templateID
@@ -187801,6 +189326,7 @@ const GetAllCampaignsDocument = `query GetAllCampaigns ($first: Int, $last: Int,
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				tags
 				templateID
@@ -187891,6 +189417,7 @@ const GetCampaignByIDDocument = `query GetCampaignByID ($campaignId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		tags
 		templateID
@@ -187984,6 +189511,7 @@ const GetCampaignsDocument = `query GetCampaigns ($first: Int, $last: Int, $afte
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				tags
 				templateID
@@ -188076,6 +189604,7 @@ const UpdateCampaignDocument = `mutation UpdateCampaign ($updateCampaignId: ID!,
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			templateID
@@ -188828,6 +190357,7 @@ const CreateBulkCSVCheckResultDocument = `mutation CreateBulkCSVCheckResult ($in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt
@@ -188873,6 +190403,7 @@ const CreateBulkCheckResultDocument = `mutation CreateBulkCheckResult ($input: [
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt
@@ -188918,6 +190449,7 @@ const CreateCheckResultDocument = `mutation CreateCheckResult ($input: CreateChe
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt
@@ -189021,6 +190553,7 @@ const GetAllCheckResultsDocument = `query GetAllCheckResults ($first: Int, $last
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				tags
 				updatedAt
@@ -189070,6 +190603,7 @@ const GetCheckResultByIDDocument = `query GetCheckResultByID ($checkResultId: ID
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		tags
 		updatedAt
@@ -189122,6 +190656,7 @@ const GetCheckResultsDocument = `query GetCheckResults ($first: Int, $last: Int,
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				tags
 				updatedAt
@@ -189173,6 +190708,7 @@ const UpdateBulkCSVCheckResultDocument = `mutation UpdateBulkCSVCheckResult ($in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt
@@ -189221,6 +190757,7 @@ const UpdateBulkCheckResultDocument = `mutation UpdateBulkCheckResult ($ids: [ID
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt
@@ -189270,6 +190807,7 @@ const UpdateCheckResultDocument = `mutation UpdateCheckResult ($updateCheckResul
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt
@@ -189318,6 +190856,7 @@ const CreateBulkCSVContactDocument = `mutation CreateBulkCSVContact ($input: Upl
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title
@@ -189366,6 +190905,7 @@ const CreateBulkContactDocument = `mutation CreateBulkContact ($input: [CreateCo
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title
@@ -189414,6 +190954,7 @@ const CreateContactDocument = `mutation CreateContact ($input: CreateContactInpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title
@@ -189524,6 +191065,7 @@ const GetContactByIDDocument = `query GetContactByID ($contactId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		tags
 		title
@@ -189612,6 +191154,7 @@ const UpdateBulkContactDocument = `mutation UpdateBulkContact ($ids: [ID!]!, $in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title
@@ -189664,6 +191207,7 @@ const UpdateContactDocument = `mutation UpdateContact ($updateContactId: ID!, $i
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title
@@ -189741,6 +191285,7 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status
@@ -189825,6 +191370,7 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status
@@ -189909,6 +191455,7 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status
@@ -190202,6 +191749,7 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceName
 		standardID
 		status
@@ -190359,6 +191907,7 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $after:
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				sourceName
 				standardID
 				status
@@ -190579,6 +192128,7 @@ const UpdateBulkControlDocument = `mutation UpdateBulkControl ($ids: [ID!]!, $in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status
@@ -190709,6 +192259,7 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status
@@ -191227,6 +192778,7 @@ const CreateBulkCSVControlImplementationDocument = `mutation CreateBulkCSVContro
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -191293,6 +192845,7 @@ const CreateBulkControlImplementationDocument = `mutation CreateBulkControlImple
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -191359,6 +192912,7 @@ const CreateControlImplementationDocument = `mutation CreateControlImplementatio
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -191509,6 +193063,7 @@ const GetControlImplementationByIDDocument = `query GetControlImplementationByID
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		systemInternalID
 		systemOwned
@@ -191637,6 +193192,7 @@ const UpdateControlImplementationDocument = `mutation UpdateControlImplementatio
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -191709,6 +193265,7 @@ const CreateBulkCSVControlObjectiveDocument = `mutation CreateBulkCSVControlObje
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			subcategory
 			systemInternalID
@@ -191761,6 +193318,7 @@ const CreateBulkControlObjectiveDocument = `mutation CreateBulkControlObjective 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			subcategory
 			systemInternalID
@@ -191813,6 +193371,7 @@ const CreateControlObjectiveDocument = `mutation CreateControlObjective ($input:
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			subcategory
 			systemInternalID
@@ -192015,6 +193574,7 @@ const GetControlObjectiveByIDDocument = `query GetControlObjectiveByID ($control
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		subcategory
 		systemInternalID
@@ -192195,6 +193755,7 @@ const UpdateControlObjectiveDocument = `mutation UpdateControlObjective ($update
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			subcategory
 			systemInternalID
@@ -193007,6 +194568,7 @@ const CreateBulkCSVCustomTypeEnumDocument = `mutation CreateBulkCSVCustomTypeEnu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -193054,6 +194616,7 @@ const CreateBulkCustomTypeEnumDocument = `mutation CreateBulkCustomTypeEnum ($in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -193101,6 +194664,7 @@ const CreateCustomTypeEnumDocument = `mutation CreateCustomTypeEnum ($input: Cre
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -193217,6 +194781,7 @@ const GetCustomTypeEnumByIDDocument = `query GetCustomTypeEnumByID ($customTypeE
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		updatedAt
@@ -193313,6 +194878,7 @@ const UpdateCustomTypeEnumDocument = `mutation UpdateCustomTypeEnum ($updateCust
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -193331,6 +194897,54 @@ func (c *Client) UpdateCustomTypeEnum(ctx context.Context, updateCustomTypeEnumI
 
 	var res UpdateCustomTypeEnum
 	if err := c.Client.Post(ctx, "UpdateCustomTypeEnum", UpdateCustomTypeEnumDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteDemoDataDocument = `mutation DeleteDemoData ($input: DeleteDemoDataInput!) {
+	deleteDemoData(input: $input) {
+		accepted
+	}
+}
+`
+
+func (c *Client) DeleteDemoData(ctx context.Context, input DeleteDemoDataInput, interceptors ...clientv2.RequestInterceptor) (*DeleteDemoData, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res DeleteDemoData
+	if err := c.Client.Post(ctx, "DeleteDemoData", DeleteDemoDataDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const SeedDemoDataDocument = `mutation SeedDemoData ($input: SeedDemoDataInput!) {
+	seedDemoData(input: $input) {
+		accepted
+	}
+}
+`
+
+func (c *Client) SeedDemoData(ctx context.Context, input SeedDemoDataInput, interceptors ...clientv2.RequestInterceptor) (*SeedDemoData, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res SeedDemoData
+	if err := c.Client.Post(ctx, "SeedDemoData", SeedDemoDataDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -193386,6 +195000,7 @@ const CreateBulkCSVDirectoryAccountDocument = `mutation CreateBulkCSVDirectoryAc
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -193459,6 +195074,7 @@ const CreateBulkDirectoryAccountDocument = `mutation CreateBulkDirectoryAccount 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -193532,6 +195148,7 @@ const CreateDirectoryAccountDocument = `mutation CreateDirectoryAccount ($input:
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -193686,6 +195303,7 @@ const GetDirectoryAccountByIDDocument = `query GetDirectoryAccountByID ($directo
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceVersion
 		status
 		tags
@@ -193820,6 +195438,7 @@ const UpdateDirectoryAccountDocument = `mutation UpdateDirectoryAccount ($update
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -193882,6 +195501,7 @@ const CreateBulkCSVDirectoryGroupDocument = `mutation CreateBulkCSVDirectoryGrou
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -193943,6 +195563,7 @@ const CreateBulkDirectoryGroupDocument = `mutation CreateBulkDirectoryGroup ($in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -194004,6 +195625,7 @@ const CreateDirectoryGroupDocument = `mutation CreateDirectoryGroup ($input: Cre
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -194141,6 +195763,7 @@ const GetDirectoryGroupByIDDocument = `query GetDirectoryGroupByID ($directoryGr
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceVersion
 		status
 		tags
@@ -194258,6 +195881,7 @@ const UpdateDirectoryGroupDocument = `mutation UpdateDirectoryGroup ($updateDire
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceVersion
 			status
 			tags
@@ -194315,6 +195939,7 @@ const CreateBulkCSVDirectoryMembershipDocument = `mutation CreateBulkCSVDirector
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -194368,6 +195993,7 @@ const CreateBulkDirectoryMembershipDocument = `mutation CreateBulkDirectoryMembe
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -194421,6 +196047,7 @@ const CreateDirectoryMembershipDocument = `mutation CreateDirectoryMembership ($
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -194543,6 +196170,7 @@ const GetDirectoryMembershipByIDDocument = `query GetDirectoryMembershipByID ($d
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		updatedAt
 		updatedBy
 		updatedByImpersonator
@@ -194645,6 +196273,7 @@ const UpdateDirectoryMembershipDocument = `mutation UpdateDirectoryMembership ($
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -195463,6 +197092,7 @@ const CreateBulkCSVEmailTemplateDocument = `mutation CreateBulkCSVEmailTemplate 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -195519,6 +197149,7 @@ const CreateBulkEmailTemplateDocument = `mutation CreateBulkEmailTemplate ($inpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -195575,6 +197206,7 @@ const CreateEmailTemplateDocument = `mutation CreateEmailTemplate ($input: Creat
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -195689,6 +197321,7 @@ const GetAllEmailTemplatesDocument = `query GetAllEmailTemplates ($first: Int, $
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemInternalID
 				systemOwned
 				templateContext
@@ -195749,6 +197382,7 @@ const GetEmailTemplateByIDDocument = `query GetEmailTemplateByID ($emailTemplate
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		templateContext
@@ -195812,6 +197446,7 @@ const GetEmailTemplatesDocument = `query GetEmailTemplates ($first: Int, $last: 
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemInternalID
 				systemOwned
 				templateContext
@@ -195897,6 +197532,7 @@ const UpdateBulkCSVEmailTemplateDocument = `mutation UpdateBulkCSVEmailTemplate 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -195956,6 +197592,7 @@ const UpdateBulkEmailTemplateDocument = `mutation UpdateBulkEmailTemplate ($ids:
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -196016,6 +197653,7 @@ const UpdateEmailTemplateDocument = `mutation UpdateEmailTemplate ($updateEmailT
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -196415,6 +198053,7 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		spendCurrency
 		ssoEnforced
 		status
@@ -197202,6 +198841,7 @@ const CreateBulkCSVEvidenceDocument = `mutation CreateBulkCSVEvidence ($input: U
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt
@@ -197491,6 +199131,7 @@ const GetEvidenceByIDDocument = `query GetEvidenceByID ($evidenceId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		tags
 		updatedAt
@@ -197713,6 +199354,7 @@ const UpdateBulkEvidenceDocument = `mutation UpdateBulkEvidence ($ids: [ID!]!, $
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			updatedAt
@@ -198505,6 +200147,7 @@ const CreateBulkCSVFindingDocument = `mutation CreateBulkCSVFinding ($input: Upl
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -198603,6 +200246,7 @@ const CreateBulkFindingDocument = `mutation CreateBulkFinding ($input: [CreateFi
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -198701,6 +200345,7 @@ const CreateFindingDocument = `mutation CreateFinding ($input: CreateFindingInpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -198943,6 +200588,7 @@ const GetFindingByIDDocument = `query GetFindingByID ($findingId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceUpdatedAt
 		state
 		stepsToReproduce
@@ -199159,6 +200805,7 @@ const UpdateBulkCSVFindingDocument = `mutation UpdateBulkCSVFinding ($input: Upl
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -199260,6 +200907,7 @@ const UpdateBulkFindingDocument = `mutation UpdateBulkFinding ($ids: [ID!]!, $in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -199362,6 +201010,7 @@ const UpdateFindingDocument = `mutation UpdateFinding ($updateFindingId: ID!, $i
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -199829,6 +201478,7 @@ const CreateBulkCSVGroupDocument = `mutation CreateBulkCSVGroup ($input: Upload!
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -199908,6 +201558,7 @@ const CreateBulkGroupDocument = `mutation CreateBulkGroup ($input: [CreateGroupI
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -199987,6 +201638,7 @@ const CreateGroupDocument = `mutation CreateGroup ($input: CreateGroupInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -200286,6 +201938,7 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		tags
 		updatedAt
 		updatedBy
@@ -200506,6 +202159,7 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -201325,6 +202979,7 @@ const CreateBulkCSVIdentityHolderDocument = `mutation CreateBulkCSVIdentityHolde
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -201395,6 +203050,7 @@ const CreateBulkIdentityHolderDocument = `mutation CreateBulkIdentityHolder ($in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -201465,6 +203121,7 @@ const CreateIdentityHolderDocument = `mutation CreateIdentityHolder ($input: Cre
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -201567,6 +203224,7 @@ const GetAllIdentityHoldersDocument = `query GetAllIdentityHolders ($first: Int,
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				startDate
 				status
 				tags
@@ -201665,6 +203323,7 @@ const GetIdentityHolderByIDDocument = `query GetIdentityHolderByID ($identityHol
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		startDate
 		status
 		tags
@@ -201851,6 +203510,7 @@ const GetIdentityHoldersDocument = `query GetIdentityHolders ($first: Int, $last
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				startDate
 				status
 				tags
@@ -201937,6 +203597,7 @@ const UpdateIdentityHolderDocument = `mutation UpdateIdentityHolder ($updateIden
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -202217,6 +203878,7 @@ const CreateBulkCSVInternalPolicyDocument = `mutation CreateBulkCSVInternalPolic
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -202298,6 +203960,7 @@ const CreateBulkInternalPolicyDocument = `mutation CreateBulkInternalPolicy ($in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -202379,6 +204042,7 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -202591,6 +204255,7 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies ($first: In
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				summary
 				systemInternalID
@@ -202701,6 +204366,7 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($first: Int, $la
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				summary
 				systemInternalID
@@ -202803,6 +204469,7 @@ const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPol
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		summary
 		systemInternalID
@@ -202938,6 +204605,7 @@ const UpdateBulkInternalPolicyDocument = `mutation UpdateBulkInternalPolicy ($id
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -203023,6 +204691,7 @@ const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInte
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -203736,6 +205405,7 @@ const CreateBulkCSVMappedControlDocument = `mutation CreateBulkCSVMappedControl 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -203782,6 +205452,7 @@ const CreateBulkMappedControlDocument = `mutation CreateBulkMappedControl ($inpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -203860,6 +205531,7 @@ const CreateMappedControlDocument = `mutation CreateMappedControl ($input: Creat
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -204037,6 +205709,7 @@ const GetMappedControlByIDDocument = `query GetMappedControlByID ($mappedControl
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		tags
@@ -204194,6 +205867,7 @@ const UpdateMappedControlDocument = `mutation UpdateMappedControl ($updateMapped
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -204273,6 +205947,7 @@ const CreateBulkCSVNarrativeDocument = `mutation CreateBulkCSVNarrative ($input:
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -204319,6 +205994,7 @@ const CreateBulkNarrativeDocument = `mutation CreateBulkNarrative ($input: [Crea
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -204365,6 +206041,7 @@ const CreateNarrativeDocument = `mutation CreateNarrative ($input: CreateNarrati
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -204533,6 +206210,7 @@ const GetNarrativeByIDDocument = `query GetNarrativeByID ($narrativeId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		tags
@@ -204679,6 +206357,7 @@ const UpdateNarrativeDocument = `mutation UpdateNarrative ($updateNarrativeId: I
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -207836,6 +209515,7 @@ const CreateBulkCSVPlatformDocument = `mutation CreateBulkCSVPlatform ($input: U
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourceType
 			status
 			tags
@@ -207928,6 +209608,7 @@ const CreateBulkPlatformDocument = `mutation CreateBulkPlatform ($input: [Create
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourceType
 			status
 			tags
@@ -208228,6 +209909,7 @@ const GetAllPlatformsDocument = `query GetAllPlatforms ($first: Int, $last: Int,
 				sourceDefinitionVersion
 				sourceIdentifier
 				sourceInstanceID
+				sourceKey
 				sourceType
 				status
 				tags
@@ -208364,6 +210046,7 @@ const GetPlatformByIDDocument = `query GetPlatformByID ($platformId: ID!) {
 		sourceDefinitionVersion
 		sourceIdentifier
 		sourceInstanceID
+		sourceKey
 		sourceType
 		status
 		tags
@@ -208493,6 +210176,7 @@ const GetPlatformsDocument = `query GetPlatforms ($first: Int, $last: Int, $afte
 				sourceDefinitionVersion
 				sourceIdentifier
 				sourceInstanceID
+				sourceKey
 				sourceType
 				status
 				tags
@@ -208735,6 +210419,7 @@ const CreateBulkCSVProcedureDocument = `mutation CreateBulkCSVProcedure ($input:
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -208815,6 +210500,7 @@ const CreateBulkProcedureDocument = `mutation CreateBulkProcedure ($input: [Crea
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -208895,6 +210581,7 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -209172,6 +210859,7 @@ const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		summary
 		systemInternalID
@@ -209333,6 +211021,7 @@ const UpdateBulkProcedureDocument = `mutation UpdateBulkProcedure ($ids: [ID!]!,
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -209417,6 +211106,7 @@ const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: I
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -209507,6 +211197,7 @@ const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upl
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -209567,6 +211258,7 @@ const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreatePr
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -209777,6 +211469,7 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -210077,6 +211770,7 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		startDate
 		status
 		tags
@@ -210323,6 +212017,7 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -210980,6 +212675,7 @@ const CreateBulkCSVRemediationDocument = `mutation CreateBulkCSVRemediation ($in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -211047,6 +212743,7 @@ const CreateBulkRemediationDocument = `mutation CreateBulkRemediation ($input: [
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -211114,6 +212811,7 @@ const CreateRemediationDocument = `mutation CreateRemediation ($input: CreateRem
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -211287,6 +212985,7 @@ const GetRemediationByIDDocument = `query GetRemediationByID ($remediationId: ID
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		state
 		status
 		summary
@@ -211414,6 +213113,7 @@ const UpdateBulkCSVRemediationDocument = `mutation UpdateBulkCSVRemediation ($in
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -211484,6 +213184,7 @@ const UpdateBulkRemediationDocument = `mutation UpdateBulkRemediation ($ids: [ID
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -211555,6 +213256,7 @@ const UpdateRemediationDocument = `mutation UpdateRemediation ($updateRemediatio
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -212465,6 +214167,7 @@ const CreateBulkCSVReviewDocument = `mutation CreateBulkCSVReview ($input: Uploa
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -212529,6 +214232,7 @@ const CreateBulkReviewDocument = `mutation CreateBulkReview ($input: [CreateRevi
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -212593,6 +214297,7 @@ const CreateReviewDocument = `mutation CreateReview ($input: CreateReviewInput!)
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -212762,6 +214467,7 @@ const GetReviewByIDDocument = `query GetReviewByID ($reviewId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		state
 		status
 		summary
@@ -212885,6 +214591,7 @@ const UpdateBulkCSVReviewDocument = `mutation UpdateBulkCSVReview ($input: Uploa
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -212952,6 +214659,7 @@ const UpdateBulkReviewDocument = `mutation UpdateBulkReview ($ids: [ID!]!, $inpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -213161,6 +214869,7 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID
@@ -213250,6 +214959,7 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID
@@ -213339,6 +215049,7 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID
@@ -213492,6 +215203,7 @@ const GetAllRisksDocument = `query GetAllRisks ($first: Int, $last: Int, $after:
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				stakeholderGroupID
 				stakeholderID
 				stakeholderIdentityHolderID
@@ -213617,6 +215329,7 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		stakeholderGroupID
 		stakeholderID
 		stakeholderIdentityHolderID
@@ -213745,6 +215458,7 @@ const GetRisksDocument = `query GetRisks ($first: Int, $last: Int, $after: Curso
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				stakeholderGroupID
 				stakeholderID
 				stakeholderIdentityHolderID
@@ -213872,6 +215586,7 @@ const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($ids: [ID!]!, $input: U
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID
@@ -213965,6 +215680,7 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			stakeholderGroupID
 			stakeholderID
 			stakeholderIdentityHolderID
@@ -214075,6 +215791,7 @@ const CreateBulkCSVScanDocument = `mutation CreateBulkCSVScan ($input: Upload!) 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -214141,6 +215858,7 @@ const CreateBulkScanDocument = `mutation CreateBulkScan ($input: [CreateScanInpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -214207,6 +215925,7 @@ const CreateScanDocument = `mutation CreateScan ($input: CreateScanInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -214339,6 +216058,7 @@ const GetScanByIDDocument = `query GetScanByID ($scanId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		systemInternalID
 		systemOwned
@@ -214451,6 +216171,7 @@ const UpdateScanDocument = `mutation UpdateScan ($updateScanId: ID!, $input: Upd
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -216046,6 +217767,7 @@ const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($inpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			status
 			subcategory
@@ -216132,6 +217854,7 @@ const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [Cr
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			status
 			subcategory
@@ -216218,6 +217941,7 @@ const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubco
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			status
 			subcategory
@@ -216391,6 +218115,7 @@ const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) 
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceName
 		status
 		subcategory
@@ -216548,6 +218273,7 @@ const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			status
 			subcategory
@@ -217367,6 +219093,7 @@ const CreateBulkCSVSystemDetailDocument = `mutation CreateBulkCSVSystemDetail ($
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemName
 			tags
 			updatedAt
@@ -217415,6 +219142,7 @@ const CreateBulkSystemDetailDocument = `mutation CreateBulkSystemDetail ($input:
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemName
 			tags
 			updatedAt
@@ -217463,6 +219191,7 @@ const CreateSystemDetailDocument = `mutation CreateSystemDetail ($input: CreateS
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemName
 			tags
 			updatedAt
@@ -217569,6 +219298,7 @@ const GetAllSystemDetailsDocument = `query GetAllSystemDetails ($first: Int, $la
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemName
 				tags
 				updatedAt
@@ -217621,6 +219351,7 @@ const GetSystemDetailByIDDocument = `query GetSystemDetailByID ($systemDetailId:
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemName
 		tags
 		updatedAt
@@ -217676,6 +219407,7 @@ const GetSystemDetailsDocument = `query GetSystemDetails ($first: Int, $last: In
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemName
 				tags
 				updatedAt
@@ -217730,6 +219462,7 @@ const UpdateBulkCSVSystemDetailDocument = `mutation UpdateBulkCSVSystemDetail ($
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemName
 			tags
 			updatedAt
@@ -217781,6 +219514,7 @@ const UpdateBulkSystemDetailDocument = `mutation UpdateBulkSystemDetail ($ids: [
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemName
 			tags
 			updatedAt
@@ -217833,6 +219567,7 @@ const UpdateSystemDetailDocument = `mutation UpdateSystemDetail ($updateSystemDe
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemName
 			tags
 			updatedAt
@@ -217881,6 +219616,7 @@ const CreateBulkCSVTagDefinitionDocument = `mutation CreateBulkCSVTagDefinition 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -217927,6 +219663,7 @@ const CreateBulkTagDefinitionDocument = `mutation CreateBulkTagDefinition ($inpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -217973,6 +219710,7 @@ const CreateTagDefinitionDocument = `mutation CreateTagDefinition ($input: Creat
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -218088,6 +219826,7 @@ const GetTagDefinitionByIDDocument = `query GetTagDefinitionByID ($tagDefinition
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		updatedAt
@@ -218183,6 +219922,7 @@ const UpdateTagDefinitionDocument = `mutation UpdateTagDefinition ($updateTagDef
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -219109,6 +220849,7 @@ const CreateBulkCSVTemplateDocument = `mutation CreateBulkCSVTemplate ($input: U
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -219163,6 +220904,7 @@ const CreateBulkTemplateDocument = `mutation CreateBulkTemplate ($input: [Create
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -224813,6 +226555,7 @@ const CreateBulkCSVVulnerabilityDocument = `mutation CreateBulkCSVVulnerability 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			summary
 			systemInternalID
@@ -224916,6 +226659,7 @@ const CreateBulkVulnerabilityDocument = `mutation CreateBulkVulnerability ($inpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			summary
 			systemInternalID
@@ -225019,6 +226763,7 @@ const CreateVulnerabilityDocument = `mutation CreateVulnerability ($input: Creat
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			summary
 			systemInternalID
@@ -225247,6 +226992,7 @@ const GetVulnerabilitiesDocument = `query GetVulnerabilities ($first: Int, $last
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				sourceUpdatedAt
 				summary
 				systemInternalID
@@ -225355,6 +227101,7 @@ const GetVulnerabilityByIDDocument = `query GetVulnerabilityByID ($vulnerability
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceUpdatedAt
 		summary
 		systemInternalID
@@ -225457,6 +227204,7 @@ const UpdateBulkCSVVulnerabilityDocument = `mutation UpdateBulkCSVVulnerability 
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			summary
 			systemInternalID
@@ -225563,6 +227311,7 @@ const UpdateBulkVulnerabilityDocument = `mutation UpdateBulkVulnerability ($ids:
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			summary
 			systemInternalID
@@ -225670,6 +227419,7 @@ const UpdateVulnerabilityDocument = `mutation UpdateVulnerability ($updateVulner
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceUpdatedAt
 			summary
 			systemInternalID
@@ -229344,6 +231094,8 @@ var DocumentOperationNames = map[string]string{
 	GetCustomTypeEnumByIDDocument:                       "GetCustomTypeEnumByID",
 	GetCustomTypeEnumsDocument:                          "GetCustomTypeEnums",
 	UpdateCustomTypeEnumDocument:                        "UpdateCustomTypeEnum",
+	DeleteDemoDataDocument:                              "DeleteDemoData",
+	SeedDemoDataDocument:                                "SeedDemoData",
 	CreateBulkCSVDirectoryAccountDocument:               "CreateBulkCSVDirectoryAccount",
 	CreateBulkDirectoryAccountDocument:                  "CreateBulkDirectoryAccount",
 	CreateDirectoryAccountDocument:                      "CreateDirectoryAccount",

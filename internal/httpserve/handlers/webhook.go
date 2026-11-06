@@ -194,7 +194,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 }
 
 // unmarshalEventData is used to unmarshal event data from a stripe.Event object into a specific type T
-func unmarshalEventData[T interface{}](e *stripe.Event) (*T, error) {
+func unmarshalEventData[T any](e *stripe.Event) (*T, error) {
 	var data T
 
 	err := json.Unmarshal(e.Data.Raw, &data)

@@ -268,6 +268,26 @@ func (_u *EntityUpdate) ClearIntegrationRunID() *EntityUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *EntityUpdate) SetSourceKey(v string) *EntityUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableSourceKey(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *EntityUpdate) ClearSourceKey() *EntityUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *EntityUpdate) SetExternalID(v string) *EntityUpdate {
 	_u.mutation.SetExternalID(v)
@@ -2900,6 +2920,12 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(entity.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(entity.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(entity.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
 	}
@@ -5168,6 +5194,26 @@ func (_u *EntityUpdateOne) SetNillableIntegrationRunID(v *string) *EntityUpdateO
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *EntityUpdateOne) ClearIntegrationRunID() *EntityUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *EntityUpdateOne) SetSourceKey(v string) *EntityUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableSourceKey(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *EntityUpdateOne) ClearSourceKey() *EntityUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -7832,6 +7878,12 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(entity.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(entity.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(entity.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(entity.FieldExternalID, field.TypeString, value)

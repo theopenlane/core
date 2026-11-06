@@ -57,6 +57,8 @@ type IdentityHolderHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -137,7 +139,7 @@ func (*IdentityHolderHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case identityholderhistory.FieldWorkflowEligibleMarker, identityholderhistory.FieldIsOpenlaneUser, identityholderhistory.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldUpdatedByImpersonator, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldSourceDefinitionID, identityholderhistory.FieldSourceDefinitionVersion, identityholderhistory.FieldSourceInstanceID, identityholderhistory.FieldManagedBy, identityholderhistory.FieldIntegrationRunID, identityholderhistory.FieldExternalID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldInternalOwnerIdentityHolderID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID, identityholderhistory.FieldAvatarRemoteURL:
+		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldUpdatedByImpersonator, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldSourceDefinitionID, identityholderhistory.FieldSourceDefinitionVersion, identityholderhistory.FieldSourceInstanceID, identityholderhistory.FieldManagedBy, identityholderhistory.FieldIntegrationRunID, identityholderhistory.FieldSourceKey, identityholderhistory.FieldExternalID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldInternalOwnerIdentityHolderID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID, identityholderhistory.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholderhistory.FieldHistoryTime, identityholderhistory.FieldCreatedAt, identityholderhistory.FieldUpdatedAt, identityholderhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -266,6 +268,12 @@ func (_m *IdentityHolderHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case identityholderhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case identityholderhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -554,6 +562,9 @@ func (_m *IdentityHolderHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

@@ -356,6 +356,7 @@ jobqueue:
         discardedjobretentionperiod: 0s
         errorhandler: null
         fetchcooldown: 0s
+        fetchonlyknownkinds: false
         fetchpollinterval: 0s
         hooks: []
         id: ""
@@ -363,6 +364,7 @@ jobqueue:
         jobinsertmiddleware: []
         jobstuckthreshold: 0s
         jobtimeout: 0s
+        leaderelectiondisabled: false
         logger: null
         maxattempts: 0
         middleware: []

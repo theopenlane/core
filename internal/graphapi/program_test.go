@@ -7,7 +7,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -292,18 +291,18 @@ func TestMutationCreateProgram(t *testing.T) {
 			name: "happy path, all basic input",
 			request: testclient.CreateProgramInput{
 				Name:                 "mitb program",
-				Description:          lo.ToPtr("being the best"),
-				FrameworkName:        lo.ToPtr("SOC 2"),
+				Description:          new("being the best"),
+				FrameworkName:        new("SOC 2"),
 				ProgramOwnerID:       &th.SharedTestUser1.ID,
 				Status:               &enums.ProgramStatusInProgress,
 				StartDate:            &startDate,
 				EndDate:              &endDate,
-				AuditorReady:         lo.ToPtr(false),
-				AuditorWriteComments: lo.ToPtr(true),
-				AuditorReadComments:  lo.ToPtr(true),
-				AuditFirm:            lo.ToPtr("Meow Audit, LLC."),
-				Auditor:              lo.ToPtr("Meowz Meow"),
-				AuditorEmail:         lo.ToPtr("m@meow-audit.com"),
+				AuditorReady:         new(false),
+				AuditorWriteComments: new(true),
+				AuditorReadComments:  new(true),
+				AuditFirm:            new("Meow Audit, LLC."),
+				Auditor:              new("Meowz Meow"),
+				AuditorEmail:         new("m@meow-audit.com"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -345,7 +344,7 @@ func TestMutationCreateProgram(t *testing.T) {
 			name: "happy path, using pat",
 			request: testclient.CreateProgramInput{
 				Name:        "mitb program",
-				Description: lo.ToPtr("being the best"),
+				Description: new("being the best"),
 				OwnerID:     &th.SharedTestUser1.OrganizationID,
 			},
 			client: suite.Client.APIWithPAT,
@@ -355,7 +354,7 @@ func TestMutationCreateProgram(t *testing.T) {
 			name: "happy path, using api token",
 			request: testclient.CreateProgramInput{
 				Name:        "mitb program",
-				Description: lo.ToPtr("being the best"),
+				Description: new("being the best"),
 			},
 			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
@@ -364,8 +363,8 @@ func TestMutationCreateProgram(t *testing.T) {
 			name: "happy path, date valid",
 			request: testclient.CreateProgramInput{
 				Name:      "Valid Date Program",
-				StartDate: lo.ToPtr(startDate),
-				EndDate:   lo.ToPtr(endDate),
+				StartDate: new(startDate),
+				EndDate:   new(endDate),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -374,7 +373,7 @@ func TestMutationCreateProgram(t *testing.T) {
 			name: "only start date",
 			request: testclient.CreateProgramInput{
 				Name:      "Start Date Only",
-				StartDate: lo.ToPtr(startDate),
+				StartDate: new(startDate),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -383,7 +382,7 @@ func TestMutationCreateProgram(t *testing.T) {
 			name: "only end date",
 			request: testclient.CreateProgramInput{
 				Name:    "End Date Only",
-				EndDate: lo.ToPtr(endDate),
+				EndDate: new(endDate),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -409,7 +408,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		{
 			name: "missing required field",
 			request: testclient.CreateProgramInput{
-				Description: lo.ToPtr("soc2 2024"),
+				Description: new("soc2 2024"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -419,7 +418,7 @@ func TestMutationCreateProgram(t *testing.T) {
 			name: "invalid auditor email",
 			request: testclient.CreateProgramInput{
 				Name:         "mitb program",
-				AuditorEmail: lo.ToPtr("invalid email"),
+				AuditorEmail: new("invalid email"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -429,8 +428,8 @@ func TestMutationCreateProgram(t *testing.T) {
 			name: "invalid date",
 			request: testclient.CreateProgramInput{
 				Name:      "Invalid Date Program",
-				StartDate: lo.ToPtr(time.Now().AddDate(0, 10, 22)),
-				EndDate:   lo.ToPtr(time.Now().AddDate(0, 9, 17)),
+				StartDate: new(time.Now().AddDate(0, 10, 22)),
+				EndDate:   new(time.Now().AddDate(0, 9, 17)),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -676,7 +675,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "happy path, update field",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				Description:  lo.ToPtr("new description"),
+				Description:  new("new description"),
 				AddEditorIDs: []string{th.SharedTestUser1.GroupID}, // add the group to the editor groups for the subsequent tests
 				AddViewerIDs: []string{viewerGroup.ID},             // add the group to the viewer groups and ensure the user has access to the program
 			},
@@ -688,14 +687,14 @@ func TestMutationUpdateProgram(t *testing.T) {
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				Status:               &enums.ProgramStatusReadyForAuditor,
-				FrameworkName:        lo.ToPtr("SOC 2"),
-				AuditFirm:            lo.ToPtr("Meow Audit, LLC."),
-				Auditor:              lo.ToPtr("Meowz Meow"),
-				AuditorEmail:         lo.ToPtr("m@meow-audit.com"),
-				EndDate:              lo.ToPtr(time.Now().AddDate(0, 0, 30)),
-				AuditorReady:         lo.ToPtr(true),
-				AuditorWriteComments: lo.ToPtr(true),
-				AuditorReadComments:  lo.ToPtr(true),
+				FrameworkName:        new("SOC 2"),
+				AuditFirm:            new("Meow Audit, LLC."),
+				Auditor:              new("Meowz Meow"),
+				AuditorEmail:         new("m@meow-audit.com"),
+				EndDate:              new(time.Now().AddDate(0, 0, 30)),
+				AuditorReady:         new(true),
+				AuditorWriteComments: new(true),
+				AuditorReadComments:  new(true),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -783,8 +782,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "happy path, valid start and end date update",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				StartDate: lo.ToPtr(baseStart.AddDate(0, 0, -1)),
-				EndDate:   lo.ToPtr(baseEnd.AddDate(0, 0, 1)),
+				StartDate: new(baseStart.AddDate(0, 0, -1)),
+				EndDate:   new(baseEnd.AddDate(0, 0, 1)),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -793,8 +792,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "happy path, valid start date update",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				StartDate: lo.ToPtr(time.Now().AddDate(0, 0, 2)),
-				EndDate:   lo.ToPtr(baseEnd),
+				StartDate: new(time.Now().AddDate(0, 0, 2)),
+				EndDate:   new(baseEnd),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -803,8 +802,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "happy path, valid end date update",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				StartDate: lo.ToPtr(baseStart),
-				EndDate:   lo.ToPtr(time.Now().AddDate(1, 2, 5)),
+				StartDate: new(baseStart),
+				EndDate:   new(time.Now().AddDate(1, 2, 5)),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -813,8 +812,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "invalid start and end date update",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				StartDate: lo.ToPtr(time.Now().AddDate(2, 2, 5)),
-				EndDate:   lo.ToPtr(time.Now().AddDate(1, 2, 5)),
+				StartDate: new(time.Now().AddDate(2, 2, 5)),
+				EndDate:   new(time.Now().AddDate(1, 2, 5)),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -824,8 +823,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "invalid start update",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				StartDate: lo.ToPtr(time.Now().AddDate(0, 0, 15)),
-				EndDate:   lo.ToPtr(baseEnd),
+				StartDate: new(time.Now().AddDate(0, 0, 15)),
+				EndDate:   new(baseEnd),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -835,8 +834,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "invalid end update",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				StartDate: lo.ToPtr(baseStart),
-				EndDate:   lo.ToPtr(time.Now().AddDate(0, 0, -15)),
+				StartDate: new(baseStart),
+				EndDate:   new(time.Now().AddDate(0, 0, -15)),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -866,7 +865,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "update not allowed, not enough permissions",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				Description: lo.ToPtr("newer description"),
+				Description: new("newer description"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -876,7 +875,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "update not allowed, no permissions",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				Description: lo.ToPtr("newer description"),
+				Description: new("newer description"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -886,7 +885,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "update allowed, user in editor group",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				Description: lo.ToPtr("soc2 2024"),
+				Description: new("soc2 2024"),
 			},
 			client: suite.Client.API,
 			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions
@@ -895,8 +894,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "update not allowed, program is archived and status update is archived",
 			programID: archivedProgram.ID,
 			request: testclient.UpdateProgramInput{
-				Description: lo.ToPtr("newer description"),
-				Status:      lo.ToPtr(enums.ProgramStatusArchived),
+				Description: new("newer description"),
+				Status:      new(enums.ProgramStatusArchived),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -906,7 +905,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "update not allowed, program is archived",
 			programID: archivedProgram.ID,
 			request: testclient.UpdateProgramInput{
-				Description: lo.ToPtr("newer description"),
+				Description: new("newer description"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -916,7 +915,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "update allowed, program is archived but status is updated",
 			programID: archivedProgram.ID,
 			request: testclient.UpdateProgramInput{
-				Status: lo.ToPtr(enums.ProgramStatusInProgress),
+				Status: new(enums.ProgramStatusInProgress),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -925,7 +924,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "update allowed, program is not archived but updated to archived state",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				Status: lo.ToPtr(enums.ProgramStatusArchived),
+				Status: new(enums.ProgramStatusArchived),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -934,7 +933,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			name:      "update allowed, program is archived but updated to in progress state",
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
-				Status: lo.ToPtr(enums.ProgramStatusInProgress),
+				Status: new(enums.ProgramStatusInProgress),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,

@@ -251,16 +251,14 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 	metrics.RecordStorageUpload(string(storagetypes.S3Provider), size)
 
 	return &storagetypes.UploadedFileMetadata{
-		FileMetadata: storagetypes.FileMetadata{
-			Key:          objectKey,
-			Size:         size,
-			Folder:       opts.FolderDestination,
-			Bucket:       p.options.Bucket,
-			Region:       p.options.Region,
-			ContentType:  opts.ContentType,
-			ProviderType: storagetypes.S3Provider,
-			FullURI:      storage.Scheme(storagetypes.S3Provider) + p.options.Bucket + "/" + objectKey,
-		},
+		Key:          objectKey,
+		Size:         size,
+		Folder:       opts.FolderDestination,
+		Bucket:       p.options.Bucket,
+		Region:       p.options.Region,
+		ContentType:  opts.ContentType,
+		ProviderType: storagetypes.S3Provider,
+		FullURI:      storage.Scheme(storagetypes.S3Provider) + p.options.Bucket + "/" + objectKey,
 	}, nil
 }
 
@@ -388,8 +386,7 @@ func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, e
 		Key:    aws.String(file.Key),
 	})
 	if err != nil {
-		var notFound *types.NotFound
-		if errors.As(err, &notFound) {
+		if _, ok := errors.AsType[*types.NotFound](err); ok {
 			return false, nil
 		}
 		return false, err

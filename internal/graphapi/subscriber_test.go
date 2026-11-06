@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -414,7 +413,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			if tc.setUnsubscribed {
 				// Set the subscriber as unsubscribed to test for duplicate email
 				resp, err := tc.client.UpdateSubscriber(tc.ctx, resp.CreateSubscriber.Subscriber.Email, testclient.UpdateSubscriberInput{
-					Unsubscribed: lo.ToPtr(true),
+					Unsubscribed: new(true),
 				})
 				assert.NilError(t, err)
 				assert.Assert(t, resp != nil)
@@ -463,7 +462,7 @@ func TestUpdateSubscriber(t *testing.T) {
 			name:  "happy path",
 			email: subscriber.Email,
 			updateInput: testclient.UpdateSubscriberInput{
-				PhoneNumber: lo.ToPtr("+1-555-867-5309"),
+				PhoneNumber: new("+1-555-867-5309"),
 			},
 			client:  suite.Client.API,
 			ctx:     th.SharedTestUser1.UserCtx,
@@ -473,7 +472,7 @@ func TestUpdateSubscriber(t *testing.T) {
 			name:  "happy path, using api token",
 			email: subscriber.Email,
 			updateInput: testclient.UpdateSubscriberInput{
-				PhoneNumber: lo.ToPtr("+1-555-867-5310"),
+				PhoneNumber: new("+1-555-867-5310"),
 			},
 			client:  suite.Client.APIWithToken,
 			ctx:     context.Background(),
@@ -483,7 +482,7 @@ func TestUpdateSubscriber(t *testing.T) {
 			name:  "happy path, using personal access token",
 			email: subscriber.Email,
 			updateInput: testclient.UpdateSubscriberInput{
-				PhoneNumber: lo.ToPtr("+1-555-867-5311"),
+				PhoneNumber: new("+1-555-867-5311"),
 			},
 			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
@@ -493,7 +492,7 @@ func TestUpdateSubscriber(t *testing.T) {
 			name:  "happy path, using api token, set unsubscribed = false",
 			email: subscriber.Email,
 			updateInput: testclient.UpdateSubscriberInput{
-				Unsubscribed: lo.ToPtr(true),
+				Unsubscribed: new(true),
 			},
 			client:  suite.Client.APIWithToken,
 			ctx:     context.Background(),
@@ -503,7 +502,7 @@ func TestUpdateSubscriber(t *testing.T) {
 			name:  "invalid email",
 			email: "beep@boop.com",
 			updateInput: testclient.UpdateSubscriberInput{
-				PhoneNumber: lo.ToPtr("+1-555-867-5309"),
+				PhoneNumber: new("+1-555-867-5309"),
 			},
 			client:  suite.Client.API,
 			ctx:     th.SharedTestUser1.UserCtx,
@@ -513,7 +512,7 @@ func TestUpdateSubscriber(t *testing.T) {
 			name:  "subscriber for another org",
 			email: subscriber2.Email,
 			updateInput: testclient.UpdateSubscriberInput{
-				PhoneNumber: lo.ToPtr("+1-555-867-5309"),
+				PhoneNumber: new("+1-555-867-5309"),
 			},
 			client:  suite.Client.API,
 			ctx:     th.SharedTestUser1.UserCtx,
@@ -659,7 +658,7 @@ func TestMutationCreateSubscriber_Active(t *testing.T) {
 			isActive: true,
 			request: testclient.CreateSubscriberInput{
 				Email:         email,
-				VerifiedEmail: lo.ToPtr(true),
+				VerifiedEmail: new(true),
 			},
 		},
 		{
@@ -669,7 +668,7 @@ func TestMutationCreateSubscriber_Active(t *testing.T) {
 			isActive: true,
 			request: testclient.CreateSubscriberInput{
 				Email:         email2,
-				VerifiedPhone: lo.ToPtr(true),
+				VerifiedPhone: new(true),
 			},
 		},
 	}

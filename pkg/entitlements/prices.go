@@ -16,7 +16,7 @@ const UpsellToKey = "upsell_to"
 func (sc *StripeClient) CreatePrice(ctx context.Context, productID string, unitAmount int64, currency, interval, nickname, lookupKey string, metadata map[string]string) (*stripe.Price, error) {
 	params := &stripe.PriceCreateParams{
 		Product:    stripe.String(productID),
-		UnitAmount: stripe.Int64(unitAmount),
+		UnitAmount: new(unitAmount),
 		Currency:   stripe.String(currency),
 		Recurring: &stripe.PriceCreateRecurringParams{
 			Interval: stripe.String(interval),

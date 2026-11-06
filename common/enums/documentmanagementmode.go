@@ -3,6 +3,7 @@ package enums
 import (
 	"fmt"
 	"io"
+	"slices"
 )
 
 // DocumentManagementMode is a custom type representing how a document is managed:
@@ -36,12 +37,7 @@ func (r DocumentManagementMode) String() string { return string(r) }
 
 // IsValid reports whether r is a recognised DocumentManagementMode value.
 func (r DocumentManagementMode) IsValid() bool {
-	for _, v := range documentManagementModeValues {
-		if r == v {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(documentManagementModeValues, r)
 }
 
 // ToDocumentManagementMode converts a string to its corresponding DocumentManagementMode enum value.

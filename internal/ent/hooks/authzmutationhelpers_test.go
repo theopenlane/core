@@ -20,7 +20,7 @@ func TestGetObjectIDFromEntValue(t *testing.T) {
 	}{
 		{
 			name: "valid object ID",
-			input: map[string]interface{}{
+			input: map[string]any{
 				"id": "12345",
 			},
 			want:    "12345",
@@ -28,7 +28,7 @@ func TestGetObjectIDFromEntValue(t *testing.T) {
 		},
 		{
 			name: "missing object ID",
-			input: map[string]interface{}{
+			input: map[string]any{
 				"name": "test",
 			},
 			want:    "",
@@ -69,8 +69,8 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "valid input",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{
-						"input": map[string]interface{}{
+					Args: map[string]any{
+						"input": map[string]any{
 							"parentField": []string{"id1", "id2"},
 						},
 					},
@@ -85,8 +85,8 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "valid input, singular",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{
-						"input": map[string]interface{}{
+					Args: map[string]any{
+						"input": map[string]any{
 							"parentField": "id1",
 						},
 					},
@@ -101,7 +101,7 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "missing input",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{},
+					Args: map[string]any{},
 				}
 				return graphql.WithFieldContext(context.Background(), fCtx)
 			}(),
@@ -113,7 +113,7 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "invalid JSON",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{
+					Args: map[string]any{
 						"input": make(chan int),
 					},
 				}
@@ -127,8 +127,8 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "missing parent field",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{
-						"input": map[string]interface{}{
+					Args: map[string]any{
+						"input": map[string]any{
 							"otherField": []string{"id1", "id2"},
 						},
 					},

@@ -22,6 +22,7 @@ mutation CreateBulkCSVEmailTemplate ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -59,6 +60,7 @@ mutation CreateBulkEmailTemplate ($input: [CreateEmailTemplateInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -96,6 +98,7 @@ mutation CreateEmailTemplate ($input: CreateEmailTemplateInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -153,6 +156,7 @@ query GetAllEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemInternalID
 				systemOwned
 				templateContext
@@ -190,6 +194,7 @@ query GetEmailTemplateByID ($emailTemplateId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		templateContext
@@ -234,6 +239,7 @@ query GetEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Curso
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemInternalID
 				systemOwned
 				templateContext
@@ -275,6 +281,7 @@ mutation UpdateBulkCSVEmailTemplate ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -315,6 +322,7 @@ mutation UpdateBulkEmailTemplate ($ids: [ID!]!, $input: UpdateEmailTemplateInput
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext
@@ -355,6 +363,7 @@ mutation UpdateEmailTemplate ($updateEmailTemplateId: ID!, $input: UpdateEmailTe
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			templateContext

@@ -144,6 +144,11 @@ func IntegrationRunID(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEQ(FieldIntegrationRunID, v))
 }
 
+// SourceKey applies equality check predicate on the "source_key" field. It's identical to SourceKeyEQ.
+func SourceKey(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldSourceKey, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEQ(FieldExternalID, v))
@@ -247,11 +252,6 @@ func Priority(v int) predicate.TaskHistory {
 // Source applies equality check predicate on the "source" field. It's identical to SourceEQ.
 func Source(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEQ(FieldSource, v))
-}
-
-// SourceKey applies equality check predicate on the "source_key" field. It's identical to SourceKeyEQ.
-func SourceKey(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldEQ(FieldSourceKey, v))
 }
 
 // IdempotencyKey applies equality check predicate on the "idempotency_key" field. It's identical to IdempotencyKeyEQ.
@@ -1297,6 +1297,81 @@ func IntegrationRunIDEqualFold(v string) predicate.TaskHistory {
 // IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
 func IntegrationRunIDContainsFold(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldContainsFold(FieldIntegrationRunID, v))
+}
+
+// SourceKeyEQ applies the EQ predicate on the "source_key" field.
+func SourceKeyEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldSourceKey, v))
+}
+
+// SourceKeyNEQ applies the NEQ predicate on the "source_key" field.
+func SourceKeyNEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNEQ(FieldSourceKey, v))
+}
+
+// SourceKeyIn applies the In predicate on the "source_key" field.
+func SourceKeyIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyNotIn applies the NotIn predicate on the "source_key" field.
+func SourceKeyNotIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyGT applies the GT predicate on the "source_key" field.
+func SourceKeyGT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGT(FieldSourceKey, v))
+}
+
+// SourceKeyGTE applies the GTE predicate on the "source_key" field.
+func SourceKeyGTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGTE(FieldSourceKey, v))
+}
+
+// SourceKeyLT applies the LT predicate on the "source_key" field.
+func SourceKeyLT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLT(FieldSourceKey, v))
+}
+
+// SourceKeyLTE applies the LTE predicate on the "source_key" field.
+func SourceKeyLTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLTE(FieldSourceKey, v))
+}
+
+// SourceKeyContains applies the Contains predicate on the "source_key" field.
+func SourceKeyContains(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContains(FieldSourceKey, v))
+}
+
+// SourceKeyHasPrefix applies the HasPrefix predicate on the "source_key" field.
+func SourceKeyHasPrefix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasPrefix(FieldSourceKey, v))
+}
+
+// SourceKeyHasSuffix applies the HasSuffix predicate on the "source_key" field.
+func SourceKeyHasSuffix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasSuffix(FieldSourceKey, v))
+}
+
+// SourceKeyIsNil applies the IsNil predicate on the "source_key" field.
+func SourceKeyIsNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIsNull(FieldSourceKey))
+}
+
+// SourceKeyNotNil applies the NotNil predicate on the "source_key" field.
+func SourceKeyNotNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotNull(FieldSourceKey))
+}
+
+// SourceKeyEqualFold applies the EqualFold predicate on the "source_key" field.
+func SourceKeyEqualFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEqualFold(FieldSourceKey, v))
+}
+
+// SourceKeyContainsFold applies the ContainsFold predicate on the "source_key" field.
+func SourceKeyContainsFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContainsFold(FieldSourceKey, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.
@@ -2577,81 +2652,6 @@ func SourceEqualFold(v string) predicate.TaskHistory {
 // SourceContainsFold applies the ContainsFold predicate on the "source" field.
 func SourceContainsFold(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldContainsFold(FieldSource, v))
-}
-
-// SourceKeyEQ applies the EQ predicate on the "source_key" field.
-func SourceKeyEQ(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldEQ(FieldSourceKey, v))
-}
-
-// SourceKeyNEQ applies the NEQ predicate on the "source_key" field.
-func SourceKeyNEQ(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldNEQ(FieldSourceKey, v))
-}
-
-// SourceKeyIn applies the In predicate on the "source_key" field.
-func SourceKeyIn(vs ...string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldIn(FieldSourceKey, vs...))
-}
-
-// SourceKeyNotIn applies the NotIn predicate on the "source_key" field.
-func SourceKeyNotIn(vs ...string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldNotIn(FieldSourceKey, vs...))
-}
-
-// SourceKeyGT applies the GT predicate on the "source_key" field.
-func SourceKeyGT(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldGT(FieldSourceKey, v))
-}
-
-// SourceKeyGTE applies the GTE predicate on the "source_key" field.
-func SourceKeyGTE(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldGTE(FieldSourceKey, v))
-}
-
-// SourceKeyLT applies the LT predicate on the "source_key" field.
-func SourceKeyLT(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldLT(FieldSourceKey, v))
-}
-
-// SourceKeyLTE applies the LTE predicate on the "source_key" field.
-func SourceKeyLTE(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldLTE(FieldSourceKey, v))
-}
-
-// SourceKeyContains applies the Contains predicate on the "source_key" field.
-func SourceKeyContains(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldContains(FieldSourceKey, v))
-}
-
-// SourceKeyHasPrefix applies the HasPrefix predicate on the "source_key" field.
-func SourceKeyHasPrefix(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldHasPrefix(FieldSourceKey, v))
-}
-
-// SourceKeyHasSuffix applies the HasSuffix predicate on the "source_key" field.
-func SourceKeyHasSuffix(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldHasSuffix(FieldSourceKey, v))
-}
-
-// SourceKeyIsNil applies the IsNil predicate on the "source_key" field.
-func SourceKeyIsNil() predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldIsNull(FieldSourceKey))
-}
-
-// SourceKeyNotNil applies the NotNil predicate on the "source_key" field.
-func SourceKeyNotNil() predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldNotNull(FieldSourceKey))
-}
-
-// SourceKeyEqualFold applies the EqualFold predicate on the "source_key" field.
-func SourceKeyEqualFold(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldEqualFold(FieldSourceKey, v))
-}
-
-// SourceKeyContainsFold applies the ContainsFold predicate on the "source_key" field.
-func SourceKeyContainsFold(v string) predicate.TaskHistory {
-	return predicate.TaskHistory(sql.FieldContainsFold(FieldSourceKey, v))
 }
 
 // IdempotencyKeyEQ applies the EQ predicate on the "idempotency_key" field.

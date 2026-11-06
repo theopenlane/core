@@ -265,6 +265,26 @@ func (_u *RiskUpdate) ClearIntegrationRunID() *RiskUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *RiskUpdate) SetSourceKey(v string) *RiskUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableSourceKey(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *RiskUpdate) ClearSourceKey() *RiskUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *RiskUpdate) SetExternalID(v string) *RiskUpdate {
 	_u.mutation.SetExternalID(v)
@@ -2208,6 +2228,12 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(risk.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(risk.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(risk.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
 	}
@@ -3973,6 +3999,26 @@ func (_u *RiskUpdateOne) SetNillableIntegrationRunID(v *string) *RiskUpdateOne {
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *RiskUpdateOne) ClearIntegrationRunID() *RiskUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *RiskUpdateOne) SetSourceKey(v string) *RiskUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableSourceKey(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *RiskUpdateOne) ClearSourceKey() *RiskUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -5948,6 +5994,12 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(risk.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(risk.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(risk.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(risk.FieldExternalID, field.TypeString, value)

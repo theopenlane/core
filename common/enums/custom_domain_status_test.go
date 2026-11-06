@@ -84,7 +84,7 @@ func TestDNSVerificationStatusMarshalGQL(t *testing.T) {
 
 func TestDNSVerificationStatusUnmarshalGQL(t *testing.T) {
 	tests := []struct {
-		input    interface{}
+		input    any
 		expected DNSVerificationStatus
 		hasError bool
 	}{
@@ -189,7 +189,7 @@ func TestSSLVerificationStatusMarshalGQL(t *testing.T) {
 
 func TestSSLVerificationStatusUnmarshalGQL(t *testing.T) {
 	tests := []struct {
-		input    interface{}
+		input    any
 		expected SSLVerificationStatus
 		hasError bool
 	}{

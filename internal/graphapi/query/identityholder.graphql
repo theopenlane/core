@@ -36,6 +36,7 @@ mutation CreateBulkCSVIdentityHolder ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -87,6 +88,7 @@ mutation CreateBulkIdentityHolder ($input: [CreateIdentityHolderInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -138,6 +140,7 @@ mutation CreateIdentityHolder ($input: CreateIdentityHolderInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags
@@ -202,6 +205,7 @@ query GetAllIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: C
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				startDate
 				status
 				tags
@@ -277,6 +281,7 @@ query GetIdentityHolderByID ($identityHolderId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		startDate
 		status
 		tags
@@ -419,6 +424,7 @@ query GetIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				startDate
 				status
 				tags
@@ -481,6 +487,7 @@ mutation UpdateIdentityHolder ($updateIdentityHolderId: ID!, $input: UpdateIdent
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			startDate
 			status
 			tags

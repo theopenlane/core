@@ -18,9 +18,9 @@ import (
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/examples/common"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
 	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
-	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
 )
 
@@ -308,7 +308,7 @@ func exerciseProvider(ctx context.Context, out io.Writer, service *eddy.ClientSe
 	}
 	fmt.Fprintf(out, "Uploaded to %s: %s\n", providerType, uploaded.Key)
 
-	storageFile := &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: uploaded.Key, Size: uploaded.Size, ContentType: uploaded.ContentType}}
+	storageFile := &storagetypes.File{Key: uploaded.Key, Size: uploaded.Size, ContentType: uploaded.ContentType}
 
 	downloaded, err := objService.Download(ctx, client.Provider, storageFile, &storage.DownloadOptions{})
 	if err != nil {
@@ -723,15 +723,13 @@ func performBenchmarkOperations(ctx context.Context, service *eddy.ClientService
 	errCh := make(chan error, cfg.Concurrent)
 
 	for i := 0; i < cfg.Concurrent; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			for tenant := range work {
 				if err := benchmarkWorkflow(ctx, service, resolver, tenant, cfg.OpsPerTenant, s); err != nil {
 					errCh <- err
 				}
 			}
-		}()
+		})
 	}
 
 	for _, t := range tenants {
@@ -776,7 +774,7 @@ func benchmarkWorkflow(ctx context.Context, service *eddy.ClientService[*benchma
 
 	objService := storage.NewObjectService()
 
-	for i := 0; i < ops; i++ {
+	for i := range ops {
 		content := strings.NewReader(fmt.Sprintf("Test data for tenant %d operation %d", t.ID, i))
 
 		uploadOpts := &storage.UploadOptions{
@@ -792,11 +790,9 @@ func benchmarkWorkflow(ctx context.Context, service *eddy.ClientService[*benchma
 		s.uploads.Add(1)
 
 		storageFile := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key:         uploaded.Key,
-				Size:        uploaded.Size,
-				ContentType: uploaded.ContentType,
-			},
+			Key:         uploaded.Key,
+			Size:        uploaded.Size,
+			ContentType: uploaded.ContentType,
 		}
 
 		if _, err := objService.Download(ctx, client.Provider, storageFile, &storage.DownloadOptions{}); err != nil {

@@ -263,6 +263,26 @@ func (_u *TaskUpdate) ClearIntegrationRunID() *TaskUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *TaskUpdate) SetSourceKey(v string) *TaskUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableSourceKey(v *string) *TaskUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *TaskUpdate) ClearSourceKey() *TaskUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *TaskUpdate) SetExternalID(v string) *TaskUpdate {
 	_u.mutation.SetExternalID(v)
@@ -681,26 +701,6 @@ func (_u *TaskUpdate) SetNillableSource(v *string) *TaskUpdate {
 // ClearSource clears the value of the "source" field.
 func (_u *TaskUpdate) ClearSource() *TaskUpdate {
 	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetSourceKey sets the "source_key" field.
-func (_u *TaskUpdate) SetSourceKey(v string) *TaskUpdate {
-	_u.mutation.SetSourceKey(v)
-	return _u
-}
-
-// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
-func (_u *TaskUpdate) SetNillableSourceKey(v *string) *TaskUpdate {
-	if v != nil {
-		_u.SetSourceKey(*v)
-	}
-	return _u
-}
-
-// ClearSourceKey clears the value of the "source_key" field.
-func (_u *TaskUpdate) ClearSourceKey() *TaskUpdate {
-	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -1724,6 +1724,12 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(task.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(task.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(task.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(task.FieldExternalID, field.TypeString, value)
 	}
@@ -1821,12 +1827,6 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(task.FieldSource, field.TypeString)
-	}
-	if value, ok := _u.mutation.SourceKey(); ok {
-		_spec.SetField(task.FieldSourceKey, field.TypeString, value)
-	}
-	if _u.mutation.SourceKeyCleared() {
-		_spec.ClearField(task.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.IdempotencyKey(); ok {
 		_spec.SetField(task.FieldIdempotencyKey, field.TypeString, value)
@@ -3151,6 +3151,26 @@ func (_u *TaskUpdateOne) ClearIntegrationRunID() *TaskUpdateOne {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *TaskUpdateOne) SetSourceKey(v string) *TaskUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableSourceKey(v *string) *TaskUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *TaskUpdateOne) ClearSourceKey() *TaskUpdateOne {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *TaskUpdateOne) SetExternalID(v string) *TaskUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -3569,26 +3589,6 @@ func (_u *TaskUpdateOne) SetNillableSource(v *string) *TaskUpdateOne {
 // ClearSource clears the value of the "source" field.
 func (_u *TaskUpdateOne) ClearSource() *TaskUpdateOne {
 	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetSourceKey sets the "source_key" field.
-func (_u *TaskUpdateOne) SetSourceKey(v string) *TaskUpdateOne {
-	_u.mutation.SetSourceKey(v)
-	return _u
-}
-
-// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
-func (_u *TaskUpdateOne) SetNillableSourceKey(v *string) *TaskUpdateOne {
-	if v != nil {
-		_u.SetSourceKey(*v)
-	}
-	return _u
-}
-
-// ClearSourceKey clears the value of the "source_key" field.
-func (_u *TaskUpdateOne) ClearSourceKey() *TaskUpdateOne {
-	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -4642,6 +4642,12 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(task.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(task.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(task.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(task.FieldExternalID, field.TypeString, value)
 	}
@@ -4739,12 +4745,6 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(task.FieldSource, field.TypeString)
-	}
-	if value, ok := _u.mutation.SourceKey(); ok {
-		_spec.SetField(task.FieldSourceKey, field.TypeString, value)
-	}
-	if _u.mutation.SourceKeyCleared() {
-		_spec.ClearField(task.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.IdempotencyKey(); ok {
 		_spec.SetField(task.FieldIdempotencyKey, field.TypeString, value)

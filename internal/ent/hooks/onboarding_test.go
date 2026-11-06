@@ -48,16 +48,16 @@ func TestHookOnboarding(t *testing.T) {
 			input: generated.CreateOnboardingInput{
 				CompanyName: name,
 				Domains:     []string{gofakeit.DomainName(), gofakeit.DomainName()},
-				CompanyDetails: map[string]interface{}{
+				CompanyDetails: map[string]any{
 					"sector":       "Technology",
 					"company_size": "100-500",
 				},
-				UserDetails: map[string]interface{}{
+				UserDetails: map[string]any{
 					"name":       gofakeit.Name(),
 					"job_title":  gofakeit.JobTitle(),
 					"department": gofakeit.JobDescriptor(),
 				},
-				Compliance: map[string]interface{}{
+				Compliance: map[string]any{
 					"existing_policies": true,
 					"existing_controls": false,
 					"risk_assessment":   true,
@@ -207,7 +207,7 @@ func TestOnboardingProgramControlsLoadableByListeners(t *testing.T) {
 
 	_, err = s.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 		CompanyName: "Onboarding Co " + gofakeit.LetterN(8),
-		Compliance:  map[string]interface{}{"frameworks": []string{framework}},
+		Compliance:  map[string]any{"frameworks": []string{framework}},
 	}).Save(ctx)
 	assert.NilError(t, err)
 
@@ -238,22 +238,22 @@ func TestOnboardingProgramFrameworkSelections(t *testing.T) {
 
 	for _, tc := range []struct {
 		name         string
-		compliance   map[string]interface{}
+		compliance   map[string]any
 		programCount int
 		controlCount int
 	}{
 		{name: "no compliance"},
-		{name: "no frameworks", compliance: map[string]interface{}{"existing_controls": true}},
-		{name: "empty frameworks", compliance: map[string]interface{}{"frameworks": []string{}}},
+		{name: "no frameworks", compliance: map[string]any{"existing_controls": true}},
+		{name: "empty frameworks", compliance: map[string]any{"frameworks": []string{}}},
 		{
 			name:         "single framework",
-			compliance:   map[string]interface{}{"frameworks": []string{framework}},
+			compliance:   map[string]any{"frameworks": []string{framework}},
 			programCount: 1,
 			controlCount: 1,
 		},
 		{
 			name:         "other framework",
-			compliance:   map[string]interface{}{"frameworks": []string{"other"}},
+			compliance:   map[string]any{"frameworks": []string{"other"}},
 			programCount: 1,
 		},
 	} {

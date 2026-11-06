@@ -88,7 +88,7 @@ func tableOutput(out []graphclient.Template) {
 		tmp, err := json.Marshal(i.Jsonconfig)
 		cobra.CheckErr(err)
 
-		var res map[string]interface{}
+		var res map[string]any
 		err = json.Unmarshal(tmp, &res)
 		cobra.CheckErr(err)
 
@@ -103,7 +103,7 @@ func tableOutput(out []graphclient.Template) {
 }
 
 // parseHeaders parses the headers from the result and sets them in the table
-func parseHeaders(writer tables.TableOutputWriter, res map[string]interface{}) (headers []string) {
+func parseHeaders(writer tables.TableOutputWriter, res map[string]any) (headers []string) {
 	if len(res) == 0 {
 		return
 	}
@@ -119,8 +119,8 @@ func parseHeaders(writer tables.TableOutputWriter, res map[string]interface{}) (
 }
 
 // parseRow parses the rows from the result and sets them in the table based on the headers
-func parseRow(writer tables.TableOutputWriter, row map[string]interface{}, headers []string) {
-	var values []interface{}
+func parseRow(writer tables.TableOutputWriter, row map[string]any, headers []string) {
+	var values []any
 
 	for _, h := range headers {
 		out, _ := json.MarshalIndent(row[h], "", " ")

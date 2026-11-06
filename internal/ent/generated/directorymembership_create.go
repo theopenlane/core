@@ -176,6 +176,20 @@ func (_c *DirectoryMembershipCreate) SetNillableIntegrationRunID(v *string) *Dir
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *DirectoryMembershipCreate) SetSourceKey(v string) *DirectoryMembershipCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableSourceKey(v *string) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *DirectoryMembershipCreate) SetOwnerID(v string) *DirectoryMembershipCreate {
 	_c.mutation.SetOwnerID(v)
@@ -673,6 +687,10 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(directorymembership.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(directorymembership.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)

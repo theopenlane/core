@@ -451,7 +451,7 @@ func TestMutationReport_Group(t *testing.T) {
 		assert.NilError(t, err)
 
 		_, err = suite.Client.API.UpdateReport(org.Member.UserCtx, report.ID, testclient.UpdateReportInput{
-			Name: lo.ToPtr("Here is a new query name"),
+			Name: new("Here is a new query name"),
 		})
 		assert.Assert(t, err != nil)
 	})
@@ -461,7 +461,7 @@ func TestMutationReport_Group(t *testing.T) {
 		assert.NilError(t, err)
 
 		_, err = suite.Client.API.UpdateReport(editorGroupUser.UserCtx, report.ID, testclient.UpdateReportInput{
-			Name: lo.ToPtr("someone in editor group updated this"),
+			Name: new("someone in editor group updated this"),
 		})
 		assert.NilError(t, err)
 	})
@@ -484,7 +484,7 @@ func TestMutationReport_Group(t *testing.T) {
 		assert.Assert(t, err != nil)
 
 		_, err = suite.Client.API.UpdateReport(org.Member.UserCtx, report.ID, testclient.UpdateReportInput{
-			Name: lo.ToPtr("failed update"),
+			Name: new("failed update"),
 		})
 		assert.Assert(t, err != nil)
 	})
@@ -494,7 +494,7 @@ func TestMutationReport_Group(t *testing.T) {
 		assert.Assert(t, err != nil)
 
 		_, err = suite.Client.API.UpdateReport(editorGroupUser.UserCtx, report.ID, testclient.UpdateReportInput{
-			Name: lo.ToPtr("Editor access was revoked"),
+			Name: new("Editor access was revoked"),
 		})
 		assert.Assert(t, err != nil)
 	})
@@ -524,7 +524,7 @@ func TestMutationReportGroup_Permission(t *testing.T) {
 	assert.NilError(t, err)
 
 	_, err = suite.Client.API.UpdateGroup(org.Admin.UserCtx, group.CreateGroup.Group.ID, testclient.UpdateGroupInput{
-		Description: lo.ToPtr("Caller can edit this group"),
+		Description: new("Caller can edit this group"),
 	})
 	assert.NilError(t, err)
 

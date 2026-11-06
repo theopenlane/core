@@ -251,6 +251,26 @@ func (_u *AssessmentUpdate) ClearIntegrationRunID() *AssessmentUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *AssessmentUpdate) SetSourceKey(v string) *AssessmentUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableSourceKey(v *string) *AssessmentUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *AssessmentUpdate) ClearSourceKey() *AssessmentUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *AssessmentUpdate) SetExternalID(v string) *AssessmentUpdate {
 	_u.mutation.SetExternalID(v)
@@ -993,6 +1013,12 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(assessment.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(assessment.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(assessment.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(assessment.FieldExternalID, field.TypeString, value)
@@ -1825,6 +1851,26 @@ func (_u *AssessmentUpdateOne) ClearIntegrationRunID() *AssessmentUpdateOne {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *AssessmentUpdateOne) SetSourceKey(v string) *AssessmentUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableSourceKey(v *string) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *AssessmentUpdateOne) ClearSourceKey() *AssessmentUpdateOne {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *AssessmentUpdateOne) SetExternalID(v string) *AssessmentUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -2597,6 +2643,12 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(assessment.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(assessment.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(assessment.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(assessment.FieldExternalID, field.TypeString, value)

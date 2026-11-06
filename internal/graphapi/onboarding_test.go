@@ -5,7 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/samber/lo"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -87,23 +86,23 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			request: testclient.CreateOnboardingInput{
 				CompanyName: companyName,
 				Domains:     []string{gofakeit.DomainName(), gofakeit.DomainName()},
-				CompanyDetails: map[string]interface{}{
+				CompanyDetails: map[string]any{
 					"sector":       "Technology",
 					"company_size": "100-500",
 				},
-				UserDetails: map[string]interface{}{
+				UserDetails: map[string]any{
 					"name":       gofakeit.Name(),
 					"job_title":  gofakeit.JobTitle(),
 					"department": gofakeit.JobDescriptor(),
 				},
-				Compliance: map[string]interface{}{
+				Compliance: map[string]any{
 					"frameworks":                   []string{"soc2", "iso27001:2022"},
 					"has_auditor":                  false,
 					"existing_controls":            false,
 					"recommend_auditors":           true,
 					"recommend_vciso_partner":      true,
 					"existing_policies_procedures": false},
-				DemoRequested: lo.ToPtr(true),
+				DemoRequested: new(true),
 			},
 			client:           suite.Client.API,
 			ctx:              personalOrgCtx2,

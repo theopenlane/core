@@ -69,7 +69,7 @@ func TestBuilderWithOptions(t *testing.T) {
 	assert.Assert(t, provider != nil)
 	t.Cleanup(func() { _ = provider.Close() })
 
-	exists, err := provider.Exists(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "seeded.txt"}})
+	exists, err := provider.Exists(context.Background(), &storagetypes.File{Key: "seeded.txt"})
 	assert.NilError(t, err)
 	assert.Check(t, exists)
 

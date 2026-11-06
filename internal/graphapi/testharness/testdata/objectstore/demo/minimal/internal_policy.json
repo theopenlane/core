@@ -1,0 +1,13 @@
+[
+  {
+    "external_id": "internal_policy::minimal-policy",
+    "name": "Minimal Access Policy",
+    "details": "Access to {{ORG_NAME}} systems is reviewed quarterly",
+    "control_ref_codes": [
+      "MIN-01"
+    ],
+    "status": "{{STATUS|PUBLISHED}}",
+    "approver_name": "{{APPROVER|Admins}}",
+    "programs_external_ids": []
+  }
+]

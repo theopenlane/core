@@ -28,13 +28,20 @@ func LoadExample(t *testing.T, dir, name string) json.RawMessage {
 func MappingSpec(t *testing.T, mappings []types.MappingRegistration, schema string) types.MappingOverride {
 	t.Helper()
 
+	return VariantMappingSpec(t, mappings, schema, "")
+}
+
+// VariantMappingSpec returns the MappingOverride for the first mapping matching schema and variant in the list
+func VariantMappingSpec(t *testing.T, mappings []types.MappingRegistration, schema, variant string) types.MappingOverride {
+	t.Helper()
+
 	for _, m := range mappings {
-		if m.Schema == schema && m.Variant == "" {
+		if m.Schema == schema && m.Variant == variant {
 			return m.Spec
 		}
 	}
 
-	t.Fatalf("no mapping found for schema %s", schema)
+	t.Fatalf("no mapping found for schema %s variant %q", schema, variant)
 
 	return types.MappingOverride{}
 }
@@ -52,6 +59,11 @@ func AssertExpressionsValid(t *testing.T, mappings []types.MappingRegistration) 
 		t.Run(name+"/filter", func(t *testing.T) {
 			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
 		})
+
+		// an empty map expression passes the payload through unchanged, so there is nothing to compile
+		if m.Spec.MapExpr == "" {
+			continue
+		}
 
 		t.Run(name+"/map", func(t *testing.T) {
 			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))

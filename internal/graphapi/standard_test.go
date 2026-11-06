@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -369,7 +368,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			name: "happy path, system admin - system owned with controls",
 			request: testclient.CreateStandardInput{
 				Name:       "Super Awesome Standard",
-				IsPublic:   lo.ToPtr(true),
+				IsPublic:   new(true),
 				ControlIDs: adminControlIDs,
 			},
 			client: suite.Client.API,
@@ -379,7 +378,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			name: "happy path, system admin - system owned using pat",
 			request: testclient.CreateStandardInput{
 				Name:     "Super Awesome Standard",
-				IsPublic: lo.ToPtr(true),
+				IsPublic: new(true),
 			},
 			client: patClientSystemAdmin,
 			ctx:    context.Background(),
@@ -388,7 +387,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			name: "happy path, system admin - system owned and public",
 			request: testclient.CreateStandardInput{
 				Name:     "Super Awesome Standard",
-				IsPublic: lo.ToPtr(true),
+				IsPublic: new(true),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedSystemAdminUser.UserCtx,
@@ -398,17 +397,17 @@ func TestMutationCreateStandard(t *testing.T) {
 			request: testclient.CreateStandardInput{
 				Name:                 "Super Awesome Standard With Everything But Edges",
 				Tags:                 []string{"tag1", "tag2"},
-				Framework:            lo.ToPtr("Awesome Framework"),
-				ShortName:            lo.ToPtr("super-great"),
-				Description:          lo.ToPtr("This is a super awesome standard with everything!"),
-				GoverningBodyLogoURL: lo.ToPtr("https://example.com/logo.png"),
-				GoverningBody:        lo.ToPtr("Super Awesome Governing Body"),
+				Framework:            new("Awesome Framework"),
+				ShortName:            new("super-great"),
+				Description:          new("This is a super awesome standard with everything!"),
+				GoverningBodyLogoURL: new("https://example.com/logo.png"),
+				GoverningBody:        new("Super Awesome Governing Body"),
 				Domains:              []string{"availability", "meows"},
-				Link:                 lo.ToPtr("https://example.com/super-awesome-standard"),
+				Link:                 new("https://example.com/super-awesome-standard"),
 				Status:               &enums.StandardDraft,
-				StandardType:         lo.ToPtr("cybersecurity"),
-				Version:              lo.ToPtr("2025 - ship latest"),
-				Revision:             lo.ToPtr("v1.0.0"),
+				StandardType:         new("cybersecurity"),
+				Version:              new("2025 - ship latest"),
+				Revision:             new("v1.0.0"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -418,7 +417,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			request: testclient.CreateStandardInput{
 				Name:      "Greatness, Kitties, and Rainbows",
 				Tags:      []string{"uffo", "brax"},
-				Framework: lo.ToPtr("Meows Framework"),
+				Framework: new("Meows Framework"),
 				OwnerID:   &th.SharedTestUser1.OrganizationID,
 			},
 			client: suite.Client.APIWithPAT,
@@ -429,7 +428,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			request: testclient.CreateStandardInput{
 				Name:      "Greatness, Kitties, and Sherbet",
 				Tags:      []string{"kc", "eddy"},
-				Framework: lo.ToPtr("Meows Framework")},
+				Framework: new("Meows Framework")},
 			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
 		},
@@ -437,7 +436,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			name: "user not authorized to make a public standard",
 			request: testclient.CreateStandardInput{
 				Name:     "Super Awesome Standard",
-				IsPublic: lo.ToPtr(true),
+				IsPublic: new(true),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -447,7 +446,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			name: "user not authorized to make public standard",
 			request: testclient.CreateStandardInput{
 				Name:     "Super Awesome Standard",
-				IsPublic: lo.ToPtr(true),
+				IsPublic: new(true),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -457,7 +456,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			name: "user not authorized to free to use standard",
 			request: testclient.CreateStandardInput{
 				Name:      "Super Awesome Standard",
-				FreeToUse: lo.ToPtr(true),
+				FreeToUse: new(true),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -655,13 +654,13 @@ func TestMutationUpdateStandard(t *testing.T) {
 			id:   standardOrgOwned.ID,
 			request: testclient.UpdateStandardInput{
 				AppendTags:           []string{"new-tag"},
-				GoverningBodyLogoURL: lo.ToPtr("https://example.com/new-logo.png"),
-				GoverningBody:        lo.ToPtr("Cat Association"),
-				ShortName:            lo.ToPtr("super-great"),
-				Description:          lo.ToPtr("This is a super awesome standard with everything!"),
-				Link:                 lo.ToPtr("https://example.com/super-awesome-standard"),
-				Status:               lo.ToPtr(enums.StandardArchived),
-				StandardType:         lo.ToPtr("cats"),
+				GoverningBodyLogoURL: new("https://example.com/new-logo.png"),
+				GoverningBody:        new("Cat Association"),
+				ShortName:            new("super-great"),
+				Description:          new("This is a super awesome standard with everything!"),
+				Link:                 new("https://example.com/super-awesome-standard"),
+				Status:               new(enums.StandardArchived),
+				StandardType:         new("cats"),
 				AppendDomains:        []string{"availability", "meows"},
 				RevisionBump:         &models.Major,
 			},
@@ -672,7 +671,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 			name: "update not allowed, not enough permissions",
 			id:   standardOrgOwned.ID,
 			request: testclient.UpdateStandardInput{
-				ClearTags: lo.ToPtr(true),
+				ClearTags: new(true),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -682,7 +681,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 			name: "update not allowed, cannot update public field",
 			id:   standardOrgOwned.ID,
 			request: testclient.UpdateStandardInput{
-				IsPublic: lo.ToPtr(true),
+				IsPublic: new(true),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -692,7 +691,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 			name: "update not allowed, cannot update public field",
 			id:   standardOrgOwned.ID,
 			request: testclient.UpdateStandardInput{
-				ClearIsPublic: lo.ToPtr(true),
+				ClearIsPublic: new(true),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -702,7 +701,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 			name: "bad request, invalid link",
 			id:   standardOrgOwned.ID,
 			request: testclient.UpdateStandardInput{
-				Link: lo.ToPtr("not a link"),
+				Link: new("not a link"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -712,7 +711,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 			name: "update not allowed, no permissions",
 			id:   standardOrgOwned.ID,
 			request: testclient.UpdateStandardInput{
-				ClearTags: lo.ToPtr(true),
+				ClearTags: new(true),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -722,7 +721,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 			name: "happy path, update field, system owned standard",
 			id:   standardSystemOwned.ID,
 			request: testclient.UpdateStandardInput{
-				IsPublic: lo.ToPtr(true),
+				IsPublic: new(true),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedSystemAdminUser.UserCtx,
@@ -731,11 +730,11 @@ func TestMutationUpdateStandard(t *testing.T) {
 			name: "happy path, update multiple fields, org owned standard",
 			id:   standardSystemOwned.ID,
 			request: testclient.UpdateStandardInput{
-				ClearTags:     lo.ToPtr(true),
+				ClearTags:     new(true),
 				AppendDomains: []string{"mice", "meows"},
-				Status:        lo.ToPtr(enums.StandardDraft),
+				Status:        new(enums.StandardDraft),
 				RevisionBump:  &models.Minor,
-				FreeToUse:     lo.ToPtr(true),
+				FreeToUse:     new(true),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedSystemAdminUser.UserCtx,
@@ -744,7 +743,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 			name: "update not allowed, no permissions",
 			id:   standardSystemOwned.ID,
 			request: testclient.UpdateStandardInput{
-				ClearTags: lo.ToPtr(true),
+				ClearTags: new(true),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -754,7 +753,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 			name: "update not allowed, no permissions",
 			id:   standardSystemOwned.ID,
 			request: testclient.UpdateStandardInput{
-				ClearTags: lo.ToPtr(true),
+				ClearTags: new(true),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,

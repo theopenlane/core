@@ -15,6 +15,7 @@ mutation CreateBulkCSVControlImplementation ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -62,6 +63,7 @@ mutation CreateBulkControlImplementation ($input: [CreateControlImplementationIn
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -109,6 +111,7 @@ mutation CreateControlImplementation ($input: CreateControlImplementationInput!)
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -204,6 +207,7 @@ query GetControlImplementationByID ($controlImplementationId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		systemInternalID
 		systemOwned
@@ -294,6 +298,7 @@ mutation UpdateControlImplementation ($updateControlImplementationId: ID!, $inpu
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned

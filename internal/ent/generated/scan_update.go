@@ -259,6 +259,26 @@ func (_u *ScanUpdate) ClearIntegrationRunID() *ScanUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *ScanUpdate) SetSourceKey(v string) *ScanUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableSourceKey(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ScanUpdate) ClearSourceKey() *ScanUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *ScanUpdate) SetExternalID(v string) *ScanUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1599,6 +1619,12 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(scan.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(scan.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(scan.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(scan.FieldExternalID, field.TypeString, value)
 	}
@@ -2917,6 +2943,26 @@ func (_u *ScanUpdateOne) SetNillableIntegrationRunID(v *string) *ScanUpdateOne {
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *ScanUpdateOne) ClearIntegrationRunID() *ScanUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *ScanUpdateOne) SetSourceKey(v string) *ScanUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableSourceKey(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ScanUpdateOne) ClearSourceKey() *ScanUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -4289,6 +4335,12 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(scan.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(scan.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(scan.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(scan.FieldExternalID, field.TypeString, value)

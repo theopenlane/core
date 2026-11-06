@@ -115,8 +115,8 @@ func listDirectoryUsers(ctx context.Context, gc *gocloak.GoCloak, token, realm s
 		}
 
 		batch, err := gc.GetUsers(ctx, token, realm, gocloak.GetUsersParams{
-			First: gocloak.IntP(first),
-			Max:   gocloak.IntP(keycloakDefaultPageSize),
+			First: new(first),
+			Max:   new(keycloakDefaultPageSize),
 		})
 		if err != nil {
 			return nil, ErrDirectoryUsersFetchFailed
@@ -145,9 +145,9 @@ func listDirectoryGroups(ctx context.Context, gc *gocloak.GoCloak, token, realm 
 		}
 
 		batch, err := gc.GetGroups(ctx, token, realm, gocloak.GetGroupsParams{
-			First: gocloak.IntP(first),
-			Max:   gocloak.IntP(keycloakDefaultPageSize),
-			Full:  gocloak.BoolP(true),
+			First: new(first),
+			Max:   new(keycloakDefaultPageSize),
+			Full:  new(true),
 		})
 		if err != nil {
 			return nil, ErrDirectoryGroupsFetchFailed
@@ -176,8 +176,8 @@ func listGroupMembers(ctx context.Context, gc *gocloak.GoCloak, token, realm, gr
 		}
 
 		batch, err := gc.GetGroupMembers(ctx, token, realm, groupID, gocloak.GetGroupsParams{
-			First: gocloak.IntP(first),
-			Max:   gocloak.IntP(keycloakDefaultPageSize),
+			First: new(first),
+			Max:   new(keycloakDefaultPageSize),
 		})
 		if err != nil {
 			return nil, ErrDirectoryGroupMembersFetchFailed

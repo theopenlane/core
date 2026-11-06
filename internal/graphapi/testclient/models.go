@@ -299,6 +299,8 @@ type ActionPlan struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the name of the action_plan
@@ -632,6 +634,18 @@ type ActionPlanWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -1076,6 +1090,8 @@ type Assessment struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -1207,6 +1223,8 @@ type AssessmentPolicy struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the organization id that owns the object
@@ -1422,6 +1440,18 @@ type AssessmentPolicyWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -1973,6 +2003,18 @@ type AssessmentWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -2130,6 +2172,8 @@ type Asset struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -2452,6 +2496,18 @@ type AssetWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -3050,6 +3106,8 @@ type Campaign struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -3678,6 +3736,18 @@ type CampaignWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -4077,6 +4147,8 @@ type CheckResult struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// current status of the control
@@ -4303,6 +4375,18 @@ type CheckResultWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
@@ -4485,6 +4569,8 @@ type Contact struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the organization id that owns the object
@@ -4715,6 +4801,18 @@ type ContactWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -4883,6 +4981,8 @@ type Control struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
@@ -5209,6 +5309,8 @@ type ControlImplementation struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -5440,6 +5542,18 @@ type ControlImplementationWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -5615,6 +5729,8 @@ type ControlObjective struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -5878,6 +5994,18 @@ type ControlObjectiveWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -6277,6 +6405,18 @@ type ControlWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -10020,8 +10160,6 @@ type CreateTaskInput struct {
 	Priority *int64 `json:"priority,omitempty"`
 	// the system or workflow that created or suggested the task
 	Source *string `json:"source,omitempty"`
-	// stable source-specific key for the task
-	SourceKey *string `json:"sourceKey,omitempty"`
 	// an optional external reference URL for the task
 	ExternalReferenceURL     []string `json:"externalReferenceURL,omitempty"`
 	IntegrationRunIDs        []string `json:"integrationRunIDs,omitempty"`
@@ -11001,6 +11139,8 @@ type CustomTypeEnum struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the organization id that owns the object
@@ -11214,6 +11354,18 @@ type CustomTypeEnumWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -11654,6 +11806,21 @@ type DNSVerificationWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
+// Input for deleteDemoData mutation
+type DeleteDemoDataInput struct {
+	// the demo dataset to remove from the current organization, e.g. soc2
+	Dataset string `json:"dataset"`
+	// dataset object types whose seeded records are kept, by snake_case schema name, e.g. custom_type_enum
+	Keep []string `json:"keep,omitempty"`
+}
+
+// Return response for deleteDemoData mutation. Removal happens asynchronously, so this only confirms
+// the removal was queued - the outcome surfaces via a follow-up Notification once it finishes
+type DeleteDemoDataPayload struct {
+	// whether the removal was queued
+	Accepted bool `json:"accepted"`
+}
+
 type DirectoryAccount struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -11676,6 +11843,8 @@ type DirectoryAccount struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"externalID"`
 	// the ID of the organization owner of the object
@@ -11951,6 +12120,18 @@ type DirectoryAccountWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -12339,6 +12520,8 @@ type DirectoryGroup struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"externalID"`
 	// the organization id that owns the object
@@ -12585,6 +12768,18 @@ type DirectoryGroupWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -12822,6 +13017,8 @@ type DirectoryMembership struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the environment of the directory_membership
@@ -13055,6 +13252,18 @@ type DirectoryMembershipWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// environment_name field predicates
 	EnvironmentName             *string  `json:"environmentName,omitempty"`
 	EnvironmentNameNeq          *string  `json:"environmentNameNEQ,omitempty"`
@@ -13609,6 +13818,8 @@ type EmailTemplate struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -13908,6 +14119,18 @@ type EmailTemplateWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -14181,6 +14404,8 @@ type Entity struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -14779,6 +15004,18 @@ type EntityWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -15749,6 +15986,8 @@ type Evidence struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -16031,6 +16270,18 @@ type EvidenceWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -17076,6 +17327,8 @@ type Finding struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -17670,6 +17923,18 @@ type FindingWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -18375,6 +18640,8 @@ type Group struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the organization id that owns the object
@@ -19144,6 +19411,18 @@ type GroupWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -19748,6 +20027,8 @@ type IdentityHolder struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -20059,6 +20340,18 @@ type IdentityHolderWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -21353,6 +21646,8 @@ type InternalPolicy struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the organization id that owns the object
@@ -21685,6 +21980,18 @@ type InternalPolicyWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -22520,6 +22827,8 @@ type MappedControl struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -22747,6 +23056,18 @@ type MappedControlWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -22886,6 +23207,8 @@ type Narrative struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -23122,6 +23445,18 @@ type NarrativeWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -26457,6 +26792,8 @@ type Platform struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -26813,6 +27150,18 @@ type PlatformWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -27573,6 +27922,8 @@ type Procedure struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the organization id that owns the object
@@ -27891,6 +28242,18 @@ type ProcedureWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -28247,6 +28610,8 @@ type Program struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the organization id that owns the object
@@ -28691,6 +29056,18 @@ type ProgramWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -29038,6 +29415,8 @@ type Remediation struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -29337,6 +29716,18 @@ type RemediationWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -30200,6 +30591,8 @@ type Review struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -30478,6 +30871,18 @@ type ReviewWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -30837,6 +31242,8 @@ type Risk struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -31178,6 +31585,18 @@ type RiskWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -31929,6 +32348,8 @@ type Scan struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -32215,6 +32636,18 @@ type ScanWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -32651,6 +33084,21 @@ type SearchSnippet struct {
 	Text string `json:"text"`
 }
 
+// Input for seedDemoData mutation
+type SeedDemoDataInput struct {
+	// the demo dataset to seed into the current organization, e.g. soc2
+	Dataset string `json:"dataset"`
+	// the seed profile, DEMO when not set
+	Profile *enums.DemoDataProfile `json:"profile,omitempty"`
+}
+
+// Return response for seedDemoData mutation. Seeding happens asynchronously, so this only confirms
+// the seed was queued - the outcome surfaces via a follow-up Notification once it finishes
+type SeedDemoDataPayload struct {
+	// whether the seed was queued
+	Accepted bool `json:"accepted"`
+}
+
 // Input for sendCampaignTestEmail mutation
 type SendCampaignTestEmailInput struct {
 	// ID of the campaign
@@ -33066,6 +33514,8 @@ type Subcontrol struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
@@ -33397,6 +33847,18 @@ type SubcontrolWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -34381,6 +34843,8 @@ type SystemDetail struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -34618,6 +35082,18 @@ type SystemDetailWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -34881,6 +35357,8 @@ type TagDefinition struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the organization id that owns the object
@@ -35082,6 +35560,18 @@ type TagDefinitionWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -35213,6 +35703,8 @@ type Task struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -35261,8 +35753,6 @@ type Task struct {
 	Priority int64 `json:"priority"`
 	// the system or workflow that created or suggested the task
 	Source *string `json:"source,omitempty"`
-	// stable source-specific key for the task
-	SourceKey *string `json:"sourceKey,omitempty"`
 	// key to prevent duplicates for auto-generated task based on rules
 	IdempotencyKey *string `json:"idempotencyKey,omitempty"`
 	// an optional external reference URL for the task
@@ -35515,6 +36005,18 @@ type TaskWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -35723,18 +36225,6 @@ type TaskWhereInput struct {
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
 	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
 	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
-	// source_key field predicates
-	SourceKey             *string  `json:"sourceKey,omitempty"`
-	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
-	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
-	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
-	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
-	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
-	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
-	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
-	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
-	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
-	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// idempotency_key field predicates
 	IdempotencyKey             *string  `json:"idempotencyKey,omitempty"`
 	IdempotencyKeyNeq          *string  `json:"idempotencyKeyNEQ,omitempty"`
@@ -35866,6 +36356,8 @@ type Template struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
@@ -36143,6 +36635,18 @@ type TemplateWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -44468,9 +44972,6 @@ type UpdateTaskInput struct {
 	// the system or workflow that created or suggested the task
 	Source      *string `json:"source,omitempty"`
 	ClearSource *bool   `json:"clearSource,omitempty"`
-	// stable source-specific key for the task
-	SourceKey      *string `json:"sourceKey,omitempty"`
-	ClearSourceKey *bool   `json:"clearSourceKey,omitempty"`
 	// an optional external reference URL for the task
 	ExternalReferenceURL           []string         `json:"externalReferenceURL,omitempty"`
 	AppendExternalReferenceURL     []string         `json:"appendExternalReferenceURL,omitempty"`
@@ -46733,6 +47234,8 @@ type Vulnerability struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"externalID"`
 	// the ID of the organization owner of the object
@@ -47143,6 +47646,18 @@ type VulnerabilityWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`

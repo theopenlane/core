@@ -4296,6 +4296,29 @@ func (ec *executionContext) fieldContext_ActionPlanHistory_integrationRunID(_ co
 	return graphql.NewScalarFieldContext("ActionPlanHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _ActionPlanHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ActionPlanHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ActionPlanHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ActionPlanHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ActionPlanHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _ActionPlanHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ActionPlanHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -5831,6 +5854,29 @@ func (ec *executionContext) fieldContext_AssessmentHistory_integrationRunID(_ co
 	return graphql.NewScalarFieldContext("AssessmentHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _AssessmentHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _AssessmentHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -6604,6 +6650,29 @@ func (ec *executionContext) _AssessmentPolicyHistory_integrationRunID(ctx contex
 	)
 }
 func (ec *executionContext) fieldContext_AssessmentPolicyHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicyHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _AssessmentPolicyHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssessmentPolicyHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicyHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicyHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("AssessmentPolicyHistory", field, false, false, "String")
 }
 
@@ -8107,6 +8176,29 @@ func (ec *executionContext) _AssetHistory_integrationRunID(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_AssetHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssetHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _AssetHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.AssetHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssetHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssetHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("AssetHistory", field, false, false, "String")
 }
 
@@ -9665,6 +9757,29 @@ func (ec *executionContext) _CampaignHistory_integrationRunID(ctx context.Contex
 	)
 }
 func (ec *executionContext) fieldContext_CampaignHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CampaignHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _CampaignHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.CampaignHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CampaignHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("CampaignHistory", field, false, false, "String")
 }
 
@@ -11608,6 +11723,29 @@ func (ec *executionContext) fieldContext_ContactHistory_integrationRunID(_ conte
 	return graphql.NewScalarFieldContext("ContactHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _ContactHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ContactHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ContactHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ContactHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _ContactHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ContactHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -12368,6 +12506,29 @@ func (ec *executionContext) _ControlHistory_integrationRunID(ctx context.Context
 	)
 }
 func (ec *executionContext) fieldContext_ControlHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ControlHistory", field, false, false, "String")
 }
 
@@ -14114,6 +14275,29 @@ func (ec *executionContext) fieldContext_ControlImplementationHistory_integratio
 	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _ControlImplementationHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementationHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementationHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _ControlImplementationHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -14933,6 +15117,29 @@ func (ec *executionContext) _ControlObjectiveHistory_integrationRunID(ctx contex
 	)
 }
 func (ec *executionContext) fieldContext_ControlObjectiveHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlObjectiveHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlObjectiveHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlObjectiveHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlObjectiveHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlObjectiveHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ControlObjectiveHistory", field, false, false, "String")
 }
 
@@ -17347,6 +17554,29 @@ func (ec *executionContext) fieldContext_EmailTemplateHistory_integrationRunID(_
 	return graphql.NewScalarFieldContext("EmailTemplateHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _EmailTemplateHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.EmailTemplateHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EmailTemplateHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailTemplateHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _EmailTemplateHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.EmailTemplateHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -18307,6 +18537,29 @@ func (ec *executionContext) fieldContext_EntityHistory_integrationRunID(_ contex
 	return graphql.NewScalarFieldContext("EntityHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _EntityHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.EntityHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EntityHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EntityHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _EntityHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.EntityHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -19021,7 +19274,20 @@ func (ec *executionContext) _EntityHistory_displayName(ctx context.Context, fiel
 		func(ctx context.Context) (any, error) {
 			return obj.DisplayName, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -19044,7 +19310,20 @@ func (ec *executionContext) _EntityHistory_description(ctx context.Context, fiel
 		func(ctx context.Context) (any, error) {
 			return obj.Description, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -19067,7 +19346,20 @@ func (ec *executionContext) _EntityHistory_domains(ctx context.Context, field gr
 		func(ctx context.Context) (any, error) {
 			return obj.Domains, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal []string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
 			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
 		},
@@ -19090,7 +19382,20 @@ func (ec *executionContext) _EntityHistory_aliases(ctx context.Context, field gr
 		func(ctx context.Context) (any, error) {
 			return obj.Aliases, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal []string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
 			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
 		},
@@ -19504,7 +19809,20 @@ func (ec *executionContext) _EntityHistory_statusPageURL(ctx context.Context, fi
 		func(ctx context.Context) (any, error) {
 			return obj.StatusPageURL, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -19527,7 +19845,20 @@ func (ec *executionContext) _EntityHistory_providedServices(ctx context.Context,
 		func(ctx context.Context) (any, error) {
 			return obj.ProvidedServices, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal []string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
 			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
 		},
@@ -19550,7 +19881,20 @@ func (ec *executionContext) _EntityHistory_links(ctx context.Context, field grap
 		func(ctx context.Context) (any, error) {
 			return obj.Links, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal []string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
 			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
 		},
@@ -19757,7 +20101,20 @@ func (ec *executionContext) _EntityHistory_logoRemoteURL(ctx context.Context, fi
 		func(ctx context.Context) (any, error) {
 			return obj.LogoRemoteURL, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
 			return ec.marshalOString2ᚖstring(ctx, selections, v)
 		},
@@ -20845,6 +21202,29 @@ func (ec *executionContext) _EvidenceHistory_integrationRunID(ctx context.Contex
 	)
 }
 func (ec *executionContext) fieldContext_EvidenceHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EvidenceHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _EvidenceHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.EvidenceHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EvidenceHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EvidenceHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("EvidenceHistory", field, false, false, "String")
 }
 
@@ -23380,6 +23760,29 @@ func (ec *executionContext) fieldContext_FindingHistory_integrationRunID(_ conte
 	return graphql.NewScalarFieldContext("FindingHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _FindingHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.FindingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_FindingHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("FindingHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _FindingHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.FindingHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -25303,6 +25706,29 @@ func (ec *executionContext) _GroupHistory_integrationRunID(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_GroupHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("GroupHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _GroupHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.GroupHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_GroupHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("GroupHistory", field, false, false, "String")
 }
 
@@ -27704,6 +28130,29 @@ func (ec *executionContext) fieldContext_IdentityHolderHistory_integrationRunID(
 	return graphql.NewScalarFieldContext("IdentityHolderHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _IdentityHolderHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.IdentityHolderHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_IdentityHolderHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("IdentityHolderHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _IdentityHolderHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.IdentityHolderHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -28970,6 +29419,29 @@ func (ec *executionContext) _InternalPolicyHistory_integrationRunID(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_InternalPolicyHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("InternalPolicyHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _InternalPolicyHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.InternalPolicyHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_InternalPolicyHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("InternalPolicyHistory", field, false, false, "String")
 }
 
@@ -30696,6 +31168,29 @@ func (ec *executionContext) fieldContext_MappedControlHistory_integrationRunID(_
 	return graphql.NewScalarFieldContext("MappedControlHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _MappedControlHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.MappedControlHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MappedControlHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MappedControlHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _MappedControlHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.MappedControlHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -31446,6 +31941,29 @@ func (ec *executionContext) _NarrativeHistory_integrationRunID(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_NarrativeHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("NarrativeHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _NarrativeHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.NarrativeHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NarrativeHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_NarrativeHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("NarrativeHistory", field, false, false, "String")
 }
 
@@ -37464,6 +37982,29 @@ func (ec *executionContext) fieldContext_PlatformHistory_integrationRunID(_ cont
 	return graphql.NewScalarFieldContext("PlatformHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _PlatformHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.PlatformHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PlatformHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_PlatformHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PlatformHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _PlatformHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.PlatformHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -39239,6 +39780,29 @@ func (ec *executionContext) fieldContext_ProcedureHistory_integrationRunID(_ con
 	return graphql.NewScalarFieldContext("ProcedureHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _ProcedureHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ProcedureHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ProcedureHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ProcedureHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _ProcedureHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ProcedureHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -40541,6 +41105,29 @@ func (ec *executionContext) _ProgramHistory_integrationRunID(ctx context.Context
 	)
 }
 func (ec *executionContext) fieldContext_ProgramHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ProgramHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ProgramHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ProgramHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ProgramHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ProgramHistory", field, false, false, "String")
 }
 
@@ -45222,6 +45809,29 @@ func (ec *executionContext) fieldContext_RemediationHistory_integrationRunID(_ c
 	return graphql.NewScalarFieldContext("RemediationHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _RemediationHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.RemediationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RemediationHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_RemediationHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("RemediationHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _RemediationHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.RemediationHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -47455,6 +48065,29 @@ func (ec *executionContext) fieldContext_ReviewHistory_integrationRunID(_ contex
 	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _ReviewHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _ReviewHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -48619,6 +49252,29 @@ func (ec *executionContext) _RiskHistory_integrationRunID(ctx context.Context, f
 	)
 }
 func (ec *executionContext) fieldContext_RiskHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("RiskHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _RiskHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.RiskHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_RiskHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("RiskHistory", field, false, false, "String")
 }
 
@@ -51466,6 +52122,29 @@ func (ec *executionContext) fieldContext_SubcontrolHistory_integrationRunID(_ co
 	return graphql.NewScalarFieldContext("SubcontrolHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _SubcontrolHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.SubcontrolHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SubcontrolHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _SubcontrolHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.SubcontrolHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -53686,6 +54365,29 @@ func (ec *executionContext) fieldContext_SystemDetailHistory_integrationRunID(_ 
 	return graphql.NewScalarFieldContext("SystemDetailHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _SystemDetailHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.SystemDetailHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SystemDetailHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SystemDetailHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _SystemDetailHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.SystemDetailHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -54426,6 +55128,29 @@ func (ec *executionContext) fieldContext_TaskHistory_integrationRunID(_ context.
 	return graphql.NewScalarFieldContext("TaskHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _TaskHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TaskHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TaskHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TaskHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _TaskHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TaskHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -54996,29 +55721,6 @@ func (ec *executionContext) fieldContext_TaskHistory_source(_ context.Context, f
 	return graphql.NewScalarFieldContext("TaskHistory", field, false, false, "String")
 }
 
-func (ec *executionContext) _TaskHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TaskHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_TaskHistory_sourceKey(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.SourceKey, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOString2string(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_TaskHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TaskHistory", field, false, false, "String")
-}
-
 func (ec *executionContext) _TaskHistory_idempotencyKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TaskHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -55572,6 +56274,29 @@ func (ec *executionContext) _TemplateHistory_integrationRunID(ctx context.Contex
 	)
 }
 func (ec *executionContext) fieldContext_TemplateHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TemplateHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _TemplateHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TemplateHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TemplateHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("TemplateHistory", field, false, false, "String")
 }
 
@@ -64427,6 +65152,29 @@ func (ec *executionContext) _VulnerabilityHistory_integrationRunID(ctx context.C
 	)
 }
 func (ec *executionContext) fieldContext_VulnerabilityHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VulnerabilityHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _VulnerabilityHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.VulnerabilityHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VulnerabilityHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VulnerabilityHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("VulnerabilityHistory", field, false, false, "String")
 }
 
@@ -116518,6 +117266,11 @@ func (ec *executionContext) _ActionPlanHistory(ctx context.Context, sel ast.Sele
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._ActionPlanHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._ActionPlanHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -116922,6 +117675,11 @@ func (ec *executionContext) _AssessmentHistory(ctx context.Context, sel ast.Sele
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._AssessmentHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._AssessmentHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -117158,6 +117916,11 @@ func (ec *executionContext) _AssessmentPolicyHistory(ctx context.Context, sel as
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._AssessmentPolicyHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._AssessmentPolicyHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -117644,6 +118407,11 @@ func (ec *executionContext) _AssetHistory(ctx context.Context, sel ast.Selection
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._AssetHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._AssetHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -118050,6 +118818,11 @@ func (ec *executionContext) _CampaignHistory(ctx context.Context, sel ast.Select
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._CampaignHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._CampaignHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -118631,6 +119404,11 @@ func (ec *executionContext) _ContactHistory(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._ContactHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._ContactHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -118872,6 +119650,11 @@ func (ec *executionContext) _ControlHistory(ctx context.Context, sel ast.Selecti
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._ControlHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._ControlHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -119289,6 +120072,11 @@ func (ec *executionContext) _ControlImplementationHistory(ctx context.Context, s
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._ControlImplementationHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._ControlImplementationHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -119535,6 +120323,11 @@ func (ec *executionContext) _ControlObjectiveHistory(ctx context.Context, sel as
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._ControlObjectiveHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._ControlObjectiveHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -120359,6 +121152,11 @@ func (ec *executionContext) _EmailTemplateHistory(ctx context.Context, sel ast.S
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._EmailTemplateHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._EmailTemplateHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -120635,6 +121433,11 @@ func (ec *executionContext) _EntityHistory(ctx context.Context, sel ast.Selectio
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._EntityHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._EntityHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -121328,6 +122131,11 @@ func (ec *executionContext) _EvidenceHistory(ctx context.Context, sel ast.Select
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._EvidenceHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._EvidenceHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -122108,6 +122916,11 @@ func (ec *executionContext) _FindingHistory(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._FindingHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._FindingHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -122594,6 +123407,11 @@ func (ec *executionContext) _GroupHistory(ctx context.Context, sel ast.Selection
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._GroupHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._GroupHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -123423,6 +124241,11 @@ func (ec *executionContext) _IdentityHolderHistory(ctx context.Context, sel ast.
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._IdentityHolderHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._IdentityHolderHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -123774,6 +124597,11 @@ func (ec *executionContext) _InternalPolicyHistory(ctx context.Context, sel ast.
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._InternalPolicyHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._InternalPolicyHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -124300,6 +125128,11 @@ func (ec *executionContext) _MappedControlHistory(ctx context.Context, sel ast.S
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._MappedControlHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._MappedControlHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -124531,6 +125364,11 @@ func (ec *executionContext) _NarrativeHistory(ctx context.Context, sel ast.Selec
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._NarrativeHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._NarrativeHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -126479,6 +127317,11 @@ func (ec *executionContext) _PlatformHistory(ctx context.Context, sel ast.Select
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._PlatformHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._PlatformHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -126943,6 +127786,11 @@ func (ec *executionContext) _ProcedureHistory(ctx context.Context, sel ast.Selec
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._ProcedureHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._ProcedureHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -127294,6 +128142,11 @@ func (ec *executionContext) _ProgramHistory(ctx context.Context, sel ast.Selecti
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._ProgramHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._ProgramHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -128247,6 +129100,11 @@ func (ec *executionContext) _RemediationHistory(ctx context.Context, sel ast.Sel
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._RemediationHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._RemediationHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -128959,6 +129817,11 @@ func (ec *executionContext) _ReviewHistory(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._ReviewHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._ReviewHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -129280,6 +130143,11 @@ func (ec *executionContext) _RiskHistory(ctx context.Context, sel ast.SelectionS
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._RiskHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._RiskHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -130120,6 +130988,11 @@ func (ec *executionContext) _SubcontrolHistory(ctx context.Context, sel ast.Sele
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._SubcontrolHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._SubcontrolHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -130708,6 +131581,11 @@ func (ec *executionContext) _SystemDetailHistory(ctx context.Context, sel ast.Se
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._SystemDetailHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._SystemDetailHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -130947,6 +131825,11 @@ func (ec *executionContext) _TaskHistory(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "sourceKey":
+			out.Values[i] = ec._TaskHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "externalID":
 			out.Values[i] = ec._TaskHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -131064,11 +131947,6 @@ func (ec *executionContext) _TaskHistory(ctx context.Context, sel ast.SelectionS
 			}
 		case "source":
 			out.Values[i] = ec._TaskHistory_source(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "sourceKey":
-			out.Values[i] = ec._TaskHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -131268,6 +132146,11 @@ func (ec *executionContext) _TemplateHistory(ctx context.Context, sel ast.Select
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._TemplateHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._TemplateHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -134279,6 +135162,11 @@ func (ec *executionContext) _VulnerabilityHistory(ctx context.Context, sel ast.S
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._VulnerabilityHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._VulnerabilityHistory_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

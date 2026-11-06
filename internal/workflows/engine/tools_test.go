@@ -65,8 +65,10 @@ const (
 )
 
 // boolPtr returns a pointer to the provided bool
+//
+//go:fix inline
 func boolPtr(v bool) *bool {
-	return &v
+	return new(v)
 }
 
 // WorkflowEngineTestSuite handles the setup and teardown between tests
@@ -215,6 +217,7 @@ func (s *WorkflowEngineTestSuite) setupSuite() {
 		FetchCooldown:        time.Millisecond,
 		FetchPollInterval:    10 * time.Millisecond,
 		WaitIdlePollInterval: 10 * time.Millisecond,
+		CompleteJobsInline:   true,
 	})
 	coreutils.RequireNoError(s.T(), err)
 

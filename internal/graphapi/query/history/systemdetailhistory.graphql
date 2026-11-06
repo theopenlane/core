@@ -29,6 +29,7 @@ query GetAllSystemDetailHistories ($first: Int, $last: Int, $after: Cursor, $bef
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemName
 				tags
 				updatedAt
@@ -70,6 +71,7 @@ query GetSystemDetailHistories ($first: Int, $last: Int, $after: Cursor, $before
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemName
 				tags
 				updatedAt

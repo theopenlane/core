@@ -1,0 +1,572 @@
+[
+  {
+    "name": "APIToken",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "ActionPlan",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Assessment",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "AssessmentPolicy",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "AssessmentResponse",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "Asset",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Campaign",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "CampaignTarget",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "CheckResult",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Contact",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Control",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "ControlImplementation",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true,
+    "parents": [
+      "control"
+    ]
+  },
+  {
+    "name": "ControlObjective",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true,
+    "parents": [
+      "control"
+    ]
+  },
+  {
+    "name": "CustomDomain",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "CustomTypeEnum",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "DNSVerification",
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "DirectoryAccount",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "DirectoryGroup",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "DirectoryMembership",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Discussion",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "DocumentData",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "EmailTemplate",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "EmailVerificationToken",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "Entity",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "EntityType",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Event",
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Evidence",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Export",
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "File",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "FileDownloadToken",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "Finding",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "FindingControl",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Group",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "GroupMembership",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "parents": [
+      "group"
+    ]
+  },
+  {
+    "name": "GroupSetting",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "parents": [
+      "group"
+    ]
+  },
+  {
+    "name": "Hush",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "IdentityHolder",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "ImpersonationEvent",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "Integration",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "IntegrationRun",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "IntegrationWebhook",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "InternalPolicy",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Invite",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "MappableDomain",
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "MappedControl",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Narrative",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Note",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Notification",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "NotificationPreference",
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "NotificationTemplate",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Onboarding",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "OrgMembership",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "parents": [
+      "organization"
+    ]
+  },
+  {
+    "name": "OrgModule",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "OrgPrice",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "OrgProduct",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "OrgSubscription"
+  },
+  {
+    "name": "Organization",
+    "hasUpdate": true
+  },
+  {
+    "name": "OrganizationBrandingSetting",
+    "hasUpdate": true,
+    "parents": [
+      "organization"
+    ]
+  },
+  {
+    "name": "OrganizationSetting",
+    "hasUpdate": true,
+    "parents": [
+      "organization"
+    ]
+  },
+  {
+    "name": "PasswordResetToken",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "PersonalAccessToken",
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Platform",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Procedure",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Program",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "ProgramMembership",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "parents": [
+      "program"
+    ]
+  },
+  {
+    "name": "Remediation",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Report",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "ReportMembership",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "parents": [
+      "report"
+    ]
+  },
+  {
+    "name": "Review",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Risk",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "SLADefinition",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Scan",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Standard",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Subcontrol",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "parents": [
+      "control"
+    ]
+  },
+  {
+    "name": "Subprocessor",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Subscriber",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "SystemDetail",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "TFASetting",
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "TagDefinition",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Task",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Template",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "TrustCenter",
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "TrustCenterCompliance",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "TrustCenterDoc",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "TrustCenterEntity",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "TrustCenterFAQ",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "TrustCenterNDARequest",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "TrustCenterSetting",
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "TrustCenterSubprocessor",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "TrustCenterWatermarkConfig",
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "User",
+    "excludeFromGeneration": true,
+    "canCreateServiceOnly": true,
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "UserSetting",
+    "excludeFromGeneration": true,
+    "canCreateServiceOnly": true,
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "VendorRiskScore",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "VendorScoringConfig",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "Vulnerability",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "Webauthn",
+    "excludeFromGeneration": true
+  },
+  {
+    "name": "WorkflowAssignment",
+    "excludeFromGeneration": true,
+    "canCreateServiceOnly": true
+  },
+  {
+    "name": "WorkflowAssignmentTarget",
+    "excludeFromGeneration": true,
+    "canCreateServiceOnly": true
+  },
+  {
+    "name": "WorkflowDefinition",
+    "hasCreate": true,
+    "hasUpdate": true,
+    "hasGroupCreator": true
+  },
+  {
+    "name": "WorkflowEvent",
+    "excludeFromGeneration": true,
+    "canCreateServiceOnly": true
+  },
+  {
+    "name": "WorkflowInstance",
+    "excludeFromGeneration": true,
+    "canCreateServiceOnly": true
+  },
+  {
+    "name": "WorkflowObjectRef",
+    "excludeFromGeneration": true,
+    "canCreateServiceOnly": true
+  },
+  {
+    "name": "WorkflowProposal",
+    "excludeFromGeneration": true,
+    "canCreateServiceOnly": true
+  }
+]

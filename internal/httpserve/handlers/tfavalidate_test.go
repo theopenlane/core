@@ -215,7 +215,7 @@ func totpGenerator(secret string) (string, error) {
 // but has been modified to work with the test cases
 func decrypt(encryptedTxt string) (string, error) {
 	// Split and parse the version prefix
-	v := strings.Split(encryptedTxt, ":")[0]
+	v, _, _ := strings.Cut(encryptedTxt, ":")
 	encryptedTxt = strings.TrimPrefix(encryptedTxt, fmt.Sprintf("%s:", v))
 
 	secret := otpManagerSecret

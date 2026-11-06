@@ -39,9 +39,9 @@ type driveItemPayload struct {
 	// WebURL is the OneDrive browser URL for opening the file
 	WebURL string `json:"webUrl,omitempty"`
 	// LastModifiedDateTime is when the file was last modified
-	LastModifiedDateTime time.Time `json:"lastModifiedDateTime,omitempty"`
+	LastModifiedDateTime time.Time `json:"lastModifiedDateTime"`
 	// CreatedDateTime is when the file was created
-	CreatedDateTime time.Time `json:"createdDateTime,omitempty"`
+	CreatedDateTime time.Time `json:"createdDateTime"`
 }
 
 // FolderSync lists OneDrive documents in a folder and emits ingest envelopes
@@ -98,7 +98,7 @@ func listFolderDocs(ctx context.Context, c *DriveClient, folderPath string) ([]m
 	reqCfg := &msgraphdrives.ItemItemsItemChildrenRequestBuilderGetRequestConfiguration{
 		QueryParameters: &msgraphdrives.ItemItemsItemChildrenRequestBuilderGetQueryParameters{
 			Select: []string{"id", "name", "file", "webUrl", "lastModifiedDateTime", "createdDateTime"},
-			Top:    lo.ToPtr(folderSyncPageSize),
+			Top:    new(folderSyncPageSize),
 		},
 	}
 

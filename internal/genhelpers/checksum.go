@@ -8,7 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
-	"strings"
 )
 
 const (
@@ -78,11 +77,6 @@ func calculateDirChecksum(paths ...string) (string, error) {
 
 			// Only process .go, .graphql, and .tmpl files
 			if !slices.Contains(checksumExtensions, filepath.Ext(relPath)) {
-				return nil
-			}
-
-			// tests never change generated output
-			if strings.HasSuffix(relPath, "_test.go") {
 				return nil
 			}
 

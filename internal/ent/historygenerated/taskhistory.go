@@ -57,6 +57,8 @@ type TaskHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -105,8 +107,6 @@ type TaskHistory struct {
 	Priority int `json:"priority,omitempty"`
 	// the system or workflow that created or suggested the task
 	Source string `json:"source,omitempty"`
-	// stable source-specific key for the task
-	SourceKey string `json:"source_key,omitempty"`
 	// key to prevent duplicates for auto-generated task based on rules
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// an optional external reference URL for the task
@@ -131,7 +131,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case taskhistory.FieldPriority:
 			values[i] = new(sql.NullInt64)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldUpdatedByImpersonator, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldSourceDefinitionID, taskhistory.FieldSourceDefinitionVersion, taskhistory.FieldSourceInstanceID, taskhistory.FieldManagedBy, taskhistory.FieldIntegrationRunID, taskhistory.FieldExternalID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldEnvironmentName, taskhistory.FieldEnvironmentID, taskhistory.FieldScopeName, taskhistory.FieldScopeID, taskhistory.FieldExternalUUID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldSource, taskhistory.FieldSourceKey, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldUpdatedByImpersonator, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldSourceDefinitionID, taskhistory.FieldSourceDefinitionVersion, taskhistory.FieldSourceInstanceID, taskhistory.FieldManagedBy, taskhistory.FieldIntegrationRunID, taskhistory.FieldSourceKey, taskhistory.FieldExternalID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldEnvironmentName, taskhistory.FieldEnvironmentID, taskhistory.FieldScopeName, taskhistory.FieldScopeID, taskhistory.FieldExternalUUID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldSource, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -260,6 +260,12 @@ func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case taskhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case taskhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -412,12 +418,6 @@ func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Source = value.String
 			}
-		case taskhistory.FieldSourceKey:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field source_key", values[i])
-			} else if value.Valid {
-				_m.SourceKey = value.String
-			}
 		case taskhistory.FieldIdempotencyKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field idempotency_key", values[i])
@@ -528,6 +528,9 @@ func (_m *TaskHistory) String() string {
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
+	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
@@ -605,9 +608,6 @@ func (_m *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(_m.Source)
-	builder.WriteString(", ")
-	builder.WriteString("source_key=")
-	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("idempotency_key=")
 	builder.WriteString(_m.IdempotencyKey)

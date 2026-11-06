@@ -269,6 +269,26 @@ func (_u *GroupUpdate) ClearIntegrationRunID() *GroupUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *GroupUpdate) SetSourceKey(v string) *GroupUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableSourceKey(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *GroupUpdate) ClearSourceKey() *GroupUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *GroupUpdate) SetExternalID(v string) *GroupUpdate {
 	_u.mutation.SetExternalID(v)
@@ -2767,6 +2787,12 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(group.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(group.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(group.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(group.FieldExternalID, field.TypeString, value)
@@ -5663,6 +5689,26 @@ func (_u *GroupUpdateOne) ClearIntegrationRunID() *GroupUpdateOne {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *GroupUpdateOne) SetSourceKey(v string) *GroupUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableSourceKey(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *GroupUpdateOne) ClearSourceKey() *GroupUpdateOne {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *GroupUpdateOne) SetExternalID(v string) *GroupUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -8191,6 +8237,12 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(group.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(group.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(group.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(group.FieldExternalID, field.TypeString, value)

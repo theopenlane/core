@@ -1159,6 +1159,7 @@ identity provider configuration, since both authentications must occur together
 |**DiscardedJobRetentionPeriod**|`integer`|||
 |**ErrorHandler**||||
 |**FetchCooldown**|`integer`|||
+|**FetchOnlyKnownKinds**|`boolean`|||
 |**FetchPollInterval**|`integer`|||
 |**ID**|`string`|||
 |**JobCleanerTimeout**|`integer`|||
@@ -1167,6 +1168,7 @@ identity provider configuration, since both authentications must occur together
 |**JobStuckThreshold**|`integer`|||
 |**JobTimeout**|`integer`|||
 |[**Hooks**](#defsrivertypehook)|`array`|||
+|**LeaderElectionDisabled**|`boolean`|||
 |[**Logger**](#defssloglogger)|`object`|||
 |**MaxAttempts**|`integer`|||
 |[**Middleware**](#defsrivertypemiddleware)|`array`|||

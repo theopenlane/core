@@ -50,7 +50,7 @@ func (c JobCadence) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (c *JobCadence) UnmarshalGQL(v interface{}) error {
+func (c *JobCadence) UnmarshalGQL(v any) error {
 	return unmarshalGQLJSON(v, c)
 }
 

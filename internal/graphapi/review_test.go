@@ -32,7 +32,7 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 			name: "happy path, review with entity",
 			input: testclient.CreateReviewInput{
 				Title:   "Test Review",
-				Summary: lo.ToPtr("Test summary"),
+				Summary: new("Test summary"),
 			},
 			client:       suite.Client.API,
 			ctx:          th.SharedTestUser1.UserCtx,
@@ -51,7 +51,7 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 			name: "review with review frequency updates next review date",
 			input: testclient.CreateReviewInput{
 				Title:   "Review with Frequency",
-				Summary: lo.ToPtr("With frequency"),
+				Summary: new("With frequency"),
 			},
 			client:       suite.Client.API,
 			ctx:          th.SharedTestUser1.UserCtx,
@@ -59,7 +59,7 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 			setup: func(t *testing.T) ([]string, []string) {
 				entity := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 				_, err := suite.Client.API.UpdateEntity(th.SharedTestUser1.UserCtx, entity.ID, testclient.UpdateEntityInput{
-					ReviewFrequency: lo.ToPtr(frequency),
+					ReviewFrequency: new(frequency),
 				}, nil, nil, nil, nil)
 				assert.NilError(t, err)
 				return []string{entity.ID}, []string{entity.EntityTypeID}
@@ -69,7 +69,7 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 			name: "review without entities does not update review fields",
 			input: testclient.CreateReviewInput{
 				Title:   "Review Without Entities",
-				Summary: lo.ToPtr("This review has no entities linked"),
+				Summary: new("This review has no entities linked"),
 			},
 			client:       suite.Client.API,
 			ctx:          th.SharedTestUser1.UserCtx,
@@ -188,12 +188,12 @@ func TestCreateReview(t *testing.T) {
 			name: "happy path, full input",
 			reviewInput: testclient.CreateReviewInput{
 				Title:     "Full Review",
-				Summary:   lo.ToPtr("Test summary"),
-				Details:   lo.ToPtr("Test details"),
-				State:     lo.ToPtr("completed"),
-				Category:  lo.ToPtr("security"),
+				Summary:   new("Test summary"),
+				Details:   new("Test details"),
+				State:     new("completed"),
+				Category:  new("security"),
 				EntityIDs: []string{entity1.ID},
-				Source:    lo.ToPtr("manual"),
+				Source:    new("manual"),
 				Tags:      []string{"test", "review"},
 			},
 			client: suite.Client.API,
@@ -222,8 +222,8 @@ func TestCreateReview(t *testing.T) {
 			reviewInput: testclient.CreateReviewInput{
 				Title:      "Program Review with Reviewer",
 				ProgramIDs: []string{program2.ID},
-				Reporter:   lo.ToPtr("Reporter 1"),
-				ReviewerID: lo.ToPtr(th.SharedAuditorUser.ID),
+				Reporter:   new("Reporter 1"),
+				ReviewerID: new(th.SharedAuditorUser.ID),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAuditorUser.UserCtx,
@@ -372,7 +372,7 @@ func TestQueryReview(t *testing.T) {
 	createResp, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:     "Query Test Review",
 		EntityIDs: entityIDs,
-		Summary:   lo.ToPtr("Test summary for query"),
+		Summary:   new("Test summary for query"),
 	})
 	assert.NilError(t, err)
 	review := createResp.GetCreateReview().GetReview()
@@ -418,14 +418,14 @@ func TestQueryReviews(t *testing.T) {
 
 	review1, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:   "First Review",
-		Summary: lo.ToPtr("First summary"),
+		Summary: new("First summary"),
 	})
 	assert.NilError(t, err)
 	reviewsToCleanup = append(reviewsToCleanup, review1.GetCreateReview().GetReview().ID)
 
 	review2, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:   "Second Review",
-		Summary: lo.ToPtr("Second summary"),
+		Summary: new("Second summary"),
 	})
 	assert.NilError(t, err)
 	reviewsToCleanup = append(reviewsToCleanup, review2.GetCreateReview().GetReview().ID)
@@ -532,7 +532,7 @@ func TestUpdateReview(t *testing.T) {
 
 	createResp, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:   "Original Title",
-		Summary: lo.ToPtr("Original summary"),
+		Summary: new("Original summary"),
 	})
 	assert.NilError(t, err)
 
@@ -540,8 +540,8 @@ func TestUpdateReview(t *testing.T) {
 
 	t.Run("update review", func(t *testing.T) {
 		resp, err := suite.Client.API.UpdateReview(th.SharedTestUser1.UserCtx, reviewID, testclient.UpdateReviewInput{
-			Title:   lo.ToPtr("Updated Title"),
-			Summary: lo.ToPtr("Updated summary"),
+			Title:   new("Updated Title"),
+			Summary: new("Updated summary"),
 		}, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -560,7 +560,7 @@ func TestUpdateReview(t *testing.T) {
 		auditorReviewID := createResp.GetCreateReview().GetReview().ID
 
 		resp, err := suite.Client.API.UpdateReview(th.SharedAuditorUser.UserCtx, auditorReviewID, testclient.UpdateReviewInput{
-			Title: lo.ToPtr("Auditor Updated Review"),
+			Title: new("Auditor Updated Review"),
 		}, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -572,7 +572,7 @@ func TestUpdateReview(t *testing.T) {
 
 	t.Run("update review not found", func(t *testing.T) {
 		_, err := suite.Client.API.UpdateReview(th.SharedTestUser1.UserCtx, "invalid-id", testclient.UpdateReviewInput{
-			Title: lo.ToPtr("New Title"),
+			Title: new("New Title"),
 		}, nil)
 		assert.ErrorContains(t, err, "review not found")
 	})
@@ -609,14 +609,14 @@ func TestReviewWithReviewFrequencyCalculation(t *testing.T) {
 			}()
 
 			_, err := suite.Client.API.UpdateEntity(th.SharedTestUser1.UserCtx, testEntity.ID, testclient.UpdateEntityInput{
-				ReviewFrequency: lo.ToPtr(freq.frequency),
+				ReviewFrequency: new(freq.frequency),
 			}, nil, nil, nil, nil)
 			assert.NilError(t, err)
 
 			_, err = suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 				Title:     freq.name + " review",
 				EntityIDs: []string{testEntity.ID},
-				Summary:   lo.ToPtr("Testing " + freq.name + " frequency"),
+				Summary:   new("Testing " + freq.name + " frequency"),
 			})
 			assert.NilError(t, err)
 
@@ -658,14 +658,14 @@ func TestReviewWithMultipleConnectedEntities(t *testing.T) {
 	typeIDs := []string{testEntity.EntityTypeID}
 
 	_, err := suite.Client.API.UpdateEntity(th.SharedTestUser1.UserCtx, testEntity.ID, testclient.UpdateEntityInput{
-		ReviewFrequency: lo.ToPtr(enums.FrequencyMonthly),
+		ReviewFrequency: new(enums.FrequencyMonthly),
 	}, nil, nil, nil, nil)
 	assert.NilError(t, err)
 
 	_, err = suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:     "Multi-Entity Review",
 		EntityIDs: ids,
-		Summary:   lo.ToPtr("we are reviewing multiple entities at once"),
+		Summary:   new("we are reviewing multiple entities at once"),
 	})
 	assert.NilError(t, err)
 

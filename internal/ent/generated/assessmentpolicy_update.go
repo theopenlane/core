@@ -183,6 +183,26 @@ func (_u *AssessmentPolicyUpdate) ClearIntegrationRunID() *AssessmentPolicyUpdat
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *AssessmentPolicyUpdate) SetSourceKey(v string) *AssessmentPolicyUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdate) SetNillableSourceKey(v *string) *AssessmentPolicyUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *AssessmentPolicyUpdate) ClearSourceKey() *AssessmentPolicyUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *AssessmentPolicyUpdate) SetExternalID(v string) *AssessmentPolicyUpdate {
 	_u.mutation.SetExternalID(v)
@@ -404,6 +424,12 @@ func (_u *AssessmentPolicyUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(assessmentpolicy.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(assessmentpolicy.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(assessmentpolicy.FieldExternalID, field.TypeString, value)
@@ -662,6 +688,26 @@ func (_u *AssessmentPolicyUpdateOne) ClearIntegrationRunID() *AssessmentPolicyUp
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *AssessmentPolicyUpdateOne) SetSourceKey(v string) *AssessmentPolicyUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdateOne) SetNillableSourceKey(v *string) *AssessmentPolicyUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *AssessmentPolicyUpdateOne) ClearSourceKey() *AssessmentPolicyUpdateOne {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *AssessmentPolicyUpdateOne) SetExternalID(v string) *AssessmentPolicyUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -913,6 +959,12 @@ func (_u *AssessmentPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Assess
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(assessmentpolicy.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(assessmentpolicy.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(assessmentpolicy.FieldExternalID, field.TypeString, value)

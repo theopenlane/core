@@ -8,7 +8,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/utils/rout"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -118,8 +117,8 @@ func TestMutationCreateUser(t *testing.T) {
 		{
 			name: "no auth create user",
 			userInput: testclient.CreateUserInput{
-				FirstName:   lo.ToPtr(gofakeit.FirstName()),
-				LastName:    lo.ToPtr(gofakeit.LastName()),
+				FirstName:   new(gofakeit.FirstName()),
+				LastName:    new(gofakeit.LastName()),
 				DisplayName: gofakeit.LetterN(50),
 				Email:       gofakeit.Email(),
 				Password:    &strongPassword,

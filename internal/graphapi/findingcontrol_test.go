@@ -271,7 +271,7 @@ func TestMutationUpdateFindingControl(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateFindingControl(tc.ctx, tc.id, testclient.UpdateFindingControlInput{
-				Source: lo.ToPtr("updated-source"),
+				Source: new("updated-source"),
 			})
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)

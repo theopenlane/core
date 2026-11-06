@@ -9,7 +9,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ssoenforcement"
@@ -98,7 +97,7 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 	}
 
 	out := models.SSOStatusResponse{
-		Reply:          rout.Reply{Success: true},
+		Success:        true,
 		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,
 		OrgTFAEnforced: setting.MultifactorAuthEnforced,

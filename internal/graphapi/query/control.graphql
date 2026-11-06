@@ -46,6 +46,7 @@ mutation CreateBulkCSVControl ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status
@@ -111,6 +112,7 @@ mutation CreateBulkControl ($input: [CreateControlInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status
@@ -176,6 +178,7 @@ mutation CreateControl ($input: CreateControlInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status
@@ -395,6 +398,7 @@ query GetControlByID ($controlId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		sourceName
 		standardID
 		status
@@ -533,6 +537,7 @@ query GetControls ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				sourceName
 				standardID
 				status
@@ -693,6 +698,7 @@ mutation UpdateBulkControl ($ids: [ID!]!, $input: UpdateControlInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status
@@ -803,6 +809,7 @@ mutation UpdateControl ($updateControlId: ID!, $input: UpdateControlInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			sourceName
 			standardID
 			status

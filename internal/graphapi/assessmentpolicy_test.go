@@ -94,7 +94,7 @@ func TestMutationCreateAssessmentPolicy(t *testing.T) {
 			request: testclient.CreateAssessmentPolicyInput{
 				AssessmentID:     assessment1.ID,
 				InternalPolicyID: policy2.ID,
-				PolicyRevision:   lo.ToPtr("v1.2.3"),
+				PolicyRevision:   new("v1.2.3"),
 			},
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser1.UserCtx,
@@ -344,7 +344,7 @@ func TestMutationCreateAssessmentWithPolicies(t *testing.T) {
 			name: "happy path, multiple policies with default and explicit revisions",
 			policies: []*testclient.AssessmentPoliciesInput{
 				{InternalPolicyID: policy1.ID},
-				{InternalPolicyID: policy2.ID, PolicyRevision: lo.ToPtr("v2.0.0")},
+				{InternalPolicyID: policy2.ID, PolicyRevision: new("v2.0.0")},
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,

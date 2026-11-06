@@ -51,6 +51,8 @@ type Task struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -99,8 +101,6 @@ type Task struct {
 	Priority int `json:"priority,omitempty"`
 	// the system or workflow that created or suggested the task
 	Source string `json:"source,omitempty"`
-	// stable source-specific key for the task
-	SourceKey string `json:"source_key,omitempty"`
 	// key to prevent duplicates for auto-generated task based on rules
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// an optional external reference URL for the task
@@ -471,7 +471,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case task.FieldPriority:
 			values[i] = new(sql.NullInt64)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldUpdatedByImpersonator, task.FieldDeletedBy, task.FieldDisplayID, task.FieldSourceDefinitionID, task.FieldSourceDefinitionVersion, task.FieldSourceInstanceID, task.FieldManagedBy, task.FieldIntegrationRunID, task.FieldExternalID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldEnvironmentName, task.FieldEnvironmentID, task.FieldScopeName, task.FieldScopeID, task.FieldExternalUUID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldAssigneeID, task.FieldAssignerID, task.FieldSource, task.FieldSourceKey, task.FieldIdempotencyKey, task.FieldParentTaskID:
+		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldUpdatedByImpersonator, task.FieldDeletedBy, task.FieldDisplayID, task.FieldSourceDefinitionID, task.FieldSourceDefinitionVersion, task.FieldSourceInstanceID, task.FieldManagedBy, task.FieldIntegrationRunID, task.FieldSourceKey, task.FieldExternalID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldEnvironmentName, task.FieldEnvironmentID, task.FieldScopeName, task.FieldScopeID, task.FieldExternalUUID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldAssigneeID, task.FieldAssignerID, task.FieldSource, task.FieldIdempotencyKey, task.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -590,6 +590,12 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case task.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case task.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -741,12 +747,6 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
 				_m.Source = value.String
-			}
-		case task.FieldSourceKey:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field source_key", values[i])
-			} else if value.Valid {
-				_m.SourceKey = value.String
 			}
 		case task.FieldIdempotencyKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1012,6 +1012,9 @@ func (_m *Task) String() string {
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
+	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
@@ -1089,9 +1092,6 @@ func (_m *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(_m.Source)
-	builder.WriteString(", ")
-	builder.WriteString("source_key=")
-	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("idempotency_key=")
 	builder.WriteString(_m.IdempotencyKey)

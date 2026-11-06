@@ -6,7 +6,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
@@ -55,9 +54,9 @@ func updateValidation() (id string, input graphclient.UpdateUserSettingInput, er
 
 	// explicitly set 2fa if provided to avoid wiping setting unintentionally
 	if cmd.Config.Bool("enable-2fa") {
-		input.IsTfaEnabled = lo.ToPtr(true)
+		input.IsTfaEnabled = new(true)
 	} else if cmd.Config.Bool("disable-2fa") {
-		input.IsTfaEnabled = lo.ToPtr(false)
+		input.IsTfaEnabled = new(false)
 	}
 
 	// add tags to the input if provided

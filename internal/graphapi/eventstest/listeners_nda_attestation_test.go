@@ -35,7 +35,7 @@ func TestNDAAttestationListener(t *testing.T) {
 
 		_, err := suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 			UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
-				EnableAutoApproval: lo.ToPtr(true),
+				EnableAutoApproval: new(true),
 			},
 		})
 		assert.NilError(t, err)
@@ -57,7 +57,7 @@ func TestNDAAttestationListener(t *testing.T) {
 		_, err = suite.Client.API.CreateTrustCenterNDARequest(signerCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     "Signer",
 			LastName:      "User",
-			CompanyName:   lo.ToPtr("Signer Co"),
+			CompanyName:   new("Signer Co"),
 			Email:         signerEmail,
 			TrustCenterID: &trustCenter.ID,
 		})
@@ -66,7 +66,7 @@ func TestNDAAttestationListener(t *testing.T) {
 		_, err = suite.Client.API.CreateTrustCenterNDARequest(bystanderCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     "Bystander",
 			LastName:      "User",
-			CompanyName:   lo.ToPtr("Bystander Co"),
+			CompanyName:   new("Bystander Co"),
 			Email:         bystanderEmail,
 			TrustCenterID: &trustCenter.ID,
 		})

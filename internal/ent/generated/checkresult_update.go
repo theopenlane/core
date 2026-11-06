@@ -247,6 +247,26 @@ func (_u *CheckResultUpdate) ClearIntegrationRunID() *CheckResultUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *CheckResultUpdate) SetSourceKey(v string) *CheckResultUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *CheckResultUpdate) SetNillableSourceKey(v *string) *CheckResultUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *CheckResultUpdate) ClearSourceKey() *CheckResultUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *CheckResultUpdate) SetStatus(v enums.CheckStatus) *CheckResultUpdate {
 	_u.mutation.SetStatus(v)
@@ -753,6 +773,12 @@ func (_u *CheckResultUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(checkresult.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(checkresult.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(checkresult.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(checkresult.FieldStatus, field.TypeEnum, value)
@@ -1315,6 +1341,26 @@ func (_u *CheckResultUpdateOne) ClearIntegrationRunID() *CheckResultUpdateOne {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *CheckResultUpdateOne) SetSourceKey(v string) *CheckResultUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *CheckResultUpdateOne) SetNillableSourceKey(v *string) *CheckResultUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *CheckResultUpdateOne) ClearSourceKey() *CheckResultUpdateOne {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *CheckResultUpdateOne) SetStatus(v enums.CheckStatus) *CheckResultUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -1851,6 +1897,12 @@ func (_u *CheckResultUpdateOne) sqlSave(ctx context.Context) (_node *CheckResult
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(checkresult.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(checkresult.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(checkresult.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(checkresult.FieldStatus, field.TypeEnum, value)

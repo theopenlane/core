@@ -90,31 +90,28 @@ func TestResolveCanonicalEmail(t *testing.T) {
 		"kwaters": {NameID: "kwaters@sso.example.com", GivenName: "Kelsey", FamilyName: "Waters"},
 	}
 
-	samlMember := &orgMemberNode{orgMemberNodeGQL: orgMemberNodeGQL{
+	samlMember := &orgMemberNode{
 		Login:                            "kwaters",
 		Email:                            "public@example.com",
-		OrganizationVerifiedDomainEmails: []string{"kwaters@example.com"},
-	}}
+		OrganizationVerifiedDomainEmails: []string{"kwaters@example.com"}}
 	resolveCanonicalEmail(samlMember, samlMap)
 
 	assert.Check(t, is.Equal("kwaters@sso.example.com", samlMember.CanonicalEmail))
 	assert.Check(t, is.Equal("Kelsey", samlMember.GivenName))
 	assert.Check(t, is.DeepEqual([]string{"public@example.com", "kwaters@example.com"}, samlMember.EmailAliases))
 
-	verifiedMember := &orgMemberNode{orgMemberNodeGQL: orgMemberNodeGQL{
+	verifiedMember := &orgMemberNode{
 		Login:                            "sfunk",
 		Email:                            "sfunk@example.com",
-		OrganizationVerifiedDomainEmails: []string{"sfunk@example.com", "sarah@example.com"},
-	}}
+		OrganizationVerifiedDomainEmails: []string{"sfunk@example.com", "sarah@example.com"}}
 	resolveCanonicalEmail(verifiedMember, nil)
 
 	assert.Check(t, is.Equal("sfunk@example.com", verifiedMember.CanonicalEmail))
 	assert.Check(t, is.DeepEqual([]string{"sarah@example.com"}, verifiedMember.EmailAliases), "canonical email must be excluded from aliases")
 
-	publicOnlyMember := &orgMemberNode{orgMemberNodeGQL: orgMemberNodeGQL{
+	publicOnlyMember := &orgMemberNode{
 		Login: "mando",
-		Email: "MANDO@example.com",
-	}}
+		Email: "MANDO@example.com"}
 	resolveCanonicalEmail(publicOnlyMember, nil)
 
 	assert.Check(t, is.Equal("MANDO@example.com", publicOnlyMember.CanonicalEmail))

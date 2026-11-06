@@ -246,6 +246,20 @@ func (_c *ActionPlanHistoryCreate) SetNillableIntegrationRunID(v *string) *Actio
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *ActionPlanHistoryCreate) SetSourceKey(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableSourceKey(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *ActionPlanHistoryCreate) SetExternalID(v string) *ActionPlanHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -1074,6 +1088,10 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(actionplanhistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(actionplanhistory.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(actionplanhistory.FieldExternalID, field.TypeString, value)

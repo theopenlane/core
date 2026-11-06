@@ -7,8 +7,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/tokens"
 
 	models "github.com/theopenlane/core/common/openapi"
@@ -86,7 +84,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 			}
 
 			out := &models.VerifyResponse{
-				Reply:   rout.Reply{Success: false},
+				Success: false,
 				ID:      meowtoken.ID,
 				Email:   user.Email,
 				Message: "Token expired, a new token has been issued. Please check your email and try again.",
@@ -113,7 +111,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 	out := &models.VerifyResponse{
 		ID:       entUser.ID,
 		Email:    entUser.Email,
-		Reply:    rout.Reply{Success: true},
+		Success:  true,
 		Message:  "success",
 		AuthData: *auth,
 	}

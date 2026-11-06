@@ -8,7 +8,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -125,7 +124,7 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 			input: testclient.CreatePersonalAccessTokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
-				ExpiresAt:   lo.ToPtr(time.Now().Add(-time.Hour)),
+				ExpiresAt:   new(time.Now().Add(-time.Hour)),
 			},
 			errorMsg: hooks.ErrPastTimeNotAllowed.Error(),
 		},
@@ -231,7 +230,7 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 	token := (&th.PersonalAccessTokenBuilder{
 		Client:          suite.Client,
 		OrganizationIDs: []string{th.SharedTestUser1.PersonalOrgID},
-		ExpiresAt:       lo.ToPtr(time.Now().Add(time.Hour * 24 * 30))}).
+		ExpiresAt:       new(time.Now().Add(time.Hour * 24 * 30))}).
 		MustNew(th.SharedTestUser1.UserCtx, t)
 
 	tokenOther := (&th.PersonalAccessTokenBuilder{
@@ -347,7 +346,7 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 
 	// update expiration date
 	_, err := suite.Client.API.UpdatePersonalAccessToken(th.SharedTestUser1.UserCtx, token.ID, testclient.UpdatePersonalAccessTokenInput{
-		ExpiresAt: lo.ToPtr(time.Now().Add(time.Hour)),
+		ExpiresAt: new(time.Now().Add(time.Hour)),
 	})
 	assert.NilError(t, err)
 

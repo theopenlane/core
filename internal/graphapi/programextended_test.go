@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -177,7 +176,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 					Name: "test program",
 				},
 				Members:    members,
-				StandardID: lo.ToPtr(publicStandard.ID),
+				StandardID: new(publicStandard.ID),
 			},
 			client:               suite.Client.API,
 			ctx:                  user.UserCtx,

@@ -123,14 +123,12 @@ func replicateFileToBackup(ctx context.Context, client *generated.Client, fileID
 	storageFile := &storagetypes.File{
 		ID:           f.ID,
 		ProviderType: source,
-		FileMetadata: storagetypes.FileMetadata{
-			Key:         f.StoragePath,
-			Bucket:      f.StorageVolume,
-			Region:      f.StorageRegion,
-			ContentType: f.DetectedContentType,
-			ProviderHints: &storagetypes.ProviderHints{
-				KnownProvider: source,
-			},
+		Key:          f.StoragePath,
+		Bucket:       f.StorageVolume,
+		Region:       f.StorageRegion,
+		ContentType:  f.DetectedContentType,
+		ProviderHints: &storagetypes.ProviderHints{
+			KnownProvider: source,
 		},
 	}
 

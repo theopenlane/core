@@ -18,6 +18,7 @@ mutation CreateBulkCSVContact ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title
@@ -47,6 +48,7 @@ mutation CreateBulkContact ($input: [CreateContactInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title
@@ -76,6 +78,7 @@ mutation CreateContact ($input: CreateContactInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title
@@ -131,6 +134,7 @@ query GetContactByID ($contactId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		tags
 		title
@@ -181,6 +185,7 @@ mutation UpdateBulkContact ($ids: [ID!]!, $input: UpdateContactInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title
@@ -213,6 +218,7 @@ mutation UpdateContact ($updateContactId: ID!, $input: UpdateContactInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			title

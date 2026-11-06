@@ -37,9 +37,9 @@ func TestSeedScheduledOperationsSkipsClientBoundWithoutRuntime(t *testing.T) {
 
 	reg := registry.New()
 	assert.NilError(t, reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "def_scheduled_client", DisplayName: "Scheduled Client", Active: true},
-		Connections:    []types.Connector{connection},
-		Installation:   types.InstallationOf[seedTestMetadata]().Registration(),
+		ID: "def_scheduled_client", DisplayName: "Scheduled Client", Active: true,
+		Connections:  []types.Connector{connection},
+		Installation: types.InstallationOf[seedTestMetadata]().Registration(),
 		Operations: []types.OperationRegistration{{
 			Name:      "import",
 			ClientRef: connection.Connection().Verify.ClientRef,

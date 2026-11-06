@@ -54,6 +54,8 @@ type MappedControlHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -88,7 +90,7 @@ func (*MappedControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case mappedcontrolhistory.FieldConfidence:
 			values[i] = new(sql.NullInt64)
-		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldUpdatedByImpersonator, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldSourceDefinitionID, mappedcontrolhistory.FieldSourceDefinitionVersion, mappedcontrolhistory.FieldSourceInstanceID, mappedcontrolhistory.FieldManagedBy, mappedcontrolhistory.FieldIntegrationRunID, mappedcontrolhistory.FieldExternalID, mappedcontrolhistory.FieldInternalNotes, mappedcontrolhistory.FieldSystemInternalID, mappedcontrolhistory.FieldOwnerID, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation, mappedcontrolhistory.FieldSource:
+		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldUpdatedByImpersonator, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldSourceDefinitionID, mappedcontrolhistory.FieldSourceDefinitionVersion, mappedcontrolhistory.FieldSourceInstanceID, mappedcontrolhistory.FieldManagedBy, mappedcontrolhistory.FieldIntegrationRunID, mappedcontrolhistory.FieldSourceKey, mappedcontrolhistory.FieldExternalID, mappedcontrolhistory.FieldInternalNotes, mappedcontrolhistory.FieldSystemInternalID, mappedcontrolhistory.FieldOwnerID, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation, mappedcontrolhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case mappedcontrolhistory.FieldHistoryTime, mappedcontrolhistory.FieldCreatedAt, mappedcontrolhistory.FieldUpdatedAt, mappedcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -211,6 +213,12 @@ func (_m *MappedControlHistory) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case mappedcontrolhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case mappedcontrolhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -354,6 +362,9 @@ func (_m *MappedControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

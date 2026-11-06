@@ -53,8 +53,8 @@ type edgeLinks struct {
 // findVersion attempts to find the version of the document in the details by
 // looking for a line that starts with "Version:" and extracting the version number from it. It returns the version in semver format if found, or an empty string if not found.
 func findVersion(details string) string {
-	lines := strings.Split(details, "\n")
-	for _, line := range lines {
+	lines := strings.SplitSeq(details, "\n")
+	for line := range lines {
 		trimmed := strings.TrimSpace(line)
 		if strings.HasPrefix(strings.ToLower(trimmed), "version:") {
 			parts := strings.SplitN(trimmed, ":", 2) //nolint:mnd
@@ -93,9 +93,9 @@ func findVersion(details string) string {
 // expanded upon in the future to handle more complex matching based on more context in the document such as presence of a framework
 func findControlMatches(details string, controls controlMapping) *edgeLinks {
 	edges := &edgeLinks{}
-	lines := strings.Split(details, "\n")
+	lines := strings.SplitSeq(details, "\n")
 
-	for _, line := range lines {
+	for line := range lines {
 		trimmed := strings.TrimSpace(line)
 		// Skip markdown headers
 		if strings.HasPrefix(trimmed, "#") {

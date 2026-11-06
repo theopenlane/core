@@ -6,7 +6,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/catalog"
 	"github.com/theopenlane/core/v2/pkg/catalog/gencatalog"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/utils/rout"
 )
 
 // ProductCatalogHandler lists all products in the catalog
@@ -17,7 +16,7 @@ func (h *Handler) ProductCatalogHandler(ctx echo.Context) error {
 	}
 
 	out := &models.ProductCatalogResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Catalog: h.filterCatalog(in),
 	}
 

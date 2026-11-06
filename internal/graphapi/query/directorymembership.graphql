@@ -26,6 +26,7 @@ mutation CreateBulkCSVDirectoryMembership ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -60,6 +61,7 @@ mutation CreateBulkDirectoryMembership ($input: [CreateDirectoryMembershipInput!
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -94,6 +96,7 @@ mutation CreateDirectoryMembership ($input: CreateDirectoryMembershipInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -161,6 +164,7 @@ query GetDirectoryMembershipByID ($directoryMembershipId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		updatedAt
 		updatedBy
 		updatedByImpersonator
@@ -223,6 +227,7 @@ mutation UpdateDirectoryMembership ($updateDirectoryMembershipId: ID!, $input: U
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator

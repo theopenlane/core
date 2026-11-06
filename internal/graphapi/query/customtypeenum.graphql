@@ -18,6 +18,7 @@ mutation CreateBulkCSVCustomTypeEnum ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -46,6 +47,7 @@ mutation CreateBulkCustomTypeEnum ($input: [CreateCustomTypeEnumInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -74,6 +76,7 @@ mutation CreateCustomTypeEnum ($input: CreateCustomTypeEnumInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -135,6 +138,7 @@ query GetCustomTypeEnumByID ($customTypeEnumId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		updatedAt
@@ -191,6 +195,7 @@ mutation UpdateCustomTypeEnum ($updateCustomTypeEnumId: ID!, $input: UpdateCusto
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt

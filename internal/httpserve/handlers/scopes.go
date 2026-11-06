@@ -5,8 +5,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
@@ -25,8 +23,8 @@ func (h *Handler) ScopesHandler(ctx echo.Context) error {
 			}
 
 			resp := &models.ScopesResponse{
-				Reply:  rout.Reply{Success: true},
-				Scopes: scopes,
+				Success: true,
+				Scopes:  scopes,
 			}
 
 			return resp, nil

@@ -55,6 +55,8 @@ type ContactHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
@@ -91,7 +93,7 @@ func (*ContactHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case contacthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldCreatedBy, contacthistory.FieldUpdatedBy, contacthistory.FieldUpdatedByImpersonator, contacthistory.FieldDeletedBy, contacthistory.FieldSourceDefinitionID, contacthistory.FieldSourceDefinitionVersion, contacthistory.FieldSourceInstanceID, contacthistory.FieldManagedBy, contacthistory.FieldIntegrationRunID, contacthistory.FieldExternalID, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus, contacthistory.FieldIntegrationID:
+		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldCreatedBy, contacthistory.FieldUpdatedBy, contacthistory.FieldUpdatedByImpersonator, contacthistory.FieldDeletedBy, contacthistory.FieldSourceDefinitionID, contacthistory.FieldSourceDefinitionVersion, contacthistory.FieldSourceInstanceID, contacthistory.FieldManagedBy, contacthistory.FieldIntegrationRunID, contacthistory.FieldSourceKey, contacthistory.FieldExternalID, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus, contacthistory.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case contacthistory.FieldHistoryTime, contacthistory.FieldCreatedAt, contacthistory.FieldUpdatedAt, contacthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -214,6 +216,12 @@ func (_m *ContactHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case contacthistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case contacthistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -367,6 +375,9 @@ func (_m *ContactHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

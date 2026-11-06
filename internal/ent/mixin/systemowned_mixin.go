@@ -151,16 +151,12 @@ func (d SystemOwnedMixin) Fields() []ent.Field {
 		field.Bool("externally_visible").
 			Default(false).
 			Optional().
-			Comment("whether this system-owned row is published for organizations to adopt").
-			Annotations(
-				entx.CatalogVisibilityField(),
-			),
+			Comment("whether this system-owned row is published for organizations to adopt"),
 		field.String(catalogKeyField).
 			Optional().
 			Comment("the lookup key of the catalog row this row was adopted from").
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-				entx.CatalogKeyField(),
 			),
 		field.JSON("raw_ingest_payload", map[string]any{}).
 			Comment("raw payload received from the integration for auditing and troubleshooting").
@@ -365,7 +361,10 @@ func queryForSystemOwned(ctx context.Context, m utils.SystemOwnedMutation, ids [
 		return false, nil
 	}
 
-	table := strcase.SnakeCase(utils.Plural(m.Type()))
+	table, err := utils.ObjectTable(m.Type())
+	if err != nil {
+		return false, err
+	}
 
 	// Build placeholders for IN clause: $1, $2, $3, ...
 	placeholders := make([]string, len(ids))

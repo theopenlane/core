@@ -9,4 +9,8 @@ extend type Mutation {
     adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
     """
     adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
+    """
+    unlinkEntityCatalog detaches the organization's entity from the catalog so catalog refreshes no longer apply to it; idempotent
+    """
+    unlinkEntityCatalog(id: ID!): EntityUpdatePayload!
 }

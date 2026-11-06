@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/theopenlane/utils/ulids"
 
@@ -73,11 +72,9 @@ func TestRefreshHandler(t *testing.T) {
 		SaveX(ec)
 
 	claims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: user.ID,
-		},
-		UserID: user.ID,
-		OrgID:  suite.testUser1.OrganizationID,
+		Subject: user.ID,
+		UserID:  user.ID,
+		OrgID:   suite.testUser1.OrganizationID,
 	}
 
 	access, refresh, err := tm.CreateTokenPair(claims)

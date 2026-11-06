@@ -12,7 +12,6 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
-	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -188,7 +187,7 @@ func TestQueryTrustCenters(t *testing.T) {
 					{
 						HasCustomDomainWith: []*testclient.CustomDomainWhereInput{
 							{
-								CnameRecord: lo.ToPtr("non-existent-domain.com"),
+								CnameRecord: new("non-existent-domain.com"),
 							},
 						},
 					},
@@ -337,8 +336,8 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 
 			// get controls for the trust center standard and ensure they are added to the trust center
 			controlsResp, err := tc.client.GetControls(tc.ctx, nil, nil, nil, nil, nil, &testclient.ControlWhereInput{
-				IsTrustCenterControl: lo.ToPtr(true),
-				SystemOwned:          lo.ToPtr(false),
+				IsTrustCenterControl: new(true),
+				SystemOwned:          new(false),
 			})
 			assert.NilError(t, err)
 			assert.Assert(t, controlsResp != nil)
@@ -485,9 +484,9 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 			trustCenterID: trustCenter.ID,
 			request: testclient.UpdateTrustCenterInput{
 				UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
-					Title:        lo.ToPtr("Updated Trust Center Title"),
-					Overview:     lo.ToPtr("Updated Trust Center Overview"),
-					PrimaryColor: lo.ToPtr("#FF5733"),
+					Title:        new("Updated Trust Center Title"),
+					Overview:     new("Updated Trust Center Overview"),
+					PrimaryColor: new("#FF5733"),
 				},
 				AddPost: &testclient.CreateNoteInput{
 					Text: "Adding a post about obtaining our FedRamp Moderate compliance attestation.",
@@ -681,7 +680,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	_, err := suite.Client.API.CreateTrustCenterEntity(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterEntityInput{
 		Name:          "test entity 1",
 		TrustCenterID: &trustCenter.ID,
-		URL:           lo.ToPtr(gofakeit.URL()),
+		URL:           new(gofakeit.URL()),
 	}, logoFile, nil)
 	assert.NilError(t, err)
 
@@ -739,8 +738,8 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	_, err = suite.Client.API.CreateTrustCenterFaq(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        faqNote.ID,
 		TrustCenterID: &trustCenter.ID,
-		ReferenceLink: lo.ToPtr("https://example.com/faq"),
-		DisplayOrder:  lo.ToPtr(int64(1)),
+		ReferenceLink: new("https://example.com/faq"),
+		DisplayOrder:  new(int64(1)),
 	})
 	assert.NilError(t, err)
 
@@ -1017,8 +1016,8 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			settingID: trustCenter.Edges.Setting.ID,
 			logoPath:  th.LogoFilePath,
 			updateInput: testclient.UpdateTrustCenterSettingInput{
-				Title:        lo.ToPtr("Updated Title with Logo"),
-				PrimaryColor: lo.ToPtr("#FF5733"),
+				Title:        new("Updated Title with Logo"),
+				PrimaryColor: new("#FF5733"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Admin.UserCtx,
@@ -1063,9 +1062,9 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			settingID: trustCenter.Edges.Setting.ID,
 			logoPath:  "", // No logo file
 			updateInput: testclient.UpdateTrustCenterSettingInput{
-				Title:        lo.ToPtr("Updated Title Only"),
-				Overview:     lo.ToPtr("Updated Overview"),
-				PrimaryColor: lo.ToPtr("#00FF00"),
+				Title:        new("Updated Title Only"),
+				Overview:     new("Updated Overview"),
+				PrimaryColor: new("#00FF00"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -1074,7 +1073,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update theme mode to EASY",
 			settingID: trustCenter.Edges.Setting.ID,
 			updateInput: testclient.UpdateTrustCenterSettingInput{
-				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeEasy),
+				ThemeMode: new(enums.TrustCenterThemeModeEasy),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -1083,7 +1082,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update theme mode to ADVANCED",
 			settingID: trustCenter.Edges.Setting.ID,
 			updateInput: testclient.UpdateTrustCenterSettingInput{
-				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
+				ThemeMode: new(enums.TrustCenterThemeModeAdvanced),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -1092,7 +1091,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update font",
 			settingID: trustCenter.Edges.Setting.ID,
 			updateInput: testclient.UpdateTrustCenterSettingInput{
-				Font: lo.ToPtr("Arial, sans-serif"),
+				Font: new("Arial, sans-serif"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -1101,7 +1100,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update foreground color",
 			settingID: trustCenter.Edges.Setting.ID,
 			updateInput: testclient.UpdateTrustCenterSettingInput{
-				ForegroundColor: lo.ToPtr("#333333"),
+				ForegroundColor: new("#333333"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.SuperAdmin.UserCtx,
@@ -1110,7 +1109,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update background color",
 			settingID: trustCenter.Edges.Setting.ID,
 			updateInput: testclient.UpdateTrustCenterSettingInput{
-				BackgroundColor: lo.ToPtr("#FFFFFF"),
+				BackgroundColor: new("#FFFFFF"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Admin.UserCtx,
@@ -1119,7 +1118,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update accent color",
 			settingID: trustCenter.Edges.Setting.ID,
 			updateInput: testclient.UpdateTrustCenterSettingInput{
-				AccentColor: lo.ToPtr("#007BFF"),
+				AccentColor: new("#007BFF"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -1128,12 +1127,12 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update all theme fields together",
 			settingID: trustCenter.Edges.Setting.ID,
 			updateInput: testclient.UpdateTrustCenterSettingInput{
-				ThemeMode:       lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
-				PrimaryColor:    lo.ToPtr("#FF6B35"),
-				Font:            lo.ToPtr("Roboto, sans-serif"),
-				ForegroundColor: lo.ToPtr("#2C3E50"),
-				BackgroundColor: lo.ToPtr("#F8F9FA"),
-				AccentColor:     lo.ToPtr("#28A745"),
+				ThemeMode:       new(enums.TrustCenterThemeModeAdvanced),
+				PrimaryColor:    new("#FF6B35"),
+				Font:            new("Roboto, sans-serif"),
+				ForegroundColor: new("#2C3E50"),
+				BackgroundColor: new("#F8F9FA"),
+				AccentColor:     new("#28A745"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -1450,7 +1449,7 @@ func TestTrustCenterUpdateHookWithCustomDomainRemoval(t *testing.T) {
 	assert.NilError(t, err)
 
 	resp, err := suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
-		ClearCustomDomain: lo.ToPtr(true),
+		ClearCustomDomain: new(true),
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
@@ -1566,7 +1565,7 @@ func TestTrustCenterDocStandards(t *testing.T) {
 
 		input := testclient.CreateTrustCenterDocInput{
 			Title:                  "Test Document with Standard",
-			TrustCenterDocKindName: lo.ToPtr("Policy"),
+			TrustCenterDocKindName: new("Policy"),
 			TrustCenterID:          &trustCenter.ID,
 			StandardID:             &standard1.ID,
 			Tags:                   []string{"test", "standard"},
@@ -1600,7 +1599,7 @@ func TestTrustCenterDocStandards(t *testing.T) {
 
 		createInput := testclient.CreateTrustCenterDocInput{
 			Title:                  "Test Document without Standard",
-			TrustCenterDocKindName: lo.ToPtr("Policy"),
+			TrustCenterDocKindName: new("Policy"),
 			TrustCenterID:          &trustCenter.ID,
 			Tags:                   []string{"test"},
 		}

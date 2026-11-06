@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
@@ -24,7 +23,7 @@ func (r *mutationResolver) createControlImplementation(ctx context.Context, owne
 
 	coInput := generated.CreateControlImplementationInput{
 		Status:     &enums.DocumentPublished,
-		Verified:   lo.ToPtr(true),
+		Verified:   new(true),
 		Details:    &cleanImp,
 		OwnerID:    ownerID,
 		ControlIDs: []string{controlID},

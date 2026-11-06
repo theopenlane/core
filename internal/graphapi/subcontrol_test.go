@@ -7,7 +7,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -267,7 +266,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		{
 			name: "missing required ref code",
 			request: testclient.CreateSubcontrolInput{
-				Description: lo.ToPtr("A description of the Subcontrol"),
+				Description: new("A description of the Subcontrol"),
 				ControlID:   control1.ID,
 			},
 			client:      suite.Client.API,
@@ -309,12 +308,12 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 			name: "happy path, all input",
 			request: testclient.CreateSubcontrolInput{
 				RefCode:     "Another Subcontrol",
-				Description: lo.ToPtr("A description of the Subcontrol"),
+				Description: new("A description of the Subcontrol"),
 				Status:      &enums.ControlStatusPreparing,
 				Tags:        []string{"tag1", "tag2"},
 				Source:      &enums.ControlSourceFramework,
-				Category:    lo.ToPtr("Availability"),
-				Subcategory: lo.ToPtr("Availability-1"),
+				Category:    new("Availability"),
+				Subcategory: new("Availability-1"),
 				MappedCategories: []string{
 					"Category1",
 					"Category2",
@@ -536,7 +535,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateSubcontrolInput{
-				Description: lo.ToPtr("Updated description"),
+				Description: new("Updated description"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -546,7 +545,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 			request: testclient.UpdateSubcontrolInput{
 				Status:             &enums.ControlStatusPreparing,
 				Tags:               []string{"tag1", "tag2"},
-				Source:             lo.ToPtr(enums.ControlSourceUserDefined),
+				Source:             new(enums.ControlSourceUserDefined),
 				ControlOwnerID:     &ownerGroup.ID,
 				DelegateID:         &delegateGroup.ID,
 				SubcontrolKindName: &kind.Name,
@@ -557,7 +556,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 		{
 			name: "update ref code to empty",
 			request: testclient.UpdateSubcontrolInput{
-				RefCode: lo.ToPtr(""),
+				RefCode: new(""),
 			},
 			client:      suite.Client.APIWithPAT,
 			ctx:         context.Background(),

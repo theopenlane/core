@@ -39,10 +39,7 @@ func GetRemoteIP(ipLookups []string, forwardedForIndexFromBehind int, r *http.Re
 				parts[i] = strings.TrimSpace(p)
 			}
 
-			partIndex := len(parts) - 1 - forwardedForIndexFromBehind
-			if partIndex < 0 {
-				partIndex = 0
-			}
+			partIndex := max(len(parts)-1-forwardedForIndexFromBehind, 0)
 
 			return parts[partIndex]
 		}

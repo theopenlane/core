@@ -56,6 +56,7 @@ mutation CreateBulkCSVPlatform ($input: Upload!) {
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourceType
 			status
 			tags
@@ -129,6 +130,7 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourceType
 			status
 			tags
@@ -369,6 +371,7 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				sourceDefinitionVersion
 				sourceIdentifier
 				sourceInstanceID
+				sourceKey
 				sourceType
 				status
 				tags
@@ -482,6 +485,7 @@ query GetPlatformByID ($platformId: ID!) {
 		sourceDefinitionVersion
 		sourceIdentifier
 		sourceInstanceID
+		sourceKey
 		sourceType
 		status
 		tags
@@ -592,6 +596,7 @@ query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				sourceDefinitionVersion
 				sourceIdentifier
 				sourceInstanceID
+				sourceKey
 				sourceType
 				status
 				tags

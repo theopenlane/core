@@ -14,6 +14,7 @@ mutation CreateAssessmentPolicy ($input: CreateAssessmentPolicyInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -36,6 +37,7 @@ mutation CreateBulkAssessmentPolicy ($input: [CreateAssessmentPolicyInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -58,6 +60,7 @@ mutation CreateBulkCSVAssessmentPolicy ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -98,6 +101,7 @@ query GetAllAssessmentPolicies ($first: Int, $last: Int, $after: Cursor, $before
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				updatedAt
 				updatedBy
 				updatedByImpersonator
@@ -129,6 +133,7 @@ query GetAssessmentPolicies ($first: Int, $last: Int, $after: Cursor, $before: C
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				updatedAt
 				updatedBy
 				updatedByImpersonator
@@ -151,6 +156,7 @@ query GetAssessmentPolicyByID ($assessmentPolicyId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		updatedAt
 		updatedBy
 		updatedByImpersonator
@@ -172,6 +178,7 @@ mutation UpdateAssessmentPolicy ($updateAssessmentPolicyId: ID!, $input: UpdateA
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -194,6 +201,7 @@ mutation UpdateBulkAssessmentPolicy ($ids: [ID!]!, $input: UpdateAssessmentPolic
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -217,6 +225,7 @@ mutation UpdateBulkCSVAssessmentPolicy ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			updatedAt
 			updatedBy
 			updatedByImpersonator

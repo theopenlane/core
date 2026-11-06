@@ -9,8 +9,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/samber/lo"
-
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 
@@ -48,7 +46,7 @@ func (suite *HandlerTestSuite) createConsentingOrg(ctx context.Context) *ent.Org
 	t := suite.T()
 
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		AllowSupportAccess: lo.ToPtr(true),
+		AllowSupportAccess: new(true),
 	}).Save(ctx)
 	assert.NilError(t, err)
 

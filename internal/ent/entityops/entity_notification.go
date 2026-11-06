@@ -85,9 +85,10 @@ func notificationVars(schema *Schema, payload MutationPayload, row json.RawMessa
 	}
 }
 
-// renderNotificationTemplate executes Go text/template content against vars, matching the
-// workflow engine render semantics: zero missing keys and stripped no-value markers
-func renderNotificationTemplate(input string, vars map[string]any) (string, error) {
+// RenderTemplate executes Go text/template content against vars with zero-valued missing keys
+// and stripped no-value markers, returning input unchanged when it carries no template actions.
+// It is the one renderer for notification content, workflow action text, and task rule templates
+func RenderTemplate(input string, vars map[string]any) (string, error) {
 	if strings.TrimSpace(input) == "" || !strings.Contains(input, "{{") {
 		return input, nil
 	}
@@ -107,12 +108,12 @@ func renderNotificationTemplate(input string, vars map[string]any) (string, erro
 
 // renderNotificationContent renders the title, body, and data map for one emission
 func renderNotificationContent(content NotificationContent, vars map[string]any) (string, string, map[string]any, error) {
-	title, err := renderNotificationTemplate(content.TitleTemplate, vars)
+	title, err := RenderTemplate(content.TitleTemplate, vars)
 	if err != nil {
 		return "", "", nil, err
 	}
 
-	body, err := renderNotificationTemplate(content.BodyTemplate, vars)
+	body, err := RenderTemplate(content.BodyTemplate, vars)
 	if err != nil {
 		return "", "", nil, err
 	}
@@ -126,7 +127,7 @@ func renderNotificationContent(content NotificationContent, vars map[string]any)
 			continue
 		}
 
-		rendered, err := renderNotificationTemplate(text, vars)
+		rendered, err := RenderTemplate(text, vars)
 		if err != nil {
 			return "", "", nil, err
 		}

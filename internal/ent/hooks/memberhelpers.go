@@ -12,11 +12,9 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/logx"
 )
 
@@ -61,7 +59,7 @@ func HookMembershipSelf(table string) ent.Hook {
 			// fallback to fgax check for full_access relation access if org role is not available
 			// in the context
 			if caller.OrganizationRole == "" {
-				if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.FullAccessRelation); access.Allow(err) {
+				if rule.HasCurrentOrgFullAccess(ctx) {
 					// ensure this is not an org membership mutation, owners cannot update their own membership
 					// in the organization, it must be done via a transfer
 					if m.Type() != generated.TypeOrgMembership && caller.OrganizationRole == auth.OwnerRole {

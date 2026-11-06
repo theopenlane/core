@@ -28,15 +28,13 @@ func TestMentionTexts(t *testing.T) {
 		MutationType: generated.TypeTask,
 		Operation:    ent.OpUpdateOne.String(),
 		EntityID:     "task-1",
-		ChangeSet: entityops.ChangeSet{
-			ProposedChanges: map[string]any{
-				task.FieldTitle:   "Task One",
-				task.FieldDetails: "details text",
-				task.FieldOwnerID: "owner-1",
-			},
-			OldValues: map[string]any{
-				task.FieldDetails: "old details text",
-			},
+		ProposedChanges: map[string]any{
+			task.FieldTitle:   "Task One",
+			task.FieldDetails: "details text",
+			task.FieldOwnerID: "owner-1",
+		},
+		OldValues: map[string]any{
+			task.FieldDetails: "old details text",
 		},
 	}
 

@@ -27,7 +27,7 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 	uid := ulids.New().String()
 	assessmentResp, err := suite.Client.API.CreateAssessment(th.SharedTestUser1.UserCtx, testclient.CreateAssessmentInput{
 		Name:       fmt.Sprintf("assessment-%s", uid),
-		TemplateID: lo.ToPtr(template.ID),
+		TemplateID: new(template.ID),
 		Jsonconfig: map[string]any{
 			"title":       "Campaign Test Assessment",
 			"description": "Assessment for campaign testing",
@@ -45,8 +45,8 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 		input := testclient.CreateCampaignWithTargetsInput{
 			Campaign: &testclient.CreateCampaignInput{
 				Name:                fmt.Sprintf("campaign-%s", testUID),
-				AssessmentID:        lo.ToPtr(assessmentID),
-				RecurrenceFrequency: lo.ToPtr(enums.FrequencyYearly),
+				AssessmentID:        new(assessmentID),
+				RecurrenceFrequency: new(enums.FrequencyYearly),
 			},
 			Targets: []*testclient.CreateCampaignTargetInput{
 				{Email: fmt.Sprintf("target1-%s@test.example", testUID)},
@@ -72,8 +72,8 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 		input := testclient.CreateCampaignWithTargetsInput{
 			Campaign: &testclient.CreateCampaignInput{
 				Name:                fmt.Sprintf("campaign-%s", testUID),
-				AssessmentID:        lo.ToPtr(assessmentID),
-				RecurrenceFrequency: lo.ToPtr(enums.FrequencyYearly),
+				AssessmentID:        new(assessmentID),
+				RecurrenceFrequency: new(enums.FrequencyYearly),
 				RecipientCount:      &explicitCount,
 			},
 			Targets: []*testclient.CreateCampaignTargetInput{
@@ -95,8 +95,8 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 		input := testclient.CreateCampaignWithTargetsInput{
 			Campaign: &testclient.CreateCampaignInput{
 				Name:                fmt.Sprintf("campaign-%s", testUID),
-				AssessmentID:        lo.ToPtr(assessmentID),
-				RecurrenceFrequency: lo.ToPtr(enums.FrequencyYearly),
+				AssessmentID:        new(assessmentID),
+				RecurrenceFrequency: new(enums.FrequencyYearly),
 			},
 			Targets: []*testclient.CreateCampaignTargetInput{},
 		}

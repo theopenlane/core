@@ -43,10 +43,8 @@ func TestNewMinimalConfig(t *testing.T) {
 	g := newTestGala(t)
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{
-			ID:          "test-def",
-			DisplayName: "Test",
-		},
+		ID:          "test-def",
+		DisplayName: "Test",
 	})
 
 	_, err = New(Config{
@@ -65,10 +63,8 @@ func TestNewWithRegistryOverride(t *testing.T) {
 
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{
-			ID:          "test-def",
-			DisplayName: "Test",
-		},
+		ID:          "test-def",
+		DisplayName: "Test",
 	})
 
 	rt, err := New(Config{
@@ -135,10 +131,8 @@ func TestNewWithBuildersNoRegistry(t *testing.T) {
 	builder := registry.Builder(func() (types.Definition, error) {
 		called = true
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          "built-def",
-				DisplayName: "Built",
-			},
+			ID:          "built-def",
+			DisplayName: "Built",
 		}, nil
 	})
 

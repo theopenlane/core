@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -144,7 +143,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			name: "happy path, full input without files",
 			input: testclient.CreateTemplateInput{
 				Name:         "Full Test Template",
-				Description:  lo.ToPtr("A comprehensive test template"),
+				Description:  new("A comprehensive test template"),
 				Kind:         &enums.TemplateKindQuestionnaire,
 				TemplateType: &enums.Document,
 				Tags:         []string{"test", "template", "questionnaire"},
@@ -205,7 +204,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 			name: "happy path, with multiple files",
 			input: testclient.CreateTemplateInput{
 				Name:        "Template with Multiple Files",
-				Description: lo.ToPtr("Template with various file types"),
+				Description: new("Template with various file types"),
 				Kind:        &enums.TemplateKindQuestionnaire,
 				Jsonconfig: map[string]any{
 					"type": "object",
@@ -294,7 +293,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 						},
 					},
 				},
-				TrustCenterID: lo.ToPtr(trustCenter.ID),
+				TrustCenterID: new(trustCenter.ID),
 			},
 			templateFiles: nil,
 			client:        suite.Client.API,
@@ -313,7 +312,7 @@ func TestMutationCreateTemplate(t *testing.T) {
 						},
 					},
 				},
-				TrustCenterID: lo.ToPtr(trustCenter.ID),
+				TrustCenterID: new(trustCenter.ID),
 			},
 			templateFiles: []*graphql.Upload{createPDFUpload()},
 			expectedKind:  &enums.TemplateKindTrustCenterNda,
@@ -416,7 +415,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			name:       "happy path, update name only",
 			templateID: template.ID,
 			input: testclient.UpdateTemplateInput{
-				Name: lo.ToPtr("Updated Template Name"),
+				Name: new("Updated Template Name"),
 			},
 			templateFiles: nil,
 			client:        suite.Client.API,
@@ -426,7 +425,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			name:       "happy path, update description",
 			templateID: template.ID,
 			input: testclient.UpdateTemplateInput{
-				Description: lo.ToPtr("Updated template description"),
+				Description: new("Updated template description"),
 			},
 			templateFiles: nil,
 			client:        suite.Client.API,
@@ -436,8 +435,8 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			name:       "happy path, update multiple fields",
 			templateID: template.ID,
 			input: testclient.UpdateTemplateInput{
-				Name:        lo.ToPtr("Multi-field Updated Template"),
-				Description: lo.ToPtr("Updated description with multiple changes"),
+				Name:        new("Multi-field Updated Template"),
+				Description: new("Updated description with multiple changes"),
 				Kind:        &enums.TemplateKindQuestionnaire,
 				Jsonconfig: map[string]any{
 					"type": "object",
@@ -475,7 +474,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			name:       "happy path, update with single file",
 			templateID: template.ID,
 			input: testclient.UpdateTemplateInput{
-				Name: lo.ToPtr("Template with Updated File"),
+				Name: new("Template with Updated File"),
 				Jsonconfig: map[string]any{
 					"type": "object",
 					"properties": map[string]any{
@@ -494,8 +493,8 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			name:       "happy path, update with multiple files",
 			templateID: template2.ID,
 			input: testclient.UpdateTemplateInput{
-				Name:        lo.ToPtr("Template with Multiple Updated Files"),
-				Description: lo.ToPtr("Template updated with various file types"),
+				Name:        new("Template with Multiple Updated Files"),
+				Description: new("Template updated with various file types"),
 				Jsonconfig: map[string]any{
 					"type": "object",
 					"properties": map[string]any{
@@ -534,7 +533,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			name:       "happy path, using personal access token",
 			templateID: template.ID,
 			input: testclient.UpdateTemplateInput{
-				Name: lo.ToPtr("PAT Updated Template"),
+				Name: new("PAT Updated Template"),
 			},
 			templateFiles: nil,
 			client:        suite.Client.APIWithPAT,
@@ -544,8 +543,8 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			name:       "happy path, system admin updating root template",
 			templateID: rootTemplate.ID,
 			input: testclient.UpdateTemplateInput{
-				Name:        lo.ToPtr("Updated Root Template"),
-				Description: lo.ToPtr("Updated root template description"),
+				Name:        new("Updated Root Template"),
+				Description: new("Updated root template description"),
 			},
 			templateFiles: nil,
 			client:        suite.Client.API,
@@ -555,7 +554,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			name:       "template not found, invalid ID",
 			templateID: "invalid-id",
 			input: testclient.UpdateTemplateInput{
-				Name: lo.ToPtr("Should Not Work"),
+				Name: new("Should Not Work"),
 			},
 			templateFiles: nil,
 			client:        suite.Client.API,
@@ -566,7 +565,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			name:       "template not found, unauthorized user",
 			templateID: template.ID,
 			input: testclient.UpdateTemplateInput{
-				Name: lo.ToPtr("Unauthorized Update"),
+				Name: new("Unauthorized Update"),
 			},
 			templateFiles: nil,
 			client:        suite.Client.API,

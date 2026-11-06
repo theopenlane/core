@@ -1,0 +1,23 @@
+[
+  {
+    "external_id": "task::minimal-task-open",
+    "title": "Collect access review evidence",
+    "status": "OPEN",
+    "due": "{{TODAY+15}}",
+    "control_ref_codes": [
+      "MIN-01"
+    ],
+    "assignee_id": "{{ORG_OWNER_USER_ID}}",
+    "programs_external_ids": []
+  },
+  {
+    "external_id": "task::minimal-task-done",
+    "title": "Confirm encryption settings",
+    "status": "COMPLETED",
+    "due": "{{TODAY-60}}",
+    "completed": "{{TODAY-64}}",
+    "control_ref_codes": [
+      "MIN-02"
+    ]
+  }
+]

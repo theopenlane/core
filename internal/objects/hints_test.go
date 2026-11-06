@@ -18,10 +18,8 @@ func TestPopulateProviderHints(t *testing.T) {
 		OriginalName:         "evidence.json",
 		FieldName:            "uploadFile",
 		CorrelatedObjectType: "evidence",
-		FileMetadata: pkgobjects.FileMetadata{
-			Size:        1024,
-			ContentType: "application/json",
-		},
+		Size:                 1024,
+		ContentType:          "application/json",
 	}
 
 	PopulateProviderHints(&file, "org-123")

@@ -3,7 +3,7 @@ package workflows
 import (
 	"testing"
 
-	"github.com/google/cel-go/cel"
+	"cel.dev/cel-go/cel"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -95,7 +95,7 @@ func TestCelEnv_IdentifierEscapeSyntax(t *testing.T) {
 	assert.Check(t, err)
 
 	_, iss = env.Compile(expr)
-	// this seems to always be true now for the Parser https://github.com/google/cel-go/pull/1295, so we no longer
+	// this seems to always be true now for the Parser https://cel.dev/cel-go/pull/1295, so we no longer
 	// expect an error
 	assert.Check(t, err)
 }

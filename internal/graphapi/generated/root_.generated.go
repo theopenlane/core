@@ -225,6 +225,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID              func(childComplexity int) int
 		SourceDefinitionVersion         func(childComplexity int) int
 		SourceInstanceID                func(childComplexity int) int
+		SourceKey                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
 		SystemInternalID                func(childComplexity int) int
@@ -315,6 +316,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -377,6 +379,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
 		UpdatedBy               func(childComplexity int) int
 		UpdatedByImpersonator   func(childComplexity int) int
@@ -570,6 +573,7 @@ type ComplexityRoot struct {
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceIdentifier              func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		SourcePlatform                func(childComplexity int) int
 		SourcePlatformID              func(childComplexity int) int
 		SourceType                    func(childComplexity int) int
@@ -691,6 +695,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID            func(childComplexity int) int
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		Status                        func(childComplexity int) int
 		Tags                          func(childComplexity int) int
 		Template                      func(childComplexity int) int
@@ -834,6 +839,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Tags                    func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
@@ -906,6 +912,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Subscribers             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
 		Tags                    func(childComplexity int) int
@@ -1037,6 +1044,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID         func(childComplexity int) int
 		SourceDefinitionVersion    func(childComplexity int) int
 		SourceInstanceID           func(childComplexity int) int
+		SourceKey                  func(childComplexity int) int
 		SourceName                 func(childComplexity int) int
 		Standard                   func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
@@ -1172,6 +1180,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SystemInternalID        func(childComplexity int) int
@@ -1273,6 +1282,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Subcategory             func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
@@ -1464,6 +1474,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
@@ -1562,6 +1573,10 @@ type ComplexityRoot struct {
 		DNSVerification func(childComplexity int) int
 	}
 
+	DeleteDemoDataPayload struct {
+		Accepted func(childComplexity int) int
+	}
+
 	DirectoryAccount struct {
 		AccountType             func(childComplexity int) int
 		AddedAt                 func(childComplexity int) int
@@ -1616,6 +1631,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SourceVersion           func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -1691,6 +1707,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SourceVersion           func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -1762,6 +1779,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
 		UpdatedBy               func(childComplexity int) int
 		UpdatedByImpersonator   func(childComplexity int) int
@@ -1934,6 +1952,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		TemplateContext         func(childComplexity int) int
@@ -2107,6 +2126,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID                    func(childComplexity int) int
 		SourceDefinitionVersion               func(childComplexity int) int
 		SourceInstanceID                      func(childComplexity int) int
+		SourceKey                             func(childComplexity int) int
 		SourcePlatforms                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		SpendCurrency                         func(childComplexity int) int
 		Status                                func(childComplexity int) int
@@ -2332,6 +2352,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags                    func(childComplexity int) int
@@ -2614,6 +2635,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID            func(childComplexity int) int
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		SourceUpdatedAt               func(childComplexity int) int
 		State                         func(childComplexity int) int
 		StepsToReproduce              func(childComplexity int) int
@@ -2814,6 +2836,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID                 func(childComplexity int) int
 		SourceDefinitionVersion            func(childComplexity int) int
 		SourceInstanceID                   func(childComplexity int) int
+		SourceKey                          func(childComplexity int) int
 		Tags                               func(childComplexity int) int
 		Tasks                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt                          func(childComplexity int) int
@@ -3116,6 +3139,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID            func(childComplexity int) int
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		StartDate                     func(childComplexity int) int
 		Status                        func(childComplexity int) int
 		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
@@ -3372,6 +3396,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID              func(childComplexity int) int
 		SourceDefinitionVersion         func(childComplexity int) int
 		SourceInstanceID                func(childComplexity int) int
+		SourceKey                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                         func(childComplexity int) int
@@ -3565,6 +3590,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -3938,6 +3964,7 @@ type ComplexityRoot struct {
 		DeleteCustomDomain                       func(childComplexity int, id string) int
 		DeleteCustomTypeEnum                     func(childComplexity int, id string) int
 		DeleteDNSVerification                    func(childComplexity int, id string) int
+		DeleteDemoData                           func(childComplexity int, input model.DeleteDemoDataInput) int
 		DeleteDirectoryAccount                   func(childComplexity int, id string) int
 		DeleteDirectoryGroup                     func(childComplexity int, id string) int
 		DeleteDirectoryMembership                func(childComplexity int, id string) int
@@ -4018,11 +4045,13 @@ type ComplexityRoot struct {
 		RequestNewTrustCenterToken               func(childComplexity int, email string) int
 		ResendCampaignIncompleteTargets          func(childComplexity int, input model.ResendCampaignIncompleteInput) int
 		ResolveVulnerability                     func(childComplexity int, id string, input model.ResolveVulnerabilityInput) int
+		SeedDemoData                             func(childComplexity int, input model.SeedDemoDataInput) int
 		SendCampaignTestEmail                    func(childComplexity int, input model.SendCampaignTestEmailInput) int
 		SetupTrustCenterDomains                  func(childComplexity int, trustCenterID string) int
 		SubmitTrustCenterNDAResponse             func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
 		SubmitWorkflowProposal                   func(childComplexity int, id string) int
 		TransferOrganizationOwnership            func(childComplexity int, newOwnerEmail string) int
+		UnlinkEntityCatalog                      func(childComplexity int, id string) int
 		UpdateAPIToken                           func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                         func(childComplexity int, id string, input generated.UpdateActionPlanInput, actionPlanFile *graphql.Upload, actionPlanFileMetadata *model.FileMetadataInput) int
 		UpdateAssessment                         func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
@@ -4256,6 +4285,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -5101,6 +5131,7 @@ type ComplexityRoot struct {
 		SourceEntities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		SourceIdentifier               func(childComplexity int) int
 		SourceInstanceID               func(childComplexity int) int
+		SourceKey                      func(childComplexity int) int
 		SourceType                     func(childComplexity int) int
 		Status                         func(childComplexity int) int
 		SystemDetails                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SystemDetailOrder, where *generated.SystemDetailWhereInput) int
@@ -5215,6 +5246,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID              func(childComplexity int) int
 		SourceDefinitionVersion         func(childComplexity int) int
 		SourceInstanceID                func(childComplexity int) int
+		SourceKey                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                         func(childComplexity int) int
@@ -5322,6 +5354,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID         func(childComplexity int) int
 		SourceDefinitionVersion    func(childComplexity int) int
 		SourceInstanceID           func(childComplexity int) int
+		SourceKey                  func(childComplexity int) int
 		StartDate                  func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcontrols                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
@@ -5747,6 +5780,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		State                   func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
@@ -5961,6 +5995,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		State                   func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
@@ -6091,6 +6126,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID          func(childComplexity int) int
 		SourceDefinitionVersion     func(childComplexity int) int
 		SourceInstanceID            func(childComplexity int) int
+		SourceKey                   func(childComplexity int) int
 		Stakeholder                 func(childComplexity int) int
 		StakeholderGroup            func(childComplexity int) int
 		StakeholderGroupID          func(childComplexity int) int
@@ -6269,6 +6305,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID         func(childComplexity int) int
 		SourceDefinitionVersion    func(childComplexity int) int
 		SourceInstanceID           func(childComplexity int) int
+		SourceKey                  func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcontrols                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SystemInternalID           func(childComplexity int) int
@@ -6378,6 +6415,10 @@ type ComplexityRoot struct {
 	SearchSnippet struct {
 		Field func(childComplexity int) int
 		Text  func(childComplexity int) int
+	}
+
+	SeedDemoDataPayload struct {
+		Accepted func(childComplexity int) int
 	}
 
 	Standard struct {
@@ -6509,6 +6550,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID         func(childComplexity int) int
 		SourceDefinitionVersion    func(childComplexity int) int
 		SourceInstanceID           func(childComplexity int) int
+		SourceKey                  func(childComplexity int) int
 		SourceName                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
@@ -6718,6 +6760,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemName              func(childComplexity int) int
 		Tags                    func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
@@ -6821,6 +6864,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
@@ -6999,6 +7043,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -7990,6 +8035,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID            func(childComplexity int) int
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		SourceUpdatedAt               func(childComplexity int) int
 		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                       func(childComplexity int) int
@@ -9200,6 +9246,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlan.SourceInstanceID(childComplexity), true
+	case "ActionPlan.sourceKey":
+		if e.ComplexityRoot.ActionPlan.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.SourceKey(childComplexity), true
 	case "ActionPlan.status":
 		if e.ComplexityRoot.ActionPlan.Status == nil {
 			break
@@ -9657,6 +9709,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Assessment.SourceInstanceID(childComplexity), true
+	case "Assessment.sourceKey":
+		if e.ComplexityRoot.Assessment.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Assessment.SourceKey(childComplexity), true
 	case "Assessment.systemInternalID":
 		if e.ComplexityRoot.Assessment.SystemInternalID == nil {
 			break
@@ -9930,6 +9988,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentPolicy.SourceInstanceID(childComplexity), true
+	case "AssessmentPolicy.sourceKey":
+		if e.ComplexityRoot.AssessmentPolicy.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicy.SourceKey(childComplexity), true
 	case "AssessmentPolicy.updatedAt":
 		if e.ComplexityRoot.AssessmentPolicy.UpdatedAt == nil {
 			break
@@ -10906,6 +10970,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Asset.SourceInstanceID(childComplexity), true
+	case "Asset.sourceKey":
+		if e.ComplexityRoot.Asset.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Asset.SourceKey(childComplexity), true
 	case "Asset.sourcePlatform":
 		if e.ComplexityRoot.Asset.SourcePlatform == nil {
 			break
@@ -11527,6 +11597,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Campaign.SourceInstanceID(childComplexity), true
+	case "Campaign.sourceKey":
+		if e.ComplexityRoot.Campaign.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Campaign.SourceKey(childComplexity), true
 	case "Campaign.status":
 		if e.ComplexityRoot.Campaign.Status == nil {
 			break
@@ -12151,6 +12227,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CheckResult.SourceInstanceID(childComplexity), true
+	case "CheckResult.sourceKey":
+		if e.ComplexityRoot.CheckResult.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResult.SourceKey(childComplexity), true
 	case "CheckResult.status":
 		if e.ComplexityRoot.CheckResult.Status == nil {
 			break
@@ -12460,6 +12542,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Contact.SourceInstanceID(childComplexity), true
+	case "Contact.sourceKey":
+		if e.ComplexityRoot.Contact.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Contact.SourceKey(childComplexity), true
 	case "Contact.status":
 		if e.ComplexityRoot.Contact.Status == nil {
 			break
@@ -13223,6 +13311,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.SourceInstanceID(childComplexity), true
+	case "Control.sourceKey":
+		if e.ComplexityRoot.Control.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.SourceKey(childComplexity), true
 	case "Control.sourceName":
 		if e.ComplexityRoot.Control.SourceName == nil {
 			break
@@ -13772,6 +13866,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementation.SourceInstanceID(childComplexity), true
+	case "ControlImplementation.sourceKey":
+		if e.ComplexityRoot.ControlImplementation.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.SourceKey(childComplexity), true
 	case "ControlImplementation.status":
 		if e.ComplexityRoot.ControlImplementation.Status == nil {
 			break
@@ -14273,6 +14373,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlObjective.SourceInstanceID(childComplexity), true
+	case "ControlObjective.sourceKey":
+		if e.ComplexityRoot.ControlObjective.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjective.SourceKey(childComplexity), true
 	case "ControlObjective.status":
 		if e.ComplexityRoot.ControlObjective.Status == nil {
 			break
@@ -15054,6 +15160,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CustomTypeEnum.SourceInstanceID(childComplexity), true
+	case "CustomTypeEnum.sourceKey":
+		if e.ComplexityRoot.CustomTypeEnum.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomTypeEnum.SourceKey(childComplexity), true
 	case "CustomTypeEnum.subcontrols":
 		if e.ComplexityRoot.CustomTypeEnum.Subcontrols == nil {
 			break
@@ -15390,6 +15502,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DNSVerificationUpdatePayload.DNSVerification(childComplexity), true
+
+	case "DeleteDemoDataPayload.accepted":
+		if e.ComplexityRoot.DeleteDemoDataPayload.Accepted == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DeleteDemoDataPayload.Accepted(childComplexity), true
 
 	case "DirectoryAccount.accountType":
 		if e.ComplexityRoot.DirectoryAccount.AccountType == nil {
@@ -15729,6 +15848,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccount.SourceInstanceID(childComplexity), true
+	case "DirectoryAccount.sourceKey":
+		if e.ComplexityRoot.DirectoryAccount.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccount.SourceKey(childComplexity), true
 	case "DirectoryAccount.sourceVersion":
 		if e.ComplexityRoot.DirectoryAccount.SourceVersion == nil {
 			break
@@ -16080,6 +16205,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryGroup.SourceInstanceID(childComplexity), true
+	case "DirectoryGroup.sourceKey":
+		if e.ComplexityRoot.DirectoryGroup.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroup.SourceKey(childComplexity), true
 	case "DirectoryGroup.sourceVersion":
 		if e.ComplexityRoot.DirectoryGroup.SourceVersion == nil {
 			break
@@ -16402,6 +16533,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembership.SourceInstanceID(childComplexity), true
+	case "DirectoryMembership.sourceKey":
+		if e.ComplexityRoot.DirectoryMembership.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryMembership.SourceKey(childComplexity), true
 	case "DirectoryMembership.updatedAt":
 		if e.ComplexityRoot.DirectoryMembership.UpdatedAt == nil {
 			break
@@ -17093,6 +17230,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplate.SourceInstanceID(childComplexity), true
+	case "EmailTemplate.sourceKey":
+		if e.ComplexityRoot.EmailTemplate.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplate.SourceKey(childComplexity), true
 	case "EmailTemplate.systemInternalID":
 		if e.ComplexityRoot.EmailTemplate.SystemInternalID == nil {
 			break
@@ -18064,6 +18207,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.SourceInstanceID(childComplexity), true
+	case "Entity.sourceKey":
+		if e.ComplexityRoot.Entity.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.SourceKey(childComplexity), true
 	case "Entity.sourcePlatforms":
 		if e.ComplexityRoot.Entity.SourcePlatforms == nil {
 			break
@@ -19105,6 +19254,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.SourceInstanceID(childComplexity), true
+	case "Evidence.sourceKey":
+		if e.ComplexityRoot.Evidence.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Evidence.SourceKey(childComplexity), true
 	case "Evidence.status":
 		if e.ComplexityRoot.Evidence.Status == nil {
 			break
@@ -20573,6 +20728,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Finding.SourceInstanceID(childComplexity), true
+	case "Finding.sourceKey":
+		if e.ComplexityRoot.Finding.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.SourceKey(childComplexity), true
 	case "Finding.sourceUpdatedAt":
 		if e.ComplexityRoot.Finding.SourceUpdatedAt == nil {
 			break
@@ -21774,6 +21935,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Group.SourceInstanceID(childComplexity), true
+	case "Group.sourceKey":
+		if e.ComplexityRoot.Group.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.SourceKey(childComplexity), true
 	case "Group.tags":
 		if e.ComplexityRoot.Group.Tags == nil {
 			break
@@ -23028,6 +23195,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolder.SourceInstanceID(childComplexity), true
+	case "IdentityHolder.sourceKey":
+		if e.ComplexityRoot.IdentityHolder.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolder.SourceKey(childComplexity), true
 	case "IdentityHolder.startDate":
 		if e.ComplexityRoot.IdentityHolder.StartDate == nil {
 			break
@@ -24565,6 +24738,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicy.SourceInstanceID(childComplexity), true
+	case "InternalPolicy.sourceKey":
+		if e.ComplexityRoot.InternalPolicy.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicy.SourceKey(childComplexity), true
 	case "InternalPolicy.status":
 		if e.ComplexityRoot.InternalPolicy.Status == nil {
 			break
@@ -25324,6 +25503,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappedControl.SourceInstanceID(childComplexity), true
+	case "MappedControl.sourceKey":
+		if e.ComplexityRoot.MappedControl.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControl.SourceKey(childComplexity), true
 	case "MappedControl.systemInternalID":
 		if e.ComplexityRoot.MappedControl.SystemInternalID == nil {
 			break
@@ -29029,6 +29214,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteDNSVerification(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteDemoData":
+		if e.ComplexityRoot.Mutation.DeleteDemoData == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDemoData_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteDemoData(childComplexity, args["input"].(model.DeleteDemoDataInput)), true
 	case "Mutation.deleteDirectoryAccount":
 		if e.ComplexityRoot.Mutation.DeleteDirectoryAccount == nil {
 			break
@@ -29904,6 +30100,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.ResolveVulnerability(childComplexity, args["id"].(string), args["input"].(model.ResolveVulnerabilityInput)), true
+	case "Mutation.seedDemoData":
+		if e.ComplexityRoot.Mutation.SeedDemoData == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_seedDemoData_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SeedDemoData(childComplexity, args["input"].(model.SeedDemoDataInput)), true
 	case "Mutation.sendCampaignTestEmail":
 		if e.ComplexityRoot.Mutation.SendCampaignTestEmail == nil {
 			break
@@ -29959,6 +30166,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.TransferOrganizationOwnership(childComplexity, args["newOwnerEmail"].(string)), true
+	case "Mutation.unlinkEntityCatalog":
+		if e.ComplexityRoot.Mutation.UnlinkEntityCatalog == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_unlinkEntityCatalog_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UnlinkEntityCatalog(childComplexity, args["id"].(string)), true
 	case "Mutation.updateAPIToken":
 		if e.ComplexityRoot.Mutation.UpdateAPIToken == nil {
 			break
@@ -32410,6 +32628,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Narrative.SourceInstanceID(childComplexity), true
+	case "Narrative.sourceKey":
+		if e.ComplexityRoot.Narrative.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Narrative.SourceKey(childComplexity), true
 	case "Narrative.systemInternalID":
 		if e.ComplexityRoot.Narrative.SystemInternalID == nil {
 			break
@@ -36637,6 +36861,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.SourceInstanceID(childComplexity), true
+	case "Platform.sourceKey":
+		if e.ComplexityRoot.Platform.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Platform.SourceKey(childComplexity), true
 	case "Platform.sourceType":
 		if e.ComplexityRoot.Platform.SourceType == nil {
 			break
@@ -37265,6 +37495,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Procedure.SourceInstanceID(childComplexity), true
+	case "Procedure.sourceKey":
+		if e.ComplexityRoot.Procedure.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Procedure.SourceKey(childComplexity), true
 	case "Procedure.status":
 		if e.ComplexityRoot.Procedure.Status == nil {
 			break
@@ -37859,6 +38095,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Program.SourceInstanceID(childComplexity), true
+	case "Program.sourceKey":
+		if e.ComplexityRoot.Program.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Program.SourceKey(childComplexity), true
 	case "Program.startDate":
 		if e.ComplexityRoot.Program.StartDate == nil {
 			break
@@ -41314,6 +41556,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Remediation.SourceInstanceID(childComplexity), true
+	case "Remediation.sourceKey":
+		if e.ComplexityRoot.Remediation.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Remediation.SourceKey(childComplexity), true
 	case "Remediation.state":
 		if e.ComplexityRoot.Remediation.State == nil {
 			break
@@ -42315,6 +42563,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Review.SourceInstanceID(childComplexity), true
+	case "Review.sourceKey":
+		if e.ComplexityRoot.Review.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.SourceKey(childComplexity), true
 	case "Review.state":
 		if e.ComplexityRoot.Review.State == nil {
 			break
@@ -43042,6 +43296,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.SourceInstanceID(childComplexity), true
+	case "Risk.sourceKey":
+		if e.ComplexityRoot.Risk.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.SourceKey(childComplexity), true
 	case "Risk.stakeholder":
 		if e.ComplexityRoot.Risk.Stakeholder == nil {
 			break
@@ -43904,6 +44164,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Scan.SourceInstanceID(childComplexity), true
+	case "Scan.sourceKey":
+		if e.ComplexityRoot.Scan.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.SourceKey(childComplexity), true
 	case "Scan.status":
 		if e.ComplexityRoot.Scan.Status == nil {
 			break
@@ -44386,6 +44652,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SearchSnippet.Text(childComplexity), true
+
+	case "SeedDemoDataPayload.accepted":
+		if e.ComplexityRoot.SeedDemoDataPayload.Accepted == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SeedDemoDataPayload.Accepted(childComplexity), true
 
 	case "Standard.applicablePlatforms":
 		if e.ComplexityRoot.Standard.ApplicablePlatforms == nil {
@@ -45146,6 +45419,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Subcontrol.SourceInstanceID(childComplexity), true
+	case "Subcontrol.sourceKey":
+		if e.ComplexityRoot.Subcontrol.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.SourceKey(childComplexity), true
 	case "Subcontrol.sourceName":
 		if e.ComplexityRoot.Subcontrol.SourceName == nil {
 			break
@@ -46006,6 +46285,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetail.SourceInstanceID(childComplexity), true
+	case "SystemDetail.sourceKey":
+		if e.ComplexityRoot.SystemDetail.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.SourceKey(childComplexity), true
 	case "SystemDetail.systemName":
 		if e.ComplexityRoot.SystemDetail.SystemName == nil {
 			break
@@ -46391,6 +46676,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TagDefinition.SourceInstanceID(childComplexity), true
+	case "TagDefinition.sourceKey":
+		if e.ComplexityRoot.TagDefinition.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TagDefinition.SourceKey(childComplexity), true
 	case "TagDefinition.systemInternalID":
 		if e.ComplexityRoot.TagDefinition.SystemInternalID == nil {
 			break
@@ -47317,6 +47608,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Template.SourceInstanceID(childComplexity), true
+	case "Template.sourceKey":
+		if e.ComplexityRoot.Template.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Template.SourceKey(childComplexity), true
 	case "Template.systemInternalID":
 		if e.ComplexityRoot.Template.SystemInternalID == nil {
 			break
@@ -51539,6 +51836,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Vulnerability.SourceInstanceID(childComplexity), true
+	case "Vulnerability.sourceKey":
+		if e.ComplexityRoot.Vulnerability.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.SourceKey(childComplexity), true
 	case "Vulnerability.sourceUpdatedAt":
 		if e.ComplexityRoot.Vulnerability.SourceUpdatedAt == nil {
 			break
@@ -53925,6 +54228,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("CustomTypeEnumWhereInput", ec.unmarshalInputCustomTypeEnumWhereInput),
 			graphql.NewInputUnmarshaler("DNSVerificationOrder", ec.unmarshalInputDNSVerificationOrder),
 			graphql.NewInputUnmarshaler("DNSVerificationWhereInput", ec.unmarshalInputDNSVerificationWhereInput),
+			graphql.NewInputUnmarshaler("DeleteDemoDataInput", ec.unmarshalInputDeleteDemoDataInput),
 			graphql.NewInputUnmarshaler("DirectoryAccountOrder", ec.unmarshalInputDirectoryAccountOrder),
 			graphql.NewInputUnmarshaler("DirectoryAccountWhereInput", ec.unmarshalInputDirectoryAccountWhereInput),
 			graphql.NewInputUnmarshaler("DirectoryGroupOrder", ec.unmarshalInputDirectoryGroupOrder),
@@ -54035,6 +54339,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("SLADefinitionWhereInput", ec.unmarshalInputSLADefinitionWhereInput),
 			graphql.NewInputUnmarshaler("ScanOrder", ec.unmarshalInputScanOrder),
 			graphql.NewInputUnmarshaler("ScanWhereInput", ec.unmarshalInputScanWhereInput),
+			graphql.NewInputUnmarshaler("SeedDemoDataInput", ec.unmarshalInputSeedDemoDataInput),
 			graphql.NewInputUnmarshaler("SendCampaignTestEmailInput", ec.unmarshalInputSendCampaignTestEmailInput),
 			graphql.NewInputUnmarshaler("StandardOrder", ec.unmarshalInputStandardOrder),
 			graphql.NewInputUnmarshaler("StandardWhereInput", ec.unmarshalInputStandardWhereInput),
@@ -57885,6 +58190,94 @@ type CustomTypeEnumBulkCreatePayload {
     """
     customTypeEnums: [CustomTypeEnum!]
 }`, BuiltIn: false},
+	{Name: "../schema/demodataextended.graphql", Input: `"""
+DemoDataProfile names the seed time rules applied to a demo dataset's records
+"""
+enum DemoDataProfile @goModel(model: "github.com/theopenlane/core/common/enums.DemoDataProfile") {
+  """
+  fills the dataset out with statuses, program links and assignments
+  """
+  DEMO
+  """
+  seeds the dataset's controls, policies and procedures as drafts with nothing linked or assigned
+  """
+  DRAFT
+}
+
+"""
+Input for seedDemoData mutation
+"""
+input SeedDemoDataInput {
+    """
+    the demo dataset to seed into the current organization, e.g. soc2
+    """
+    dataset: String!
+    """
+    the seed profile, DEMO when not set
+    """
+    profile: DemoDataProfile
+}
+
+"""
+Return response for seedDemoData mutation. Seeding happens asynchronously, so this only confirms
+the seed was queued - the outcome surfaces via a follow-up Notification once it finishes
+"""
+type SeedDemoDataPayload {
+    """
+    whether the seed was queued
+    """
+    accepted: Boolean!
+}
+
+"""
+Input for deleteDemoData mutation
+"""
+input DeleteDemoDataInput {
+    """
+    the demo dataset to remove from the current organization, e.g. soc2
+    """
+    dataset: String!
+    """
+    dataset object types whose seeded records are kept, by snake_case schema name, e.g. custom_type_enum
+    """
+    keep: [String!]
+}
+
+"""
+Return response for deleteDemoData mutation. Removal happens asynchronously, so this only confirms
+the removal was queued - the outcome surfaces via a follow-up Notification once it finishes
+"""
+type DeleteDemoDataPayload {
+    """
+    whether the removal was queued
+    """
+    accepted: Boolean!
+}
+
+extend type Mutation {
+    """
+    Seed the current organization with a demo dataset, asynchronously creating its programs,
+    controls, policies, risks and related records
+    """
+    seedDemoData(
+        """
+        the demo dataset to seed
+        """
+        input: SeedDemoDataInput!
+    ): SeedDemoDataPayload!
+    """
+    Remove a seeded demo dataset from the current organization, asynchronously deleting every
+    record it imported except the object types listed in keep. Controls cloned from catalog
+    standards such as SOC 2 are left in place
+    """
+    deleteDemoData(
+        """
+        the demo dataset to remove
+        """
+        input: DeleteDemoDataInput!
+    ): DeleteDemoDataPayload!
+}
+`, BuiltIn: false},
 	{Name: "../schema/directoryaccount.graphql", Input: `extend type Query {
     """
     Look up directoryAccount by ID
@@ -59456,6 +59849,10 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -60374,6 +60771,20 @@ input ActionPlanWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -60953,6 +61364,10 @@ type Assessment implements Node @modules(names: ["compliance_module"]) {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -61433,6 +61848,10 @@ type AssessmentPolicy implements Node @modules(names: ["compliance_module"]) {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -61687,6 +62106,20 @@ input AssessmentPolicyWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -62463,6 +62896,20 @@ input AssessmentWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -62680,6 +63127,10 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -63693,6 +64144,20 @@ input AssetWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -64453,6 +64918,10 @@ type Campaign implements Node @modules(names: ["compliance_module","trust_center
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -65665,6 +66134,20 @@ input CampaignWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -66189,6 +66672,10 @@ type CheckResult implements Node {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: ID
@@ -66623,6 +67110,20 @@ input CheckResultWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -66800,6 +67301,10 @@ type Contact implements Node @modules(names: ["entity_management_module","compli
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -67250,6 +67755,20 @@ input ContactWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -67470,6 +67989,10 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -68668,6 +69191,10 @@ type ControlImplementation implements Node @modules(names: ["compliance_module"]
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -69146,6 +69673,20 @@ input ControlImplementationWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -69345,6 +69886,10 @@ type ControlObjective implements Node @modules(names: ["compliance_module","poli
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -70053,6 +70598,20 @@ input ControlObjectiveWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -70475,6 +71034,20 @@ input ControlWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -76271,10 +76844,6 @@ input CreateTaskInput {
   """
   source: String
   """
-  stable source-specific key for the task
-  """
-  sourceKey: String
-  """
   an optional external reference URL for the task
   """
   externalReferenceURL: [String!]
@@ -77648,6 +78217,10 @@ type CustomTypeEnum implements Node @modules(names: ["any_module"]) {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -78237,6 +78810,20 @@ input CustomTypeEnumWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -78876,6 +79463,10 @@ type DirectoryAccount implements Node {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String!
@@ -79433,6 +80024,20 @@ input DirectoryAccountWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -79926,6 +80531,10 @@ type DirectoryGroup implements Node {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String!
@@ -80386,6 +80995,20 @@ input DirectoryGroupWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -80693,6 +81316,10 @@ type DirectoryMembership implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   the organization id that owns the object
   """
@@ -81085,6 +81712,20 @@ input DirectoryMembershipWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   environment_name field predicates
   """
@@ -81829,6 +82470,10 @@ type EmailTemplate implements Node @modules(names: ["any_module"]) {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -82367,6 +83012,20 @@ input EmailTemplateWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -82719,6 +83378,10 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -82837,19 +83500,19 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   The entity's displayed 'friendly' name
   """
-  displayName: String
+  displayName: String @catalogManaged
   """
   An optional description of the entity
   """
-  description: String
+  description: String @catalogManaged
   """
   domains associated with the entity
   """
-  domains: [String!]
+  domains: [String!] @catalogManaged
   """
   common matching names that should match with the entity
   """
-  aliases: [String!]
+  aliases: [String!] @catalogManaged
   """
   The type of the entity
   """
@@ -82921,15 +83584,15 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   status page URL for the entity
   """
-  statusPageURL: String
+  statusPageURL: String @catalogManaged
   """
   services provided by the entity
   """
-  providedServices: [String!]
+  providedServices: [String!] @catalogManaged
   """
   external links associated with the entity
   """
-  links: [String!]
+  links: [String!] @catalogManaged
   """
   the risk rating label for the entity
   """
@@ -82965,7 +83628,7 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   URL of the logo for the entity
   """
-  logoRemoteURL: String
+  logoRemoteURL: String @catalogManaged
   """
   The logo file id for the entity
   """
@@ -84429,6 +85092,20 @@ input EntityWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -86009,6 +86686,10 @@ type Evidence implements Node @modules(names: ["compliance_module","policy_manag
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -86765,6 +87446,20 @@ input EvidenceWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -88381,6 +89076,10 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -89828,6 +90527,20 @@ input FindingWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -90735,6 +91448,10 @@ type Group implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -93109,6 +93826,20 @@ input GroupWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -93999,6 +94730,10 @@ type IdentityHolder implements Node @modules(names: ["compliance_module","regist
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -95006,6 +95741,20 @@ input IdentityHolderWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -97656,6 +98405,10 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -98747,6 +99500,20 @@ input InternalPolicyWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -99865,6 +100632,10 @@ type MappedControl implements Node @modules(names: ["compliance_module"]) {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -100340,6 +101111,20 @@ input MappedControlWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -100526,6 +101311,10 @@ type Narrative implements Node @modules(names: ["compliance_module","policy_mana
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -101021,6 +101810,20 @@ input NarrativeWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -108148,6 +108951,10 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -109531,6 +110338,20 @@ input PlatformWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -110498,6 +111319,10 @@ type Procedure implements Node @modules(names: ["compliance_module","policy_mana
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -111307,6 +112132,20 @@ input ProcedureWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -111781,6 +112620,10 @@ type Program implements Node @modules(names: ["compliance_module","entity_manage
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -112980,6 +113823,20 @@ input ProgramWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -116274,6 +117131,10 @@ type Remediation implements Node @modules(names: ["vulnerability_management_modu
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -117208,6 +118069,20 @@ input RemediationWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -118406,6 +119281,10 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -119293,6 +120172,20 @@ input ReviewWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -119762,6 +120655,10 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -120916,6 +121813,20 @@ input RiskWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -121920,6 +122831,10 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -122735,6 +123650,20 @@ input ScanWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -123875,6 +124804,10 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -124955,6 +125888,20 @@ input SubcontrolWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -126292,6 +127239,10 @@ type SystemDetail implements Node @modules(names: ["compliance_module","registry
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -126711,6 +127662,20 @@ input SystemDetailWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -127044,6 +128009,10 @@ type TagDefinition implements Node @modules(names: ["any_module"]) {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -127319,6 +128288,20 @@ input TagDefinitionWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -127489,6 +128472,10 @@ type Task implements Node @modules(names: ["any_module"]) {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -127584,10 +128571,6 @@ type Task implements Node @modules(names: ["any_module"]) {
   the system or workflow that created or suggested the task
   """
   source: String
-  """
-  stable source-specific key for the task
-  """
-  sourceKey: String
   """
   key to prevent duplicates for auto-generated task based on rules
   """
@@ -128428,6 +129411,20 @@ input TaskWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -128680,20 +129677,6 @@ input TaskWhereInput {
   sourceEqualFold: String
   sourceContainsFold: String
   """
-  source_key field predicates
-  """
-  sourceKey: String
-  sourceKeyNEQ: String
-  sourceKeyIn: [String!]
-  sourceKeyNotIn: [String!]
-  sourceKeyContains: String
-  sourceKeyHasPrefix: String
-  sourceKeyHasSuffix: String
-  sourceKeyIsNil: Boolean
-  sourceKeyNotNil: Boolean
-  sourceKeyEqualFold: String
-  sourceKeyContainsFold: String
-  """
   idempotency_key field predicates
   """
   idempotencyKey: String
@@ -128899,6 +129882,10 @@ type Template implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -129376,6 +130363,20 @@ input TemplateWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -141052,11 +142053,6 @@ input UpdateTaskInput {
   source: String
   clearSource: Boolean
   """
-  stable source-specific key for the task
-  """
-  sourceKey: String
-  clearSourceKey: Boolean
-  """
   an optional external reference URL for the task
   """
   externalReferenceURL: [String!]
@@ -144738,6 +145734,10 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String!
@@ -145860,6 +146860,20 @@ input VulnerabilityWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   external_id field predicates
   """
@@ -150525,6 +151539,10 @@ extend type Mutation {
     adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
     """
     adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
+    """
+    unlinkEntityCatalog detaches the organization's entity from the catalog so catalog refreshes no longer apply to it; idempotent
+    """
+    unlinkEntityCatalog(id: ID!): EntityUpdatePayload!
 }
 `, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
@@ -163218,6 +164236,8 @@ func (ec *executionContext) childFields_ActionPlan(ctx context.Context, field gr
 		return ec.fieldContext_ActionPlan_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ActionPlan_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ActionPlan_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ActionPlan_externalID(ctx, field)
 	case "name":
@@ -163470,6 +164490,8 @@ func (ec *executionContext) childFields_Assessment(ctx context.Context, field gr
 		return ec.fieldContext_Assessment_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Assessment_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Assessment_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Assessment_externalID(ctx, field)
 	case "ownerID":
@@ -163618,6 +164640,8 @@ func (ec *executionContext) childFields_AssessmentPolicy(ctx context.Context, fi
 		return ec.fieldContext_AssessmentPolicy_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_AssessmentPolicy_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_AssessmentPolicy_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_AssessmentPolicy_externalID(ctx, field)
 	case "ownerID":
@@ -163890,6 +164914,8 @@ func (ec *executionContext) childFields_Asset(ctx context.Context, field graphql
 		return ec.fieldContext_Asset_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Asset_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Asset_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Asset_externalID(ctx, field)
 	case "ownerID":
@@ -164164,6 +165190,8 @@ func (ec *executionContext) childFields_Campaign(ctx context.Context, field grap
 		return ec.fieldContext_Campaign_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Campaign_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Campaign_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Campaign_externalID(ctx, field)
 	case "ownerID":
@@ -164524,6 +165552,8 @@ func (ec *executionContext) childFields_CheckResult(ctx context.Context, field g
 		return ec.fieldContext_CheckResult_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_CheckResult_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_CheckResult_sourceKey(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_CheckResult_ownerID(ctx, field)
 	case "status":
@@ -164666,6 +165696,8 @@ func (ec *executionContext) childFields_Contact(ctx context.Context, field graph
 		return ec.fieldContext_Contact_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Contact_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Contact_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Contact_externalID(ctx, field)
 	case "ownerID":
@@ -164814,6 +165846,8 @@ func (ec *executionContext) childFields_Control(ctx context.Context, field graph
 		return ec.fieldContext_Control_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Control_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Control_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Control_externalID(ctx, field)
 	case "externalUUID":
@@ -165194,6 +166228,8 @@ func (ec *executionContext) childFields_ControlImplementation(ctx context.Contex
 		return ec.fieldContext_ControlImplementation_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ControlImplementation_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ControlImplementation_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ControlImplementation_externalID(ctx, field)
 	case "ownerID":
@@ -165378,6 +166414,8 @@ func (ec *executionContext) childFields_ControlObjective(ctx context.Context, fi
 		return ec.fieldContext_ControlObjective_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ControlObjective_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ControlObjective_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ControlObjective_externalID(ctx, field)
 	case "ownerID":
@@ -165760,6 +166798,8 @@ func (ec *executionContext) childFields_CustomTypeEnum(ctx context.Context, fiel
 		return ec.fieldContext_CustomTypeEnum_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_CustomTypeEnum_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_CustomTypeEnum_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_CustomTypeEnum_externalID(ctx, field)
 	case "ownerID":
@@ -165988,6 +167028,14 @@ func (ec *executionContext) childFields_DNSVerificationUpdatePayload(ctx context
 	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationUpdatePayload", field.Name)
 }
 
+func (ec *executionContext) childFields_DeleteDemoDataPayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "accepted":
+		return ec.fieldContext_DeleteDemoDataPayload_accepted(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DeleteDemoDataPayload", field.Name)
+}
+
 func (ec *executionContext) childFields_DirectoryAccount(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -166016,6 +167064,8 @@ func (ec *executionContext) childFields_DirectoryAccount(ctx context.Context, fi
 		return ec.fieldContext_DirectoryAccount_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_DirectoryAccount_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_DirectoryAccount_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_DirectoryAccount_externalID(ctx, field)
 	case "ownerID":
@@ -166196,6 +167246,8 @@ func (ec *executionContext) childFields_DirectoryGroup(ctx context.Context, fiel
 		return ec.fieldContext_DirectoryGroup_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_DirectoryGroup_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_DirectoryGroup_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_DirectoryGroup_externalID(ctx, field)
 	case "ownerID":
@@ -166344,6 +167396,8 @@ func (ec *executionContext) childFields_DirectoryMembership(ctx context.Context,
 		return ec.fieldContext_DirectoryMembership_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_DirectoryMembership_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_DirectoryMembership_sourceKey(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_DirectoryMembership_ownerID(ctx, field)
 	case "environmentName":
@@ -166698,6 +167752,8 @@ func (ec *executionContext) childFields_EmailTemplate(ctx context.Context, field
 		return ec.fieldContext_EmailTemplate_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_EmailTemplate_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_EmailTemplate_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_EmailTemplate_externalID(ctx, field)
 	case "ownerID":
@@ -166898,6 +167954,8 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Entity_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Entity_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Entity_externalID(ctx, field)
 	case "ownerID":
@@ -167470,6 +168528,8 @@ func (ec *executionContext) childFields_Evidence(ctx context.Context, field grap
 		return ec.fieldContext_Evidence_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Evidence_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Evidence_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Evidence_externalID(ctx, field)
 	case "ownerID":
@@ -167922,6 +168982,8 @@ func (ec *executionContext) childFields_Finding(ctx context.Context, field graph
 		return ec.fieldContext_Finding_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Finding_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Finding_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Finding_externalID(ctx, field)
 	case "ownerID":
@@ -168346,6 +169408,8 @@ func (ec *executionContext) childFields_Group(ctx context.Context, field graphql
 		return ec.fieldContext_Group_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Group_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Group_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Group_externalID(ctx, field)
 	case "ownerID":
@@ -168994,6 +170058,8 @@ func (ec *executionContext) childFields_IdentityHolder(ctx context.Context, fiel
 		return ec.fieldContext_IdentityHolder_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_IdentityHolder_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_IdentityHolder_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_IdentityHolder_externalID(ctx, field)
 	case "ownerID":
@@ -169494,6 +170560,8 @@ func (ec *executionContext) childFields_InternalPolicy(ctx context.Context, fiel
 		return ec.fieldContext_InternalPolicy_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_InternalPolicy_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_InternalPolicy_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_InternalPolicy_externalID(ctx, field)
 	case "ownerID":
@@ -169968,6 +171036,8 @@ func (ec *executionContext) childFields_MappedControl(ctx context.Context, field
 		return ec.fieldContext_MappedControl_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_MappedControl_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_MappedControl_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_MappedControl_externalID(ctx, field)
 	case "systemOwned":
@@ -170114,6 +171184,8 @@ func (ec *executionContext) childFields_Narrative(ctx context.Context, field gra
 		return ec.fieldContext_Narrative_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Narrative_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Narrative_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Narrative_externalID(ctx, field)
 	case "ownerID":
@@ -171632,6 +172704,8 @@ func (ec *executionContext) childFields_Platform(ctx context.Context, field grap
 		return ec.fieldContext_Platform_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Platform_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Platform_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Platform_externalID(ctx, field)
 	case "ownerID":
@@ -171952,6 +173026,8 @@ func (ec *executionContext) childFields_Procedure(ctx context.Context, field gra
 		return ec.fieldContext_Procedure_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Procedure_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Procedure_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Procedure_externalID(ctx, field)
 	case "ownerID":
@@ -172178,6 +173254,8 @@ func (ec *executionContext) childFields_Program(ctx context.Context, field graph
 		return ec.fieldContext_Program_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Program_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Program_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Program_externalID(ctx, field)
 	case "ownerID":
@@ -172510,6 +173588,8 @@ func (ec *executionContext) childFields_Remediation(ctx context.Context, field g
 		return ec.fieldContext_Remediation_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Remediation_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Remediation_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Remediation_externalID(ctx, field)
 	case "ownerID":
@@ -172942,6 +174022,8 @@ func (ec *executionContext) childFields_Review(ctx context.Context, field graphq
 		return ec.fieldContext_Review_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Review_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Review_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Review_externalID(ctx, field)
 	case "ownerID":
@@ -173152,6 +174234,8 @@ func (ec *executionContext) childFields_Risk(ctx context.Context, field graphql.
 		return ec.fieldContext_Risk_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Risk_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Risk_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Risk_externalID(ctx, field)
 	case "ownerID":
@@ -173540,6 +174624,8 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Scan_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Scan_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Scan_externalID(ctx, field)
 	case "ownerID":
@@ -173852,6 +174938,14 @@ func (ec *executionContext) childFields_SearchSnippet(ctx context.Context, field
 	return nil, fmt.Errorf("no field named %q was found under type SearchSnippet", field.Name)
 }
 
+func (ec *executionContext) childFields_SeedDemoDataPayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "accepted":
+		return ec.fieldContext_SeedDemoDataPayload_accepted(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SeedDemoDataPayload", field.Name)
+}
+
 func (ec *executionContext) childFields_Standard(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -173996,6 +175090,8 @@ func (ec *executionContext) childFields_Subcontrol(ctx context.Context, field gr
 		return ec.fieldContext_Subcontrol_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Subcontrol_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Subcontrol_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Subcontrol_externalID(ctx, field)
 	case "externalUUID":
@@ -174492,6 +175588,8 @@ func (ec *executionContext) childFields_SystemDetail(ctx context.Context, field 
 		return ec.fieldContext_SystemDetail_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_SystemDetail_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_SystemDetail_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_SystemDetail_externalID(ctx, field)
 	case "ownerID":
@@ -174704,6 +175802,8 @@ func (ec *executionContext) childFields_TagDefinition(ctx context.Context, field
 		return ec.fieldContext_TagDefinition_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_TagDefinition_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_TagDefinition_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_TagDefinition_externalID(ctx, field)
 	case "ownerID":
@@ -174814,6 +175914,8 @@ func (ec *executionContext) childFields_Task(ctx context.Context, field graphql.
 		return ec.fieldContext_Task_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Task_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Task_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Task_externalID(ctx, field)
 	case "ownerID":
@@ -174862,8 +175964,6 @@ func (ec *executionContext) childFields_Task(ctx context.Context, field graphql.
 		return ec.fieldContext_Task_priority(ctx, field)
 	case "source":
 		return ec.fieldContext_Task_source(ctx, field)
-	case "sourceKey":
-		return ec.fieldContext_Task_sourceKey(ctx, field)
 	case "idempotencyKey":
 		return ec.fieldContext_Task_idempotencyKey(ctx, field)
 	case "externalReferenceURL":
@@ -175042,6 +176142,8 @@ func (ec *executionContext) childFields_Template(ctx context.Context, field grap
 		return ec.fieldContext_Template_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Template_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Template_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Template_externalID(ctx, field)
 	case "ownerID":
@@ -176868,6 +177970,8 @@ func (ec *executionContext) childFields_Vulnerability(ctx context.Context, field
 		return ec.fieldContext_Vulnerability_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_Vulnerability_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_Vulnerability_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Vulnerability_externalID(ctx, field)
 	case "ownerID":

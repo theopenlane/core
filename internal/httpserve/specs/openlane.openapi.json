@@ -863,6 +863,9 @@
                           "inline": {
                             "type": "boolean"
                           },
+                          "noRetry": {
+                            "type": "boolean"
+                          },
                           "reconcile": {
                             "type": "boolean"
                           },
@@ -889,7 +892,8 @@
                       },
                       "topic": {
                         "type": "string"
-                      }
+                      },
+                      "variables": {}
                     },
                     "type": "object"
                   },

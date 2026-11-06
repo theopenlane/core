@@ -3,6 +3,11 @@ package objectstore
 import (
 	"fmt"
 
+	"github.com/samber/lo"
+
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/utils/jsonx"
@@ -80,15 +85,26 @@ func Builder(runtime *RuntimeConfig, federationIssuer string, cfg Config) regist
 					Policy(importPolicy).
 					Ingest(importContracts...).
 					SkipDefaultLookback().
-					Description("Import the JSON records under a bucket prefix object by object, moving each imported object aside when configured").
+					Variables(jsonx.SchemaFrom[DatasetBuiltinVariables]()).
+					Description("Import the JSON records under a bucket prefix object by object as the schema each directory names, moving each imported object aside when configured, or a manifest-described dataset as the dispatching organization").
 					Registration(),
 				types.OperationPayloadOf[WriteObject]().
 					Handles(runWriteObject).
 					Policy(types.ExecutionPolicy{Inline: true}).
 					Description("Write a document into the bucket under a key").
 					Registration(),
+				operations.DeleteSourceOp.Registration(),
 			},
-			Mappings: []types.MappingRegistration{entityMapping},
+			Mappings: lo.Map(recordSchemas, func(schema *entityops.Schema, _ int) types.MappingRegistration {
+				return types.MappingRegistration{
+					Schema: schema.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: recordFilterExpr,
+						MapExpr:    recordMapExprs[schema.Name],
+						Links:      append(providerkit.EdgeKeyLinks(schema), recordLinks[schema.Name]...),
+					},
+				}
+			}),
 		}
 
 		if runtime.Provisioned() {

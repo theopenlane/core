@@ -56,6 +56,8 @@ type ProgramHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
@@ -114,7 +116,7 @@ func (*ProgramHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case programhistory.FieldAuditorReady, programhistory.FieldAuditorWriteComments, programhistory.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldUpdatedByImpersonator, programhistory.FieldDeletedBy, programhistory.FieldDisplayID, programhistory.FieldSourceDefinitionID, programhistory.FieldSourceDefinitionVersion, programhistory.FieldSourceInstanceID, programhistory.FieldManagedBy, programhistory.FieldIntegrationRunID, programhistory.FieldExternalID, programhistory.FieldOwnerID, programhistory.FieldProgramKindName, programhistory.FieldProgramKindID, programhistory.FieldExternalUUID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldFrameworkName, programhistory.FieldAuditFirm, programhistory.FieldAuditor, programhistory.FieldAuditorEmail, programhistory.FieldProgramOwnerID:
+		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldUpdatedByImpersonator, programhistory.FieldDeletedBy, programhistory.FieldDisplayID, programhistory.FieldSourceDefinitionID, programhistory.FieldSourceDefinitionVersion, programhistory.FieldSourceInstanceID, programhistory.FieldManagedBy, programhistory.FieldIntegrationRunID, programhistory.FieldSourceKey, programhistory.FieldExternalID, programhistory.FieldOwnerID, programhistory.FieldProgramKindName, programhistory.FieldProgramKindID, programhistory.FieldExternalUUID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldFrameworkName, programhistory.FieldAuditFirm, programhistory.FieldAuditor, programhistory.FieldAuditorEmail, programhistory.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
 		case programhistory.FieldHistoryTime, programhistory.FieldCreatedAt, programhistory.FieldUpdatedAt, programhistory.FieldDeletedAt, programhistory.FieldStartDate, programhistory.FieldEndDate, programhistory.FieldObservationPeriodStartDate, programhistory.FieldObservationPeriodEndDate, programhistory.FieldFieldworkStartDate, programhistory.FieldFieldworkEndDate:
 			values[i] = new(sql.NullTime)
@@ -243,6 +245,12 @@ func (_m *ProgramHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case programhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case programhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -465,6 +473,9 @@ func (_m *ProgramHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

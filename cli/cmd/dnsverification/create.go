@@ -5,7 +5,6 @@ package dnsverification
 import (
 	"context"
 
-	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
@@ -78,9 +77,9 @@ func create(ctx context.Context) error {
 		CloudflareHostnameID:       cmd.Config.String("cloudflare-hostname-id"),
 		DNSTxtRecord:               cmd.Config.String("dns-txt-record"),
 		DNSTxtValue:                cmd.Config.String("dns-txt-value"),
-		AcmeChallengePath:          lo.ToPtr(cmd.Config.String("acme-challenge-path")),
-		ExpectedAcmeChallengeValue: lo.ToPtr(cmd.Config.String("acme-challenge-value")),
-		OwnerID:                    lo.ToPtr(cmd.Config.String("org-id")),
+		AcmeChallengePath:          new(cmd.Config.String("acme-challenge-path")),
+		ExpectedAcmeChallengeValue: new(cmd.Config.String("acme-challenge-value")),
+		OwnerID:                    new(cmd.Config.String("org-id")),
 	}
 
 	o, err := client.CreateDNSVerification(ctx, input)

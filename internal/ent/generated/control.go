@@ -53,6 +53,8 @@ type Control struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
@@ -647,7 +649,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case control.FieldSystemOwned, control.FieldWorkflowEligibleMarker, control.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldUpdatedByImpersonator, control.FieldDeletedBy, control.FieldDisplayID, control.FieldSourceDefinitionID, control.FieldSourceDefinitionVersion, control.FieldSourceInstanceID, control.FieldManagedBy, control.FieldIntegrationRunID, control.FieldExternalID, control.FieldExternalUUID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldImplementationStatus, control.FieldImplementationDescription, control.FieldPublicRepresentation, control.FieldSource, control.FieldSourceName, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID, control.FieldTrustCenterVisibility:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldUpdatedByImpersonator, control.FieldDeletedBy, control.FieldDisplayID, control.FieldSourceDefinitionID, control.FieldSourceDefinitionVersion, control.FieldSourceInstanceID, control.FieldManagedBy, control.FieldIntegrationRunID, control.FieldSourceKey, control.FieldExternalID, control.FieldExternalUUID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldImplementationStatus, control.FieldImplementationDescription, control.FieldPublicRepresentation, control.FieldSource, control.FieldSourceName, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID, control.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -760,6 +762,12 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case control.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case control.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1347,6 +1355,9 @@ func (_m *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

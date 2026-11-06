@@ -3,14 +3,15 @@
     "technology",
     "collaboration"
   ],
-  "systemInternalID": "entity::0Xm9dLb5VebudLDH6npaNw",
+  "external_id": "entity::0Xm9dLb5VebudLDH6npaNw",
+  "system_internal_id": "entity::0Xm9dLb5VebudLDH6npaNw",
   "name": "airtable",
-  "displayName": "Airtable",
+  "display_name": "Airtable",
   "description": "Airtable is an AI-native platform that enables organizations to build custom AI applications to accelerate business operations and streamline workflows. With its AI app builder and agent software, teams can create apps that drive innovation, improve customer experiences, and enhance governance, allowing businesses to work more efficiently and effectively.",
   "domains": [
     "airtable.com"
   ],
-  "entityTypeName": "vendor",
-  "externallyVisible": true,
-  "logoRemoteURL": "https://www.google.com/s2/favicons?domain=airtable.com&sz=128"
+  "entity_type_name": "vendor",
+  "externally_visible": true,
+  "logo_remote_url": "https://www.google.com/s2/favicons?domain=airtable.com&sz=128"
 }

@@ -314,8 +314,8 @@ func TestAccessKeyCredentialsProviderCredentials(t *testing.T) {
 
 func TestR2CredentialsProviderCredentials(t *testing.T) {
 	creds := R2Credentials{
-		AccessKeyCredentials: AccessKeyCredentials{AccessKeyID: "key", SecretAccessKey: "secret"},
-		AccountID:            "account",
+		AccessKeyID: "key", SecretAccessKey: "secret",
+		AccountID: "account",
 	}
 
 	assert.Check(t, is.DeepEqual(ProviderCredentials{AccessKeyID: "key", SecretAccessKey: "secret", AccountID: "account"}, creds.ProviderCredentials()))

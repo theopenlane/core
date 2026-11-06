@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -206,7 +205,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			request: testclient.CreateSubprocessorInput{
 				Name: "Test Subprocessor",
 			},
-			expectedOwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
+			expectedOwnerID: new(th.SharedTestUser1.OrganizationID),
 			client:          suite.Client.API,
 			ctx:             th.SharedTestUser1.UserCtx,
 		},
@@ -214,10 +213,10 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			name: "happy path with description and logo upload",
 			request: testclient.CreateSubprocessorInput{
 				Name:        "Test Subprocessor with Description",
-				Description: lo.ToPtr("This is a test subprocessor"),
+				Description: new("This is a test subprocessor"),
 			},
 			upload:          createImageUpload(),
-			expectedOwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
+			expectedOwnerID: new(th.SharedTestUser1.OrganizationID),
 			client:          suite.Client.API,
 			ctx:             th.SharedTestUser1.UserCtx,
 		},
@@ -226,7 +225,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			request: testclient.CreateSubprocessorInput{
 				Name: "Admin Test Subprocessor",
 			},
-			expectedOwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
+			expectedOwnerID: new(th.SharedTestUser1.OrganizationID),
 			client:          suite.Client.API,
 			ctx:             th.SharedAdminUser.UserCtx,
 		},
@@ -234,7 +233,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			name: "not authorized",
 			request: testclient.CreateSubprocessorInput{
 				Name:    "Unauthorized Subprocessor",
-				OwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				OwnerID: new(th.SharedTestUser1.OrganizationID),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -243,7 +242,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 		{
 			name: "missing name",
 			request: testclient.CreateSubprocessorInput{
-				OwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				OwnerID: new(th.SharedTestUser1.OrganizationID),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -385,8 +384,8 @@ func TestUpdateSubprocessor(t *testing.T) {
 			client:  suite.Client.API,
 			ctx:     th.SharedTestUser1.UserCtx,
 			updateInput: testclient.UpdateSubprocessorInput{
-				Name:        lo.ToPtr("Updated Subprocessor Name"),
-				Description: lo.ToPtr("Updated description"),
+				Name:        new("Updated Subprocessor Name"),
+				Description: new("Updated description"),
 			},
 		},
 		{
@@ -395,8 +394,8 @@ func TestUpdateSubprocessor(t *testing.T) {
 			client:  suite.Client.API,
 			ctx:     th.SharedSystemAdminUser.UserCtx,
 			updateInput: testclient.UpdateSubprocessorInput{
-				Name:        lo.ToPtr("Updated System Owned Subprocessor Name"),
-				Description: lo.ToPtr("Updated system owned description"),
+				Name:        new("Updated System Owned Subprocessor Name"),
+				Description: new("Updated system owned description"),
 			},
 		},
 		{
@@ -405,7 +404,7 @@ func TestUpdateSubprocessor(t *testing.T) {
 			client:  suite.Client.API,
 			ctx:     th.SharedTestUser1.UserCtx,
 			updateInput: testclient.UpdateSubprocessorInput{
-				LogoRemoteURL: lo.ToPtr("https://example.com/new-logo.png"),
+				LogoRemoteURL: new("https://example.com/new-logo.png"),
 			},
 		},
 		{

@@ -23,6 +23,11 @@ type ownerMutation interface {
 	OwnerID() (id string, exists bool)
 }
 
+// HasCurrentOrgFullAccess reports whether the caller is an owner or super admin of the current organization
+func HasCurrentOrgFullAccess(ctx context.Context) bool {
+	return access.Allow(CheckCurrentOrgAccess(ctx, nil, fgax.FullAccessRelation))
+}
+
 // CheckCurrentOrgAccess checks if the authenticated user has access to the organization
 // based on the relation provided
 // This rule assumes that the organization id and user id are set in the context

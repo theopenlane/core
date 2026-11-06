@@ -124,10 +124,8 @@ func TestValidateReviewActionParams(t *testing.T) {
 	t.Parallel()
 
 	params := workflows.ReviewActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: "user-1"},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: "user-1"},
 		},
 		Label: "Review Required",
 	}

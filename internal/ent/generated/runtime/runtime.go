@@ -1808,7 +1808,7 @@ func init() {
 	// directoryaccount.DefaultTags holds the default value on creation for the tags field.
 	directoryaccount.DefaultTags = directoryaccountDescTags.Default.([]string)
 	// directoryaccountDescExternalID is the schema descriptor for external_id field.
-	directoryaccountDescExternalID := directoryaccountMixinFields6[5].Descriptor()
+	directoryaccountDescExternalID := directoryaccountMixinFields6[6].Descriptor()
 	// directoryaccount.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directoryaccount.ExternalIDValidator = directoryaccountDescExternalID.Validators[0].(func(string) error)
 	// directoryaccountDescOwnerID is the schema descriptor for owner_id field.
@@ -1931,7 +1931,7 @@ func init() {
 	// directorygroup.DefaultTags holds the default value on creation for the tags field.
 	directorygroup.DefaultTags = directorygroupDescTags.Default.([]string)
 	// directorygroupDescExternalID is the schema descriptor for external_id field.
-	directorygroupDescExternalID := directorygroupMixinFields6[5].Descriptor()
+	directorygroupDescExternalID := directorygroupMixinFields6[6].Descriptor()
 	// directorygroup.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directorygroup.ExternalIDValidator = directorygroupDescExternalID.Validators[0].(func(string) error)
 	// directorygroupDescOwnerID is the schema descriptor for owner_id field.
@@ -7519,7 +7519,7 @@ func init() {
 	// task.DefaultPriority holds the default value on creation for the priority field.
 	task.DefaultPriority = taskDescPriority.Default.(int)
 	// taskDescExternalReferenceURL is the schema descriptor for external_reference_url field.
-	taskDescExternalReferenceURL := taskFields[17].Descriptor()
+	taskDescExternalReferenceURL := taskFields[16].Descriptor()
 	// task.ExternalReferenceURLValidator is a validator for the "external_reference_url" field. It is called by the builders before save.
 	task.ExternalReferenceURLValidator = taskDescExternalReferenceURL.Validators[0].(func([]string) error)
 	// taskDescID is the schema descriptor for id field.
@@ -8964,7 +8964,7 @@ func init() {
 	// vulnerability.DefaultTags holds the default value on creation for the tags field.
 	vulnerability.DefaultTags = vulnerabilityDescTags.Default.([]string)
 	// vulnerabilityDescExternalID is the schema descriptor for external_id field.
-	vulnerabilityDescExternalID := vulnerabilityMixinFields7[5].Descriptor()
+	vulnerabilityDescExternalID := vulnerabilityMixinFields7[6].Descriptor()
 	// vulnerability.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	vulnerability.ExternalIDValidator = vulnerabilityDescExternalID.Validators[0].(func(string) error)
 	// vulnerabilityDescOwnerID is the schema descriptor for owner_id field.

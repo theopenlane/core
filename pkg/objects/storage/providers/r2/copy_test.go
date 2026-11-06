@@ -35,7 +35,7 @@ func TestR2ProviderCopy(t *testing.T) {
 	assert.Assert(t, ok, "the r2 provider must implement storage.Copier")
 
 	content := []byte(`{"systemInternalID":"entity::copy"}`)
-	source := &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "vendors/copy me.json"}}
+	source := &storagetypes.File{Key: "vendors/copy me.json"}
 
 	_, err = provider.Upload(ctx, bytes.NewReader(content), &storagetypes.UploadFileOptions{FileName: source.Key, ContentType: "application/json"})
 	assert.NilError(t, err)
@@ -43,7 +43,7 @@ func TestR2ProviderCopy(t *testing.T) {
 	destination := "vendors/processed/copy me.json"
 	assert.NilError(t, copier.Copy(ctx, source, &storage.CopyOptions{Key: destination}))
 
-	copied, err := provider.Download(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: destination}}, &storagetypes.DownloadFileOptions{})
+	copied, err := provider.Download(ctx, &storagetypes.File{Key: destination}, &storagetypes.DownloadFileOptions{})
 	assert.NilError(t, err)
 	assert.Check(t, is.DeepEqual(content, copied.File))
 
@@ -52,7 +52,7 @@ func TestR2ProviderCopy(t *testing.T) {
 	assert.Check(t, exists, "copy must leave the source in place")
 
 	t.Run("missing source fails", func(t *testing.T) {
-		err := copier.Copy(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "vendors/missing.json"}}, &storage.CopyOptions{Key: "vendors/processed/missing.json"})
+		err := copier.Copy(ctx, &storagetypes.File{Key: "vendors/missing.json"}, &storage.CopyOptions{Key: "vendors/processed/missing.json"})
 		assert.Check(t, err != nil)
 	})
 }

@@ -53,6 +53,8 @@ type Platform struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -826,7 +828,7 @@ func (*Platform) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case platform.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case platform.FieldID, platform.FieldCreatedBy, platform.FieldUpdatedBy, platform.FieldUpdatedByImpersonator, platform.FieldDeletedBy, platform.FieldDisplayID, platform.FieldSourceDefinitionID, platform.FieldSourceDefinitionVersion, platform.FieldSourceInstanceID, platform.FieldManagedBy, platform.FieldIntegrationRunID, platform.FieldExternalID, platform.FieldOwnerID, platform.FieldInternalOwner, platform.FieldInternalOwnerUserID, platform.FieldInternalOwnerGroupID, platform.FieldInternalOwnerIdentityHolderID, platform.FieldBusinessOwner, platform.FieldBusinessOwnerUserID, platform.FieldBusinessOwnerGroupID, platform.FieldBusinessOwnerIdentityHolderID, platform.FieldTechnicalOwner, platform.FieldTechnicalOwnerUserID, platform.FieldTechnicalOwnerGroupID, platform.FieldTechnicalOwnerIdentityHolderID, platform.FieldSecurityOwner, platform.FieldSecurityOwnerUserID, platform.FieldSecurityOwnerGroupID, platform.FieldSecurityOwnerIdentityHolderID, platform.FieldPlatformKindName, platform.FieldPlatformKindID, platform.FieldPlatformDataClassificationName, platform.FieldPlatformDataClassificationID, platform.FieldEnvironmentName, platform.FieldEnvironmentID, platform.FieldScopeName, platform.FieldScopeID, platform.FieldAccessModelName, platform.FieldAccessModelID, platform.FieldEncryptionStatusName, platform.FieldEncryptionStatusID, platform.FieldSecurityTierName, platform.FieldSecurityTierID, platform.FieldCriticalityName, platform.FieldCriticalityID, platform.FieldExternalUUID, platform.FieldName, platform.FieldDescription, platform.FieldBusinessPurpose, platform.FieldScopeStatement, platform.FieldTrustBoundaryDescription, platform.FieldDataFlowSummary, platform.FieldStatus, platform.FieldPhysicalLocation, platform.FieldRegion, platform.FieldSourceType, platform.FieldSourceIdentifier, platform.FieldCostCenter, platform.FieldPlatformOwnerID, platform.FieldExternalReferenceID:
+		case platform.FieldID, platform.FieldCreatedBy, platform.FieldUpdatedBy, platform.FieldUpdatedByImpersonator, platform.FieldDeletedBy, platform.FieldDisplayID, platform.FieldSourceDefinitionID, platform.FieldSourceDefinitionVersion, platform.FieldSourceInstanceID, platform.FieldManagedBy, platform.FieldIntegrationRunID, platform.FieldSourceKey, platform.FieldExternalID, platform.FieldOwnerID, platform.FieldInternalOwner, platform.FieldInternalOwnerUserID, platform.FieldInternalOwnerGroupID, platform.FieldInternalOwnerIdentityHolderID, platform.FieldBusinessOwner, platform.FieldBusinessOwnerUserID, platform.FieldBusinessOwnerGroupID, platform.FieldBusinessOwnerIdentityHolderID, platform.FieldTechnicalOwner, platform.FieldTechnicalOwnerUserID, platform.FieldTechnicalOwnerGroupID, platform.FieldTechnicalOwnerIdentityHolderID, platform.FieldSecurityOwner, platform.FieldSecurityOwnerUserID, platform.FieldSecurityOwnerGroupID, platform.FieldSecurityOwnerIdentityHolderID, platform.FieldPlatformKindName, platform.FieldPlatformKindID, platform.FieldPlatformDataClassificationName, platform.FieldPlatformDataClassificationID, platform.FieldEnvironmentName, platform.FieldEnvironmentID, platform.FieldScopeName, platform.FieldScopeID, platform.FieldAccessModelName, platform.FieldAccessModelID, platform.FieldEncryptionStatusName, platform.FieldEncryptionStatusID, platform.FieldSecurityTierName, platform.FieldSecurityTierID, platform.FieldCriticalityName, platform.FieldCriticalityID, platform.FieldExternalUUID, platform.FieldName, platform.FieldDescription, platform.FieldBusinessPurpose, platform.FieldScopeStatement, platform.FieldTrustBoundaryDescription, platform.FieldDataFlowSummary, platform.FieldStatus, platform.FieldPhysicalLocation, platform.FieldRegion, platform.FieldSourceType, platform.FieldSourceIdentifier, platform.FieldCostCenter, platform.FieldPlatformOwnerID, platform.FieldExternalReferenceID:
 			values[i] = new(sql.NullString)
 		case platform.FieldCreatedAt, platform.FieldUpdatedAt, platform.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -941,6 +943,12 @@ func (_m *Platform) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case platform.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case platform.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1618,6 +1626,9 @@ func (_m *Platform) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

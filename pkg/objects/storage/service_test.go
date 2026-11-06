@@ -63,10 +63,8 @@ func (m *mockProvider) Upload(ctx context.Context, reader io.Reader, opts *stora
 	}
 	return &storagetypes.UploadedFileMetadata{
 		TimeUploaded: time.Now(),
-		FileMetadata: storagetypes.FileMetadata{
-			Key:  "test-key",
-			Size: 100,
-		},
+		Key:          "test-key",
+		Size:         100,
 	}, nil
 }
 
@@ -213,10 +211,8 @@ func TestObjectService_Download(t *testing.T) {
 		provider := &mockProvider{}
 
 		file := &storagetypes.File{
-			ID: "test-id",
-			FileMetadata: storage.FileMetadata{
-				Key: "test-key",
-			},
+			ID:  "test-id",
+			Key: "test-key",
 		}
 
 		opts := &storagetypes.DownloadFileOptions{
@@ -254,10 +250,8 @@ func TestObjectService_GetPresignedURL(t *testing.T) {
 		provider := &mockProvider{}
 
 		file := &storagetypes.File{
-			ID: "test-id",
-			FileMetadata: storage.FileMetadata{
-				Key: "test-key",
-			},
+			ID:  "test-id",
+			Key: "test-key",
 		}
 
 		opts := &storagetypes.PresignedURLOptions{
@@ -294,10 +288,8 @@ func TestObjectService_Delete(t *testing.T) {
 		provider := &mockProvider{}
 
 		file := &storagetypes.File{
-			ID: "test-id",
-			FileMetadata: storage.FileMetadata{
-				Key: "test-key",
-			},
+			ID:  "test-id",
+			Key: "test-key",
 		}
 
 		opts := &storagetypes.DeleteFileOptions{

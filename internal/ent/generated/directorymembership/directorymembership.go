@@ -40,6 +40,8 @@ const (
 	FieldManagedBy = "managed_by"
 	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldSourceKey holds the string denoting the source_key field in the database.
+	FieldSourceKey = "source_key"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
@@ -178,6 +180,7 @@ var Columns = []string{
 	FieldSourceInstanceID,
 	FieldManagedBy,
 	FieldIntegrationRunID,
+	FieldSourceKey,
 	FieldOwnerID,
 	FieldEnvironmentName,
 	FieldEnvironmentID,
@@ -318,6 +321,11 @@ func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByIntegrationRunID orders the results by the integration_run_id field.
 func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
+// BySourceKey orders the results by the source_key field.
+func BySourceKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceKey, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

@@ -186,16 +186,14 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		OrganizationSettingsID:     org.Edges.Setting.ID,
 		OrganizationSubscriptionID: sub.ID,
 		OrganizationName:           org.Name,
-		ContactInfo: entitlements.ContactInfo{
-			Email:      org.Edges.Setting.BillingEmail,
-			Phone:      org.Edges.Setting.BillingPhone,
-			Line1:      &org.Edges.Setting.BillingAddress.Line1,
-			Line2:      &org.Edges.Setting.BillingAddress.Line2,
-			City:       &org.Edges.Setting.BillingAddress.City,
-			State:      &org.Edges.Setting.BillingAddress.State,
-			Country:    &org.Edges.Setting.BillingAddress.Country,
-			PostalCode: &org.Edges.Setting.BillingAddress.PostalCode,
-		},
+		Email:                      org.Edges.Setting.BillingEmail,
+		Phone:                      org.Edges.Setting.BillingPhone,
+		Line1:                      &org.Edges.Setting.BillingAddress.Line1,
+		Line2:                      &org.Edges.Setting.BillingAddress.Line2,
+		City:                       &org.Edges.Setting.BillingAddress.City,
+		State:                      &org.Edges.Setting.BillingAddress.State,
+		Country:                    &org.Edges.Setting.BillingAddress.Country,
+		PostalCode:                 &org.Edges.Setting.BillingAddress.PostalCode,
 	}
 
 	if cust.Prices == nil && r.db != nil && r.db.EntConfig != nil {

@@ -73,10 +73,8 @@ func TestDevModeRuntimeClient_SendsWelcomeEmail(t *testing.T) {
 	welcome := testDispatcher[WelcomeRequest](t, "WelcomeRequest")
 
 	err = welcome.SendByKey(context.Background(), types.OperationRequest{}, client, mustMarshal(t, WelcomeRequest{
-		RecipientInfo: RecipientInfo{
-			Email:     "dev@example.com",
-			FirstName: "Dev",
-		},
+		Email:     "dev@example.com",
+		FirstName: "Dev",
 	}))
 	assert.NilError(t, err)
 
