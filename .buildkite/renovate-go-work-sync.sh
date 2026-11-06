@@ -49,6 +49,6 @@ changed_files_as_additions | jq -s \
     fileChanges: {additions: .}
   }}}' | gh api graphql --input -
 
-# Fail on purpose so cancel_on_build_failing stops this superseded build
+# Fail on purpose so the wait step in pipeline.yaml stops this superseded build
 echo "🔁 Committed go work sync changes, the new commit will run its own build"
 exit 1
