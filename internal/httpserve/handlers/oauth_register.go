@@ -71,7 +71,7 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 
 	switch {
 	case user.Edges.Setting.IsTfaEnabled:
-		return h.startTFAAuthentication(ctx, user.ID)
+		return h.startTFAAuthentication(ctx, user.ID, "")
 	case orgStatus != nil && orgStatus.OrgTFAEnforced:
 		return h.startTFAEnrollment(ctx, user)
 	}

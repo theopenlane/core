@@ -90,12 +90,12 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 
 	switch {
 	case user.Edges.Setting.IsTfaEnabled:
-		return h.startTFAAuthentication(ctx, user.ID)
+		return h.startTFAAuthentication(ctx, user.ID, "")
 	case orgTFAEnforced:
 		return h.startTFAEnrollment(ctx, user)
 	}
 
-	authData, err := h.generateAuthSession(ctx, user, false)
+	authData, err := h.generateAuthSession(ctx, user, false, "")
 	if err != nil {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -112,7 +112,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 // startTFAEnrollment issues an enrollment-only session when the organization enforces two factor authentication
 // and the user has not enrolled yet
 func (h *Handler) startTFAEnrollment(ctx echo.Context, user *ent.User) error {
-	authData, err := h.generateAuthSession(ctx, user, true)
+	authData, err := h.generateAuthSession(ctx, user, true, "")
 	if err != nil {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -127,12 +127,13 @@ func (h *Handler) startTFAEnrollment(ctx echo.Context, user *ent.User) error {
 	})
 }
 
-// generateAuthSession mints the session for the user in their default organization, enrollment-only when tfaEnrollmentRequired is set
-func (h *Handler) generateAuthSession(ctx echo.Context, user *ent.User, tfaEnrollmentRequired bool) (*models.AuthData, error) {
+// generateAuthSession mints the session for the user. if the orgID is provided, the session is scoped there else it
+// uses the default organization of the user. enrollment-only when tfaEnrollmentRequired is set
+func (h *Handler) generateAuthSession(ctx echo.Context, user *ent.User, tfaEnrollmentRequired bool, orgID string) (*models.AuthData, error) {
 	reqCtx := ctx.Request().Context()
 	userCtx := setAuthenticatedContext(reqCtx, user)
 
-	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(userCtx, ctx.Response().Writer, user, "", tfaEnrollmentRequired)
+	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(userCtx, ctx.Response().Writer, user, orgID, tfaEnrollmentRequired)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 

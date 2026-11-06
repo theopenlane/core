@@ -266,7 +266,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	if !isTestingSSO {
 		switch {
 		case entUser.Edges.Setting.IsTfaEnabled:
-			return h.startTFAAuthentication(ctx, entUser.ID)
+			return h.startTFAAuthentication(ctx, entUser.ID, in.OrganizationID)
 		case orgStatus.OrgTFAEnforced:
 			return h.startTFAEnrollment(ctx, entUser)
 		}
