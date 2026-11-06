@@ -133,7 +133,7 @@ func TestMutationSetupTrustCenterDomains(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Check(t, resp.SetupTrustCenterDomains.Success)
 
-			setting, err := suite.Client.API.GetTrustCenterSettingByID(org.Owner.UserCtx, org.TrustCenter.Edges.Setting.ID)
+			setting, err := suite.Client.API.GetTrustCenterSettingByID(org.Owner.UserCtx, org.TrustCenter.Edges.PreviewSetting.ID)
 			assert.NilError(t, err)
 			assert.Assert(t, setting.TrustCenterSetting.DisableDefaultDomain != nil)
 			assert.Check(t, !lo.FromPtr(setting.TrustCenterSetting.DisableDefaultDomain))
