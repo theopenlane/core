@@ -176,6 +176,104 @@ func (_c *VendorRiskScoreHistoryCreate) SetNillableOwnerID(v *string) *VendorRis
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *VendorRiskScoreHistoryCreate) SetSourceDefinitionID(v string) *VendorRiskScoreHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *VendorRiskScoreHistoryCreate) SetNillableSourceDefinitionID(v *string) *VendorRiskScoreHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *VendorRiskScoreHistoryCreate) SetSourceDefinitionVersion(v string) *VendorRiskScoreHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *VendorRiskScoreHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *VendorRiskScoreHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *VendorRiskScoreHistoryCreate) SetSourceInstanceID(v string) *VendorRiskScoreHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *VendorRiskScoreHistoryCreate) SetNillableSourceInstanceID(v *string) *VendorRiskScoreHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *VendorRiskScoreHistoryCreate) SetManagedBy(v string) *VendorRiskScoreHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *VendorRiskScoreHistoryCreate) SetNillableManagedBy(v *string) *VendorRiskScoreHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *VendorRiskScoreHistoryCreate) SetIntegrationRunID(v string) *VendorRiskScoreHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *VendorRiskScoreHistoryCreate) SetNillableIntegrationRunID(v *string) *VendorRiskScoreHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_c *VendorRiskScoreHistoryCreate) SetSourceKey(v string) *VendorRiskScoreHistoryCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *VendorRiskScoreHistoryCreate) SetNillableSourceKey(v *string) *VendorRiskScoreHistoryCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *VendorRiskScoreHistoryCreate) SetExternalID(v string) *VendorRiskScoreHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *VendorRiskScoreHistoryCreate) SetNillableExternalID(v *string) *VendorRiskScoreHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetQuestionKey sets the "question_key" field.
 func (_c *VendorRiskScoreHistoryCreate) SetQuestionKey(v string) *VendorRiskScoreHistoryCreate {
 	_c.mutation.SetQuestionKey(v)
@@ -531,6 +629,34 @@ func (_c *VendorRiskScoreHistoryCreate) createSpec() (*VendorRiskScoreHistory, *
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(vendorriskscorehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(vendorriskscorehistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(vendorriskscorehistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(vendorriskscorehistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(vendorriskscorehistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(vendorriskscorehistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(vendorriskscorehistory.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(vendorriskscorehistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.QuestionKey(); ok {
 		_spec.SetField(vendorriskscorehistory.FieldQuestionKey, field.TypeString, value)

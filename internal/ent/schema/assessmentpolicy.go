@@ -95,8 +95,7 @@ func (AssessmentPolicy) Indexes() []ent.Index {
 func (AssessmentPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.IntegrationMappingSchema().
-			StockPersist().
-			LookupAlternative(externalIDFieldName),
+			StockPersist(),
 	}
 }
 

@@ -7805,31 +7805,39 @@ type ComplexityRoot struct {
 	}
 
 	VendorRiskScore struct {
-		Answer                func(childComplexity int) int
-		AnswerType            func(childComplexity int) int
-		AssessmentResponse    func(childComplexity int) int
-		AssessmentResponseID  func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Entity                func(childComplexity int) int
-		EntityID              func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Impact                func(childComplexity int) int
-		Likelihood            func(childComplexity int) int
-		Notes                 func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		QuestionCategory      func(childComplexity int) int
-		QuestionDescription   func(childComplexity int) int
-		QuestionKey           func(childComplexity int) int
-		QuestionName          func(childComplexity int) int
-		Score                 func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		VendorScoringConfig   func(childComplexity int) int
-		VendorScoringConfigID func(childComplexity int) int
+		Answer                  func(childComplexity int) int
+		AnswerType              func(childComplexity int) int
+		AssessmentResponse      func(childComplexity int) int
+		AssessmentResponseID    func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Entity                  func(childComplexity int) int
+		EntityID                func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Impact                  func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
+		Likelihood              func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Notes                   func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		QuestionCategory        func(childComplexity int) int
+		QuestionDescription     func(childComplexity int) int
+		QuestionKey             func(childComplexity int) int
+		QuestionName            func(childComplexity int) int
+		Score                   func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		VendorScoringConfig     func(childComplexity int) int
+		VendorScoringConfigID   func(childComplexity int) int
 	}
 
 	VendorRiskScoreBulkCreatePayload struct {
@@ -50738,6 +50746,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScore.EntityID(childComplexity), true
+	case "VendorRiskScore.externalID":
+		if e.ComplexityRoot.VendorRiskScore.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.ExternalID(childComplexity), true
 	case "VendorRiskScore.id":
 		if e.ComplexityRoot.VendorRiskScore.ID == nil {
 			break
@@ -50750,12 +50764,35 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScore.Impact(childComplexity), true
+	case "VendorRiskScore.integrationRunID":
+		if e.ComplexityRoot.VendorRiskScore.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.IntegrationRunID(childComplexity), true
+	case "VendorRiskScore.integrationRuns":
+		if e.ComplexityRoot.VendorRiskScore.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_VendorRiskScore_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "VendorRiskScore.likelihood":
 		if e.ComplexityRoot.VendorRiskScore.Likelihood == nil {
 			break
 		}
 
 		return e.ComplexityRoot.VendorRiskScore.Likelihood(childComplexity), true
+	case "VendorRiskScore.managedBy":
+		if e.ComplexityRoot.VendorRiskScore.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.ManagedBy(childComplexity), true
 	case "VendorRiskScore.notes":
 		if e.ComplexityRoot.VendorRiskScore.Notes == nil {
 			break
@@ -50804,6 +50841,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScore.Score(childComplexity), true
+	case "VendorRiskScore.sourceDefinitionID":
+		if e.ComplexityRoot.VendorRiskScore.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.SourceDefinitionID(childComplexity), true
+	case "VendorRiskScore.sourceDefinitionVersion":
+		if e.ComplexityRoot.VendorRiskScore.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.SourceDefinitionVersion(childComplexity), true
+	case "VendorRiskScore.sourceInstanceID":
+		if e.ComplexityRoot.VendorRiskScore.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.SourceInstanceID(childComplexity), true
+	case "VendorRiskScore.sourceKey":
+		if e.ComplexityRoot.VendorRiskScore.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.SourceKey(childComplexity), true
 	case "VendorRiskScore.tags":
 		if e.ComplexityRoot.VendorRiskScore.Tags == nil {
 			break
@@ -77407,6 +77468,10 @@ input CreateVendorRiskScoreInput {
   """
   tags: [String!]
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String!
@@ -77439,6 +77504,7 @@ input CreateVendorRiskScoreInput {
   """
   notes: String
   ownerID: ID
+  integrationRunIDs: [ID!]
   vendorScoringConfigID: ID
   entityID: ID!
   assessmentResponseID: ID
@@ -142859,6 +142925,11 @@ input UpdateVendorRiskScoreInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  clearExternalID: Boolean
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String
@@ -142893,6 +142964,9 @@ input UpdateVendorRiskScoreInput {
   """
   notes: String
   clearNotes: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   vendorScoringConfigID: ID
   clearVendorScoringConfig: Boolean
   entityID: ID
@@ -144968,6 +145042,34 @@ type VendorRiskScore implements Node @modules(names: ["entity_management_module"
   """
   ownerID: ID
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String!
@@ -145020,6 +145122,37 @@ type VendorRiskScore implements Node @modules(names: ["entity_management_module"
   """
   assessmentResponseID: ID
   owner: Organization
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   vendorScoringConfig: VendorScoringConfig
   entity: Entity!
   assessmentResponse: AssessmentResponse
@@ -145073,6 +145206,7 @@ Properties by which VendorRiskScore connections can be ordered.
 enum VendorRiskScoreOrderField {
   created_at
   updated_at
+  external_id
   question_key
   question_category
   impact
@@ -145215,6 +145349,104 @@ input VendorRiskScoreWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   question_key field predicates
   """
@@ -145365,6 +145597,11 @@ input VendorRiskScoreWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   vendor_scoring_config edge predicates
   """
@@ -177589,6 +177826,20 @@ func (ec *executionContext) childFields_VendorRiskScore(ctx context.Context, fie
 		return ec.fieldContext_VendorRiskScore_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_VendorRiskScore_ownerID(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_VendorRiskScore_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_VendorRiskScore_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_VendorRiskScore_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_VendorRiskScore_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_VendorRiskScore_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_VendorRiskScore_sourceKey(ctx, field)
+	case "externalID":
+		return ec.fieldContext_VendorRiskScore_externalID(ctx, field)
 	case "questionKey":
 		return ec.fieldContext_VendorRiskScore_questionKey(ctx, field)
 	case "questionName":
@@ -177617,6 +177868,8 @@ func (ec *executionContext) childFields_VendorRiskScore(ctx context.Context, fie
 		return ec.fieldContext_VendorRiskScore_assessmentResponseID(ctx, field)
 	case "owner":
 		return ec.fieldContext_VendorRiskScore_owner(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_VendorRiskScore_integrationRuns(ctx, field)
 	case "vendorScoringConfig":
 		return ec.fieldContext_VendorRiskScore_vendorScoringConfig(ctx, field)
 	case "entity":

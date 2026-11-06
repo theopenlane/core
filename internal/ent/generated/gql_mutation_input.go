@@ -29610,6 +29610,7 @@ func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUp
 // CreateVendorRiskScoreInput represents a mutation input for creating vendorriskscores.
 type CreateVendorRiskScoreInput struct {
 	Tags                  []string                    `json:"tags,omitempty"`
+	ExternalID            *string                     `json:"external_id,omitempty"`
 	QuestionKey           string                      `json:"question_key,omitempty"`
 	QuestionName          string                      `json:"question_name,omitempty"`
 	QuestionDescription   *string                     `json:"question_description,omitempty"`
@@ -29619,6 +29620,7 @@ type CreateVendorRiskScoreInput struct {
 	Answer                *string                     `json:"answer,omitempty"`
 	Notes                 *string                     `json:"notes,omitempty"`
 	OwnerID               *string                     `json:"owner_id,omitempty"`
+	IntegrationRunIDs     []string                    `json:"integration_run_ids,omitempty"`
 	VendorScoringConfigID *string                     `json:"vendor_scoring_config_id,omitempty"`
 	EntityID              string                      `json:"entity_id,omitempty"`
 	AssessmentResponseID  *string                     `json:"assessment_response_id,omitempty"`
@@ -29628,6 +29630,9 @@ type CreateVendorRiskScoreInput struct {
 func (i *CreateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	m.SetQuestionKey(i.QuestionKey)
 	m.SetQuestionName(i.QuestionName)
@@ -29645,6 +29650,9 @@ func (i *CreateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.VendorScoringConfigID; v != nil {
 		m.SetVendorScoringConfigID(*v)
@@ -29666,6 +29674,8 @@ type UpdateVendorRiskScoreInput struct {
 	ClearTags                bool
 	Tags                     []string `json:"tags,omitempty"`
 	AppendTags               []string
+	ClearExternalID          bool
+	ExternalID               *string `json:"external_id,omitempty"`
 	QuestionKey              *string `json:"question_key,omitempty"`
 	QuestionName             *string `json:"question_name,omitempty"`
 	ClearQuestionDescription bool
@@ -29677,6 +29687,9 @@ type UpdateVendorRiskScoreInput struct {
 	Answer                   *string `json:"answer,omitempty"`
 	ClearNotes               bool
 	Notes                    *string `json:"notes,omitempty"`
+	ClearIntegrationRuns     bool
+	AddIntegrationRunIDs     []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs  []string `json:"remove_integration_run_ids,omitempty"`
 	ClearVendorScoringConfig bool
 	VendorScoringConfigID    *string `json:"vendor_scoring_config_id,omitempty"`
 	EntityID                 *string `json:"entity_id,omitempty"`
@@ -29694,6 +29707,12 @@ func (i *UpdateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.QuestionKey; v != nil {
 		m.SetQuestionKey(*v)
@@ -29727,6 +29746,15 @@ func (i *UpdateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
 	}
 	if v := i.Notes; v != nil {
 		m.SetNotes(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearVendorScoringConfig {
 		m.ClearVendorScoringConfig()

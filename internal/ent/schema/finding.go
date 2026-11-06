@@ -379,7 +379,7 @@ func (f Finding) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "FIND",
 		additionalMixins: []ent.Mixin{
-			newProvenanceMixin(f, withSearchableExternalID(), withoutExternalIDIndex()),
+			newProvenanceMixin(f, withSearchableExternalID(), withoutExternalIDIndex(), withoutExternalIDLookupKey()),
 			newObjectOwnedMixin[generated.Finding](f,
 				withParents(
 					Program{},

@@ -171,6 +171,6 @@ func (c Contact) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaContact),
 		entx.NewExportable(),
-		entx.IntegrationMappingSchema().StockPersist().LookupAlternative(externalIDFieldName).LookupAlternative("email"),
+		entx.IntegrationMappingSchema().StockPersist().LookupAlternative("email"),
 	}
 }

@@ -100,6 +100,27 @@ func (_u *VendorRiskScoreHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(vendorriskscorehistory.FieldOwnerID, field.TypeString)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldSourceKey, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.QuestionDescriptionCleared() {
 		_spec.ClearField(vendorriskscorehistory.FieldQuestionDescription, field.TypeString)
 	}
@@ -235,6 +256,27 @@ func (_u *VendorRiskScoreHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(vendorriskscorehistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldSourceKey, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(vendorriskscorehistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.QuestionDescriptionCleared() {
 		_spec.ClearField(vendorriskscorehistory.FieldQuestionDescription, field.TypeString)

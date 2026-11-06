@@ -33,6 +33,8 @@ type ProvenanceMixin struct {
 	SearchableExternalID bool
 	// ImmutableExternalID prevents the external_id field from changing after create
 	ImmutableExternalID bool
+	// OmitExternalIDLookupKey leaves external_id out of the stock ingest lookup
+	OmitExternalIDLookupKey bool
 }
 
 // provenanceOption configures the ProvenanceMixin
@@ -65,6 +67,13 @@ func withoutExternalID() provenanceOption {
 func withoutExternalIDIndex() provenanceOption {
 	return func(p *ProvenanceMixin) {
 		p.IncludeExternalIDIndex = false
+	}
+}
+
+// withoutExternalIDLookupKey keeps external_id but leaves ingest lookup to the schema's declared alternatives
+func withoutExternalIDLookupKey() provenanceOption {
+	return func(p *ProvenanceMixin) {
+		p.OmitExternalIDLookupKey = true
 	}
 }
 
@@ -152,9 +161,14 @@ func (p ProvenanceMixin) Fields() []ent.Field {
 
 // externalIDField returns the external_id field configured by the mixin options
 func (p ProvenanceMixin) externalIDField() ent.Field {
+	mapping := entx.IntegrationMappingField()
+	if !p.OmitExternalIDLookupKey {
+		mapping = mapping.LookupKey()
+	}
+
 	annotations := []schema.Annotation{
 		entgql.OrderField(externalIDFieldName),
-		entx.IntegrationMappingField().LookupKey(),
+		mapping,
 	}
 
 	if p.SearchableExternalID {

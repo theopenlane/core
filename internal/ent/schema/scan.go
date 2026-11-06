@@ -233,7 +233,6 @@ func (Scan) Annotations() []schema.Annotation {
 			Exclude: true,
 		},
 		entx.IntegrationMappingSchema().
-			StockPersist().
-			LookupAlternative(externalIDFieldName),
+			StockPersist(),
 	}
 }
