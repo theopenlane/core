@@ -714,6 +714,8 @@ github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
 github.com/resend/resend-go/v3 v3.17.0 h1:Q/kP5jaTD/2X/qO+apSSVNWAgsBCI7Itds+KMjjosTk=
 github.com/resend/resend-go/v3 v3.17.0/go.mod h1:iI7VA0NoGjWvsNii5iNC5Dy0llsI3HncXPejhniYzwE=
+github.com/resend/resend-go/v4 v4.11.0 h1:XArgOdgEsmoLYgYlwCFL1LvZBw9bdpy/k/iHINRM8J4=
+github.com/resend/resend-go/v4 v4.11.0/go.mod h1:96jCV9Fb2HoQAnPOgGXURcbBZxCtLrul8e5iwKJ/E/g=
 github.com/riverqueue/river v0.50.0 h1:YKQp8NHpq2IDIE7UIyQIhTxJKwc4XAHyUwr8O38+5lY=
 github.com/riverqueue/river v0.50.0/go.mod h1:uxM5wtMfaY/ZBRCV7UWb/NNc5OHhuvYWmZcTINCVmlE=
 github.com/riverqueue/river/riverdriver v0.50.0 h1:k+hLDDWkHBNXlfUITppQE3EGuutUbCdQgAs+Yox3mmA=
