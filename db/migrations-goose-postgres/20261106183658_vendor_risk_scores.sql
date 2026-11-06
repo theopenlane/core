@@ -1,8 +1,6 @@
 -- +goose Up
 -- modify "vendor_risk_scores" table
 ALTER TABLE "vendor_risk_scores" ADD COLUMN "source_definition_id" character varying NULL, ADD COLUMN "source_definition_version" character varying NULL, ADD COLUMN "source_instance_id" character varying NULL, ADD COLUMN "managed_by" character varying NULL, ADD COLUMN "integration_run_id" character varying NULL, ADD COLUMN "source_key" character varying NULL, ADD COLUMN "external_id" character varying NULL;
--- create index "vendorriskscore_external_id_owner_id" to table: "vendor_risk_scores"
-CREATE UNIQUE INDEX "vendorriskscore_external_id_owner_id" ON "vendor_risk_scores" ("external_id", "owner_id") WHERE (deleted_at IS NULL);
 -- create index "vendorriskscore_integration_run_id" to table: "vendor_risk_scores"
 CREATE INDEX "vendorriskscore_integration_run_id" ON "vendor_risk_scores" ("integration_run_id");
 -- create index "vendorriskscore_source_instance_id" to table: "vendor_risk_scores"
@@ -21,7 +19,5 @@ DROP INDEX "vendorriskscore_source_key";
 DROP INDEX "vendorriskscore_source_instance_id";
 -- reverse: create index "vendorriskscore_integration_run_id" to table: "vendor_risk_scores"
 DROP INDEX "vendorriskscore_integration_run_id";
--- reverse: create index "vendorriskscore_external_id_owner_id" to table: "vendor_risk_scores"
-DROP INDEX "vendorriskscore_external_id_owner_id";
 -- reverse: modify "vendor_risk_scores" table
 ALTER TABLE "vendor_risk_scores" DROP COLUMN "external_id", DROP COLUMN "source_key", DROP COLUMN "integration_run_id", DROP COLUMN "managed_by", DROP COLUMN "source_instance_id", DROP COLUMN "source_definition_version", DROP COLUMN "source_definition_id";
