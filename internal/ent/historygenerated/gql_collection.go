@@ -15188,6 +15188,41 @@ func (_q *VendorRiskScoreHistoryQuery) collectField(ctx context.Context, oneNode
 				selectedFields = append(selectedFields, vendorriskscorehistory.FieldOwnerID)
 				fieldSeen[vendorriskscorehistory.FieldOwnerID] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldSourceDefinitionID)
+				fieldSeen[vendorriskscorehistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldSourceDefinitionVersion)
+				fieldSeen[vendorriskscorehistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldSourceInstanceID)
+				fieldSeen[vendorriskscorehistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldManagedBy)
+				fieldSeen[vendorriskscorehistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldIntegrationRunID)
+				fieldSeen[vendorriskscorehistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldSourceKey)
+				fieldSeen[vendorriskscorehistory.FieldSourceKey] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldExternalID)
+				fieldSeen[vendorriskscorehistory.FieldExternalID] = struct{}{}
+			}
 		case "questionKey":
 			if _, ok := fieldSeen[vendorriskscorehistory.FieldQuestionKey]; !ok {
 				selectedFields = append(selectedFields, vendorriskscorehistory.FieldQuestionKey)

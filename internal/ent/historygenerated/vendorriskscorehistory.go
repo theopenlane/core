@@ -46,6 +46,20 @@ type VendorRiskScoreHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
 	QuestionKey string `json:"question_key,omitempty"`
 	// question text as it existed when this assessment was created; preserved for historical accuracy if the question wording changes later
@@ -86,7 +100,7 @@ func (*VendorRiskScoreHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case vendorriskscorehistory.FieldScore:
 			values[i] = new(sql.NullFloat64)
-		case vendorriskscorehistory.FieldID, vendorriskscorehistory.FieldRef, vendorriskscorehistory.FieldCreatedBy, vendorriskscorehistory.FieldUpdatedBy, vendorriskscorehistory.FieldUpdatedByImpersonator, vendorriskscorehistory.FieldDeletedBy, vendorriskscorehistory.FieldOwnerID, vendorriskscorehistory.FieldQuestionKey, vendorriskscorehistory.FieldQuestionName, vendorriskscorehistory.FieldQuestionDescription, vendorriskscorehistory.FieldQuestionCategory, vendorriskscorehistory.FieldAnswerType, vendorriskscorehistory.FieldImpact, vendorriskscorehistory.FieldLikelihood, vendorriskscorehistory.FieldAnswer, vendorriskscorehistory.FieldNotes, vendorriskscorehistory.FieldVendorScoringConfigID, vendorriskscorehistory.FieldEntityID, vendorriskscorehistory.FieldAssessmentResponseID:
+		case vendorriskscorehistory.FieldID, vendorriskscorehistory.FieldRef, vendorriskscorehistory.FieldCreatedBy, vendorriskscorehistory.FieldUpdatedBy, vendorriskscorehistory.FieldUpdatedByImpersonator, vendorriskscorehistory.FieldDeletedBy, vendorriskscorehistory.FieldOwnerID, vendorriskscorehistory.FieldSourceDefinitionID, vendorriskscorehistory.FieldSourceDefinitionVersion, vendorriskscorehistory.FieldSourceInstanceID, vendorriskscorehistory.FieldManagedBy, vendorriskscorehistory.FieldIntegrationRunID, vendorriskscorehistory.FieldSourceKey, vendorriskscorehistory.FieldExternalID, vendorriskscorehistory.FieldQuestionKey, vendorriskscorehistory.FieldQuestionName, vendorriskscorehistory.FieldQuestionDescription, vendorriskscorehistory.FieldQuestionCategory, vendorriskscorehistory.FieldAnswerType, vendorriskscorehistory.FieldImpact, vendorriskscorehistory.FieldLikelihood, vendorriskscorehistory.FieldAnswer, vendorriskscorehistory.FieldNotes, vendorriskscorehistory.FieldVendorScoringConfigID, vendorriskscorehistory.FieldEntityID, vendorriskscorehistory.FieldAssessmentResponseID:
 			values[i] = new(sql.NullString)
 		case vendorriskscorehistory.FieldHistoryTime, vendorriskscorehistory.FieldCreatedAt, vendorriskscorehistory.FieldUpdatedAt, vendorriskscorehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -185,6 +199,48 @@ func (_m *VendorRiskScoreHistory) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case vendorriskscorehistory.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case vendorriskscorehistory.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case vendorriskscorehistory.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case vendorriskscorehistory.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case vendorriskscorehistory.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case vendorriskscorehistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
+			}
+		case vendorriskscorehistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case vendorriskscorehistory.FieldQuestionKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -340,6 +396,27 @@ func (_m *VendorRiskScoreHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("question_key=")
 	builder.WriteString(_m.QuestionKey)

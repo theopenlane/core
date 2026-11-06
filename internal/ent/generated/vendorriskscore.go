@@ -41,6 +41,20 @@ type VendorRiskScore struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
 	QuestionKey string `json:"question_key,omitempty"`
 	// question text as it existed when this assessment was created; preserved for historical accuracy if the question wording changes later
@@ -80,6 +94,8 @@ type VendorRiskScore struct {
 type VendorRiskScoreEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// VendorScoringConfig holds the value of the vendor_scoring_config edge.
 	VendorScoringConfig *VendorScoringConfig `json:"vendor_scoring_config,omitempty"`
 	// Entity holds the value of the entity edge.
@@ -88,9 +104,11 @@ type VendorRiskScoreEdges struct {
 	AssessmentResponse *AssessmentResponse `json:"assessment_response,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
+
+	namedIntegrationRuns map[string][]*IntegrationRun
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -104,12 +122,21 @@ func (e VendorRiskScoreEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e VendorRiskScoreEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[1] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // VendorScoringConfigOrErr returns the VendorScoringConfig value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e VendorRiskScoreEdges) VendorScoringConfigOrErr() (*VendorScoringConfig, error) {
 	if e.VendorScoringConfig != nil {
 		return e.VendorScoringConfig, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: vendorscoringconfig.Label}
 	}
 	return nil, &NotLoadedError{edge: "vendor_scoring_config"}
@@ -120,7 +147,7 @@ func (e VendorRiskScoreEdges) VendorScoringConfigOrErr() (*VendorScoringConfig, 
 func (e VendorRiskScoreEdges) EntityOrErr() (*Entity, error) {
 	if e.Entity != nil {
 		return e.Entity, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -131,7 +158,7 @@ func (e VendorRiskScoreEdges) EntityOrErr() (*Entity, error) {
 func (e VendorRiskScoreEdges) AssessmentResponseOrErr() (*AssessmentResponse, error) {
 	if e.AssessmentResponse != nil {
 		return e.AssessmentResponse, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: assessmentresponse.Label}
 	}
 	return nil, &NotLoadedError{edge: "assessment_response"}
@@ -146,7 +173,7 @@ func (*VendorRiskScore) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case vendorriskscore.FieldScore:
 			values[i] = new(sql.NullFloat64)
-		case vendorriskscore.FieldID, vendorriskscore.FieldCreatedBy, vendorriskscore.FieldUpdatedBy, vendorriskscore.FieldUpdatedByImpersonator, vendorriskscore.FieldDeletedBy, vendorriskscore.FieldOwnerID, vendorriskscore.FieldQuestionKey, vendorriskscore.FieldQuestionName, vendorriskscore.FieldQuestionDescription, vendorriskscore.FieldQuestionCategory, vendorriskscore.FieldAnswerType, vendorriskscore.FieldImpact, vendorriskscore.FieldLikelihood, vendorriskscore.FieldAnswer, vendorriskscore.FieldNotes, vendorriskscore.FieldVendorScoringConfigID, vendorriskscore.FieldEntityID, vendorriskscore.FieldAssessmentResponseID:
+		case vendorriskscore.FieldID, vendorriskscore.FieldCreatedBy, vendorriskscore.FieldUpdatedBy, vendorriskscore.FieldUpdatedByImpersonator, vendorriskscore.FieldDeletedBy, vendorriskscore.FieldOwnerID, vendorriskscore.FieldSourceDefinitionID, vendorriskscore.FieldSourceDefinitionVersion, vendorriskscore.FieldSourceInstanceID, vendorriskscore.FieldManagedBy, vendorriskscore.FieldIntegrationRunID, vendorriskscore.FieldSourceKey, vendorriskscore.FieldExternalID, vendorriskscore.FieldQuestionKey, vendorriskscore.FieldQuestionName, vendorriskscore.FieldQuestionDescription, vendorriskscore.FieldQuestionCategory, vendorriskscore.FieldAnswerType, vendorriskscore.FieldImpact, vendorriskscore.FieldLikelihood, vendorriskscore.FieldAnswer, vendorriskscore.FieldNotes, vendorriskscore.FieldVendorScoringConfigID, vendorriskscore.FieldEntityID, vendorriskscore.FieldAssessmentResponseID:
 			values[i] = new(sql.NullString)
 		case vendorriskscore.FieldCreatedAt, vendorriskscore.FieldUpdatedAt, vendorriskscore.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -233,6 +260,48 @@ func (_m *VendorRiskScore) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case vendorriskscore.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case vendorriskscore.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case vendorriskscore.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case vendorriskscore.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case vendorriskscore.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case vendorriskscore.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
+			}
+		case vendorriskscore.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case vendorriskscore.FieldQuestionKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -354,6 +423,11 @@ func (_m *VendorRiskScore) QueryOwner() *OrganizationQuery {
 	return NewVendorRiskScoreClient(_m.config).QueryOwner(_m)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the VendorRiskScore entity.
+func (_m *VendorRiskScore) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewVendorRiskScoreClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryVendorScoringConfig queries the "vendor_scoring_config" edge of the VendorRiskScore entity.
 func (_m *VendorRiskScore) QueryVendorScoringConfig() *VendorScoringConfigQuery {
 	return NewVendorRiskScoreClient(_m.config).QueryVendorScoringConfig(_m)
@@ -421,6 +495,27 @@ func (_m *VendorRiskScore) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("question_key=")
 	builder.WriteString(_m.QuestionKey)
 	builder.WriteString(", ")
@@ -467,6 +562,30 @@ func (_m *VendorRiskScore) String() string {
 	builder.WriteString(_m.AssessmentResponseID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *VendorRiskScore) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *VendorRiskScore) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // VendorRiskScores is a parsable slice of VendorRiskScore.

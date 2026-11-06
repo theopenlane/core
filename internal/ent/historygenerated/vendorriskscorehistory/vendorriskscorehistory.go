@@ -44,6 +44,20 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldSourceDefinitionID holds the string denoting the source_definition_id field in the database.
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion holds the string denoting the source_definition_version field in the database.
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID holds the string denoting the source_instance_id field in the database.
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldManagedBy holds the string denoting the managed_by field in the database.
+	FieldManagedBy = "managed_by"
+	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
+	FieldIntegrationRunID = "integration_run_id"
+	// FieldSourceKey holds the string denoting the source_key field in the database.
+	FieldSourceKey = "source_key"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
 	// FieldQuestionKey holds the string denoting the question_key field in the database.
 	FieldQuestionKey = "question_key"
 	// FieldQuestionName holds the string denoting the question_name field in the database.
@@ -89,6 +103,13 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldSourceDefinitionID,
+	FieldSourceDefinitionVersion,
+	FieldSourceInstanceID,
+	FieldManagedBy,
+	FieldIntegrationRunID,
+	FieldSourceKey,
+	FieldExternalID,
 	FieldQuestionKey,
 	FieldQuestionName,
 	FieldQuestionDescription,
@@ -248,6 +269,41 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// BySourceDefinitionID orders the results by the source_definition_id field.
+func BySourceDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionID, opts...).ToFunc()
+}
+
+// BySourceDefinitionVersion orders the results by the source_definition_version field.
+func BySourceDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionVersion, opts...).ToFunc()
+}
+
+// BySourceInstanceID orders the results by the source_instance_id field.
+func BySourceInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceInstanceID, opts...).ToFunc()
+}
+
+// ByManagedBy orders the results by the managed_by field.
+func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagedBy, opts...).ToFunc()
+}
+
+// ByIntegrationRunID orders the results by the integration_run_id field.
+func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
+// BySourceKey orders the results by the source_key field.
+func BySourceKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceKey, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
 }
 
 // ByQuestionKey orders the results by the question_key field.

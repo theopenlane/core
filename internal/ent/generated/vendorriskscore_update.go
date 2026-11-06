@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
@@ -141,6 +142,146 @@ func (_u *VendorRiskScoreUpdate) AppendTags(v []string) *VendorRiskScoreUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *VendorRiskScoreUpdate) ClearTags() *VendorRiskScoreUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *VendorRiskScoreUpdate) SetSourceDefinitionID(v string) *VendorRiskScoreUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdate) SetNillableSourceDefinitionID(v *string) *VendorRiskScoreUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *VendorRiskScoreUpdate) ClearSourceDefinitionID() *VendorRiskScoreUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *VendorRiskScoreUpdate) SetSourceDefinitionVersion(v string) *VendorRiskScoreUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdate) SetNillableSourceDefinitionVersion(v *string) *VendorRiskScoreUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *VendorRiskScoreUpdate) ClearSourceDefinitionVersion() *VendorRiskScoreUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *VendorRiskScoreUpdate) SetSourceInstanceID(v string) *VendorRiskScoreUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdate) SetNillableSourceInstanceID(v *string) *VendorRiskScoreUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *VendorRiskScoreUpdate) ClearSourceInstanceID() *VendorRiskScoreUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *VendorRiskScoreUpdate) SetManagedBy(v string) *VendorRiskScoreUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdate) SetNillableManagedBy(v *string) *VendorRiskScoreUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *VendorRiskScoreUpdate) ClearManagedBy() *VendorRiskScoreUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *VendorRiskScoreUpdate) SetIntegrationRunID(v string) *VendorRiskScoreUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdate) SetNillableIntegrationRunID(v *string) *VendorRiskScoreUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *VendorRiskScoreUpdate) ClearIntegrationRunID() *VendorRiskScoreUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *VendorRiskScoreUpdate) SetSourceKey(v string) *VendorRiskScoreUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdate) SetNillableSourceKey(v *string) *VendorRiskScoreUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *VendorRiskScoreUpdate) ClearSourceKey() *VendorRiskScoreUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *VendorRiskScoreUpdate) SetExternalID(v string) *VendorRiskScoreUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdate) SetNillableExternalID(v *string) *VendorRiskScoreUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *VendorRiskScoreUpdate) ClearExternalID() *VendorRiskScoreUpdate {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -363,6 +504,21 @@ func (_u *VendorRiskScoreUpdate) ClearAssessmentResponseID() *VendorRiskScoreUpd
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *VendorRiskScoreUpdate) AddIntegrationRunIDs(ids ...string) *VendorRiskScoreUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *VendorRiskScoreUpdate) AddIntegrationRuns(v ...*IntegrationRun) *VendorRiskScoreUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetVendorScoringConfig sets the "vendor_scoring_config" edge to the VendorScoringConfig entity.
 func (_u *VendorRiskScoreUpdate) SetVendorScoringConfig(v *VendorScoringConfig) *VendorRiskScoreUpdate {
 	return _u.SetVendorScoringConfigID(v.ID)
@@ -381,6 +537,27 @@ func (_u *VendorRiskScoreUpdate) SetAssessmentResponse(v *AssessmentResponse) *V
 // Mutation returns the VendorRiskScoreMutation object of the builder.
 func (_u *VendorRiskScoreUpdate) Mutation() *VendorRiskScoreMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *VendorRiskScoreUpdate) ClearIntegrationRuns() *VendorRiskScoreUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *VendorRiskScoreUpdate) RemoveIntegrationRunIDs(ids ...string) *VendorRiskScoreUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *VendorRiskScoreUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *VendorRiskScoreUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearVendorScoringConfig clears the "vendor_scoring_config" edge to the VendorScoringConfig entity.
@@ -551,6 +728,48 @@ func (_u *VendorRiskScoreUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(vendorriskscore.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(vendorriskscore.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(vendorriskscore.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(vendorriskscore.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(vendorriskscore.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(vendorriskscore.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(vendorriskscore.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(vendorriskscore.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(vendorriskscore.FieldSourceKey, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(vendorriskscore.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(vendorriskscore.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.QuestionKey(); ok {
 		_spec.SetField(vendorriskscore.FieldQuestionKey, field.TypeString, value)
 	}
@@ -592,6 +811,51 @@ func (_u *VendorRiskScoreUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.NotesCleared() {
 		_spec.ClearField(vendorriskscore.FieldNotes, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorriskscore.IntegrationRunsTable,
+			Columns: []string{vendorriskscore.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorriskscore.IntegrationRunsTable,
+			Columns: []string{vendorriskscore.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorriskscore.IntegrationRunsTable,
+			Columns: []string{vendorriskscore.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.VendorScoringConfigCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -809,6 +1073,146 @@ func (_u *VendorRiskScoreUpdateOne) AppendTags(v []string) *VendorRiskScoreUpdat
 // ClearTags clears the value of the "tags" field.
 func (_u *VendorRiskScoreUpdateOne) ClearTags() *VendorRiskScoreUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *VendorRiskScoreUpdateOne) SetSourceDefinitionID(v string) *VendorRiskScoreUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdateOne) SetNillableSourceDefinitionID(v *string) *VendorRiskScoreUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *VendorRiskScoreUpdateOne) ClearSourceDefinitionID() *VendorRiskScoreUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *VendorRiskScoreUpdateOne) SetSourceDefinitionVersion(v string) *VendorRiskScoreUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdateOne) SetNillableSourceDefinitionVersion(v *string) *VendorRiskScoreUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *VendorRiskScoreUpdateOne) ClearSourceDefinitionVersion() *VendorRiskScoreUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *VendorRiskScoreUpdateOne) SetSourceInstanceID(v string) *VendorRiskScoreUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdateOne) SetNillableSourceInstanceID(v *string) *VendorRiskScoreUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *VendorRiskScoreUpdateOne) ClearSourceInstanceID() *VendorRiskScoreUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *VendorRiskScoreUpdateOne) SetManagedBy(v string) *VendorRiskScoreUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdateOne) SetNillableManagedBy(v *string) *VendorRiskScoreUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *VendorRiskScoreUpdateOne) ClearManagedBy() *VendorRiskScoreUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *VendorRiskScoreUpdateOne) SetIntegrationRunID(v string) *VendorRiskScoreUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdateOne) SetNillableIntegrationRunID(v *string) *VendorRiskScoreUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *VendorRiskScoreUpdateOne) ClearIntegrationRunID() *VendorRiskScoreUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *VendorRiskScoreUpdateOne) SetSourceKey(v string) *VendorRiskScoreUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdateOne) SetNillableSourceKey(v *string) *VendorRiskScoreUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *VendorRiskScoreUpdateOne) ClearSourceKey() *VendorRiskScoreUpdateOne {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *VendorRiskScoreUpdateOne) SetExternalID(v string) *VendorRiskScoreUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *VendorRiskScoreUpdateOne) SetNillableExternalID(v *string) *VendorRiskScoreUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *VendorRiskScoreUpdateOne) ClearExternalID() *VendorRiskScoreUpdateOne {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -1031,6 +1435,21 @@ func (_u *VendorRiskScoreUpdateOne) ClearAssessmentResponseID() *VendorRiskScore
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *VendorRiskScoreUpdateOne) AddIntegrationRunIDs(ids ...string) *VendorRiskScoreUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *VendorRiskScoreUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *VendorRiskScoreUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetVendorScoringConfig sets the "vendor_scoring_config" edge to the VendorScoringConfig entity.
 func (_u *VendorRiskScoreUpdateOne) SetVendorScoringConfig(v *VendorScoringConfig) *VendorRiskScoreUpdateOne {
 	return _u.SetVendorScoringConfigID(v.ID)
@@ -1049,6 +1468,27 @@ func (_u *VendorRiskScoreUpdateOne) SetAssessmentResponse(v *AssessmentResponse)
 // Mutation returns the VendorRiskScoreMutation object of the builder.
 func (_u *VendorRiskScoreUpdateOne) Mutation() *VendorRiskScoreMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *VendorRiskScoreUpdateOne) ClearIntegrationRuns() *VendorRiskScoreUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *VendorRiskScoreUpdateOne) RemoveIntegrationRunIDs(ids ...string) *VendorRiskScoreUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *VendorRiskScoreUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *VendorRiskScoreUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearVendorScoringConfig clears the "vendor_scoring_config" edge to the VendorScoringConfig entity.
@@ -1249,6 +1689,48 @@ func (_u *VendorRiskScoreUpdateOne) sqlSave(ctx context.Context) (_node *VendorR
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(vendorriskscore.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(vendorriskscore.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(vendorriskscore.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(vendorriskscore.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(vendorriskscore.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(vendorriskscore.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(vendorriskscore.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(vendorriskscore.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(vendorriskscore.FieldSourceKey, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(vendorriskscore.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(vendorriskscore.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.QuestionKey(); ok {
 		_spec.SetField(vendorriskscore.FieldQuestionKey, field.TypeString, value)
 	}
@@ -1290,6 +1772,51 @@ func (_u *VendorRiskScoreUpdateOne) sqlSave(ctx context.Context) (_node *VendorR
 	}
 	if _u.mutation.NotesCleared() {
 		_spec.ClearField(vendorriskscore.FieldNotes, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorriskscore.IntegrationRunsTable,
+			Columns: []string{vendorriskscore.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorriskscore.IntegrationRunsTable,
+			Columns: []string{vendorriskscore.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorriskscore.IntegrationRunsTable,
+			Columns: []string{vendorriskscore.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.VendorScoringConfigCleared() {
 		edge := &sqlgraph.EdgeSpec{

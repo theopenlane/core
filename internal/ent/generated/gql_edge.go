@@ -18567,6 +18567,27 @@ func (_m *VendorRiskScore) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *VendorRiskScore) IntegrationRuns(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy *IntegrationRunOrder, where *IntegrationRunWhereInput,
+) (*IntegrationRunConnection, error) {
+	opts := []IntegrationRunPaginateOption{
+		WithIntegrationRunOrder(orderBy),
+		WithIntegrationRunFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[1][alias]
+	if nodes, err := _m.NamedIntegrationRuns(alias); err == nil || hasTotalCount {
+		pager, err := newIntegrationRunPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &IntegrationRunConnection{Edges: []*IntegrationRunEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryIntegrationRuns().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *VendorRiskScore) VendorScoringConfig(ctx context.Context) (*VendorScoringConfig, error) {
 	result, err := _m.Edges.VendorScoringConfigOrErr()
 	if IsNotLoaded(err) {
