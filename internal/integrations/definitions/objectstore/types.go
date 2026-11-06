@@ -200,6 +200,8 @@ type ImportRecords struct {
 type DatasetBuiltinVariables struct {
 	// OrgName is the importing organization's display name
 	OrgName string `json:"ORG_NAME" jsonschema:"title=Organization Name,description=Display name of the importing organization"`
+	// OrgSlug is the importing organization's url-safe slug
+	OrgSlug string `json:"ORG_SLUG" jsonschema:"title=Organization Slug,description=Url-safe slug of the importing organization or its kebab-case name when it has none"`
 	// OrgDomain is the importing organization's primary domain
 	OrgDomain string `json:"ORG_DOMAIN" jsonschema:"title=Organization Domain,description=Primary domain of the importing organization or example.com when it has none"`
 	// OwnerUserID is the user id of the owner who requested the import
