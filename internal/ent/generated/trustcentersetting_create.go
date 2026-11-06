@@ -555,6 +555,20 @@ func (_c *TrustCenterSettingCreate) SetNillableAutoApprovalRules(v *models.Trust
 	return _c
 }
 
+// SetDisableDefaultDomain sets the "disable_default_domain" field.
+func (_c *TrustCenterSettingCreate) SetDisableDefaultDomain(v bool) *TrustCenterSettingCreate {
+	_c.mutation.SetDisableDefaultDomain(v)
+	return _c
+}
+
+// SetNillableDisableDefaultDomain sets the "disable_default_domain" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableDisableDefaultDomain(v *bool) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetDisableDefaultDomain(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingCreate) SetID(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetID(v)
@@ -743,6 +757,10 @@ func (_c *TrustCenterSettingCreate) defaults() error {
 	if _, ok := _c.mutation.AutoApprovalRules(); !ok {
 		v := trustcentersetting.DefaultAutoApprovalRules
 		_c.mutation.SetAutoApprovalRules(v)
+	}
+	if _, ok := _c.mutation.DisableDefaultDomain(); !ok {
+		v := trustcentersetting.DefaultDisableDefaultDomain
+		_c.mutation.SetDisableDefaultDomain(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersetting.DefaultID == nil {
@@ -1011,6 +1029,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.AutoApprovalRules(); ok {
 		_spec.SetField(trustcentersetting.FieldAutoApprovalRules, field.TypeJSON, value)
 		_node.AutoApprovalRules = value
+	}
+	if value, ok := _c.mutation.DisableDefaultDomain(); ok {
+		_spec.SetField(trustcentersetting.FieldDisableDefaultDomain, field.TypeBool, value)
+		_node.DisableDefaultDomain = value
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

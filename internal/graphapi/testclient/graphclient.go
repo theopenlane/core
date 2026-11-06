@@ -641,6 +641,8 @@ type TestGraphClient interface {
 	GetTrustCenterDocByID(ctx context.Context, trustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterDocByID, error)
 	GetTrustCenterDocs(ctx context.Context, first *int64, last *int64, where *TrustCenterDocWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterDocs, error)
 	UpdateTrustCenterDoc(ctx context.Context, updateTrustCenterDocID string, input UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterDoc, error)
+	SetupTrustCenterDomains(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*SetupTrustCenterDomains, error)
+	CreateTrustCenterPreviewDomain(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterPreviewDomain, error)
 	CreateTrustCenterDomain(ctx context.Context, input CreateTrustCenterDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDomain, error)
 	CreateBulkCSVTrustCenterEntity(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterEntity, error)
 	CreateBulkTrustCenterEntity(ctx context.Context, input []*CreateTrustCenterEntityInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterEntity, error)
@@ -147177,6 +147179,28 @@ func (t *UpdateTrustCenterDoc_UpdateTrustCenterDoc) GetTrustCenterDoc() *UpdateT
 	return &t.TrustCenterDoc
 }
 
+type SetupTrustCenterDomains_SetupTrustCenterDomains struct {
+	Success bool "json:\"success\" graphql:\"success\""
+}
+
+func (t *SetupTrustCenterDomains_SetupTrustCenterDomains) GetSuccess() bool {
+	if t == nil {
+		t = &SetupTrustCenterDomains_SetupTrustCenterDomains{}
+	}
+	return t.Success
+}
+
+type CreateTrustCenterPreviewDomain_CreateTrustCenterPreviewDomain struct {
+	Success bool "json:\"success\" graphql:\"success\""
+}
+
+func (t *CreateTrustCenterPreviewDomain_CreateTrustCenterPreviewDomain) GetSuccess() bool {
+	if t == nil {
+		t = &CreateTrustCenterPreviewDomain_CreateTrustCenterPreviewDomain{}
+	}
+	return t.Success
+}
+
 type CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification struct {
 	DNSTxtRecord          string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
 	DNSTxtValue           string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
@@ -151570,6 +151594,7 @@ type GetTrustCenterSettingByID_TrustCenterSetting struct {
 	CompanyName                           *string                                                     "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt                             *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                             *string                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisableDefaultDomain                  *bool                                                       "json:\"disableDefaultDomain,omitempty\" graphql:\"disableDefaultDomain\""
 	EnableAutoApproval                    *bool                                                       "json:\"enableAutoApproval,omitempty\" graphql:\"enableAutoApproval\""
 	Environment                           *enums.TrustCenterEnvironment                               "json:\"environment,omitempty\" graphql:\"environment\""
 	FaviconFile                           *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile   "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
@@ -151656,6 +151681,12 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetCreatedBy() *string {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetDisableDefaultDomain() *bool {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.DisableDefaultDomain
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetEnableAutoApproval() *bool {
 	if t == nil {
@@ -184401,6 +184432,28 @@ func (t *UpdateTrustCenterDoc) GetUpdateTrustCenterDoc() *UpdateTrustCenterDoc_U
 		t = &UpdateTrustCenterDoc{}
 	}
 	return &t.UpdateTrustCenterDoc
+}
+
+type SetupTrustCenterDomains struct {
+	SetupTrustCenterDomains SetupTrustCenterDomains_SetupTrustCenterDomains "json:\"setupTrustCenterDomains\" graphql:\"setupTrustCenterDomains\""
+}
+
+func (t *SetupTrustCenterDomains) GetSetupTrustCenterDomains() *SetupTrustCenterDomains_SetupTrustCenterDomains {
+	if t == nil {
+		t = &SetupTrustCenterDomains{}
+	}
+	return &t.SetupTrustCenterDomains
+}
+
+type CreateTrustCenterPreviewDomain struct {
+	CreateTrustCenterPreviewDomain CreateTrustCenterPreviewDomain_CreateTrustCenterPreviewDomain "json:\"createTrustCenterPreviewDomain\" graphql:\"createTrustCenterPreviewDomain\""
+}
+
+func (t *CreateTrustCenterPreviewDomain) GetCreateTrustCenterPreviewDomain() *CreateTrustCenterPreviewDomain_CreateTrustCenterPreviewDomain {
+	if t == nil {
+		t = &CreateTrustCenterPreviewDomain{}
+	}
+	return &t.CreateTrustCenterPreviewDomain
 }
 
 type CreateTrustCenterDomain struct {
@@ -222524,6 +222577,54 @@ func (c *Client) UpdateTrustCenterDoc(ctx context.Context, updateTrustCenterDocI
 	return &res, nil
 }
 
+const SetupTrustCenterDomainsDocument = `mutation SetupTrustCenterDomains ($trustCenterID: ID!) {
+	setupTrustCenterDomains(trustCenterID: $trustCenterID) {
+		success
+	}
+}
+`
+
+func (c *Client) SetupTrustCenterDomains(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*SetupTrustCenterDomains, error) {
+	vars := map[string]any{
+		"trustCenterID": trustCenterID,
+	}
+
+	var res SetupTrustCenterDomains
+	if err := c.Client.Post(ctx, "SetupTrustCenterDomains", SetupTrustCenterDomainsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTrustCenterPreviewDomainDocument = `mutation CreateTrustCenterPreviewDomain ($trustCenterID: ID!) {
+	createTrustCenterPreviewDomain(trustCenterID: $trustCenterID) {
+		success
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterPreviewDomain(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterPreviewDomain, error) {
+	vars := map[string]any{
+		"trustCenterID": trustCenterID,
+	}
+
+	var res CreateTrustCenterPreviewDomain
+	if err := c.Client.Post(ctx, "CreateTrustCenterPreviewDomain", CreateTrustCenterPreviewDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTrustCenterDomainDocument = `mutation CreateTrustCenterDomain ($input: CreateTrustCenterDomainInput!) {
 	createTrustCenterDomain(input: $input) {
 		customDomain {
@@ -224042,6 +224143,7 @@ const GetTrustCenterSettingByIDDocument = `query GetTrustCenterSettingByID ($tru
 		companyName
 		createdAt
 		createdBy
+		disableDefaultDomain
 		enableAutoApproval
 		environment
 		faviconLocalFileID
@@ -231470,6 +231572,8 @@ var DocumentOperationNames = map[string]string{
 	GetTrustCenterDocByIDDocument:                       "GetTrustCenterDocByID",
 	GetTrustCenterDocsDocument:                          "GetTrustCenterDocs",
 	UpdateTrustCenterDocDocument:                        "UpdateTrustCenterDoc",
+	SetupTrustCenterDomainsDocument:                     "SetupTrustCenterDomains",
+	CreateTrustCenterPreviewDomainDocument:              "CreateTrustCenterPreviewDomain",
 	CreateTrustCenterDomainDocument:                     "CreateTrustCenterDomain",
 	CreateBulkCSVTrustCenterEntityDocument:              "CreateBulkCSVTrustCenterEntity",
 	CreateBulkTrustCenterEntityDocument:                 "CreateBulkTrustCenterEntity",

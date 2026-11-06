@@ -17724,6 +17724,10 @@ input CreateTrustCenterSettingInput {
   rules for approving trust center NDA requests
   """
   autoApprovalRules: TrustCenterNDARequestSetting
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -73600,6 +73604,10 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
   rules for approving trust center NDA requests
   """
   autoApprovalRules: TrustCenterNDARequestSetting
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -74174,6 +74182,13 @@ input TrustCenterSettingWhereInput {
   enableAutoApprovalNEQ: Boolean
   enableAutoApprovalIsNil: Boolean
   enableAutoApprovalNotNil: Boolean
+  """
+  disable_default_domain field predicates
+  """
+  disableDefaultDomain: Boolean
+  disableDefaultDomainNEQ: Boolean
+  disableDefaultDomainIsNil: Boolean
+  disableDefaultDomainNotNil: Boolean
   """
   blocked_groups edge predicates
   """
@@ -83082,6 +83097,11 @@ input UpdateTrustCenterSettingInput {
   """
   autoApprovalRules: TrustCenterNDARequestSetting
   clearAutoApprovalRules: Boolean
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
+  clearDisableDefaultDomain: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean

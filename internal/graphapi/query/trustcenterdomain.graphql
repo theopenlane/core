@@ -1,3 +1,15 @@
+mutation SetupTrustCenterDomains($trustCenterID: ID!) {
+  setupTrustCenterDomains(trustCenterID: $trustCenterID) {
+    success
+  }
+}
+
+mutation CreateTrustCenterPreviewDomain($trustCenterID: ID!) {
+  createTrustCenterPreviewDomain(trustCenterID: $trustCenterID) {
+    success
+  }
+}
+
 mutation CreateTrustCenterDomain($input: CreateTrustCenterDomainInput!) {
   createTrustCenterDomain(input: $input) {
     customDomain {

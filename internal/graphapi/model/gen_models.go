@@ -3699,6 +3699,11 @@ type TrustCenterDomainCreatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
+// Return response for setupTrustCenterDomains mutation
+type TrustCenterDomainsSetupPayload struct {
+	Success bool `json:"success"`
+}
+
 // Return response for createBulkTrustCenterEntity mutation
 type TrustCenterEntityBulkCreatePayload struct {
 	// Created trustCenterEntitys
@@ -3809,6 +3814,11 @@ type TrustCenterNDARequestUpdatePayload struct {
 
 type TrustCenterNDAUpdatePayload struct {
 	Template *generated.Template `json:"template"`
+}
+
+// Return response for createTrustCenterPreviewDomain mutation
+type TrustCenterPreviewDomainCreatePayload struct {
+	Success bool `json:"success"`
 }
 
 // Return response for createTrustCenterPreviewSetting mutation

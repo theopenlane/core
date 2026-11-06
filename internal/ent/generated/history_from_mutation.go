@@ -26029,6 +26029,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetAutoApprovalRules(autoApprovalRules)
 	}
 
+	if disableDefaultDomain, exists := m.DisableDefaultDomain(); exists {
+		create = create.SetDisableDefaultDomain(disableDefaultDomain)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -26291,6 +26295,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetAutoApprovalRules(trustcentersetting.AutoApprovalRules)
 		}
 
+		if disableDefaultDomain, exists := m.DisableDefaultDomain(); exists {
+			create = create.SetDisableDefaultDomain(disableDefaultDomain)
+		} else {
+			create = create.SetDisableDefaultDomain(trustcentersetting.DisableDefaultDomain)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -26367,6 +26377,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain).
 			SetEnableAutoApproval(trustcentersetting.EnableAutoApproval).
 			SetAutoApprovalRules(trustcentersetting.AutoApprovalRules).
+			SetDisableDefaultDomain(trustcentersetting.DisableDefaultDomain).
 			Save(ctx)
 		if err != nil {
 			return err

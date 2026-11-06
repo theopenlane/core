@@ -108,6 +108,7 @@ query GetTrustCenterSettingByID ($trustCenterSettingId: ID!) {
 		companyName
 		createdAt
 		createdBy
+		disableDefaultDomain
 		enableAutoApproval
 		environment
 		faviconLocalFileID
