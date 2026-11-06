@@ -195,8 +195,8 @@ github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWD
 github.com/stretchr/testify v1.12.1/go.mod h1:MDEgiDPPsNp5cuIrHPPCyornHKgEVbtFUmoNlxoYthg=
 github.com/theopenlane/core/common v1.2.2 h1:pRqkFSx0fvQ/T1BLwDlZqWeUy3tO9/2X/t8FUi5qxTA=
 github.com/theopenlane/core/common v1.2.2/go.mod h1:+DD6DtNxS2Pvk23HO0+7yEekVFNLhTaqnv91r7+dX2k=
-github.com/theopenlane/core/v2 v2.13.2 h1:vi99tNB/f29QAweONzsXSeYuRZWBikRw09nAP6252xc=
-github.com/theopenlane/core/v2 v2.13.2/go.mod h1:YovCqty39tVork8XT3vxjB0lpKDW8mO3gmPBOtsL17Q=
+github.com/theopenlane/core/v2 v2.13.3 h1:hG8CLNTZ9Qz4p0uQH9hYXsZ3tvXVkFpUu56em5KtMAM=
+github.com/theopenlane/core/v2 v2.13.3/go.mod h1:YovCqty39tVork8XT3vxjB0lpKDW8mO3gmPBOtsL17Q=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/go-client v0.15.1 h1:1uhfo/5UXtC/AZgMKw2psVEmBqVoQLn8yhPRhBNYvHA=
@@ -274,6 +274,7 @@ google.golang.org/genproto/googleapis/api v0.0.0-20261019180522-ce908d29299b/go.
 google.golang.org/genproto/googleapis/rpc v0.0.0-20261026165753-2ffab32bce7e h1:w3fy/G8OrJHYexn+u5y7hFyc8YRRIr7DCevtIOwAcGY=
 google.golang.org/genproto/googleapis/rpc v0.0.0-20261026165753-2ffab32bce7e/go.mod h1:OaIUM3+LpYcK2GXM4FTmhWoIq371Owdr+Cc7/BsYHHc=
 google.golang.org/grpc v1.85.0 h1:BPBCfuVRQ1qvBhKDOq9uvQllMvO59rKsYhXpp7Dd8vw=
+google.golang.org/grpc v1.85.0/go.mod h1:0rQrOD58yjal/0EaVbGBANindixsCZNQPDV3VKtaKuQ=
 google.golang.org/protobuf v1.36.12 h1:pJOKDDOyeXErUroCihFAd5LQuwXBSpVnKGrj5o/fwxc=
 google.golang.org/protobuf v1.36.12/go.mod h1:HTf+CrKn2C3g5S8VImy6tdcUvCska2kB7j23XfzDpco=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
