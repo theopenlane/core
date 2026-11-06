@@ -3,7 +3,7 @@ package keycloak
 import (
 	"context"
 
-	gocloak "github.com/Nerzal/gocloak/v13"
+	gocloak "github.com/Nerzal/gocloak/v14"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"

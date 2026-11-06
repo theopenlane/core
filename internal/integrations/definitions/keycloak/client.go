@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	gocloak "github.com/Nerzal/gocloak/v13"
+	gocloak "github.com/Nerzal/gocloak/v14"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/urlx"
