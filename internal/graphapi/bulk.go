@@ -11731,25 +11731,6 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 	}, nil
 }
 
-// bulkCreateUserSetting uses the CreateBulk function to create multiple UserSetting entities
-func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.UserSettingCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.UserSetting.Create().SetInput(*data)
-	}
-
-	res, err := c.UserSetting.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "usersetting"})
-	}
-
-	// return response
-	return &model.UserSettingBulkCreatePayload{
-		UserSettings: res,
-	}, nil
-}
-
 // bulkDeleteUserSetting deletes multiple UserSetting entities by their IDs
 func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []string) (*model.UserSettingBulkDeletePayload, error) {
 	if len(ids) == 0 {

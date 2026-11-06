@@ -7,12 +7,35 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
+
+func TestMutationCreateBulkProgramMembership(t *testing.T) {
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: program.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	orgMember1 := (&th.OrgMemberBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	orgMember2 := (&th.OrgMemberBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	resp, err := suite.Client.API.CreateBulkProgramMembership(th.SharedTestUser1.UserCtx, []*testclient.CreateProgramMembershipInput{
+		{ProgramID: program.ID, UserID: orgMember1.UserID},
+		{ProgramID: program.ID, UserID: orgMember2.UserID},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkProgramMembership.ProgramMemberships, 2))
+
+	assertObjectAccess(t, orgMember1.UserID, fgax.MemberRelation, generated.TypeProgram, []string{program.ID})
+	assertObjectAccess(t, orgMember2.UserID, fgax.MemberRelation, generated.TypeProgram, []string{program.ID})
+}
 
 func TestMutationCreateProgramMembers(t *testing.T) {
 	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)

@@ -106,6 +106,30 @@ func TestQueryTemplate(t *testing.T) {
 	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: templateRoot.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
+func TestMutationCreateBulkTemplate(t *testing.T) {
+	name := "Bulk Template " + ulids.New().String()
+	jsonConfig := map[string]any{"type": "object", "properties": map[string]any{"name": map[string]any{"type": "string"}}}
+
+	resp, err := suite.Client.API.CreateBulkTemplate(th.SharedTestUser1.UserCtx, []*testclient.CreateTemplateInput{
+		{Name: name + " 1", Jsonconfig: jsonConfig},
+		{Name: name + " 2", Jsonconfig: jsonConfig},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkTemplate.Templates, 2))
+
+	templateIDs := make([]string, 0, len(resp.CreateBulkTemplate.Templates))
+	for _, template := range resp.CreateBulkTemplate.Templates {
+		templateIDs = append(templateIDs, template.ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, IDs: templateIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeTemplate, templateIDs)
+}
+
 func TestMutationCreateTemplate(t *testing.T) {
 	// Helper function to create fresh file uploads for each test case
 	createPDFUpload := th.UploadFileFunc(t, th.PdfFilePath)
