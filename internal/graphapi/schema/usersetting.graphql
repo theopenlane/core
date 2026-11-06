@@ -21,24 +21,6 @@ extend type Mutation{
         input: CreateUserSettingInput!
     ): UserSettingCreatePayload!
     """
-    Create multiple new userSettings
-    """
-    createBulkUserSetting(
-        """
-        values of the userSetting
-        """
-        input: [CreateUserSettingInput!]
-    ): UserSettingBulkCreatePayload!
-    """
-    Create multiple new userSettings via file upload
-    """
-    createBulkCSVUserSetting(
-        """
-        csv file containing values of the userSetting
-        """
-        input: Upload!
-    ): UserSettingBulkCreatePayload!
-    """
     Update an existing userSetting
     """
     updateUserSetting(
@@ -102,16 +84,6 @@ type UserSettingUpdatePayload {
     Updated userSetting
     """
     userSetting: UserSetting!
-}
-
-"""
-Return response for createBulkUserSetting mutation
-"""
-type UserSettingBulkCreatePayload {
-    """
-    Created userSettings
-    """
-    userSettings: [UserSetting!]
 }
 
 """

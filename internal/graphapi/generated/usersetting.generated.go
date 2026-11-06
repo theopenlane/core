@@ -24,25 +24,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _UserSettingBulkCreatePayload_userSettings(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingBulkCreatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_UserSettingBulkCreatePayload_userSettings(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.UserSettings, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []*generated.UserSetting) graphql.Marshaler {
-			return ec.marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
 func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserSettingBulkCreatePayload",
@@ -302,39 +283,6 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 
 // region    **************************** object.gotpl ****************************
 
-var userSettingBulkCreatePayloadImplementors = []string{"UserSettingBulkCreatePayload"}
-
-func (ec *executionContext) _UserSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.UserSettingBulkCreatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, userSettingBulkCreatePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := graphql.NewDeferredGroup(ctx)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("UserSettingBulkCreatePayload")
-		case "userSettings":
-			out.Values[i] = ec._UserSettingBulkCreatePayload_userSettings(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	if n := len(deferred.Defers); n > 0 {
-		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
-		ec.ProcessDeferredGroup(deferred)
-	}
-
-	return out
-}
-
 var userSettingBulkDeletePayloadImplementors = []string{"UserSettingBulkDeletePayload"}
 
 func (ec *executionContext) _UserSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.UserSettingBulkDeletePayload) graphql.Marshaler {
@@ -495,14 +443,6 @@ func (ec *executionContext) _UserSettingUpdatePayload(ctx context.Context, sel a
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
-
-func (ec *executionContext) marshalNUserSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.UserSettingBulkCreatePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "UserSettingBulkCreatePayload!")
-		return graphql.Null
-	}
-	return ec._UserSettingBulkCreatePayload(ctx, sel, v)
-}
 
 func (ec *executionContext) marshalNUserSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.UserSettingBulkDeletePayload) graphql.Marshaler {
 	if v == nil {

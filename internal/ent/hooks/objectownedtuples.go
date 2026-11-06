@@ -15,6 +15,17 @@ import (
 	"github.com/theopenlane/logx"
 )
 
+// writeMutationTuples writes tuples to the authz service unless a bulk create is batching them
+func writeMutationTuples(ctx context.Context, m ent.Mutation, addTuples, removeTuples []fgax.TupleKey) error {
+	if utils.DeferTuples(ctx, m, addTuples, removeTuples) {
+		return nil
+	}
+
+	_, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples)
+
+	return err
+}
+
 // HookObjectOwnedTuples is a hook that adds object owned tuples for the object being created
 // given a set of parent id fields, it will add the user and parent permissions to the object
 // on creation
@@ -77,7 +88,7 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string) ent.Hook {
 
 			// write the tuples to the authz service
 			if len(addTuples) != 0 || len(removeTuples) != 0 {
-				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
+				if err := writeMutationTuples(ctx, m, addTuples, removeTuples); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, ErrInternalServerError
@@ -177,7 +188,7 @@ func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.H
 			// write the tuples to the authz service, the permissions to the edges
 			// were already checked by the global edge permissions hook
 			if len(addTuples) != 0 || len(removeTuples) != 0 {
-				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
+				if err := writeMutationTuples(ctx, m, addTuples, removeTuples); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, ErrInternalServerError

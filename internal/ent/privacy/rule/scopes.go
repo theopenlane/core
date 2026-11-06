@@ -159,7 +159,7 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 		ObjectID:    orgID,
 	}
 
-	hasAccess, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)
+	hasAccess, err := utils.CheckAccess(ctx, utils.AuthzClientFromContext(ctx), ac)
 	if err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Interface("check", ac).Msg("failed scope check, unable to determine access")
 

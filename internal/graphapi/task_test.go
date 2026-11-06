@@ -865,6 +865,29 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 	th.CleanupOrganizationDataWithContext(localTestOrg2.Owner.UserCtx, t)
 }
 
+func TestMutationCreateBulkTask(t *testing.T) {
+	title := "Bulk Task " + ulids.New().String()
+
+	resp, err := suite.Client.API.CreateBulkTask(th.SharedTestUser1.UserCtx, []*testclient.CreateTaskInput{
+		{Title: title + " 1"},
+		{Title: title + " 2"},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkTask.Tasks, 2))
+
+	taskIDs := make([]string, 0, len(resp.CreateBulkTask.Tasks))
+	for _, task := range resp.CreateBulkTask.Tasks {
+		taskIDs = append(taskIDs, task.ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.TaskDeleteOne]{Client: suite.Client.DB.Task, IDs: taskIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeTask, taskIDs)
+}
+
 func TestMutationCreateTask(t *testing.T) {
 	t.Parallel()
 

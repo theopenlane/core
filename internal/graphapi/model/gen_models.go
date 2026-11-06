@@ -3950,12 +3950,6 @@ type UserDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-// Return response for createBulkUserSetting mutation
-type UserSettingBulkCreatePayload struct {
-	// Created userSettings
-	UserSettings []*generated.UserSetting `json:"userSettings,omitempty"`
-}
-
 // Return response for deleteBulkUserSetting mutation
 type UserSettingBulkDeletePayload struct {
 	// Deleted userSetting IDs
