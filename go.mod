@@ -23,7 +23,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.3
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.15.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity v0.15.0
-	github.com/Nerzal/gocloak/v13 v13.9.0
+	github.com/Nerzal/gocloak/v14 v14.0.4
 	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/alicebob/miniredis/v2 v2.40.0
 	github.com/alitto/pond/v2 v2.7.3
@@ -240,7 +240,7 @@ require (
 	github.com/go-openapi/jsonpointer v1.0.1 // indirect
 	github.com/go-openapi/testify/v2 v2.8.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/go-resty/resty/v2 v2.7.0 // indirect
+	github.com/go-resty/resty/v2 v2.17.2 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/go-webauthn/x v0.3.1 // indirect
 	github.com/goccy/go-json v0.11.2 // indirect
