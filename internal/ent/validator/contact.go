@@ -1,7 +1,7 @@
 package validator
 
 import (
-	"github.com/nyaruka/phonenumbers"
+	"github.com/nyaruka/phonenumbers/v2"
 )
 
 // ValidatePhoneNumber validates a phone number using the phone numbers library
