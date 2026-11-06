@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 	"github.com/theopenlane/iam/auth"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"

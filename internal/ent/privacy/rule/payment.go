@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/logx"
