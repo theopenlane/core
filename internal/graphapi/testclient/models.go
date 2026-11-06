@@ -8996,9 +8996,13 @@ type CreateOnboardingInput struct {
 	// details given about the user during the onboarding process, including things such as name, job title, department, etc
 	UserDetails map[string]any `json:"userDetails,omitempty"`
 	// details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
-	Compliance     map[string]any `json:"compliance,omitempty"`
-	DemoRequested  *bool          `json:"demoRequested,omitempty"`
-	OrganizationID *string        `json:"organizationID,omitempty"`
+	Compliance    map[string]any `json:"compliance,omitempty"`
+	DemoRequested *bool          `json:"demoRequested,omitempty"`
+	// whether the organization starts with demo data, unset when the question was not answered
+	SeedDemoData *bool `json:"seedDemoData,omitempty"`
+	// the demo dataset to seed when seed_demo_data is true
+	DemoDataset    *string `json:"demoDataset,omitempty"`
+	OrganizationID *string `json:"organizationID,omitempty"`
 }
 
 // CreateOrgMembershipInput is used for create OrgMembership object.
@@ -24750,7 +24754,11 @@ type Onboarding struct {
 	// details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
 	Compliance    map[string]any `json:"compliance,omitempty"`
 	DemoRequested *bool          `json:"demoRequested,omitempty"`
-	Organization  *Organization  `json:"organization,omitempty"`
+	// whether the organization starts with demo data, unset when the question was not answered
+	SeedDemoData *bool `json:"seedDemoData,omitempty"`
+	// the demo dataset to seed when seed_demo_data is true
+	DemoDataset  *string       `json:"demoDataset,omitempty"`
+	Organization *Organization `json:"organization,omitempty"`
 }
 
 func (Onboarding) IsNode() {}
@@ -24801,6 +24809,23 @@ type OnboardingWhereInput struct {
 	DemoRequestedNeq    *bool `json:"demoRequestedNEQ,omitempty"`
 	DemoRequestedIsNil  *bool `json:"demoRequestedIsNil,omitempty"`
 	DemoRequestedNotNil *bool `json:"demoRequestedNotNil,omitempty"`
+	// seed_demo_data field predicates
+	SeedDemoData       *bool `json:"seedDemoData,omitempty"`
+	SeedDemoDataNeq    *bool `json:"seedDemoDataNEQ,omitempty"`
+	SeedDemoDataIsNil  *bool `json:"seedDemoDataIsNil,omitempty"`
+	SeedDemoDataNotNil *bool `json:"seedDemoDataNotNil,omitempty"`
+	// demo_dataset field predicates
+	DemoDataset             *string  `json:"demoDataset,omitempty"`
+	DemoDatasetNeq          *string  `json:"demoDatasetNEQ,omitempty"`
+	DemoDatasetIn           []string `json:"demoDatasetIn,omitempty"`
+	DemoDatasetNotIn        []string `json:"demoDatasetNotIn,omitempty"`
+	DemoDatasetContains     *string  `json:"demoDatasetContains,omitempty"`
+	DemoDatasetHasPrefix    *string  `json:"demoDatasetHasPrefix,omitempty"`
+	DemoDatasetHasSuffix    *string  `json:"demoDatasetHasSuffix,omitempty"`
+	DemoDatasetIsNil        *bool    `json:"demoDatasetIsNil,omitempty"`
+	DemoDatasetNotNil       *bool    `json:"demoDatasetNotNil,omitempty"`
+	DemoDatasetEqualFold    *string  `json:"demoDatasetEqualFold,omitempty"`
+	DemoDatasetContainsFold *string  `json:"demoDatasetContainsFold,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`

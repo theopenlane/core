@@ -50,16 +50,17 @@ func NotifyOutcome(ctx context.Context, objectType string, content entityops.Not
 
 // NotifyImportOutcome sends the organization notification summarizing an import
 // subject names what was imported, and detail, such as how to retry, is appended to the body when set
-func NotifyImportOutcome(ctx context.Context, subject string, result IngestResult, ingestErr error, detail string) error {
+// url is the console path the notification links to when set
+func NotifyImportOutcome(ctx context.Context, subject string, result IngestResult, ingestErr error, detail, url string) error {
 	if ingestErr != nil {
 		logx.FromContext(ctx).Error().Err(ingestErr).Str("subject", subject).Msg("import failed")
 	}
 
-	return NotifyOutcome(ctx, importCompletedObjectType, importOutcome(subject, result, ingestErr, detail))
+	return NotifyOutcome(ctx, importCompletedObjectType, importOutcome(subject, result, ingestErr, detail, url))
 }
 
 // importOutcome builds the notification summarizing an import
-func importOutcome(subject string, result IngestResult, ingestErr error, detail string) entityops.NotificationContent {
+func importOutcome(subject string, result IngestResult, ingestErr error, detail, url string) entityops.NotificationContent {
 	title := subject + " import completed"
 	body := fmt.Sprintf("Imported %d record(s)", result.Persisted)
 
@@ -80,10 +81,16 @@ func importOutcome(subject string, result IngestResult, ingestErr error, detail 
 		body += ", " + detail
 	}
 
+	data := map[string]any{"succeeded": result.Succeeded, "persisted": result.Persisted, "skipped": result.Skipped, "failed": result.Failed, "failure_summary": result.FailureSummary()}
+
+	if url != "" {
+		data["url"] = url
+	}
+
 	return entityops.NotificationContent{
 		TitleTemplate: title,
 		BodyTemplate:  body,
-		Data:          map[string]any{"succeeded": result.Succeeded, "persisted": result.Persisted, "skipped": result.Skipped, "failed": result.Failed, "failure_summary": result.FailureSummary()},
+		Data:          data,
 	}
 }
 

@@ -115514,6 +115514,52 @@ func (ec *executionContext) fieldContext_Onboarding_demoRequested(_ context.Cont
 	return graphql.NewScalarFieldContext("Onboarding", field, false, false, "Boolean")
 }
 
+func (ec *executionContext) _Onboarding_seedDemoData(ctx context.Context, field graphql.CollectedField, obj *generated.Onboarding) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Onboarding_seedDemoData(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SeedDemoData, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *bool) graphql.Marshaler {
+			return ec.marshalOBoolean2ᚖbool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Onboarding_seedDemoData(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Onboarding", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _Onboarding_demoDataset(ctx context.Context, field graphql.CollectedField, obj *generated.Onboarding) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Onboarding_demoDataset(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DemoDataset, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Onboarding_demoDataset(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Onboarding", field, false, false, "String")
+}
+
 func (ec *executionContext) _Onboarding_organization(ctx context.Context, field graphql.CollectedField, obj *generated.Onboarding) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -226032,7 +226078,7 @@ func (ec *executionContext) unmarshalInputCreateOnboardingInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"companyName", "domains", "companyDetails", "userDetails", "compliance", "demoRequested", "organizationID"}
+	fieldsInOrder := [...]string{"companyName", "domains", "companyDetails", "userDetails", "compliance", "demoRequested", "seedDemoData", "demoDataset", "organizationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -226081,6 +226127,20 @@ func (ec *executionContext) unmarshalInputCreateOnboardingInput(ctx context.Cont
 				return it, err
 			}
 			it.DemoRequested = data
+		case "seedDemoData":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seedDemoData"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SeedDemoData = data
+		case "demoDataset":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDataset"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDataset = data
 		case "organizationID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("organizationID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -294318,7 +294378,7 @@ func (ec *executionContext) unmarshalInputOnboardingWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDIsNil", "organizationIDNotNil", "organizationIDEqualFold", "organizationIDContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameEqualFold", "companyNameContainsFold", "demoRequested", "demoRequestedNEQ", "demoRequestedIsNil", "demoRequestedNotNil", "hasOrganization", "hasOrganizationWith", "domainsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDIsNil", "organizationIDNotNil", "organizationIDEqualFold", "organizationIDContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameEqualFold", "companyNameContainsFold", "demoRequested", "demoRequestedNEQ", "demoRequestedIsNil", "demoRequestedNotNil", "seedDemoData", "seedDemoDataNEQ", "seedDemoDataIsNil", "seedDemoDataNotNil", "demoDataset", "demoDatasetNEQ", "demoDatasetIn", "demoDatasetNotIn", "demoDatasetContains", "demoDatasetHasPrefix", "demoDatasetHasSuffix", "demoDatasetIsNil", "demoDatasetNotNil", "demoDatasetEqualFold", "demoDatasetContainsFold", "hasOrganization", "hasOrganizationWith", "domainsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -294556,6 +294616,111 @@ func (ec *executionContext) unmarshalInputOnboardingWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.DemoRequestedNotNil = data
+		case "seedDemoData":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seedDemoData"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SeedDemoData = data
+		case "seedDemoDataNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seedDemoDataNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SeedDemoDataNEQ = data
+		case "seedDemoDataIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seedDemoDataIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SeedDemoDataIsNil = data
+		case "seedDemoDataNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("seedDemoDataNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SeedDemoDataNotNil = data
+		case "demoDataset":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDataset"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDataset = data
+		case "demoDatasetNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetNEQ = data
+		case "demoDatasetIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetIn = data
+		case "demoDatasetNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetNotIn = data
+		case "demoDatasetContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetContains = data
+		case "demoDatasetHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetHasPrefix = data
+		case "demoDatasetHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetHasSuffix = data
+		case "demoDatasetIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetIsNil = data
+		case "demoDatasetNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetNotNil = data
+		case "demoDatasetEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetEqualFold = data
+		case "demoDatasetContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("demoDatasetContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DemoDatasetContainsFold = data
 		case "hasOrganization":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasOrganization"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -433914,6 +434079,16 @@ func (ec *executionContext) _Onboarding(ctx context.Context, sel ast.SelectionSe
 			}
 		case "demoRequested":
 			out.Values[i] = ec._Onboarding_demoRequested(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "seedDemoData":
+			out.Values[i] = ec._Onboarding_seedDemoData(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "demoDataset":
+			out.Values[i] = ec._Onboarding_demoDataset(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
