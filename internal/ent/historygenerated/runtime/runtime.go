@@ -2835,7 +2835,7 @@ func init() {
 	// vendorriskscorehistory.DefaultTags holds the default value on creation for the tags field.
 	vendorriskscorehistory.DefaultTags = vendorriskscorehistoryDescTags.Default.([]string)
 	// vendorriskscorehistoryDescScore is the schema descriptor for score field.
-	vendorriskscorehistoryDescScore := vendorriskscorehistoryFields[20].Descriptor()
+	vendorriskscorehistoryDescScore := vendorriskscorehistoryFields[27].Descriptor()
 	// vendorriskscorehistory.DefaultScore holds the default value on creation for the score field.
 	vendorriskscorehistory.DefaultScore = vendorriskscorehistoryDescScore.Default.(float64)
 	// vendorriskscorehistoryDescID is the schema descriptor for id field.

@@ -50325,6 +50325,60 @@ func (ec *executionContext) field_User_webauthns_args(ctx context.Context, rawAr
 	return args, nil
 }
 
+func (ec *executionContext) field_VendorRiskScore_integrationRuns_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) (*generated.IntegrationRunOrder, error) {
+			return ec.unmarshalOIntegrationRunOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationRunOrder(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.IntegrationRunWhereInput, error) {
+			return ec.unmarshalOIntegrationRunWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationRunWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_VendorScoringConfig_vendorRiskScores_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -174472,6 +174526,167 @@ func (ec *executionContext) fieldContext_VendorRiskScore_ownerID(_ context.Conte
 	return graphql.NewScalarFieldContext("VendorRiskScore", field, false, false, "ID")
 }
 
+func (ec *executionContext) _VendorRiskScore_sourceDefinitionID(ctx context.Context, field graphql.CollectedField, obj *generated.VendorRiskScore) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScore_sourceDefinitionID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceDefinitionID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScore_sourceDefinitionID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScore", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScore_sourceDefinitionVersion(ctx context.Context, field graphql.CollectedField, obj *generated.VendorRiskScore) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScore_sourceDefinitionVersion(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceDefinitionVersion, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScore_sourceDefinitionVersion(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScore", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScore_sourceInstanceID(ctx context.Context, field graphql.CollectedField, obj *generated.VendorRiskScore) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScore_sourceInstanceID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceInstanceID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScore_sourceInstanceID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScore", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScore_managedBy(ctx context.Context, field graphql.CollectedField, obj *generated.VendorRiskScore) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScore_managedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ManagedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScore_managedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScore", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScore_integrationRunID(ctx context.Context, field graphql.CollectedField, obj *generated.VendorRiskScore) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScore_integrationRunID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IntegrationRunID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScore_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScore", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScore_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.VendorRiskScore) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScore_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScore_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScore", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScore_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.VendorRiskScore) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScore_externalID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExternalID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScore_externalID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScore", field, false, false, "String")
+}
+
 func (ec *executionContext) _VendorRiskScore_questionKey(ctx context.Context, field graphql.CollectedField, obj *generated.VendorRiskScore) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -174799,6 +175014,50 @@ func (ec *executionContext) fieldContext_VendorRiskScore_owner(_ context.Context
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Organization(ctx, field)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _VendorRiskScore_integrationRuns(ctx context.Context, field graphql.CollectedField, obj *generated.VendorRiskScore) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScore_integrationRuns(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.IntegrationRuns(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].(*generated.IntegrationRunOrder), fc.Args["where"].(*generated.IntegrationRunWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IntegrationRunConnection) graphql.Marshaler {
+			return ec.marshalNIntegrationRunConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationRunConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScore_integrationRuns(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "VendorRiskScore",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IntegrationRunConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_VendorRiskScore_integrationRuns_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -234193,7 +234452,7 @@ func (ec *executionContext) unmarshalInputCreateVendorRiskScoreInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "questionKey", "questionName", "questionDescription", "questionCategory", "impact", "likelihood", "answer", "notes", "ownerID", "vendorScoringConfigID", "entityID", "assessmentResponseID"}
+	fieldsInOrder := [...]string{"tags", "externalID", "questionKey", "questionName", "questionDescription", "questionCategory", "impact", "likelihood", "answer", "notes", "ownerID", "integrationRunIDs", "vendorScoringConfigID", "entityID", "assessmentResponseID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -234207,6 +234466,13 @@ func (ec *executionContext) unmarshalInputCreateVendorRiskScoreInput(ctx context
 				return it, err
 			}
 			it.Tags = data
+		case "externalID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalID = data
 		case "questionKey":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("questionKey"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -234270,6 +234536,13 @@ func (ec *executionContext) unmarshalInputCreateVendorRiskScoreInput(ctx context
 				return it, err
 			}
 			it.OwnerID = data
+		case "integrationRunIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDs = data
 		case "vendorScoringConfigID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vendorScoringConfigID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -394738,7 +395011,7 @@ func (ec *executionContext) unmarshalInputUpdateVendorRiskScoreInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "questionKey", "questionName", "questionDescription", "clearQuestionDescription", "questionCategory", "impact", "likelihood", "answer", "clearAnswer", "notes", "clearNotes", "vendorScoringConfigID", "clearVendorScoringConfig", "entityID", "assessmentResponseID", "clearAssessmentResponse"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalID", "clearExternalID", "questionKey", "questionName", "questionDescription", "clearQuestionDescription", "questionCategory", "impact", "likelihood", "answer", "clearAnswer", "notes", "clearNotes", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "vendorScoringConfigID", "clearVendorScoringConfig", "entityID", "assessmentResponseID", "clearAssessmentResponse"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -394766,6 +395039,20 @@ func (ec *executionContext) unmarshalInputUpdateVendorRiskScoreInput(ctx context
 				return it, err
 			}
 			it.ClearTags = data
+		case "externalID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalID = data
+		case "clearExternalID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalID"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearExternalID = data
 		case "questionKey":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("questionKey"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -394843,6 +395130,27 @@ func (ec *executionContext) unmarshalInputUpdateVendorRiskScoreInput(ctx context
 				return it, err
 			}
 			it.ClearNotes = data
+		case "addIntegrationRunIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addIntegrationRunIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddIntegrationRunIDs = data
+		case "removeIntegrationRunIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeIntegrationRunIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveIntegrationRunIDs = data
+		case "clearIntegrationRuns":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRuns"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearIntegrationRuns = data
 		case "vendorScoringConfigID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vendorScoringConfigID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -399724,7 +400032,7 @@ func (ec *executionContext) unmarshalInputVendorRiskScoreWhereInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "questionKey", "questionKeyNEQ", "questionKeyIn", "questionKeyNotIn", "questionKeyContains", "questionKeyHasPrefix", "questionKeyHasSuffix", "questionKeyEqualFold", "questionKeyContainsFold", "questionName", "questionNameNEQ", "questionNameIn", "questionNameNotIn", "questionNameContains", "questionNameHasPrefix", "questionNameHasSuffix", "questionNameEqualFold", "questionNameContainsFold", "questionDescription", "questionDescriptionNEQ", "questionDescriptionIn", "questionDescriptionNotIn", "questionDescriptionContains", "questionDescriptionHasPrefix", "questionDescriptionHasSuffix", "questionDescriptionIsNil", "questionDescriptionNotNil", "questionDescriptionEqualFold", "questionDescriptionContainsFold", "questionCategory", "questionCategoryNEQ", "questionCategoryIn", "questionCategoryNotIn", "answerType", "answerTypeNEQ", "answerTypeIn", "answerTypeNotIn", "impact", "impactNEQ", "impactIn", "impactNotIn", "likelihood", "likelihoodNEQ", "likelihoodIn", "likelihoodNotIn", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "answer", "answerNEQ", "answerIn", "answerNotIn", "answerContains", "answerHasPrefix", "answerHasSuffix", "answerIsNil", "answerNotNil", "answerEqualFold", "answerContainsFold", "notes", "notesNEQ", "notesIn", "notesNotIn", "notesContains", "notesHasPrefix", "notesHasSuffix", "notesIsNil", "notesNotNil", "notesEqualFold", "notesContainsFold", "vendorScoringConfigID", "vendorScoringConfigIDNEQ", "vendorScoringConfigIDIn", "vendorScoringConfigIDNotIn", "vendorScoringConfigIDContains", "vendorScoringConfigIDHasPrefix", "vendorScoringConfigIDHasSuffix", "vendorScoringConfigIDIsNil", "vendorScoringConfigIDNotNil", "vendorScoringConfigIDEqualFold", "vendorScoringConfigIDContainsFold", "entityID", "entityIDNEQ", "entityIDIn", "entityIDNotIn", "entityIDContains", "entityIDHasPrefix", "entityIDHasSuffix", "entityIDEqualFold", "entityIDContainsFold", "assessmentResponseID", "assessmentResponseIDNEQ", "assessmentResponseIDIn", "assessmentResponseIDNotIn", "assessmentResponseIDContains", "assessmentResponseIDHasPrefix", "assessmentResponseIDHasSuffix", "assessmentResponseIDIsNil", "assessmentResponseIDNotNil", "assessmentResponseIDEqualFold", "assessmentResponseIDContainsFold", "hasOwner", "hasOwnerWith", "hasVendorScoringConfig", "hasVendorScoringConfigWith", "hasEntity", "hasEntityWith", "hasAssessmentResponse", "hasAssessmentResponseWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "questionKey", "questionKeyNEQ", "questionKeyIn", "questionKeyNotIn", "questionKeyContains", "questionKeyHasPrefix", "questionKeyHasSuffix", "questionKeyEqualFold", "questionKeyContainsFold", "questionName", "questionNameNEQ", "questionNameIn", "questionNameNotIn", "questionNameContains", "questionNameHasPrefix", "questionNameHasSuffix", "questionNameEqualFold", "questionNameContainsFold", "questionDescription", "questionDescriptionNEQ", "questionDescriptionIn", "questionDescriptionNotIn", "questionDescriptionContains", "questionDescriptionHasPrefix", "questionDescriptionHasSuffix", "questionDescriptionIsNil", "questionDescriptionNotNil", "questionDescriptionEqualFold", "questionDescriptionContainsFold", "questionCategory", "questionCategoryNEQ", "questionCategoryIn", "questionCategoryNotIn", "answerType", "answerTypeNEQ", "answerTypeIn", "answerTypeNotIn", "impact", "impactNEQ", "impactIn", "impactNotIn", "likelihood", "likelihoodNEQ", "likelihoodIn", "likelihoodNotIn", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "answer", "answerNEQ", "answerIn", "answerNotIn", "answerContains", "answerHasPrefix", "answerHasSuffix", "answerIsNil", "answerNotNil", "answerEqualFold", "answerContainsFold", "notes", "notesNEQ", "notesIn", "notesNotIn", "notesContains", "notesHasPrefix", "notesHasSuffix", "notesIsNil", "notesNotNil", "notesEqualFold", "notesContainsFold", "vendorScoringConfigID", "vendorScoringConfigIDNEQ", "vendorScoringConfigIDIn", "vendorScoringConfigIDNotIn", "vendorScoringConfigIDContains", "vendorScoringConfigIDHasPrefix", "vendorScoringConfigIDHasSuffix", "vendorScoringConfigIDIsNil", "vendorScoringConfigIDNotNil", "vendorScoringConfigIDEqualFold", "vendorScoringConfigIDContainsFold", "entityID", "entityIDNEQ", "entityIDIn", "entityIDNotIn", "entityIDContains", "entityIDHasPrefix", "entityIDHasSuffix", "entityIDEqualFold", "entityIDContainsFold", "assessmentResponseID", "assessmentResponseIDNEQ", "assessmentResponseIDIn", "assessmentResponseIDNotIn", "assessmentResponseIDContains", "assessmentResponseIDHasPrefix", "assessmentResponseIDHasSuffix", "assessmentResponseIDIsNil", "assessmentResponseIDNotNil", "assessmentResponseIDEqualFold", "assessmentResponseIDContainsFold", "hasOwner", "hasOwnerWith", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasVendorScoringConfig", "hasVendorScoringConfigWith", "hasEntity", "hasEntityWith", "hasAssessmentResponse", "hasAssessmentResponseWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -400200,6 +400508,545 @@ func (ec *executionContext) unmarshalInputVendorRiskScoreWhereInput(ctx context.
 				return it, err
 			}
 			it.OwnerIDContainsFold = data
+		case "sourceDefinitionID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionID = data
+		case "sourceDefinitionIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDNEQ = data
+		case "sourceDefinitionIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDIn = data
+		case "sourceDefinitionIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDNotIn = data
+		case "sourceDefinitionIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDContains = data
+		case "sourceDefinitionIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDHasPrefix = data
+		case "sourceDefinitionIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDHasSuffix = data
+		case "sourceDefinitionIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDIsNil = data
+		case "sourceDefinitionIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDNotNil = data
+		case "sourceDefinitionIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDEqualFold = data
+		case "sourceDefinitionIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionIDContainsFold = data
+		case "sourceDefinitionVersion":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersion = data
+		case "sourceDefinitionVersionNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionNEQ = data
+		case "sourceDefinitionVersionIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionIn = data
+		case "sourceDefinitionVersionNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionNotIn = data
+		case "sourceDefinitionVersionContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionContains = data
+		case "sourceDefinitionVersionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionHasPrefix = data
+		case "sourceDefinitionVersionHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionHasSuffix = data
+		case "sourceDefinitionVersionIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionIsNil = data
+		case "sourceDefinitionVersionNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionNotNil = data
+		case "sourceDefinitionVersionEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionEqualFold = data
+		case "sourceDefinitionVersionContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersionContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceDefinitionVersionContainsFold = data
+		case "sourceInstanceID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceID = data
+		case "sourceInstanceIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDNEQ = data
+		case "sourceInstanceIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDIn = data
+		case "sourceInstanceIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDNotIn = data
+		case "sourceInstanceIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDContains = data
+		case "sourceInstanceIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDHasPrefix = data
+		case "sourceInstanceIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDHasSuffix = data
+		case "sourceInstanceIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDIsNil = data
+		case "sourceInstanceIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDNotNil = data
+		case "sourceInstanceIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDEqualFold = data
+		case "sourceInstanceIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceInstanceIDContainsFold = data
+		case "managedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedBy = data
+		case "managedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByNEQ = data
+		case "managedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByIn = data
+		case "managedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByNotIn = data
+		case "managedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByContains = data
+		case "managedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByHasPrefix = data
+		case "managedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByHasSuffix = data
+		case "managedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByIsNil = data
+		case "managedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByNotNil = data
+		case "managedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByEqualFold = data
+		case "managedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ManagedByContainsFold = data
+		case "integrationRunID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunID = data
+		case "integrationRunIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDNEQ = data
+		case "integrationRunIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDIn = data
+		case "integrationRunIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDNotIn = data
+		case "integrationRunIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDContains = data
+		case "integrationRunIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDHasPrefix = data
+		case "integrationRunIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDHasSuffix = data
+		case "integrationRunIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDIsNil = data
+		case "integrationRunIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDNotNil = data
+		case "integrationRunIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDEqualFold = data
+		case "integrationRunIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
+		case "externalID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalID = data
+		case "externalIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDNEQ = data
+		case "externalIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDIn = data
+		case "externalIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDNotIn = data
+		case "externalIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDContains = data
+		case "externalIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDHasPrefix = data
+		case "externalIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDHasSuffix = data
+		case "externalIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDIsNil = data
+		case "externalIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDNotNil = data
+		case "externalIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDEqualFold = data
+		case "externalIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalIDContainsFold = data
 		case "questionKey":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("questionKey"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -400956,6 +401803,20 @@ func (ec *executionContext) unmarshalInputVendorRiskScoreWhereInput(ctx context.
 				return it, err
 			}
 			it.HasOwnerWith = data
+		case "hasIntegrationRuns":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasIntegrationRuns"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasIntegrationRuns = data
+		case "hasIntegrationRunsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasIntegrationRunsWith"))
+			data, err := ec.unmarshalOIntegrationRunWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationRunWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasIntegrationRunsWith = data
 		case "hasVendorScoringConfig":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVendorScoringConfig"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -446569,6 +447430,41 @@ func (ec *executionContext) _VendorRiskScore(ctx context.Context, sel ast.Select
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceDefinitionID":
+			out.Values[i] = ec._VendorRiskScore_sourceDefinitionID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceDefinitionVersion":
+			out.Values[i] = ec._VendorRiskScore_sourceDefinitionVersion(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceInstanceID":
+			out.Values[i] = ec._VendorRiskScore_sourceInstanceID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "managedBy":
+			out.Values[i] = ec._VendorRiskScore_managedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "integrationRunID":
+			out.Values[i] = ec._VendorRiskScore_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._VendorRiskScore_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "externalID":
+			out.Values[i] = ec._VendorRiskScore_externalID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "questionKey":
 			out.Values[i] = ec._VendorRiskScore_questionKey(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -446639,6 +447535,12 @@ func (ec *executionContext) _VendorRiskScore(ctx context.Context, sel ast.Select
 				true, false,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._VendorRiskScore_owner(ctx, field, obj)
+				})
+		case "integrationRuns":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._VendorRiskScore_integrationRuns(ctx, field, obj)
 				})
 		case "vendorScoringConfig":
 			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
@@ -450427,11 +451329,6 @@ func (ec *executionContext) unmarshalNCreateAPITokenInput2githubᚗcomᚋtheopen
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateAPITokenInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInput(ctx context.Context, v any) (*generated.CreateAPITokenInput, error) {
-	res, err := ec.unmarshalInputCreateAPITokenInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNCreateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInput(ctx context.Context, v any) (generated.CreateActionPlanInput, error) {
 	res, err := ec.unmarshalInputCreateActionPlanInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -450565,11 +451462,6 @@ func (ec *executionContext) unmarshalNCreateCustomTypeEnumInput2ᚖgithubᚗcom�
 func (ec *executionContext) unmarshalNCreateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInput(ctx context.Context, v any) (generated.CreateDNSVerificationInput, error) {
 	res, err := ec.unmarshalInputCreateDNSVerificationInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNCreateDNSVerificationInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInput(ctx context.Context, v any) (*generated.CreateDNSVerificationInput, error) {
-	res, err := ec.unmarshalInputCreateDNSVerificationInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreateDirectoryAccountInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDirectoryAccountInput(ctx context.Context, v any) (generated.CreateDirectoryAccountInput, error) {
@@ -450732,11 +451624,6 @@ func (ec *executionContext) unmarshalNCreateHushInput2githubᚗcomᚋtheopenlane
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateHushInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateHushInput(ctx context.Context, v any) (*generated.CreateHushInput, error) {
-	res, err := ec.unmarshalInputCreateHushInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNCreateIdentityHolderInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateIdentityHolderInput(ctx context.Context, v any) (generated.CreateIdentityHolderInput, error) {
 	res, err := ec.unmarshalInputCreateIdentityHolderInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -450770,11 +451657,6 @@ func (ec *executionContext) unmarshalNCreateInviteInput2ᚖgithubᚗcomᚋtheope
 func (ec *executionContext) unmarshalNCreateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInput(ctx context.Context, v any) (generated.CreateMappableDomainInput, error) {
 	res, err := ec.unmarshalInputCreateMappableDomainInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNCreateMappableDomainInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInput(ctx context.Context, v any) (*generated.CreateMappableDomainInput, error) {
-	res, err := ec.unmarshalInputCreateMappableDomainInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreateMappedControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappedControlInput(ctx context.Context, v any) (generated.CreateMappedControlInput, error) {
@@ -450855,11 +451737,6 @@ func (ec *executionContext) unmarshalNCreateOrganizationInput2githubᚗcomᚋthe
 func (ec *executionContext) unmarshalNCreateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput(ctx context.Context, v any) (generated.CreateOrganizationSettingInput, error) {
 	res, err := ec.unmarshalInputCreateOrganizationSettingInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNCreateOrganizationSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput(ctx context.Context, v any) (*generated.CreateOrganizationSettingInput, error) {
-	res, err := ec.unmarshalInputCreateOrganizationSettingInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreatePersonalAccessTokenInput(ctx context.Context, v any) (generated.CreatePersonalAccessTokenInput, error) {
@@ -451135,11 +452012,6 @@ func (ec *executionContext) unmarshalNCreateUserInput2githubᚗcomᚋtheopenlane
 func (ec *executionContext) unmarshalNCreateUserSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInput(ctx context.Context, v any) (generated.CreateUserSettingInput, error) {
 	res, err := ec.unmarshalInputCreateUserSettingInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNCreateUserSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInput(ctx context.Context, v any) (*generated.CreateUserSettingInput, error) {
-	res, err := ec.unmarshalInputCreateUserSettingInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreateVendorRiskScoreInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateVendorRiskScoreInput(ctx context.Context, v any) (generated.CreateVendorRiskScoreInput, error) {
@@ -458264,23 +459136,6 @@ func (ec *executionContext) unmarshalOControlWhereInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOCreateAPITokenInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInputᚄ(ctx context.Context, v any) ([]*generated.CreateAPITokenInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateAPITokenInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateAPITokenInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
 func (ec *executionContext) unmarshalOCreateActionPlanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInputᚄ(ctx context.Context, v any) ([]*generated.CreateActionPlanInput, error) {
 	if v == nil {
 		return nil, nil
@@ -458511,23 +459366,6 @@ func (ec *executionContext) unmarshalOCreateCustomTypeEnumInput2ᚕᚖgithubᚗc
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNCreateCustomTypeEnumInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateCustomTypeEnumInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalOCreateDNSVerificationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInputᚄ(ctx context.Context, v any) ([]*generated.CreateDNSVerificationInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateDNSVerificationInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateDNSVerificationInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -458814,23 +459652,6 @@ func (ec *executionContext) unmarshalOCreateGroupSettingInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOCreateHushInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateHushInputᚄ(ctx context.Context, v any) ([]*generated.CreateHushInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateHushInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateHushInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateHushInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
 func (ec *executionContext) unmarshalOCreateIdentityHolderInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateIdentityHolderInputᚄ(ctx context.Context, v any) ([]*generated.CreateIdentityHolderInput, error) {
 	if v == nil {
 		return nil, nil
@@ -458875,23 +459696,6 @@ func (ec *executionContext) unmarshalOCreateInviteInput2ᚕᚖgithubᚗcomᚋthe
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNCreateInviteInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateInviteInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalOCreateMappableDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInputᚄ(ctx context.Context, v any) ([]*generated.CreateMappableDomainInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateMappableDomainInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateMappableDomainInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -459002,23 +459806,6 @@ func (ec *executionContext) unmarshalOCreateOrganizationBrandingSettingInput2ᚕ
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNCreateOrganizationBrandingSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationBrandingSettingInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalOCreateOrganizationSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInputᚄ(ctx context.Context, v any) ([]*generated.CreateOrganizationSettingInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateOrganizationSettingInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateOrganizationSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -459425,23 +460212,6 @@ func (ec *executionContext) unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖg
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOCreateUserSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInputᚄ(ctx context.Context, v any) ([]*generated.CreateUserSettingInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateUserSettingInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateUserSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
 func (ec *executionContext) unmarshalOCreateVendorRiskScoreInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateVendorRiskScoreInputᚄ(ctx context.Context, v any) ([]*generated.CreateVendorRiskScoreInput, error) {
 	if v == nil {
 		return nil, nil
@@ -459821,25 +460591,6 @@ func (ec *executionContext) unmarshalOCustomTypeEnumWhereInput2ᚖgithubᚗcom�
 	}
 	res, err := ec.unmarshalInputCustomTypeEnumWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.DNSVerification) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
-		fc := graphql.GetFieldContext(ctx)
-		fc.Result = &v[i]
-		return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, sel, v[i])
-	})
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
 }
 
 func (ec *executionContext) marshalODNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx context.Context, sel ast.SelectionSet, v *generated.DNSVerification) graphql.Marshaler {
@@ -463884,25 +464635,6 @@ func (ec *executionContext) marshalOMap2map(ctx context.Context, sel ast.Selecti
 	_ = ctx
 	res := graphql.MarshalMap(v)
 	return res
-}
-
-func (ec *executionContext) marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.MappableDomain) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
-		fc := graphql.GetFieldContext(ctx)
-		fc.Result = &v[i]
-		return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, sel, v[i])
-	})
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
 }
 
 func (ec *executionContext) marshalOMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx context.Context, sel ast.SelectionSet, v *generated.MappableDomain) graphql.Marshaler {
@@ -470706,25 +471438,6 @@ func (ec *executionContext) marshalOUserRole2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return v
-}
-
-func (ec *executionContext) marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.UserSetting) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
-		fc := graphql.GetFieldContext(ctx)
-		fc.Result = &v[i]
-		return ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx, sel, v[i])
-	})
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
 }
 
 func (ec *executionContext) marshalOUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx context.Context, sel ast.SelectionSet, v *generated.UserSetting) graphql.Marshaler {

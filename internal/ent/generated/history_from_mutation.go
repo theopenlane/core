@@ -27717,6 +27717,34 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if sourceKey, exists := m.SourceKey(); exists {
+		create = create.SetSourceKey(sourceKey)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if questionKey, exists := m.QuestionKey(); exists {
 		create = create.SetQuestionKey(questionKey)
 	}
@@ -27857,6 +27885,48 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetOwnerID(vendorriskscore.OwnerID)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(vendorriskscore.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(vendorriskscore.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(vendorriskscore.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(vendorriskscore.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(vendorriskscore.IntegrationRunID)
+		}
+
+		if sourceKey, exists := m.SourceKey(); exists {
+			create = create.SetSourceKey(sourceKey)
+		} else {
+			create = create.SetSourceKey(vendorriskscore.SourceKey)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(vendorriskscore.ExternalID)
+		}
+
 		if questionKey, exists := m.QuestionKey(); exists {
 			create = create.SetQuestionKey(questionKey)
 		} else {
@@ -27982,6 +28052,13 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetDeletedBy(vendorriskscore.DeletedBy).
 			SetTags(vendorriskscore.Tags).
 			SetOwnerID(vendorriskscore.OwnerID).
+			SetSourceDefinitionID(vendorriskscore.SourceDefinitionID).
+			SetSourceDefinitionVersion(vendorriskscore.SourceDefinitionVersion).
+			SetSourceInstanceID(vendorriskscore.SourceInstanceID).
+			SetManagedBy(vendorriskscore.ManagedBy).
+			SetIntegrationRunID(vendorriskscore.IntegrationRunID).
+			SetSourceKey(vendorriskscore.SourceKey).
+			SetExternalID(vendorriskscore.ExternalID).
 			SetQuestionKey(vendorriskscore.QuestionKey).
 			SetQuestionName(vendorriskscore.QuestionName).
 			SetNillableQuestionDescription(vendorriskscore.QuestionDescription).

@@ -7,9 +7,12 @@ mutation CreateBulkCSVVendorRiskScore ($input: Upload!) {
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -17,6 +20,10 @@ mutation CreateBulkCSVVendorRiskScore ($input: Upload!) {
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -34,9 +41,12 @@ mutation CreateBulkVendorRiskScore ($input: [CreateVendorRiskScoreInput!]) {
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -44,6 +54,10 @@ mutation CreateBulkVendorRiskScore ($input: [CreateVendorRiskScoreInput!]) {
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -61,9 +75,12 @@ mutation CreateVendorRiskScore ($input: CreateVendorRiskScoreInput!) {
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -71,6 +88,10 @@ mutation CreateVendorRiskScore ($input: CreateVendorRiskScoreInput!) {
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -108,9 +129,12 @@ query GetAllVendorRiskScores ($first: Int, $last: Int, $after: Cursor, $before: 
 				createdAt
 				createdBy
 				entityID
+				externalID
 				id
 				impact
+				integrationRunID
 				likelihood
+				managedBy
 				notes
 				ownerID
 				questionCategory
@@ -118,6 +142,10 @@ query GetAllVendorRiskScores ($first: Int, $last: Int, $after: Cursor, $before: 
 				questionKey
 				questionName
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
+				sourceKey
 				tags
 				updatedAt
 				updatedBy
@@ -135,9 +163,12 @@ query GetVendorRiskScoreByID ($vendorRiskScoreId: ID!) {
 		createdAt
 		createdBy
 		entityID
+		externalID
 		id
 		impact
+		integrationRunID
 		likelihood
+		managedBy
 		notes
 		ownerID
 		questionCategory
@@ -145,6 +176,10 @@ query GetVendorRiskScoreByID ($vendorRiskScoreId: ID!) {
 		questionKey
 		questionName
 		score
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
+		sourceKey
 		tags
 		updatedAt
 		updatedBy
@@ -169,9 +204,12 @@ query GetVendorRiskScores ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				createdAt
 				createdBy
 				entityID
+				externalID
 				id
 				impact
+				integrationRunID
 				likelihood
+				managedBy
 				notes
 				ownerID
 				questionCategory
@@ -179,6 +217,10 @@ query GetVendorRiskScores ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				questionKey
 				questionName
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
+				sourceKey
 				tags
 				updatedAt
 				updatedBy
@@ -197,9 +239,12 @@ mutation UpdateBulkCSVVendorRiskScore ($input: Upload!) {
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -207,6 +252,10 @@ mutation UpdateBulkCSVVendorRiskScore ($input: Upload!) {
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -227,9 +276,12 @@ mutation UpdateBulkVendorRiskScore ($ids: [ID!]!, $input: UpdateVendorRiskScoreI
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -237,6 +289,10 @@ mutation UpdateBulkVendorRiskScore ($ids: [ID!]!, $input: UpdateVendorRiskScoreI
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -257,9 +313,12 @@ mutation UpdateVendorRiskScore ($updateVendorRiskScoreId: ID!, $input: UpdateVen
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -267,6 +326,10 @@ mutation UpdateVendorRiskScore ($updateVendorRiskScoreId: ID!, $input: UpdateVen
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy

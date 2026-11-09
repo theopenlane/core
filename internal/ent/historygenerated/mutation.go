@@ -166353,40 +166353,47 @@ func (m *UserSettingHistoryMutation) ResetEdge(name string) error {
 // VendorRiskScoreHistoryMutation represents an operation that mutates the VendorRiskScoreHistory nodes in the graph.
 type VendorRiskScoreHistoryMutation struct {
 	config
-	op                       Op
-	typ                      string
-	id                       *string
-	history_time             *time.Time
-	ref                      *string
-	operation                *history.OpType
-	created_at               *time.Time
-	updated_at               *time.Time
-	created_by               *string
-	updated_by               *string
-	updated_by_impersonator  *string
-	deleted_at               *time.Time
-	deleted_by               *string
-	tags                     *[]string
-	appendtags               []string
-	owner_id                 *string
-	question_key             *string
-	question_name            *string
-	question_description     *string
-	question_category        *enums.VendorScoringCategory
-	answer_type              *enums.VendorScoringAnswerType
-	impact                   *enums.VendorRiskImpact
-	likelihood               *enums.VendorRiskLikelihood
-	score                    *float64
-	addscore                 *float64
-	answer                   *string
-	notes                    *string
-	vendor_scoring_config_id *string
-	entity_id                *string
-	assessment_response_id   *string
-	clearedFields            map[string]struct{}
-	done                     bool
-	oldValue                 func(context.Context) (*VendorRiskScoreHistory, error)
-	predicates               []predicate.VendorRiskScoreHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	owner_id                  *string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	source_key                *string
+	external_id               *string
+	question_key              *string
+	question_name             *string
+	question_description      *string
+	question_category         *enums.VendorScoringCategory
+	answer_type               *enums.VendorScoringAnswerType
+	impact                    *enums.VendorRiskImpact
+	likelihood                *enums.VendorRiskLikelihood
+	score                     *float64
+	addscore                  *float64
+	answer                    *string
+	notes                     *string
+	vendor_scoring_config_id  *string
+	entity_id                 *string
+	assessment_response_id    *string
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*VendorRiskScoreHistory, error)
+	predicates                []predicate.VendorRiskScoreHistory
 }
 
 var _ ent.Mutation = (*VendorRiskScoreHistoryMutation)(nil)
@@ -167071,6 +167078,349 @@ func (m *VendorRiskScoreHistoryMutation) ResetOwnerID() {
 	delete(m.clearedFields, vendorriskscorehistory.FieldOwnerID)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *VendorRiskScoreHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *VendorRiskScoreHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the VendorRiskScoreHistory entity.
+// If the VendorRiskScoreHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *VendorRiskScoreHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[vendorriskscorehistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *VendorRiskScoreHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscorehistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *VendorRiskScoreHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, vendorriskscorehistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *VendorRiskScoreHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *VendorRiskScoreHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the VendorRiskScoreHistory entity.
+// If the VendorRiskScoreHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *VendorRiskScoreHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[vendorriskscorehistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *VendorRiskScoreHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[vendorriskscorehistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *VendorRiskScoreHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, vendorriskscorehistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *VendorRiskScoreHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *VendorRiskScoreHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the VendorRiskScoreHistory entity.
+// If the VendorRiskScoreHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *VendorRiskScoreHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[vendorriskscorehistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *VendorRiskScoreHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscorehistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *VendorRiskScoreHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, vendorriskscorehistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *VendorRiskScoreHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *VendorRiskScoreHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the VendorRiskScoreHistory entity.
+// If the VendorRiskScoreHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *VendorRiskScoreHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[vendorriskscorehistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *VendorRiskScoreHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[vendorriskscorehistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *VendorRiskScoreHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, vendorriskscorehistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *VendorRiskScoreHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *VendorRiskScoreHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the VendorRiskScoreHistory entity.
+// If the VendorRiskScoreHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *VendorRiskScoreHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[vendorriskscorehistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *VendorRiskScoreHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscorehistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *VendorRiskScoreHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, vendorriskscorehistory.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *VendorRiskScoreHistoryMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *VendorRiskScoreHistoryMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the VendorRiskScoreHistory entity.
+// If the VendorRiskScoreHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreHistoryMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *VendorRiskScoreHistoryMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[vendorriskscorehistory.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *VendorRiskScoreHistoryMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[vendorriskscorehistory.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *VendorRiskScoreHistoryMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, vendorriskscorehistory.FieldSourceKey)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *VendorRiskScoreHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *VendorRiskScoreHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the VendorRiskScoreHistory entity.
+// If the VendorRiskScoreHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *VendorRiskScoreHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[vendorriskscorehistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *VendorRiskScoreHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscorehistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *VendorRiskScoreHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, vendorriskscorehistory.FieldExternalID)
+}
+
 // SetQuestionKey sets the "question_key" field.
 func (m *VendorRiskScoreHistoryMutation) SetQuestionKey(s string) {
 	m.question_key = &s
@@ -167658,7 +168008,7 @@ func (m *VendorRiskScoreHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VendorRiskScoreHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 32)
 	if m.history_time != nil {
 		fields = append(fields, vendorriskscorehistory.FieldHistoryTime)
 	}
@@ -167694,6 +168044,27 @@ func (m *VendorRiskScoreHistoryMutation) Fields() []string {
 	}
 	if m.owner_id != nil {
 		fields = append(fields, vendorriskscorehistory.FieldOwnerID)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, vendorriskscorehistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, vendorriskscorehistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, vendorriskscorehistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, vendorriskscorehistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, vendorriskscorehistory.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, vendorriskscorehistory.FieldSourceKey)
+	}
+	if m.external_id != nil {
+		fields = append(fields, vendorriskscorehistory.FieldExternalID)
 	}
 	if m.question_key != nil {
 		fields = append(fields, vendorriskscorehistory.FieldQuestionKey)
@@ -167766,6 +168137,20 @@ func (m *VendorRiskScoreHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Tags()
 	case vendorriskscorehistory.FieldOwnerID:
 		return m.OwnerID()
+	case vendorriskscorehistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case vendorriskscorehistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case vendorriskscorehistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case vendorriskscorehistory.FieldManagedBy:
+		return m.ManagedBy()
+	case vendorriskscorehistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case vendorriskscorehistory.FieldSourceKey:
+		return m.SourceKey()
+	case vendorriskscorehistory.FieldExternalID:
+		return m.ExternalID()
 	case vendorriskscorehistory.FieldQuestionKey:
 		return m.QuestionKey()
 	case vendorriskscorehistory.FieldQuestionName:
@@ -167825,6 +168210,20 @@ func (m *VendorRiskScoreHistoryMutation) OldField(ctx context.Context, name stri
 		return m.OldTags(ctx)
 	case vendorriskscorehistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
+	case vendorriskscorehistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case vendorriskscorehistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case vendorriskscorehistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case vendorriskscorehistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case vendorriskscorehistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case vendorriskscorehistory.FieldSourceKey:
+		return m.OldSourceKey(ctx)
+	case vendorriskscorehistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case vendorriskscorehistory.FieldQuestionKey:
 		return m.OldQuestionKey(ctx)
 	case vendorriskscorehistory.FieldQuestionName:
@@ -167943,6 +168342,55 @@ func (m *VendorRiskScoreHistoryMutation) SetField(name string, value ent.Value) 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOwnerID(v)
+		return nil
+	case vendorriskscorehistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case vendorriskscorehistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case vendorriskscorehistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case vendorriskscorehistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case vendorriskscorehistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case vendorriskscorehistory.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
+		return nil
+	case vendorriskscorehistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case vendorriskscorehistory.FieldQuestionKey:
 		v, ok := value.(string)
@@ -168110,6 +168558,27 @@ func (m *VendorRiskScoreHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(vendorriskscorehistory.FieldOwnerID) {
 		fields = append(fields, vendorriskscorehistory.FieldOwnerID)
 	}
+	if m.FieldCleared(vendorriskscorehistory.FieldSourceDefinitionID) {
+		fields = append(fields, vendorriskscorehistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(vendorriskscorehistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, vendorriskscorehistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(vendorriskscorehistory.FieldSourceInstanceID) {
+		fields = append(fields, vendorriskscorehistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(vendorriskscorehistory.FieldManagedBy) {
+		fields = append(fields, vendorriskscorehistory.FieldManagedBy)
+	}
+	if m.FieldCleared(vendorriskscorehistory.FieldIntegrationRunID) {
+		fields = append(fields, vendorriskscorehistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(vendorriskscorehistory.FieldSourceKey) {
+		fields = append(fields, vendorriskscorehistory.FieldSourceKey)
+	}
+	if m.FieldCleared(vendorriskscorehistory.FieldExternalID) {
+		fields = append(fields, vendorriskscorehistory.FieldExternalID)
+	}
 	if m.FieldCleared(vendorriskscorehistory.FieldQuestionDescription) {
 		fields = append(fields, vendorriskscorehistory.FieldQuestionDescription)
 	}
@@ -168169,6 +168638,27 @@ func (m *VendorRiskScoreHistoryMutation) ClearField(name string) error {
 	case vendorriskscorehistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
+	case vendorriskscorehistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case vendorriskscorehistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case vendorriskscorehistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case vendorriskscorehistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case vendorriskscorehistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case vendorriskscorehistory.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
+	case vendorriskscorehistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case vendorriskscorehistory.FieldQuestionDescription:
 		m.ClearQuestionDescription()
 		return nil
@@ -168227,6 +168717,27 @@ func (m *VendorRiskScoreHistoryMutation) ResetField(name string) error {
 		return nil
 	case vendorriskscorehistory.FieldOwnerID:
 		m.ResetOwnerID()
+		return nil
+	case vendorriskscorehistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case vendorriskscorehistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case vendorriskscorehistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case vendorriskscorehistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case vendorriskscorehistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case vendorriskscorehistory.FieldSourceKey:
+		m.ResetSourceKey()
+		return nil
+	case vendorriskscorehistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case vendorriskscorehistory.FieldQuestionKey:
 		m.ResetQuestionKey()

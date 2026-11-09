@@ -240,7 +240,7 @@ func (r Review) Mixin() []ent.Mixin {
 	return mixinConfig{
 		// prefix: "RVW",
 		additionalMixins: []ent.Mixin{
-			newProvenanceMixin(r, withSearchableExternalID(), withoutExternalIDIndex()),
+			newProvenanceMixin(r, withSearchableExternalID(), withoutExternalIDIndex(), withoutExternalIDLookupKey()),
 			newObjectOwnedMixin[generated.Review](r,
 				withParents(
 					Program{},

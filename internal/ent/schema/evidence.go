@@ -283,8 +283,7 @@ func (e Evidence) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALAssembly("back-matter-resource"),
 		),
 		entx.IntegrationMappingSchema().
-			StockPersist().
-			LookupAlternative(externalIDFieldName),
+			StockPersist(),
 	}
 }
 

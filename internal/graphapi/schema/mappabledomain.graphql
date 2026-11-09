@@ -21,24 +21,6 @@ extend type Mutation{
         input: CreateMappableDomainInput!
     ): MappableDomainCreatePayload!
     """
-    Create multiple new mappableDomains
-    """
-    createBulkMappableDomain(
-        """
-        values of the mappableDomain
-        """
-        input: [CreateMappableDomainInput!]
-    ): MappableDomainBulkCreatePayload!
-    """
-    Create multiple new mappableDomains via file upload
-    """
-    createBulkCSVMappableDomain(
-        """
-        csv file containing values of the mappableDomain
-        """
-        input: Upload!
-    ): MappableDomainBulkCreatePayload!
-    """
     Update an existing mappableDomain
     """
     updateMappableDomain(
@@ -60,37 +42,6 @@ extend type Mutation{
         """
         id: ID!
     ): MappableDomainDeletePayload!
-    """
-    Delete multiple mappableDomains
-    """
-    deleteBulkMappableDomain(
-        """
-        IDs of the mappableDomains to delete
-        """
-        ids: [ID!]!
-    ): MappableDomainBulkDeletePayload!
-    """
-    Update multiple existing mappableDomains
-    """
-    updateBulkMappableDomain(
-        """
-        IDs of the mappableDomains to update
-        """
-        ids: [ID!]!
-        """
-        values to update the mappableDomains with
-        """
-        input: UpdateMappableDomainInput!
-    ): MappableDomainBulkUpdatePayload!
-    """
-    Update multiple existing mappableDomains via file upload
-    """
-    updateBulkCSVMappableDomain(
-        """
-        csv file containing values of the mappableDomain, must include ID column
-        """
-        input: Upload!
-    ): MappableDomainBulkUpdatePayload!
 }
 
 """
@@ -121,54 +72,4 @@ type MappableDomainDeletePayload {
     Deleted mappableDomain ID
     """
     deletedID: ID!
-}
-
-"""
-Return response for createBulkMappableDomain mutation
-"""
-type MappableDomainBulkCreatePayload {
-    """
-    Created mappableDomains
-    """
-    mappableDomains: [MappableDomain!]
-}
-
-"""
-Return response for deleteBulkMappableDomain mutation
-"""
-type MappableDomainBulkDeletePayload {
-    """
-    Deleted mappableDomain IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkMappableDomain mutation
-"""
-type MappableDomainBulkUpdatePayload {
-    """
-    Updated mappableDomains
-    """
-    mappableDomains: [MappableDomain!]
-    """
-    IDs of the updated mappableDomains
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
 }

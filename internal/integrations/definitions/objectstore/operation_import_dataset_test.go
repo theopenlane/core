@@ -173,11 +173,12 @@ func TestLinkStandardControls(t *testing.T) {
 }
 
 func TestDatasetBuiltinVariables(t *testing.T) {
-	variables, err := DatasetBuiltinVariables{OrgName: "Acme", OrgDomain: "acme.test", OwnerUserID: "user_1", OwnerEmail: "owner@acme.test", OwnerName: "Owner", Today: "2026-11-04"}.variables()
+	variables, err := DatasetBuiltinVariables{OrgName: "Acme", OrgSlug: "acme", OrgDomain: "acme.test", OwnerUserID: "user_1", OwnerEmail: "owner@acme.test", OwnerName: "Owner", Today: "2026-11-04"}.variables()
 	assert.NilError(t, err)
 
 	assert.DeepEqual(t, placeholder.Variables{
 		"ORG_NAME":          "Acme",
+		"ORG_SLUG":          "acme",
 		"ORG_DOMAIN":        "acme.test",
 		"ORG_OWNER_USER_ID": "user_1",
 		"ORG_OWNER_EMAIL":   "owner@acme.test",

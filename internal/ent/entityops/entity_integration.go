@@ -2684,6 +2684,50 @@ var TemplateFields = struct {
 	Uischema:               FieldDescriptor{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}", InputKey: "uischema", Clearable: true},
 }
 
+// VendorRiskScoreFields indexes the provider-mappable fields of VendorRiskScore
+var VendorRiskScoreFields = struct {
+	// Answer is the answer field
+	Answer FieldDescriptor
+	// AssessmentResponseID is the assessment_response_id field
+	AssessmentResponseID FieldDescriptor
+	// EntityID is the entity_id field
+	EntityID FieldDescriptor
+	// ExternalID is the external_id field
+	ExternalID FieldDescriptor
+	// Impact is the impact field
+	Impact FieldDescriptor
+	// Likelihood is the likelihood field
+	Likelihood FieldDescriptor
+	// Notes is the notes field
+	Notes FieldDescriptor
+	// QuestionCategory is the question_category field
+	QuestionCategory FieldDescriptor
+	// QuestionDescription is the question_description field
+	QuestionDescription FieldDescriptor
+	// QuestionKey is the question_key field
+	QuestionKey FieldDescriptor
+	// QuestionName is the question_name field
+	QuestionName FieldDescriptor
+	// Tags is the tags field
+	Tags FieldDescriptor
+	// VendorScoringConfigID is the vendor_scoring_config_id field
+	VendorScoringConfigID FieldDescriptor
+}{
+	Answer:                FieldDescriptor{Name: "answer", Label: "Answer", Type: "string", MatchKey: true, InputKey: "answer", Clearable: true},
+	AssessmentResponseID:  FieldDescriptor{Name: "assessment_response_id", Label: "AssessmentResponseID", Type: "string", MatchKey: true, InputKey: "assessment_response_id", Clearable: true},
+	EntityID:              FieldDescriptor{Name: "entity_id", Label: "EntityID", Type: "string", MatchKey: true, InputKey: "entity_id"},
+	ExternalID:            FieldDescriptor{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
+	Impact:                FieldDescriptor{Name: "impact", Label: "Impact", Type: "enums.VendorRiskImpact", InputKey: "impact"},
+	Likelihood:            FieldDescriptor{Name: "likelihood", Label: "Likelihood", Type: "enums.VendorRiskLikelihood", InputKey: "likelihood"},
+	Notes:                 FieldDescriptor{Name: "notes", Label: "Notes", Type: "string", MatchKey: true, InputKey: "notes", Clearable: true},
+	QuestionCategory:      FieldDescriptor{Name: "question_category", Label: "QuestionCategory", Type: "enums.VendorScoringCategory", InputKey: "question_category"},
+	QuestionDescription:   FieldDescriptor{Name: "question_description", Label: "QuestionDescription", Type: "string", MatchKey: true, InputKey: "question_description", Clearable: true},
+	QuestionKey:           FieldDescriptor{Name: "question_key", Label: "QuestionKey", Type: "string", MatchKey: true, InputKey: "question_key"},
+	QuestionName:          FieldDescriptor{Name: "question_name", Label: "QuestionName", Type: "string", MatchKey: true, InputKey: "question_name"},
+	Tags:                  FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+	VendorScoringConfigID: FieldDescriptor{Name: "vendor_scoring_config_id", Label: "VendorScoringConfigID", Type: "string", MatchKey: true, InputKey: "vendor_scoring_config_id", Clearable: true},
+}
+
 // VulnerabilityFields indexes the provider-mappable fields of Vulnerability
 var VulnerabilityFields = struct {
 	// AssignedTo is the assigned_to field

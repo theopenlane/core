@@ -3778,28 +3778,35 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "VendorRiskScore",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			vendorriskscore.FieldCreatedAt:             {Type: field.TypeTime, Column: vendorriskscore.FieldCreatedAt},
-			vendorriskscore.FieldUpdatedAt:             {Type: field.TypeTime, Column: vendorriskscore.FieldUpdatedAt},
-			vendorriskscore.FieldCreatedBy:             {Type: field.TypeString, Column: vendorriskscore.FieldCreatedBy},
-			vendorriskscore.FieldUpdatedBy:             {Type: field.TypeString, Column: vendorriskscore.FieldUpdatedBy},
-			vendorriskscore.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: vendorriskscore.FieldUpdatedByImpersonator},
-			vendorriskscore.FieldDeletedAt:             {Type: field.TypeTime, Column: vendorriskscore.FieldDeletedAt},
-			vendorriskscore.FieldDeletedBy:             {Type: field.TypeString, Column: vendorriskscore.FieldDeletedBy},
-			vendorriskscore.FieldTags:                  {Type: field.TypeJSON, Column: vendorriskscore.FieldTags},
-			vendorriskscore.FieldOwnerID:               {Type: field.TypeString, Column: vendorriskscore.FieldOwnerID},
-			vendorriskscore.FieldQuestionKey:           {Type: field.TypeString, Column: vendorriskscore.FieldQuestionKey},
-			vendorriskscore.FieldQuestionName:          {Type: field.TypeString, Column: vendorriskscore.FieldQuestionName},
-			vendorriskscore.FieldQuestionDescription:   {Type: field.TypeString, Column: vendorriskscore.FieldQuestionDescription},
-			vendorriskscore.FieldQuestionCategory:      {Type: field.TypeEnum, Column: vendorriskscore.FieldQuestionCategory},
-			vendorriskscore.FieldAnswerType:            {Type: field.TypeEnum, Column: vendorriskscore.FieldAnswerType},
-			vendorriskscore.FieldImpact:                {Type: field.TypeEnum, Column: vendorriskscore.FieldImpact},
-			vendorriskscore.FieldLikelihood:            {Type: field.TypeEnum, Column: vendorriskscore.FieldLikelihood},
-			vendorriskscore.FieldScore:                 {Type: field.TypeFloat64, Column: vendorriskscore.FieldScore},
-			vendorriskscore.FieldAnswer:                {Type: field.TypeString, Column: vendorriskscore.FieldAnswer},
-			vendorriskscore.FieldNotes:                 {Type: field.TypeString, Column: vendorriskscore.FieldNotes},
-			vendorriskscore.FieldVendorScoringConfigID: {Type: field.TypeString, Column: vendorriskscore.FieldVendorScoringConfigID},
-			vendorriskscore.FieldEntityID:              {Type: field.TypeString, Column: vendorriskscore.FieldEntityID},
-			vendorriskscore.FieldAssessmentResponseID:  {Type: field.TypeString, Column: vendorriskscore.FieldAssessmentResponseID},
+			vendorriskscore.FieldCreatedAt:               {Type: field.TypeTime, Column: vendorriskscore.FieldCreatedAt},
+			vendorriskscore.FieldUpdatedAt:               {Type: field.TypeTime, Column: vendorriskscore.FieldUpdatedAt},
+			vendorriskscore.FieldCreatedBy:               {Type: field.TypeString, Column: vendorriskscore.FieldCreatedBy},
+			vendorriskscore.FieldUpdatedBy:               {Type: field.TypeString, Column: vendorriskscore.FieldUpdatedBy},
+			vendorriskscore.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: vendorriskscore.FieldUpdatedByImpersonator},
+			vendorriskscore.FieldDeletedAt:               {Type: field.TypeTime, Column: vendorriskscore.FieldDeletedAt},
+			vendorriskscore.FieldDeletedBy:               {Type: field.TypeString, Column: vendorriskscore.FieldDeletedBy},
+			vendorriskscore.FieldTags:                    {Type: field.TypeJSON, Column: vendorriskscore.FieldTags},
+			vendorriskscore.FieldOwnerID:                 {Type: field.TypeString, Column: vendorriskscore.FieldOwnerID},
+			vendorriskscore.FieldSourceDefinitionID:      {Type: field.TypeString, Column: vendorriskscore.FieldSourceDefinitionID},
+			vendorriskscore.FieldSourceDefinitionVersion: {Type: field.TypeString, Column: vendorriskscore.FieldSourceDefinitionVersion},
+			vendorriskscore.FieldSourceInstanceID:        {Type: field.TypeString, Column: vendorriskscore.FieldSourceInstanceID},
+			vendorriskscore.FieldManagedBy:               {Type: field.TypeString, Column: vendorriskscore.FieldManagedBy},
+			vendorriskscore.FieldIntegrationRunID:        {Type: field.TypeString, Column: vendorriskscore.FieldIntegrationRunID},
+			vendorriskscore.FieldSourceKey:               {Type: field.TypeString, Column: vendorriskscore.FieldSourceKey},
+			vendorriskscore.FieldExternalID:              {Type: field.TypeString, Column: vendorriskscore.FieldExternalID},
+			vendorriskscore.FieldQuestionKey:             {Type: field.TypeString, Column: vendorriskscore.FieldQuestionKey},
+			vendorriskscore.FieldQuestionName:            {Type: field.TypeString, Column: vendorriskscore.FieldQuestionName},
+			vendorriskscore.FieldQuestionDescription:     {Type: field.TypeString, Column: vendorriskscore.FieldQuestionDescription},
+			vendorriskscore.FieldQuestionCategory:        {Type: field.TypeEnum, Column: vendorriskscore.FieldQuestionCategory},
+			vendorriskscore.FieldAnswerType:              {Type: field.TypeEnum, Column: vendorriskscore.FieldAnswerType},
+			vendorriskscore.FieldImpact:                  {Type: field.TypeEnum, Column: vendorriskscore.FieldImpact},
+			vendorriskscore.FieldLikelihood:              {Type: field.TypeEnum, Column: vendorriskscore.FieldLikelihood},
+			vendorriskscore.FieldScore:                   {Type: field.TypeFloat64, Column: vendorriskscore.FieldScore},
+			vendorriskscore.FieldAnswer:                  {Type: field.TypeString, Column: vendorriskscore.FieldAnswer},
+			vendorriskscore.FieldNotes:                   {Type: field.TypeString, Column: vendorriskscore.FieldNotes},
+			vendorriskscore.FieldVendorScoringConfigID:   {Type: field.TypeString, Column: vendorriskscore.FieldVendorScoringConfigID},
+			vendorriskscore.FieldEntityID:                {Type: field.TypeString, Column: vendorriskscore.FieldEntityID},
+			vendorriskscore.FieldAssessmentResponseID:    {Type: field.TypeString, Column: vendorriskscore.FieldAssessmentResponseID},
 		},
 	}
 	graph.Nodes[93] = &sqlgraph.Node{
@@ -18771,6 +18778,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"VendorRiskScore",
 		"Organization",
+	)
+	graph.MustAddE(
+		"integration_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorriskscore.IntegrationRunsTable,
+			Columns: []string{vendorriskscore.IntegrationRunsColumn},
+			Bidi:    false,
+		},
+		"VendorRiskScore",
+		"IntegrationRun",
 	)
 	graph.MustAddE(
 		"vendor_scoring_config",
@@ -53130,6 +53149,41 @@ func (f *VendorRiskScoreFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(vendorriskscore.FieldOwnerID))
 }
 
+// WhereSourceDefinitionID applies the entql string predicate on the source_definition_id field.
+func (f *VendorRiskScoreFilter) WhereSourceDefinitionID(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldSourceDefinitionID))
+}
+
+// WhereSourceDefinitionVersion applies the entql string predicate on the source_definition_version field.
+func (f *VendorRiskScoreFilter) WhereSourceDefinitionVersion(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldSourceDefinitionVersion))
+}
+
+// WhereSourceInstanceID applies the entql string predicate on the source_instance_id field.
+func (f *VendorRiskScoreFilter) WhereSourceInstanceID(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldSourceInstanceID))
+}
+
+// WhereManagedBy applies the entql string predicate on the managed_by field.
+func (f *VendorRiskScoreFilter) WhereManagedBy(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldManagedBy))
+}
+
+// WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
+func (f *VendorRiskScoreFilter) WhereIntegrationRunID(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *VendorRiskScoreFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldSourceKey))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *VendorRiskScoreFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldExternalID))
+}
+
 // WhereQuestionKey applies the entql string predicate on the question_key field.
 func (f *VendorRiskScoreFilter) WhereQuestionKey(p entql.StringP) {
 	f.Where(p.Field(vendorriskscore.FieldQuestionKey))
@@ -53203,6 +53257,20 @@ func (f *VendorRiskScoreFilter) WhereHasOwner() {
 // WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
 func (f *VendorRiskScoreFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIntegrationRuns applies a predicate to check if query has an edge integration_runs.
+func (f *VendorRiskScoreFilter) WhereHasIntegrationRuns() {
+	f.Where(entql.HasEdge("integration_runs"))
+}
+
+// WhereHasIntegrationRunsWith applies a predicate to check if query has an edge integration_runs with a given conditions (other predicates).
+func (f *VendorRiskScoreFilter) WhereHasIntegrationRunsWith(preds ...predicate.IntegrationRun) {
+	f.Where(entql.HasEdgeWith("integration_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

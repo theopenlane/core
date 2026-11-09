@@ -6174,6 +6174,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "integration_runs": {
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "vendor_scoring_config": {
 	ObjectType:          "organization",
 	SkipEditCheck:       false,

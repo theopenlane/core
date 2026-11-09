@@ -17947,6 +17947,10 @@ input CreateVendorRiskScoreInput {
   """
   tags: [String!]
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String!
@@ -17979,6 +17983,7 @@ input CreateVendorRiskScoreInput {
   """
   notes: String
   ownerID: ID
+  integrationRunIDs: [ID!]
   vendorScoringConfigID: ID
   entityID: ID!
   assessmentResponseID: ID
@@ -83415,6 +83420,11 @@ input UpdateVendorRiskScoreInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  clearExternalID: Boolean
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String
@@ -83449,6 +83459,9 @@ input UpdateVendorRiskScoreInput {
   """
   notes: String
   clearNotes: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   vendorScoringConfigID: ID
   clearVendorScoringConfig: Boolean
   entityID: ID
@@ -85524,6 +85537,34 @@ type VendorRiskScore implements Node @modules(names: ["entity_management_module"
   """
   ownerID: ID
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String!
@@ -85576,6 +85617,37 @@ type VendorRiskScore implements Node @modules(names: ["entity_management_module"
   """
   assessmentResponseID: ID
   owner: Organization
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   vendorScoringConfig: VendorScoringConfig
   entity: Entity!
   assessmentResponse: AssessmentResponse
@@ -85629,6 +85701,7 @@ Properties by which VendorRiskScore connections can be ordered.
 enum VendorRiskScoreOrderField {
   created_at
   updated_at
+  external_id
   question_key
   question_category
   impact
@@ -85771,6 +85844,104 @@ input VendorRiskScoreWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   question_key field predicates
   """
@@ -85921,6 +86092,11 @@ input VendorRiskScoreWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   vendor_scoring_config edge predicates
   """

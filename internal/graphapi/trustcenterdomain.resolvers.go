@@ -10,10 +10,6 @@ import (
 	"errors"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
@@ -22,6 +18,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterDomain is the resolver for the createTrustCenterDomain field.

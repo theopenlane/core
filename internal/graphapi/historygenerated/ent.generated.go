@@ -63882,6 +63882,167 @@ func (ec *executionContext) fieldContext_VendorRiskScoreHistory_ownerID(_ contex
 	return graphql.NewScalarFieldContext("VendorRiskScoreHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _VendorRiskScoreHistory_sourceDefinitionID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.VendorRiskScoreHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScoreHistory_sourceDefinitionID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceDefinitionID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScoreHistory_sourceDefinitionID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScoreHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScoreHistory_sourceDefinitionVersion(ctx context.Context, field graphql.CollectedField, obj *historygenerated.VendorRiskScoreHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScoreHistory_sourceDefinitionVersion(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceDefinitionVersion, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScoreHistory_sourceDefinitionVersion(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScoreHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScoreHistory_sourceInstanceID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.VendorRiskScoreHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScoreHistory_sourceInstanceID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceInstanceID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScoreHistory_sourceInstanceID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScoreHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScoreHistory_managedBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.VendorRiskScoreHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScoreHistory_managedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ManagedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScoreHistory_managedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScoreHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScoreHistory_integrationRunID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.VendorRiskScoreHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScoreHistory_integrationRunID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IntegrationRunID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScoreHistory_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScoreHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScoreHistory_sourceKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.VendorRiskScoreHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScoreHistory_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScoreHistory_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScoreHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _VendorRiskScoreHistory_externalID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.VendorRiskScoreHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorRiskScoreHistory_externalID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExternalID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VendorRiskScoreHistory_externalID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VendorRiskScoreHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _VendorRiskScoreHistory_questionKey(ctx context.Context, field graphql.CollectedField, obj *historygenerated.VendorRiskScoreHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -134729,6 +134890,41 @@ func (ec *executionContext) _VendorRiskScoreHistory(ctx context.Context, sel ast
 			}
 		case "ownerID":
 			out.Values[i] = ec._VendorRiskScoreHistory_ownerID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceDefinitionID":
+			out.Values[i] = ec._VendorRiskScoreHistory_sourceDefinitionID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceDefinitionVersion":
+			out.Values[i] = ec._VendorRiskScoreHistory_sourceDefinitionVersion(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceInstanceID":
+			out.Values[i] = ec._VendorRiskScoreHistory_sourceInstanceID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "managedBy":
+			out.Values[i] = ec._VendorRiskScoreHistory_managedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "integrationRunID":
+			out.Values[i] = ec._VendorRiskScoreHistory_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "sourceKey":
+			out.Values[i] = ec._VendorRiskScoreHistory_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "externalID":
+			out.Values[i] = ec._VendorRiskScoreHistory_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

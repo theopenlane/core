@@ -195,6 +195,29 @@ func TestQueryRisks(t *testing.T) {
 		MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
+func TestMutationCreateBulkRisk(t *testing.T) {
+	name := "Bulk Risk " + ulids.New().String()
+
+	resp, err := suite.Client.API.CreateBulkRisk(th.SharedTestUser1.UserCtx, []*testclient.CreateRiskInput{
+		{Name: name + " 1"},
+		{Name: name + " 2"},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkRisk.Risks, 2))
+
+	riskIDs := make([]string, 0, len(resp.CreateBulkRisk.Risks))
+	for _, risk := range resp.CreateBulkRisk.Risks {
+		riskIDs = append(riskIDs, risk.ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.RiskDeleteOne]{Client: suite.Client.DB.Risk, IDs: riskIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeRisk, riskIDs)
+}
+
 func TestMutationCreateRisk(t *testing.T) {
 	program1 := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	program2 := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)

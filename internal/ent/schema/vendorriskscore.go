@@ -121,6 +121,7 @@ func (v VendorRiskScore) Mixin() []ent.Mixin {
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
 			),
+			newProvenanceMixin(v, withoutExternalIDIndex(), withoutExternalIDLookupKey()),
 		},
 	}.getMixins(v)
 }
@@ -166,6 +167,9 @@ func (VendorRiskScore) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName, "question_key"),
 	}
 }
 

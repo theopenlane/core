@@ -269,6 +269,11 @@ func defaultIngestPersist(s *Schema) IngestPersist {
 			owner = integration.OwnerID
 		}
 
+		// imports without an installation run as the dispatching organization if its in the context
+		if owner == "" {
+			owner, _ = auth.GetOrganizationIDFromContext(ctx)
+		}
+
 		return s.Upsert(ctx, client, owner, payload)
 	}
 }
@@ -4235,8 +4240,8 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_id", "external_owner_id"}},
+			{Fields: []string{"external_id"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "finding", Operation: refOpCreate}
@@ -5934,8 +5939,8 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_id", "external_owner_id"}},
+			{Fields: []string{"external_id"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "remediation", Operation: refOpCreate}
@@ -6112,8 +6117,8 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_id", "external_owner_id"}},
+			{Fields: []string{"external_id"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "review", Operation: refOpCreate}
@@ -7388,8 +7393,53 @@ var (
 			Lower:  "vendorriskscore",
 			Plural: "vendor_risk_scores",
 		},
-		ProjectionType: reflect.TypeFor[VendorRiskScoreProjection](),
-		OwnerField:     vendorriskscore.FieldOwnerID,
+		ProjectionType:        reflect.TypeFor[VendorRiskScoreProjection](),
+		OwnerField:            vendorriskscore.FieldOwnerID,
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id", "question_key"}},
+		},
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateVendorRiskScoreInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.VendorRiskScore.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
+		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
+			ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpUpdate, EntityID: entityID}
+
+			decoded, err := jsonx.Decode[generated.UpdateVendorRiskScoreInput](applyClears(input))
+			if err != nil {
+				return logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			builder := client.VendorRiskScore.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpQuery}
 
@@ -7428,6 +7478,9 @@ var (
 
 			return data, nil
 		},
+		Ingest: &IngestCapability{
+			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "vendor_risk_score.ingest.requested"),
+		},
 	}
 	SchemaVendorScoringConfig = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
@@ -7436,7 +7489,31 @@ var (
 			Lower:  "vendorscoringconfig",
 			Plural: "vendor_scoring_configs",
 		},
-		OwnerField: vendorscoringconfig.FieldOwnerID,
+		ProjectionType: reflect.TypeFor[VendorScoringConfigProjection](),
+		OwnerField:     vendorscoringconfig.FieldOwnerID,
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "vendor_scoring_config", Operation: refOpQuery}
+
+			entities, err := client.VendorScoringConfig.Query().
+				Where(vendorscoringconfig.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "vendor_scoring_config", Operation: refOpLoad, EntityID: entityID}
 
@@ -10467,28 +10544,35 @@ func init() {
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaVendorRiskScore.Fields = []FieldDescriptor{
-		{Name: "answer", Label: "Answer", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "answer", Label: "Answer", Type: "string", MatchKey: true, InputKey: "answer", Clearable: true},
 		{Name: "answer_type", Label: "AnswerType", Type: "enums.VendorScoringAnswerType"},
-		{Name: "assessment_response_id", Label: "AssessmentResponseID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "assessment_response_id", Label: "AssessmentResponseID", Type: "string", MatchKey: true, InputKey: "assessment_response_id", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "entity_id", Label: "EntityID", Type: "string", MatchKey: true},
-		{Name: "impact", Label: "Impact", Type: "enums.VendorRiskImpact"},
-		{Name: "likelihood", Label: "Likelihood", Type: "enums.VendorRiskLikelihood"},
-		{Name: "notes", Label: "Notes", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "entity_id", Label: "EntityID", Type: "string", MatchKey: true, InputKey: "entity_id"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
+		{Name: "impact", Label: "Impact", Type: "enums.VendorRiskImpact", InputKey: "impact"},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "likelihood", Label: "Likelihood", Type: "enums.VendorRiskLikelihood", InputKey: "likelihood"},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "notes", Label: "Notes", Type: "string", MatchKey: true, InputKey: "notes", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "question_category", Label: "QuestionCategory", Type: "enums.VendorScoringCategory"},
-		{Name: "question_description", Label: "QuestionDescription", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "question_key", Label: "QuestionKey", Type: "string", MatchKey: true},
-		{Name: "question_name", Label: "QuestionName", Type: "string", MatchKey: true},
+		{Name: "question_category", Label: "QuestionCategory", Type: "enums.VendorScoringCategory", InputKey: "question_category"},
+		{Name: "question_description", Label: "QuestionDescription", Type: "string", MatchKey: true, InputKey: "question_description", Clearable: true},
+		{Name: "question_key", Label: "QuestionKey", Type: "string", MatchKey: true, InputKey: "question_key"},
+		{Name: "question_name", Label: "QuestionName", Type: "string", MatchKey: true, InputKey: "question_name"},
 		{Name: "score", Label: "Score", Type: "float64"},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "vendor_scoring_config_id", Label: "VendorScoringConfigID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "vendor_scoring_config_id", Label: "VendorScoringConfigID", Type: "string", MatchKey: true, InputKey: "vendor_scoring_config_id", Clearable: true},
 	}
 	SchemaVendorScoringConfig.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -21459,6 +21543,14 @@ func init() {
 			Field:       "entity_id",
 		},
 		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
+		},
+		{
 			Name:        "owner",
 			Label:       "Owner",
 			Target:      SchemaOrganization,
@@ -23889,6 +23981,34 @@ func init() {
 
 		return results, nil
 	}
+	SchemaVendorScoringConfig.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "vendor_scoring_config", Operation: refOpQuery}
+
+		if !SchemaVendorScoringConfig.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "vendor_scoring_config"))
+		}
+
+		entities, err := client.VendorScoringConfig.Query().
+			Where(vendorscoringconfig.OwnerID(orgID)).
+			Where(predicate.VendorScoringConfig(lookupPredicate(SchemaVendorScoringConfig, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
 	SchemaVulnerability.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
 
@@ -25085,6 +25205,32 @@ func init() {
 		if input.OwnerID != nil {
 			if err := template.OwnerIDValidator(*input.OwnerID); err != nil {
 				logSanitizedIngestField(ctx, "template", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaVendorRiskScore.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateVendorRiskScoreInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := vendorriskscore.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "vendor_risk_score", "owner_id", err)
 				input.OwnerID = nil
 			}
 		}
@@ -26441,6 +26587,44 @@ func init() {
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
 			update = update.Where(template.Or(template.IntegrationRunIDIsNil(), template.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaVendorRiskScore.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.VendorRiskScore](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateVendorRiskScoreInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.VendorRiskScore.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(vendorriskscore.Or(vendorriskscore.IntegrationRunIDIsNil(), vendorriskscore.IntegrationRunIDLT(runID)))
 			guarded = true
 		}
 
@@ -28035,6 +28219,50 @@ func init() {
 		}
 
 		return filterByAlternativeFields(SchemaTemplate, results, fields, keys), nil
+	}
+	SchemaVendorRiskScore.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaVendorRiskScore.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "vendor_risk_score"))
+		}
+
+		fields := SchemaVendorRiskScore.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.VendorRiskScore.Query()
+			query = query.Where(vendorriskscore.OwnerID(ownerID))
+			query = query.Where(predicate.VendorRiskScore(lookupPredicate(SchemaVendorRiskScore, primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(SchemaVendorRiskScore, results, fields, keys), nil
 	}
 	SchemaVulnerability.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
@@ -29767,6 +29995,50 @@ func init() {
 
 		return ids, nil
 	}
+	SchemaVendorRiskScore.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.VendorRiskScore.Query().Where(vendorriskscore.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(vendorriskscore.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(vendorriskscore.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(vendorriskscore.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.VendorRiskScore.Delete().Where(vendorriskscore.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
 	SchemaVulnerability.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
 		ref := SchemaRef{Schema: "vulnerability", Operation: refOpDelete}
 
@@ -29887,6 +30159,7 @@ func init() {
 	SchemaTagDefinition.Ingest.persist = defaultIngestPersist(SchemaTagDefinition)
 	SchemaTask.Ingest.persist = defaultIngestPersist(SchemaTask)
 	SchemaTemplate.Ingest.persist = defaultIngestPersist(SchemaTemplate)
+	SchemaVendorRiskScore.Ingest.persist = defaultIngestPersist(SchemaVendorRiskScore)
 	SchemaVulnerability.Ingest.persist = defaultIngestPersist(SchemaVulnerability)
 
 	// through edges are linked by creating join entity rows — one per target, each with its own

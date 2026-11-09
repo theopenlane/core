@@ -197,8 +197,6 @@ type TestGraphClient interface {
 	GetDiscussionByID(ctx context.Context, discussionID string, interceptors ...clientv2.RequestInterceptor) (*GetDiscussionByID, error)
 	GetDiscussions(ctx context.Context, first *int64, last *int64, where *DiscussionWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetDiscussions, error)
 	UpdateDiscussion(ctx context.Context, updateDiscussionID string, input UpdateDiscussionInput, interceptors ...clientv2.RequestInterceptor) (*UpdateDiscussion, error)
-	CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVDNSVerification, error)
-	CreateBulkDNSVerification(ctx context.Context, input []*CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkDNSVerification, error)
 	CreateDNSVerification(ctx context.Context, input CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*CreateDNSVerification, error)
 	DeleteDNSVerification(ctx context.Context, deleteDNSVerificationID string, interceptors ...clientv2.RequestInterceptor) (*DeleteDNSVerification, error)
 	GetAllDNSVerifications(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllDNSVerifications, error)
@@ -219,7 +217,6 @@ type TestGraphClient interface {
 	GetEmailTemplateByID(ctx context.Context, emailTemplateID string, interceptors ...clientv2.RequestInterceptor) (*GetEmailTemplateByID, error)
 	GetEmailTemplates(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*EmailTemplateOrder, where *EmailTemplateWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEmailTemplates, error)
 	PreviewEmailTemplate(ctx context.Context, key string, defaults map[string]any, interceptors ...clientv2.RequestInterceptor) (*PreviewEmailTemplate, error)
-	UpdateBulkCSVEmailTemplate(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVEmailTemplate, error)
 	UpdateBulkEmailTemplate(ctx context.Context, ids []string, input UpdateEmailTemplateInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkEmailTemplate, error)
 	UpdateEmailTemplate(ctx context.Context, updateEmailTemplateID string, input UpdateEmailTemplateInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEmailTemplate, error)
 	CreateBulkCSVEntity(ctx context.Context, input graphql.Upload, entityTypeName *string, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEntity, error)
@@ -309,8 +306,6 @@ type TestGraphClient interface {
 	GetGroupSettingByID(ctx context.Context, groupSettingID string, interceptors ...clientv2.RequestInterceptor) (*GetGroupSettingByID, error)
 	GetGroupSettings(ctx context.Context, where GroupSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetGroupSettings, error)
 	UpdateGroupSetting(ctx context.Context, updateGroupSettingID string, input UpdateGroupSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateGroupSetting, error)
-	CreateBulkCSVHush(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVHush, error)
-	CreateBulkHush(ctx context.Context, input []*CreateHushInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkHush, error)
 	CreateHush(ctx context.Context, input CreateHushInput, interceptors ...clientv2.RequestInterceptor) (*CreateHush, error)
 	GetAllHushes(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllHushes, error)
 	GetHushByID(ctx context.Context, hushID string, interceptors ...clientv2.RequestInterceptor) (*GetHushByID, error)
@@ -348,8 +343,6 @@ type TestGraphClient interface {
 	GetAllInvites(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInvites, error)
 	GetInviteByID(ctx context.Context, inviteID string, interceptors ...clientv2.RequestInterceptor) (*GetInviteByID, error)
 	InvitesByOrgID(ctx context.Context, where *InviteWhereInput, interceptors ...clientv2.RequestInterceptor) (*InvitesByOrgID, error)
-	CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVMappableDomain, error)
-	CreateBulkMappableDomain(ctx context.Context, input []*CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkMappableDomain, error)
 	CreateMappableDomain(ctx context.Context, input CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateMappableDomain, error)
 	DeleteMappableDomain(ctx context.Context, deleteMappableDomainID string, interceptors ...clientv2.RequestInterceptor) (*DeleteMappableDomain, error)
 	GetAllMappableDomains(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllMappableDomains, error)
@@ -42222,274 +42215,6 @@ func (t *UpdateDiscussion_UpdateDiscussion) GetDiscussion() *UpdateDiscussion_Up
 	return &t.Discussion
 }
 
-type CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications struct {
-	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	ID                          string                      "json:\"id\" graphql:\"id\""
-	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator       *string                     "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetAcmeChallengePath() *string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.AcmeChallengePath
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return &t.AcmeChallengeStatus
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetAcmeChallengeStatusReason() *string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.AcmeChallengeStatusReason
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetCloudflareHostnameID() string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.CloudflareHostnameID
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSTxtRecord() string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.DNSTxtRecord
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSTxtValue() string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.DNSTxtValue
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return &t.DNSVerificationStatus
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSVerificationStatusReason() *string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.DNSVerificationStatusReason
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetExpectedAcmeChallengeValue() *string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.ExpectedAcmeChallengeValue
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification struct {
-	DNSVerifications []*CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications "json:\"dnsVerifications,omitempty\" graphql:\"dnsVerifications\""
-}
-
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification) GetDNSVerifications() []*CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification{}
-	}
-	return t.DNSVerifications
-}
-
-type CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications struct {
-	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	ID                          string                      "json:\"id\" graphql:\"id\""
-	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator       *string                     "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetAcmeChallengePath() *string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.AcmeChallengePath
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return &t.AcmeChallengeStatus
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetAcmeChallengeStatusReason() *string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.AcmeChallengeStatusReason
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetCloudflareHostnameID() string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.CloudflareHostnameID
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSTxtRecord() string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.DNSTxtRecord
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSTxtValue() string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.DNSTxtValue
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return &t.DNSVerificationStatus
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSVerificationStatusReason() *string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.DNSVerificationStatusReason
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetExpectedAcmeChallengeValue() *string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.ExpectedAcmeChallengeValue
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetID() string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.ID
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type CreateBulkDNSVerification_CreateBulkDNSVerification struct {
-	DNSVerifications []*CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications "json:\"dnsVerifications,omitempty\" graphql:\"dnsVerifications\""
-}
-
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification) GetDNSVerifications() []*CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications {
-	if t == nil {
-		t = &CreateBulkDNSVerification_CreateBulkDNSVerification{}
-	}
-	return t.DNSVerifications
-}
-
 type CreateDNSVerification_CreateDNSVerification_DNSVerification struct {
 	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
 	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
@@ -45132,266 +44857,6 @@ func (t *GetEmailTemplates_EmailTemplates) GetTotalCount() int64 {
 		t = &GetEmailTemplates_EmailTemplates{}
 	}
 	return t.TotalCount
-}
-
-type UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates struct {
-	Active                  bool                              "json:\"active\" graphql:\"active\""
-	CreatedAt               *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy               *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Defaults                map[string]any                    "json:\"defaults,omitempty\" graphql:\"defaults\""
-	Description             *string                           "json:\"description,omitempty\" graphql:\"description\""
-	ExternalID              *string                           "json:\"externalID,omitempty\" graphql:\"externalID\""
-	Format                  *enums.NotificationTemplateFormat "json:\"format,omitempty\" graphql:\"format\""
-	ID                      string                            "json:\"id\" graphql:\"id\""
-	IntegrationID           *string                           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	IntegrationRunID        *string                           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	InternalNotes           *string                           "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Key                     string                            "json:\"key\" graphql:\"key\""
-	Locale                  string                            "json:\"locale\" graphql:\"locale\""
-	ManagedBy               *string                           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
-	Metadata                map[string]any                    "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Name                    string                            "json:\"name\" graphql:\"name\""
-	OwnerID                 *string                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision                *string                           "json:\"revision,omitempty\" graphql:\"revision\""
-	SourceDefinitionID      *string                           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
-	SourceDefinitionVersion *string                           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
-	SourceInstanceID        *string                           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
-	SourceKey               *string                           "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
-	SystemInternalID        *string                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned             *bool                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	TemplateContext         *enums.TemplateContext            "json:\"templateContext,omitempty\" graphql:\"templateContext\""
-	TrustCenterID           *string                           "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt               *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy               *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator   *string                           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	Version                 int64                             "json:\"version\" graphql:\"version\""
-	WorkflowDefinitionID    *string                           "json:\"workflowDefinitionID,omitempty\" graphql:\"workflowDefinitionID\""
-	WorkflowInstanceID      *string                           "json:\"workflowInstanceID,omitempty\" graphql:\"workflowInstanceID\""
-}
-
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetActive() bool {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Active
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetDefaults() map[string]any {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Defaults
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetDescription() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Description
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetExternalID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.ExternalID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetFormat() *enums.NotificationTemplateFormat {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Format
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetID() string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.ID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetIntegrationID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.IntegrationID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetIntegrationRunID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.IntegrationRunID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetInternalNotes() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.InternalNotes
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetKey() string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Key
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetLocale() string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Locale
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetManagedBy() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.ManagedBy
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetMetadata() map[string]any {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Metadata
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetName() string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Name
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetOwnerID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.OwnerID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetRevision() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Revision
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetSourceDefinitionID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.SourceDefinitionID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetSourceDefinitionVersion() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.SourceDefinitionVersion
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetSourceInstanceID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.SourceInstanceID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetSourceKey() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.SourceKey
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetSystemInternalID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.SystemInternalID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetSystemOwned() *bool {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.SystemOwned
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetTemplateContext() *enums.TemplateContext {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.TemplateContext
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetTrustCenterID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.TrustCenterID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.UpdatedBy
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetVersion() int64 {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.Version
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetWorkflowDefinitionID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.WorkflowDefinitionID
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) GetWorkflowInstanceID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates{}
-	}
-	return t.WorkflowInstanceID
-}
-
-type UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate struct {
-	EmailTemplates []*UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates "json:\"emailTemplates,omitempty\" graphql:\"emailTemplates\""
-	Error          *string                                                                 "json:\"error,omitempty\" graphql:\"error\""
-	NotUpdatedIDs  []string                                                                "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
-	UpdatedIDs     []string                                                                "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
-}
-
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate) GetEmailTemplates() []*UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate{}
-	}
-	return t.EmailTemplates
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate) GetError() *string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate{}
-	}
-	return t.Error
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate) GetNotUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate{}
-	}
-	return t.NotUpdatedIDs
-}
-func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate) GetUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate{}
-	}
-	return t.UpdatedIDs
 }
 
 type UpdateBulkEmailTemplate_UpdateBulkEmailTemplate_EmailTemplates struct {
@@ -65415,354 +64880,6 @@ func (t *UpdateGroupSetting_UpdateGroupSetting) GetGroupSetting() *UpdateGroupSe
 	return &t.GroupSetting
 }
 
-type CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges struct {
-	Node *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges) GetNode() *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations struct {
-	Edges []*CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations) GetEdges() []*CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations_Edges {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVHush_CreateBulkCSVHush_Hushes struct {
-	CreatedAt             *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                                                 "json:\"description,omitempty\" graphql:\"description\""
-	ExpiresAt             *time.Time                                              "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ID                    string                                                  "json:\"id\" graphql:\"id\""
-	Integrations          CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations "json:\"integrations\" graphql:\"integrations\""
-	InternalNotes         *string                                                 "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Kind                  *string                                                 "json:\"kind,omitempty\" graphql:\"kind\""
-	LastUsedAt            *time.Time                                              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	Metadata              map[string]any                                          "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Name                  string                                                  "json:\"name\" graphql:\"name\""
-	OwnerID               *string                                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	SecretName            *string                                                 "json:\"secretName,omitempty\" graphql:\"secretName\""
-	SystemInternalID      *string                                                 "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool                                                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	UpdatedAt             *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetExpiresAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.ExpiresAt
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetIntegrations() *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return &t.Integrations
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetInternalNotes() *string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.InternalNotes
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetKind() *string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.Kind
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetLastUsedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.LastUsedAt
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetMetadata() map[string]any {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.Metadata
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.Name
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetSecretName() *string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.SecretName
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetSystemInternalID() *string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.SystemInternalID
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetSystemOwned() *bool {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.SystemOwned
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type CreateBulkCSVHush_CreateBulkCSVHush struct {
-	Hushes []*CreateBulkCSVHush_CreateBulkCSVHush_Hushes "json:\"hushes,omitempty\" graphql:\"hushes\""
-}
-
-func (t *CreateBulkCSVHush_CreateBulkCSVHush) GetHushes() []*CreateBulkCSVHush_CreateBulkCSVHush_Hushes {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush{}
-	}
-	return t.Hushes
-}
-
-type CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges struct {
-	Node *CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges) GetNode() *CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges_Node {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkHush_CreateBulkHush_Hushes_Integrations struct {
-	Edges []*CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkHush_CreateBulkHush_Hushes_Integrations) GetEdges() []*CreateBulkHush_CreateBulkHush_Hushes_Integrations_Edges {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes_Integrations{}
-	}
-	return t.Edges
-}
-
-type CreateBulkHush_CreateBulkHush_Hushes struct {
-	CreatedAt             *time.Time                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description           *string                                           "json:\"description,omitempty\" graphql:\"description\""
-	ExpiresAt             *time.Time                                        "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ID                    string                                            "json:\"id\" graphql:\"id\""
-	Integrations          CreateBulkHush_CreateBulkHush_Hushes_Integrations "json:\"integrations\" graphql:\"integrations\""
-	InternalNotes         *string                                           "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Kind                  *string                                           "json:\"kind,omitempty\" graphql:\"kind\""
-	LastUsedAt            *time.Time                                        "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	Metadata              map[string]any                                    "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Name                  string                                            "json:\"name\" graphql:\"name\""
-	OwnerID               *string                                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	SecretName            *string                                           "json:\"secretName,omitempty\" graphql:\"secretName\""
-	SystemInternalID      *string                                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned           *bool                                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	UpdatedAt             *time.Time                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                                           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.Description
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetExpiresAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.ExpiresAt
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetID() string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.ID
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetIntegrations() *CreateBulkHush_CreateBulkHush_Hushes_Integrations {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return &t.Integrations
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetInternalNotes() *string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.InternalNotes
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetKind() *string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.Kind
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetLastUsedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.LastUsedAt
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetMetadata() map[string]any {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.Metadata
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetName() string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.Name
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetSecretName() *string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.SecretName
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetSystemInternalID() *string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.SystemInternalID
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetSystemOwned() *bool {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.SystemOwned
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type CreateBulkHush_CreateBulkHush struct {
-	Hushes []*CreateBulkHush_CreateBulkHush_Hushes "json:\"hushes,omitempty\" graphql:\"hushes\""
-}
-
-func (t *CreateBulkHush_CreateBulkHush) GetHushes() []*CreateBulkHush_CreateBulkHush_Hushes {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush{}
-	}
-	return t.Hushes
-}
-
 type CreateHush_CreateHush_Hush_Integrations_Edges_Node struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -76044,162 +75161,6 @@ func (t *InvitesByOrgID_Invites) GetEdges() []*InvitesByOrgID_Invites_Edges {
 		t = &InvitesByOrgID_Invites{}
 	}
 	return t.Edges
-}
-
-type CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains struct {
-	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                    string     "json:\"id\" graphql:\"id\""
-	Name                  string     "json:\"name\" graphql:\"name\""
-	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	ZoneID                string     "json:\"zoneID\" graphql:\"zoneID\""
-}
-
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
-	}
-	return t.Name
-}
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetZoneID() string {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
-	}
-	return t.ZoneID
-}
-
-type CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain struct {
-	MappableDomains []*CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
-}
-
-func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain) GetMappableDomains() []*CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain{}
-	}
-	return t.MappableDomains
-}
-
-type CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains struct {
-	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                    string     "json:\"id\" graphql:\"id\""
-	Name                  string     "json:\"name\" graphql:\"name\""
-	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	ZoneID                string     "json:\"zoneID\" graphql:\"zoneID\""
-}
-
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetID() string {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
-	}
-	return t.ID
-}
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetName() string {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
-	}
-	return t.Name
-}
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetZoneID() string {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
-	}
-	return t.ZoneID
-}
-
-type CreateBulkMappableDomain_CreateBulkMappableDomain struct {
-	MappableDomains []*CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
-}
-
-func (t *CreateBulkMappableDomain_CreateBulkMappableDomain) GetMappableDomains() []*CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains {
-	if t == nil {
-		t = &CreateBulkMappableDomain_CreateBulkMappableDomain{}
-	}
-	return t.MappableDomains
 }
 
 type CreateMappableDomain_CreateMappableDomain_MappableDomain struct {
@@ -156759,27 +155720,34 @@ func (t *UpdateUserSetting_UpdateUserSetting) GetUserSetting() *UpdateUserSettin
 }
 
 type CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores struct {
-	Answer                *string                       "json:\"answer,omitempty\" graphql:\"answer\""
-	AnswerType            enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
-	AssessmentResponseID  *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EntityID              string                        "json:\"entityID\" graphql:\"entityID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	Impact                enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
-	Likelihood            enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
-	Notes                 *string                       "json:\"notes,omitempty\" graphql:\"notes\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionCategory      enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
-	QuestionDescription   *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
-	QuestionKey           string                        "json:\"questionKey\" graphql:\"questionKey\""
-	QuestionName          string                        "json:\"questionName\" graphql:\"questionName\""
-	Score                 float64                       "json:\"score\" graphql:\"score\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	VendorScoringConfigID *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
+	Answer                  *string                       "json:\"answer,omitempty\" graphql:\"answer\""
+	AnswerType              enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
+	AssessmentResponseID    *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EntityID                string                        "json:\"entityID\" graphql:\"entityID\""
+	ExternalID              *string                       "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	Impact                  enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	Likelihood              enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Notes                   *string                       "json:\"notes,omitempty\" graphql:\"notes\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	QuestionCategory        enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
+	QuestionDescription     *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
+	QuestionKey             string                        "json:\"questionKey\" graphql:\"questionKey\""
+	QuestionName            string                        "json:\"questionName\" graphql:\"questionName\""
+	Score                   float64                       "json:\"score\" graphql:\"score\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	VendorScoringConfigID   *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
 }
 
 func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetAnswer() *string {
@@ -156818,6 +155786,12 @@ func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskSco
 	}
 	return t.EntityID
 }
+func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetExternalID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.ExternalID
+}
 func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
@@ -156830,11 +155804,23 @@ func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskSco
 	}
 	return &t.Impact
 }
+func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetLikelihood() *enums.VendorRiskLikelihood {
 	if t == nil {
 		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
 	}
 	return &t.Likelihood
+}
+func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetNotes() *string {
 	if t == nil {
@@ -156877,6 +155863,30 @@ func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskSco
 		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
 	}
 	return t.Score
+}
+func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceInstanceID
+}
+func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore_VendorRiskScores) GetTags() []string {
 	if t == nil {
@@ -156921,27 +155931,34 @@ func (t *CreateBulkCSVVendorRiskScore_CreateBulkCSVVendorRiskScore) GetVendorRis
 }
 
 type CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores struct {
-	Answer                *string                       "json:\"answer,omitempty\" graphql:\"answer\""
-	AnswerType            enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
-	AssessmentResponseID  *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EntityID              string                        "json:\"entityID\" graphql:\"entityID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	Impact                enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
-	Likelihood            enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
-	Notes                 *string                       "json:\"notes,omitempty\" graphql:\"notes\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionCategory      enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
-	QuestionDescription   *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
-	QuestionKey           string                        "json:\"questionKey\" graphql:\"questionKey\""
-	QuestionName          string                        "json:\"questionName\" graphql:\"questionName\""
-	Score                 float64                       "json:\"score\" graphql:\"score\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	VendorScoringConfigID *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
+	Answer                  *string                       "json:\"answer,omitempty\" graphql:\"answer\""
+	AnswerType              enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
+	AssessmentResponseID    *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EntityID                string                        "json:\"entityID\" graphql:\"entityID\""
+	ExternalID              *string                       "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	Impact                  enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	Likelihood              enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Notes                   *string                       "json:\"notes,omitempty\" graphql:\"notes\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	QuestionCategory        enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
+	QuestionDescription     *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
+	QuestionKey             string                        "json:\"questionKey\" graphql:\"questionKey\""
+	QuestionName            string                        "json:\"questionName\" graphql:\"questionName\""
+	Score                   float64                       "json:\"score\" graphql:\"score\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	VendorScoringConfigID   *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
 }
 
 func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetAnswer() *string {
@@ -156980,6 +155997,12 @@ func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) G
 	}
 	return t.EntityID
 }
+func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetExternalID() *string {
+	if t == nil {
+		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.ExternalID
+}
 func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetID() string {
 	if t == nil {
 		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
@@ -156992,11 +156015,23 @@ func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) G
 	}
 	return &t.Impact
 }
+func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetLikelihood() *enums.VendorRiskLikelihood {
 	if t == nil {
 		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
 	}
 	return &t.Likelihood
+}
+func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetNotes() *string {
 	if t == nil {
@@ -157039,6 +156074,30 @@ func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) G
 		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
 	}
 	return t.Score
+}
+func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceInstanceID
+}
+func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceKey
 }
 func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore_VendorRiskScores) GetTags() []string {
 	if t == nil {
@@ -157083,27 +156142,34 @@ func (t *CreateBulkVendorRiskScore_CreateBulkVendorRiskScore) GetVendorRiskScore
 }
 
 type CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore struct {
-	Answer                *string                       "json:\"answer,omitempty\" graphql:\"answer\""
-	AnswerType            enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
-	AssessmentResponseID  *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EntityID              string                        "json:\"entityID\" graphql:\"entityID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	Impact                enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
-	Likelihood            enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
-	Notes                 *string                       "json:\"notes,omitempty\" graphql:\"notes\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionCategory      enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
-	QuestionDescription   *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
-	QuestionKey           string                        "json:\"questionKey\" graphql:\"questionKey\""
-	QuestionName          string                        "json:\"questionName\" graphql:\"questionName\""
-	Score                 float64                       "json:\"score\" graphql:\"score\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	VendorScoringConfigID *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
+	Answer                  *string                       "json:\"answer,omitempty\" graphql:\"answer\""
+	AnswerType              enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
+	AssessmentResponseID    *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EntityID                string                        "json:\"entityID\" graphql:\"entityID\""
+	ExternalID              *string                       "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	Impact                  enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	Likelihood              enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Notes                   *string                       "json:\"notes,omitempty\" graphql:\"notes\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	QuestionCategory        enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
+	QuestionDescription     *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
+	QuestionKey             string                        "json:\"questionKey\" graphql:\"questionKey\""
+	QuestionName            string                        "json:\"questionName\" graphql:\"questionName\""
+	Score                   float64                       "json:\"score\" graphql:\"score\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	VendorScoringConfigID   *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
 }
 
 func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetAnswer() *string {
@@ -157142,6 +156208,12 @@ func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetEntityI
 	}
 	return t.EntityID
 }
+func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetExternalID() *string {
+	if t == nil {
+		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.ExternalID
+}
 func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetID() string {
 	if t == nil {
 		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
@@ -157154,11 +156226,23 @@ func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetImpact(
 	}
 	return &t.Impact
 }
+func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetLikelihood() *enums.VendorRiskLikelihood {
 	if t == nil {
 		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
 	}
 	return &t.Likelihood
+}
+func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.ManagedBy
 }
 func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetNotes() *string {
 	if t == nil {
@@ -157201,6 +156285,30 @@ func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetScore()
 		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
 	}
 	return t.Score
+}
+func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.SourceInstanceID
+}
+func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetSourceKey() *string {
+	if t == nil {
+		t = &CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.SourceKey
 }
 func (t *CreateVendorRiskScore_CreateVendorRiskScore_VendorRiskScore) GetTags() []string {
 	if t == nil {
@@ -157313,27 +156421,34 @@ func (t *GetAllVendorRiskScores_VendorRiskScores_PageInfo) GetStartCursor() *str
 }
 
 type GetAllVendorRiskScores_VendorRiskScores_Edges_Node struct {
-	Answer                *string                       "json:\"answer,omitempty\" graphql:\"answer\""
-	AnswerType            enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
-	AssessmentResponseID  *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EntityID              string                        "json:\"entityID\" graphql:\"entityID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	Impact                enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
-	Likelihood            enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
-	Notes                 *string                       "json:\"notes,omitempty\" graphql:\"notes\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionCategory      enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
-	QuestionDescription   *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
-	QuestionKey           string                        "json:\"questionKey\" graphql:\"questionKey\""
-	QuestionName          string                        "json:\"questionName\" graphql:\"questionName\""
-	Score                 float64                       "json:\"score\" graphql:\"score\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	VendorScoringConfigID *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
+	Answer                  *string                       "json:\"answer,omitempty\" graphql:\"answer\""
+	AnswerType              enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
+	AssessmentResponseID    *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EntityID                string                        "json:\"entityID\" graphql:\"entityID\""
+	ExternalID              *string                       "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	Impact                  enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	Likelihood              enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Notes                   *string                       "json:\"notes,omitempty\" graphql:\"notes\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	QuestionCategory        enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
+	QuestionDescription     *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
+	QuestionKey             string                        "json:\"questionKey\" graphql:\"questionKey\""
+	QuestionName            string                        "json:\"questionName\" graphql:\"questionName\""
+	Score                   float64                       "json:\"score\" graphql:\"score\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	VendorScoringConfigID   *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
 }
 
 func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetAnswer() *string {
@@ -157372,6 +156487,12 @@ func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetEntityID() strin
 	}
 	return t.EntityID
 }
+func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetExternalID() *string {
+	if t == nil {
+		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.ExternalID
+}
 func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
@@ -157384,11 +156505,23 @@ func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetImpact() *enums.
 	}
 	return &t.Impact
 }
+func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetLikelihood() *enums.VendorRiskLikelihood {
 	if t == nil {
 		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
 	}
 	return &t.Likelihood
+}
+func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetManagedBy() *string {
+	if t == nil {
+		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.ManagedBy
 }
 func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetNotes() *string {
 	if t == nil {
@@ -157431,6 +156564,30 @@ func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetScore() float64 
 		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
 	}
 	return t.Score
+}
+func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.SourceInstanceID
+}
+func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetAllVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.SourceKey
 }
 func (t *GetAllVendorRiskScores_VendorRiskScores_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -157500,27 +156657,34 @@ func (t *GetAllVendorRiskScores_VendorRiskScores) GetTotalCount() int64 {
 }
 
 type GetVendorRiskScoreByID_VendorRiskScore struct {
-	Answer                *string                       "json:\"answer,omitempty\" graphql:\"answer\""
-	AnswerType            enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
-	AssessmentResponseID  *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EntityID              string                        "json:\"entityID\" graphql:\"entityID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	Impact                enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
-	Likelihood            enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
-	Notes                 *string                       "json:\"notes,omitempty\" graphql:\"notes\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionCategory      enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
-	QuestionDescription   *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
-	QuestionKey           string                        "json:\"questionKey\" graphql:\"questionKey\""
-	QuestionName          string                        "json:\"questionName\" graphql:\"questionName\""
-	Score                 float64                       "json:\"score\" graphql:\"score\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	VendorScoringConfigID *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
+	Answer                  *string                       "json:\"answer,omitempty\" graphql:\"answer\""
+	AnswerType              enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
+	AssessmentResponseID    *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EntityID                string                        "json:\"entityID\" graphql:\"entityID\""
+	ExternalID              *string                       "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	Impact                  enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	Likelihood              enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Notes                   *string                       "json:\"notes,omitempty\" graphql:\"notes\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	QuestionCategory        enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
+	QuestionDescription     *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
+	QuestionKey             string                        "json:\"questionKey\" graphql:\"questionKey\""
+	QuestionName            string                        "json:\"questionName\" graphql:\"questionName\""
+	Score                   float64                       "json:\"score\" graphql:\"score\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	VendorScoringConfigID   *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
 }
 
 func (t *GetVendorRiskScoreByID_VendorRiskScore) GetAnswer() *string {
@@ -157559,6 +156723,12 @@ func (t *GetVendorRiskScoreByID_VendorRiskScore) GetEntityID() string {
 	}
 	return t.EntityID
 }
+func (t *GetVendorRiskScoreByID_VendorRiskScore) GetExternalID() *string {
+	if t == nil {
+		t = &GetVendorRiskScoreByID_VendorRiskScore{}
+	}
+	return t.ExternalID
+}
 func (t *GetVendorRiskScoreByID_VendorRiskScore) GetID() string {
 	if t == nil {
 		t = &GetVendorRiskScoreByID_VendorRiskScore{}
@@ -157571,11 +156741,23 @@ func (t *GetVendorRiskScoreByID_VendorRiskScore) GetImpact() *enums.VendorRiskIm
 	}
 	return &t.Impact
 }
+func (t *GetVendorRiskScoreByID_VendorRiskScore) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetVendorRiskScoreByID_VendorRiskScore{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetVendorRiskScoreByID_VendorRiskScore) GetLikelihood() *enums.VendorRiskLikelihood {
 	if t == nil {
 		t = &GetVendorRiskScoreByID_VendorRiskScore{}
 	}
 	return &t.Likelihood
+}
+func (t *GetVendorRiskScoreByID_VendorRiskScore) GetManagedBy() *string {
+	if t == nil {
+		t = &GetVendorRiskScoreByID_VendorRiskScore{}
+	}
+	return t.ManagedBy
 }
 func (t *GetVendorRiskScoreByID_VendorRiskScore) GetNotes() *string {
 	if t == nil {
@@ -157618,6 +156800,30 @@ func (t *GetVendorRiskScoreByID_VendorRiskScore) GetScore() float64 {
 		t = &GetVendorRiskScoreByID_VendorRiskScore{}
 	}
 	return t.Score
+}
+func (t *GetVendorRiskScoreByID_VendorRiskScore) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetVendorRiskScoreByID_VendorRiskScore{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetVendorRiskScoreByID_VendorRiskScore) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetVendorRiskScoreByID_VendorRiskScore{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetVendorRiskScoreByID_VendorRiskScore) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetVendorRiskScoreByID_VendorRiskScore{}
+	}
+	return t.SourceInstanceID
+}
+func (t *GetVendorRiskScoreByID_VendorRiskScore) GetSourceKey() *string {
+	if t == nil {
+		t = &GetVendorRiskScoreByID_VendorRiskScore{}
+	}
+	return t.SourceKey
 }
 func (t *GetVendorRiskScoreByID_VendorRiskScore) GetTags() []string {
 	if t == nil {
@@ -157683,27 +156889,34 @@ func (t *GetVendorRiskScores_VendorRiskScores_PageInfo) GetStartCursor() *string
 }
 
 type GetVendorRiskScores_VendorRiskScores_Edges_Node struct {
-	Answer                *string                       "json:\"answer,omitempty\" graphql:\"answer\""
-	AnswerType            enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
-	AssessmentResponseID  *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EntityID              string                        "json:\"entityID\" graphql:\"entityID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	Impact                enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
-	Likelihood            enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
-	Notes                 *string                       "json:\"notes,omitempty\" graphql:\"notes\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionCategory      enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
-	QuestionDescription   *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
-	QuestionKey           string                        "json:\"questionKey\" graphql:\"questionKey\""
-	QuestionName          string                        "json:\"questionName\" graphql:\"questionName\""
-	Score                 float64                       "json:\"score\" graphql:\"score\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	VendorScoringConfigID *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
+	Answer                  *string                       "json:\"answer,omitempty\" graphql:\"answer\""
+	AnswerType              enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
+	AssessmentResponseID    *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EntityID                string                        "json:\"entityID\" graphql:\"entityID\""
+	ExternalID              *string                       "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	Impact                  enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	Likelihood              enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Notes                   *string                       "json:\"notes,omitempty\" graphql:\"notes\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	QuestionCategory        enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
+	QuestionDescription     *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
+	QuestionKey             string                        "json:\"questionKey\" graphql:\"questionKey\""
+	QuestionName            string                        "json:\"questionName\" graphql:\"questionName\""
+	Score                   float64                       "json:\"score\" graphql:\"score\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	VendorScoringConfigID   *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
 }
 
 func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetAnswer() *string {
@@ -157742,6 +156955,12 @@ func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetEntityID() string {
 	}
 	return t.EntityID
 }
+func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetExternalID() *string {
+	if t == nil {
+		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.ExternalID
+}
 func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
@@ -157754,11 +156973,23 @@ func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetImpact() *enums.Ven
 	}
 	return &t.Impact
 }
+func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetLikelihood() *enums.VendorRiskLikelihood {
 	if t == nil {
 		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
 	}
 	return &t.Likelihood
+}
+func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetManagedBy() *string {
+	if t == nil {
+		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.ManagedBy
 }
 func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetNotes() *string {
 	if t == nil {
@@ -157801,6 +157032,30 @@ func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetScore() float64 {
 		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
 	}
 	return t.Score
+}
+func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.SourceInstanceID
+}
+func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetSourceKey() *string {
+	if t == nil {
+		t = &GetVendorRiskScores_VendorRiskScores_Edges_Node{}
+	}
+	return t.SourceKey
 }
 func (t *GetVendorRiskScores_VendorRiskScores_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -157870,27 +157125,34 @@ func (t *GetVendorRiskScores_VendorRiskScores) GetTotalCount() int64 {
 }
 
 type UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores struct {
-	Answer                *string                       "json:\"answer,omitempty\" graphql:\"answer\""
-	AnswerType            enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
-	AssessmentResponseID  *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EntityID              string                        "json:\"entityID\" graphql:\"entityID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	Impact                enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
-	Likelihood            enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
-	Notes                 *string                       "json:\"notes,omitempty\" graphql:\"notes\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionCategory      enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
-	QuestionDescription   *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
-	QuestionKey           string                        "json:\"questionKey\" graphql:\"questionKey\""
-	QuestionName          string                        "json:\"questionName\" graphql:\"questionName\""
-	Score                 float64                       "json:\"score\" graphql:\"score\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	VendorScoringConfigID *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
+	Answer                  *string                       "json:\"answer,omitempty\" graphql:\"answer\""
+	AnswerType              enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
+	AssessmentResponseID    *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EntityID                string                        "json:\"entityID\" graphql:\"entityID\""
+	ExternalID              *string                       "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	Impact                  enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	Likelihood              enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Notes                   *string                       "json:\"notes,omitempty\" graphql:\"notes\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	QuestionCategory        enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
+	QuestionDescription     *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
+	QuestionKey             string                        "json:\"questionKey\" graphql:\"questionKey\""
+	QuestionName            string                        "json:\"questionName\" graphql:\"questionName\""
+	Score                   float64                       "json:\"score\" graphql:\"score\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	VendorScoringConfigID   *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
 }
 
 func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetAnswer() *string {
@@ -157929,6 +157191,12 @@ func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskSco
 	}
 	return t.EntityID
 }
+func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetExternalID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.ExternalID
+}
 func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetID() string {
 	if t == nil {
 		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
@@ -157941,11 +157209,23 @@ func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskSco
 	}
 	return &t.Impact
 }
+func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetLikelihood() *enums.VendorRiskLikelihood {
 	if t == nil {
 		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
 	}
 	return &t.Likelihood
+}
+func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetNotes() *string {
 	if t == nil {
@@ -157988,6 +157268,30 @@ func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskSco
 		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
 	}
 	return t.Score
+}
+func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceInstanceID
+}
+func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores) GetTags() []string {
 	if t == nil {
@@ -158053,27 +157357,34 @@ func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore) GetVendorRis
 }
 
 type UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores struct {
-	Answer                *string                       "json:\"answer,omitempty\" graphql:\"answer\""
-	AnswerType            enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
-	AssessmentResponseID  *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EntityID              string                        "json:\"entityID\" graphql:\"entityID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	Impact                enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
-	Likelihood            enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
-	Notes                 *string                       "json:\"notes,omitempty\" graphql:\"notes\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionCategory      enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
-	QuestionDescription   *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
-	QuestionKey           string                        "json:\"questionKey\" graphql:\"questionKey\""
-	QuestionName          string                        "json:\"questionName\" graphql:\"questionName\""
-	Score                 float64                       "json:\"score\" graphql:\"score\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	VendorScoringConfigID *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
+	Answer                  *string                       "json:\"answer,omitempty\" graphql:\"answer\""
+	AnswerType              enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
+	AssessmentResponseID    *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EntityID                string                        "json:\"entityID\" graphql:\"entityID\""
+	ExternalID              *string                       "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	Impact                  enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	Likelihood              enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Notes                   *string                       "json:\"notes,omitempty\" graphql:\"notes\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	QuestionCategory        enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
+	QuestionDescription     *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
+	QuestionKey             string                        "json:\"questionKey\" graphql:\"questionKey\""
+	QuestionName            string                        "json:\"questionName\" graphql:\"questionName\""
+	Score                   float64                       "json:\"score\" graphql:\"score\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	VendorScoringConfigID   *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
 }
 
 func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetAnswer() *string {
@@ -158112,6 +157423,12 @@ func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) G
 	}
 	return t.EntityID
 }
+func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetExternalID() *string {
+	if t == nil {
+		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.ExternalID
+}
 func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetID() string {
 	if t == nil {
 		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
@@ -158124,11 +157441,23 @@ func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) G
 	}
 	return &t.Impact
 }
+func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetLikelihood() *enums.VendorRiskLikelihood {
 	if t == nil {
 		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
 	}
 	return &t.Likelihood
+}
+func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetNotes() *string {
 	if t == nil {
@@ -158171,6 +157500,30 @@ func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) G
 		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
 	}
 	return t.Score
+}
+func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceInstanceID
+}
+func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) GetTags() []string {
 	if t == nil {
@@ -158236,27 +157589,34 @@ func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore) GetVendorRiskScore
 }
 
 type UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore struct {
-	Answer                *string                       "json:\"answer,omitempty\" graphql:\"answer\""
-	AnswerType            enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
-	AssessmentResponseID  *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
-	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EntityID              string                        "json:\"entityID\" graphql:\"entityID\""
-	ID                    string                        "json:\"id\" graphql:\"id\""
-	Impact                enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
-	Likelihood            enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
-	Notes                 *string                       "json:\"notes,omitempty\" graphql:\"notes\""
-	OwnerID               *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionCategory      enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
-	QuestionDescription   *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
-	QuestionKey           string                        "json:\"questionKey\" graphql:\"questionKey\""
-	QuestionName          string                        "json:\"questionName\" graphql:\"questionName\""
-	Score                 float64                       "json:\"score\" graphql:\"score\""
-	Tags                  []string                      "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt             *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	VendorScoringConfigID *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
+	Answer                  *string                       "json:\"answer,omitempty\" graphql:\"answer\""
+	AnswerType              enums.VendorScoringAnswerType "json:\"answerType\" graphql:\"answerType\""
+	AssessmentResponseID    *string                       "json:\"assessmentResponseID,omitempty\" graphql:\"assessmentResponseID\""
+	CreatedAt               *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EntityID                string                        "json:\"entityID\" graphql:\"entityID\""
+	ExternalID              *string                       "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                      string                        "json:\"id\" graphql:\"id\""
+	Impact                  enums.VendorRiskImpact        "json:\"impact\" graphql:\"impact\""
+	IntegrationRunID        *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	Likelihood              enums.VendorRiskLikelihood    "json:\"likelihood\" graphql:\"likelihood\""
+	ManagedBy               *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Notes                   *string                       "json:\"notes,omitempty\" graphql:\"notes\""
+	OwnerID                 *string                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	QuestionCategory        enums.VendorScoringCategory   "json:\"questionCategory\" graphql:\"questionCategory\""
+	QuestionDescription     *string                       "json:\"questionDescription,omitempty\" graphql:\"questionDescription\""
+	QuestionKey             string                        "json:\"questionKey\" graphql:\"questionKey\""
+	QuestionName            string                        "json:\"questionName\" graphql:\"questionName\""
+	Score                   float64                       "json:\"score\" graphql:\"score\""
+	SourceDefinitionID      *string                       "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string                       "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string                       "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceKey               *string                       "json:\"sourceKey,omitempty\" graphql:\"sourceKey\""
+	Tags                    []string                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	VendorScoringConfigID   *string                       "json:\"vendorScoringConfigID,omitempty\" graphql:\"vendorScoringConfigID\""
 }
 
 func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetAnswer() *string {
@@ -158295,6 +157655,12 @@ func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetEntityI
 	}
 	return t.EntityID
 }
+func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetExternalID() *string {
+	if t == nil {
+		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.ExternalID
+}
 func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetID() string {
 	if t == nil {
 		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
@@ -158307,11 +157673,23 @@ func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetImpact(
 	}
 	return &t.Impact
 }
+func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetLikelihood() *enums.VendorRiskLikelihood {
 	if t == nil {
 		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
 	}
 	return &t.Likelihood
+}
+func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.ManagedBy
 }
 func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetNotes() *string {
 	if t == nil {
@@ -158354,6 +157732,30 @@ func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetScore()
 		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
 	}
 	return t.Score
+}
+func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.SourceInstanceID
+}
+func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetSourceKey() *string {
+	if t == nil {
+		t = &UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore{}
+	}
+	return t.SourceKey
 }
 func (t *UpdateVendorRiskScore_UpdateVendorRiskScore_VendorRiskScore) GetTags() []string {
 	if t == nil {
@@ -179543,28 +178945,6 @@ func (t *UpdateDiscussion) GetUpdateDiscussion() *UpdateDiscussion_UpdateDiscuss
 	return &t.UpdateDiscussion
 }
 
-type CreateBulkCSVDNSVerification struct {
-	CreateBulkCSVDNSVerification CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification "json:\"createBulkCSVDNSVerification\" graphql:\"createBulkCSVDNSVerification\""
-}
-
-func (t *CreateBulkCSVDNSVerification) GetCreateBulkCSVDNSVerification() *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification {
-	if t == nil {
-		t = &CreateBulkCSVDNSVerification{}
-	}
-	return &t.CreateBulkCSVDNSVerification
-}
-
-type CreateBulkDNSVerification struct {
-	CreateBulkDNSVerification CreateBulkDNSVerification_CreateBulkDNSVerification "json:\"createBulkDNSVerification\" graphql:\"createBulkDNSVerification\""
-}
-
-func (t *CreateBulkDNSVerification) GetCreateBulkDNSVerification() *CreateBulkDNSVerification_CreateBulkDNSVerification {
-	if t == nil {
-		t = &CreateBulkDNSVerification{}
-	}
-	return &t.CreateBulkDNSVerification
-}
-
 type CreateDNSVerification struct {
 	CreateDNSVerification CreateDNSVerification_CreateDNSVerification "json:\"createDNSVerification\" graphql:\"createDNSVerification\""
 }
@@ -179783,17 +179163,6 @@ func (t *PreviewEmailTemplate) GetPreviewEmailTemplate() string {
 		t = &PreviewEmailTemplate{}
 	}
 	return t.PreviewEmailTemplate
-}
-
-type UpdateBulkCSVEmailTemplate struct {
-	UpdateBulkCSVEmailTemplate UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate "json:\"updateBulkCSVEmailTemplate\" graphql:\"updateBulkCSVEmailTemplate\""
-}
-
-func (t *UpdateBulkCSVEmailTemplate) GetUpdateBulkCSVEmailTemplate() *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate {
-	if t == nil {
-		t = &UpdateBulkCSVEmailTemplate{}
-	}
-	return &t.UpdateBulkCSVEmailTemplate
 }
 
 type UpdateBulkEmailTemplate struct {
@@ -180775,28 +180144,6 @@ func (t *UpdateGroupSetting) GetUpdateGroupSetting() *UpdateGroupSetting_UpdateG
 	return &t.UpdateGroupSetting
 }
 
-type CreateBulkCSVHush struct {
-	CreateBulkCSVHush CreateBulkCSVHush_CreateBulkCSVHush "json:\"createBulkCSVHush\" graphql:\"createBulkCSVHush\""
-}
-
-func (t *CreateBulkCSVHush) GetCreateBulkCSVHush() *CreateBulkCSVHush_CreateBulkCSVHush {
-	if t == nil {
-		t = &CreateBulkCSVHush{}
-	}
-	return &t.CreateBulkCSVHush
-}
-
-type CreateBulkHush struct {
-	CreateBulkHush CreateBulkHush_CreateBulkHush "json:\"createBulkHush\" graphql:\"createBulkHush\""
-}
-
-func (t *CreateBulkHush) GetCreateBulkHush() *CreateBulkHush_CreateBulkHush {
-	if t == nil {
-		t = &CreateBulkHush{}
-	}
-	return &t.CreateBulkHush
-}
-
 type CreateHush struct {
 	CreateHush CreateHush_CreateHush "json:\"createHush\" graphql:\"createHush\""
 }
@@ -181202,28 +180549,6 @@ func (t *InvitesByOrgID) GetInvites() *InvitesByOrgID_Invites {
 		t = &InvitesByOrgID{}
 	}
 	return &t.Invites
-}
-
-type CreateBulkCSVMappableDomain struct {
-	CreateBulkCSVMappableDomain CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain "json:\"createBulkCSVMappableDomain\" graphql:\"createBulkCSVMappableDomain\""
-}
-
-func (t *CreateBulkCSVMappableDomain) GetCreateBulkCSVMappableDomain() *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain {
-	if t == nil {
-		t = &CreateBulkCSVMappableDomain{}
-	}
-	return &t.CreateBulkCSVMappableDomain
-}
-
-type CreateBulkMappableDomain struct {
-	CreateBulkMappableDomain CreateBulkMappableDomain_CreateBulkMappableDomain "json:\"createBulkMappableDomain\" graphql:\"createBulkMappableDomain\""
-}
-
-func (t *CreateBulkMappableDomain) GetCreateBulkMappableDomain() *CreateBulkMappableDomain_CreateBulkMappableDomain {
-	if t == nil {
-		t = &CreateBulkMappableDomain{}
-	}
-	return &t.CreateBulkMappableDomain
 }
 
 type CreateMappableDomain struct {
@@ -196577,90 +195902,6 @@ func (c *Client) UpdateDiscussion(ctx context.Context, updateDiscussionID string
 	return &res, nil
 }
 
-const CreateBulkCSVDNSVerificationDocument = `mutation CreateBulkCSVDNSVerification ($input: Upload!) {
-	createBulkCSVDNSVerification(input: $input) {
-		dnsVerifications {
-			acmeChallengePath
-			acmeChallengeStatus
-			acmeChallengeStatusReason
-			cloudflareHostnameID
-			createdAt
-			createdBy
-			dnsTxtRecord
-			dnsTxtValue
-			dnsVerificationStatus
-			dnsVerificationStatusReason
-			expectedAcmeChallengeValue
-			id
-			ownerID
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVDNSVerification, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVDNSVerification
-	if err := c.Client.Post(ctx, "CreateBulkCSVDNSVerification", CreateBulkCSVDNSVerificationDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkDNSVerificationDocument = `mutation CreateBulkDNSVerification ($input: [CreateDNSVerificationInput!]) {
-	createBulkDNSVerification(input: $input) {
-		dnsVerifications {
-			acmeChallengePath
-			acmeChallengeStatus
-			acmeChallengeStatusReason
-			cloudflareHostnameID
-			createdAt
-			createdBy
-			dnsTxtRecord
-			dnsTxtValue
-			dnsVerificationStatus
-			dnsVerificationStatusReason
-			expectedAcmeChallengeValue
-			id
-			ownerID
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkDNSVerification(ctx context.Context, input []*CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkDNSVerification, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkDNSVerification
-	if err := c.Client.Post(ctx, "CreateBulkDNSVerification", CreateBulkDNSVerificationDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateDNSVerificationDocument = `mutation CreateDNSVerification ($input: CreateDNSVerificationInput!) {
 	createDNSVerification(input: $input) {
 		dnsVerification {
@@ -197498,66 +196739,6 @@ func (c *Client) PreviewEmailTemplate(ctx context.Context, key string, defaults 
 
 	var res PreviewEmailTemplate
 	if err := c.Client.Post(ctx, "PreviewEmailTemplate", PreviewEmailTemplateDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const UpdateBulkCSVEmailTemplateDocument = `mutation UpdateBulkCSVEmailTemplate ($input: Upload!) {
-	updateBulkCSVEmailTemplate(input: $input) {
-		emailTemplates {
-			active
-			createdAt
-			createdBy
-			defaults
-			description
-			externalID
-			format
-			id
-			integrationID
-			integrationRunID
-			internalNotes
-			key
-			locale
-			managedBy
-			metadata
-			name
-			ownerID
-			revision
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			sourceKey
-			systemInternalID
-			systemOwned
-			templateContext
-			trustCenterID
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			version
-			workflowDefinitionID
-			workflowInstanceID
-		}
-		updatedIDs
-		notUpdatedIDs
-		error
-	}
-}
-`
-
-func (c *Client) UpdateBulkCSVEmailTemplate(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVEmailTemplate, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res UpdateBulkCSVEmailTemplate
-	if err := c.Client.Post(ctx, "UpdateBulkCSVEmailTemplate", UpdateBulkCSVEmailTemplateDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -202611,104 +201792,6 @@ func (c *Client) UpdateGroupSetting(ctx context.Context, updateGroupSettingID st
 	return &res, nil
 }
 
-const CreateBulkCSVHushDocument = `mutation CreateBulkCSVHush ($input: Upload!) {
-	createBulkCSVHush(input: $input) {
-		hushes {
-			createdAt
-			createdBy
-			description
-			expiresAt
-			id
-			internalNotes
-			kind
-			lastUsedAt
-			metadata
-			name
-			ownerID
-			secretName
-			systemInternalID
-			systemOwned
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			integrations {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVHush(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVHush, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVHush
-	if err := c.Client.Post(ctx, "CreateBulkCSVHush", CreateBulkCSVHushDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkHushDocument = `mutation CreateBulkHush ($input: [CreateHushInput!]) {
-	createBulkHush(input: $input) {
-		hushes {
-			createdAt
-			createdBy
-			description
-			expiresAt
-			id
-			internalNotes
-			kind
-			lastUsedAt
-			metadata
-			name
-			ownerID
-			secretName
-			systemInternalID
-			systemOwned
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			integrations {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkHush(ctx context.Context, input []*CreateHushInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkHush, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkHush
-	if err := c.Client.Post(ctx, "CreateBulkHush", CreateBulkHushDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateHushDocument = `mutation CreateHush ($input: CreateHushInput!) {
 	createHush(input: $input) {
 		hush {
@@ -205100,74 +204183,6 @@ func (c *Client) InvitesByOrgID(ctx context.Context, where *InviteWhereInput, in
 
 	var res InvitesByOrgID
 	if err := c.Client.Post(ctx, "InvitesByOrgID", InvitesByOrgIDDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkCSVMappableDomainDocument = `mutation CreateBulkCSVMappableDomain ($input: Upload!) {
-	createBulkCSVMappableDomain(input: $input) {
-		mappableDomains {
-			createdAt
-			createdBy
-			id
-			name
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			zoneID
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVMappableDomain, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVMappableDomain
-	if err := c.Client.Post(ctx, "CreateBulkCSVMappableDomain", CreateBulkCSVMappableDomainDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkMappableDomainDocument = `mutation CreateBulkMappableDomain ($input: [CreateMappableDomainInput!]) {
-	createBulkMappableDomain(input: $input) {
-		mappableDomains {
-			createdAt
-			createdBy
-			id
-			name
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			zoneID
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkMappableDomain(ctx context.Context, input []*CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkMappableDomain, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkMappableDomain
-	if err := c.Client.Post(ctx, "CreateBulkMappableDomain", CreateBulkMappableDomainDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -225593,9 +224608,12 @@ const CreateBulkCSVVendorRiskScoreDocument = `mutation CreateBulkCSVVendorRiskSc
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -225603,6 +224621,10 @@ const CreateBulkCSVVendorRiskScoreDocument = `mutation CreateBulkCSVVendorRiskSc
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -225639,9 +224661,12 @@ const CreateBulkVendorRiskScoreDocument = `mutation CreateBulkVendorRiskScore ($
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -225649,6 +224674,10 @@ const CreateBulkVendorRiskScoreDocument = `mutation CreateBulkVendorRiskScore ($
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -225685,9 +224714,12 @@ const CreateVendorRiskScoreDocument = `mutation CreateVendorRiskScore ($input: C
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -225695,6 +224727,10 @@ const CreateVendorRiskScoreDocument = `mutation CreateVendorRiskScore ($input: C
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -225789,9 +224825,12 @@ const GetAllVendorRiskScoresDocument = `query GetAllVendorRiskScores ($first: In
 				createdAt
 				createdBy
 				entityID
+				externalID
 				id
 				impact
+				integrationRunID
 				likelihood
+				managedBy
 				notes
 				ownerID
 				questionCategory
@@ -225799,6 +224838,10 @@ const GetAllVendorRiskScoresDocument = `query GetAllVendorRiskScores ($first: In
 				questionKey
 				questionName
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
+				sourceKey
 				tags
 				updatedAt
 				updatedBy
@@ -225839,9 +224882,12 @@ const GetVendorRiskScoreByIDDocument = `query GetVendorRiskScoreByID ($vendorRis
 		createdAt
 		createdBy
 		entityID
+		externalID
 		id
 		impact
+		integrationRunID
 		likelihood
+		managedBy
 		notes
 		ownerID
 		questionCategory
@@ -225849,6 +224895,10 @@ const GetVendorRiskScoreByIDDocument = `query GetVendorRiskScoreByID ($vendorRis
 		questionKey
 		questionName
 		score
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
+		sourceKey
 		tags
 		updatedAt
 		updatedBy
@@ -225892,9 +224942,12 @@ const GetVendorRiskScoresDocument = `query GetVendorRiskScores ($first: Int, $la
 				createdAt
 				createdBy
 				entityID
+				externalID
 				id
 				impact
+				integrationRunID
 				likelihood
+				managedBy
 				notes
 				ownerID
 				questionCategory
@@ -225902,6 +224955,10 @@ const GetVendorRiskScoresDocument = `query GetVendorRiskScores ($first: Int, $la
 				questionKey
 				questionName
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
+				sourceKey
 				tags
 				updatedAt
 				updatedBy
@@ -225944,9 +225001,12 @@ const UpdateBulkCSVVendorRiskScoreDocument = `mutation UpdateBulkCSVVendorRiskSc
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -225954,6 +225014,10 @@ const UpdateBulkCSVVendorRiskScoreDocument = `mutation UpdateBulkCSVVendorRiskSc
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -225993,9 +225057,12 @@ const UpdateBulkVendorRiskScoreDocument = `mutation UpdateBulkVendorRiskScore ($
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -226003,6 +225070,10 @@ const UpdateBulkVendorRiskScoreDocument = `mutation UpdateBulkVendorRiskScore ($
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -226043,9 +225114,12 @@ const UpdateVendorRiskScoreDocument = `mutation UpdateVendorRiskScore ($updateVe
 			createdAt
 			createdBy
 			entityID
+			externalID
 			id
 			impact
+			integrationRunID
 			likelihood
+			managedBy
 			notes
 			ownerID
 			questionCategory
@@ -226053,6 +225127,10 @@ const UpdateVendorRiskScoreDocument = `mutation UpdateVendorRiskScore ($updateVe
 			questionKey
 			questionName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			sourceKey
 			tags
 			updatedAt
 			updatedBy
@@ -231128,8 +230206,6 @@ var DocumentOperationNames = map[string]string{
 	GetDiscussionByIDDocument:                           "GetDiscussionByID",
 	GetDiscussionsDocument:                              "GetDiscussions",
 	UpdateDiscussionDocument:                            "UpdateDiscussion",
-	CreateBulkCSVDNSVerificationDocument:                "CreateBulkCSVDNSVerification",
-	CreateBulkDNSVerificationDocument:                   "CreateBulkDNSVerification",
 	CreateDNSVerificationDocument:                       "CreateDNSVerification",
 	DeleteDNSVerificationDocument:                       "DeleteDNSVerification",
 	GetAllDNSVerificationsDocument:                      "GetAllDNSVerifications",
@@ -231150,7 +230226,6 @@ var DocumentOperationNames = map[string]string{
 	GetEmailTemplateByIDDocument:                        "GetEmailTemplateByID",
 	GetEmailTemplatesDocument:                           "GetEmailTemplates",
 	PreviewEmailTemplateDocument:                        "PreviewEmailTemplate",
-	UpdateBulkCSVEmailTemplateDocument:                  "UpdateBulkCSVEmailTemplate",
 	UpdateBulkEmailTemplateDocument:                     "UpdateBulkEmailTemplate",
 	UpdateEmailTemplateDocument:                         "UpdateEmailTemplate",
 	CreateBulkCSVEntityDocument:                         "CreateBulkCSVEntity",
@@ -231240,8 +230315,6 @@ var DocumentOperationNames = map[string]string{
 	GetGroupSettingByIDDocument:                         "GetGroupSettingByID",
 	GetGroupSettingsDocument:                            "GetGroupSettings",
 	UpdateGroupSettingDocument:                          "UpdateGroupSetting",
-	CreateBulkCSVHushDocument:                           "CreateBulkCSVHush",
-	CreateBulkHushDocument:                              "CreateBulkHush",
 	CreateHushDocument:                                  "CreateHush",
 	GetAllHushesDocument:                                "GetAllHushes",
 	GetHushByIDDocument:                                 "GetHushByID",
@@ -231279,8 +230352,6 @@ var DocumentOperationNames = map[string]string{
 	GetAllInvitesDocument:                               "GetAllInvites",
 	GetInviteByIDDocument:                               "GetInviteByID",
 	InvitesByOrgIDDocument:                              "InvitesByOrgID",
-	CreateBulkCSVMappableDomainDocument:                 "CreateBulkCSVMappableDomain",
-	CreateBulkMappableDomainDocument:                    "CreateBulkMappableDomain",
 	CreateMappableDomainDocument:                        "CreateMappableDomain",
 	DeleteMappableDomainDocument:                        "DeleteMappableDomain",
 	GetAllMappableDomainsDocument:                       "GetAllMappableDomains",

@@ -293002,6 +293002,13 @@ type VendorRiskScoreMutation struct {
 	deleted_by                   *string
 	tags                         *[]string
 	appendtags                   []string
+	source_definition_id         *string
+	source_definition_version    *string
+	source_instance_id           *string
+	managed_by                   *string
+	integration_run_id           *string
+	source_key                   *string
+	external_id                  *string
 	question_key                 *string
 	question_name                *string
 	question_description         *string
@@ -293016,6 +293023,9 @@ type VendorRiskScoreMutation struct {
 	clearedFields                map[string]struct{}
 	owner                        *string
 	clearedowner                 bool
+	integration_runs             map[string]struct{}
+	removedintegration_runs      map[string]struct{}
+	clearedintegration_runs      bool
 	vendor_scoring_config        *string
 	clearedvendor_scoring_config bool
 	entity                       *string
@@ -293586,6 +293596,349 @@ func (m *VendorRiskScoreMutation) OwnerIDCleared() bool {
 func (m *VendorRiskScoreMutation) ResetOwnerID() {
 	m.owner = nil
 	delete(m.clearedFields, vendorriskscore.FieldOwnerID)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *VendorRiskScoreMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *VendorRiskScoreMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *VendorRiskScoreMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[vendorriskscore.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *VendorRiskScoreMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, vendorriskscore.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *VendorRiskScoreMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *VendorRiskScoreMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *VendorRiskScoreMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[vendorriskscore.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *VendorRiskScoreMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, vendorriskscore.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *VendorRiskScoreMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *VendorRiskScoreMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *VendorRiskScoreMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[vendorriskscore.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *VendorRiskScoreMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, vendorriskscore.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *VendorRiskScoreMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *VendorRiskScoreMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *VendorRiskScoreMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[vendorriskscore.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *VendorRiskScoreMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, vendorriskscore.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *VendorRiskScoreMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *VendorRiskScoreMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *VendorRiskScoreMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[vendorriskscore.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *VendorRiskScoreMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, vendorriskscore.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *VendorRiskScoreMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *VendorRiskScoreMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *VendorRiskScoreMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[vendorriskscore.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *VendorRiskScoreMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, vendorriskscore.FieldSourceKey)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *VendorRiskScoreMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *VendorRiskScoreMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *VendorRiskScoreMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[vendorriskscore.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *VendorRiskScoreMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, vendorriskscore.FieldExternalID)
 }
 
 // SetQuestionKey sets the "question_key" field.
@@ -294168,6 +294521,60 @@ func (m *VendorRiskScoreMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by ids.
+func (m *VendorRiskScoreMutation) AddIntegrationRunIDs(ids ...string) {
+	if m.integration_runs == nil {
+		m.integration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRuns clears the "integration_runs" edge to the IntegrationRun entity.
+func (m *VendorRiskScoreMutation) ClearIntegrationRuns() {
+	m.clearedintegration_runs = true
+}
+
+// IntegrationRunsCleared reports if the "integration_runs" edge to the IntegrationRun entity was cleared.
+func (m *VendorRiskScoreMutation) IntegrationRunsCleared() bool {
+	return m.clearedintegration_runs
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (m *VendorRiskScoreMutation) RemoveIntegrationRunIDs(ids ...string) {
+	if m.removedintegration_runs == nil {
+		m.removedintegration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_runs, ids[i])
+		m.removedintegration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRuns returns the removed IDs of the "integration_runs" edge to the IntegrationRun entity.
+func (m *VendorRiskScoreMutation) RemovedIntegrationRunsIDs() (ids []string) {
+	for id := range m.removedintegration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRunsIDs returns the "integration_runs" edge IDs in the mutation.
+func (m *VendorRiskScoreMutation) IntegrationRunsIDs() (ids []string) {
+	for id := range m.integration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRuns resets all changes to the "integration_runs" edge.
+func (m *VendorRiskScoreMutation) ResetIntegrationRuns() {
+	m.integration_runs = nil
+	m.clearedintegration_runs = false
+	m.removedintegration_runs = nil
+}
+
 // ClearVendorScoringConfig clears the "vendor_scoring_config" edge to the VendorScoringConfig entity.
 func (m *VendorRiskScoreMutation) ClearVendorScoringConfig() {
 	m.clearedvendor_scoring_config = true
@@ -294283,7 +294690,7 @@ func (m *VendorRiskScoreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VendorRiskScoreMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 29)
 	if m.created_at != nil {
 		fields = append(fields, vendorriskscore.FieldCreatedAt)
 	}
@@ -294310,6 +294717,27 @@ func (m *VendorRiskScoreMutation) Fields() []string {
 	}
 	if m.owner != nil {
 		fields = append(fields, vendorriskscore.FieldOwnerID)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, vendorriskscore.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, vendorriskscore.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, vendorriskscore.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, vendorriskscore.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, vendorriskscore.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, vendorriskscore.FieldSourceKey)
+	}
+	if m.external_id != nil {
+		fields = append(fields, vendorriskscore.FieldExternalID)
 	}
 	if m.question_key != nil {
 		fields = append(fields, vendorriskscore.FieldQuestionKey)
@@ -294376,6 +294804,20 @@ func (m *VendorRiskScoreMutation) Field(name string) (ent.Value, bool) {
 		return m.Tags()
 	case vendorriskscore.FieldOwnerID:
 		return m.OwnerID()
+	case vendorriskscore.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case vendorriskscore.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case vendorriskscore.FieldManagedBy:
+		return m.ManagedBy()
+	case vendorriskscore.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case vendorriskscore.FieldSourceKey:
+		return m.SourceKey()
+	case vendorriskscore.FieldExternalID:
+		return m.ExternalID()
 	case vendorriskscore.FieldQuestionKey:
 		return m.QuestionKey()
 	case vendorriskscore.FieldQuestionName:
@@ -294429,6 +294871,20 @@ func (m *VendorRiskScoreMutation) OldField(ctx context.Context, name string) (en
 		return m.OldTags(ctx)
 	case vendorriskscore.FieldOwnerID:
 		return m.OldOwnerID(ctx)
+	case vendorriskscore.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case vendorriskscore.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case vendorriskscore.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case vendorriskscore.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case vendorriskscore.FieldSourceKey:
+		return m.OldSourceKey(ctx)
+	case vendorriskscore.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case vendorriskscore.FieldQuestionKey:
 		return m.OldQuestionKey(ctx)
 	case vendorriskscore.FieldQuestionName:
@@ -294526,6 +294982,55 @@ func (m *VendorRiskScoreMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOwnerID(v)
+		return nil
+	case vendorriskscore.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case vendorriskscore.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case vendorriskscore.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case vendorriskscore.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case vendorriskscore.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
+		return nil
+	case vendorriskscore.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case vendorriskscore.FieldQuestionKey:
 		v, ok := value.(string)
@@ -294690,6 +295195,27 @@ func (m *VendorRiskScoreMutation) ClearedFields() []string {
 	if m.FieldCleared(vendorriskscore.FieldOwnerID) {
 		fields = append(fields, vendorriskscore.FieldOwnerID)
 	}
+	if m.FieldCleared(vendorriskscore.FieldSourceDefinitionID) {
+		fields = append(fields, vendorriskscore.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(vendorriskscore.FieldSourceDefinitionVersion) {
+		fields = append(fields, vendorriskscore.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(vendorriskscore.FieldSourceInstanceID) {
+		fields = append(fields, vendorriskscore.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(vendorriskscore.FieldManagedBy) {
+		fields = append(fields, vendorriskscore.FieldManagedBy)
+	}
+	if m.FieldCleared(vendorriskscore.FieldIntegrationRunID) {
+		fields = append(fields, vendorriskscore.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(vendorriskscore.FieldSourceKey) {
+		fields = append(fields, vendorriskscore.FieldSourceKey)
+	}
+	if m.FieldCleared(vendorriskscore.FieldExternalID) {
+		fields = append(fields, vendorriskscore.FieldExternalID)
+	}
 	if m.FieldCleared(vendorriskscore.FieldQuestionDescription) {
 		fields = append(fields, vendorriskscore.FieldQuestionDescription)
 	}
@@ -294746,6 +295272,27 @@ func (m *VendorRiskScoreMutation) ClearField(name string) error {
 	case vendorriskscore.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
+	case vendorriskscore.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case vendorriskscore.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case vendorriskscore.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case vendorriskscore.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case vendorriskscore.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
+	case vendorriskscore.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case vendorriskscore.FieldQuestionDescription:
 		m.ClearQuestionDescription()
 		return nil
@@ -294796,6 +295343,27 @@ func (m *VendorRiskScoreMutation) ResetField(name string) error {
 	case vendorriskscore.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
+	case vendorriskscore.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case vendorriskscore.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case vendorriskscore.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case vendorriskscore.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case vendorriskscore.FieldSourceKey:
+		m.ResetSourceKey()
+		return nil
+	case vendorriskscore.FieldExternalID:
+		m.ResetExternalID()
+		return nil
 	case vendorriskscore.FieldQuestionKey:
 		m.ResetQuestionKey()
 		return nil
@@ -294841,9 +295409,12 @@ func (m *VendorRiskScoreMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VendorRiskScoreMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.owner != nil {
 		edges = append(edges, vendorriskscore.EdgeOwner)
+	}
+	if m.integration_runs != nil {
+		edges = append(edges, vendorriskscore.EdgeIntegrationRuns)
 	}
 	if m.vendor_scoring_config != nil {
 		edges = append(edges, vendorriskscore.EdgeVendorScoringConfig)
@@ -294865,6 +295436,12 @@ func (m *VendorRiskScoreMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
+	case vendorriskscore.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.integration_runs))
+		for id := range m.integration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case vendorriskscore.EdgeVendorScoringConfig:
 		if id := m.vendor_scoring_config; id != nil {
 			return []ent.Value{*id}
@@ -294883,21 +295460,35 @@ func (m *VendorRiskScoreMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VendorRiskScoreMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
+	if m.removedintegration_runs != nil {
+		edges = append(edges, vendorriskscore.EdgeIntegrationRuns)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *VendorRiskScoreMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case vendorriskscore.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.removedintegration_runs))
+		for id := range m.removedintegration_runs {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *VendorRiskScoreMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.clearedowner {
 		edges = append(edges, vendorriskscore.EdgeOwner)
+	}
+	if m.clearedintegration_runs {
+		edges = append(edges, vendorriskscore.EdgeIntegrationRuns)
 	}
 	if m.clearedvendor_scoring_config {
 		edges = append(edges, vendorriskscore.EdgeVendorScoringConfig)
@@ -294917,6 +295508,8 @@ func (m *VendorRiskScoreMutation) EdgeCleared(name string) bool {
 	switch name {
 	case vendorriskscore.EdgeOwner:
 		return m.clearedowner
+	case vendorriskscore.EdgeIntegrationRuns:
+		return m.clearedintegration_runs
 	case vendorriskscore.EdgeVendorScoringConfig:
 		return m.clearedvendor_scoring_config
 	case vendorriskscore.EdgeEntity:
@@ -294953,6 +295546,9 @@ func (m *VendorRiskScoreMutation) ResetEdge(name string) error {
 	switch name {
 	case vendorriskscore.EdgeOwner:
 		m.ResetOwner()
+		return nil
+	case vendorriskscore.EdgeIntegrationRuns:
+		m.ResetIntegrationRuns()
 		return nil
 	case vendorriskscore.EdgeVendorScoringConfig:
 		m.ResetVendorScoringConfig()

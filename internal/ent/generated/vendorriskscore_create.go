@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
@@ -139,6 +140,104 @@ func (_c *VendorRiskScoreCreate) SetOwnerID(v string) *VendorRiskScoreCreate {
 func (_c *VendorRiskScoreCreate) SetNillableOwnerID(v *string) *VendorRiskScoreCreate {
 	if v != nil {
 		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *VendorRiskScoreCreate) SetSourceDefinitionID(v string) *VendorRiskScoreCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *VendorRiskScoreCreate) SetNillableSourceDefinitionID(v *string) *VendorRiskScoreCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *VendorRiskScoreCreate) SetSourceDefinitionVersion(v string) *VendorRiskScoreCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *VendorRiskScoreCreate) SetNillableSourceDefinitionVersion(v *string) *VendorRiskScoreCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *VendorRiskScoreCreate) SetSourceInstanceID(v string) *VendorRiskScoreCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *VendorRiskScoreCreate) SetNillableSourceInstanceID(v *string) *VendorRiskScoreCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *VendorRiskScoreCreate) SetManagedBy(v string) *VendorRiskScoreCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *VendorRiskScoreCreate) SetNillableManagedBy(v *string) *VendorRiskScoreCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *VendorRiskScoreCreate) SetIntegrationRunID(v string) *VendorRiskScoreCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *VendorRiskScoreCreate) SetNillableIntegrationRunID(v *string) *VendorRiskScoreCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_c *VendorRiskScoreCreate) SetSourceKey(v string) *VendorRiskScoreCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *VendorRiskScoreCreate) SetNillableSourceKey(v *string) *VendorRiskScoreCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *VendorRiskScoreCreate) SetExternalID(v string) *VendorRiskScoreCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *VendorRiskScoreCreate) SetNillableExternalID(v *string) *VendorRiskScoreCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -286,6 +385,21 @@ func (_c *VendorRiskScoreCreate) SetNillableID(v *string) *VendorRiskScoreCreate
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *VendorRiskScoreCreate) SetOwner(v *Organization) *VendorRiskScoreCreate {
 	return _c.SetOwnerID(v.ID)
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *VendorRiskScoreCreate) AddIntegrationRunIDs(ids ...string) *VendorRiskScoreCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *VendorRiskScoreCreate) AddIntegrationRuns(v ...*IntegrationRun) *VendorRiskScoreCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
 }
 
 // SetVendorScoringConfig sets the "vendor_scoring_config" edge to the VendorScoringConfig entity.
@@ -508,6 +622,34 @@ func (_c *VendorRiskScoreCreate) createSpec() (*VendorRiskScore, *sqlgraph.Creat
 		_spec.SetField(vendorriskscore.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(vendorriskscore.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(vendorriskscore.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(vendorriskscore.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(vendorriskscore.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.QuestionKey(); ok {
 		_spec.SetField(vendorriskscore.FieldQuestionKey, field.TypeString, value)
 		_node.QuestionKey = value
@@ -563,6 +705,22 @@ func (_c *VendorRiskScoreCreate) createSpec() (*VendorRiskScore, *sqlgraph.Creat
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorriskscore.IntegrationRunsTable,
+			Columns: []string{vendorriskscore.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.VendorScoringConfigIDs(); len(nodes) > 0 {

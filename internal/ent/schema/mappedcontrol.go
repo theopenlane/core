@@ -130,8 +130,7 @@ func (MappedControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.IntegrationMappingSchema().
-			StockPersist().
-			LookupAlternative(externalIDFieldName),
+			StockPersist(),
 	}
 }
 

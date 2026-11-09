@@ -323,7 +323,6 @@ func (IdentityHolder) Annotations() []schema.Annotation {
 		entx.NewExportable(),
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			LookupAlternative(externalIDFieldName).
 			LookupAlternative("external_reference_id").
 			LookupAlternative("email"),
 	}

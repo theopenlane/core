@@ -113,10 +113,6 @@ type ComplexityRoot struct {
 		UpdatedByImpersonator func(childComplexity int) int
 	}
 
-	APITokenBulkCreatePayload struct {
-		APITokens func(childComplexity int) int
-	}
-
 	APITokenBulkDeletePayload struct {
 		DeletedIDs    func(childComplexity int) int
 		Error         func(childComplexity int) int
@@ -1531,23 +1527,6 @@ type ComplexityRoot struct {
 		UpdatedAt                   func(childComplexity int) int
 		UpdatedBy                   func(childComplexity int) int
 		UpdatedByImpersonator       func(childComplexity int) int
-	}
-
-	DNSVerificationBulkCreatePayload struct {
-		DNSVerifications func(childComplexity int) int
-	}
-
-	DNSVerificationBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	DNSVerificationBulkUpdatePayload struct {
-		DNSVerifications func(childComplexity int) int
-		Error            func(childComplexity int) int
-		NotUpdatedIDs    func(childComplexity int) int
-		UpdatedIDs       func(childComplexity int) int
 	}
 
 	DNSVerificationConnection struct {
@@ -3038,10 +3017,6 @@ type ComplexityRoot struct {
 		UpdatedByImpersonator func(childComplexity int) int
 	}
 
-	HushBulkCreatePayload struct {
-		Hushes func(childComplexity int) int
-	}
-
 	HushBulkDeletePayload struct {
 		DeletedIDs    func(childComplexity int) int
 		Error         func(childComplexity int) int
@@ -3528,23 +3503,6 @@ type ComplexityRoot struct {
 		ZoneID                func(childComplexity int) int
 	}
 
-	MappableDomainBulkCreatePayload struct {
-		MappableDomains func(childComplexity int) int
-	}
-
-	MappableDomainBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	MappableDomainBulkUpdatePayload struct {
-		Error           func(childComplexity int) int
-		MappableDomains func(childComplexity int) int
-		NotUpdatedIDs   func(childComplexity int) int
-		UpdatedIDs      func(childComplexity int) int
-	}
-
 	MappableDomainConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3659,11 +3617,9 @@ type ComplexityRoot struct {
 		CreateAssessmentTemplate                 func(childComplexity int, input model.CreateAssessmentTemplateInput) int
 		CreateAssessmentWithPolicies             func(childComplexity int, assessmentInput generated.CreateAssessmentInput, policies []*model.AssessmentPoliciesInput) int
 		CreateAsset                              func(childComplexity int, input generated.CreateAssetInput) int
-		CreateBulkAPIToken                       func(childComplexity int, input []*generated.CreateAPITokenInput) int
 		CreateBulkActionPlan                     func(childComplexity int, input []*generated.CreateActionPlanInput) int
 		CreateBulkAssessmentPolicy               func(childComplexity int, input []*generated.CreateAssessmentPolicyInput) int
 		CreateBulkAsset                          func(childComplexity int, input []*generated.CreateAssetInput) int
-		CreateBulkCSVAPIToken                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVActionPlan                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVAssessmentPolicy            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVAsset                       func(childComplexity int, input graphql.Upload) int
@@ -3676,7 +3632,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVControlObjective            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCustomDomain                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCustomTypeEnum              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDNSVerification             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDirectoryAccount            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDirectoryGroup              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDirectoryMembership         func(childComplexity int, input graphql.Upload) int
@@ -3692,18 +3647,15 @@ type ComplexityRoot struct {
 		CreateBulkCSVGroup                       func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVGroupMembership             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVGroupSetting                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVHush                        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVIdentityHolder              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInternalPolicy              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInvite                      func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVMappableDomain              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVMappedControl               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNarrative                   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNotificationPreference      func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNotificationTemplate        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganizationBrandingSetting func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrganizationSetting         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVPlatform                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProcedure                   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgram                     func(childComplexity int, input graphql.Upload) int
@@ -3726,7 +3678,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVTrustCenterFaq              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterNDARequest       func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterSubprocessor     func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVUserSetting                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVVendorRiskScore             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVVendorScoringConfig         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVVulnerability               func(childComplexity int, input graphql.Upload) int
@@ -3740,7 +3691,6 @@ type ComplexityRoot struct {
 		CreateBulkControlObjective               func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
 		CreateBulkCustomDomain                   func(childComplexity int, input []*generated.CreateCustomDomainInput) int
 		CreateBulkCustomTypeEnum                 func(childComplexity int, input []*generated.CreateCustomTypeEnumInput) int
-		CreateBulkDNSVerification                func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
 		CreateBulkDirectoryAccount               func(childComplexity int, input []*generated.CreateDirectoryAccountInput) int
 		CreateBulkDirectoryGroup                 func(childComplexity int, input []*generated.CreateDirectoryGroupInput) int
 		CreateBulkDirectoryMembership            func(childComplexity int, input []*generated.CreateDirectoryMembershipInput) int
@@ -3756,18 +3706,15 @@ type ComplexityRoot struct {
 		CreateBulkGroup                          func(childComplexity int, input []*generated.CreateGroupInput) int
 		CreateBulkGroupMembership                func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
 		CreateBulkGroupSetting                   func(childComplexity int, input []*generated.CreateGroupSettingInput) int
-		CreateBulkHush                           func(childComplexity int, input []*generated.CreateHushInput) int
 		CreateBulkIdentityHolder                 func(childComplexity int, input []*generated.CreateIdentityHolderInput) int
 		CreateBulkInternalPolicy                 func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
 		CreateBulkInvite                         func(childComplexity int, input []*generated.CreateInviteInput) int
-		CreateBulkMappableDomain                 func(childComplexity int, input []*generated.CreateMappableDomainInput) int
 		CreateBulkMappedControl                  func(childComplexity int, input []*generated.CreateMappedControlInput) int
 		CreateBulkNarrative                      func(childComplexity int, input []*generated.CreateNarrativeInput) int
 		CreateBulkNotificationPreference         func(childComplexity int, input []*generated.CreateNotificationPreferenceInput) int
 		CreateBulkNotificationTemplate           func(childComplexity int, input []*generated.CreateNotificationTemplateInput) int
 		CreateBulkOrgMembership                  func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
 		CreateBulkOrganizationBrandingSetting    func(childComplexity int, input []*generated.CreateOrganizationBrandingSettingInput) int
-		CreateBulkOrganizationSetting            func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
 		CreateBulkPlatform                       func(childComplexity int, input []*generated.CreatePlatformInput) int
 		CreateBulkProcedure                      func(childComplexity int, input []*generated.CreateProcedureInput) int
 		CreateBulkProgram                        func(childComplexity int, input []*generated.CreateProgramInput) int
@@ -3791,7 +3738,6 @@ type ComplexityRoot struct {
 		CreateBulkTrustCenterFaq                 func(childComplexity int, input []*generated.CreateTrustCenterFAQInput) int
 		CreateBulkTrustCenterNDARequest          func(childComplexity int, input []*generated.CreateTrustCenterNDARequestInput) int
 		CreateBulkTrustCenterSubprocessor        func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
-		CreateBulkUserSetting                    func(childComplexity int, input []*generated.CreateUserSettingInput) int
 		CreateBulkVendorRiskScore                func(childComplexity int, input []*generated.CreateVendorRiskScoreInput) int
 		CreateBulkVendorScoringConfig            func(childComplexity int, input []*generated.CreateVendorScoringConfigInput) int
 		CreateBulkVulnerability                  func(childComplexity int, input []*generated.CreateVulnerabilityInput) int
@@ -3906,7 +3852,6 @@ type ComplexityRoot struct {
 		DeleteBulkControlImplementation          func(childComplexity int, ids []string) int
 		DeleteBulkControlObjective               func(childComplexity int, ids []string) int
 		DeleteBulkCustomDomain                   func(childComplexity int, ids []string) int
-		DeleteBulkDNSVerification                func(childComplexity int, ids []string) int
 		DeleteBulkDocumentData                   func(childComplexity int, ids []string) int
 		DeleteBulkEmailTemplate                  func(childComplexity int, ids []string) int
 		DeleteBulkEntity                         func(childComplexity int, ids []string) int
@@ -3923,14 +3868,12 @@ type ComplexityRoot struct {
 		DeleteBulkIdentityHolder                 func(childComplexity int, ids []string) int
 		DeleteBulkInternalPolicy                 func(childComplexity int, ids []string) int
 		DeleteBulkInvite                         func(childComplexity int, ids []string) int
-		DeleteBulkMappableDomain                 func(childComplexity int, ids []string) int
 		DeleteBulkMappedControl                  func(childComplexity int, ids []string) int
 		DeleteBulkNarrative                      func(childComplexity int, ids []string) int
 		DeleteBulkNotificationPreference         func(childComplexity int, ids []string) int
 		DeleteBulkNotificationTemplate           func(childComplexity int, ids []string) int
 		DeleteBulkOrgMembership                  func(childComplexity int, ids []string) int
 		DeleteBulkOrganizationBrandingSetting    func(childComplexity int, ids []string) int
-		DeleteBulkOrganizationSetting            func(childComplexity int, ids []string) int
 		DeleteBulkProcedure                      func(childComplexity int, ids []string) int
 		DeleteBulkProgram                        func(childComplexity int, ids []string) int
 		DeleteBulkProgramMembership              func(childComplexity int, ids []string) int
@@ -3950,7 +3893,6 @@ type ComplexityRoot struct {
 		DeleteBulkTrustCenterFaq                 func(childComplexity int, ids []string) int
 		DeleteBulkTrustCenterNDARequest          func(childComplexity int, ids []string) int
 		DeleteBulkTrustCenterSubprocessor        func(childComplexity int, ids []string) int
-		DeleteBulkUserSetting                    func(childComplexity int, ids []string) int
 		DeleteBulkVendorRiskScore                func(childComplexity int, ids []string) int
 		DeleteBulkVendorScoringConfig            func(childComplexity int, ids []string) int
 		DeleteBulkVulnerability                  func(childComplexity int, ids []string) int
@@ -4061,7 +4003,6 @@ type ComplexityRoot struct {
 		UpdateBulkActionPlan                     func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
 		UpdateBulkAssessmentPolicy               func(childComplexity int, ids []string, input generated.UpdateAssessmentPolicyInput) int
 		UpdateBulkAsset                          func(childComplexity int, ids []string, input generated.UpdateAssetInput) int
-		UpdateBulkCSVAPIToken                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVActionPlan                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVAssessmentPolicy            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVAsset                       func(childComplexity int, input graphql.Upload) int
@@ -4071,9 +4012,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVControlImplementation       func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVControlObjective            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVCustomDomain                func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVDNSVerification             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVDocumentData                func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVEmailTemplate               func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEntity                      func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEntityType                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEvent                       func(childComplexity int, input graphql.Upload) int
@@ -4082,18 +4021,15 @@ type ComplexityRoot struct {
 		UpdateBulkCSVGroup                       func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroupMembership             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroupSetting                func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVHush                        func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVIdentityHolder              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInternalPolicy              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInvite                      func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVMappableDomain              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVMappedControl               func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVNarrative                   func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVNotificationPreference      func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVNotificationTemplate        func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVOrgMembership               func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVOrganizationBrandingSetting func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVOrganizationSetting         func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProcedure                   func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProgram                     func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProgramMembership           func(childComplexity int, input graphql.Upload) int
@@ -4111,7 +4047,6 @@ type ComplexityRoot struct {
 		UpdateBulkCSVTrustCenterDoc              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVTrustCenterFaq              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVTrustCenterSubprocessor     func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVUserSetting                 func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVVendorRiskScore             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVVendorScoringConfig         func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVVulnerability               func(childComplexity int, input graphql.Upload) int
@@ -4121,7 +4056,6 @@ type ComplexityRoot struct {
 		UpdateBulkControlImplementation          func(childComplexity int, ids []string, input generated.UpdateControlImplementationInput) int
 		UpdateBulkControlObjective               func(childComplexity int, ids []string, input generated.UpdateControlObjectiveInput) int
 		UpdateBulkCustomDomain                   func(childComplexity int, ids []string, input generated.UpdateCustomDomainInput) int
-		UpdateBulkDNSVerification                func(childComplexity int, ids []string, input generated.UpdateDNSVerificationInput) int
 		UpdateBulkDocumentData                   func(childComplexity int, ids []string, input generated.UpdateDocumentDataInput) int
 		UpdateBulkEmailTemplate                  func(childComplexity int, ids []string, input generated.UpdateEmailTemplateInput) int
 		UpdateBulkEntity                         func(childComplexity int, ids []string, input generated.UpdateEntityInput) int
@@ -4136,14 +4070,12 @@ type ComplexityRoot struct {
 		UpdateBulkIdentityHolder                 func(childComplexity int, ids []string, input generated.UpdateIdentityHolderInput) int
 		UpdateBulkInternalPolicy                 func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
 		UpdateBulkInvite                         func(childComplexity int, ids []string, input generated.UpdateInviteInput) int
-		UpdateBulkMappableDomain                 func(childComplexity int, ids []string, input generated.UpdateMappableDomainInput) int
 		UpdateBulkMappedControl                  func(childComplexity int, ids []string, input generated.UpdateMappedControlInput) int
 		UpdateBulkNarrative                      func(childComplexity int, ids []string, input generated.UpdateNarrativeInput) int
 		UpdateBulkNotificationPreference         func(childComplexity int, ids []string, input generated.UpdateNotificationPreferenceInput) int
 		UpdateBulkNotificationTemplate           func(childComplexity int, ids []string, input generated.UpdateNotificationTemplateInput) int
 		UpdateBulkOrgMembership                  func(childComplexity int, ids []string, input generated.UpdateOrgMembershipInput) int
 		UpdateBulkOrganizationBrandingSetting    func(childComplexity int, ids []string, input generated.UpdateOrganizationBrandingSettingInput) int
-		UpdateBulkOrganizationSetting            func(childComplexity int, ids []string, input generated.UpdateOrganizationSettingInput) int
 		UpdateBulkProcedure                      func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
 		UpdateBulkProgram                        func(childComplexity int, ids []string, input generated.UpdateProgramInput) int
 		UpdateBulkProgramMembership              func(childComplexity int, ids []string, input generated.UpdateProgramMembershipInput) int
@@ -4162,7 +4094,6 @@ type ComplexityRoot struct {
 		UpdateBulkTrustCenterDoc                 func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
 		UpdateBulkTrustCenterFaq                 func(childComplexity int, ids []string, input generated.UpdateTrustCenterFAQInput) int
 		UpdateBulkTrustCenterSubprocessor        func(childComplexity int, ids []string, input generated.UpdateTrustCenterSubprocessorInput) int
-		UpdateBulkUserSetting                    func(childComplexity int, ids []string, input generated.UpdateUserSettingInput) int
 		UpdateBulkVendorRiskScore                func(childComplexity int, ids []string, input generated.UpdateVendorRiskScoreInput) int
 		UpdateBulkVendorScoringConfig            func(childComplexity int, ids []string, input generated.UpdateVendorScoringConfigInput) int
 		UpdateBulkVulnerability                  func(childComplexity int, ids []string, input generated.UpdateVulnerabilityInput) int
@@ -4920,23 +4851,6 @@ type ComplexityRoot struct {
 		UpdatedAt                        func(childComplexity int) int
 		UpdatedBy                        func(childComplexity int) int
 		UpdatedByImpersonator            func(childComplexity int) int
-	}
-
-	OrganizationSettingBulkCreatePayload struct {
-		OrganizationSettings func(childComplexity int) int
-	}
-
-	OrganizationSettingBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	OrganizationSettingBulkUpdatePayload struct {
-		Error                func(childComplexity int) int
-		NotUpdatedIDs        func(childComplexity int) int
-		OrganizationSettings func(childComplexity int) int
-		UpdatedIDs           func(childComplexity int) int
 	}
 
 	OrganizationSettingConnection struct {
@@ -7775,23 +7689,6 @@ type ComplexityRoot struct {
 		UserID                func(childComplexity int) int
 	}
 
-	UserSettingBulkCreatePayload struct {
-		UserSettings func(childComplexity int) int
-	}
-
-	UserSettingBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	UserSettingBulkUpdatePayload struct {
-		Error         func(childComplexity int) int
-		NotUpdatedIDs func(childComplexity int) int
-		UpdatedIDs    func(childComplexity int) int
-		UserSettings  func(childComplexity int) int
-	}
-
 	UserSettingConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -7816,31 +7713,39 @@ type ComplexityRoot struct {
 	}
 
 	VendorRiskScore struct {
-		Answer                func(childComplexity int) int
-		AnswerType            func(childComplexity int) int
-		AssessmentResponse    func(childComplexity int) int
-		AssessmentResponseID  func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Entity                func(childComplexity int) int
-		EntityID              func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Impact                func(childComplexity int) int
-		Likelihood            func(childComplexity int) int
-		Notes                 func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		QuestionCategory      func(childComplexity int) int
-		QuestionDescription   func(childComplexity int) int
-		QuestionKey           func(childComplexity int) int
-		QuestionName          func(childComplexity int) int
-		Score                 func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		VendorScoringConfig   func(childComplexity int) int
-		VendorScoringConfigID func(childComplexity int) int
+		Answer                  func(childComplexity int) int
+		AnswerType              func(childComplexity int) int
+		AssessmentResponse      func(childComplexity int) int
+		AssessmentResponseID    func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Entity                  func(childComplexity int) int
+		EntityID                func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Impact                  func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
+		Likelihood              func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Notes                   func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		QuestionCategory        func(childComplexity int) int
+		QuestionDescription     func(childComplexity int) int
+		QuestionKey             func(childComplexity int) int
+		QuestionName            func(childComplexity int) int
+		Score                   func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		VendorScoringConfig     func(childComplexity int) int
+		VendorScoringConfigID   func(childComplexity int) int
 	}
 
 	VendorRiskScoreBulkCreatePayload struct {
@@ -8677,13 +8582,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.APIToken.UpdatedByImpersonator(childComplexity), true
-
-	case "APITokenBulkCreatePayload.apiTokens":
-		if e.ComplexityRoot.APITokenBulkCreatePayload.APITokens == nil {
-			break
-		}
-
-		return e.ComplexityRoot.APITokenBulkCreatePayload.APITokens(childComplexity), true
 
 	case "APITokenBulkDeletePayload.deletedIDs":
 		if e.ComplexityRoot.APITokenBulkDeletePayload.DeletedIDs == nil {
@@ -15398,57 +15296,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DNSVerification.UpdatedByImpersonator(childComplexity), true
-
-	case "DNSVerificationBulkCreatePayload.dnsVerifications":
-		if e.ComplexityRoot.DNSVerificationBulkCreatePayload.DNSVerifications == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DNSVerificationBulkCreatePayload.DNSVerifications(childComplexity), true
-
-	case "DNSVerificationBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.DNSVerificationBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DNSVerificationBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "DNSVerificationBulkDeletePayload.error":
-		if e.ComplexityRoot.DNSVerificationBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DNSVerificationBulkDeletePayload.Error(childComplexity), true
-	case "DNSVerificationBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.DNSVerificationBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DNSVerificationBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "DNSVerificationBulkUpdatePayload.dnsVerifications":
-		if e.ComplexityRoot.DNSVerificationBulkUpdatePayload.DNSVerifications == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DNSVerificationBulkUpdatePayload.DNSVerifications(childComplexity), true
-	case "DNSVerificationBulkUpdatePayload.error":
-		if e.ComplexityRoot.DNSVerificationBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DNSVerificationBulkUpdatePayload.Error(childComplexity), true
-	case "DNSVerificationBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.DNSVerificationBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DNSVerificationBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "DNSVerificationBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.DNSVerificationBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DNSVerificationBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "DNSVerificationConnection.edges":
 		if e.ComplexityRoot.DNSVerificationConnection.Edges == nil {
@@ -22656,13 +22503,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Hush.UpdatedByImpersonator(childComplexity), true
 
-	case "HushBulkCreatePayload.hushes":
-		if e.ComplexityRoot.HushBulkCreatePayload.Hushes == nil {
-			break
-		}
-
-		return e.ComplexityRoot.HushBulkCreatePayload.Hushes(childComplexity), true
-
 	case "HushBulkDeletePayload.deletedIDs":
 		if e.ComplexityRoot.HushBulkDeletePayload.DeletedIDs == nil {
 			break
@@ -25248,57 +25088,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.MappableDomain.ZoneID(childComplexity), true
 
-	case "MappableDomainBulkCreatePayload.mappableDomains":
-		if e.ComplexityRoot.MappableDomainBulkCreatePayload.MappableDomains == nil {
-			break
-		}
-
-		return e.ComplexityRoot.MappableDomainBulkCreatePayload.MappableDomains(childComplexity), true
-
-	case "MappableDomainBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.MappableDomainBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.MappableDomainBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "MappableDomainBulkDeletePayload.error":
-		if e.ComplexityRoot.MappableDomainBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.MappableDomainBulkDeletePayload.Error(childComplexity), true
-	case "MappableDomainBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.MappableDomainBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.MappableDomainBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "MappableDomainBulkUpdatePayload.error":
-		if e.ComplexityRoot.MappableDomainBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.MappableDomainBulkUpdatePayload.Error(childComplexity), true
-	case "MappableDomainBulkUpdatePayload.mappableDomains":
-		if e.ComplexityRoot.MappableDomainBulkUpdatePayload.MappableDomains == nil {
-			break
-		}
-
-		return e.ComplexityRoot.MappableDomainBulkUpdatePayload.MappableDomains(childComplexity), true
-	case "MappableDomainBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.MappableDomainBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.MappableDomainBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "MappableDomainBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.MappableDomainBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.MappableDomainBulkUpdatePayload.UpdatedIDs(childComplexity), true
-
 	case "MappableDomainConnection.edges":
 		if e.ComplexityRoot.MappableDomainConnection.Edges == nil {
 			break
@@ -25859,17 +25648,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateAsset(childComplexity, args["input"].(generated.CreateAssetInput)), true
-	case "Mutation.createBulkAPIToken":
-		if e.ComplexityRoot.Mutation.CreateBulkAPIToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkAPIToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkAPIToken(childComplexity, args["input"].([]*generated.CreateAPITokenInput)), true
 	case "Mutation.createBulkActionPlan":
 		if e.ComplexityRoot.Mutation.CreateBulkActionPlan == nil {
 			break
@@ -25903,17 +25681,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkAsset(childComplexity, args["input"].([]*generated.CreateAssetInput)), true
-	case "Mutation.createBulkCSVAPIToken":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVAPIToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVAPIToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVAPIToken(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVActionPlan":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVActionPlan == nil {
 			break
@@ -26046,17 +25813,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVCustomTypeEnum(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.createBulkCSVDNSVerification":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVDNSVerification == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVDNSVerification_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVDNSVerification(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVDirectoryAccount":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVDirectoryAccount == nil {
 			break
@@ -26222,17 +25978,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVGroupSetting(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.createBulkCSVHush":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVHush == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVHush_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVHush(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVIdentityHolder":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVIdentityHolder == nil {
 			break
@@ -26266,17 +26011,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVInvite(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.createBulkCSVMappableDomain":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVMappableDomain == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVMappableDomain_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVMappableDomain(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVMappedControl":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVMappedControl == nil {
 			break
@@ -26343,17 +26077,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVOrganizationBrandingSetting(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.createBulkCSVOrganizationSetting":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVOrganizationSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVOrganizationSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVOrganizationSetting(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVPlatform":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVPlatform == nil {
 			break
@@ -26596,17 +26319,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVTrustCenterSubprocessor(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.createBulkCSVUserSetting":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVUserSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVUserSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVUserSetting(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVVendorRiskScore":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVVendorRiskScore == nil {
 			break
@@ -26750,17 +26462,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCustomTypeEnum(childComplexity, args["input"].([]*generated.CreateCustomTypeEnumInput)), true
-	case "Mutation.createBulkDNSVerification":
-		if e.ComplexityRoot.Mutation.CreateBulkDNSVerification == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkDNSVerification_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkDNSVerification(childComplexity, args["input"].([]*generated.CreateDNSVerificationInput)), true
 	case "Mutation.createBulkDirectoryAccount":
 		if e.ComplexityRoot.Mutation.CreateBulkDirectoryAccount == nil {
 			break
@@ -26926,17 +26627,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkGroupSetting(childComplexity, args["input"].([]*generated.CreateGroupSettingInput)), true
-	case "Mutation.createBulkHush":
-		if e.ComplexityRoot.Mutation.CreateBulkHush == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkHush_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkHush(childComplexity, args["input"].([]*generated.CreateHushInput)), true
 	case "Mutation.createBulkIdentityHolder":
 		if e.ComplexityRoot.Mutation.CreateBulkIdentityHolder == nil {
 			break
@@ -26970,17 +26660,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkInvite(childComplexity, args["input"].([]*generated.CreateInviteInput)), true
-	case "Mutation.createBulkMappableDomain":
-		if e.ComplexityRoot.Mutation.CreateBulkMappableDomain == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkMappableDomain_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkMappableDomain(childComplexity, args["input"].([]*generated.CreateMappableDomainInput)), true
 	case "Mutation.createBulkMappedControl":
 		if e.ComplexityRoot.Mutation.CreateBulkMappedControl == nil {
 			break
@@ -27047,17 +26726,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkOrganizationBrandingSetting(childComplexity, args["input"].([]*generated.CreateOrganizationBrandingSettingInput)), true
-	case "Mutation.createBulkOrganizationSetting":
-		if e.ComplexityRoot.Mutation.CreateBulkOrganizationSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkOrganizationSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkOrganizationSetting(childComplexity, args["input"].([]*generated.CreateOrganizationSettingInput)), true
 	case "Mutation.createBulkPlatform":
 		if e.ComplexityRoot.Mutation.CreateBulkPlatform == nil {
 			break
@@ -27311,17 +26979,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkTrustCenterSubprocessor(childComplexity, args["input"].([]*generated.CreateTrustCenterSubprocessorInput)), true
-	case "Mutation.createBulkUserSetting":
-		if e.ComplexityRoot.Mutation.CreateBulkUserSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkUserSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkUserSetting(childComplexity, args["input"].([]*generated.CreateUserSettingInput)), true
 	case "Mutation.createBulkVendorRiskScore":
 		if e.ComplexityRoot.Mutation.CreateBulkVendorRiskScore == nil {
 			break
@@ -28576,17 +28233,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkCustomDomain(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkDNSVerification":
-		if e.ComplexityRoot.Mutation.DeleteBulkDNSVerification == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkDNSVerification_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkDNSVerification(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkDocumentData":
 		if e.ComplexityRoot.Mutation.DeleteBulkDocumentData == nil {
 			break
@@ -28763,17 +28409,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkInvite(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkMappableDomain":
-		if e.ComplexityRoot.Mutation.DeleteBulkMappableDomain == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkMappableDomain_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkMappableDomain(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkMappedControl":
 		if e.ComplexityRoot.Mutation.DeleteBulkMappedControl == nil {
 			break
@@ -28840,17 +28475,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkOrganizationBrandingSetting(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkOrganizationSetting":
-		if e.ComplexityRoot.Mutation.DeleteBulkOrganizationSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkOrganizationSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkOrganizationSetting(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkProcedure":
 		if e.ComplexityRoot.Mutation.DeleteBulkProcedure == nil {
 			break
@@ -29060,17 +28684,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkTrustCenterSubprocessor(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkUserSetting":
-		if e.ComplexityRoot.Mutation.DeleteBulkUserSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkUserSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkUserSetting(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkVendorRiskScore":
 		if e.ComplexityRoot.Mutation.DeleteBulkVendorRiskScore == nil {
 			break
@@ -30276,17 +29889,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkAsset(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateAssetInput)), true
-	case "Mutation.updateBulkCSVAPIToken":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVAPIToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVAPIToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVAPIToken(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVActionPlan":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVActionPlan == nil {
 			break
@@ -30386,17 +29988,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVCustomDomain(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVDNSVerification":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVDNSVerification == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVDNSVerification_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVDNSVerification(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVDocumentData":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVDocumentData == nil {
 			break
@@ -30408,17 +29999,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVDocumentData(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVEmailTemplate":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVEmailTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVEmailTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVEmailTemplate(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVEntity":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVEntity == nil {
 			break
@@ -30507,17 +30087,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVGroupSetting(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVHush":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVHush == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVHush_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVHush(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVIdentityHolder":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVIdentityHolder == nil {
 			break
@@ -30551,17 +30120,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVInvite(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVMappableDomain":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVMappableDomain == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVMappableDomain_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVMappableDomain(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVMappedControl":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVMappedControl == nil {
 			break
@@ -30628,17 +30186,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVOrganizationBrandingSetting(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVOrganizationSetting":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVOrganizationSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVOrganizationSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVOrganizationSetting(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVProcedure":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVProcedure == nil {
 			break
@@ -30826,17 +30373,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVTrustCenterSubprocessor(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVUserSetting":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVUserSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVUserSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVUserSetting(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVVendorRiskScore":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVVendorRiskScore == nil {
 			break
@@ -30936,17 +30472,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCustomDomain(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateCustomDomainInput)), true
-	case "Mutation.updateBulkDNSVerification":
-		if e.ComplexityRoot.Mutation.UpdateBulkDNSVerification == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkDNSVerification_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkDNSVerification(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateDNSVerificationInput)), true
 	case "Mutation.updateBulkDocumentData":
 		if e.ComplexityRoot.Mutation.UpdateBulkDocumentData == nil {
 			break
@@ -31101,17 +30626,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkInvite(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateInviteInput)), true
-	case "Mutation.updateBulkMappableDomain":
-		if e.ComplexityRoot.Mutation.UpdateBulkMappableDomain == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkMappableDomain_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkMappableDomain(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateMappableDomainInput)), true
 	case "Mutation.updateBulkMappedControl":
 		if e.ComplexityRoot.Mutation.UpdateBulkMappedControl == nil {
 			break
@@ -31178,17 +30692,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkOrganizationBrandingSetting(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateOrganizationBrandingSettingInput)), true
-	case "Mutation.updateBulkOrganizationSetting":
-		if e.ComplexityRoot.Mutation.UpdateBulkOrganizationSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkOrganizationSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkOrganizationSetting(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateOrganizationSettingInput)), true
 	case "Mutation.updateBulkProcedure":
 		if e.ComplexityRoot.Mutation.UpdateBulkProcedure == nil {
 			break
@@ -31387,17 +30890,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkTrustCenterSubprocessor(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTrustCenterSubprocessorInput)), true
-	case "Mutation.updateBulkUserSetting":
-		if e.ComplexityRoot.Mutation.UpdateBulkUserSetting == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkUserSetting_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkUserSetting(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateUserSettingInput)), true
 	case "Mutation.updateBulkVendorRiskScore":
 		if e.ComplexityRoot.Mutation.UpdateBulkVendorRiskScore == nil {
 			break
@@ -35788,57 +35280,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSetting.UpdatedByImpersonator(childComplexity), true
-
-	case "OrganizationSettingBulkCreatePayload.organizationSettings":
-		if e.ComplexityRoot.OrganizationSettingBulkCreatePayload.OrganizationSettings == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingBulkCreatePayload.OrganizationSettings(childComplexity), true
-
-	case "OrganizationSettingBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.OrganizationSettingBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "OrganizationSettingBulkDeletePayload.error":
-		if e.ComplexityRoot.OrganizationSettingBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingBulkDeletePayload.Error(childComplexity), true
-	case "OrganizationSettingBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.OrganizationSettingBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "OrganizationSettingBulkUpdatePayload.error":
-		if e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.Error(childComplexity), true
-	case "OrganizationSettingBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "OrganizationSettingBulkUpdatePayload.organizationSettings":
-		if e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.OrganizationSettings == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.OrganizationSettings(childComplexity), true
-	case "OrganizationSettingBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "OrganizationSettingConnection.edges":
 		if e.ComplexityRoot.OrganizationSettingConnection.Edges == nil {
@@ -50639,57 +50080,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.UserSetting.UserID(childComplexity), true
 
-	case "UserSettingBulkCreatePayload.userSettings":
-		if e.ComplexityRoot.UserSettingBulkCreatePayload.UserSettings == nil {
-			break
-		}
-
-		return e.ComplexityRoot.UserSettingBulkCreatePayload.UserSettings(childComplexity), true
-
-	case "UserSettingBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.UserSettingBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.UserSettingBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "UserSettingBulkDeletePayload.error":
-		if e.ComplexityRoot.UserSettingBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.UserSettingBulkDeletePayload.Error(childComplexity), true
-	case "UserSettingBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.UserSettingBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.UserSettingBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "UserSettingBulkUpdatePayload.error":
-		if e.ComplexityRoot.UserSettingBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.UserSettingBulkUpdatePayload.Error(childComplexity), true
-	case "UserSettingBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.UserSettingBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.UserSettingBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "UserSettingBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.UserSettingBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.UserSettingBulkUpdatePayload.UpdatedIDs(childComplexity), true
-	case "UserSettingBulkUpdatePayload.userSettings":
-		if e.ComplexityRoot.UserSettingBulkUpdatePayload.UserSettings == nil {
-			break
-		}
-
-		return e.ComplexityRoot.UserSettingBulkUpdatePayload.UserSettings(childComplexity), true
-
 	case "UserSettingConnection.edges":
 		if e.ComplexityRoot.UserSettingConnection.Edges == nil {
 			break
@@ -50791,6 +50181,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScore.EntityID(childComplexity), true
+	case "VendorRiskScore.externalID":
+		if e.ComplexityRoot.VendorRiskScore.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.ExternalID(childComplexity), true
 	case "VendorRiskScore.id":
 		if e.ComplexityRoot.VendorRiskScore.ID == nil {
 			break
@@ -50803,12 +50199,35 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScore.Impact(childComplexity), true
+	case "VendorRiskScore.integrationRunID":
+		if e.ComplexityRoot.VendorRiskScore.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.IntegrationRunID(childComplexity), true
+	case "VendorRiskScore.integrationRuns":
+		if e.ComplexityRoot.VendorRiskScore.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_VendorRiskScore_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "VendorRiskScore.likelihood":
 		if e.ComplexityRoot.VendorRiskScore.Likelihood == nil {
 			break
 		}
 
 		return e.ComplexityRoot.VendorRiskScore.Likelihood(childComplexity), true
+	case "VendorRiskScore.managedBy":
+		if e.ComplexityRoot.VendorRiskScore.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.ManagedBy(childComplexity), true
 	case "VendorRiskScore.notes":
 		if e.ComplexityRoot.VendorRiskScore.Notes == nil {
 			break
@@ -50857,6 +50276,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScore.Score(childComplexity), true
+	case "VendorRiskScore.sourceDefinitionID":
+		if e.ComplexityRoot.VendorRiskScore.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.SourceDefinitionID(childComplexity), true
+	case "VendorRiskScore.sourceDefinitionVersion":
+		if e.ComplexityRoot.VendorRiskScore.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.SourceDefinitionVersion(childComplexity), true
+	case "VendorRiskScore.sourceInstanceID":
+		if e.ComplexityRoot.VendorRiskScore.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.SourceInstanceID(childComplexity), true
+	case "VendorRiskScore.sourceKey":
+		if e.ComplexityRoot.VendorRiskScore.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScore.SourceKey(childComplexity), true
 	case "VendorRiskScore.tags":
 		if e.ComplexityRoot.VendorRiskScore.Tags == nil {
 			break
@@ -55011,24 +54454,6 @@ extend type Mutation{
         input: CreateAPITokenInput!
     ): APITokenCreatePayload!
     """
-    Create multiple new apiTokens
-    """
-    createBulkAPIToken(
-        """
-        values of the apiToken
-        """
-        input: [CreateAPITokenInput!]
-    ): APITokenBulkCreatePayload!
-    """
-    Create multiple new apiTokens via file upload
-    """
-    createBulkCSVAPIToken(
-        """
-        csv file containing values of the apiToken
-        """
-        input: Upload!
-    ): APITokenBulkCreatePayload!
-    """
     Update an existing apiToken
     """
     updateAPIToken(
@@ -55072,15 +54497,6 @@ extend type Mutation{
         """
         input: UpdateAPITokenInput!
     ): APITokenBulkUpdatePayload!
-    """
-    Update multiple existing apiTokens via file upload
-    """
-    updateBulkCSVAPIToken(
-        """
-        csv file containing values of the apiToken, must include ID column
-        """
-        input: Upload!
-    ): APITokenBulkUpdatePayload!
 }
 
 """
@@ -55111,16 +54527,6 @@ type APITokenDeletePayload {
     Deleted apiToken ID
     """
     deletedID: ID!
-}
-
-"""
-Return response for createBulkAPIToken mutation
-"""
-type APITokenBulkCreatePayload {
-    """
-    Created apiTokens
-    """
-    apiTokens: [APIToken!]
 }
 
 """
@@ -58722,24 +58128,6 @@ extend type Mutation{
         input: CreateDNSVerificationInput!
     ): DNSVerificationCreatePayload!
     """
-    Create multiple new dnsVerifications
-    """
-    createBulkDNSVerification(
-        """
-        values of the dnsVerification
-        """
-        input: [CreateDNSVerificationInput!]
-    ): DNSVerificationBulkCreatePayload!
-    """
-    Create multiple new dnsVerifications via file upload
-    """
-    createBulkCSVDNSVerification(
-        """
-        csv file containing values of the dnsVerification
-        """
-        input: Upload!
-    ): DNSVerificationBulkCreatePayload!
-    """
     Update an existing dnsVerification
     """
     updateDNSVerification(
@@ -58761,37 +58149,6 @@ extend type Mutation{
         """
         id: ID!
     ): DNSVerificationDeletePayload!
-    """
-    Delete multiple dnsVerifications
-    """
-    deleteBulkDNSVerification(
-        """
-        IDs of the dnsVerifications to delete
-        """
-        ids: [ID!]!
-    ): DNSVerificationBulkDeletePayload!
-    """
-    Update multiple existing dnsVerifications
-    """
-    updateBulkDNSVerification(
-        """
-        IDs of the dnsVerifications to update
-        """
-        ids: [ID!]!
-        """
-        values to update the dnsVerifications with
-        """
-        input: UpdateDNSVerificationInput!
-    ): DNSVerificationBulkUpdatePayload!
-    """
-    Update multiple existing dnsVerifications via file upload
-    """
-    updateBulkCSVDNSVerification(
-        """
-        csv file containing values of the dnsVerification, must include ID column
-        """
-        input: Upload!
-    ): DNSVerificationBulkUpdatePayload!
 }
 
 """
@@ -58822,58 +58179,7 @@ type DNSVerificationDeletePayload {
     Deleted dnsVerification ID
     """
     deletedID: ID!
-}
-
-"""
-Return response for createBulkDNSVerification mutation
-"""
-type DNSVerificationBulkCreatePayload {
-    """
-    Created dnsVerifications
-    """
-    dnsVerifications: [DNSVerification!]
-}
-
-"""
-Return response for deleteBulkDNSVerification mutation
-"""
-type DNSVerificationBulkDeletePayload {
-    """
-    Deleted dnsVerification IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkDNSVerification mutation
-"""
-type DNSVerificationBulkUpdatePayload {
-    """
-    Updated dnsVerifications
-    """
-    dnsVerifications: [DNSVerification!]
-    """
-    IDs of the updated dnsVerifications
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
-`, BuiltIn: false},
+}`, BuiltIn: false},
 	{Name: "../schema/documentdata.graphql", Input: `extend type Query {
     """
     Look up documentData by ID
@@ -59307,15 +58613,6 @@ extend type Mutation{
         values to update the emailTemplates with
         """
         input: UpdateEmailTemplateInput!
-    ): EmailTemplateBulkUpdatePayload!
-    """
-    Update multiple existing emailTemplates via file upload
-    """
-    updateBulkCSVEmailTemplate(
-        """
-        csv file containing values of the emailTemplate, must include ID column
-        """
-        input: Upload!
     ): EmailTemplateBulkUpdatePayload!
     """
     Update an existing emailTemplate
@@ -77464,6 +76761,10 @@ input CreateVendorRiskScoreInput {
   """
   tags: [String!]
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String!
@@ -77496,6 +76797,7 @@ input CreateVendorRiskScoreInput {
   """
   notes: String
   ownerID: ID
+  integrationRunIDs: [ID!]
   vendorScoringConfigID: ID
   entityID: ID!
   assessmentResponseID: ID
@@ -142932,6 +142234,11 @@ input UpdateVendorRiskScoreInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  clearExternalID: Boolean
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String
@@ -142966,6 +142273,9 @@ input UpdateVendorRiskScoreInput {
   """
   notes: String
   clearNotes: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   vendorScoringConfigID: ID
   clearVendorScoringConfig: Boolean
   entityID: ID
@@ -145041,6 +144351,34 @@ type VendorRiskScore implements Node @modules(names: ["entity_management_module"
   """
   ownerID: ID
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String!
@@ -145093,6 +144431,37 @@ type VendorRiskScore implements Node @modules(names: ["entity_management_module"
   """
   assessmentResponseID: ID
   owner: Organization
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   vendorScoringConfig: VendorScoringConfig
   entity: Entity!
   assessmentResponse: AssessmentResponse
@@ -145146,6 +144515,7 @@ Properties by which VendorRiskScore connections can be ordered.
 enum VendorRiskScoreOrderField {
   created_at
   updated_at
+  external_id
   question_key
   question_category
   impact
@@ -145288,6 +144658,104 @@ input VendorRiskScoreWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   question_key field predicates
   """
@@ -145438,6 +144906,11 @@ input VendorRiskScoreWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   vendor_scoring_config edge predicates
   """
@@ -153430,24 +152903,6 @@ extend type Mutation{
         input: CreateHushInput!
     ): HushCreatePayload!
     """
-    Create multiple new hushs
-    """
-    createBulkHush(
-        """
-        values of the hush
-        """
-        input: [CreateHushInput!]
-    ): HushBulkCreatePayload!
-    """
-    Create multiple new hushs via file upload
-    """
-    createBulkCSVHush(
-        """
-        csv file containing values of the hush
-        """
-        input: Upload!
-    ): HushBulkCreatePayload!
-    """
     Update multiple existing hushs
     """
     updateBulkHush(
@@ -153491,15 +152946,6 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): HushBulkDeletePayload!
-    """
-    Update multiple existing hushs via file upload
-    """
-    updateBulkCSVHush(
-        """
-        csv file containing values of the hush, must include ID column
-        """
-        input: Upload!
-    ): HushBulkUpdatePayload!
 }
 
 """
@@ -153530,16 +152976,6 @@ type HushDeletePayload {
     Deleted hush ID
     """
     deletedID: ID!
-}
-
-"""
-Return response for createBulkHush mutation
-"""
-type HushBulkCreatePayload {
-    """
-    Created hushs
-    """
-    hushes: [Hush!]
 }
 
 """
@@ -154262,24 +153698,6 @@ extend type Mutation{
         input: CreateMappableDomainInput!
     ): MappableDomainCreatePayload!
     """
-    Create multiple new mappableDomains
-    """
-    createBulkMappableDomain(
-        """
-        values of the mappableDomain
-        """
-        input: [CreateMappableDomainInput!]
-    ): MappableDomainBulkCreatePayload!
-    """
-    Create multiple new mappableDomains via file upload
-    """
-    createBulkCSVMappableDomain(
-        """
-        csv file containing values of the mappableDomain
-        """
-        input: Upload!
-    ): MappableDomainBulkCreatePayload!
-    """
     Update an existing mappableDomain
     """
     updateMappableDomain(
@@ -154301,37 +153719,6 @@ extend type Mutation{
         """
         id: ID!
     ): MappableDomainDeletePayload!
-    """
-    Delete multiple mappableDomains
-    """
-    deleteBulkMappableDomain(
-        """
-        IDs of the mappableDomains to delete
-        """
-        ids: [ID!]!
-    ): MappableDomainBulkDeletePayload!
-    """
-    Update multiple existing mappableDomains
-    """
-    updateBulkMappableDomain(
-        """
-        IDs of the mappableDomains to update
-        """
-        ids: [ID!]!
-        """
-        values to update the mappableDomains with
-        """
-        input: UpdateMappableDomainInput!
-    ): MappableDomainBulkUpdatePayload!
-    """
-    Update multiple existing mappableDomains via file upload
-    """
-    updateBulkCSVMappableDomain(
-        """
-        csv file containing values of the mappableDomain, must include ID column
-        """
-        input: Upload!
-    ): MappableDomainBulkUpdatePayload!
 }
 
 """
@@ -154362,58 +153749,7 @@ type MappableDomainDeletePayload {
     Deleted mappableDomain ID
     """
     deletedID: ID!
-}
-
-"""
-Return response for createBulkMappableDomain mutation
-"""
-type MappableDomainBulkCreatePayload {
-    """
-    Created mappableDomains
-    """
-    mappableDomains: [MappableDomain!]
-}
-
-"""
-Return response for deleteBulkMappableDomain mutation
-"""
-type MappableDomainBulkDeletePayload {
-    """
-    Deleted mappableDomain IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkMappableDomain mutation
-"""
-type MappableDomainBulkUpdatePayload {
-    """
-    Updated mappableDomains
-    """
-    mappableDomains: [MappableDomain!]
-    """
-    IDs of the updated mappableDomains
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
-`, BuiltIn: false},
+}`, BuiltIn: false},
 	{Name: "../schema/mappedcontrol.graphql", Input: `extend type Query {
     """
     Look up mappedControl by ID
@@ -155851,24 +155187,6 @@ extend type Mutation{
         input: CreateOrganizationSettingInput!
     ): OrganizationSettingCreatePayload!
     """
-    Create multiple new organizationSettings
-    """
-    createBulkOrganizationSetting(
-        """
-        values of the organizationSetting
-        """
-        input: [CreateOrganizationSettingInput!]
-    ): OrganizationSettingBulkCreatePayload!
-    """
-    Create multiple new organizationSettings via file upload
-    """
-    createBulkCSVOrganizationSetting(
-        """
-        csv file containing values of the organizationSetting
-        """
-        input: Upload!
-    ): OrganizationSettingBulkCreatePayload!
-    """
     Update an existing organizationSetting
     """
     updateOrganizationSetting(
@@ -155890,37 +155208,6 @@ extend type Mutation{
         """
         id: ID!
     ): OrganizationSettingDeletePayload!
-    """
-    Delete multiple organizationSettings
-    """
-    deleteBulkOrganizationSetting(
-        """
-        IDs of the organizationSettings to delete
-        """
-        ids: [ID!]!
-    ): OrganizationSettingBulkDeletePayload!
-    """
-    Update multiple existing organizationSettings
-    """
-    updateBulkOrganizationSetting(
-        """
-        IDs of the organizationSettings to update
-        """
-        ids: [ID!]!
-        """
-        values to update the organizationSettings with
-        """
-        input: UpdateOrganizationSettingInput!
-    ): OrganizationSettingBulkUpdatePayload!
-    """
-    Update multiple existing organizationSettings via file upload
-    """
-    updateBulkCSVOrganizationSetting(
-        """
-        csv file containing values of the organizationSetting, must include ID column
-        """
-        input: Upload!
-    ): OrganizationSettingBulkUpdatePayload!
 }
 
 """
@@ -155951,56 +155238,6 @@ type OrganizationSettingDeletePayload {
     Deleted organizationSetting ID
     """
     deletedID: ID!
-}
-
-"""
-Return response for createBulkOrganizationSetting mutation
-"""
-type OrganizationSettingBulkCreatePayload {
-    """
-    Created organizationSettings
-    """
-    organizationSettings: [OrganizationSetting!]
-}
-
-"""
-Return response for deleteBulkOrganizationSetting mutation
-"""
-type OrganizationSettingBulkDeletePayload {
-    """
-    Deleted organizationSetting IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkOrganizationSetting mutation
-"""
-type OrganizationSettingBulkUpdatePayload {
-    """
-    Updated organizationSettings
-    """
-    organizationSettings: [OrganizationSetting!]
-    """
-    IDs of the updated organizationSettings
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/orgextended.graphql", Input: `extend input CreateOrganizationInput {
@@ -162519,7 +161756,6 @@ type UserBulkCreatePayload {
     users: [User!]
 }
 `, BuiltIn: false},
-	{Name: "../schema/userextended.graphql", Input: ``, BuiltIn: false},
 	{Name: "../schema/usersetting.graphql", Input: `extend type Query {
     """
     Look up userSetting by ID
@@ -162543,24 +161779,6 @@ extend type Mutation{
         input: CreateUserSettingInput!
     ): UserSettingCreatePayload!
     """
-    Create multiple new userSettings
-    """
-    createBulkUserSetting(
-        """
-        values of the userSetting
-        """
-        input: [CreateUserSettingInput!]
-    ): UserSettingBulkCreatePayload!
-    """
-    Create multiple new userSettings via file upload
-    """
-    createBulkCSVUserSetting(
-        """
-        csv file containing values of the userSetting
-        """
-        input: Upload!
-    ): UserSettingBulkCreatePayload!
-    """
     Update an existing userSetting
     """
     updateUserSetting(
@@ -162573,37 +161791,6 @@ extend type Mutation{
         """
         input: UpdateUserSettingInput!
     ): UserSettingUpdatePayload!
-    """
-    Delete multiple userSettings
-    """
-    deleteBulkUserSetting(
-        """
-        IDs of the userSettings to delete
-        """
-        ids: [ID!]!
-    ): UserSettingBulkDeletePayload!
-    """
-    Update multiple existing userSettings
-    """
-    updateBulkUserSetting(
-        """
-        IDs of the userSettings to update
-        """
-        ids: [ID!]!
-        """
-        values to update the userSettings with
-        """
-        input: UpdateUserSettingInput!
-    ): UserSettingBulkUpdatePayload!
-    """
-    Update multiple existing userSettings via file upload
-    """
-    updateBulkCSVUserSetting(
-        """
-        csv file containing values of the userSetting, must include ID column
-        """
-        input: Upload!
-    ): UserSettingBulkUpdatePayload!
 }
 
 """
@@ -162624,56 +161811,6 @@ type UserSettingUpdatePayload {
     Updated userSetting
     """
     userSetting: UserSetting!
-}
-
-"""
-Return response for createBulkUserSetting mutation
-"""
-type UserSettingBulkCreatePayload {
-    """
-    Created userSettings
-    """
-    userSettings: [UserSetting!]
-}
-
-"""
-Return response for deleteBulkUserSetting mutation
-"""
-type UserSettingBulkDeletePayload {
-    """
-    Deleted userSetting IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkUserSetting mutation
-"""
-type UserSettingBulkUpdatePayload {
-    """
-    Updated userSettings
-    """
-    userSettings: [UserSetting!]
-    """
-    IDs of the updated userSettings
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/vendorriskscore.graphql", Input: `extend type Query {
@@ -164118,14 +163255,6 @@ func (ec *executionContext) childFields_APIToken(ctx context.Context, field grap
 		return ec.fieldContext_APIToken_owner(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type APIToken", field.Name)
-}
-
-func (ec *executionContext) childFields_APITokenBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "apiTokens":
-		return ec.fieldContext_APITokenBulkCreatePayload_apiTokens(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type APITokenBulkCreatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_APITokenBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -166946,40 +166075,6 @@ func (ec *executionContext) childFields_DNSVerification(ctx context.Context, fie
 		return ec.fieldContext_DNSVerification_customDomains(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type DNSVerification", field.Name)
-}
-
-func (ec *executionContext) childFields_DNSVerificationBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "dnsVerifications":
-		return ec.fieldContext_DNSVerificationBulkCreatePayload_dnsVerifications(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_DNSVerificationBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_DNSVerificationBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_DNSVerificationBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_DNSVerificationBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_DNSVerificationBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "dnsVerifications":
-		return ec.fieldContext_DNSVerificationBulkUpdatePayload_dnsVerifications(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_DNSVerificationBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_DNSVerificationBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_DNSVerificationBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationBulkUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_DNSVerificationConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -169950,14 +169045,6 @@ func (ec *executionContext) childFields_Hush(ctx context.Context, field graphql.
 	return nil, fmt.Errorf("no field named %q was found under type Hush", field.Name)
 }
 
-func (ec *executionContext) childFields_HushBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "hushes":
-		return ec.fieldContext_HushBulkCreatePayload_hushes(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type HushBulkCreatePayload", field.Name)
-}
-
 func (ec *executionContext) childFields_HushBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "deletedIDs":
@@ -170928,40 +170015,6 @@ func (ec *executionContext) childFields_MappableDomain(ctx context.Context, fiel
 		return ec.fieldContext_MappableDomain_customDomains(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type MappableDomain", field.Name)
-}
-
-func (ec *executionContext) childFields_MappableDomainBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "mappableDomains":
-		return ec.fieldContext_MappableDomainBulkCreatePayload_mappableDomains(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type MappableDomainBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_MappableDomainBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_MappableDomainBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_MappableDomainBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_MappableDomainBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type MappableDomainBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_MappableDomainBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "mappableDomains":
-		return ec.fieldContext_MappableDomainBulkUpdatePayload_mappableDomains(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_MappableDomainBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_MappableDomainBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_MappableDomainBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type MappableDomainBulkUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_MappableDomainConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -172468,40 +171521,6 @@ func (ec *executionContext) childFields_OrganizationSetting(ctx context.Context,
 		return ec.fieldContext_OrganizationSetting_files(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type OrganizationSetting", field.Name)
-}
-
-func (ec *executionContext) childFields_OrganizationSettingBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "organizationSettings":
-		return ec.fieldContext_OrganizationSettingBulkCreatePayload_organizationSettings(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_OrganizationSettingBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_OrganizationSettingBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_OrganizationSettingBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_OrganizationSettingBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_OrganizationSettingBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "organizationSettings":
-		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_organizationSettings(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingBulkUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_OrganizationSettingConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -177614,40 +176633,6 @@ func (ec *executionContext) childFields_UserSetting(ctx context.Context, field g
 	return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
 }
 
-func (ec *executionContext) childFields_UserSettingBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "userSettings":
-		return ec.fieldContext_UserSettingBulkCreatePayload_userSettings(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type UserSettingBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_UserSettingBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_UserSettingBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_UserSettingBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_UserSettingBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type UserSettingBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_UserSettingBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "userSettings":
-		return ec.fieldContext_UserSettingBulkUpdatePayload_userSettings(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_UserSettingBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_UserSettingBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_UserSettingBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type UserSettingBulkUpdatePayload", field.Name)
-}
-
 func (ec *executionContext) childFields_UserSettingConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "edges":
@@ -177712,6 +176697,20 @@ func (ec *executionContext) childFields_VendorRiskScore(ctx context.Context, fie
 		return ec.fieldContext_VendorRiskScore_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_VendorRiskScore_ownerID(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_VendorRiskScore_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_VendorRiskScore_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_VendorRiskScore_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_VendorRiskScore_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_VendorRiskScore_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_VendorRiskScore_sourceKey(ctx, field)
+	case "externalID":
+		return ec.fieldContext_VendorRiskScore_externalID(ctx, field)
 	case "questionKey":
 		return ec.fieldContext_VendorRiskScore_questionKey(ctx, field)
 	case "questionName":
@@ -177740,6 +176739,8 @@ func (ec *executionContext) childFields_VendorRiskScore(ctx context.Context, fie
 		return ec.fieldContext_VendorRiskScore_assessmentResponseID(ctx, field)
 	case "owner":
 		return ec.fieldContext_VendorRiskScore_owner(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_VendorRiskScore_integrationRuns(ctx, field)
 	case "vendorScoringConfig":
 		return ec.fieldContext_VendorRiskScore_vendorScoringConfig(ctx, field)
 	case "entity":

@@ -21386,6 +21386,34 @@ type VendorRiskScoreHistory implements Node {
   """
   ownerID: String
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String!
@@ -21496,6 +21524,7 @@ enum VendorRiskScoreHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   question_key
   question_category
   impact

@@ -146,8 +146,7 @@ func (c ControlObjective) Annotations() []schema.Annotation {
 		entfga.SelfAccessChecks(),
 		entx.FGACrudParent(Control{}.Name()),
 		entx.IntegrationMappingSchema().
-			StockPersist().
-			LookupAlternative(externalIDFieldName),
+			StockPersist(),
 	}
 }
 

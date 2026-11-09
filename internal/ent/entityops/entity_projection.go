@@ -2290,27 +2290,53 @@ type UserProjection struct {
 // the full generated.VendorRiskScore whose edge graph cannot be reflected
 type VendorRiskScoreProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                    string                        `json:"id,omitempty"`
-	Answer                string                        `json:"answer,omitempty"`
-	AnswerType            enums.VendorScoringAnswerType `json:"answer_type,omitempty"`
-	AssessmentResponseID  string                        `json:"assessment_response_id,omitempty"`
-	CreatedAt             time.Time                     `json:"created_at,omitempty"`
-	CreatedBy             string                        `json:"created_by,omitempty"`
-	EntityID              string                        `json:"entity_id,omitempty"`
-	Impact                enums.VendorRiskImpact        `json:"impact,omitempty"`
-	Likelihood            enums.VendorRiskLikelihood    `json:"likelihood,omitempty"`
-	Notes                 string                        `json:"notes,omitempty"`
-	OwnerID               string                        `json:"owner_id,omitempty"`
-	QuestionCategory      enums.VendorScoringCategory   `json:"question_category,omitempty"`
-	QuestionDescription   string                        `json:"question_description,omitempty"`
-	QuestionKey           string                        `json:"question_key,omitempty"`
-	QuestionName          string                        `json:"question_name,omitempty"`
-	Score                 float64                       `json:"score,omitempty"`
-	Tags                  []string                      `json:"tags,omitempty"`
-	UpdatedAt             time.Time                     `json:"updated_at,omitempty"`
-	UpdatedBy             string                        `json:"updated_by,omitempty"`
-	UpdatedByImpersonator string                        `json:"updated_by_impersonator,omitempty"`
-	VendorScoringConfigID string                        `json:"vendor_scoring_config_id,omitempty"`
+	ID                      string                        `json:"id,omitempty"`
+	Answer                  string                        `json:"answer,omitempty"`
+	AnswerType              enums.VendorScoringAnswerType `json:"answer_type,omitempty"`
+	AssessmentResponseID    string                        `json:"assessment_response_id,omitempty"`
+	CreatedAt               time.Time                     `json:"created_at,omitempty"`
+	CreatedBy               string                        `json:"created_by,omitempty"`
+	EntityID                string                        `json:"entity_id,omitempty"`
+	ExternalID              string                        `json:"external_id,omitempty"`
+	Impact                  enums.VendorRiskImpact        `json:"impact,omitempty"`
+	IntegrationRunID        string                        `json:"integration_run_id,omitempty"`
+	Likelihood              enums.VendorRiskLikelihood    `json:"likelihood,omitempty"`
+	ManagedBy               string                        `json:"managed_by,omitempty"`
+	Notes                   string                        `json:"notes,omitempty"`
+	OwnerID                 string                        `json:"owner_id,omitempty"`
+	QuestionCategory        enums.VendorScoringCategory   `json:"question_category,omitempty"`
+	QuestionDescription     string                        `json:"question_description,omitempty"`
+	QuestionKey             string                        `json:"question_key,omitempty"`
+	QuestionName            string                        `json:"question_name,omitempty"`
+	Score                   float64                       `json:"score,omitempty"`
+	SourceDefinitionID      string                        `json:"source_definition_id,omitempty"`
+	SourceDefinitionVersion string                        `json:"source_definition_version,omitempty"`
+	SourceInstanceID        string                        `json:"source_instance_id,omitempty"`
+	SourceKey               string                        `json:"source_key,omitempty"`
+	Tags                    []string                      `json:"tags,omitempty"`
+	UpdatedAt               time.Time                     `json:"updated_at,omitempty"`
+	UpdatedBy               string                        `json:"updated_by,omitempty"`
+	UpdatedByImpersonator   string                        `json:"updated_by_impersonator,omitempty"`
+	VendorScoringConfigID   string                        `json:"vendor_scoring_config_id,omitempty"`
+}
+
+// VendorScoringConfigProjection is the flat, CEL- and jsonschema-facing view of a VendorScoringConfig: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.VendorScoringConfig whose edge graph cannot be reflected
+type VendorScoringConfigProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string                              `json:"id,omitempty"`
+	CreatedAt             time.Time                           `json:"created_at,omitempty"`
+	CreatedBy             string                              `json:"created_by,omitempty"`
+	OwnerID               string                              `json:"owner_id,omitempty"`
+	Questions             models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	RiskThresholds        models.RiskThresholdsConfig         `json:"risk_thresholds,omitempty"`
+	ScoringMode           enums.VendorScoringMode             `json:"scoring_mode,omitempty"`
+	Tags                  []string                            `json:"tags,omitempty"`
+	UpdatedAt             time.Time                           `json:"updated_at,omitempty"`
+	UpdatedBy             string                              `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string                              `json:"updated_by_impersonator,omitempty"`
 }
 
 // VulnerabilityProjection is the flat, CEL- and jsonschema-facing view of a Vulnerability: its

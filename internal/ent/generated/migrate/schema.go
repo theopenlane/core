@@ -5017,6 +5017,7 @@ var (
 		{Name: "tag_definition_integration_runs", Type: field.TypeString, Nullable: true},
 		{Name: "task_integration_runs", Type: field.TypeString, Nullable: true},
 		{Name: "template_integration_runs", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_risk_score_integration_runs", Type: field.TypeString, Nullable: true},
 	}
 	// IntegrationRunsTable holds the schema information for the "integration_runs" table.
 	IntegrationRunsTable = &schema.Table{
@@ -5172,6 +5173,12 @@ var (
 				Symbol:     "integration_runs_templates_integration_runs",
 				Columns:    []*schema.Column{IntegrationRunsColumns[43]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integration_runs_vendor_risk_scores_integration_runs",
+				Columns:    []*schema.Column{IntegrationRunsColumns[44]},
+				RefColumns: []*schema.Column{VendorRiskScoresColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -9795,6 +9802,13 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "source_definition_id", Type: field.TypeString, Nullable: true},
+		{Name: "source_definition_version", Type: field.TypeString, Nullable: true},
+		{Name: "source_instance_id", Type: field.TypeString, Nullable: true},
+		{Name: "managed_by", Type: field.TypeString, Nullable: true},
+		{Name: "integration_run_id", Type: field.TypeString, Nullable: true},
+		{Name: "source_key", Type: field.TypeString, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
 		{Name: "question_key", Type: field.TypeString},
 		{Name: "question_name", Type: field.TypeString},
 		{Name: "question_description", Type: field.TypeString, Nullable: true},
@@ -9821,43 +9835,43 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "vendor_risk_scores_assessment_responses_vendor_risk_scores",
-				Columns:    []*schema.Column{VendorRiskScoresColumns[19]},
+				Columns:    []*schema.Column{VendorRiskScoresColumns[26]},
 				RefColumns: []*schema.Column{AssessmentResponsesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vendor_risk_scores_entities_vendor_risk_scores",
-				Columns:    []*schema.Column{VendorRiskScoresColumns[20]},
+				Columns:    []*schema.Column{VendorRiskScoresColumns[27]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vendor_risk_scores_organizations_vendor_risk_scores",
-				Columns:    []*schema.Column{VendorRiskScoresColumns[21]},
+				Columns:    []*schema.Column{VendorRiskScoresColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vendor_risk_scores_vendor_scoring_configs_vendor_scoring_config",
-				Columns:    []*schema.Column{VendorRiskScoresColumns[22]},
+				Columns:    []*schema.Column{VendorRiskScoresColumns[29]},
 				RefColumns: []*schema.Column{VendorScoringConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vendor_risk_scores_entities_entity",
-				Columns:    []*schema.Column{VendorRiskScoresColumns[23]},
+				Columns:    []*schema.Column{VendorRiskScoresColumns[30]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "vendor_risk_scores_assessment_responses_assessment_response",
-				Columns:    []*schema.Column{VendorRiskScoresColumns[24]},
+				Columns:    []*schema.Column{VendorRiskScoresColumns[31]},
 				RefColumns: []*schema.Column{AssessmentResponsesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vendor_risk_scores_vendor_scoring_configs_vendor_risk_scores",
-				Columns:    []*schema.Column{VendorRiskScoresColumns[25]},
+				Columns:    []*schema.Column{VendorRiskScoresColumns[32]},
 				RefColumns: []*schema.Column{VendorScoringConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -9866,22 +9880,37 @@ var (
 			{
 				Name:    "vendor_risk_score_vendor_scoring_config_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{VendorRiskScoresColumns[22]},
+				Columns: []*schema.Column{VendorRiskScoresColumns[29]},
 			},
 			{
 				Name:    "vendor_risk_score_entity_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{VendorRiskScoresColumns[23]},
+				Columns: []*schema.Column{VendorRiskScoresColumns[30]},
 			},
 			{
 				Name:    "vendor_risk_score_assessment_response_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{VendorRiskScoresColumns[24]},
+				Columns: []*schema.Column{VendorRiskScoresColumns[31]},
 			},
 			{
 				Name:    "vendor_risk_score_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{VendorRiskScoresColumns[21]},
+				Columns: []*schema.Column{VendorRiskScoresColumns[28]},
+			},
+			{
+				Name:    "vendorriskscore_source_instance_id",
+				Unique:  false,
+				Columns: []*schema.Column{VendorRiskScoresColumns[11]},
+			},
+			{
+				Name:    "vendorriskscore_integration_run_id",
+				Unique:  false,
+				Columns: []*schema.Column{VendorRiskScoresColumns[13]},
+			},
+			{
+				Name:    "vendorriskscore_source_key",
+				Unique:  false,
+				Columns: []*schema.Column{VendorRiskScoresColumns[14]},
 			},
 		},
 	}
@@ -17687,6 +17716,7 @@ func init() {
 	IntegrationRunsTable.ForeignKeys[22].RefTable = TagDefinitionsTable
 	IntegrationRunsTable.ForeignKeys[23].RefTable = TasksTable
 	IntegrationRunsTable.ForeignKeys[24].RefTable = TemplatesTable
+	IntegrationRunsTable.ForeignKeys[25].RefTable = VendorRiskScoresTable
 	IntegrationWebhooksTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationWebhooksTable.ForeignKeys[1].RefTable = OrganizationsTable
 	InternalPoliciesTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable

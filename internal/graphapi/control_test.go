@@ -1,9 +1,12 @@
 package graphapi_test
 
 import (
+	"bytes"
 	"cmp"
 	"context"
+	"fmt"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/theopenlane/core/v2/internal/controls"
@@ -14,6 +17,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -1130,6 +1135,197 @@ func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: clonedControlID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: ctrl.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: standard.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+}
+
+func assertObjectAccess(t *testing.T, userID, relation, objectType string, objectIDs []string) {
+	t.Helper()
+
+	for _, objectID := range objectIDs {
+		allowed, err := suite.Client.DB.Authz.CheckAccess(context.Background(), fgax.AccessCheck{
+			SubjectID:   userID,
+			SubjectType: auth.UserSubjectType,
+			Relation:    relation,
+			ObjectType:  fgax.Kind(objectType),
+			ObjectID:    objectID,
+		})
+
+		assert.NilError(t, err)
+		assert.Check(t, allowed, "user %s is missing %s on %s %s", userID, relation, objectType, objectID)
+	}
+}
+
+func assertCanEdit(t *testing.T, userID, objectType string, objectIDs []string) {
+	t.Helper()
+
+	assertObjectAccess(t, userID, fgax.CanEdit, objectType, objectIDs)
+}
+
+func bulkControlInputs(rows int, controlOwnerID *string) []*testclient.CreateControlInput {
+	refCodePrefix := "BULK-" + ulids.New().String()
+
+	inputs := make([]*testclient.CreateControlInput, 0, rows)
+	for row := range rows {
+		inputs = append(inputs, &testclient.CreateControlInput{
+			RefCode:        fmt.Sprintf("%s-%d", refCodePrefix, row),
+			ControlOwnerID: controlOwnerID,
+		})
+	}
+
+	return inputs
+}
+
+func controlCSVUpload(rows int) graphql.Upload {
+	refCodePrefix := "BULK-" + ulids.New().String()
+
+	var csv strings.Builder
+
+	csv.WriteString("RefCode,Title,Description\n")
+
+	for row := range rows {
+		fmt.Fprintf(&csv, "%s-%d,Control %d,Description for control %d\n", refCodePrefix, row, row, row)
+	}
+
+	data := csv.String()
+
+	return graphql.Upload{
+		File:        bytes.NewReader([]byte(data)),
+		Filename:    refCodePrefix + ".csv",
+		Size:        int64(len(data)),
+		ContentType: "text/csv",
+	}
+}
+
+func TestMutationCreateBulkControl(t *testing.T) {
+	ownerGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, GroupID: ownerGroup.ID, UserID: th.SharedViewOnlyUser.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, ID: ownerGroup.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	testCases := []struct {
+		name           string
+		rows           int
+		controlOwnerID *string
+		editorID       string
+		ctx            context.Context
+		expectedErr    string
+	}{
+		{
+			name:     "happy path",
+			rows:     3,
+			editorID: th.SharedTestUser1.ID,
+			ctx:      th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:     "happy path, more rows than one fga write",
+			rows:     150,
+			editorID: th.SharedTestUser1.ID,
+			ctx:      th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:           "happy path, control owner group gets edit access",
+			rows:           3,
+			controlOwnerID: &ownerGroup.ID,
+			editorID:       th.SharedViewOnlyUser.ID,
+			ctx:            th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:        "view only user cannot create",
+			rows:        3,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := suite.Client.API.CreateBulkControl(tc.ctx, bulkControlInputs(tc.rows, tc.controlOwnerID))
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.CreateBulkControl.Controls, tc.rows))
+
+			controlIDs := make([]string, 0, tc.rows)
+			for _, control := range resp.CreateBulkControl.Controls {
+				controlIDs = append(controlIDs, control.ID)
+			}
+
+			t.Cleanup(func() {
+				(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: controlIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+			})
+
+			assertCanEdit(t, tc.editorID, generated.TypeControl, controlIDs)
+		})
+	}
+}
+
+func TestMutationCreateBulkControlDuplicateRefCodeCreatesNothing(t *testing.T) {
+	refCode := "BULK-" + ulids.New().String()
+
+	_, err := suite.Client.API.CreateBulkControl(th.SharedTestUser1.UserCtx, []*testclient.CreateControlInput{{RefCode: refCode}, {RefCode: refCode}})
+	assert.Assert(t, err != nil)
+
+	count, err := suite.Client.DB.Control.Query().Where(controlgen.RefCode(refCode)).Count(th.SharedTestUser1.UserCtx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(0, count))
+}
+
+func TestMutationCreateBulkCSVControl(t *testing.T) {
+	testCases := []struct {
+		name        string
+		rows        int
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name: "happy path",
+			rows: 3,
+			ctx:  th.SharedTestUser1.UserCtx,
+		},
+		{
+			name: "happy path, more rows than one fga write",
+			rows: 150,
+			ctx:  th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:        "view only user cannot create",
+			rows:        3,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := suite.Client.API.CreateBulkCSVControl(tc.ctx, controlCSVUpload(tc.rows))
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.CreateBulkCSVControl.Controls, tc.rows))
+
+			controlIDs := make([]string, 0, tc.rows)
+			for _, control := range resp.CreateBulkCSVControl.Controls {
+				controlIDs = append(controlIDs, control.ID)
+			}
+
+			t.Cleanup(func() {
+				(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: controlIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+			})
+
+			assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeControl, controlIDs)
+		})
+	}
 }
 
 func TestMutationCreateControlsByCloneCSV(t *testing.T) {

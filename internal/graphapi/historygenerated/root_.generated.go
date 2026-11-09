@@ -3012,30 +3012,37 @@ type ComplexityRoot struct {
 	}
 
 	VendorRiskScoreHistory struct {
-		Answer                func(childComplexity int) int
-		AnswerType            func(childComplexity int) int
-		AssessmentResponseID  func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		EntityID              func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Impact                func(childComplexity int) int
-		Likelihood            func(childComplexity int) int
-		Notes                 func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		QuestionCategory      func(childComplexity int) int
-		QuestionDescription   func(childComplexity int) int
-		QuestionKey           func(childComplexity int) int
-		QuestionName          func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		Score                 func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		VendorScoringConfigID func(childComplexity int) int
+		Answer                  func(childComplexity int) int
+		AnswerType              func(childComplexity int) int
+		AssessmentResponseID    func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		EntityID                func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Impact                  func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		Likelihood              func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Notes                   func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		QuestionCategory        func(childComplexity int) int
+		QuestionDescription     func(childComplexity int) int
+		QuestionKey             func(childComplexity int) int
+		QuestionName            func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		Score                   func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		VendorScoringConfigID   func(childComplexity int) int
 	}
 
 	VendorRiskScoreHistoryConnection struct {
@@ -18251,6 +18258,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScoreHistory.EntityID(childComplexity), true
+	case "VendorRiskScoreHistory.externalID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.ExternalID(childComplexity), true
 	case "VendorRiskScoreHistory.historyTime":
 		if e.ComplexityRoot.VendorRiskScoreHistory.HistoryTime == nil {
 			break
@@ -18269,12 +18282,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScoreHistory.Impact(childComplexity), true
+	case "VendorRiskScoreHistory.integrationRunID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.IntegrationRunID(childComplexity), true
 	case "VendorRiskScoreHistory.likelihood":
 		if e.ComplexityRoot.VendorRiskScoreHistory.Likelihood == nil {
 			break
 		}
 
 		return e.ComplexityRoot.VendorRiskScoreHistory.Likelihood(childComplexity), true
+	case "VendorRiskScoreHistory.managedBy":
+		if e.ComplexityRoot.VendorRiskScoreHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.ManagedBy(childComplexity), true
 	case "VendorRiskScoreHistory.notes":
 		if e.ComplexityRoot.VendorRiskScoreHistory.Notes == nil {
 			break
@@ -18329,6 +18354,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScoreHistory.Score(childComplexity), true
+	case "VendorRiskScoreHistory.sourceDefinitionID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.SourceDefinitionID(childComplexity), true
+	case "VendorRiskScoreHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.VendorRiskScoreHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.SourceDefinitionVersion(childComplexity), true
+	case "VendorRiskScoreHistory.sourceInstanceID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.SourceInstanceID(childComplexity), true
+	case "VendorRiskScoreHistory.sourceKey":
+		if e.ComplexityRoot.VendorRiskScoreHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.SourceKey(childComplexity), true
 	case "VendorRiskScoreHistory.tags":
 		if e.ComplexityRoot.VendorRiskScoreHistory.Tags == nil {
 			break
@@ -41342,6 +41391,34 @@ type VendorRiskScoreHistory implements Node {
   """
   ownerID: String
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
   questionKey: String!
@@ -41452,6 +41529,7 @@ enum VendorRiskScoreHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   question_key
   question_category
   impact
@@ -49000,6 +49078,20 @@ func (ec *executionContext) childFields_VendorRiskScoreHistory(ctx context.Conte
 		return ec.fieldContext_VendorRiskScoreHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_VendorRiskScoreHistory_ownerID(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_VendorRiskScoreHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_VendorRiskScoreHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_VendorRiskScoreHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_VendorRiskScoreHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_VendorRiskScoreHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_VendorRiskScoreHistory_sourceKey(ctx, field)
+	case "externalID":
+		return ec.fieldContext_VendorRiskScoreHistory_externalID(ctx, field)
 	case "questionKey":
 		return ec.fieldContext_VendorRiskScoreHistory_questionKey(ctx, field)
 	case "questionName":

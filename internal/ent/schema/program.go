@@ -325,7 +325,6 @@ func (p Program) Annotations() []schema.Annotation {
 		),
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			LookupAlternative(externalIDFieldName).
 			LookupAlternative("external_uuid"),
 	}
 }

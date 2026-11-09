@@ -91,15 +91,6 @@ type APIToken implements Node @modules(names: ["any_module"]) {
 	owner: Organization
 }
 """
-Return response for createBulkAPIToken mutation
-"""
-type APITokenBulkCreatePayload {
-	"""
-	Created apiTokens
-	"""
-	apiTokens: [APIToken!]
-}
-"""
 Return response for deleteBulkAPIToken mutation
 """
 type APITokenBulkDeletePayload {
@@ -19685,6 +19676,10 @@ input CreateVendorRiskScoreInput {
 	"""
 	tags: [String!]
 	"""
+	identifier of the record in an external system
+	"""
+	externalID: String
+	"""
 	stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
 	"""
 	questionKey: String!
@@ -19717,6 +19712,7 @@ input CreateVendorRiskScoreInput {
 	"""
 	notes: String
 	ownerID: ID
+	integrationRunIDs: [ID!]
 	vendorScoringConfigID: ID
 	entityID: ID!
 	assessmentResponseID: ID
@@ -21456,53 +21452,6 @@ type DNSVerification implements Node @modules(names: ["trust_center_module","ass
 		"""
 		where: CustomDomainWhereInput
 	): CustomDomainConnection!
-}
-"""
-Return response for createBulkDNSVerification mutation
-"""
-type DNSVerificationBulkCreatePayload {
-	"""
-	Created dnsVerifications
-	"""
-	dnsVerifications: [DNSVerification!]
-}
-"""
-Return response for deleteBulkDNSVerification mutation
-"""
-type DNSVerificationBulkDeletePayload {
-	"""
-	Deleted dnsVerification IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkDNSVerification mutation
-"""
-type DNSVerificationBulkUpdatePayload {
-	"""
-	Updated dnsVerifications
-	"""
-	dnsVerifications: [DNSVerification!]
-	"""
-	IDs of the updated dnsVerifications
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
 }
 """
 A connection to a list of items.
@@ -38186,15 +38135,6 @@ type Hush implements Node {
 	): EventConnection!
 }
 """
-Return response for createBulkHush mutation
-"""
-type HushBulkCreatePayload {
-	"""
-	Created hushs
-	"""
-	hushes: [Hush!]
-}
-"""
 Return response for deleteBulkHush mutation
 """
 type HushBulkDeletePayload {
@@ -44749,53 +44689,6 @@ type MappableDomain implements Node @modules(names: ["trust_center_module"]) {
 	): CustomDomainConnection!
 }
 """
-Return response for createBulkMappableDomain mutation
-"""
-type MappableDomainBulkCreatePayload {
-	"""
-	Created mappableDomains
-	"""
-	mappableDomains: [MappableDomain!]
-}
-"""
-Return response for deleteBulkMappableDomain mutation
-"""
-type MappableDomainBulkDeletePayload {
-	"""
-	Deleted mappableDomain IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkMappableDomain mutation
-"""
-type MappableDomainBulkUpdatePayload {
-	"""
-	Updated mappableDomains
-	"""
-	mappableDomains: [MappableDomain!]
-	"""
-	IDs of the updated mappableDomains
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
-}
-"""
 A connection to a list of items.
 """
 type MappableDomainConnection {
@@ -45855,24 +45748,6 @@ type Mutation {
 		input: CreateAPITokenInput!
 	): APITokenCreatePayload!
 	"""
-	Create multiple new apiTokens
-	"""
-	createBulkAPIToken(
-		"""
-		values of the apiToken
-		"""
-		input: [CreateAPITokenInput!]
-	): APITokenBulkCreatePayload!
-	"""
-	Create multiple new apiTokens via file upload
-	"""
-	createBulkCSVAPIToken(
-		"""
-		csv file containing values of the apiToken
-		"""
-		input: Upload!
-	): APITokenBulkCreatePayload!
-	"""
 	Update an existing apiToken
 	"""
 	updateAPIToken(
@@ -45917,15 +45792,6 @@ type Mutation {
 		values to update the apiTokens with
 		"""
 		input: UpdateAPITokenInput!
-	): APITokenBulkUpdatePayload!
-	"""
-	Update multiple existing apiTokens via file upload
-	"""
-	updateBulkCSVAPIToken(
-		"""
-		csv file containing values of the apiToken, must include ID column
-		"""
-		input: Upload!
 	): APITokenBulkUpdatePayload!
 	"""
 	Create a questionnaire template from an existing assessment
@@ -47137,24 +47003,6 @@ type Mutation {
 		input: CreateDNSVerificationInput!
 	): DNSVerificationCreatePayload!
 	"""
-	Create multiple new dnsVerifications
-	"""
-	createBulkDNSVerification(
-		"""
-		values of the dnsVerification
-		"""
-		input: [CreateDNSVerificationInput!]
-	): DNSVerificationBulkCreatePayload!
-	"""
-	Create multiple new dnsVerifications via file upload
-	"""
-	createBulkCSVDNSVerification(
-		"""
-		csv file containing values of the dnsVerification
-		"""
-		input: Upload!
-	): DNSVerificationBulkCreatePayload!
-	"""
 	Update an existing dnsVerification
 	"""
 	updateDNSVerification(
@@ -47177,38 +47025,6 @@ type Mutation {
 		"""
 		id: ID!
 	): DNSVerificationDeletePayload!
-	"""
-	Delete multiple dnsVerifications
-	"""
-	deleteBulkDNSVerification(
-		"""
-		IDs of the dnsVerifications to delete
-		"""
-		ids: [ID!]!
-	): DNSVerificationBulkDeletePayload!
-	"""
-	Update multiple existing dnsVerifications
-	"""
-	updateBulkDNSVerification(
-		"""
-		IDs of the dnsVerifications to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the dnsVerifications with
-		"""
-		input: UpdateDNSVerificationInput!
-	): DNSVerificationBulkUpdatePayload!
-	"""
-	Update multiple existing dnsVerifications via file upload
-	"""
-	updateBulkCSVDNSVerification(
-		"""
-		csv file containing values of the dnsVerification, must include ID column
-		"""
-		input: Upload!
-	): DNSVerificationBulkUpdatePayload!
 	"""
 	Create a new documentData
 	"""
@@ -47346,15 +47162,6 @@ type Mutation {
 		values to update the emailTemplates with
 		"""
 		input: UpdateEmailTemplateInput!
-	): EmailTemplateBulkUpdatePayload!
-	"""
-	Update multiple existing emailTemplates via file upload
-	"""
-	updateBulkCSVEmailTemplate(
-		"""
-		csv file containing values of the emailTemplate, must include ID column
-		"""
-		input: Upload!
 	): EmailTemplateBulkUpdatePayload!
 	"""
 	Update an existing emailTemplate
@@ -48251,24 +48058,6 @@ type Mutation {
 		input: CreateHushInput!
 	): HushCreatePayload!
 	"""
-	Create multiple new hushs
-	"""
-	createBulkHush(
-		"""
-		values of the hush
-		"""
-		input: [CreateHushInput!]
-	): HushBulkCreatePayload!
-	"""
-	Create multiple new hushs via file upload
-	"""
-	createBulkCSVHush(
-		"""
-		csv file containing values of the hush
-		"""
-		input: Upload!
-	): HushBulkCreatePayload!
-	"""
 	Update multiple existing hushs
 	"""
 	updateBulkHush(
@@ -48314,15 +48103,6 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): HushBulkDeletePayload!
-	"""
-	Update multiple existing hushs via file upload
-	"""
-	updateBulkCSVHush(
-		"""
-		csv file containing values of the hush, must include ID column
-		"""
-		input: Upload!
-	): HushBulkUpdatePayload!
 	"""
 	Create a new identityHolder
 	"""
@@ -48614,24 +48394,6 @@ type Mutation {
 		input: CreateMappableDomainInput!
 	): MappableDomainCreatePayload!
 	"""
-	Create multiple new mappableDomains
-	"""
-	createBulkMappableDomain(
-		"""
-		values of the mappableDomain
-		"""
-		input: [CreateMappableDomainInput!]
-	): MappableDomainBulkCreatePayload!
-	"""
-	Create multiple new mappableDomains via file upload
-	"""
-	createBulkCSVMappableDomain(
-		"""
-		csv file containing values of the mappableDomain
-		"""
-		input: Upload!
-	): MappableDomainBulkCreatePayload!
-	"""
 	Update an existing mappableDomain
 	"""
 	updateMappableDomain(
@@ -48654,38 +48416,6 @@ type Mutation {
 		"""
 		id: ID!
 	): MappableDomainDeletePayload!
-	"""
-	Delete multiple mappableDomains
-	"""
-	deleteBulkMappableDomain(
-		"""
-		IDs of the mappableDomains to delete
-		"""
-		ids: [ID!]!
-	): MappableDomainBulkDeletePayload!
-	"""
-	Update multiple existing mappableDomains
-	"""
-	updateBulkMappableDomain(
-		"""
-		IDs of the mappableDomains to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the mappableDomains with
-		"""
-		input: UpdateMappableDomainInput!
-	): MappableDomainBulkUpdatePayload!
-	"""
-	Update multiple existing mappableDomains via file upload
-	"""
-	updateBulkCSVMappableDomain(
-		"""
-		csv file containing values of the mappableDomain, must include ID column
-		"""
-		input: Upload!
-	): MappableDomainBulkUpdatePayload!
 	"""
 	Create a new mappedControl
 	"""
@@ -49416,24 +49146,6 @@ type Mutation {
 		input: CreateOrganizationSettingInput!
 	): OrganizationSettingCreatePayload!
 	"""
-	Create multiple new organizationSettings
-	"""
-	createBulkOrganizationSetting(
-		"""
-		values of the organizationSetting
-		"""
-		input: [CreateOrganizationSettingInput!]
-	): OrganizationSettingBulkCreatePayload!
-	"""
-	Create multiple new organizationSettings via file upload
-	"""
-	createBulkCSVOrganizationSetting(
-		"""
-		csv file containing values of the organizationSetting
-		"""
-		input: Upload!
-	): OrganizationSettingBulkCreatePayload!
-	"""
 	Update an existing organizationSetting
 	"""
 	updateOrganizationSetting(
@@ -49456,38 +49168,6 @@ type Mutation {
 		"""
 		id: ID!
 	): OrganizationSettingDeletePayload!
-	"""
-	Delete multiple organizationSettings
-	"""
-	deleteBulkOrganizationSetting(
-		"""
-		IDs of the organizationSettings to delete
-		"""
-		ids: [ID!]!
-	): OrganizationSettingBulkDeletePayload!
-	"""
-	Update multiple existing organizationSettings
-	"""
-	updateBulkOrganizationSetting(
-		"""
-		IDs of the organizationSettings to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the organizationSettings with
-		"""
-		input: UpdateOrganizationSettingInput!
-	): OrganizationSettingBulkUpdatePayload!
-	"""
-	Update multiple existing organizationSettings via file upload
-	"""
-	updateBulkCSVOrganizationSetting(
-		"""
-		csv file containing values of the organizationSetting, must include ID column
-		"""
-		input: Upload!
-	): OrganizationSettingBulkUpdatePayload!
 	"""
 	Create a new organization with members
 	"""
@@ -51809,24 +51489,6 @@ type Mutation {
 		input: CreateUserSettingInput!
 	): UserSettingCreatePayload!
 	"""
-	Create multiple new userSettings
-	"""
-	createBulkUserSetting(
-		"""
-		values of the userSetting
-		"""
-		input: [CreateUserSettingInput!]
-	): UserSettingBulkCreatePayload!
-	"""
-	Create multiple new userSettings via file upload
-	"""
-	createBulkCSVUserSetting(
-		"""
-		csv file containing values of the userSetting
-		"""
-		input: Upload!
-	): UserSettingBulkCreatePayload!
-	"""
 	Update an existing userSetting
 	"""
 	updateUserSetting(
@@ -51840,38 +51502,6 @@ type Mutation {
 		"""
 		input: UpdateUserSettingInput!
 	): UserSettingUpdatePayload!
-	"""
-	Delete multiple userSettings
-	"""
-	deleteBulkUserSetting(
-		"""
-		IDs of the userSettings to delete
-		"""
-		ids: [ID!]!
-	): UserSettingBulkDeletePayload!
-	"""
-	Update multiple existing userSettings
-	"""
-	updateBulkUserSetting(
-		"""
-		IDs of the userSettings to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the userSettings with
-		"""
-		input: UpdateUserSettingInput!
-	): UserSettingBulkUpdatePayload!
-	"""
-	Update multiple existing userSettings via file upload
-	"""
-	updateBulkCSVUserSetting(
-		"""
-		csv file containing values of the userSetting, must include ID column
-		"""
-		input: Upload!
-	): UserSettingBulkUpdatePayload!
 	"""
 	Create a new vendorRiskScore
 	"""
@@ -59003,53 +58633,6 @@ type OrganizationSetting implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
-}
-"""
-Return response for createBulkOrganizationSetting mutation
-"""
-type OrganizationSettingBulkCreatePayload {
-	"""
-	Created organizationSettings
-	"""
-	organizationSettings: [OrganizationSetting!]
-}
-"""
-Return response for deleteBulkOrganizationSetting mutation
-"""
-type OrganizationSettingBulkDeletePayload {
-	"""
-	Deleted organizationSetting IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkOrganizationSetting mutation
-"""
-type OrganizationSettingBulkUpdatePayload {
-	"""
-	Updated organizationSettings
-	"""
-	organizationSettings: [OrganizationSetting!]
-	"""
-	IDs of the updated organizationSettings
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
 }
 """
 A connection to a list of items.
@@ -99122,6 +98705,11 @@ input UpdateVendorRiskScoreInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	identifier of the record in an external system
+	"""
+	externalID: String
+	clearExternalID: Boolean
+	"""
 	stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
 	"""
 	questionKey: String
@@ -99156,6 +98744,9 @@ input UpdateVendorRiskScoreInput {
 	"""
 	notes: String
 	clearNotes: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	vendorScoringConfigID: ID
 	clearVendorScoringConfig: Boolean
 	entityID: ID
@@ -100608,53 +100199,6 @@ type UserSetting implements Node {
 	defaultOrg: Organization
 }
 """
-Return response for createBulkUserSetting mutation
-"""
-type UserSettingBulkCreatePayload {
-	"""
-	Created userSettings
-	"""
-	userSettings: [UserSetting!]
-}
-"""
-Return response for deleteBulkUserSetting mutation
-"""
-type UserSettingBulkDeletePayload {
-	"""
-	Deleted userSetting IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkUserSetting mutation
-"""
-type UserSettingBulkUpdatePayload {
-	"""
-	Updated userSettings
-	"""
-	userSettings: [UserSetting!]
-	"""
-	IDs of the updated userSettings
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
-}
-"""
 A connection to a list of items.
 """
 type UserSettingConnection {
@@ -101356,6 +100900,34 @@ type VendorRiskScore implements Node @modules(names: ["entity_management_module"
 	"""
 	ownerID: ID
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	id of the integration installation managing the record, empty when the record is unclaimed
+	"""
+	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
+	identifier of the record in an external system
+	"""
+	externalID: String
+	"""
 	stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
 	"""
 	questionKey: String!
@@ -101408,6 +100980,37 @@ type VendorRiskScore implements Node @modules(names: ["entity_management_module"
 	"""
 	assessmentResponseID: ID
 	owner: Organization
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	vendorScoringConfig: VendorScoringConfig
 	entity: Entity!
 	assessmentResponse: AssessmentResponse
@@ -101526,6 +101129,7 @@ Properties by which VendorRiskScore connections can be ordered.
 enum VendorRiskScoreOrderField {
 	created_at
 	updated_at
+	external_id
 	question_key
 	question_category
 	impact
@@ -101678,6 +101282,104 @@ input VendorRiskScoreWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
+	external_id field predicates
+	"""
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
 	question_key field predicates
 	"""
 	questionKey: String
@@ -101827,6 +101529,11 @@ input VendorRiskScoreWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	vendor_scoring_config edge predicates
 	"""

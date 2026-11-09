@@ -15,10 +15,13 @@ query GetAllVendorRiskScoreHistories ($first: Int, $last: Int, $after: Cursor, $
 				createdAt
 				createdBy
 				entityID
+				externalID
 				historyTime
 				id
 				impact
+				integrationRunID
 				likelihood
+				managedBy
 				notes
 				operation
 				ownerID
@@ -28,6 +31,10 @@ query GetAllVendorRiskScoreHistories ($first: Int, $last: Int, $after: Cursor, $
 				questionName
 				ref
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
+				sourceKey
 				tags
 				updatedAt
 				updatedBy
@@ -54,10 +61,13 @@ query GetVendorRiskScoreHistories ($first: Int, $last: Int, $after: Cursor, $bef
 				createdAt
 				createdBy
 				entityID
+				externalID
 				historyTime
 				id
 				impact
+				integrationRunID
 				likelihood
+				managedBy
 				notes
 				operation
 				ownerID
@@ -67,6 +77,10 @@ query GetVendorRiskScoreHistories ($first: Int, $last: Int, $after: Cursor, $bef
 				questionName
 				ref
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
+				sourceKey
 				tags
 				updatedAt
 				updatedBy
