@@ -267,7 +267,6 @@ func (g Group) Annotations() []schema.Annotation {
 		),
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			LookupAlternative(externalIDFieldName).
 			LookupAlternative("name"),
 	}
 }

@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -14,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
@@ -25,17 +27,19 @@ import (
 // VendorRiskScoreQuery is the builder for querying VendorRiskScore entities.
 type VendorRiskScoreQuery struct {
 	config
-	ctx                     *QueryContext
-	order                   []vendorriskscore.OrderOption
-	inters                  []Interceptor
-	predicates              []predicate.VendorRiskScore
-	withOwner               *OrganizationQuery
-	withVendorScoringConfig *VendorScoringConfigQuery
-	withEntity              *EntityQuery
-	withAssessmentResponse  *AssessmentResponseQuery
-	withFKs                 bool
-	loadTotal               []func(context.Context, []*VendorRiskScore) error
-	modifiers               []func(*sql.Selector)
+	ctx                      *QueryContext
+	order                    []vendorriskscore.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.VendorRiskScore
+	withOwner                *OrganizationQuery
+	withIntegrationRuns      *IntegrationRunQuery
+	withVendorScoringConfig  *VendorScoringConfigQuery
+	withEntity               *EntityQuery
+	withAssessmentResponse   *AssessmentResponseQuery
+	withFKs                  bool
+	loadTotal                []func(context.Context, []*VendorRiskScore) error
+	modifiers                []func(*sql.Selector)
+	withNamedIntegrationRuns map[string]*IntegrationRunQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -87,6 +91,28 @@ func (_q *VendorRiskScoreQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.From(vendorriskscore.Table, vendorriskscore.FieldID, selector),
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, vendorriskscore.OwnerTable, vendorriskscore.OwnerColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *VendorRiskScoreQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorriskscore.Table, vendorriskscore.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vendorriskscore.IntegrationRunsTable, vendorriskscore.IntegrationRunsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -353,6 +379,7 @@ func (_q *VendorRiskScoreQuery) Clone() *VendorRiskScoreQuery {
 		inters:                  append([]Interceptor{}, _q.inters...),
 		predicates:              append([]predicate.VendorRiskScore{}, _q.predicates...),
 		withOwner:               _q.withOwner.Clone(),
+		withIntegrationRuns:     _q.withIntegrationRuns.Clone(),
 		withVendorScoringConfig: _q.withVendorScoringConfig.Clone(),
 		withEntity:              _q.withEntity.Clone(),
 		withAssessmentResponse:  _q.withAssessmentResponse.Clone(),
@@ -371,6 +398,17 @@ func (_q *VendorRiskScoreQuery) WithOwner(opts ...func(*OrganizationQuery)) *Ven
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *VendorRiskScoreQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *VendorRiskScoreQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
 	return _q
 }
 
@@ -492,8 +530,9 @@ func (_q *VendorRiskScoreQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		nodes       = []*VendorRiskScore{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			_q.withOwner != nil,
+			_q.withIntegrationRuns != nil,
 			_q.withVendorScoringConfig != nil,
 			_q.withEntity != nil,
 			_q.withAssessmentResponse != nil,
@@ -529,6 +568,15 @@ func (_q *VendorRiskScoreQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *VendorRiskScore) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *VendorRiskScore, e *IntegrationRun) {
+				n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withVendorScoringConfig; query != nil {
 		if err := _q.loadVendorScoringConfig(ctx, query, nodes, nil,
 			func(n *VendorRiskScore, e *VendorScoringConfig) { n.Edges.VendorScoringConfig = e }); err != nil {
@@ -544,6 +592,13 @@ func (_q *VendorRiskScoreQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	if query := _q.withAssessmentResponse; query != nil {
 		if err := _q.loadAssessmentResponse(ctx, query, nodes, nil,
 			func(n *VendorRiskScore, e *AssessmentResponse) { n.Edges.AssessmentResponse = e }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *VendorRiskScore) { n.appendNamedIntegrationRuns(name) },
+			func(n *VendorRiskScore, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -581,6 +636,37 @@ func (_q *VendorRiskScoreQuery) loadOwner(ctx context.Context, query *Organizati
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (_q *VendorRiskScoreQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*VendorRiskScore, init func(*VendorRiskScore), assign func(*VendorRiskScore, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*VendorRiskScore)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(vendorriskscore.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.vendor_risk_score_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "vendor_risk_score_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "vendor_risk_score_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -776,6 +862,20 @@ func (_q *VendorRiskScoreQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *VendorRiskScoreQuery) Modify(modifiers ...func(s *sql.Selector)) *VendorRiskScoreSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *VendorRiskScoreQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *VendorRiskScoreQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied

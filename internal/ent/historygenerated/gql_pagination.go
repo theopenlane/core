@@ -28592,6 +28592,20 @@ var (
 			}
 		},
 	}
+	// VendorRiskScoreHistoryOrderFieldExternalID orders VendorRiskScoreHistory by external_id.
+	VendorRiskScoreHistoryOrderFieldExternalID = &VendorRiskScoreHistoryOrderField{
+		Value: func(_m *VendorRiskScoreHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: vendorriskscorehistory.FieldExternalID,
+		toTerm: vendorriskscorehistory.ByExternalID,
+		toCursor: func(_m *VendorRiskScoreHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// VendorRiskScoreHistoryOrderFieldQuestionKey orders VendorRiskScoreHistory by question_key.
 	VendorRiskScoreHistoryOrderFieldQuestionKey = &VendorRiskScoreHistoryOrderField{
 		Value: func(_m *VendorRiskScoreHistory) (ent.Value, error) {
@@ -28674,6 +28688,8 @@ func (f VendorRiskScoreHistoryOrderField) String() string {
 		str = "created_at"
 	case VendorRiskScoreHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case VendorRiskScoreHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case VendorRiskScoreHistoryOrderFieldQuestionKey.column:
 		str = "question_key"
 	case VendorRiskScoreHistoryOrderFieldQuestionCategory.column:
@@ -28706,6 +28722,8 @@ func (f *VendorRiskScoreHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VendorRiskScoreHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *VendorRiskScoreHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *VendorRiskScoreHistoryOrderFieldExternalID
 	case "question_key":
 		*f = *VendorRiskScoreHistoryOrderFieldQuestionKey
 	case "question_category":

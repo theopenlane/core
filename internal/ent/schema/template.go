@@ -171,7 +171,6 @@ func (Template) Annotations() []schema.Annotation {
 		// match the unique name index within the template type
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			LookupAlternative(externalIDFieldName).
 			LookupAlternative("name", "template_type"),
 	}
 }

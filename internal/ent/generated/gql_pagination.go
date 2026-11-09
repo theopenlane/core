@@ -38329,6 +38329,20 @@ var (
 			}
 		},
 	}
+	// VendorRiskScoreOrderFieldExternalID orders VendorRiskScore by external_id.
+	VendorRiskScoreOrderFieldExternalID = &VendorRiskScoreOrderField{
+		Value: func(_m *VendorRiskScore) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: vendorriskscore.FieldExternalID,
+		toTerm: vendorriskscore.ByExternalID,
+		toCursor: func(_m *VendorRiskScore) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// VendorRiskScoreOrderFieldQuestionKey orders VendorRiskScore by question_key.
 	VendorRiskScoreOrderFieldQuestionKey = &VendorRiskScoreOrderField{
 		Value: func(_m *VendorRiskScore) (ent.Value, error) {
@@ -38409,6 +38423,8 @@ func (f VendorRiskScoreOrderField) String() string {
 		str = "created_at"
 	case VendorRiskScoreOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case VendorRiskScoreOrderFieldExternalID.column:
+		str = "external_id"
 	case VendorRiskScoreOrderFieldQuestionKey.column:
 		str = "question_key"
 	case VendorRiskScoreOrderFieldQuestionCategory.column:
@@ -38439,6 +38455,8 @@ func (f *VendorRiskScoreOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VendorRiskScoreOrderFieldCreatedAt
 	case "updated_at":
 		*f = *VendorRiskScoreOrderFieldUpdatedAt
+	case "external_id":
+		*f = *VendorRiskScoreOrderFieldExternalID
 	case "question_key":
 		*f = *VendorRiskScoreOrderFieldQuestionKey
 	case "question_category":
@@ -49496,6 +49514,13 @@ func (_q *VendorRiskScoreQuery) clonePage() *VendorRiskScoreQuery {
 	}
 	c := _q.Clone()
 	c.withOwner = _q.withOwner.clonePage()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withVendorScoringConfig = _q.withVendorScoringConfig.clonePage()
 	c.withEntity = _q.withEntity.clonePage()
 	c.withAssessmentResponse = _q.withAssessmentResponse.clonePage()

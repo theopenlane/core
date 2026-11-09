@@ -287,7 +287,6 @@ func (c Control) Annotations() []schema.Annotation {
 		// match the unique index for controls not linked to a standard
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			LookupAlternative(externalIDFieldName).
 			LookupAlternative("ref_code").
 			LookupWhereNull("standard_id"),
 	}

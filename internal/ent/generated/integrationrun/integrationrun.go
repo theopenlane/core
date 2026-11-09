@@ -222,6 +222,7 @@ var ForeignKeys = []string{
 	"tag_definition_integration_runs",
 	"task_integration_runs",
 	"template_integration_runs",
+	"vendor_risk_score_integration_runs",
 }
 
 var (

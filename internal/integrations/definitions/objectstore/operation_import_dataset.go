@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -290,6 +291,7 @@ func datasetBuiltinVariables(ctx context.Context, db *generated.Client) (placeho
 
 	return DatasetBuiltinVariables{
 		OrgName:     lo.CoalesceOrEmpty(org.DisplayName, org.Name),
+		OrgSlug:     lo.CoalesceOrEmpty(org.SlugName, strcase.KebabCase(org.Name)),
 		OrgDomain:   domain,
 		OwnerUserID: caller.SubjectID,
 		OwnerEmail:  caller.SubjectEmail,
