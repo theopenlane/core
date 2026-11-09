@@ -9914,14 +9914,6 @@ var (
 				Unique:  false,
 				Columns: []*schema.Column{VendorRiskScoresColumns[14]},
 			},
-			{
-				Name:    "vendorriskscore_external_id_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{VendorRiskScoresColumns[15], VendorRiskScoresColumns[28]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
-			},
 		},
 	}
 	// VendorScoringConfigsColumns holds the columns for the "vendor_scoring_configs" table.

@@ -161807,6 +161807,7 @@ type UserBulkCreatePayload {
     users: [User!]
 }
 `, BuiltIn: false},
+	{Name: "../schema/userextended.graphql", Input: ``, BuiltIn: false},
 	{Name: "../schema/usersetting.graphql", Input: `extend type Query {
     """
     Look up userSetting by ID
