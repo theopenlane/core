@@ -33,37 +33,6 @@ extend type Mutation{
         """
         input: UpdateUserSettingInput!
     ): UserSettingUpdatePayload!
-    """
-    Delete multiple userSettings
-    """
-    deleteBulkUserSetting(
-        """
-        IDs of the userSettings to delete
-        """
-        ids: [ID!]!
-    ): UserSettingBulkDeletePayload!
-    """
-    Update multiple existing userSettings
-    """
-    updateBulkUserSetting(
-        """
-        IDs of the userSettings to update
-        """
-        ids: [ID!]!
-        """
-        values to update the userSettings with
-        """
-        input: UpdateUserSettingInput!
-    ): UserSettingBulkUpdatePayload!
-    """
-    Update multiple existing userSettings via file upload
-    """
-    updateBulkCSVUserSetting(
-        """
-        csv file containing values of the userSetting, must include ID column
-        """
-        input: Upload!
-    ): UserSettingBulkUpdatePayload!
 }
 
 """
@@ -84,44 +53,4 @@ type UserSettingUpdatePayload {
     Updated userSetting
     """
     userSetting: UserSetting!
-}
-
-"""
-Return response for deleteBulkUserSetting mutation
-"""
-type UserSettingBulkDeletePayload {
-    """
-    Deleted userSetting IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkUserSetting mutation
-"""
-type UserSettingBulkUpdatePayload {
-    """
-    Updated userSettings
-    """
-    userSettings: [UserSetting!]
-    """
-    IDs of the updated userSettings
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
 }

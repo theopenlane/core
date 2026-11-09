@@ -21,24 +21,6 @@ extend type Mutation{
         input: CreateDNSVerificationInput!
     ): DNSVerificationCreatePayload!
     """
-    Create multiple new dnsVerifications
-    """
-    createBulkDNSVerification(
-        """
-        values of the dnsVerification
-        """
-        input: [CreateDNSVerificationInput!]
-    ): DNSVerificationBulkCreatePayload!
-    """
-    Create multiple new dnsVerifications via file upload
-    """
-    createBulkCSVDNSVerification(
-        """
-        csv file containing values of the dnsVerification
-        """
-        input: Upload!
-    ): DNSVerificationBulkCreatePayload!
-    """
     Update an existing dnsVerification
     """
     updateDNSVerification(
@@ -60,37 +42,6 @@ extend type Mutation{
         """
         id: ID!
     ): DNSVerificationDeletePayload!
-    """
-    Delete multiple dnsVerifications
-    """
-    deleteBulkDNSVerification(
-        """
-        IDs of the dnsVerifications to delete
-        """
-        ids: [ID!]!
-    ): DNSVerificationBulkDeletePayload!
-    """
-    Update multiple existing dnsVerifications
-    """
-    updateBulkDNSVerification(
-        """
-        IDs of the dnsVerifications to update
-        """
-        ids: [ID!]!
-        """
-        values to update the dnsVerifications with
-        """
-        input: UpdateDNSVerificationInput!
-    ): DNSVerificationBulkUpdatePayload!
-    """
-    Update multiple existing dnsVerifications via file upload
-    """
-    updateBulkCSVDNSVerification(
-        """
-        csv file containing values of the dnsVerification, must include ID column
-        """
-        input: Upload!
-    ): DNSVerificationBulkUpdatePayload!
 }
 
 """
@@ -121,54 +72,4 @@ type DNSVerificationDeletePayload {
     Deleted dnsVerification ID
     """
     deletedID: ID!
-}
-
-"""
-Return response for createBulkDNSVerification mutation
-"""
-type DNSVerificationBulkCreatePayload {
-    """
-    Created dnsVerifications
-    """
-    dnsVerifications: [DNSVerification!]
-}
-
-"""
-Return response for deleteBulkDNSVerification mutation
-"""
-type DNSVerificationBulkDeletePayload {
-    """
-    Deleted dnsVerification IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkDNSVerification mutation
-"""
-type DNSVerificationBulkUpdatePayload {
-    """
-    Updated dnsVerifications
-    """
-    dnsVerifications: [DNSVerification!]
-    """
-    IDs of the updated dnsVerifications
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
 }

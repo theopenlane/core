@@ -167089,28 +167089,12 @@ func (ec *executionContext) childFields_DNSVerificationBulkCreatePayload(ctx con
 }
 
 func (ec *executionContext) childFields_DNSVerificationBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_DNSVerificationBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_DNSVerificationBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_DNSVerificationBulkDeletePayload_error(ctx, field)
-	}
+
 	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationBulkDeletePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_DNSVerificationBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "dnsVerifications":
-		return ec.fieldContext_DNSVerificationBulkUpdatePayload_dnsVerifications(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_DNSVerificationBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_DNSVerificationBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_DNSVerificationBulkUpdatePayload_error(ctx, field)
-	}
+
 	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationBulkUpdatePayload", field.Name)
 }
 
@@ -172611,28 +172595,12 @@ func (ec *executionContext) childFields_OrganizationSettingBulkCreatePayload(ctx
 }
 
 func (ec *executionContext) childFields_OrganizationSettingBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_OrganizationSettingBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_OrganizationSettingBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_OrganizationSettingBulkDeletePayload_error(ctx, field)
-	}
+
 	return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingBulkDeletePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_OrganizationSettingBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "organizationSettings":
-		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_organizationSettings(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_error(ctx, field)
-	}
+
 	return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingBulkUpdatePayload", field.Name)
 }
 
@@ -177737,28 +177705,12 @@ func (ec *executionContext) childFields_UserSettingBulkCreatePayload(ctx context
 }
 
 func (ec *executionContext) childFields_UserSettingBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_UserSettingBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_UserSettingBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_UserSettingBulkDeletePayload_error(ctx, field)
-	}
+
 	return nil, fmt.Errorf("no field named %q was found under type UserSettingBulkDeletePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_UserSettingBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "userSettings":
-		return ec.fieldContext_UserSettingBulkUpdatePayload_userSettings(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_UserSettingBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_UserSettingBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_UserSettingBulkUpdatePayload_error(ctx, field)
-	}
+
 	return nil, fmt.Errorf("no field named %q was found under type UserSettingBulkUpdatePayload", field.Name)
 }
 

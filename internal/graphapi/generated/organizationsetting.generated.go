@@ -24,25 +24,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _OrganizationSettingBulkCreatePayload_organizationSettings(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkCreatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSettingBulkCreatePayload_organizationSettings(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.OrganizationSettings, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []*generated.OrganizationSetting) graphql.Marshaler {
-			return ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
 func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_organizationSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "OrganizationSettingBulkCreatePayload",
@@ -56,94 +37,6 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 	return fc, nil
 }
 
-func (ec *executionContext) _OrganizationSettingBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkDeletePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSettingBulkDeletePayload_deletedIDs(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.DeletedIDs, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
-			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_OrganizationSettingBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationSettingBulkDeletePayload", field, false, false, "ID")
-}
-
-func (ec *executionContext) _OrganizationSettingBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkDeletePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSettingBulkDeletePayload_notDeletedIDs(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.NotDeletedIDs, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
-			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_OrganizationSettingBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationSettingBulkDeletePayload", field, false, false, "ID")
-}
-
-func (ec *executionContext) _OrganizationSettingBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkDeletePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSettingBulkDeletePayload_error(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Error, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOString2ᚖstring(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_OrganizationSettingBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationSettingBulkDeletePayload", field, false, false, "String")
-}
-
-func (ec *executionContext) _OrganizationSettingBulkUpdatePayload_organizationSettings(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkUpdatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSettingBulkUpdatePayload_organizationSettings(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.OrganizationSettings, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []*generated.OrganizationSetting) graphql.Marshaler {
-			return ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
 func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_organizationSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "OrganizationSettingBulkUpdatePayload",
@@ -157,71 +50,10 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_or
 	return fc, nil
 }
 
-func (ec *executionContext) _OrganizationSettingBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkUpdatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSettingBulkUpdatePayload_updatedIDs(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.UpdatedIDs, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
-			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
 func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("OrganizationSettingBulkUpdatePayload", field, false, false, "ID")
 }
 
-func (ec *executionContext) _OrganizationSettingBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkUpdatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSettingBulkUpdatePayload_notUpdatedIDs(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.NotUpdatedIDs, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
-			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationSettingBulkUpdatePayload", field, false, false, "ID")
-}
-
-func (ec *executionContext) _OrganizationSettingBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingBulkUpdatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSettingBulkUpdatePayload_error(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Error, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOString2ᚖstring(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
 func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("OrganizationSettingBulkUpdatePayload", field, false, false, "String")
 }
@@ -327,127 +159,9 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 
 var organizationSettingBulkCreatePayloadImplementors = []string{"OrganizationSettingBulkCreatePayload"}
 
-func (ec *executionContext) _OrganizationSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.OrganizationSettingBulkCreatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, organizationSettingBulkCreatePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := graphql.NewDeferredGroup(ctx)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("OrganizationSettingBulkCreatePayload")
-		case "organizationSettings":
-			out.Values[i] = ec._OrganizationSettingBulkCreatePayload_organizationSettings(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	if n := len(deferred.Defers); n > 0 {
-		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
-		ec.ProcessDeferredGroup(deferred)
-	}
-
-	return out
-}
-
 var organizationSettingBulkDeletePayloadImplementors = []string{"OrganizationSettingBulkDeletePayload"}
 
-func (ec *executionContext) _OrganizationSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, organizationSettingBulkDeletePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := graphql.NewDeferredGroup(ctx)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("OrganizationSettingBulkDeletePayload")
-		case "deletedIDs":
-			out.Values[i] = ec._OrganizationSettingBulkDeletePayload_deletedIDs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "notDeletedIDs":
-			out.Values[i] = ec._OrganizationSettingBulkDeletePayload_notDeletedIDs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "error":
-			out.Values[i] = ec._OrganizationSettingBulkDeletePayload_error(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	if n := len(deferred.Defers); n > 0 {
-		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
-		ec.ProcessDeferredGroup(deferred)
-	}
-
-	return out
-}
-
 var organizationSettingBulkUpdatePayloadImplementors = []string{"OrganizationSettingBulkUpdatePayload"}
-
-func (ec *executionContext) _OrganizationSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, organizationSettingBulkUpdatePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := graphql.NewDeferredGroup(ctx)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("OrganizationSettingBulkUpdatePayload")
-		case "organizationSettings":
-			out.Values[i] = ec._OrganizationSettingBulkUpdatePayload_organizationSettings(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "updatedIDs":
-			out.Values[i] = ec._OrganizationSettingBulkUpdatePayload_updatedIDs(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "notUpdatedIDs":
-			out.Values[i] = ec._OrganizationSettingBulkUpdatePayload_notUpdatedIDs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "error":
-			out.Values[i] = ec._OrganizationSettingBulkUpdatePayload_error(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	if n := len(deferred.Defers); n > 0 {
-		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
-		ec.ProcessDeferredGroup(deferred)
-	}
-
-	return out
-}
 
 var organizationSettingCreatePayloadImplementors = []string{"OrganizationSettingCreatePayload"}
 
@@ -551,30 +265,6 @@ func (ec *executionContext) _OrganizationSettingUpdatePayload(ctx context.Contex
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
-
-func (ec *executionContext) marshalNOrganizationSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkCreatePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "OrganizationSettingBulkCreatePayload!")
-		return graphql.Null
-	}
-	return ec._OrganizationSettingBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrganizationSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "OrganizationSettingBulkDeletePayload!")
-		return graphql.Null
-	}
-	return ec._OrganizationSettingBulkDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrganizationSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "OrganizationSettingBulkUpdatePayload!")
-		return graphql.Null
-	}
-	return ec._OrganizationSettingBulkUpdatePayload(ctx, sel, v)
-}
 
 func (ec *executionContext) marshalNOrganizationSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingCreatePayload) graphql.Marshaler {
 	if v == nil {

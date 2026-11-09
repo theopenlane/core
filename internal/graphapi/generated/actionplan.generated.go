@@ -28,8 +28,6 @@ type MutationResolver interface {
 	DeleteBulkActionPlan(ctx context.Context, ids []string) (*model.ActionPlanBulkDeletePayload, error)
 	UpdateBulkCSVActionPlan(ctx context.Context, input graphql.Upload) (*model.ActionPlanBulkUpdatePayload, error)
 	CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*model.APITokenCreatePayload, error)
-	CreateBulkAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*model.APITokenBulkCreatePayload, error)
-	CreateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*model.APITokenBulkCreatePayload, error)
 	UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*model.APITokenUpdatePayload, error)
 	DeleteAPIToken(ctx context.Context, id string) (*model.APITokenDeletePayload, error)
 	DeleteBulkAPIToken(ctx context.Context, ids []string) (*model.APITokenBulkDeletePayload, error)
@@ -154,13 +152,8 @@ type MutationResolver interface {
 	UpdateDiscussion(ctx context.Context, id string, input generated.UpdateDiscussionInput) (*model.DiscussionUpdatePayload, error)
 	DeleteDiscussion(ctx context.Context, id string) (*model.DiscussionDeletePayload, error)
 	CreateDNSVerification(ctx context.Context, input generated.CreateDNSVerificationInput) (*model.DNSVerificationCreatePayload, error)
-	CreateBulkDNSVerification(ctx context.Context, input []*generated.CreateDNSVerificationInput) (*model.DNSVerificationBulkCreatePayload, error)
-	CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload) (*model.DNSVerificationBulkCreatePayload, error)
 	UpdateDNSVerification(ctx context.Context, id string, input generated.UpdateDNSVerificationInput) (*model.DNSVerificationUpdatePayload, error)
 	DeleteDNSVerification(ctx context.Context, id string) (*model.DNSVerificationDeletePayload, error)
-	DeleteBulkDNSVerification(ctx context.Context, ids []string) (*model.DNSVerificationBulkDeletePayload, error)
-	UpdateBulkDNSVerification(ctx context.Context, ids []string, input generated.UpdateDNSVerificationInput) (*model.DNSVerificationBulkUpdatePayload, error)
-	UpdateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload) (*model.DNSVerificationBulkUpdatePayload, error)
 	CreateDocumentData(ctx context.Context, input generated.CreateDocumentDataInput) (*model.DocumentDataCreatePayload, error)
 	CreateBulkDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error)
 	CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkCreatePayload, error)
@@ -258,8 +251,6 @@ type MutationResolver interface {
 	UpdateBulkGroupSetting(ctx context.Context, ids []string, input generated.UpdateGroupSettingInput) (*model.GroupSettingBulkUpdatePayload, error)
 	UpdateBulkCSVGroupSetting(ctx context.Context, input graphql.Upload) (*model.GroupSettingBulkUpdatePayload, error)
 	CreateHush(ctx context.Context, input generated.CreateHushInput) (*model.HushCreatePayload, error)
-	CreateBulkHush(ctx context.Context, input []*generated.CreateHushInput) (*model.HushBulkCreatePayload, error)
-	CreateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkCreatePayload, error)
 	UpdateBulkHush(ctx context.Context, ids []string, input generated.UpdateHushInput) (*model.HushBulkUpdatePayload, error)
 	UpdateHush(ctx context.Context, id string, input generated.UpdateHushInput) (*model.HushUpdatePayload, error)
 	DeleteHush(ctx context.Context, id string) (*model.HushDeletePayload, error)
@@ -292,13 +283,8 @@ type MutationResolver interface {
 	UpdateBulkInvite(ctx context.Context, ids []string, input generated.UpdateInviteInput) (*model.InviteBulkUpdatePayload, error)
 	UpdateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*model.InviteBulkUpdatePayload, error)
 	CreateMappableDomain(ctx context.Context, input generated.CreateMappableDomainInput) (*model.MappableDomainCreatePayload, error)
-	CreateBulkMappableDomain(ctx context.Context, input []*generated.CreateMappableDomainInput) (*model.MappableDomainBulkCreatePayload, error)
-	CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload) (*model.MappableDomainBulkCreatePayload, error)
 	UpdateMappableDomain(ctx context.Context, id string, input generated.UpdateMappableDomainInput) (*model.MappableDomainUpdatePayload, error)
 	DeleteMappableDomain(ctx context.Context, id string) (*model.MappableDomainDeletePayload, error)
-	DeleteBulkMappableDomain(ctx context.Context, ids []string) (*model.MappableDomainBulkDeletePayload, error)
-	UpdateBulkMappableDomain(ctx context.Context, ids []string, input generated.UpdateMappableDomainInput) (*model.MappableDomainBulkUpdatePayload, error)
-	UpdateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload) (*model.MappableDomainBulkUpdatePayload, error)
 	CreateMappedControl(ctx context.Context, input generated.CreateMappedControlInput) (*model.MappedControlCreatePayload, error)
 	CreateBulkMappedControl(ctx context.Context, input []*generated.CreateMappedControlInput) (*model.MappedControlBulkCreatePayload, error)
 	CreateBulkCSVMappedControl(ctx context.Context, input graphql.Upload) (*model.MappedControlBulkCreatePayload, error)
@@ -360,13 +346,8 @@ type MutationResolver interface {
 	UpdateBulkOrganizationBrandingSetting(ctx context.Context, ids []string, input generated.UpdateOrganizationBrandingSettingInput) (*model.OrganizationBrandingSettingBulkUpdatePayload, error)
 	UpdateBulkCSVOrganizationBrandingSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationBrandingSettingBulkUpdatePayload, error)
 	CreateOrganizationSetting(ctx context.Context, input generated.CreateOrganizationSettingInput) (*model.OrganizationSettingCreatePayload, error)
-	CreateBulkOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error)
-	CreateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkCreatePayload, error)
 	UpdateOrganizationSetting(ctx context.Context, id string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingUpdatePayload, error)
 	DeleteOrganizationSetting(ctx context.Context, id string) (*model.OrganizationSettingDeletePayload, error)
-	DeleteBulkOrganizationSetting(ctx context.Context, ids []string) (*model.OrganizationSettingBulkDeletePayload, error)
-	UpdateBulkOrganizationSetting(ctx context.Context, ids []string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingBulkUpdatePayload, error)
-	UpdateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkUpdatePayload, error)
 	CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error)
 	TransferOrganizationOwnership(ctx context.Context, newOwnerEmail string) (*model.OrganizationTransferOwnershipPayload, error)
 	CreateOrgMembership(ctx context.Context, input generated.CreateOrgMembershipInput) (*model.OrgMembershipCreatePayload, error)
@@ -585,9 +566,6 @@ type MutationResolver interface {
 	DeleteUser(ctx context.Context, id string) (*model.UserDeletePayload, error)
 	CreateUserSetting(ctx context.Context, input generated.CreateUserSettingInput) (*model.UserSettingCreatePayload, error)
 	UpdateUserSetting(ctx context.Context, id string, input generated.UpdateUserSettingInput) (*model.UserSettingUpdatePayload, error)
-	DeleteBulkUserSetting(ctx context.Context, ids []string) (*model.UserSettingBulkDeletePayload, error)
-	UpdateBulkUserSetting(ctx context.Context, ids []string, input generated.UpdateUserSettingInput) (*model.UserSettingBulkUpdatePayload, error)
-	UpdateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*model.UserSettingBulkUpdatePayload, error)
 	CreateVendorRiskScore(ctx context.Context, input generated.CreateVendorRiskScoreInput) (*model.VendorRiskScoreCreatePayload, error)
 	CreateBulkVendorRiskScore(ctx context.Context, input []*generated.CreateVendorRiskScoreInput) (*model.VendorRiskScoreBulkCreatePayload, error)
 	CreateBulkCSVVendorRiskScore(ctx context.Context, input graphql.Upload) (*model.VendorRiskScoreBulkCreatePayload, error)
@@ -12622,94 +12600,6 @@ func (ec *executionContext) fieldContext_Mutation_createAPIToken(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createBulkAPIToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkAPIToken(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkAPIToken(ctx, fc.Args["input"].([]*generated.CreateAPITokenInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.APITokenBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_createBulkAPIToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_APITokenBulkCreatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkAPIToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_createBulkCSVAPIToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkCSVAPIToken(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkCSVAPIToken(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.APITokenBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_createBulkCSVAPIToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_APITokenBulkCreatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkCSVAPIToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_updateAPIToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -18166,26 +18056,6 @@ func (ec *executionContext) fieldContext_Mutation_createDNSVerification(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createBulkDNSVerification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkDNSVerification(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkDNSVerification(ctx, fc.Args["input"].([]*generated.CreateDNSVerificationInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNDNSVerificationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
 func (ec *executionContext) fieldContext_Mutation_createBulkDNSVerification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
@@ -18211,24 +18081,7 @@ func (ec *executionContext) fieldContext_Mutation_createBulkDNSVerification(ctx 
 }
 
 func (ec *executionContext) _Mutation_createBulkCSVDNSVerification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkCSVDNSVerification(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkCSVDNSVerification(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNDNSVerificationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_createBulkCSVDNSVerification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -18343,24 +18196,7 @@ func (ec *executionContext) fieldContext_Mutation_deleteDNSVerification(ctx cont
 }
 
 func (ec *executionContext) _Mutation_deleteBulkDNSVerification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_deleteBulkDNSVerification(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().DeleteBulkDNSVerification(ctx, fc.Args["ids"].([]string))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
-			return ec.marshalNDNSVerificationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_deleteBulkDNSVerification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -18386,26 +18222,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkDNSVerification(ctx 
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateBulkDNSVerification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkDNSVerification(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkDNSVerification(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateDNSVerificationInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DNSVerificationBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNDNSVerificationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
 func (ec *executionContext) fieldContext_Mutation_updateBulkDNSVerification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
@@ -18431,24 +18247,7 @@ func (ec *executionContext) fieldContext_Mutation_updateBulkDNSVerification(ctx 
 }
 
 func (ec *executionContext) _Mutation_updateBulkCSVDNSVerification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkCSVDNSVerification(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkCSVDNSVerification(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DNSVerificationBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNDNSVerificationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_updateBulkCSVDNSVerification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -22743,24 +22542,7 @@ func (ec *executionContext) fieldContext_Mutation_createHush(ctx context.Context
 }
 
 func (ec *executionContext) _Mutation_createBulkHush(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkHush(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkHush(ctx, fc.Args["input"].([]*generated.CreateHushInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.HushBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNHushBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_createBulkHush(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -22787,24 +22569,7 @@ func (ec *executionContext) fieldContext_Mutation_createBulkHush(ctx context.Con
 }
 
 func (ec *executionContext) _Mutation_createBulkCSVHush(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkCSVHush(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkCSVHush(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.HushBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNHushBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_createBulkCSVHush(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -24239,24 +24004,7 @@ func (ec *executionContext) fieldContext_Mutation_createMappableDomain(ctx conte
 }
 
 func (ec *executionContext) _Mutation_createBulkMappableDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkMappableDomain(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkMappableDomain(ctx, fc.Args["input"].([]*generated.CreateMappableDomainInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.MappableDomainBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_createBulkMappableDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -24283,24 +24031,7 @@ func (ec *executionContext) fieldContext_Mutation_createBulkMappableDomain(ctx c
 }
 
 func (ec *executionContext) _Mutation_createBulkCSVMappableDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkCSVMappableDomain(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkCSVMappableDomain(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.MappableDomainBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_createBulkCSVMappableDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -24415,24 +24146,7 @@ func (ec *executionContext) fieldContext_Mutation_deleteMappableDomain(ctx conte
 }
 
 func (ec *executionContext) _Mutation_deleteBulkMappableDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_deleteBulkMappableDomain(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().DeleteBulkMappableDomain(ctx, fc.Args["ids"].([]string))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.MappableDomainBulkDeletePayload) graphql.Marshaler {
-			return ec.marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_deleteBulkMappableDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -24459,24 +24173,7 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkMappableDomain(ctx c
 }
 
 func (ec *executionContext) _Mutation_updateBulkMappableDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkMappableDomain(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkMappableDomain(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateMappableDomainInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_updateBulkMappableDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -24503,24 +24200,7 @@ func (ec *executionContext) fieldContext_Mutation_updateBulkMappableDomain(ctx c
 }
 
 func (ec *executionContext) _Mutation_updateBulkCSVMappableDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkCSVMappableDomain(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkCSVMappableDomain(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_updateBulkCSVMappableDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -27231,24 +26911,7 @@ func (ec *executionContext) fieldContext_Mutation_createOrganizationSetting(ctx 
 }
 
 func (ec *executionContext) _Mutation_createBulkOrganizationSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkOrganizationSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkOrganizationSetting(ctx, fc.Args["input"].([]*generated.CreateOrganizationSettingInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.OrganizationSettingBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNOrganizationSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_createBulkOrganizationSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -27275,24 +26938,7 @@ func (ec *executionContext) fieldContext_Mutation_createBulkOrganizationSetting(
 }
 
 func (ec *executionContext) _Mutation_createBulkCSVOrganizationSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkCSVOrganizationSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkCSVOrganizationSetting(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.OrganizationSettingBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNOrganizationSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_createBulkCSVOrganizationSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -27407,24 +27053,7 @@ func (ec *executionContext) fieldContext_Mutation_deleteOrganizationSetting(ctx 
 }
 
 func (ec *executionContext) _Mutation_deleteBulkOrganizationSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_deleteBulkOrganizationSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().DeleteBulkOrganizationSetting(ctx, fc.Args["ids"].([]string))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
-			return ec.marshalNOrganizationSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_deleteBulkOrganizationSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -27451,24 +27080,7 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkOrganizationSetting(
 }
 
 func (ec *executionContext) _Mutation_updateBulkOrganizationSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkOrganizationSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkOrganizationSetting(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateOrganizationSettingInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNOrganizationSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_updateBulkOrganizationSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -27494,26 +27106,6 @@ func (ec *executionContext) fieldContext_Mutation_updateBulkOrganizationSetting(
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateBulkCSVOrganizationSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkCSVOrganizationSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkCSVOrganizationSetting(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNOrganizationSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
 func (ec *executionContext) fieldContext_Mutation_updateBulkCSVOrganizationSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
@@ -37173,24 +36765,7 @@ func (ec *executionContext) fieldContext_Mutation_updateUserSetting(ctx context.
 }
 
 func (ec *executionContext) _Mutation_deleteBulkUserSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_deleteBulkUserSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().DeleteBulkUserSetting(ctx, fc.Args["ids"].([]string))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.UserSettingBulkDeletePayload) graphql.Marshaler {
-			return ec.marshalNUserSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkDeletePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
+	return nil
 }
 func (ec *executionContext) fieldContext_Mutation_deleteBulkUserSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
@@ -37216,26 +36791,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkUserSetting(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateBulkUserSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkUserSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkUserSetting(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateUserSettingInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.UserSettingBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNUserSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
 func (ec *executionContext) fieldContext_Mutation_updateBulkUserSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
@@ -37260,26 +36815,6 @@ func (ec *executionContext) fieldContext_Mutation_updateBulkUserSetting(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateBulkCSVUserSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkCSVUserSetting(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkCSVUserSetting(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.UserSettingBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNUserSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
 func (ec *executionContext) fieldContext_Mutation_updateBulkCSVUserSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
@@ -39520,20 +39055,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "createBulkAPIToken":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkAPIToken(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createBulkCSVAPIToken":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkCSVAPIToken(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "updateAPIToken":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateAPIToken(ctx, field)
@@ -40402,20 +39923,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "createBulkDNSVerification":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkDNSVerification(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createBulkCSVDNSVerification":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkCSVDNSVerification(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "updateDNSVerification":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateDNSVerification(ctx, field)
@@ -40426,27 +39933,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteDNSVerification":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteDNSVerification(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "deleteBulkDNSVerification":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteBulkDNSVerification(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateBulkDNSVerification":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkDNSVerification(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateBulkCSVDNSVerification":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkCSVDNSVerification(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -41882,13 +41368,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateBulkOrganizationSetting":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateBulkOrganizationSetting(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateBulkCSVOrganizationSetting":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkCSVOrganizationSetting(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -43429,27 +42908,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateUserSetting":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateUserSetting(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "deleteBulkUserSetting":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteBulkUserSetting(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateBulkUserSetting":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkUserSetting(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateBulkCSVUserSetting":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkCSVUserSetting(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

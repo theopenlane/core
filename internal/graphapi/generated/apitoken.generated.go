@@ -24,25 +24,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _APITokenBulkCreatePayload_apiTokens(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkCreatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_APITokenBulkCreatePayload_apiTokens(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.APITokens, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []*generated.APIToken) graphql.Marshaler {
-			return ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
 func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "APITokenBulkCreatePayload",
@@ -327,37 +308,6 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 
 var aPITokenBulkCreatePayloadImplementors = []string{"APITokenBulkCreatePayload"}
 
-func (ec *executionContext) _APITokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.APITokenBulkCreatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, aPITokenBulkCreatePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := graphql.NewDeferredGroup(ctx)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("APITokenBulkCreatePayload")
-		case "apiTokens":
-			out.Values[i] = ec._APITokenBulkCreatePayload_apiTokens(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	if n := len(deferred.Defers); n > 0 {
-		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
-		ec.ProcessDeferredGroup(deferred)
-	}
-
-	return out
-}
-
 var aPITokenBulkDeletePayloadImplementors = []string{"APITokenBulkDeletePayload"}
 
 func (ec *executionContext) _APITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.APITokenBulkDeletePayload) graphql.Marshaler {
@@ -551,14 +501,6 @@ func (ec *executionContext) _APITokenUpdatePayload(ctx context.Context, sel ast.
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
-
-func (ec *executionContext) marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkCreatePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "APITokenBulkCreatePayload!")
-		return graphql.Null
-	}
-	return ec._APITokenBulkCreatePayload(ctx, sel, v)
-}
 
 func (ec *executionContext) marshalNAPITokenBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkDeletePayload) graphql.Marshaler {
 	if v == nil {

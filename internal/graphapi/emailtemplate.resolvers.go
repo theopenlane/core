@@ -103,26 +103,6 @@ func (r *mutationResolver) UpdateBulkEmailTemplate(ctx context.Context, ids []st
 	return r.bulkUpdateEmailTemplate(ctx, ids, input)
 }
 
-// UpdateBulkCSVEmailTemplate is the resolver for the updateBulkCSVEmailTemplate field.
-func (r *mutationResolver) UpdateBulkCSVEmailTemplate(ctx context.Context, input graphql.Upload) (*model.EmailTemplateBulkUpdatePayload, error) {
-	data, err := common.UnmarshalBulkData[csvgenerated.EmailTemplateCSVUpdateInput](input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "emailtemplate"})
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	if err := resolveCSVReferencesForSchema(ctx, "EmailTemplate", data); err != nil {
-		return nil, err
-	}
-
-	return r.bulkUpdateCSVEmailTemplate(ctx, data)
-}
-
 // UpdateEmailTemplate is the resolver for the updateEmailTemplate field.
 func (r *mutationResolver) UpdateEmailTemplate(ctx context.Context, id string, input generated.UpdateEmailTemplateInput) (*model.EmailTemplateUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).EmailTemplate.Get(ctx, id)

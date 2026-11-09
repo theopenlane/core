@@ -24,25 +24,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _HushBulkCreatePayload_hushes(ctx context.Context, field graphql.CollectedField, obj *model.HushBulkCreatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_HushBulkCreatePayload_hushes(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.Hushes, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Hush) graphql.Marshaler {
-			return ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHushᚄ(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
 func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "HushBulkCreatePayload",
@@ -327,37 +308,6 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 
 var hushBulkCreatePayloadImplementors = []string{"HushBulkCreatePayload"}
 
-func (ec *executionContext) _HushBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.HushBulkCreatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, hushBulkCreatePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := graphql.NewDeferredGroup(ctx)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("HushBulkCreatePayload")
-		case "hushes":
-			out.Values[i] = ec._HushBulkCreatePayload_hushes(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	if n := len(deferred.Defers); n > 0 {
-		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
-		ec.ProcessDeferredGroup(deferred)
-	}
-
-	return out
-}
-
 var hushBulkDeletePayloadImplementors = []string{"HushBulkDeletePayload"}
 
 func (ec *executionContext) _HushBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.HushBulkDeletePayload) graphql.Marshaler {
@@ -551,14 +501,6 @@ func (ec *executionContext) _HushUpdatePayload(ctx context.Context, sel ast.Sele
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
-
-func (ec *executionContext) marshalNHushBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.HushBulkCreatePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "HushBulkCreatePayload!")
-		return graphql.Null
-	}
-	return ec._HushBulkCreatePayload(ctx, sel, v)
-}
 
 func (ec *executionContext) marshalNHushBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.HushBulkDeletePayload) graphql.Marshaler {
 	if v == nil {

@@ -52,15 +52,6 @@ extend type Mutation{
         input: UpdateEmailTemplateInput!
     ): EmailTemplateBulkUpdatePayload!
     """
-    Update multiple existing emailTemplates via file upload
-    """
-    updateBulkCSVEmailTemplate(
-        """
-        csv file containing values of the emailTemplate, must include ID column
-        """
-        input: Upload!
-    ): EmailTemplateBulkUpdatePayload!
-    """
     Update an existing emailTemplate
     """
     updateEmailTemplate(
