@@ -3821,6 +3821,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterFaq                     func(childComplexity int, input generated.CreateTrustCenterFAQInput) int
 		CreateTrustCenterNDARequest              func(childComplexity int, input generated.CreateTrustCenterNDARequestInput) int
 		CreateTrustCenterNda                     func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
+		CreateTrustCenterPreviewDomain           func(childComplexity int, trustCenterID string) int
 		CreateTrustCenterPreviewSetting          func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
 		CreateTrustCenterSetting                 func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
 		CreateTrustCenterSubprocessor            func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
@@ -3988,6 +3989,7 @@ type ComplexityRoot struct {
 		ResolveVulnerability                     func(childComplexity int, id string, input model.ResolveVulnerabilityInput) int
 		SeedDemoData                             func(childComplexity int, input model.SeedDemoDataInput) int
 		SendCampaignTestEmail                    func(childComplexity int, input model.SendCampaignTestEmailInput) int
+		SetupTrustCenterDomains                  func(childComplexity int, trustCenterID string) int
 		SubmitTrustCenterNDAResponse             func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
 		SubmitWorkflowProposal                   func(childComplexity int, id string) int
 		TransferOrganizationOwnership            func(childComplexity int, newOwnerEmail string) int
@@ -7206,6 +7208,10 @@ type ComplexityRoot struct {
 		CustomDomain func(childComplexity int) int
 	}
 
+	TrustCenterDomainsSetupPayload struct {
+		Success func(childComplexity int) int
+	}
+
 	TrustCenterEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
@@ -7389,6 +7395,10 @@ type ComplexityRoot struct {
 		Template func(childComplexity int) int
 	}
 
+	TrustCenterPreviewDomainCreatePayload struct {
+		Success func(childComplexity int) int
+	}
+
 	TrustCenterPreviewSettingCreatePayload struct {
 		TrustCenterSetting func(childComplexity int) int
 	}
@@ -7404,6 +7414,7 @@ type ComplexityRoot struct {
 		CompanyName                           func(childComplexity int) int
 		CreatedAt                             func(childComplexity int) int
 		CreatedBy                             func(childComplexity int) int
+		DisableDefaultDomain                  func(childComplexity int) int
 		Editors                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EnableAutoApproval                    func(childComplexity int) int
 		Environment                           func(childComplexity int) int
@@ -27881,6 +27892,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateTrustCenterNda(childComplexity, args["input"].(model.CreateTrustCenterNDAInput), args["templateFiles"].([]*graphql.Upload), args["templateFilesMetadata"].([]*model.FileMetadataInput)), true
+	case "Mutation.createTrustCenterPreviewDomain":
+		if e.ComplexityRoot.Mutation.CreateTrustCenterPreviewDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterPreviewDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateTrustCenterPreviewDomain(childComplexity, args["trustCenterID"].(string)), true
 	case "Mutation.createTrustCenterPreviewSetting":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterPreviewSetting == nil {
 			break
@@ -29713,6 +29735,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.SendCampaignTestEmail(childComplexity, args["input"].(model.SendCampaignTestEmailInput)), true
+	case "Mutation.setupTrustCenterDomains":
+		if e.ComplexityRoot.Mutation.SetupTrustCenterDomains == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_setupTrustCenterDomains_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SetupTrustCenterDomains(childComplexity, args["trustCenterID"].(string)), true
 	case "Mutation.submitTrustCenterNDAResponse":
 		if e.ComplexityRoot.Mutation.SubmitTrustCenterNDAResponse == nil {
 			break
@@ -48018,6 +48051,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterDomainCreatePayload.CustomDomain(childComplexity), true
 
+	case "TrustCenterDomainsSetupPayload.success":
+		if e.ComplexityRoot.TrustCenterDomainsSetupPayload.Success == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterDomainsSetupPayload.Success(childComplexity), true
+
 	case "TrustCenterEdge.cursor":
 		if e.ComplexityRoot.TrustCenterEdge.Cursor == nil {
 			break
@@ -48692,6 +48732,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterNDAUpdatePayload.Template(childComplexity), true
 
+	case "TrustCenterPreviewDomainCreatePayload.success":
+		if e.ComplexityRoot.TrustCenterPreviewDomainCreatePayload.Success == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterPreviewDomainCreatePayload.Success(childComplexity), true
+
 	case "TrustCenterPreviewSettingCreatePayload.trustCenterSetting":
 		if e.ComplexityRoot.TrustCenterPreviewSettingCreatePayload.TrustCenterSetting == nil {
 			break
@@ -48764,6 +48811,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSetting.CreatedBy(childComplexity), true
+	case "TrustCenterSetting.disableDefaultDomain":
+		if e.ComplexityRoot.TrustCenterSetting.DisableDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.DisableDefaultDomain(childComplexity), true
 	case "TrustCenterSetting.editors":
 		if e.ComplexityRoot.TrustCenterSetting.Editors == nil {
 			break
@@ -76485,6 +76538,10 @@ input CreateTrustCenterSettingInput {
   rules for approving trust center NDA requests
   """
   autoApprovalRules: TrustCenterNDARequestSetting
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -132366,6 +132423,10 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
   rules for approving trust center NDA requests
   """
   autoApprovalRules: TrustCenterNDARequestSetting
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -132940,6 +133001,13 @@ input TrustCenterSettingWhereInput {
   enableAutoApprovalNEQ: Boolean
   enableAutoApprovalIsNil: Boolean
   enableAutoApprovalNotNil: Boolean
+  """
+  disable_default_domain field predicates
+  """
+  disableDefaultDomain: Boolean
+  disableDefaultDomainNEQ: Boolean
+  disableDefaultDomainIsNil: Boolean
+  disableDefaultDomainNotNil: Boolean
   """
   blocked_groups edge predicates
   """
@@ -141848,6 +141916,11 @@ input UpdateTrustCenterSettingInput {
   """
   autoApprovalRules: TrustCenterNDARequestSetting
   clearAutoApprovalRules: Boolean
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
+  clearDisableDefaultDomain: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -160512,6 +160585,38 @@ type TrustCenterDocBulkUpdatePayload {
         """
         input: CreateTrustCenterDomainInput!
     ): TrustCenterDomainCreatePayload!
+    """
+    enqueues the creation of a preview domain for the trustcenter
+    """
+    createTrustCenterPreviewDomain(
+        """
+        trust center ID
+        """
+        trustCenterID: ID!
+    ): TrustCenterPreviewDomainCreatePayload!
+    """
+    enqueues the creation of a preview domain and enables the default domain for the trustcenter
+    """
+    setupTrustCenterDomains(
+        """
+        trust center ID
+        """
+        trustCenterID: ID!
+    ): TrustCenterDomainsSetupPayload!
+}
+
+"""
+Return response for setupTrustCenterDomains mutation
+"""
+type TrustCenterDomainsSetupPayload {
+    success: Boolean!
+}
+
+"""
+Return response for createTrustCenterPreviewDomain mutation
+"""
+type TrustCenterPreviewDomainCreatePayload {
+    success: Boolean!
 }
 
 """
@@ -175590,6 +175695,14 @@ func (ec *executionContext) childFields_TrustCenterDomainCreatePayload(ctx conte
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterDomainCreatePayload", field.Name)
 }
 
+func (ec *executionContext) childFields_TrustCenterDomainsSetupPayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "success":
+		return ec.fieldContext_TrustCenterDomainsSetupPayload_success(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterDomainsSetupPayload", field.Name)
+}
+
 func (ec *executionContext) childFields_TrustCenterEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "node":
@@ -175956,6 +176069,14 @@ func (ec *executionContext) childFields_TrustCenterNDAUpdatePayload(ctx context.
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDAUpdatePayload", field.Name)
 }
 
+func (ec *executionContext) childFields_TrustCenterPreviewDomainCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "success":
+		return ec.fieldContext_TrustCenterPreviewDomainCreatePayload_success(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterPreviewDomainCreatePayload", field.Name)
+}
+
 func (ec *executionContext) childFields_TrustCenterPreviewSettingCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "trustCenterSetting":
@@ -176040,6 +176161,8 @@ func (ec *executionContext) childFields_TrustCenterSetting(ctx context.Context, 
 		return ec.fieldContext_TrustCenterSetting_enableAutoApproval(ctx, field)
 	case "autoApprovalRules":
 		return ec.fieldContext_TrustCenterSetting_autoApprovalRules(ctx, field)
+	case "disableDefaultDomain":
+		return ec.fieldContext_TrustCenterSetting_disableDefaultDomain(ctx, field)
 	case "blockedGroups":
 		return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 	case "editors":

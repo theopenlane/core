@@ -253,6 +253,11 @@ func EnableAutoApproval(v bool) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldEnableAutoApproval, v))
 }
 
+// DisableDefaultDomain applies equality check predicate on the "disable_default_domain" field. It's identical to DisableDefaultDomainEQ.
+func DisableDefaultDomain(v bool) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldDisableDefaultDomain, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -2671,6 +2676,26 @@ func AutoApprovalRulesIsNil() predicate.TrustCenterSettingHistory {
 // AutoApprovalRulesNotNil applies the NotNil predicate on the "auto_approval_rules" field.
 func AutoApprovalRulesNotNil() predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldAutoApprovalRules))
+}
+
+// DisableDefaultDomainEQ applies the EQ predicate on the "disable_default_domain" field.
+func DisableDefaultDomainEQ(v bool) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldDisableDefaultDomain, v))
+}
+
+// DisableDefaultDomainNEQ applies the NEQ predicate on the "disable_default_domain" field.
+func DisableDefaultDomainNEQ(v bool) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldDisableDefaultDomain, v))
+}
+
+// DisableDefaultDomainIsNil applies the IsNil predicate on the "disable_default_domain" field.
+func DisableDefaultDomainIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldDisableDefaultDomain))
+}
+
+// DisableDefaultDomainNotNil applies the NotNil predicate on the "disable_default_domain" field.
+func DisableDefaultDomainNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldDisableDefaultDomain))
 }
 
 // And groups predicates with the AND operator between them.

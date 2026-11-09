@@ -241,6 +241,11 @@ func EnableAutoApproval(v bool) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldEnableAutoApproval, v))
 }
 
+// DisableDefaultDomain applies equality check predicate on the "disable_default_domain" field. It's identical to DisableDefaultDomainEQ.
+func DisableDefaultDomain(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldDisableDefaultDomain, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldCreatedAt, v))
@@ -2524,6 +2529,26 @@ func AutoApprovalRulesIsNil() predicate.TrustCenterSetting {
 // AutoApprovalRulesNotNil applies the NotNil predicate on the "auto_approval_rules" field.
 func AutoApprovalRulesNotNil() predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldAutoApprovalRules))
+}
+
+// DisableDefaultDomainEQ applies the EQ predicate on the "disable_default_domain" field.
+func DisableDefaultDomainEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldDisableDefaultDomain, v))
+}
+
+// DisableDefaultDomainNEQ applies the NEQ predicate on the "disable_default_domain" field.
+func DisableDefaultDomainNEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldDisableDefaultDomain, v))
+}
+
+// DisableDefaultDomainIsNil applies the IsNil predicate on the "disable_default_domain" field.
+func DisableDefaultDomainIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldDisableDefaultDomain))
+}
+
+// DisableDefaultDomainNotNil applies the NotNil predicate on the "disable_default_domain" field.
+func DisableDefaultDomainNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldDisableDefaultDomain))
 }
 
 // HasBlockedGroups applies the HasEdge predicate on the "blocked_groups" edge.

@@ -7,13 +7,18 @@ package graphapi
 
 import (
 	"context"
+	"errors"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -108,5 +113,80 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 
 	return &model.TrustCenterDomainCreatePayload{
 		CustomDomain: customDomain,
+	}, nil
+}
+
+// CreateTrustCenterPreviewDomain is the resolver for the createTrustCenterPreviewDomain field.
+func (r *mutationResolver) CreateTrustCenterPreviewDomain(ctx context.Context, trustCenterID string) (*model.TrustCenterPreviewDomainCreatePayload, error) {
+	trustCenter, err := withTransactionalMutation(ctx).TrustCenter.Get(ctx, trustCenterID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenter"})
+	}
+
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	if err := rule.CheckTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID); !errors.Is(err, privacy.Allow) {
+		return nil, err
+	}
+
+	if trustCenter.PreviewDomainID != "" {
+		return nil, parseRequestError(ctx, common.ErrTrustCenterDomainAlreadyExists, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
+	}
+
+	if err := enqueueTrustCenterPreviewDomain(ctx, trustCenter.ID, r); err != nil {
+		return nil, err
+	}
+
+	return &model.TrustCenterPreviewDomainCreatePayload{
+		Success: true,
+	}, nil
+}
+
+// SetupTrustCenterDomains is the resolver for the setupTrustCenterDomains field.
+func (r *mutationResolver) SetupTrustCenterDomains(ctx context.Context, trustCenterID string) (*model.TrustCenterDomainsSetupPayload, error) {
+	trustCenter, err := withTransactionalMutation(ctx).TrustCenter.Get(ctx, trustCenterID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenter"})
+	}
+
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	if trustCenter.PreviewDomainID != "" {
+		return nil, parseRequestError(ctx, common.ErrTrustCenterDomainAlreadyExists, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
+	}
+
+	setting, err := withTransactionalMutation(ctx).TrustCenterSetting.
+		Query().
+		Where(
+			trustcentersetting.TrustCenterID(trustCenterID),
+			trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentPreview),
+		).
+		Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcentersetting"})
+	}
+
+	_, err = setting.Update().SetDisableDefaultDomain(false).
+		Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
+	}
+
+	if err := enqueueTrustCenterPreviewDomain(ctx, trustCenterID, r); err != nil {
+		return nil, err
+	}
+
+	return &model.TrustCenterDomainsSetupPayload{
+		Success: true,
 	}, nil
 }

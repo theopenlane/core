@@ -8,6 +8,38 @@ extend type Mutation{
         """
         input: CreateTrustCenterDomainInput!
     ): TrustCenterDomainCreatePayload!
+    """
+    enqueues the creation of a preview domain for the trustcenter
+    """
+    createTrustCenterPreviewDomain(
+        """
+        trust center ID
+        """
+        trustCenterID: ID!
+    ): TrustCenterPreviewDomainCreatePayload!
+    """
+    enqueues the creation of a preview domain and enables the default domain for the trustcenter
+    """
+    setupTrustCenterDomains(
+        """
+        trust center ID
+        """
+        trustCenterID: ID!
+    ): TrustCenterDomainsSetupPayload!
+}
+
+"""
+Return response for setupTrustCenterDomains mutation
+"""
+type TrustCenterDomainsSetupPayload {
+    success: Boolean!
+}
+
+"""
+Return response for createTrustCenterPreviewDomain mutation
+"""
+type TrustCenterPreviewDomainCreatePayload {
+    success: Boolean!
 }
 
 """

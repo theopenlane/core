@@ -2629,6 +2629,10 @@ func init() {
 	trustcentersettinghistoryDescAutoApprovalRules := trustcentersettinghistoryFields[41].Descriptor()
 	// trustcentersettinghistory.DefaultAutoApprovalRules holds the default value on creation for the auto_approval_rules field.
 	trustcentersettinghistory.DefaultAutoApprovalRules = trustcentersettinghistoryDescAutoApprovalRules.Default.(models.TrustCenterNDARequestSetting)
+	// trustcentersettinghistoryDescDisableDefaultDomain is the schema descriptor for disable_default_domain field.
+	trustcentersettinghistoryDescDisableDefaultDomain := trustcentersettinghistoryFields[42].Descriptor()
+	// trustcentersettinghistory.DefaultDisableDefaultDomain holds the default value on creation for the disable_default_domain field.
+	trustcentersettinghistory.DefaultDisableDefaultDomain = trustcentersettinghistoryDescDisableDefaultDomain.Default.(bool)
 	// trustcentersettinghistoryDescID is the schema descriptor for id field.
 	trustcentersettinghistoryDescID := trustcentersettinghistoryFields[10].Descriptor()
 	// trustcentersettinghistory.DefaultID holds the default value on creation for the id field.

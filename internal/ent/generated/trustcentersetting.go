@@ -98,6 +98,8 @@ type TrustCenterSetting struct {
 	EnableAutoApproval bool `json:"enable_auto_approval,omitempty"`
 	// rules for approving trust center NDA requests
 	AutoApprovalRules models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`
+	// if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+	DisableDefaultDomain bool `json:"disable_default_domain,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -197,7 +199,7 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersetting.FieldAutoApprovalRules:
 			values[i] = new([]byte)
-		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired, trustcentersetting.FieldAllowSubscribers, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, trustcentersetting.FieldNoindexDefaultDomain, trustcentersetting.FieldEnableAutoApproval:
+		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired, trustcentersetting.FieldAllowSubscribers, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, trustcentersetting.FieldNoindexDefaultDomain, trustcentersetting.FieldEnableAutoApproval, trustcentersetting.FieldDisableDefaultDomain:
 			values[i] = new(sql.NullBool)
 		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldUpdatedByImpersonator, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldCompanyDescription, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldHeroImageLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact, trustcentersetting.FieldNdaApproverGroupID, trustcentersetting.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
@@ -465,6 +467,12 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 					return fmt.Errorf("unmarshal field auto_approval_rules: %w", err)
 				}
 			}
+		case trustcentersetting.FieldDisableDefaultDomain:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field disable_default_domain", values[i])
+			} else if value.Valid {
+				_m.DisableDefaultDomain = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -666,6 +674,9 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("auto_approval_rules=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AutoApprovalRules))
+	builder.WriteString(", ")
+	builder.WriteString("disable_default_domain=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DisableDefaultDomain))
 	builder.WriteByte(')')
 	return builder.String()
 }

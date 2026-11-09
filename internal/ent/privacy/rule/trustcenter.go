@@ -11,11 +11,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	"github.com/theopenlane/logx"
 )
 
 // AllowIfTrustCenterEditor checks if the user has edit access to the trust center associated with the mutation
@@ -32,7 +33,7 @@ func AllowIfTrustCenterEditor() privacy.MutationRule {
 
 		// the caller must be able to edit every trust center the object belongs to or is moved to
 		for _, trustCenterID := range trustCenterIDs {
-			if err := checkTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID); !errors.Is(err, privacy.Allow) {
+			if err := CheckTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID); !errors.Is(err, privacy.Allow) {
 				return err
 			}
 		}
@@ -112,8 +113,8 @@ func getStoredTrustCenterID(ctx context.Context, tcMutation utils.TrustCenterMut
 	return stored.TrustCenterID
 }
 
-// checkTrustCenterAccess checks if the authenticated user has the specified relation access to the trust center.
-func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID string) error {
+// CheckTrustCenterAccess checks if the authenticated user has the specified relation access to the trust center.
+func CheckTrustCenterAccess(ctx context.Context, relation string, trustCenterID string) error {
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller.IsAnonymous() {
 		return auth.ErrNoAuthUser

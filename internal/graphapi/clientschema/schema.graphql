@@ -19453,6 +19453,10 @@ input CreateTrustCenterSettingInput {
 	rules for approving trust center NDA requests
 	"""
 	autoApprovalRules: TrustCenterNDARequestSetting
+	"""
+	if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+	"""
+	disableDefaultDomain: Boolean
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	logoFileID: ID
@@ -50995,6 +50999,24 @@ type Mutation {
 		"""
 		input: CreateTrustCenterDomainInput!
 	): TrustCenterDomainCreatePayload!
+	"""
+	enqueues the creation of a preview domain for the trustcenter
+	"""
+	createTrustCenterPreviewDomain(
+		"""
+		trust center ID
+		"""
+		trustCenterID: ID!
+	): TrustCenterPreviewDomainCreatePayload!
+	"""
+	enqueues the creation of a preview domain and enables the default domain for the trustcenter
+	"""
+	setupTrustCenterDomains(
+		"""
+		trust center ID
+		"""
+		trustCenterID: ID!
+	): TrustCenterDomainsSetupPayload!
 	"""
 	Create a new trustCenterEntity
 	"""
@@ -87118,6 +87140,12 @@ type TrustCenterDomainCreatePayload {
 	customDomain: CustomDomain!
 }
 """
+Return response for setupTrustCenterDomains mutation
+"""
+type TrustCenterDomainsSetupPayload {
+	success: Boolean!
+}
+"""
 An edge in a connection.
 """
 type TrustCenterEdge {
@@ -88484,6 +88512,12 @@ enum TrustCenterOrderField {
 	updated_at
 }
 """
+Return response for createTrustCenterPreviewDomain mutation
+"""
+type TrustCenterPreviewDomainCreatePayload {
+	success: Boolean!
+}
+"""
 Return response for createTrustCenterPreviewSetting mutation
 """
 type TrustCenterPreviewSettingCreatePayload {
@@ -88626,6 +88660,10 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
 	rules for approving trust center NDA requests
 	"""
 	autoApprovalRules: TrustCenterNDARequestSetting
+	"""
+	if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+	"""
+	disableDefaultDomain: Boolean
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -89236,6 +89274,13 @@ input TrustCenterSettingWhereInput {
 	enableAutoApprovalNEQ: Boolean
 	enableAutoApprovalIsNil: Boolean
 	enableAutoApprovalNotNil: Boolean
+	"""
+	disable_default_domain field predicates
+	"""
+	disableDefaultDomain: Boolean
+	disableDefaultDomainNEQ: Boolean
+	disableDefaultDomainIsNil: Boolean
+	disableDefaultDomainNotNil: Boolean
 	"""
 	blocked_groups edge predicates
 	"""
@@ -98342,6 +98387,11 @@ input UpdateTrustCenterSettingInput {
 	"""
 	autoApprovalRules: TrustCenterNDARequestSetting
 	clearAutoApprovalRules: Boolean
+	"""
+	if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+	"""
+	disableDefaultDomain: Boolean
+	clearDisableDefaultDomain: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean

@@ -3637,6 +3637,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersetting.FieldNoindexDefaultDomain},
 			trustcentersetting.FieldEnableAutoApproval:                    {Type: field.TypeBool, Column: trustcentersetting.FieldEnableAutoApproval},
 			trustcentersetting.FieldAutoApprovalRules:                     {Type: field.TypeJSON, Column: trustcentersetting.FieldAutoApprovalRules},
+			trustcentersetting.FieldDisableDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersetting.FieldDisableDefaultDomain},
 		},
 	}
 	graph.Nodes[88] = &sqlgraph.Node{
@@ -51849,6 +51850,11 @@ func (f *TrustCenterSettingFilter) WhereEnableAutoApproval(p entql.BoolP) {
 // WhereAutoApprovalRules applies the entql json.RawMessage predicate on the auto_approval_rules field.
 func (f *TrustCenterSettingFilter) WhereAutoApprovalRules(p entql.BytesP) {
 	f.Where(p.Field(trustcentersetting.FieldAutoApprovalRules))
+}
+
+// WhereDisableDefaultDomain applies the entql bool predicate on the disable_default_domain field.
+func (f *TrustCenterSettingFilter) WhereDisableDefaultDomain(p entql.BoolP) {
+	f.Where(p.Field(trustcentersetting.FieldDisableDefaultDomain))
 }
 
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
