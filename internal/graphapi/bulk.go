@@ -394,47 +394,6 @@ func (r *mutationResolver) bulkUpdateAPIToken(ctx context.Context, ids []string,
 	}, nil
 }
 
-// bulkUpdateCSVAPIToken updates multiple APIToken entities from CSV data with per-row values
-func (r *mutationResolver) bulkUpdateCSVAPIToken(ctx context.Context, inputs []*csvgenerated.APITokenCSVUpdateInput) (*model.APITokenBulkUpdatePayload, error) {
-	if len(inputs) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	c := withTransactionalMutation(ctx)
-	results := make([]*generated.APIToken, 0, len(inputs))
-	updatedIDs := make([]string, 0, len(inputs))
-
-	// update each apitoken individually with its own input values
-	for _, input := range inputs {
-		if input == nil || input.ID == "" {
-			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for apitoken")
-			continue
-		}
-
-		// get the existing entity first
-		existing, err := c.APIToken.Get(ctx, input.ID)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("apitoken_id", input.ID).Msg("failed to get apitoken in CSV bulk update operation")
-			continue
-		}
-
-		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendScopes(input.Input.AppendScopes).Save(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("apitoken_id", input.ID).Msg("failed to update apitoken in CSV bulk operation")
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "apitoken"})
-		}
-
-		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, input.ID)
-	}
-
-	return &model.APITokenBulkUpdatePayload{
-		APITokens:  results,
-		UpdatedIDs: updatedIDs,
-	}, nil
-}
-
 // bulkDeleteAssessment deletes multiple Assessment entities by their IDs
 func (r *mutationResolver) bulkDeleteAssessment(ctx context.Context, ids []string) (*model.AssessmentBulkDeletePayload, error) {
 	if len(ids) == 0 {
@@ -4855,47 +4814,6 @@ func (r *mutationResolver) bulkUpdateHush(ctx context.Context, ids []string, inp
 		UpdatedIDs:    updatedIDs,
 		NotUpdatedIDs: notUpdatedIDs,
 		Error:         err,
-	}, nil
-}
-
-// bulkUpdateCSVHush updates multiple Hush entities from CSV data with per-row values
-func (r *mutationResolver) bulkUpdateCSVHush(ctx context.Context, inputs []*csvgenerated.HushCSVUpdateInput) (*model.HushBulkUpdatePayload, error) {
-	if len(inputs) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	c := withTransactionalMutation(ctx)
-	results := make([]*generated.Hush, 0, len(inputs))
-	updatedIDs := make([]string, 0, len(inputs))
-
-	// update each hush individually with its own input values
-	for _, input := range inputs {
-		if input == nil || input.ID == "" {
-			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for hush")
-			continue
-		}
-
-		// get the existing entity first
-		existing, err := c.Hush.Get(ctx, input.ID)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("hush_id", input.ID).Msg("failed to get hush in CSV bulk update operation")
-			continue
-		}
-
-		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("hush_id", input.ID).Msg("failed to update hush in CSV bulk operation")
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "hush"})
-		}
-
-		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, input.ID)
-	}
-
-	return &model.HushBulkUpdatePayload{
-		Hushes:     results,
-		UpdatedIDs: updatedIDs,
 	}, nil
 }
 

@@ -24,19 +24,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "HushBulkCreatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_Hush(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _HushBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.HushBulkDeletePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -305,8 +292,6 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var hushBulkCreatePayloadImplementors = []string{"HushBulkCreatePayload"}
 
 var hushBulkDeletePayloadImplementors = []string{"HushBulkDeletePayload"}
 

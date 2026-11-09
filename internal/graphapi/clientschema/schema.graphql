@@ -91,15 +91,6 @@ type APIToken implements Node @modules(names: ["any_module"]) {
 	owner: Organization
 }
 """
-Return response for createBulkAPIToken mutation
-"""
-type APITokenBulkCreatePayload {
-	"""
-	Created apiTokens
-	"""
-	apiTokens: [APIToken!]
-}
-"""
 Return response for deleteBulkAPIToken mutation
 """
 type APITokenBulkDeletePayload {
@@ -21459,53 +21450,6 @@ type DNSVerification implements Node @modules(names: ["trust_center_module","ass
 	): CustomDomainConnection!
 }
 """
-Return response for createBulkDNSVerification mutation
-"""
-type DNSVerificationBulkCreatePayload {
-	"""
-	Created dnsVerifications
-	"""
-	dnsVerifications: [DNSVerification!]
-}
-"""
-Return response for deleteBulkDNSVerification mutation
-"""
-type DNSVerificationBulkDeletePayload {
-	"""
-	Deleted dnsVerification IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkDNSVerification mutation
-"""
-type DNSVerificationBulkUpdatePayload {
-	"""
-	Updated dnsVerifications
-	"""
-	dnsVerifications: [DNSVerification!]
-	"""
-	IDs of the updated dnsVerifications
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
-}
-"""
 A connection to a list of items.
 """
 type DNSVerificationConnection {
@@ -38187,15 +38131,6 @@ type Hush implements Node {
 	): EventConnection!
 }
 """
-Return response for createBulkHush mutation
-"""
-type HushBulkCreatePayload {
-	"""
-	Created hushs
-	"""
-	hushes: [Hush!]
-}
-"""
 Return response for deleteBulkHush mutation
 """
 type HushBulkDeletePayload {
@@ -44750,53 +44685,6 @@ type MappableDomain implements Node @modules(names: ["trust_center_module"]) {
 	): CustomDomainConnection!
 }
 """
-Return response for createBulkMappableDomain mutation
-"""
-type MappableDomainBulkCreatePayload {
-	"""
-	Created mappableDomains
-	"""
-	mappableDomains: [MappableDomain!]
-}
-"""
-Return response for deleteBulkMappableDomain mutation
-"""
-type MappableDomainBulkDeletePayload {
-	"""
-	Deleted mappableDomain IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkMappableDomain mutation
-"""
-type MappableDomainBulkUpdatePayload {
-	"""
-	Updated mappableDomains
-	"""
-	mappableDomains: [MappableDomain!]
-	"""
-	IDs of the updated mappableDomains
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
-}
-"""
 A connection to a list of items.
 """
 type MappableDomainConnection {
@@ -45856,24 +45744,6 @@ type Mutation {
 		input: CreateAPITokenInput!
 	): APITokenCreatePayload!
 	"""
-	Create multiple new apiTokens
-	"""
-	createBulkAPIToken(
-		"""
-		values of the apiToken
-		"""
-		input: [CreateAPITokenInput!]
-	): APITokenBulkCreatePayload!
-	"""
-	Create multiple new apiTokens via file upload
-	"""
-	createBulkCSVAPIToken(
-		"""
-		csv file containing values of the apiToken
-		"""
-		input: Upload!
-	): APITokenBulkCreatePayload!
-	"""
 	Update an existing apiToken
 	"""
 	updateAPIToken(
@@ -45918,15 +45788,6 @@ type Mutation {
 		values to update the apiTokens with
 		"""
 		input: UpdateAPITokenInput!
-	): APITokenBulkUpdatePayload!
-	"""
-	Update multiple existing apiTokens via file upload
-	"""
-	updateBulkCSVAPIToken(
-		"""
-		csv file containing values of the apiToken, must include ID column
-		"""
-		input: Upload!
 	): APITokenBulkUpdatePayload!
 	"""
 	Create a questionnaire template from an existing assessment
@@ -47138,24 +46999,6 @@ type Mutation {
 		input: CreateDNSVerificationInput!
 	): DNSVerificationCreatePayload!
 	"""
-	Create multiple new dnsVerifications
-	"""
-	createBulkDNSVerification(
-		"""
-		values of the dnsVerification
-		"""
-		input: [CreateDNSVerificationInput!]
-	): DNSVerificationBulkCreatePayload!
-	"""
-	Create multiple new dnsVerifications via file upload
-	"""
-	createBulkCSVDNSVerification(
-		"""
-		csv file containing values of the dnsVerification
-		"""
-		input: Upload!
-	): DNSVerificationBulkCreatePayload!
-	"""
 	Update an existing dnsVerification
 	"""
 	updateDNSVerification(
@@ -47178,38 +47021,6 @@ type Mutation {
 		"""
 		id: ID!
 	): DNSVerificationDeletePayload!
-	"""
-	Delete multiple dnsVerifications
-	"""
-	deleteBulkDNSVerification(
-		"""
-		IDs of the dnsVerifications to delete
-		"""
-		ids: [ID!]!
-	): DNSVerificationBulkDeletePayload!
-	"""
-	Update multiple existing dnsVerifications
-	"""
-	updateBulkDNSVerification(
-		"""
-		IDs of the dnsVerifications to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the dnsVerifications with
-		"""
-		input: UpdateDNSVerificationInput!
-	): DNSVerificationBulkUpdatePayload!
-	"""
-	Update multiple existing dnsVerifications via file upload
-	"""
-	updateBulkCSVDNSVerification(
-		"""
-		csv file containing values of the dnsVerification, must include ID column
-		"""
-		input: Upload!
-	): DNSVerificationBulkUpdatePayload!
 	"""
 	Create a new documentData
 	"""
@@ -47347,15 +47158,6 @@ type Mutation {
 		values to update the emailTemplates with
 		"""
 		input: UpdateEmailTemplateInput!
-	): EmailTemplateBulkUpdatePayload!
-	"""
-	Update multiple existing emailTemplates via file upload
-	"""
-	updateBulkCSVEmailTemplate(
-		"""
-		csv file containing values of the emailTemplate, must include ID column
-		"""
-		input: Upload!
 	): EmailTemplateBulkUpdatePayload!
 	"""
 	Update an existing emailTemplate
@@ -48252,24 +48054,6 @@ type Mutation {
 		input: CreateHushInput!
 	): HushCreatePayload!
 	"""
-	Create multiple new hushs
-	"""
-	createBulkHush(
-		"""
-		values of the hush
-		"""
-		input: [CreateHushInput!]
-	): HushBulkCreatePayload!
-	"""
-	Create multiple new hushs via file upload
-	"""
-	createBulkCSVHush(
-		"""
-		csv file containing values of the hush
-		"""
-		input: Upload!
-	): HushBulkCreatePayload!
-	"""
 	Update multiple existing hushs
 	"""
 	updateBulkHush(
@@ -48315,15 +48099,6 @@ type Mutation {
 		"""
 		ids: [ID!]!
 	): HushBulkDeletePayload!
-	"""
-	Update multiple existing hushs via file upload
-	"""
-	updateBulkCSVHush(
-		"""
-		csv file containing values of the hush, must include ID column
-		"""
-		input: Upload!
-	): HushBulkUpdatePayload!
 	"""
 	Create a new identityHolder
 	"""
@@ -48615,24 +48390,6 @@ type Mutation {
 		input: CreateMappableDomainInput!
 	): MappableDomainCreatePayload!
 	"""
-	Create multiple new mappableDomains
-	"""
-	createBulkMappableDomain(
-		"""
-		values of the mappableDomain
-		"""
-		input: [CreateMappableDomainInput!]
-	): MappableDomainBulkCreatePayload!
-	"""
-	Create multiple new mappableDomains via file upload
-	"""
-	createBulkCSVMappableDomain(
-		"""
-		csv file containing values of the mappableDomain
-		"""
-		input: Upload!
-	): MappableDomainBulkCreatePayload!
-	"""
 	Update an existing mappableDomain
 	"""
 	updateMappableDomain(
@@ -48655,38 +48412,6 @@ type Mutation {
 		"""
 		id: ID!
 	): MappableDomainDeletePayload!
-	"""
-	Delete multiple mappableDomains
-	"""
-	deleteBulkMappableDomain(
-		"""
-		IDs of the mappableDomains to delete
-		"""
-		ids: [ID!]!
-	): MappableDomainBulkDeletePayload!
-	"""
-	Update multiple existing mappableDomains
-	"""
-	updateBulkMappableDomain(
-		"""
-		IDs of the mappableDomains to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the mappableDomains with
-		"""
-		input: UpdateMappableDomainInput!
-	): MappableDomainBulkUpdatePayload!
-	"""
-	Update multiple existing mappableDomains via file upload
-	"""
-	updateBulkCSVMappableDomain(
-		"""
-		csv file containing values of the mappableDomain, must include ID column
-		"""
-		input: Upload!
-	): MappableDomainBulkUpdatePayload!
 	"""
 	Create a new mappedControl
 	"""
@@ -49417,24 +49142,6 @@ type Mutation {
 		input: CreateOrganizationSettingInput!
 	): OrganizationSettingCreatePayload!
 	"""
-	Create multiple new organizationSettings
-	"""
-	createBulkOrganizationSetting(
-		"""
-		values of the organizationSetting
-		"""
-		input: [CreateOrganizationSettingInput!]
-	): OrganizationSettingBulkCreatePayload!
-	"""
-	Create multiple new organizationSettings via file upload
-	"""
-	createBulkCSVOrganizationSetting(
-		"""
-		csv file containing values of the organizationSetting
-		"""
-		input: Upload!
-	): OrganizationSettingBulkCreatePayload!
-	"""
 	Update an existing organizationSetting
 	"""
 	updateOrganizationSetting(
@@ -49457,38 +49164,6 @@ type Mutation {
 		"""
 		id: ID!
 	): OrganizationSettingDeletePayload!
-	"""
-	Delete multiple organizationSettings
-	"""
-	deleteBulkOrganizationSetting(
-		"""
-		IDs of the organizationSettings to delete
-		"""
-		ids: [ID!]!
-	): OrganizationSettingBulkDeletePayload!
-	"""
-	Update multiple existing organizationSettings
-	"""
-	updateBulkOrganizationSetting(
-		"""
-		IDs of the organizationSettings to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the organizationSettings with
-		"""
-		input: UpdateOrganizationSettingInput!
-	): OrganizationSettingBulkUpdatePayload!
-	"""
-	Update multiple existing organizationSettings via file upload
-	"""
-	updateBulkCSVOrganizationSetting(
-		"""
-		csv file containing values of the organizationSetting, must include ID column
-		"""
-		input: Upload!
-	): OrganizationSettingBulkUpdatePayload!
 	"""
 	Create a new organization with members
 	"""
@@ -51792,24 +51467,6 @@ type Mutation {
 		input: CreateUserSettingInput!
 	): UserSettingCreatePayload!
 	"""
-	Create multiple new userSettings
-	"""
-	createBulkUserSetting(
-		"""
-		values of the userSetting
-		"""
-		input: [CreateUserSettingInput!]
-	): UserSettingBulkCreatePayload!
-	"""
-	Create multiple new userSettings via file upload
-	"""
-	createBulkCSVUserSetting(
-		"""
-		csv file containing values of the userSetting
-		"""
-		input: Upload!
-	): UserSettingBulkCreatePayload!
-	"""
 	Update an existing userSetting
 	"""
 	updateUserSetting(
@@ -51823,38 +51480,6 @@ type Mutation {
 		"""
 		input: UpdateUserSettingInput!
 	): UserSettingUpdatePayload!
-	"""
-	Delete multiple userSettings
-	"""
-	deleteBulkUserSetting(
-		"""
-		IDs of the userSettings to delete
-		"""
-		ids: [ID!]!
-	): UserSettingBulkDeletePayload!
-	"""
-	Update multiple existing userSettings
-	"""
-	updateBulkUserSetting(
-		"""
-		IDs of the userSettings to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the userSettings with
-		"""
-		input: UpdateUserSettingInput!
-	): UserSettingBulkUpdatePayload!
-	"""
-	Update multiple existing userSettings via file upload
-	"""
-	updateBulkCSVUserSetting(
-		"""
-		csv file containing values of the userSetting, must include ID column
-		"""
-		input: Upload!
-	): UserSettingBulkUpdatePayload!
 	"""
 	Create a new vendorRiskScore
 	"""
@@ -58986,53 +58611,6 @@ type OrganizationSetting implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
-}
-"""
-Return response for createBulkOrganizationSetting mutation
-"""
-type OrganizationSettingBulkCreatePayload {
-	"""
-	Created organizationSettings
-	"""
-	organizationSettings: [OrganizationSetting!]
-}
-"""
-Return response for deleteBulkOrganizationSetting mutation
-"""
-type OrganizationSettingBulkDeletePayload {
-	"""
-	Deleted organizationSetting IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkOrganizationSetting mutation
-"""
-type OrganizationSettingBulkUpdatePayload {
-	"""
-	Updated organizationSettings
-	"""
-	organizationSettings: [OrganizationSetting!]
-	"""
-	IDs of the updated organizationSettings
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
 }
 """
 A connection to a list of items.
@@ -100569,53 +100147,6 @@ type UserSetting implements Node {
 	organization to load on user login
 	"""
 	defaultOrg: Organization
-}
-"""
-Return response for createBulkUserSetting mutation
-"""
-type UserSettingBulkCreatePayload {
-	"""
-	Created userSettings
-	"""
-	userSettings: [UserSetting!]
-}
-"""
-Return response for deleteBulkUserSetting mutation
-"""
-type UserSettingBulkDeletePayload {
-	"""
-	Deleted userSetting IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkUserSetting mutation
-"""
-type UserSettingBulkUpdatePayload {
-	"""
-	Updated userSettings
-	"""
-	userSettings: [UserSetting!]
-	"""
-	IDs of the updated userSettings
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
 }
 """
 A connection to a list of items.

@@ -24,19 +24,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "APITokenBulkCreatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_APIToken(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _APITokenBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkDeletePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -305,8 +292,6 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var aPITokenBulkCreatePayloadImplementors = []string{"APITokenBulkCreatePayload"}
 
 var aPITokenBulkDeletePayloadImplementors = []string{"APITokenBulkDeletePayload"}
 

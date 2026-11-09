@@ -24,26 +24,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "UserSettingBulkCreatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_UserSetting(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) fieldContext_UserSettingBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("UserSettingBulkDeletePayload", field, false, false, "ID")
-}
-func (ec *executionContext) fieldContext_UserSettingBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("UserSettingBulkUpdatePayload", field, false, false, "String")
-}
-
 func (ec *executionContext) _UserSettingCreatePayload_userSetting(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -119,10 +99,6 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var userSettingBulkDeletePayloadImplementors = []string{"UserSettingBulkDeletePayload"}
-
-var userSettingBulkUpdatePayloadImplementors = []string{"UserSettingBulkUpdatePayload"}
 
 var userSettingCreatePayloadImplementors = []string{"UserSettingCreatePayload"}
 

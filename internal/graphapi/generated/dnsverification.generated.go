@@ -24,23 +24,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) fieldContext_DNSVerificationBulkCreatePayload_dnsVerifications(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DNSVerificationBulkCreatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DNSVerification(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) fieldContext_DNSVerificationBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DNSVerificationBulkUpdatePayload", field, false, false, "String")
-}
-
 func (ec *executionContext) _DNSVerificationCreatePayload_dnsVerification(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -139,12 +122,6 @@ func (ec *executionContext) fieldContext_DNSVerificationUpdatePayload_dnsVerific
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var dNSVerificationBulkCreatePayloadImplementors = []string{"DNSVerificationBulkCreatePayload"}
-
-var dNSVerificationBulkDeletePayloadImplementors = []string{"DNSVerificationBulkDeletePayload"}
-
-var dNSVerificationBulkUpdatePayloadImplementors = []string{"DNSVerificationBulkUpdatePayload"}
 
 var dNSVerificationCreatePayloadImplementors = []string{"DNSVerificationCreatePayload"}
 

@@ -451252,11 +451252,6 @@ func (ec *executionContext) unmarshalNCreateAPITokenInput2githubᚗcomᚋtheopen
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateAPITokenInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInput(ctx context.Context, v any) (*generated.CreateAPITokenInput, error) {
-	res, err := ec.unmarshalInputCreateAPITokenInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNCreateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInput(ctx context.Context, v any) (generated.CreateActionPlanInput, error) {
 	res, err := ec.unmarshalInputCreateActionPlanInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -451390,11 +451385,6 @@ func (ec *executionContext) unmarshalNCreateCustomTypeEnumInput2ᚖgithubᚗcom�
 func (ec *executionContext) unmarshalNCreateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInput(ctx context.Context, v any) (generated.CreateDNSVerificationInput, error) {
 	res, err := ec.unmarshalInputCreateDNSVerificationInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNCreateDNSVerificationInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInput(ctx context.Context, v any) (*generated.CreateDNSVerificationInput, error) {
-	res, err := ec.unmarshalInputCreateDNSVerificationInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreateDirectoryAccountInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDirectoryAccountInput(ctx context.Context, v any) (generated.CreateDirectoryAccountInput, error) {
@@ -451557,11 +451547,6 @@ func (ec *executionContext) unmarshalNCreateHushInput2githubᚗcomᚋtheopenlane
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateHushInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateHushInput(ctx context.Context, v any) (*generated.CreateHushInput, error) {
-	res, err := ec.unmarshalInputCreateHushInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNCreateIdentityHolderInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateIdentityHolderInput(ctx context.Context, v any) (generated.CreateIdentityHolderInput, error) {
 	res, err := ec.unmarshalInputCreateIdentityHolderInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -451595,11 +451580,6 @@ func (ec *executionContext) unmarshalNCreateInviteInput2ᚖgithubᚗcomᚋtheope
 func (ec *executionContext) unmarshalNCreateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInput(ctx context.Context, v any) (generated.CreateMappableDomainInput, error) {
 	res, err := ec.unmarshalInputCreateMappableDomainInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNCreateMappableDomainInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInput(ctx context.Context, v any) (*generated.CreateMappableDomainInput, error) {
-	res, err := ec.unmarshalInputCreateMappableDomainInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreateMappedControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappedControlInput(ctx context.Context, v any) (generated.CreateMappedControlInput, error) {
@@ -451680,11 +451660,6 @@ func (ec *executionContext) unmarshalNCreateOrganizationInput2githubᚗcomᚋthe
 func (ec *executionContext) unmarshalNCreateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput(ctx context.Context, v any) (generated.CreateOrganizationSettingInput, error) {
 	res, err := ec.unmarshalInputCreateOrganizationSettingInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNCreateOrganizationSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput(ctx context.Context, v any) (*generated.CreateOrganizationSettingInput, error) {
-	res, err := ec.unmarshalInputCreateOrganizationSettingInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreatePersonalAccessTokenInput(ctx context.Context, v any) (generated.CreatePersonalAccessTokenInput, error) {
@@ -451960,11 +451935,6 @@ func (ec *executionContext) unmarshalNCreateUserInput2githubᚗcomᚋtheopenlane
 func (ec *executionContext) unmarshalNCreateUserSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInput(ctx context.Context, v any) (generated.CreateUserSettingInput, error) {
 	res, err := ec.unmarshalInputCreateUserSettingInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNCreateUserSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInput(ctx context.Context, v any) (*generated.CreateUserSettingInput, error) {
-	res, err := ec.unmarshalInputCreateUserSettingInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNCreateVendorRiskScoreInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateVendorRiskScoreInput(ctx context.Context, v any) (generated.CreateVendorRiskScoreInput, error) {
@@ -459089,23 +459059,6 @@ func (ec *executionContext) unmarshalOControlWhereInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOCreateAPITokenInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInputᚄ(ctx context.Context, v any) ([]*generated.CreateAPITokenInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateAPITokenInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateAPITokenInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
 func (ec *executionContext) unmarshalOCreateActionPlanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInputᚄ(ctx context.Context, v any) ([]*generated.CreateActionPlanInput, error) {
 	if v == nil {
 		return nil, nil
@@ -459336,23 +459289,6 @@ func (ec *executionContext) unmarshalOCreateCustomTypeEnumInput2ᚕᚖgithubᚗc
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNCreateCustomTypeEnumInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateCustomTypeEnumInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalOCreateDNSVerificationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInputᚄ(ctx context.Context, v any) ([]*generated.CreateDNSVerificationInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateDNSVerificationInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateDNSVerificationInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -459639,23 +459575,6 @@ func (ec *executionContext) unmarshalOCreateGroupSettingInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOCreateHushInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateHushInputᚄ(ctx context.Context, v any) ([]*generated.CreateHushInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateHushInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateHushInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateHushInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
 func (ec *executionContext) unmarshalOCreateIdentityHolderInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateIdentityHolderInputᚄ(ctx context.Context, v any) ([]*generated.CreateIdentityHolderInput, error) {
 	if v == nil {
 		return nil, nil
@@ -459700,23 +459619,6 @@ func (ec *executionContext) unmarshalOCreateInviteInput2ᚕᚖgithubᚗcomᚋthe
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNCreateInviteInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateInviteInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalOCreateMappableDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInputᚄ(ctx context.Context, v any) ([]*generated.CreateMappableDomainInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateMappableDomainInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateMappableDomainInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -459827,23 +459729,6 @@ func (ec *executionContext) unmarshalOCreateOrganizationBrandingSettingInput2ᚕ
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNCreateOrganizationBrandingSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationBrandingSettingInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalOCreateOrganizationSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInputᚄ(ctx context.Context, v any) ([]*generated.CreateOrganizationSettingInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateOrganizationSettingInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateOrganizationSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -460250,23 +460135,6 @@ func (ec *executionContext) unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖg
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOCreateUserSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInputᚄ(ctx context.Context, v any) ([]*generated.CreateUserSettingInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.CreateUserSettingInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCreateUserSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
 func (ec *executionContext) unmarshalOCreateVendorRiskScoreInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateVendorRiskScoreInputᚄ(ctx context.Context, v any) ([]*generated.CreateVendorRiskScoreInput, error) {
 	if v == nil {
 		return nil, nil
@@ -460646,25 +460514,6 @@ func (ec *executionContext) unmarshalOCustomTypeEnumWhereInput2ᚖgithubᚗcom�
 	}
 	res, err := ec.unmarshalInputCustomTypeEnumWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.DNSVerification) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
-		fc := graphql.GetFieldContext(ctx)
-		fc.Result = &v[i]
-		return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, sel, v[i])
-	})
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
 }
 
 func (ec *executionContext) marshalODNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx context.Context, sel ast.SelectionSet, v *generated.DNSVerification) graphql.Marshaler {
@@ -464709,25 +464558,6 @@ func (ec *executionContext) marshalOMap2map(ctx context.Context, sel ast.Selecti
 	_ = ctx
 	res := graphql.MarshalMap(v)
 	return res
-}
-
-func (ec *executionContext) marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.MappableDomain) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
-		fc := graphql.GetFieldContext(ctx)
-		fc.Result = &v[i]
-		return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, sel, v[i])
-	})
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
 }
 
 func (ec *executionContext) marshalOMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx context.Context, sel ast.SelectionSet, v *generated.MappableDomain) graphql.Marshaler {
@@ -471531,25 +471361,6 @@ func (ec *executionContext) marshalOUserRole2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return v
-}
-
-func (ec *executionContext) marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.UserSetting) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
-		fc := graphql.GetFieldContext(ctx)
-		fc.Result = &v[i]
-		return ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx, sel, v[i])
-	})
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
 }
 
 func (ec *executionContext) marshalOUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx context.Context, sel ast.SelectionSet, v *generated.UserSetting) graphql.Marshaler {

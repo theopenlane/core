@@ -24,40 +24,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_organizationSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "OrganizationSettingBulkCreatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_OrganizationSetting(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_organizationSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "OrganizationSettingBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_OrganizationSetting(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationSettingBulkUpdatePayload", field, false, false, "ID")
-}
-
-func (ec *executionContext) fieldContext_OrganizationSettingBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationSettingBulkUpdatePayload", field, false, false, "String")
-}
-
 func (ec *executionContext) _OrganizationSettingCreatePayload_organizationSetting(ctx context.Context, field graphql.CollectedField, obj *model.OrganizationSettingCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -156,12 +122,6 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var organizationSettingBulkCreatePayloadImplementors = []string{"OrganizationSettingBulkCreatePayload"}
-
-var organizationSettingBulkDeletePayloadImplementors = []string{"OrganizationSettingBulkDeletePayload"}
-
-var organizationSettingBulkUpdatePayloadImplementors = []string{"OrganizationSettingBulkUpdatePayload"}
 
 var organizationSettingCreatePayloadImplementors = []string{"OrganizationSettingCreatePayload"}
 
