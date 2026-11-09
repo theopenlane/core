@@ -259,7 +259,7 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
-          - sparse-checkout#v1.10.0:
+          - sparse-checkout#v1.11.0:
               paths:
                 - .buildkite
           - docker#v5.14.0:
@@ -277,7 +277,7 @@ steps:
         depends_on: "generate_config"
         if: *if-main
         plugins:
-          - sparse-checkout#v1.10.0:
+          - sparse-checkout#v1.11.0:
               paths:
                 - .buildkite
                 - config
@@ -293,7 +293,7 @@ steps:
         depends_on: "helm_automation"
         if: *if-main
         plugins:
-          - sparse-checkout#v1.10.0:
+          - sparse-checkout#v1.11.0:
               paths:
                 - .buildkite
           - docker#v5.14.0:
@@ -498,7 +498,7 @@ steps:
         key: "fga_test"
         depends_on: "generate_fga"
         plugins:
-          - sparse-checkout#v1.10.0:
+          - sparse-checkout#v1.11.0:
               paths:
                 - fga
           - docker#v5.14.0:
@@ -722,7 +722,7 @@ steps:
         soft_fail:
           - exit_status: 1
         plugins:
-          - sparse-checkout#v1.10.0:
+          - sparse-checkout#v1.11.0:
               paths:
                 - db
           - theopenlane/atlas#v1.2.1:
@@ -769,7 +769,7 @@ steps:
           fi
         artifact_paths: linter-result.txt
         plugins:
-          - sparse-checkout#v1.10.0:
+          - sparse-checkout#v1.11.0:
               paths:
                 - internal/graphapi
           - docker#v5.14.0:
@@ -865,7 +865,7 @@ steps:
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
         plugins:
-          - sparse-checkout#v1.10.0:
+          - sparse-checkout#v1.11.0:
               paths:
                 - internal/graphapi
           - docker#v5.14.0:
@@ -881,7 +881,7 @@ steps:
         command: "rover graph publish --schema $$GRAPHQL_HISTORY_SCHEMA_LOCATION $$GRAPHQL_HISTORY_SCHEMA_NAME"
         agents: *small-runner
         plugins:
-          - sparse-checkout#v1.10.0:
+          - sparse-checkout#v1.11.0:
               paths:
                 - internal/graphapi
           - cluster-secrets#v1.0.0:
@@ -897,7 +897,7 @@ steps:
         key: "atlas_migrate"
         agents: *small-runner
         plugins:
-          - sparse-checkout#v1.10.0:
+          - sparse-checkout#v1.11.0:
               paths:
                 - db
           - theopenlane/atlas#v1.2.1:
