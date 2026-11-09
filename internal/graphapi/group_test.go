@@ -274,6 +274,29 @@ func TestQueryGroups(t *testing.T) {
 	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{group2.ID, group3.ID}}).MustDelete(usersAnother.UserCtx, t)
 }
 
+func TestMutationCreateBulkGroup(t *testing.T) {
+	name := "Bulk Group " + ulids.New().String()
+
+	resp, err := suite.Client.API.CreateBulkGroup(th.SharedTestUser1.UserCtx, []*testclient.CreateGroupInput{
+		{Name: name + " 1"},
+		{Name: name + " 2"},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkGroup.Groups, 2))
+
+	groupIDs := make([]string, 0, len(resp.CreateBulkGroup.Groups))
+	for _, group := range resp.CreateBulkGroup.Groups {
+		groupIDs = append(groupIDs, group.ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: groupIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeGroup, groupIDs)
+}
+
 func TestMutationCreateGroup(t *testing.T) {
 	name := gofakeit.Name()
 

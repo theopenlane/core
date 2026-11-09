@@ -50,12 +50,6 @@ type APIToken struct {
 
 func (APIToken) IsNode() {}
 
-// Return response for createBulkAPIToken mutation
-type APITokenBulkCreatePayload struct {
-	// Created apiTokens
-	APITokens []*APIToken `json:"apiTokens,omitempty"`
-}
-
 // Return response for deleteBulkAPIToken mutation
 type APITokenBulkDeletePayload struct {
 	// Deleted apiToken IDs
@@ -11560,34 +11554,6 @@ type DNSVerification struct {
 
 func (DNSVerification) IsNode() {}
 
-// Return response for createBulkDNSVerification mutation
-type DNSVerificationBulkCreatePayload struct {
-	// Created dnsVerifications
-	DNSVerifications []*DNSVerification `json:"dnsVerifications,omitempty"`
-}
-
-// Return response for deleteBulkDNSVerification mutation
-type DNSVerificationBulkDeletePayload struct {
-	// Deleted dnsVerification IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkDNSVerification mutation
-type DNSVerificationBulkUpdatePayload struct {
-	// Updated dnsVerifications
-	DNSVerifications []*DNSVerification `json:"dnsVerifications,omitempty"`
-	// IDs of the updated dnsVerifications
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
 // A connection to a list of items.
 type DNSVerificationConnection struct {
 	// A list of edges.
@@ -19764,12 +19730,6 @@ type Hush struct {
 
 func (Hush) IsNode() {}
 
-// Return response for createBulkHush mutation
-type HushBulkCreatePayload struct {
-	// Created hushs
-	Hushes []*Hush `json:"hushes,omitempty"`
-}
-
 // Return response for deleteBulkHush mutation
 type HushBulkDeletePayload struct {
 	// Deleted hush IDs
@@ -22643,34 +22603,6 @@ type MappableDomain struct {
 }
 
 func (MappableDomain) IsNode() {}
-
-// Return response for createBulkMappableDomain mutation
-type MappableDomainBulkCreatePayload struct {
-	// Created mappableDomains
-	MappableDomains []*MappableDomain `json:"mappableDomains,omitempty"`
-}
-
-// Return response for deleteBulkMappableDomain mutation
-type MappableDomainBulkDeletePayload struct {
-	// Deleted mappableDomain IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkMappableDomain mutation
-type MappableDomainBulkUpdatePayload struct {
-	// Updated mappableDomains
-	MappableDomains []*MappableDomain `json:"mappableDomains,omitempty"`
-	// IDs of the updated mappableDomains
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
 
 // A connection to a list of items.
 type MappableDomainConnection struct {
@@ -25756,34 +25688,6 @@ type OrganizationSetting struct {
 }
 
 func (OrganizationSetting) IsNode() {}
-
-// Return response for createBulkOrganizationSetting mutation
-type OrganizationSettingBulkCreatePayload struct {
-	// Created organizationSettings
-	OrganizationSettings []*OrganizationSetting `json:"organizationSettings,omitempty"`
-}
-
-// Return response for deleteBulkOrganizationSetting mutation
-type OrganizationSettingBulkDeletePayload struct {
-	// Deleted organizationSetting IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkOrganizationSetting mutation
-type OrganizationSettingBulkUpdatePayload struct {
-	// Updated organizationSettings
-	OrganizationSettings []*OrganizationSetting `json:"organizationSettings,omitempty"`
-	// IDs of the updated organizationSettings
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
 
 // A connection to a list of items.
 type OrganizationSettingConnection struct {
@@ -46151,34 +46055,6 @@ type UserSetting struct {
 }
 
 func (UserSetting) IsNode() {}
-
-// Return response for createBulkUserSetting mutation
-type UserSettingBulkCreatePayload struct {
-	// Created userSettings
-	UserSettings []*UserSetting `json:"userSettings,omitempty"`
-}
-
-// Return response for deleteBulkUserSetting mutation
-type UserSettingBulkDeletePayload struct {
-	// Deleted userSetting IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkUserSetting mutation
-type UserSettingBulkUpdatePayload struct {
-	// Updated userSettings
-	UserSettings []*UserSetting `json:"userSettings,omitempty"`
-	// IDs of the updated userSettings
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
 
 // A connection to a list of items.
 type UserSettingConnection struct {

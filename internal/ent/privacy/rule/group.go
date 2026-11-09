@@ -62,7 +62,7 @@ func checkCreateAccess(ctx context.Context, m generated.Mutation, serviceOnly bo
 		Relation:    relation,
 	}
 
-	access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)
+	access, err := utils.CheckAccess(ctx, utils.AuthzClientFromContext(ctx), ac)
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Interface("req", ac).Msg("failed to check access")
 

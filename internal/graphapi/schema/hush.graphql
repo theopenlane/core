@@ -23,24 +23,6 @@ extend type Mutation{
         input: CreateHushInput!
     ): HushCreatePayload!
     """
-    Create multiple new hushs
-    """
-    createBulkHush(
-        """
-        values of the hush
-        """
-        input: [CreateHushInput!]
-    ): HushBulkCreatePayload!
-    """
-    Create multiple new hushs via file upload
-    """
-    createBulkCSVHush(
-        """
-        csv file containing values of the hush
-        """
-        input: Upload!
-    ): HushBulkCreatePayload!
-    """
     Update multiple existing hushs
     """
     updateBulkHush(
@@ -84,15 +66,6 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): HushBulkDeletePayload!
-    """
-    Update multiple existing hushs via file upload
-    """
-    updateBulkCSVHush(
-        """
-        csv file containing values of the hush, must include ID column
-        """
-        input: Upload!
-    ): HushBulkUpdatePayload!
 }
 
 """
@@ -123,16 +96,6 @@ type HushDeletePayload {
     Deleted hush ID
     """
     deletedID: ID!
-}
-
-"""
-Return response for createBulkHush mutation
-"""
-type HushBulkCreatePayload {
-    """
-    Created hushs
-    """
-    hushes: [Hush!]
 }
 
 """

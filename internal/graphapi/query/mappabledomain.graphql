@@ -1,33 +1,3 @@
-mutation CreateBulkCSVMappableDomain ($input: Upload!) {
-	createBulkCSVMappableDomain(input: $input) {
-		mappableDomains {
-			createdAt
-			createdBy
-			id
-			name
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			zoneID
-		}
-	}
-}
-mutation CreateBulkMappableDomain ($input: [CreateMappableDomainInput!]) {
-	createBulkMappableDomain(input: $input) {
-		mappableDomains {
-			createdAt
-			createdBy
-			id
-			name
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			zoneID
-		}
-	}
-}
 mutation CreateMappableDomain ($input: CreateMappableDomainInput!) {
 	createMappableDomain(input: $input) {
 		mappableDomain {

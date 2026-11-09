@@ -8,14 +8,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/v2/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateOrganizationSetting is the resolver for the createOrganizationSetting field.
@@ -28,40 +24,6 @@ func (r *mutationResolver) CreateOrganizationSetting(ctx context.Context, input 
 	return &model.OrganizationSettingCreatePayload{
 		OrganizationSetting: res,
 	}, nil
-}
-
-// CreateBulkOrganizationSetting is the resolver for the createBulkOrganizationSetting field.
-func (r *mutationResolver) CreateBulkOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	return r.bulkCreateOrganizationSetting(ctx, input)
-}
-
-// CreateBulkCSVOrganizationSetting is the resolver for the createBulkCSVOrganizationSetting field.
-func (r *mutationResolver) CreateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[csvgenerated.OrganizationSettingCSVInput](input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organizationsetting"})
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	if err := resolveCSVReferencesForSchema(ctx, "OrganizationSetting", data); err != nil {
-		return nil, err
-	}
-
-	inputs := make([]*generated.CreateOrganizationSettingInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateOrganizationSetting(ctx, inputs)
 }
 
 // UpdateOrganizationSetting is the resolver for the updateOrganizationSetting field.
@@ -97,44 +59,6 @@ func (r *mutationResolver) DeleteOrganizationSetting(ctx context.Context, id str
 	return &model.OrganizationSettingDeletePayload{
 		DeletedID: id,
 	}, nil
-}
-
-// DeleteBulkOrganizationSetting is the resolver for the deleteBulkOrganizationSetting field.
-func (r *mutationResolver) DeleteBulkOrganizationSetting(ctx context.Context, ids []string) (*model.OrganizationSettingBulkDeletePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkDeleteOrganizationSetting(ctx, ids)
-}
-
-// UpdateBulkOrganizationSetting is the resolver for the updateBulkOrganizationSetting field.
-func (r *mutationResolver) UpdateBulkOrganizationSetting(ctx context.Context, ids []string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingBulkUpdatePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkUpdateOrganizationSetting(ctx, ids, input)
-}
-
-// UpdateBulkCSVOrganizationSetting is the resolver for the updateBulkCSVOrganizationSetting field.
-func (r *mutationResolver) UpdateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkUpdatePayload, error) {
-	data, err := common.UnmarshalBulkData[csvgenerated.OrganizationSettingCSVUpdateInput](input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organizationsetting"})
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	if err := resolveCSVReferencesForSchema(ctx, "OrganizationSetting", data); err != nil {
-		return nil, err
-	}
-
-	return r.bulkUpdateCSVOrganizationSetting(ctx, data)
 }
 
 // OrganizationSetting is the resolver for the organizationSetting field.
