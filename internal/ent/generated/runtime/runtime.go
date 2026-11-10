@@ -4767,6 +4767,10 @@ func init() {
 	onboardingDescDemoRequested := onboardingFields[6].Descriptor()
 	// onboarding.DefaultDemoRequested holds the default value on creation for the demo_requested field.
 	onboarding.DefaultDemoRequested = onboardingDescDemoRequested.Default.(bool)
+	// onboardingDescDemoDataset is the schema descriptor for demo_dataset field.
+	onboardingDescDemoDataset := onboardingFields[8].Descriptor()
+	// onboarding.DefaultDemoDataset holds the default value on creation for the demo_dataset field.
+	onboarding.DefaultDemoDataset = onboardingDescDemoDataset.Default.(string)
 	// onboardingDescID is the schema descriptor for id field.
 	onboardingDescID := onboardingMixinFields0[0].Descriptor()
 	// onboarding.DefaultID holds the default value on creation for the id field.

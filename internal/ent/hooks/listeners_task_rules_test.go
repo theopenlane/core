@@ -113,6 +113,42 @@ func TestTaskRuleListenersNotificationTaskOwnerAttribution(t *testing.T) {
 	assert.Check(t, is.Len(tasksB, 0))
 }
 
+func TestOnboardingAddDemoDataLaterTask(t *testing.T) {
+	testCases := []struct {
+		name      string
+		seedDemo  *bool
+		wantCount int
+	}{
+		{name: "declined demo data", seedDemo: new(false), wantCount: 0},
+		{name: "chose demo data", seedDemo: new(true), wantCount: 0},
+		{name: "unanswered", wantCount: 1},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			s := suite.setupTest(t)
+			user := s.seedUser()
+			ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), s.client)
+			ctx = auth.WithInternalOperationContext(ctx)
+
+			onboarding, err := s.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
+				CompanyName:  "Demo Task Co " + gofakeit.LetterN(8),
+				SeedDemoData: tc.seedDemo,
+			}).Save(ctx)
+			assert.NilError(t, err)
+
+			s.waitForEvents()
+
+			count, err := s.client.Task.Query().Where(
+				task.OwnerIDEQ(onboarding.OrganizationID),
+				task.SourceKeyEQ("onboarding-"+taskrules.RuleAddDemoDataLater),
+			).Count(ctx)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.wantCount, count))
+		})
+	}
+}
+
 func TestOnboardingCreatesProgramWithSelectedFrameworks(t *testing.T) {
 	s := suite.setupTest(t)
 	user := s.seedUser()

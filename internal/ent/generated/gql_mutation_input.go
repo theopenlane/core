@@ -16237,6 +16237,8 @@ type CreateOnboardingInput struct {
 	UserDetails    map[string]interface{} `json:"user_details,omitempty"`
 	Compliance     map[string]interface{} `json:"compliance,omitempty"`
 	DemoRequested  *bool                  `json:"demo_requested,omitempty"`
+	SeedDemoData   *bool                  `json:"seed_demo_data,omitempty"`
+	DemoDataset    *string                `json:"demo_dataset,omitempty"`
 	OrganizationID *string                `json:"organization_id,omitempty"`
 }
 
@@ -16257,6 +16259,12 @@ func (i *CreateOnboardingInput) Mutate(m *OnboardingMutation) {
 	}
 	if v := i.DemoRequested; v != nil {
 		m.SetDemoRequested(*v)
+	}
+	if v := i.SeedDemoData; v != nil {
+		m.SetSeedDemoData(*v)
+	}
+	if v := i.DemoDataset; v != nil {
+		m.SetDemoDataset(*v)
 	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)

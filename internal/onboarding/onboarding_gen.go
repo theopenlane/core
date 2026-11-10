@@ -20,6 +20,20 @@ var defaultQuestionnaire = models.Questionnaire{
 			Key:         "company_domains",
 			Label:       "Company Domains",
 		}, models.Question{
+			Description: "Choose whether to start with demo data or an empty organization.",
+			InputType:   models.InputType("boolean"),
+			Key:         "seed_demo_data",
+			Label:       "How would you like to get started?",
+			Options: []models.QuestionOption{models.QuestionOption{
+				Description: "Start with sample records. You can remove demo data anytime under Organization Settings → General Settings.",
+				Label:       "Explore with demo data",
+				Value:       "true",
+			}, models.QuestionOption{
+				Description: "Create an empty organization. You can add demo data later if you'd like.",
+				Label:       "Start with my own data",
+				Value:       "false",
+			}},
+		}, models.Question{
 			InputType: models.InputType("select"),
 			Key:       "company_size",
 			Label:     "Company Size",
