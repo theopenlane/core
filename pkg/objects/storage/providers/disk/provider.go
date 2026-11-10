@@ -112,7 +112,7 @@ func (p *Provider) Upload(_ context.Context, reader io.Reader, opts *storagetype
 
 // Download implements storagetypes.Provider
 func (p *Provider) Download(_ context.Context, file *storagetypes.File, _ *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
-	filePath := filepath.Join(p.options.Bucket, file.Key)
+	filePath := filepath.Join(p.options.BucketFor(file.StoredBucket()), file.Key)
 	fileData, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
@@ -129,7 +129,7 @@ func (p *Provider) Download(_ context.Context, file *storagetypes.File, _ *stora
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(_ context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
-	err := os.Remove(filepath.Join(p.options.BucketFor(file.Bucket), file.Key))
+	err := os.Remove(filepath.Join(p.options.BucketFor(file.StoredBucket()), file.Key))
 	if os.IsNotExist(err) {
 		metrics.RecordStorageDelete(string(storagetypes.DiskProvider))
 		return nil
@@ -145,7 +145,7 @@ func (p *Provider) Delete(_ context.Context, file *storagetypes.File, _ *storage
 
 // Copy implements storage.Copier by copying the file within the local bucket directories
 func (p *Provider) Copy(_ context.Context, file *storagetypes.File, opts *storage.CopyOptions) error {
-	source, err := os.Open(filepath.Join(p.options.BucketFor(file.Bucket), file.Key))
+	source, err := os.Open(filepath.Join(p.options.BucketFor(file.StoredBucket()), file.Key))
 	if err != nil {
 		return err
 	}
@@ -199,7 +199,7 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 
 // Exists checks if a file exists on disk
 func (p *Provider) Exists(_ context.Context, file *storagetypes.File) (bool, error) {
-	fullPath := filepath.Join(p.options.Bucket, file.Key)
+	fullPath := filepath.Join(p.options.BucketFor(file.StoredBucket()), file.Key)
 
 	_, err := os.Stat(fullPath)
 	if err != nil {
