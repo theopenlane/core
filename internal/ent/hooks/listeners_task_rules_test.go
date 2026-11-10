@@ -119,9 +119,9 @@ func TestOnboardingAddDemoDataLaterTask(t *testing.T) {
 		seedDemo  *bool
 		wantCount int
 	}{
-		{name: "declined demo data", seedDemo: new(false), wantCount: 1},
+		{name: "declined demo data", seedDemo: new(false), wantCount: 0},
 		{name: "chose demo data", seedDemo: new(true), wantCount: 0},
-		{name: "unanswered", wantCount: 0},
+		{name: "unanswered", wantCount: 1},
 	}
 
 	for _, tc := range testCases {

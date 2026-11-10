@@ -9431,7 +9431,7 @@ func init() {
 		{Name: "demo_requested", Label: "DemoRequested", Type: "bool", Clearable: true, TaskRules: []TaskRuleDescriptor{{RuleID: "demo-requested", Expression: "value == true", Trigger: "createOnly"}}},
 		{Name: "domains", Label: "Domains", Type: "[]string", Clearable: true},
 		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "seed_demo_data", Label: "SeedDemoData", Type: "bool", Clearable: true, TaskRules: []TaskRuleDescriptor{{RuleID: "add-demo-data-later", Expression: "value == false", Trigger: "createOnly"}}},
+		{Name: "seed_demo_data", Label: "SeedDemoData", Type: "bool", Clearable: true, TaskRules: []TaskRuleDescriptor{{RuleID: "add-demo-data-later", Expression: "value == null", Trigger: "createOnly"}}},
 		{Name: "user_details", Label: "UserDetails", Type: "map[string]interface {}", Clearable: true},
 	}
 	SchemaOrgMembership.Fields = []FieldDescriptor{

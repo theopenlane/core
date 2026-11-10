@@ -71,11 +71,11 @@ var OnboardingDemoRequestedRule = []entx.TaskRuleSpec{
 	},
 }
 
-// OnboardingSeedDemoDataRule suggests adding demo data when the user chose to start without it
+// OnboardingSeedDemoDataRule suggests adding demo data when the user did not answer the demo data question
 var OnboardingSeedDemoDataRule = []entx.TaskRuleSpec{
 	{
 		RuleID:     RuleAddDemoDataLater,
-		Expression: "value == false",
+		Expression: "value == null",
 		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
 }

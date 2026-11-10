@@ -17,7 +17,6 @@ steps:
         label: How would you like to get started?
         description: Choose whether to start with demo data or an empty organization.
         inputType: boolean
-        required: true
         options:
           - value: "true"
             label: Explore with demo data

@@ -33,7 +33,6 @@ var defaultQuestionnaire = models.Questionnaire{
 				Label:       "Start with my own data",
 				Value:       "false",
 			}},
-			Required: true,
 		}, models.Question{
 			InputType: models.InputType("select"),
 			Key:       "company_size",
