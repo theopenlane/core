@@ -28,14 +28,16 @@ import (
 type downloadProvider struct {
 	downloaded    []byte
 	downloadCalls int
+	lastFile      *storagetypes.File
 }
 
 func (p *downloadProvider) Upload(context.Context, io.Reader, *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
 	return &storagetypes.UploadedFileMetadata{}, nil
 }
 
-func (p *downloadProvider) Download(context.Context, *storagetypes.File, *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
+func (p *downloadProvider) Download(_ context.Context, file *storagetypes.File, _ *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
 	p.downloadCalls++
+	p.lastFile = file
 	return &storagetypes.DownloadedFileMetadata{File: p.downloaded}, nil
 }
 
@@ -82,6 +84,7 @@ func TestInterceptorPresignedURL_Base64Requested(t *testing.T) {
 		StorageVolume:       "bucket-1",
 		StorageRegion:       "us-east-1",
 		StoragePath:         "org-1/avatar.png",
+		URI:                 "s3://bucket-1/org-1/avatar.png",
 	}
 
 	query := &generated.FileQuery{}
@@ -101,6 +104,11 @@ func TestInterceptorPresignedURL_Base64Requested(t *testing.T) {
 
 	assert.Check(t, is.Equal(base64.StdEncoding.EncodeToString(provider.downloaded), files[0].Base64))
 	assert.Check(t, is.Equal(1, provider.downloadCalls))
+	assert.Assert(t, provider.lastFile != nil)
+	assert.Check(t, is.Equal(file.StorageVolume, provider.lastFile.Bucket))
+	assert.Check(t, is.Equal(file.URI, provider.lastFile.FullURI))
+	assert.Check(t, is.Equal(file.StoragePath, provider.lastFile.Key))
+	assert.Check(t, is.Equal(file.StorageVolume, provider.lastFile.StoredBucket()))
 }
 
 func TestInterceptorPresignedURL_Base64NotRequested(t *testing.T) {
