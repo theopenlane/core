@@ -3,9 +3,12 @@
 package main
 
 import (
+	"context"
 	"os"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/gqlgo/gqlgenc/config"
+	"github.com/gqlgo/gqlgenc/generator"
 	"github.com/rs/zerolog/log"
 
 	"github.com/vektah/gqlparser/v2/formatter"
@@ -21,6 +24,7 @@ const (
 	// checksum files to track schema changes
 	schemaChecksumFile  = "./internal/graphapi/clientschema/checksum/.schema_checksum"
 	historyChecksumFile = "./internal/graphapi/historyschema/checksum/.history_schema_checksum"
+	clientChecksumFile  = "./internal/graphapi/testclient/checksum/.client_checksum"
 )
 
 var (
@@ -35,6 +39,14 @@ var (
 	historyInputPaths = []string{
 		"internal/graphapi/historygenerated",
 		"internal/graphapi/historymodel",
+		graphapiGenDir,
+	}
+
+	// changes to these paths should trigger full client generation
+	clientInputPaths = []string{
+		"internal/graphapi/clientschema",
+		"internal/graphapi/historyschema",
+		"internal/graphapi/query",
 		graphapiGenDir,
 	}
 )
@@ -91,6 +103,35 @@ func main() {
 	if hasHistoryChanges {
 		genhelpers.SetSchemaChecksum(historyChecksumFile, historyInputPaths...)
 	}
+
+	// the client is generated from the schema files written above
+	generateClient()
+}
+
+func generateClient() {
+	hasChanges, err := genhelpers.HasSchemaChanges(clientChecksumFile, clientInputPaths...)
+	if err != nil {
+		log.Warn().Err(err).Msg("failed to check for schema changes, running history generation anyway")
+		hasChanges = true
+	}
+
+	if !hasChanges {
+		log.Info().Msg("no schema changes detected, skipping gqlgen client generation")
+		return
+	}
+
+	cfg, err := config.LoadConfig(graphapiGenDir + ".gqlgenc_testclient.yml")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to load config")
+		os.Exit(2)
+	}
+
+	if err := generator.Generate(context.Background(), cfg); err != nil {
+		log.Error().Err(err).Msg("Failed to generate gqlgenc client")
+	}
+
+	// update checksum file
+	genhelpers.SetSchemaChecksum(clientChecksumFile, clientInputPaths...)
 }
 
 func generateClientSchema(execSchema graphql.ExecutableSchema, path string) {

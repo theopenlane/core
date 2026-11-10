@@ -20,6 +20,7 @@ mutation CreateBulkCSVTemplate ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -55,6 +56,7 @@ mutation CreateBulkTemplate ($input: [CreateTemplateInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags

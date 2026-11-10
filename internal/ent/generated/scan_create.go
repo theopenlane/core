@@ -214,6 +214,20 @@ func (_c *ScanCreate) SetNillableIntegrationRunID(v *string) *ScanCreate {
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *ScanCreate) SetSourceKey(v string) *ScanCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableSourceKey(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *ScanCreate) SetExternalID(v string) *ScanCreate {
 	_c.mutation.SetExternalID(v)
@@ -1098,6 +1112,10 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(scan.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(scan.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(scan.FieldExternalID, field.TypeString, value)

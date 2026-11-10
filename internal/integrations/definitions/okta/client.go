@@ -3,7 +3,7 @@ package okta
 import (
 	"context"
 
-	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
+	oktagosdk "github.com/okta/okta-sdk-golang/v8/okta"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/urlx"

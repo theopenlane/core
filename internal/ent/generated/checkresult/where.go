@@ -127,6 +127,11 @@ func IntegrationRunID(v string) predicate.CheckResult {
 	return predicate.CheckResult(sql.FieldEQ(FieldIntegrationRunID, v))
 }
 
+// SourceKey applies equality check predicate on the "source_key" field. It's identical to SourceKeyEQ.
+func SourceKey(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldEQ(FieldSourceKey, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.CheckResult {
 	return predicate.CheckResult(sql.FieldEQ(FieldOwnerID, v))
@@ -995,6 +1000,81 @@ func IntegrationRunIDEqualFold(v string) predicate.CheckResult {
 // IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
 func IntegrationRunIDContainsFold(v string) predicate.CheckResult {
 	return predicate.CheckResult(sql.FieldContainsFold(FieldIntegrationRunID, v))
+}
+
+// SourceKeyEQ applies the EQ predicate on the "source_key" field.
+func SourceKeyEQ(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldEQ(FieldSourceKey, v))
+}
+
+// SourceKeyNEQ applies the NEQ predicate on the "source_key" field.
+func SourceKeyNEQ(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldNEQ(FieldSourceKey, v))
+}
+
+// SourceKeyIn applies the In predicate on the "source_key" field.
+func SourceKeyIn(vs ...string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyNotIn applies the NotIn predicate on the "source_key" field.
+func SourceKeyNotIn(vs ...string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldNotIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyGT applies the GT predicate on the "source_key" field.
+func SourceKeyGT(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldGT(FieldSourceKey, v))
+}
+
+// SourceKeyGTE applies the GTE predicate on the "source_key" field.
+func SourceKeyGTE(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldGTE(FieldSourceKey, v))
+}
+
+// SourceKeyLT applies the LT predicate on the "source_key" field.
+func SourceKeyLT(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldLT(FieldSourceKey, v))
+}
+
+// SourceKeyLTE applies the LTE predicate on the "source_key" field.
+func SourceKeyLTE(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldLTE(FieldSourceKey, v))
+}
+
+// SourceKeyContains applies the Contains predicate on the "source_key" field.
+func SourceKeyContains(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldContains(FieldSourceKey, v))
+}
+
+// SourceKeyHasPrefix applies the HasPrefix predicate on the "source_key" field.
+func SourceKeyHasPrefix(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldHasPrefix(FieldSourceKey, v))
+}
+
+// SourceKeyHasSuffix applies the HasSuffix predicate on the "source_key" field.
+func SourceKeyHasSuffix(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldHasSuffix(FieldSourceKey, v))
+}
+
+// SourceKeyIsNil applies the IsNil predicate on the "source_key" field.
+func SourceKeyIsNil() predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldIsNull(FieldSourceKey))
+}
+
+// SourceKeyNotNil applies the NotNil predicate on the "source_key" field.
+func SourceKeyNotNil() predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldNotNull(FieldSourceKey))
+}
+
+// SourceKeyEqualFold applies the EqualFold predicate on the "source_key" field.
+func SourceKeyEqualFold(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldEqualFold(FieldSourceKey, v))
+}
+
+// SourceKeyContainsFold applies the ContainsFold predicate on the "source_key" field.
+func SourceKeyContainsFold(v string) predicate.CheckResult {
+	return predicate.CheckResult(sql.FieldContainsFold(FieldSourceKey, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.

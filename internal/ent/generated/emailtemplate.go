@@ -50,6 +50,8 @@ type EmailTemplate struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -276,7 +278,7 @@ func (*EmailTemplate) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case emailtemplate.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldUpdatedByImpersonator, emailtemplate.FieldDeletedBy, emailtemplate.FieldRevision, emailtemplate.FieldSourceDefinitionID, emailtemplate.FieldSourceDefinitionVersion, emailtemplate.FieldSourceInstanceID, emailtemplate.FieldManagedBy, emailtemplate.FieldIntegrationRunID, emailtemplate.FieldExternalID, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldTemplateContext, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID, emailtemplate.FieldTrustCenterID:
+		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldUpdatedByImpersonator, emailtemplate.FieldDeletedBy, emailtemplate.FieldRevision, emailtemplate.FieldSourceDefinitionID, emailtemplate.FieldSourceDefinitionVersion, emailtemplate.FieldSourceInstanceID, emailtemplate.FieldManagedBy, emailtemplate.FieldIntegrationRunID, emailtemplate.FieldSourceKey, emailtemplate.FieldExternalID, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldTemplateContext, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID, emailtemplate.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case emailtemplate.FieldCreatedAt, emailtemplate.FieldUpdatedAt, emailtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -379,6 +381,12 @@ func (_m *EmailTemplate) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case emailtemplate.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case emailtemplate.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -676,6 +684,9 @@ func (_m *EmailTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

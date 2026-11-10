@@ -72,7 +72,7 @@ func TestResolveConnectionFromStateEmptyProviderState(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
+		ID: "test-def",
 	}
 
 	rt := NewForTesting(registry.New())
@@ -92,7 +92,7 @@ func TestResolveConnectionFromStateNilProviders(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
+		ID: "test-def",
 	}
 
 	rt := NewForTesting(registry.New())
@@ -114,8 +114,8 @@ func TestResolveConnectionFromStateWithPersistedRef(t *testing.T) {
 
 	credRef := credentialTestOAuthRef.Connection().Credential.Name
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-		Connections:    []types.Connector{credentialTestOAuthRef.Name("OAuth Connection")},
+		ID:          "test-def",
+		Connections: []types.Connector{credentialTestOAuthRef.Name("OAuth Connection")},
 	}
 
 	providerState, _ := json.Marshal(types.DefinitionProviderState{CredentialRef: credRef})
@@ -146,7 +146,7 @@ func TestResolveConnectionFromStateUnknownRef(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
+		ID: "test-def",
 	}
 
 	providerState, _ := json.Marshal(types.DefinitionProviderState{CredentialRef: "unknown"})
@@ -214,8 +214,8 @@ func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 
 	rt := NewForTesting(registry.New())
 	conn, err := rt.resolvePersistedConnection(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-		Connections:    []types.Connector{credentialTestOAuthRef.Name("Only Connection")},
+		ID:          "test-def",
+		Connections: []types.Connector{credentialTestOAuthRef.Name("Only Connection")},
 	}, &ent.Integration{
 		DefinitionID: "test-def",
 	})
@@ -233,7 +233,7 @@ func TestResolvePersistedConnectionMultipleConnectionsNoState(t *testing.T) {
 
 	rt := NewForTesting(registry.New())
 	_, err := rt.resolvePersistedConnection(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
+		ID: "test-def",
 		Connections: []types.Connector{
 			credentialTestOAuthRef.Name("OAuth"),
 			credentialTestAPIKeyRef.Name("API Key"),

@@ -55,6 +55,11 @@ type Config struct {
 	// FetchPollInterval is the fallback polling interval when LISTEN/NOTIFY misses events (default 1s)
 	// This is only used when LISTEN/NOTIFY fails to deliver notifications.
 	FetchPollInterval time.Duration
+	// WaitIdlePollInterval is how often WaitIdle polls durable queues (default 50ms)
+	WaitIdlePollInterval time.Duration
+	// CompleteJobsInline marks finished jobs completed straight away rather than on River's
+	// 250ms completer flush, so WaitIdle returns promptly (use for tests only)
+	CompleteJobsInline bool
 	// Kinds are the envelope kind namespaces this runtime registers; each kind gets a
 	// dedicated queue and shares the envelope worker
 	Kinds []Namespace
@@ -89,6 +94,10 @@ type Gala struct {
 	dispatchMode DispatchMode
 	// inMemoryPool backs in-process dispatch when DispatchModeInMemory is enabled.
 	inMemoryPool *Pool
+	// waitIdlePollInterval overrides the durable WaitIdle poll interval when greater than zero
+	waitIdlePollInterval time.Duration
+	// completeJobsInline completes finished jobs in the worker instead of on River's completer flush
+	completeJobsInline bool
 }
 
 // NewGala initializes your gala, initializes dependencies, and starts workers
@@ -178,6 +187,8 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 	app.jobController = jobClient.GetRiverClient()
 	app.kindQueues = kindQueues
 	app.durableQueues = lo.Values(kindQueues)
+	app.waitIdlePollInterval = config.WaitIdlePollInterval
+	app.completeJobsInline = config.CompleteJobsInline
 
 	return app, nil
 }
@@ -596,6 +607,11 @@ func (g *Gala) waitDurableIdle(ctx context.Context) error {
 		return nil
 	}
 
+	pollInterval := durableWaitPollInterval
+	if g.waitIdlePollInterval > 0 {
+		pollInterval = g.waitIdlePollInterval
+	}
+
 	return waitStable(ctx, func() (bool, error) {
 		params := river.NewJobListParams().
 			States(rivertype.JobStateAvailable, rivertype.JobStatePending, rivertype.JobStateRunning).
@@ -638,7 +654,7 @@ func (g *Gala) waitDurableIdle(ctx context.Context) error {
 		}
 
 		return true, nil
-	}, durableWaitPollInterval, durableIdleThreshold)
+	}, pollInterval, durableIdleThreshold)
 }
 
 const (

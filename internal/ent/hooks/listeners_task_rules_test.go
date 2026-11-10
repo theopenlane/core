@@ -5,12 +5,11 @@ package hooks_test
 import (
 	"context"
 	"fmt"
+	"slices"
 	"testing"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/iam/auth"
@@ -22,28 +21,31 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
-	t := suite.T()
+func TestTaskRuleListenersCreateSuggestedTasks(t *testing.T) {
+	s := suite.setupTest(t)
 
-	user := suite.seedUser()
+	user := s.seedUser()
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
-	userCtx = generated.NewContext(userCtx, suite.client)
+	userCtx = generated.NewContext(userCtx, s.client)
 
 	ctx := auth.WithInternalOperationContext(userCtx)
-	ctx = generated.NewContext(ctx, suite.client)
+	ctx = generated.NewContext(ctx, s.client)
 
-	onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
+	onboarding, err := s.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 		CompanyName: "Task Rule Co",
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	suite.waitForEvents()
+	s.waitForEvents()
 
-	tasks, err := suite.client.Task.Query().Where(task.OwnerIDEQ(onboarding.OrganizationID)).All(ctx)
-	require.NoError(t, err)
+	tasks, err := s.client.Task.Query().Where(task.OwnerIDEQ(onboarding.OrganizationID)).All(ctx)
+	assert.NilError(t, err)
 
 	sourceKeys := make([]string, 0, len(tasks))
 	for _, tk := range tasks {
@@ -51,32 +53,32 @@ func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
 	}
 
 	// organization schema-level rules fire because the onboarding-created org is not personal
-	assert.Contains(t, sourceKeys, "organization-"+taskrules.RuleSecureOrganization)
-	assert.Contains(t, sourceKeys, "organization-"+taskrules.RuleInviteTeam)
+	assert.Check(t, is.Contains(sourceKeys, "organization-"+taskrules.RuleSecureOrganization))
+	assert.Check(t, is.Contains(sourceKeys, "organization-"+taskrules.RuleInviteTeam))
 
 	// onboarding compliance answers were left blank, so the unanswered-fallback rule fires
-	assert.Contains(t, sourceKeys, "onboarding-"+taskrules.RuleImportTemplateControls)
-	assert.Contains(t, sourceKeys, "onboarding-"+taskrules.RuleFrameworkGeneric)
+	assert.Check(t, is.Contains(sourceKeys, "onboarding-"+taskrules.RuleImportTemplateControls))
+	assert.Check(t, is.Contains(sourceKeys, "onboarding-"+taskrules.RuleFrameworkGeneric))
 }
 
 // TestTaskRuleListenersNotificationTaskOwnerAttribution guards against a suggested task
 // created off a system-context (CapInternalOperation) mutation ending up
 // ownerless: ObjectOwnedMixin's create hook assumes such callers set owner_id themselves,
 // so createSuggestedTask must set it explicitly rather than relying on auto-derivation
-func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttribution() {
-	t := suite.T()
+func TestTaskRuleListenersNotificationTaskOwnerAttribution(t *testing.T) {
+	s := suite.setupTest(t)
 
-	user := suite.seedUser()
+	user := s.seedUser()
 	orgA := user.Edges.OrgMemberships[0].OrganizationID
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
-	userCtx = generated.NewContext(userCtx, suite.client)
+	userCtx = generated.NewContext(userCtx, s.client)
 	userCtx = auth.WithInternalOperationContext(userCtx)
 
-	orgBEntity, err := suite.client.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	orgBEntity, err := s.client.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name: "Org B " + gofakeit.LetterN(8),
 	}).Save(userCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	orgB := orgBEntity.ID
 
@@ -86,39 +88,39 @@ func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttributio
 		Capabilities:   auth.CapInternalOperation,
 	})
 
-	_, err = suite.client.Notification.Create().
+	_, err = s.client.Notification.Create().
 		SetOwnerID(orgA).
 		SetNotificationType(enums.NotificationTypeOrganization).
 		SetObjectType("scan.created").
 		SetTitle("Domain scan completed").
 		SetBody("test").
-		SetData(map[string]interface{}{}).
+		SetData(map[string]any{}).
 		SetTopic(enums.NotificationTopicDomainScan).
 		Save(scanSystemCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	suite.waitForEvents()
+	s.waitForEvents()
 
-	bypassCtx := generated.NewContext(scanSystemCtx, suite.client)
+	bypassCtx := generated.NewContext(scanSystemCtx, s.client)
 
-	tasksA, err := suite.client.Task.Query().Where(task.OwnerIDEQ(orgA)).All(bypassCtx)
-	require.NoError(t, err)
+	tasksA, err := s.client.Task.Query().Where(task.OwnerIDEQ(orgA)).All(bypassCtx)
+	assert.NilError(t, err)
 
-	tasksB, err := suite.client.Task.Query().Where(task.OwnerIDEQ(orgB)).All(bypassCtx)
-	require.NoError(t, err)
+	tasksB, err := s.client.Task.Query().Where(task.OwnerIDEQ(orgB)).All(bypassCtx)
+	assert.NilError(t, err)
 
-	assert.NotEmpty(t, tasksA)
-	assert.Empty(t, tasksB)
+	assert.Check(t, len(tasksA) > 0)
+	assert.Check(t, is.Len(tasksB, 0))
 }
 
-func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks() {
-	t := suite.T()
-	user := suite.seedUser()
-	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
+func TestOnboardingCreatesProgramWithSelectedFrameworks(t *testing.T) {
+	s := suite.setupTest(t)
+	user := s.seedUser()
+	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), s.client)
 	ctx = auth.WithInternalOperationContext(ctx)
 
-	admin := suite.seedSystemAdmin()
-	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), suite.client)
+	admin := s.seedSystemAdmin()
+	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), s.client)
 
 	for _, framework := range []struct {
 		code  string
@@ -127,7 +129,7 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 		{code: "soc2", label: "SOC 2"},
 		{code: "iso27001", label: "ISO 27001"},
 	} {
-		std, err := suite.client.Standard.Create().
+		std, err := s.client.Standard.Create().
 			SetSystemOwned(true).
 			SetIsPublic(true).
 			SetFramework(framework.code).
@@ -135,74 +137,74 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 			SetName(framework.label).
 			SetStatus(enums.StandardActive).
 			Save(sysCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		for _, category := range []string{"Security", "Availability", "Confidentiality", "Processing Integrity", "Privacy"} {
-			control, err := suite.client.Control.Create().
+			control, err := s.client.Control.Create().
 				SetSystemOwned(true).
 				SetStandardID(std.ID).
 				SetRefCode(framework.code + "-" + category).
 				SetCategory(category).
 				Save(sysCtx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
-			_, err = suite.client.Subcontrol.Create().
+			_, err = s.client.Subcontrol.Create().
 				SetSystemOwned(true).
 				SetControlID(control.ID).
 				SetRefCode(control.RefCode + "-1").
 				SetCategory(category).
 				Save(sysCtx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 		}
 	}
 
-	onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
+	onboarding, err := s.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 		CompanyName: "Framework Program Co",
-		Compliance: map[string]interface{}{
-			"frameworks":    []interface{}{"soc2", "iso27001", "soc2"},
+		Compliance: map[string]any{
+			"frameworks":    []any{"soc2", "iso27001", "soc2"},
 			"auditor_name":  "Jane Doe",
 			"auditor_email": "jane@example.com",
 		},
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	suite.waitForEvents()
+	s.waitForEvents()
 
-	created, err := suite.client.Program.Query().Where(program.OwnerIDEQ(onboarding.OrganizationID)).
+	created, err := s.client.Program.Query().Where(program.OwnerIDEQ(onboarding.OrganizationID)).
 		WithControls(func(q *generated.ControlQuery) { q.WithSubcontrols() }).
 		WithMembers().Only(ctx)
 
-	require.NoError(t, err)
-	assert.Equal(t, "SOC 2, ISO 27001", created.FrameworkName)
-	assert.Equal(t, fmt.Sprintf("Compliance Program %d", time.Now().Year()), created.Name)
-	assert.Equal(t, "Jane Doe", created.Auditor)
-	assert.Equal(t, "jane@example.com", created.AuditorEmail)
-	require.Len(t, created.Edges.Members, 1)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal("SOC 2, ISO 27001", created.FrameworkName))
+	assert.Check(t, is.Equal(fmt.Sprintf("Compliance Program %d", time.Now().Year()), created.Name))
+	assert.Check(t, is.Equal("Jane Doe", created.Auditor))
+	assert.Check(t, is.Equal("jane@example.com", created.AuditorEmail))
+	assert.Assert(t, is.Len(created.Edges.Members, 1))
 
 	refs := make([]string, 0, len(created.Edges.Controls))
 
 	for _, control := range created.Edges.Controls {
 		refs = append(refs, control.RefCode)
-		assert.Equal(t, onboarding.OrganizationID, control.OwnerID)
-		assert.False(t, control.SystemOwned)
-		require.Len(t, control.Edges.Subcontrols, 1)
-		assert.Equal(t, control.RefCode+"-1", control.Edges.Subcontrols[0].RefCode)
-		assert.Equal(t, onboarding.OrganizationID, control.Edges.Subcontrols[0].OwnerID)
-		assert.Equal(t, control.ID, control.Edges.Subcontrols[0].ControlID)
+		assert.Check(t, is.Equal(onboarding.OrganizationID, control.OwnerID))
+		assert.Check(t, !control.SystemOwned)
+		assert.Assert(t, is.Len(control.Edges.Subcontrols, 1))
+		assert.Check(t, is.Equal(control.RefCode+"-1", control.Edges.Subcontrols[0].RefCode))
+		assert.Check(t, is.Equal(onboarding.OrganizationID, control.Edges.Subcontrols[0].OwnerID))
+		assert.Check(t, is.Equal(control.ID, control.Edges.Subcontrols[0].ControlID))
 	}
-	assert.ElementsMatch(t, []string{
+	assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values([]string{
 		"soc2-Security", "iso27001-Security", "iso27001-Availability",
 		"iso27001-Confidentiality", "iso27001-Processing Integrity", "iso27001-Privacy",
-	}, refs)
+	})), slices.Sorted(slices.Values(refs))))
 
-	tasks, err := suite.client.Task.Query().Where(task.OwnerIDEQ(onboarding.OrganizationID)).All(ctx)
-	require.NoError(t, err)
-	require.NotEmpty(t, tasks)
+	tasks, err := s.client.Task.Query().Where(task.OwnerIDEQ(onboarding.OrganizationID)).All(ctx)
+	assert.NilError(t, err)
+	assert.Assert(t, len(tasks) > 0)
 
 	for _, tk := range tasks {
-		assert.NotEqual(t, "onboarding-framework-soc2", tk.SourceKey)
-		assert.NotEqual(t, "onboarding-framework-iso27001", tk.SourceKey)
-		assert.NotEqual(t, "onboarding-"+taskrules.RuleFrameworkGeneric, tk.SourceKey)
+		assert.Check(t, "onboarding-framework-soc2" != tk.SourceKey)
+		assert.Check(t, "onboarding-framework-iso27001" != tk.SourceKey)
+		assert.Check(t, "onboarding-"+taskrules.RuleFrameworkGeneric != tk.SourceKey)
 	}
 }
 
@@ -210,13 +212,13 @@ func TestTaskRuleNotificationTopicGate(t *testing.T) {
 	t.Parallel()
 
 	listener, ok := taskRuleListenerFor(generated.TypeNotification)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	gate := listener.Definition().Gate
 
-	assert.True(t, gate(context.Background(), notificationCreatePayload(enums.NotificationTopicDomainScan)))
-	assert.False(t, gate(context.Background(), notificationCreatePayload(enums.NotificationTopicApproval)))
-	assert.False(t, gate(context.Background(), entityops.MutationPayload{MutationType: generated.TypeNotification, Operation: entityops.OpCreate, EntityID: "notification-1"}))
+	assert.Check(t, gate(context.Background(), notificationCreatePayload(enums.NotificationTopicDomainScan)))
+	assert.Check(t, !gate(context.Background(), notificationCreatePayload(enums.NotificationTopicApproval)))
+	assert.Check(t, !gate(context.Background(), entityops.MutationPayload{MutationType: generated.TypeNotification, Operation: entityops.OpCreate, EntityID: "notification-1"}))
 }
 
 func taskRuleListenerFor(schemaName string) (entityops.MutationListener, bool) {
@@ -232,11 +234,9 @@ func taskRuleListenerFor(schemaName string) (entityops.MutationListener, bool) {
 
 func notificationCreatePayload(topic enums.NotificationTopic) entityops.MutationPayload {
 	return entityops.MutationPayload{
-		MutationType: generated.TypeNotification,
-		Operation:    entityops.OpCreate,
-		EntityID:     "notification-1",
-		ChangeSet: entityops.ChangeSet{
-			ProposedChanges: map[string]any{notification.FieldTopic: topic},
-		},
+		MutationType:    generated.TypeNotification,
+		Operation:       entityops.OpCreate,
+		EntityID:        "notification-1",
+		ProposedChanges: map[string]any{notification.FieldTopic: topic},
 	}
 }

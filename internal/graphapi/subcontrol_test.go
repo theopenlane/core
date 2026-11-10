@@ -7,7 +7,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -190,6 +189,8 @@ func TestQuerySubcontrols(t *testing.T) {
 }
 
 func TestQuerySubcontrolsBlockedGroupOnControl(t *testing.T) {
+	t.Parallel()
+
 	users := suite.SeedFreshMinimalOrgUsers(t, true)
 	ownerCtx := users.Owner.UserCtx
 
@@ -236,6 +237,35 @@ func TestQuerySubcontrolsBlockedGroupOnControl(t *testing.T) {
 	th.CleanupOrganizationDataWithContext(ownerCtx, t)
 }
 
+func TestMutationCreateBulkSubcontrol(t *testing.T) {
+	control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: control.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	refCode := "BULK-" + ulids.New().String()
+
+	resp, err := suite.Client.API.CreateBulkSubcontrol(th.SharedTestUser1.UserCtx, []*testclient.CreateSubcontrolInput{
+		{RefCode: refCode + "-1", ControlID: control.ID},
+		{RefCode: refCode + "-2", ControlID: control.ID},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkSubcontrol.Subcontrols, 2))
+
+	subcontrolIDs := make([]string, 0, len(resp.CreateBulkSubcontrol.Subcontrols))
+	for _, subcontrol := range resp.CreateBulkSubcontrol.Subcontrols {
+		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, IDs: subcontrolIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeSubcontrol, subcontrolIDs)
+}
+
 func TestMutationCreateSubcontrol(t *testing.T) {
 	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
@@ -265,7 +295,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		{
 			name: "missing required ref code",
 			request: testclient.CreateSubcontrolInput{
-				Description: lo.ToPtr("A description of the Subcontrol"),
+				Description: new("A description of the Subcontrol"),
 				ControlID:   control1.ID,
 			},
 			client:      suite.Client.API,
@@ -307,12 +337,12 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 			name: "happy path, all input",
 			request: testclient.CreateSubcontrolInput{
 				RefCode:     "Another Subcontrol",
-				Description: lo.ToPtr("A description of the Subcontrol"),
+				Description: new("A description of the Subcontrol"),
 				Status:      &enums.ControlStatusPreparing,
 				Tags:        []string{"tag1", "tag2"},
 				Source:      &enums.ControlSourceFramework,
-				Category:    lo.ToPtr("Availability"),
-				Subcategory: lo.ToPtr("Availability-1"),
+				Category:    new("Availability"),
+				Subcategory: new("Availability-1"),
 				MappedCategories: []string{
 					"Category1",
 					"Category2",
@@ -534,7 +564,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateSubcontrolInput{
-				Description: lo.ToPtr("Updated description"),
+				Description: new("Updated description"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -544,7 +574,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 			request: testclient.UpdateSubcontrolInput{
 				Status:             &enums.ControlStatusPreparing,
 				Tags:               []string{"tag1", "tag2"},
-				Source:             lo.ToPtr(enums.ControlSourceUserDefined),
+				Source:             new(enums.ControlSourceUserDefined),
 				ControlOwnerID:     &ownerGroup.ID,
 				DelegateID:         &delegateGroup.ID,
 				SubcontrolKindName: &kind.Name,
@@ -555,7 +585,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 		{
 			name: "update ref code to empty",
 			request: testclient.UpdateSubcontrolInput{
-				RefCode: lo.ToPtr(""),
+				RefCode: new(""),
 			},
 			client:      suite.Client.APIWithPAT,
 			ctx:         context.Background(),

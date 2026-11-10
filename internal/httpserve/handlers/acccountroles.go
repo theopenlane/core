@@ -5,8 +5,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -44,7 +42,7 @@ func (h *Handler) AccountRolesHandler(ctx echo.Context) error {
 			}
 
 			resp := &models.AccountRolesResponse{
-				Reply:       rout.Reply{Success: true},
+				Success:     true,
 				ObjectRoles: objectRoles,
 			}
 

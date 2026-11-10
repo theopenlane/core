@@ -14,12 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
-// Return response for createBulkAPIToken mutation
-type APITokenBulkCreatePayload struct {
-	// Created apiTokens
-	APITokens []*generated.APIToken `json:"apiTokens,omitempty"`
-}
-
 // Return response for deleteBulkAPIToken mutation
 type APITokenBulkDeletePayload struct {
 	// Deleted apiToken IDs
@@ -1031,34 +1025,6 @@ type CustomTypeEnumUpdatePayload struct {
 	CustomTypeEnum *generated.CustomTypeEnum `json:"customTypeEnum"`
 }
 
-// Return response for createBulkDNSVerification mutation
-type DNSVerificationBulkCreatePayload struct {
-	// Created dnsVerifications
-	DNSVerifications []*generated.DNSVerification `json:"dnsVerifications,omitempty"`
-}
-
-// Return response for deleteBulkDNSVerification mutation
-type DNSVerificationBulkDeletePayload struct {
-	// Deleted dnsVerification IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkDNSVerification mutation
-type DNSVerificationBulkUpdatePayload struct {
-	// Updated dnsVerifications
-	DNSVerifications []*generated.DNSVerification `json:"dnsVerifications,omitempty"`
-	// IDs of the updated dnsVerifications
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
 // Return response for createDNSVerification mutation
 type DNSVerificationCreatePayload struct {
 	// Created dnsVerification
@@ -1075,6 +1041,21 @@ type DNSVerificationDeletePayload struct {
 type DNSVerificationUpdatePayload struct {
 	// Updated dnsVerification
 	DNSVerification *generated.DNSVerification `json:"dnsVerification"`
+}
+
+// Input for deleteDemoData mutation
+type DeleteDemoDataInput struct {
+	// the demo dataset to remove from the current organization, e.g. soc2
+	Dataset string `json:"dataset"`
+	// dataset object types whose seeded records are kept, by snake_case schema name, e.g. custom_type_enum
+	Keep []string `json:"keep,omitempty"`
+}
+
+// Return response for deleteDemoData mutation. Removal happens asynchronously, so this only confirms
+// the removal was queued - the outcome surfaces via a follow-up Notification once it finishes
+type DeleteDemoDataPayload struct {
+	// whether the removal was queued
+	Accepted bool `json:"accepted"`
 }
 
 // Return response for createBulkDirectoryAccount mutation
@@ -1862,12 +1843,6 @@ type GroupUpdatePayload struct {
 	Group *generated.Group `json:"group"`
 }
 
-// Return response for createBulkHush mutation
-type HushBulkCreatePayload struct {
-	// Created hushs
-	Hushes []*generated.Hush `json:"hushes,omitempty"`
-}
-
 // Return response for deleteBulkHush mutation
 type HushBulkDeletePayload struct {
 	// Deleted hush IDs
@@ -2170,34 +2145,6 @@ type LaunchCampaignInput struct {
 	Resend *bool `json:"resend,omitempty"`
 	// Optional time to schedule the campaign launch or resend
 	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
-}
-
-// Return response for createBulkMappableDomain mutation
-type MappableDomainBulkCreatePayload struct {
-	// Created mappableDomains
-	MappableDomains []*generated.MappableDomain `json:"mappableDomains,omitempty"`
-}
-
-// Return response for deleteBulkMappableDomain mutation
-type MappableDomainBulkDeletePayload struct {
-	// Deleted mappableDomain IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkMappableDomain mutation
-type MappableDomainBulkUpdatePayload struct {
-	// Updated mappableDomains
-	MappableDomains []*generated.MappableDomain `json:"mappableDomains,omitempty"`
-	// IDs of the updated mappableDomains
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createMappableDomain mutation
@@ -2541,34 +2488,6 @@ type OrganizationCreatePayload struct {
 type OrganizationDeletePayload struct {
 	// Deleted organization ID
 	DeletedID string `json:"deletedID"`
-}
-
-// Return response for createBulkOrganizationSetting mutation
-type OrganizationSettingBulkCreatePayload struct {
-	// Created organizationSettings
-	OrganizationSettings []*generated.OrganizationSetting `json:"organizationSettings,omitempty"`
-}
-
-// Return response for deleteBulkOrganizationSetting mutation
-type OrganizationSettingBulkDeletePayload struct {
-	// Deleted organizationSetting IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkOrganizationSetting mutation
-type OrganizationSettingBulkUpdatePayload struct {
-	// Updated organizationSettings
-	OrganizationSettings []*generated.OrganizationSetting `json:"organizationSettings,omitempty"`
-	// IDs of the updated organizationSettings
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createOrganizationSetting mutation
@@ -3207,6 +3126,21 @@ type SearchResults struct {
 	SearchContext         []*models.SearchContext                   `json:"searchContext,omitempty"`
 }
 
+// Input for seedDemoData mutation
+type SeedDemoDataInput struct {
+	// the demo dataset to seed into the current organization, e.g. soc2
+	Dataset string `json:"dataset"`
+	// the seed profile, DEMO when not set
+	Profile *enums.DemoDataProfile `json:"profile,omitempty"`
+}
+
+// Return response for seedDemoData mutation. Seeding happens asynchronously, so this only confirms
+// the seed was queued - the outcome surfaces via a follow-up Notification once it finishes
+type SeedDemoDataPayload struct {
+	// whether the seed was queued
+	Accepted bool `json:"accepted"`
+}
+
 // Input for sendCampaignTestEmail mutation
 type SendCampaignTestEmailInput struct {
 	// ID of the campaign
@@ -3671,6 +3605,11 @@ type TrustCenterDomainCreatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
+// Return response for setupTrustCenterDomains mutation
+type TrustCenterDomainsSetupPayload struct {
+	Success bool `json:"success"`
+}
+
 // Return response for createBulkTrustCenterEntity mutation
 type TrustCenterEntityBulkCreatePayload struct {
 	// Created trustCenterEntitys
@@ -3781,6 +3720,11 @@ type TrustCenterNDARequestUpdatePayload struct {
 
 type TrustCenterNDAUpdatePayload struct {
 	Template *generated.Template `json:"template"`
+}
+
+// Return response for createTrustCenterPreviewDomain mutation
+type TrustCenterPreviewDomainCreatePayload struct {
+	Success bool `json:"success"`
 }
 
 // Return response for createTrustCenterPreviewSetting mutation
@@ -3920,34 +3864,6 @@ type UserCreatePayload struct {
 type UserDeletePayload struct {
 	// Deleted user ID
 	DeletedID string `json:"deletedID"`
-}
-
-// Return response for createBulkUserSetting mutation
-type UserSettingBulkCreatePayload struct {
-	// Created userSettings
-	UserSettings []*generated.UserSetting `json:"userSettings,omitempty"`
-}
-
-// Return response for deleteBulkUserSetting mutation
-type UserSettingBulkDeletePayload struct {
-	// Deleted userSetting IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkUserSetting mutation
-type UserSettingBulkUpdatePayload struct {
-	// Updated userSettings
-	UserSettings []*generated.UserSetting `json:"userSettings,omitempty"`
-	// IDs of the updated userSettings
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createUserSetting mutation

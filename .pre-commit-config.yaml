@@ -2,6 +2,7 @@ default_stages: [pre-commit]
 fail_fast: true
 default_language_version:
   golang: system
+  node: system
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -19,12 +20,3 @@ repos:
     rev: v1.51.1
     hooks:
       - id: typos
-  - repo: local
-    hooks:
-      - id: format-graphql
-        name: Format GraphQL
-        description: This hook formats GraphQL schemas
-        entry: format-graphql --write=true
-        language: node
-        additional_dependencies: ["format-graphql@1.5.0"]
-        files: 'query/.*\.graphql$'

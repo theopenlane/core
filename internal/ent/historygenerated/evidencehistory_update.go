@@ -112,6 +112,9 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(evidencehistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(evidencehistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(evidencehistory.FieldExternalID, field.TypeString)
 	}
@@ -295,6 +298,9 @@ func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evidenc
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(evidencehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(evidencehistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(evidencehistory.FieldExternalID, field.TypeString)

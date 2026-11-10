@@ -6,8 +6,9 @@ import (
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/gertd/go-pluralize"
-	"github.com/stretchr/testify/assert"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestGetObjectIDFromEntValue(t *testing.T) {
@@ -19,7 +20,7 @@ func TestGetObjectIDFromEntValue(t *testing.T) {
 	}{
 		{
 			name: "valid object ID",
-			input: map[string]interface{}{
+			input: map[string]any{
 				"id": "12345",
 			},
 			want:    "12345",
@@ -27,7 +28,7 @@ func TestGetObjectIDFromEntValue(t *testing.T) {
 		},
 		{
 			name: "missing object ID",
-			input: map[string]interface{}{
+			input: map[string]any{
 				"name": "test",
 			},
 			want:    "",
@@ -45,13 +46,13 @@ func TestGetObjectIDFromEntValue(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := GetObjectIDFromEntValue(tt.input)
 			if tt.wantErr {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 
 				return
 			}
 
-			assert.NoError(t, err)
-			assert.Equal(t, tt.want, got)
+			assert.Check(t, err)
+			assert.Check(t, is.Equal(tt.want, got))
 		})
 	}
 }
@@ -68,8 +69,8 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "valid input",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{
-						"input": map[string]interface{}{
+					Args: map[string]any{
+						"input": map[string]any{
 							"parentField": []string{"id1", "id2"},
 						},
 					},
@@ -84,8 +85,8 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "valid input, singular",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{
-						"input": map[string]interface{}{
+					Args: map[string]any{
+						"input": map[string]any{
 							"parentField": "id1",
 						},
 					},
@@ -100,7 +101,7 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "missing input",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{},
+					Args: map[string]any{},
 				}
 				return graphql.WithFieldContext(context.Background(), fCtx)
 			}(),
@@ -112,7 +113,7 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "invalid JSON",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{
+					Args: map[string]any{
 						"input": make(chan int),
 					},
 				}
@@ -126,8 +127,8 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			name: "missing parent field",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
-					Args: map[string]interface{}{
-						"input": map[string]interface{}{
+					Args: map[string]any{
+						"input": map[string]any{
 							"otherField": []string{"id1", "id2"},
 						},
 					},
@@ -144,18 +145,17 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := parseGraphqlInputForEdgeIDs(tt.ctx, tt.parentField)
 			if tt.wantErr {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 				return
 			}
 
-			assert.NoError(t, err)
-			assert.Equal(t, tt.want, got)
+			assert.Check(t, err)
+			assert.Check(t, is.DeepEqual(tt.want, got))
 		})
 	}
 }
 
 func TestCheckForEdge(t *testing.T) {
-	pluralizer := pluralize.NewClient()
 	tests := []struct {
 		name        string
 		parentField string
@@ -208,8 +208,8 @@ func TestCheckForEdge(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := checkForEdge(pluralizer, tt.parentField, tt.edgeField)
-			assert.Equal(t, tt.want, got)
+			got := checkForEdge(tt.parentField, tt.edgeField)
+			assert.Check(t, is.Equal(tt.want, got))
 		})
 	}
 }

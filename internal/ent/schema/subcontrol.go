@@ -246,7 +246,6 @@ func (Subcontrol) Annotations() []schema.Annotation {
 		// match the unique index on ref_code within the parent control
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			LookupAlternative(externalIDFieldName).
 			LookupAlternative("control_id", "ref_code"),
 	}
 }

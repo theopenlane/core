@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 
@@ -176,7 +175,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 			client:      suite.Client.API,
 			policyID:    policy1.ID,
 			userContext: th.SharedTestUser1.UserCtx,
-			newStatus:   lo.ToPtr(enums.DocumentApproved),
+			newStatus:   new(enums.DocumentApproved),
 			expectError: false,
 		},
 		{
@@ -184,7 +183,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 			client:      suite.Client.API,
 			policyID:    policy2.ID,
 			userContext: th.SharedTestUser1.UserCtx,
-			newStatus:   lo.ToPtr(enums.DocumentApproved),
+			newStatus:   new(enums.DocumentApproved),
 			expectError: false,
 		},
 		{
@@ -192,7 +191,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 			client:        suite.Client.API,
 			policyID:      policy4.ID, // policy4 has emptyGroup, th.SharedTestUser1 is not a member
 			userContext:   th.SharedTestUser1.UserCtx,
-			newStatus:     lo.ToPtr(enums.DocumentApproved),
+			newStatus:     new(enums.DocumentApproved),
 			expectError:   true,
 			errorContains: "you must be in the approver group to mark as approved",
 		},
@@ -201,7 +200,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 			client:        suite.Client.API,
 			policyID:      policy3.ID,
 			userContext:   th.SharedTestUser1.UserCtx,
-			newStatus:     lo.ToPtr(enums.DocumentApproved),
+			newStatus:     new(enums.DocumentApproved),
 			expectError:   true,
 			errorContains: "you must be in the approver group to mark as approved",
 		},
@@ -210,7 +209,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 			client:      suite.Client.API,
 			policyID:    policy3.ID,
 			userContext: th.SharedTestUser1.UserCtx,
-			newStatus:   lo.ToPtr(enums.DocumentPublished),
+			newStatus:   new(enums.DocumentPublished),
 			expectError: false,
 		},
 		{
@@ -218,7 +217,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 			client:      suite.Client.API,
 			policyID:    policy5.ID,
 			userContext: th.SharedTestUser1.UserCtx,
-			newStatus:   lo.ToPtr(enums.DocumentApproved),
+			newStatus:   new(enums.DocumentApproved),
 			expectError: false,
 		},
 	}

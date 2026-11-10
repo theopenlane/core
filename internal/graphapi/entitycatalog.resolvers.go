@@ -37,15 +37,20 @@ func (r *mutationResolver) AdoptEntity(ctx context.Context, catalogID string, in
 		return nil, rout.ErrPermissionDenied
 	}
 
-	overlay, err := jsonx.ToRawMessage(input)
+	source, err := jsonx.ToRawMessage(input)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
 	}
 
-	id, _, err := entityops.SchemaEntity.Adopt(ctx, withTransactionalMutation(ctx), catalogID, orgID, overlay)
+	source, _, err = jsonx.SetObjectKey(source, entityops.CatalogPointerField, catalogID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
+	}
+
+	id, err := entityops.SchemaEntity.Reconcile(ctx, withTransactionalMutation(ctx), orgID, source)
 
 	switch {
-	case errors.Is(err, entityops.ErrCatalogRowNotSystemOwned), errors.Is(err, entityops.ErrCatalogRowNotVisible):
+	case errors.Is(err, entityops.ErrCatalogRowNotFound):
 		return nil, common.NewNotFoundError("entity")
 	case err != nil:
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
@@ -57,6 +62,30 @@ func (r *mutationResolver) AdoptEntity(ctx context.Context, catalogID string, in
 	}
 
 	return &model.EntityCreatePayload{
+		Entity: res,
+	}, nil
+}
+
+// UnlinkEntityCatalog is the resolver for the unlinkEntityCatalog field.
+func (r *mutationResolver) UnlinkEntityCatalog(ctx context.Context, id string) (*model.EntityUpdatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	ctx, err := common.SetOrganizationInAuthContext(ctx, nil)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	if err := entityops.SchemaEntity.Unlink(ctx, withTransactionalMutation(ctx), id); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
+	}
+
+	res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "entity"})
+	}
+
+	return &model.EntityUpdatePayload{
 		Entity: res,
 	}, nil
 }

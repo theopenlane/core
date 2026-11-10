@@ -207,10 +207,7 @@ func compareStrings(a, b string) int {
 	as := strings.Split(a, ".")
 	bs := strings.Split(b, ".")
 
-	n := len(as)
-	if len(bs) < n {
-		n = len(bs)
-	}
+	n := min(len(bs), len(as))
 
 	for i := range n {
 		aInt, aErr := strconv.Atoi(as[i])

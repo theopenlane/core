@@ -2,19 +2,21 @@ package rule
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/logx"
+
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	"github.com/theopenlane/logx"
 )
 
 // AllowIfTrustCenterEditor checks if the user has edit access to the trust center associated with the mutation
@@ -31,7 +33,7 @@ func AllowIfTrustCenterEditor() privacy.MutationRule {
 
 		// the caller must be able to edit every trust center the object belongs to or is moved to
 		for _, trustCenterID := range trustCenterIDs {
-			if err := checkTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID); !errors.Is(err, privacy.Allow) {
+			if err := CheckTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID); !errors.Is(err, privacy.Allow) {
 				return err
 			}
 		}
@@ -86,32 +88,33 @@ func getStoredTrustCenterID(ctx context.Context, tcMutation utils.TrustCenterMut
 		return ""
 	}
 
-	pluralObjectType := tcMutation.Client().Pluralizer.Plural(objectType)
-	tableName := strcase.SnakeCase(pluralObjectType)
+	schema, ok := entityops.LookupSchema(objectType)
+	if !ok || schema.Load == nil {
+		return ""
+	}
 
-	query := "SELECT trust_center_id FROM " + tableName + " WHERE id = $1"
-
-	var rows sql.Rows
-	if err := tcMutation.Client().Driver().Query(ctx, query, []any{objectID}, &rows); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to check for object in organization")
+	data, err := schema.Load(ctx, tcMutation.Client(), objectID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("object_type", objectType).Msg("failed to load object for trust center id")
 
 		return ""
 	}
 
-	defer rows.Close()
-
-	if rows.Next() {
-		var trustCenterID string
-		if err := rows.Scan(&trustCenterID); err == nil {
-			return trustCenterID
-		}
+	var stored struct {
+		TrustCenterID string `json:"trust_center_id"`
 	}
 
-	return ""
+	if err := json.Unmarshal(data, &stored); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("object_type", objectType).Msg("failed to decode object for trust center id")
+
+		return ""
+	}
+
+	return stored.TrustCenterID
 }
 
-// checkTrustCenterAccess checks if the authenticated user has the specified relation access to the trust center.
-func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID string) error {
+// CheckTrustCenterAccess checks if the authenticated user has the specified relation access to the trust center.
+func CheckTrustCenterAccess(ctx context.Context, relation string, trustCenterID string) error {
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller.IsAnonymous() {
 		return auth.ErrNoAuthUser

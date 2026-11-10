@@ -7,7 +7,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -32,7 +31,7 @@ func TestDocumentDataAnonymousTrustCenterAccess(t *testing.T) {
 		_, err := suite.Client.API.CreateTrustCenterNDARequest(ctx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     "Anon",
 			LastName:      "User",
-			CompanyName:   lo.ToPtr("Test Company"),
+			CompanyName:   new("Test Company"),
 			Email:         email,
 			TrustCenterID: &trustCenter.ID,
 		})

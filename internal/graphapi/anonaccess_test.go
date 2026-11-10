@@ -17,6 +17,8 @@ import (
 )
 
 func TestTemplateAnonymousTrustCenterAccess(t *testing.T) {
+	t.Parallel()
+
 	// two orgs each with a trust center and NDA template
 	tcOrg1 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
@@ -149,6 +151,8 @@ func TestTemplateAnonymousTrustCenterAccess(t *testing.T) {
 }
 
 func TestSubscriberAnonymousTrustCenterAccess(t *testing.T) {
+	t.Parallel()
+
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
 
@@ -210,9 +214,9 @@ func TestSubscriberAnonymousTrustCenterOnlyAcceptsEmail(t *testing.T) {
 		name  string
 		input testclient.CreateSubscriberInput
 	}{
-		{name: "verified email", input: testclient.CreateSubscriberInput{VerifiedEmail: lo.ToPtr(true)}},
-		{name: "verified phone", input: testclient.CreateSubscriberInput{VerifiedPhone: lo.ToPtr(true)}},
-		{name: "phone number", input: testclient.CreateSubscriberInput{PhoneNumber: lo.ToPtr("+12025550123")}},
+		{name: "verified email", input: testclient.CreateSubscriberInput{VerifiedEmail: new(true)}},
+		{name: "verified phone", input: testclient.CreateSubscriberInput{VerifiedPhone: new(true)}},
+		{name: "phone number", input: testclient.CreateSubscriberInput{PhoneNumber: new("+12025550123")}},
 		{name: "tags", input: testclient.CreateSubscriberInput{Tags: []string{"injected"}}},
 		{name: "user", input: testclient.CreateSubscriberInput{UserID: &th.SharedTestUser1.ID}},
 		{name: "owner", input: testclient.CreateSubscriberInput{OwnerID: &th.SharedTestUser1.OrganizationID}},
@@ -249,6 +253,8 @@ func TestSubscriberAnonymousTrustCenterOnlyAcceptsEmail(t *testing.T) {
 }
 
 func TestTrustCenterNDARequestAnonymousAllowedFields(t *testing.T) {
+	t.Parallel()
+
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	trustCenter := tcOrg.TrustCenter
 
@@ -259,10 +265,10 @@ func TestTrustCenterNDARequestAnonymousAllowedFields(t *testing.T) {
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         anonEmail,
-		CompanyName:   lo.ToPtr(gofakeit.Company()),
-		Reason:        lo.ToPtr("audit"),
+		CompanyName:   new(gofakeit.Company()),
+		Reason:        new("audit"),
 		TrustCenterID: &trustCenter.ID,
-		AccessLevel:   lo.ToPtr(enums.TrustCenterNDARequestAccessLevelLimited),
+		AccessLevel:   new(enums.TrustCenterNDARequestAccessLevelLimited),
 	})
 	assert.NilError(t, err)
 
@@ -287,7 +293,7 @@ func TestTrustCenterNDARequestAnonymousAllowedFields(t *testing.T) {
 			FirstName:     gofakeit.FirstName(),
 			LastName:      gofakeit.LastName(),
 			Email:         gofakeit.Email(),
-			TrustCenterID: lo.ToPtr(ulids.New().String()),
+			TrustCenterID: new(ulids.New().String()),
 		})
 		assert.ErrorContains(t, err, "not authorized")
 	})
@@ -298,7 +304,7 @@ func TestTrustCenterNDARequestAnonymousAllowedFields(t *testing.T) {
 		name  string
 		input testclient.CreateTrustCenterNDARequestInput
 	}{
-		{name: "status", input: testclient.CreateTrustCenterNDARequestInput{Status: lo.ToPtr(enums.TrustCenterNDARequestStatusRequested)}},
+		{name: "status", input: testclient.CreateTrustCenterNDARequestInput{Status: new(enums.TrustCenterNDARequestStatusRequested)}},
 		{name: "approved at", input: testclient.CreateTrustCenterNDARequestInput{ApprovedAt: &now}},
 		{name: "signed at", input: testclient.CreateTrustCenterNDARequestInput{SignedAt: &now}},
 		{name: "approved by user", input: testclient.CreateTrustCenterNDARequestInput{ApprovedByUserID: &tcOrg.Owner.ID}},
@@ -349,6 +355,8 @@ func TestTrustCenterNDARequestAnonymousAllowedFields(t *testing.T) {
 }
 
 func TestTrustCenterNDARequestAnonymousDataIsolation(t *testing.T) {
+	t.Parallel()
+
 	tcOrg1 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 
@@ -428,6 +436,8 @@ func TestTrustCenterNDARequestAnonymousDataIsolation(t *testing.T) {
 }
 
 func TestControlAnonymousTrustCenterAccess(t *testing.T) {
+	t.Parallel()
+
 	tcOrg1 := th.CreateFreshOrgWithTrustCenter(t)
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t)
 
@@ -445,7 +455,7 @@ func TestControlAnonymousTrustCenterAccess(t *testing.T) {
 	assert.NilError(t, err)
 
 	_, err = suite.Client.API.UpdateControl(tcOrg1.Owner.UserCtx, tcControl1.ID, testclient.UpdateControlInput{
-		TrustCenterVisibility: lo.ToPtr(enums.TrustCenterControlVisibilityPubliclyVisible),
+		TrustCenterVisibility: new(enums.TrustCenterControlVisibilityPubliclyVisible),
 	})
 	assert.NilError(t, err)
 
@@ -470,7 +480,7 @@ func TestControlAnonymousTrustCenterAccess(t *testing.T) {
 	assert.NilError(t, err)
 
 	_, err = suite.Client.API.UpdateControl(tcOrg2.Owner.UserCtx, tcControl2.ID, testclient.UpdateControlInput{
-		TrustCenterVisibility: lo.ToPtr(enums.TrustCenterControlVisibilityPubliclyVisible),
+		TrustCenterVisibility: new(enums.TrustCenterControlVisibilityPubliclyVisible),
 	})
 	assert.NilError(t, err)
 

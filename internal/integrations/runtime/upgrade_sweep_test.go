@@ -13,7 +13,7 @@ import (
 
 func TestStaleInstallationsKeepsOnlyOlderVersions(t *testing.T) {
 	reg, err := testint.VersionedRegistry(func() (types.Definition, error) {
-		return types.Definition{DefinitionSpec: types.DefinitionSpec{ID: "sweep-def"}}, nil
+		return types.Definition{ID: "sweep-def"}, nil
 	})
 	assert.NilError(t, err)
 

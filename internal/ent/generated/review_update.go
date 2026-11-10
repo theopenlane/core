@@ -261,6 +261,26 @@ func (_u *ReviewUpdate) ClearIntegrationRunID() *ReviewUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *ReviewUpdate) SetSourceKey(v string) *ReviewUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableSourceKey(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ReviewUpdate) ClearSourceKey() *ReviewUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *ReviewUpdate) SetExternalID(v string) *ReviewUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1577,6 +1597,12 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(review.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(review.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(review.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(review.FieldExternalID, field.TypeString, value)
 	}
@@ -2835,6 +2861,26 @@ func (_u *ReviewUpdateOne) SetNillableIntegrationRunID(v *string) *ReviewUpdateO
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *ReviewUpdateOne) ClearIntegrationRunID() *ReviewUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *ReviewUpdateOne) SetSourceKey(v string) *ReviewUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableSourceKey(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ReviewUpdateOne) ClearSourceKey() *ReviewUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -4183,6 +4229,12 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(review.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(review.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(review.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(review.FieldExternalID, field.TypeString, value)

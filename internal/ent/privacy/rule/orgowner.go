@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
-	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -241,8 +240,12 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType,
 	}
 
 	// check if the object is in the organization
-	pluralObjectType := utils.PluralizerClient(ctx, m).Plural(objectType)
-	tableName := strcase.SnakeCase(pluralObjectType)
+	tableName, err := utils.ObjectTable(objectType)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("object", objectType).Msg("failed to resolve table for object")
+
+		return privacy.Denyf("unable to determine access")
+	}
 
 	// files are not org owned, they rely on parents
 	if tableName == "files" {
@@ -328,8 +331,12 @@ func CheckIsSystemOwned(ctx context.Context, m ent.Mutation, objectType, objectI
 	}
 
 	// check if the object is in the organization
-	pluralObjectType := utils.PluralizerClient(ctx, m).Plural(objectType)
-	tableName := strcase.SnakeCase(pluralObjectType)
+	tableName, err := utils.ObjectTable(objectType)
+	if err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Str("object", objectType).Msg("failed to resolve table for object")
+
+		return false
+	}
 
 	query := "SELECT EXISTS (SELECT 1 FROM " + tableName + " WHERE id = $1 and (owner_id is null and system_owned = true))"
 

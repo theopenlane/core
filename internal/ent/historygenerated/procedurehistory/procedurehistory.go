@@ -56,6 +56,8 @@ const (
 	FieldManagedBy = "managed_by"
 	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldSourceKey holds the string denoting the source_key field in the database.
+	FieldSourceKey = "source_key"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
@@ -147,6 +149,7 @@ var Columns = []string{
 	FieldSourceInstanceID,
 	FieldManagedBy,
 	FieldIntegrationRunID,
+	FieldSourceKey,
 	FieldExternalID,
 	FieldOwnerID,
 	FieldName,
@@ -214,7 +217,7 @@ var (
 	// DefaultApprovalRequired holds the default value on creation for the "approval_required" field.
 	DefaultApprovalRequired bool
 	// DefaultReviewDue holds the default value on creation for the "review_due" field.
-	DefaultReviewDue time.Time
+	DefaultReviewDue func() time.Time
 	// DefaultTagSuggestions holds the default value on creation for the "tag_suggestions" field.
 	DefaultTagSuggestions []string
 	// DefaultDismissedTagSuggestions holds the default value on creation for the "dismissed_tag_suggestions" field.
@@ -372,6 +375,11 @@ func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByIntegrationRunID orders the results by the integration_run_id field.
 func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
+// BySourceKey orders the results by the source_key field.
+func BySourceKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceKey, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.

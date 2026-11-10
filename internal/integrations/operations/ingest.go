@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
 )
 
@@ -102,6 +103,17 @@ func (r *IngestResult) Merge(other IngestResult) {
 	r.Excluded += other.Excluded
 	r.Removed += other.Removed
 	r.Failures = append(r.Failures, other.Failures...)
+}
+
+// FailureSummary renders a compact summary of the failed records, empty when none failed
+func (r IngestResult) FailureSummary() string {
+	if len(r.Failures) == 0 {
+		return ""
+	}
+
+	first := r.Failures[0]
+
+	return fmt.Sprintf("%d of %d records failed to import; first failure: %s %s: %s", r.Failed, r.Attempted, first.Schema, first.Resource, first.Message)
 }
 
 // IngestOptionsFromOperationContext derives ingest options from an integration operation context
@@ -208,14 +220,18 @@ func (ic IngestContext) definitionID() string {
 	}
 }
 
-// ownerID returns the owning organization, empty on the runtime path so rows persist system-owned
-func (ic IngestContext) ownerID() string {
-	switch {
-	case ic.Integration != nil:
+// ownerID returns the owning organization, from the installation or the caller's organization, empty for system-owned rows
+func (ic IngestContext) ownerID(ctx context.Context) string {
+	if ic.Integration != nil {
 		return ic.Integration.OwnerID
-	default:
+	}
+
+	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return ""
 	}
+
+	return ownerID
 }
 
 // ProcessPayloadSets persists one batch of mapped payload sets synchronously
@@ -322,7 +338,7 @@ func (run *payloadRun) fail(schema, resource string, err error) {
 
 // applySet prepares, links, and persists one payload set
 func (run *payloadRun) applySet(ctx context.Context, payloadSet types.IngestPayloadSet) error {
-	sourceSchema, err := run.resolveSetSchema(payloadSet.Schema)
+	sourceSchema, err := run.resolveSetSchema(ctx, payloadSet.Schema)
 	if err != nil {
 		return err
 	}
@@ -337,7 +353,7 @@ func (run *payloadRun) applySet(ctx context.Context, payloadSet types.IngestPayl
 	setCtx := ctx
 
 	if run.preload && sourceSchema.QueryByLookup != nil && len(sourceSchema.Lookup) > 0 {
-		prefetched, err := prefetchLookupMatches(ctx, run.ic.DB, run.ic.ownerID(), sourceSchema, ready)
+		prefetched, err := prefetchLookupMatches(ctx, run.ic.DB, run.ic.ownerID(ctx), sourceSchema, ready)
 		if err != nil {
 			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
@@ -360,14 +376,14 @@ func (run *payloadRun) applySet(ctx context.Context, payloadSet types.IngestPayl
 }
 
 // resolveSetSchema checks the payload set's schema is declared by the operation and ingest-capable
-func (run *payloadRun) resolveSetSchema(name string) (*entityops.Schema, error) {
+func (run *payloadRun) resolveSetSchema(ctx context.Context, name string) (*entityops.Schema, error) {
 	if !contractIncludesSchema(run.batch.Contracts, name) {
 		return nil, ErrIngestSchemaNotDeclared
 	}
 
 	sourceSchema, ok := lookupIngestSchema(name)
 	if ok {
-		if _, systemOwnable := sourceSchema.FieldByName(fieldSystemOwned); run.ic.Integration == nil && !systemOwnable {
+		if _, systemOwnable := sourceSchema.FieldByName(fieldSystemOwned); run.ic.ownerID(ctx) == "" && !systemOwnable {
 			return nil, ErrIngestSchemaNotSystemOwned
 		}
 
@@ -411,7 +427,12 @@ func (run *payloadRun) prepare(ctx context.Context, payloadSet types.IngestPaylo
 		}
 
 		record.schema = sourceSchema
-		record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, run.ic.Integration, run.definition.ID, run.batch.Options.RunID)
+		record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, entityops.ProvenanceSource{
+			Integration:  run.ic.Integration,
+			DefinitionID: run.definition.ID,
+			SourceKey:    payloadSet.SourceKey,
+			RunID:        run.batch.Options.RunID,
+		})
 
 		prepared = append(prepared, preparedIngestRecord{resource: envelope.Resource, record: record, links: mapping.Links})
 	}
@@ -440,7 +461,7 @@ func (run *payloadRun) link(ctx context.Context, sourceSchema *entityops.Schema,
 		}
 
 		for _, p := range group.records {
-			payload, err := entityops.InjectCreateLinks(linkCtx, run.ic.DB, run.ic.ownerID(), sourceSchema, p.record.Payload, specs)
+			payload, err := entityops.InjectCreateLinks(linkCtx, run.ic.DB, run.ic.ownerID(ctx), sourceSchema, p.record.Payload, specs)
 			if err != nil {
 				logx.FromContext(p.logCtx(ctx)).Error().Err(err).Str("schema", sourceSchema.Name).Msg("ingest link target resolution failed")
 				run.fail(p.record.Schema, p.resource, fmt.Errorf("%w: %w", ErrLinkFailed, err))
@@ -464,7 +485,7 @@ func (run *payloadRun) prefetchLinkTargets(ctx context.Context, sourceSchema *en
 
 	payloads := lo.Map(records, func(p preparedIngestRecord, _ int) json.RawMessage { return p.record.Payload })
 
-	prefetched, err := entityops.PrefetchLinkTargets(ctx, run.ic.DB, run.ic.ownerID(), sourceSchema, payloads, specs)
+	prefetched, err := entityops.PrefetchLinkTargets(ctx, run.ic.DB, run.ic.ownerID(ctx), sourceSchema, payloads, specs)
 	if err != nil {
 		return ctx, fmt.Errorf("%w: %w", ErrLinkFailed, err)
 	}
@@ -552,7 +573,7 @@ func (run *payloadRun) skipExcluded(ctx, recordCtx context.Context, p preparedIn
 	var rows []json.RawMessage
 
 	if set != nil || resolvable {
-		fetched, err := excludedRecordRows(ctx, run.ic.DB, run.ic.ownerID(), schema, p.record.Payload)
+		fetched, err := excludedRecordRows(ctx, run.ic.DB, run.ic.ownerID(ctx), schema, p.record.Payload)
 		if err != nil {
 			return false, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
@@ -579,7 +600,8 @@ func (run *payloadRun) skipExcluded(ctx, recordCtx context.Context, p preparedIn
 	}
 
 	run.result.Excluded++
-	run.result.Failures = append(run.result.Failures, RecordFailure{Schema: p.record.Schema, Resource: p.resource, Err: fmt.Errorf("%w: %s", ErrIngestRecordExcluded, entry.LastError)})
+	excludedErr := fmt.Errorf("%w: %s", ErrIngestRecordExcluded, entry.LastError)
+	run.result.Failures = append(run.result.Failures, RecordFailure{Schema: p.record.Schema, Resource: p.resource, Message: excludedErr.Error(), Err: excludedErr})
 
 	logx.FromContext(recordCtx).Warn().Int("attempts", entry.Attempts).Msg("ingest excluded record skipped")
 
@@ -800,7 +822,7 @@ func prefetchLookupMatches(ctx context.Context, db *ent.Client, ownerID string, 
 
 		keyed := make(map[string][]json.RawMessage, len(values))
 		for _, v := range values {
-			keyed[entityops.EncodeLookupKey(alt, v)] = nil
+			keyed[entityops.EncodeLookupKey(schema, alt, v)] = nil
 		}
 
 		for _, chunk := range lo.Chunk(values, ingestQueryChunk) {
@@ -809,7 +831,7 @@ func prefetchLookupMatches(ctx context.Context, db *ent.Client, ownerID string, 
 				return ctx, err
 			}
 
-			keyLookupRows(alt, rows, keyed)
+			keyLookupRows(schema, alt, rows, keyed)
 		}
 
 		matches[alternative] = keyed
@@ -819,14 +841,14 @@ func prefetchLookupMatches(ctx context.Context, db *ent.Client, ownerID string, 
 }
 
 // keyLookupRows indexes rows by their lookup alternative key
-func keyLookupRows(alt entityops.LookupAlternative, rows []json.RawMessage, keyed map[string][]json.RawMessage) {
+func keyLookupRows(schema *entityops.Schema, alt entityops.LookupAlternative, rows []json.RawMessage, keyed map[string][]json.RawMessage) {
 	for _, row := range rows {
 		rowValues := make(entityops.LookupValues, len(alt.Fields))
 		for _, name := range alt.Fields {
 			rowValues[name] = entityops.FieldValue(row, name)
 		}
 
-		key := entityops.EncodeLookupKey(alt, rowValues)
+		key := entityops.EncodeLookupKey(schema, alt, rowValues)
 		keyed[key] = append(keyed[key], row)
 	}
 }

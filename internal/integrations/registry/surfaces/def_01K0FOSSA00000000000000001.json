@@ -1,0 +1,101 @@
+{
+  "hash": "06e6427c38db1f79f7f6d3acc8f91b3e9c4dc68b19c53a3558414c1f8e7e3de9",
+  "version": "01M6Q13CWMK8CCSHXZY2X5VJ8B",
+  "surface": {
+    "id": "def_01K0FOSSA00000000000000001",
+    "credentials": [
+      {
+        "ref": "CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/fossa/credential-schema",
+          "$ref": "#/$defs/CredentialSchema",
+          "$defs": {
+            "CredentialSchema": {
+              "properties": {
+                "apiToken": {
+                  "type": "string",
+                  "title": "API Token",
+                  "description": "Full API token from a FOSSA service account. Push-only tokens cannot read issues. Read scope is controlled by the service account role."
+                },
+                "baseUrl": {
+                  "type": "string",
+                  "title": "Base URL",
+                  "description": "FOSSA base URL. Leave blank to use https://app.fossa.com."
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "apiToken"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/fossa/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "title": "Organization ID"
+              },
+              "baseUrl": {
+                "type": "string",
+                "title": "Base URL"
+              },
+              "subscription": {
+                "type": "string",
+                "title": "Subscription"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "CredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "VulnerabilitySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/fossa/vulnerability-sync",
+          "$ref": "#/$defs/VulnerabilitySync",
+          "$defs": {
+            "VulnerabilitySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                },
+                "enableLicenseFindings": {
+                  "type": "boolean",
+                  "title": "Enable License Compliance Findings",
+                  "description": "Also collect FOSSA OSS license policy issues as findings. Security vulnerabilities are always collected."
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

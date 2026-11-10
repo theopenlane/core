@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -77,7 +78,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	}
 
 	// create new claims for the user
-	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctxWithToken, ctx.Response().Writer, user, invitedUser.OwnerID)
+	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctxWithToken, ctx.Response().Writer, user, invitedUser.OwnerID, false)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
@@ -86,7 +87,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 
 	// reply with the relevant details
 	out := &models.InviteResponse{
-		Reply:       rout.Reply{Success: true},
+		Success:     true,
 		ID:          subjectID,
 		Email:       invitedUser.Recipient,
 		JoinedOrgID: invitedUser.OwnerID,
@@ -243,7 +244,7 @@ func (i *Invite) validateInviteRequest() error {
 // validateUser is a helper function that ensures the logged-in user is the same as the invite
 func (i *Invite) validateUser(email string) error {
 	// ensure the logged in user is the same as the invite
-	if i.Email != email {
+	if !strings.EqualFold(i.Email, email) {
 		return ErrUnableToVerifyEmail
 	}
 

@@ -16,9 +16,10 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gertd/go-pluralize"
 	"github.com/mcuadros/go-defaults"
+	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
@@ -94,6 +95,7 @@ type GraphTestSuite struct {
 	CacheRefreshServer *httptest.Server
 	GalaRuntime        *gala.Gala
 	IntegrationsRT     *intruntime.Runtime
+	IntegrationsRedis  *redis.Client
 	WorkflowEngine     *engine.WorkflowEngine
 	SlackMock          *slackdef.MockSlackRuntime
 	CloudflareMock     *cloudflaredef.MockCloudflareRuntime
@@ -290,13 +292,15 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// durable gala runtime for integration dispatch
 	galaInstance, err := gala.NewGala(ctx, gala.Config{
-		DispatchMode:      gala.DispatchModeDurable,
-		ConnectionURI:     suite.TF.URI,
-		QueueName:         "graphapi_integration_test",
-		WorkerCount:       5, //nolint:mnd
-		RunMigrations:     true,
-		FetchCooldown:     time.Millisecond,
-		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
+		DispatchMode:         gala.DispatchModeDurable,
+		ConnectionURI:        suite.TF.URI,
+		QueueName:            "graphapi_integration_test",
+		WorkerCount:          5, //nolint:mnd
+		RunMigrations:        true,
+		FetchCooldown:        time.Millisecond,
+		FetchPollInterval:    10 * time.Millisecond, //nolint:mnd
+		WaitIdlePollInterval: 10 * time.Millisecond, //nolint:mnd
+		CompleteJobsInline:   true,
 	})
 	RequireNoError(t, err)
 
@@ -352,11 +356,13 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	)
 	RequireNoError(t, err)
 
+	suite.IntegrationsRedis = coreutils.NewRedisClient()
+
 	rt, err := intruntime.New(intruntime.Config{
 		DB:          c.DB,
 		Gala:        galaInstance,
 		Keystore:    credStore,
-		RedisClient: coreutils.NewRedisClient(),
+		RedisClient: suite.IntegrationsRedis,
 		Registry:    reg,
 	})
 	RequireNoError(t, err)
@@ -429,7 +435,7 @@ func NewTestGraphServer(t *testing.T) http.Handler {
 
 	// get keys from the token manager
 	keys, err := Suite.Client.DB.TokenManager.Keys()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")

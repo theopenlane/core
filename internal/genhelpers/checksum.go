@@ -7,11 +7,15 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"slices"
 )
 
 const (
 	defaultFilePermissions = 0644
 )
+
+// checksumExtensions are the file types whose changes trigger regeneration, templates included so template-only edits regenerate
+var checksumExtensions = []string{".go", ".graphql", ".tmpl"}
 
 // HasSchemaChanges checks if there have been changes to schema or generated files
 // by comparing checksums of the relevant directories
@@ -71,8 +75,8 @@ func calculateDirChecksum(paths ...string) (string, error) {
 				return nil
 			}
 
-			// Only process .go files and .graphql files
-			if filepath.Ext(relPath) != ".go" && filepath.Ext(relPath) != ".graphql" {
+			// Only process .go, .graphql, and .tmpl files
+			if !slices.Contains(checksumExtensions, filepath.Ext(relPath)) {
 				return nil
 			}
 

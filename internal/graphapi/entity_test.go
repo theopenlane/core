@@ -8,7 +8,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -139,7 +138,7 @@ func TestQueryEntities(t *testing.T) {
 func TestMutationCreateEntity(t *testing.T) {
 	entitiesToDelete := []string{}
 	entityTypesToDelete := []string{}
-	defaultTier := lo.ToPtr(enums.VendorTierStandard)
+	defaultTier := new(enums.VendorTierStandard)
 
 	entityType := (&th.EntityTypeBuilder{Client: suite.Client, Name: "superheros"}).MustNew(th.SharedTestUser1.UserCtx, t)
 	entityTypeAnotherOrg := (&th.EntityTypeBuilder{Client: suite.Client, Name: "villains"}).MustNew(th.SharedTestUser2.UserCtx, t)
@@ -155,7 +154,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		{
 			name: "happy path, minimal input",
 			request: testclient.CreateEntityInput{
-				Name: lo.ToPtr("fraser fir"),
+				Name: new("fraser fir"),
 				Tier: defaultTier,
 			},
 			client: suite.Client.API,
@@ -164,9 +163,9 @@ func TestMutationCreateEntity(t *testing.T) {
 		{
 			name: "happy path, all input with entity type",
 			request: testclient.CreateEntityInput{
-				Name:        lo.ToPtr("mitb"),
-				DisplayName: lo.ToPtr("fraser fir"),
-				Description: lo.ToPtr("the pine trees of appalachia"),
+				Name:        new("mitb"),
+				DisplayName: new("fraser fir"),
+				Description: new("the pine trees of appalachia"),
 				Domains:     []string{"https://appalachiatrees.com"},
 				Status:      &enums.EntityStatusUnderReview,
 				Tier:        defaultTier,
@@ -181,7 +180,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		{
 			name: "not allowed to use another org's entity type",
 			request: testclient.CreateEntityInput{
-				Name: lo.ToPtr("peter pan"),
+				Name: new("peter pan"),
 				Tier: defaultTier,
 			},
 			entityTypeName: &entityTypeAnotherOrg.Name,
@@ -192,7 +191,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateEntityInput{
-				Name: lo.ToPtr("douglas fir"),
+				Name: new("douglas fir"),
 				Tier: defaultTier,
 			},
 			client: suite.Client.APIWithToken,
@@ -201,7 +200,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateEntityInput{
-				Name:    lo.ToPtr("blue spruce"),
+				Name:    new("blue spruce"),
 				OwnerID: &th.SharedTestUser1.OrganizationID,
 				Tier:    defaultTier,
 			},
@@ -211,7 +210,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		{
 			name: "do not create if not allowed",
 			request: testclient.CreateEntityInput{
-				Name: lo.ToPtr("test-entity"),
+				Name: new("test-entity"),
 				Tier: defaultTier,
 			},
 			client:      suite.Client.API,
@@ -221,7 +220,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		{
 			name: "missing name, but display name provided",
 			request: testclient.CreateEntityInput{
-				DisplayName: lo.ToPtr("fraser firs"),
+				DisplayName: new("fraser firs"),
 				Tier:        defaultTier,
 			},
 			client: suite.Client.API,
@@ -230,7 +229,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		{
 			name: "name already exists, different casing is allowed",
 			request: testclient.CreateEntityInput{
-				Name: lo.ToPtr("Blue spruce"),
+				Name: new("Blue spruce"),
 				Tier: defaultTier,
 			},
 			client: suite.Client.API,
@@ -239,7 +238,7 @@ func TestMutationCreateEntity(t *testing.T) {
 		{
 			name: "invalid domain(s)",
 			request: testclient.CreateEntityInput{
-				Name:    lo.ToPtr("stone pines"),
+				Name:    new("stone pines"),
 				Domains: []string{"appalachiatrees"},
 				Tier:    defaultTier,
 			},
@@ -331,8 +330,8 @@ func TestMutationCreateEntityEnrichment(t *testing.T) {
 	}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	resp, err := suite.Client.API.CreateEntity(th.SharedTestUser1.UserCtx, testclient.CreateEntityInput{
-		Name: lo.ToPtr(strings.ToUpper(name)),
-		Tier: lo.ToPtr(enums.VendorTierStandard),
+		Name: new(strings.ToUpper(name)),
+		Tier: new(enums.VendorTierStandard),
 	}, nil, nil, nil, nil, nil)
 
 	assert.NilError(t, err)
@@ -345,11 +344,11 @@ func TestMutationCreateEntityEnrichment(t *testing.T) {
 	userLogoURL := "https://example.com/requested-logo.png"
 
 	entityResp, err := suite.Client.API.CreateEntity(th.SharedTestUser1.UserCtx, testclient.CreateEntityInput{
-		Name:          lo.ToPtr(name + " entity"),
-		DisplayName:   lo.ToPtr(name),
-		Description:   lo.ToPtr(userDescription),
-		Tier:          lo.ToPtr(enums.VendorTierStandard),
-		LogoRemoteURL: lo.ToPtr(userLogoURL),
+		Name:          new(name + " entity"),
+		DisplayName:   new(name),
+		Description:   new(userDescription),
+		Tier:          new(enums.VendorTierStandard),
+		LogoRemoteURL: new(userLogoURL),
 	}, nil, nil, nil, nil, nil)
 
 	assert.NilError(t, err)
@@ -376,8 +375,8 @@ func TestMutationUpdateEntity(t *testing.T) {
 		{
 			name: "happy path, update display name",
 			request: testclient.UpdateEntityInput{
-				DisplayName:    lo.ToPtr("blue spruce"),
-				ApprovedForUse: lo.ToPtr(true),
+				DisplayName:    new("blue spruce"),
+				ApprovedForUse: new(true),
 				Note: &testclient.CreateNoteInput{
 					Text: "the pine tree with blue-green colored needles",
 				},
@@ -388,7 +387,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 		{
 			name: "update description using api token",
 			request: testclient.UpdateEntityInput{
-				Description: lo.ToPtr("the pine tree with blue-green colored needles"),
+				Description: new("the pine tree with blue-green colored needles"),
 				Status:      &enums.EntityStatusDraft,
 			},
 			client: suite.Client.APIWithToken,
@@ -411,7 +410,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 			request: testclient.UpdateEntityInput{
 				Status:         &enums.EntityStatusSuspended,
 				AppendDomains:  []string{"example.com"},
-				ApprovedForUse: lo.ToPtr(false),
+				ApprovedForUse: new(false),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -420,7 +419,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 			name: "conflicting status and approved for use, approved should take precedence",
 			request: testclient.UpdateEntityInput{
 				Status:         &enums.EntityStatusActive,
-				ApprovedForUse: lo.ToPtr(false),
+				ApprovedForUse: new(false),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -428,7 +427,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 		{
 			name: "not allowed to update",
 			request: testclient.UpdateEntityInput{
-				Description: lo.ToPtr("pine trees of the west"),
+				Description: new("pine trees of the west"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -437,7 +436,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 		{
 			name: "not allowed to update, no access to entity",
 			request: testclient.UpdateEntityInput{
-				Description: lo.ToPtr("pine trees of the west"),
+				Description: new("pine trees of the west"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,

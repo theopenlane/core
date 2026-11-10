@@ -3,14 +3,14 @@ package email
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestTemplateVariables_NotEmpty(t *testing.T) {
 	vars := TemplateVariables()
 
-	require.NotEmpty(t, vars)
+	assert.Assert(t, len(vars) > 0)
 }
 
 func TestTemplateVariables_ContainsBaseVars(t *testing.T) {
@@ -25,7 +25,7 @@ func TestTemplateVariables_ContainsBaseVars(t *testing.T) {
 		"companyName", "corporation", "supportemail", "year",
 		"email", "firstName", "lastName",
 	} {
-		assert.Contains(t, names, expected, "missing base variable: %s", expected)
+		assert.Check(t, is.Contains(names, expected), "missing base variable: %s", expected)
 	}
 }
 
@@ -44,7 +44,8 @@ func TestTemplateVariables_ExcludesOperationalAndSecretFields(t *testing.T) {
 		"rooturl", "producturl", "docsurl", "fromemail",
 		"logoURL", "buttonColor", "cardStyle",
 	} {
-		assert.NotContains(t, names, excluded, "operational/secret field leaked into template variables: %s", excluded)
+		_, found := names[excluded]
+		assert.Check(t, !found, "operational/secret field leaked into template variables: %s", excluded)
 	}
 }
 
@@ -56,13 +57,13 @@ func TestTemplateVariables_ContainsCampaignVars(t *testing.T) {
 		names[v.Name] = struct{}{}
 	}
 
-	assert.Contains(t, names, "campaignName")
-	assert.Contains(t, names, "campaignDescription")
+	assert.Check(t, is.Contains(names, "campaignName"))
+	assert.Check(t, is.Contains(names, "campaignDescription"))
 }
 
 func TestTemplateVariables_AllHaveDescriptions(t *testing.T) {
 	for _, v := range TemplateVariables() {
-		assert.NotEmpty(t, v.Description, "variable %s missing description", v.Name)
+		assert.Check(t, len(v.Description) > 0, "variable %s missing description", v.Name)
 	}
 }
 
@@ -72,7 +73,7 @@ func TestTemplateVariables_NoDuplicates(t *testing.T) {
 	seen := make(map[string]struct{}, len(vars))
 	for _, v := range vars {
 		_, dup := seen[v.Name]
-		assert.False(t, dup, "duplicate variable name: %s", v.Name)
+		assert.Check(t, !dup, "duplicate variable name: %s", v.Name)
 		seen[v.Name] = struct{}{}
 	}
 }

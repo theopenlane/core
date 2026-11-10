@@ -62,7 +62,7 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 				Name:          "Trust Center NDA",
 				TemplateType:  &enums.Document,
 				Kind:          &enums.TemplateKindTrustCenterNda,
-				Jsonconfig:    map[string]interface{}{},
+				Jsonconfig:    map[string]any{},
 				OwnerID:       &trustCenter.OwnerID,
 				TrustCenterID: &trustCenter.ID,
 			},
@@ -107,7 +107,7 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 	// Get the output as a string from the buffer
 	outputString := buf.String()
 
-	var outputInterface map[string]interface{}
+	var outputInterface map[string]any
 	if err := json.Unmarshal([]byte(outputString), &outputInterface); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
@@ -171,7 +171,7 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 	// Get the output as a string from the buffer
 	outputString := buf.String()
 
-	var outputInterface map[string]interface{}
+	var outputInterface map[string]any
 	if err := json.Unmarshal([]byte(outputString), &outputInterface); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
@@ -217,7 +217,7 @@ func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCe
 
 	res, err := txnCtx.DocumentData.Create().SetInput(
 		generated.CreateDocumentDataInput{
-			TemplateID: lo.ToPtr(input.TemplateID),
+			TemplateID: new(input.TemplateID),
 			Data:       input.Response,
 		},
 	).Save(internalCtx)

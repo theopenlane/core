@@ -2,32 +2,32 @@ package entitlements_test
 
 import (
 	"context"
+	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/entitlements/mocks"
 )
 
 func TestNew(t *testing.T) {
-	c := assert.New(t)
 
 	t.Setenv("STRIPE_SECRET_KEY", "secret_key")
 
 	stripeService, err := entitlements.NewStripeClient(entitlements.WithAPIKey("secret_key"))
-	c.NoError(err)
-	c.IsType(stripeService, stripeService)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(reflect.TypeOf(stripeService), reflect.TypeOf(stripeService)))
 }
 
 func TestNewErrMissingAPIKey(t *testing.T) {
-	c := assert.New(t)
 
 	stripeService, err := entitlements.NewStripeClient()
-	c.Nil(stripeService)
-	c.ErrorIs(err, entitlements.ErrMissingAPIKey)
+	assert.Check(t, is.Nil(stripeService))
+	assert.Check(t, is.ErrorIs(err, entitlements.ErrMissingAPIKey))
 }
 
 func TestWithConfig(t *testing.T) {
@@ -77,13 +77,12 @@ func TestNewConfig(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := entitlements.NewConfig(tt.opts...)
-			assert.Equal(t, tt.want, got)
+			assert.Check(t, is.DeepEqual(tt.want, got))
 		})
 	}
 }
 
 func TestCreateCustomer(t *testing.T) {
-	c := assert.New(t)
 
 	expectedCustomer := &stripe.Customer{
 		ID:    "cus_123",
@@ -108,10 +107,8 @@ func TestCreateCustomer(t *testing.T) {
 		OrganizationID:         "org_123",
 		OrganizationSettingsID: "settings_123",
 		OrganizationName:       "Test Organization",
-		ContactInfo: entitlements.ContactInfo{
-			Email: "test@example.com",
-			Phone: "1234567890",
-		},
+		Email:                  "test@example.com",
+		Phone:                  "1234567890",
 	}
 
 	stripeBackendMock := new(mocks.MockStripeBackend)
@@ -136,12 +133,11 @@ func TestCreateCustomer(t *testing.T) {
 	ctx := context.Background()
 
 	customer, err := service.CreateCustomer(ctx, orgCustomer)
-	c.NoError(err)
-	c.Equal(expectedCustomer, customer)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expectedCustomer, customer))
 }
 
 func TestUpdateCustomer(t *testing.T) {
-	c := assert.New(t)
 
 	expectedCustomer := &stripe.Customer{
 		ID:    "cus_123",
@@ -171,19 +167,18 @@ func TestUpdateCustomer(t *testing.T) {
 		entitlements.WithAPIKey("sk_test"),
 		entitlements.WithBackends(stripeTestBackends),
 	)
-	c.NoError(err)
+	assert.Check(t, err)
 
 	service := entitlements.StripeClient{
 		Client: mockStripeClient.Client,
 	}
 
 	customer, err := service.UpdateCustomer(context.Background(), "cus_123", updateParams)
-	c.NoError(err)
-	c.Equal(expectedCustomer, customer)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expectedCustomer, customer))
 }
 
 func TestDeleteCustomer(t *testing.T) {
-	c := assert.New(t)
 
 	expectedCustomer := &stripe.Customer{
 		ID: "cus_123",
@@ -206,18 +201,17 @@ func TestDeleteCustomer(t *testing.T) {
 		entitlements.WithAPIKey("sk_test"),
 		entitlements.WithBackends(stripeTestBackends),
 	)
-	c.NoError(err)
+	assert.Check(t, err)
 
 	service := entitlements.StripeClient{
 		Client: mockStripeClient.Client,
 	}
 
 	err = service.DeleteCustomer(context.Background(), "cus_123")
-	c.NoError(err)
+	assert.Check(t, err)
 }
 
 func TestCreateSubscription(t *testing.T) {
-	c := assert.New(t)
 
 	expectedSubscription := &stripe.Subscription{
 		ID: "sub_123",
@@ -252,12 +246,11 @@ func TestCreateSubscription(t *testing.T) {
 	}
 
 	subscription, err := service.CreateSubscription(context.Background(), subscriptionParams)
-	c.NoError(err)
-	c.Equal(expectedSubscription, subscription)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expectedSubscription, subscription))
 }
 
 func TestUpdateSubscription(t *testing.T) {
-	c := assert.New(t)
 
 	expectedSubscription := &stripe.Subscription{
 		ID: "sub_123",
@@ -291,12 +284,11 @@ func TestUpdateSubscription(t *testing.T) {
 	}
 
 	subscription, err := service.UpdateSubscription(context.Background(), "sub_123", updateParams)
-	c.NoError(err)
-	c.Equal(expectedSubscription, subscription)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expectedSubscription, subscription))
 }
 
 func TestCancelSubscription(t *testing.T) {
-	c := assert.New(t)
 
 	expectedSubscription := &stripe.Subscription{
 		ID: "sub_123",
@@ -324,12 +316,11 @@ func TestCancelSubscription(t *testing.T) {
 	}
 
 	subscription, err := service.CancelSubscription(context.Background(), "sub_123", cancelParams)
-	c.NoError(err)
-	c.Equal(expectedSubscription, subscription)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expectedSubscription, subscription))
 }
 
 func TestMapStripeSubscription(t *testing.T) {
-	c := assert.New(t)
 
 	stripeSubscription := &stripe.Subscription{
 		ID: "sub_123",
@@ -401,11 +392,10 @@ func TestMapStripeSubscription(t *testing.T) {
 	}
 
 	subscription := service.MapStripeSubscription(context.Background(), stripeSubscription, stripeSubscriptionSchedule)
-	c.Equal(expectedSubscription, subscription)
+	assert.Check(t, is.DeepEqual(expectedSubscription, subscription))
 }
 
 func TestCreateSubscriptionWithOptions_MultipleItems(t *testing.T) {
-	c := assert.New(t)
 
 	expectedSubscription := &stripe.Subscription{
 		ID: "sub_multi",
@@ -438,12 +428,11 @@ func TestCreateSubscriptionWithOptions_MultipleItems(t *testing.T) {
 	}
 
 	subscription, err := service.CreateSubscriptionWithOptions(context.Background(), subscriptionParams, entitlements.WithSubscriptionItems(items...))
-	c.NoError(err)
-	c.Equal(expectedSubscription, subscription)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expectedSubscription, subscription))
 }
 
 func TestUpdateSubscriptionWithOptions_AddNewItemsIfNotExist(t *testing.T) {
-	c := assert.New(t)
 
 	existingItems := []*stripe.SubscriptionItem{
 		{ID: "item_1", Price: &stripe.Price{ID: "price_1"}},
@@ -457,8 +446,8 @@ func TestUpdateSubscriptionWithOptions_AddNewItemsIfNotExist(t *testing.T) {
 	entitlements.AddNewItemsIfNotExist(existingItems, updateParams, newItems...)
 
 	// Only price_2 should be added
-	c.Len(updateParams.Items, 1)
-	c.Equal("price_2", *updateParams.Items[0].Price)
+	assert.Check(t, is.Len(updateParams.Items, 1))
+	assert.Check(t, is.Equal("price_2", *updateParams.Items[0].Price))
 
 	expectedSubscription := &stripe.Subscription{ID: "sub_update"}
 
@@ -480,12 +469,11 @@ func TestUpdateSubscriptionWithOptions_AddNewItemsIfNotExist(t *testing.T) {
 	}
 
 	updatedSub, err := service.UpdateSubscriptionWithOptions(context.Background(), "sub_update", updateParams, entitlements.WithUpdateSubscriptionItems(updateParams.Items...))
-	c.NoError(err)
-	c.Equal(expectedSubscription, updatedSub)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expectedSubscription, updatedSub))
 }
 
 func TestCreateWebhookEndpoint(t *testing.T) {
-	c := assert.New(t)
 
 	expectedWebhook := &stripe.WebhookEndpoint{
 		ID:     "we_123",
@@ -511,12 +499,11 @@ func TestCreateWebhookEndpoint(t *testing.T) {
 	}
 
 	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", entitlements.SupportedEventTypeStrings(), stripe.APIVersion, false)
-	c.NoError(err)
-	c.Equal(expectedWebhook, webhook)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expectedWebhook, webhook))
 }
 
 func TestCreateWebhookEndpointDefaultEvents(t *testing.T) {
-	c := assert.New(t)
 
 	expectedWebhook := &stripe.WebhookEndpoint{
 		ID:     "we_123",
@@ -542,6 +529,6 @@ func TestCreateWebhookEndpointDefaultEvents(t *testing.T) {
 	}
 
 	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", nil, "", false)
-	c.NoError(err)
-	c.Equal(expectedWebhook, webhook)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expectedWebhook, webhook))
 }

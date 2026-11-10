@@ -315,7 +315,7 @@ func init() {
 	// actionplanDescReviewDue is the schema descriptor for review_due field.
 	actionplanDescReviewDue := actionplanMixinFields9[6].Descriptor()
 	// actionplan.DefaultReviewDue holds the default value on creation for the review_due field.
-	actionplan.DefaultReviewDue = actionplanDescReviewDue.Default.(time.Time)
+	actionplan.DefaultReviewDue = actionplanDescReviewDue.Default.(func() time.Time)
 	// actionplanDescTagSuggestions is the schema descriptor for tag_suggestions field.
 	actionplanDescTagSuggestions := actionplanMixinFields9[11].Descriptor()
 	// actionplan.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
@@ -621,7 +621,7 @@ func init() {
 	// assessmentresponseDescStartedAt is the schema descriptor for started_at field.
 	assessmentresponseDescStartedAt := assessmentresponseFields[17].Descriptor()
 	// assessmentresponse.DefaultStartedAt holds the default value on creation for the started_at field.
-	assessmentresponse.DefaultStartedAt = assessmentresponseDescStartedAt.Default.(time.Time)
+	assessmentresponse.DefaultStartedAt = assessmentresponseDescStartedAt.Default.(func() time.Time)
 	// assessmentresponseDescIsDraft is the schema descriptor for is_draft field.
 	assessmentresponseDescIsDraft := assessmentresponseFields[21].Descriptor()
 	// assessmentresponse.DefaultIsDraft holds the default value on creation for the is_draft field.
@@ -1808,7 +1808,7 @@ func init() {
 	// directoryaccount.DefaultTags holds the default value on creation for the tags field.
 	directoryaccount.DefaultTags = directoryaccountDescTags.Default.([]string)
 	// directoryaccountDescExternalID is the schema descriptor for external_id field.
-	directoryaccountDescExternalID := directoryaccountMixinFields6[5].Descriptor()
+	directoryaccountDescExternalID := directoryaccountMixinFields6[6].Descriptor()
 	// directoryaccount.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directoryaccount.ExternalIDValidator = directoryaccountDescExternalID.Validators[0].(func(string) error)
 	// directoryaccountDescOwnerID is the schema descriptor for owner_id field.
@@ -1931,7 +1931,7 @@ func init() {
 	// directorygroup.DefaultTags holds the default value on creation for the tags field.
 	directorygroup.DefaultTags = directorygroupDescTags.Default.([]string)
 	// directorygroupDescExternalID is the schema descriptor for external_id field.
-	directorygroupDescExternalID := directorygroupMixinFields6[5].Descriptor()
+	directorygroupDescExternalID := directorygroupMixinFields6[6].Descriptor()
 	// directorygroup.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directorygroup.ExternalIDValidator = directorygroupDescExternalID.Validators[0].(func(string) error)
 	// directorygroupDescOwnerID is the schema descriptor for owner_id field.
@@ -4004,7 +4004,7 @@ func init() {
 	// internalpolicyDescReviewDue is the schema descriptor for review_due field.
 	internalpolicyDescReviewDue := internalpolicyMixinFields12[6].Descriptor()
 	// internalpolicy.DefaultReviewDue holds the default value on creation for the review_due field.
-	internalpolicy.DefaultReviewDue = internalpolicyDescReviewDue.Default.(time.Time)
+	internalpolicy.DefaultReviewDue = internalpolicyDescReviewDue.Default.(func() time.Time)
 	// internalpolicyDescTagSuggestions is the schema descriptor for tag_suggestions field.
 	internalpolicyDescTagSuggestions := internalpolicyMixinFields12[11].Descriptor()
 	// internalpolicy.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
@@ -5900,7 +5900,7 @@ func init() {
 	// procedureDescReviewDue is the schema descriptor for review_due field.
 	procedureDescReviewDue := procedureMixinFields11[6].Descriptor()
 	// procedure.DefaultReviewDue holds the default value on creation for the review_due field.
-	procedure.DefaultReviewDue = procedureDescReviewDue.Default.(time.Time)
+	procedure.DefaultReviewDue = procedureDescReviewDue.Default.(func() time.Time)
 	// procedureDescTagSuggestions is the schema descriptor for tag_suggestions field.
 	procedureDescTagSuggestions := procedureMixinFields11[11].Descriptor()
 	// procedure.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
@@ -7519,7 +7519,7 @@ func init() {
 	// task.DefaultPriority holds the default value on creation for the priority field.
 	task.DefaultPriority = taskDescPriority.Default.(int)
 	// taskDescExternalReferenceURL is the schema descriptor for external_reference_url field.
-	taskDescExternalReferenceURL := taskFields[17].Descriptor()
+	taskDescExternalReferenceURL := taskFields[16].Descriptor()
 	// task.ExternalReferenceURLValidator is a validator for the "external_reference_url" field. It is called by the builders before save.
 	task.ExternalReferenceURLValidator = taskDescExternalReferenceURL.Validators[0].(func([]string) error)
 	// taskDescID is the schema descriptor for id field.
@@ -8310,6 +8310,10 @@ func init() {
 	trustcentersettingDescAutoApprovalRules := trustcentersettingFields[30].Descriptor()
 	// trustcentersetting.DefaultAutoApprovalRules holds the default value on creation for the auto_approval_rules field.
 	trustcentersetting.DefaultAutoApprovalRules = trustcentersettingDescAutoApprovalRules.Default.(models.TrustCenterNDARequestSetting)
+	// trustcentersettingDescDisableDefaultDomain is the schema descriptor for disable_default_domain field.
+	trustcentersettingDescDisableDefaultDomain := trustcentersettingFields[31].Descriptor()
+	// trustcentersetting.DefaultDisableDefaultDomain holds the default value on creation for the disable_default_domain field.
+	trustcentersetting.DefaultDisableDefaultDomain = trustcentersettingDescDisableDefaultDomain.Default.(bool)
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields4[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.
@@ -8960,7 +8964,7 @@ func init() {
 	// vulnerability.DefaultTags holds the default value on creation for the tags field.
 	vulnerability.DefaultTags = vulnerabilityDescTags.Default.([]string)
 	// vulnerabilityDescExternalID is the schema descriptor for external_id field.
-	vulnerabilityDescExternalID := vulnerabilityMixinFields7[5].Descriptor()
+	vulnerabilityDescExternalID := vulnerabilityMixinFields7[6].Descriptor()
 	// vulnerability.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	vulnerability.ExternalIDValidator = vulnerabilityDescExternalID.Validators[0].(func(string) error)
 	// vulnerabilityDescOwnerID is the schema descriptor for owner_id field.

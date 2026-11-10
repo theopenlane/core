@@ -227,6 +227,20 @@ func (_c *ActionPlanCreate) SetNillableIntegrationRunID(v *string) *ActionPlanCr
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *ActionPlanCreate) SetSourceKey(v string) *ActionPlanCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableSourceKey(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *ActionPlanCreate) SetExternalID(v string) *ActionPlanCreate {
 	_c.mutation.SetExternalID(v)
@@ -1106,7 +1120,10 @@ func (_c *ActionPlanCreate) defaults() error {
 		_c.mutation.SetApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ReviewDue(); !ok {
-		v := actionplan.DefaultReviewDue
+		if actionplan.DefaultReviewDue == nil {
+			return fmt.Errorf("generated: uninitialized actionplan.DefaultReviewDue (forgotten import generated/runtime?)")
+		}
+		v := actionplan.DefaultReviewDue()
 		_c.mutation.SetReviewDue(v)
 	}
 	if _, ok := _c.mutation.ReviewFrequency(); !ok {
@@ -1312,6 +1329,10 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(actionplan.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(actionplan.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(actionplan.FieldExternalID, field.TypeString, value)

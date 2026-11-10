@@ -18,30 +18,30 @@ var ErrTextContainsComments = errors.New("text contains comments, unable to set 
 // this is used for the document mixin schemas and control implementation schema
 type detailsWithJSONMutation interface {
 	Details() (string, bool)
-	DetailsJSON() ([]interface{}, bool)
-	OldDetailsJSON(ctx context.Context) (v []interface{}, err error)
+	DetailsJSON() ([]any, bool)
+	OldDetailsJSON(ctx context.Context) (v []any, err error)
 	ClearDetailsJSON()
 }
 
 // descriptionWithJSONMutation is a mutation interface for entities with description and description_json fields, used by the control mixin
 type descriptionWithJSONMutation interface {
 	Description() (string, bool)
-	DescriptionJSON() ([]interface{}, bool)
+	DescriptionJSON() ([]any, bool)
 	DescriptionJSONCleared() bool
-	OldDescriptionJSON(ctx context.Context) (v []interface{}, err error)
+	OldDescriptionJSON(ctx context.Context) (v []any, err error)
 	ClearDescriptionJSON()
 }
 
 // riskWithJSONMutation is a mutation interface for the risk schema with mitigation, business_costs and details fields, along with their corresponding JSON fields, used by the risk schema
 type riskWithJSONMutation interface {
 	Mitigation() (string, bool)
-	MitigationJSON() ([]interface{}, bool)
-	OldMitigationJSON(ctx context.Context) (v []interface{}, err error)
+	MitigationJSON() ([]any, bool)
+	OldMitigationJSON(ctx context.Context) (v []any, err error)
 	ClearMitigationJSON()
 
 	BusinessCosts() (string, bool)
-	BusinessCostsJSON() ([]interface{}, bool)
-	OldBusinessCostsJSON(ctx context.Context) (v []interface{}, err error)
+	BusinessCostsJSON() ([]any, bool)
+	OldBusinessCostsJSON(ctx context.Context) (v []any, err error)
 	ClearBusinessCostsJSON()
 
 	detailsWithJSONMutation
@@ -50,16 +50,16 @@ type riskWithJSONMutation interface {
 // controlObjectiveWithJSONMutation is a mutation interface for the control implementation schema with desired_outcome, along with their corresponding JSON fields, used by the control implementation schema
 type controlObjectiveWithJSONMutation interface {
 	DesiredOutcome() (string, bool)
-	DesiredOutcomeJSON() ([]interface{}, bool)
-	OldDesiredOutcomeJSON(ctx context.Context) (v []interface{}, err error)
+	DesiredOutcomeJSON() ([]any, bool)
+	OldDesiredOutcomeJSON(ctx context.Context) (v []any, err error)
 	ClearDesiredOutcomeJSON()
 }
 
 // noteWithJSONMutation is a mutation interface for the note schema with text and text_json fields
 type noteWithJSONMutation interface {
 	Text() (string, bool)
-	TextJSON() ([]interface{}, bool)
-	OldTextJSON(ctx context.Context) (v []interface{}, err error)
+	TextJSON() ([]any, bool)
+	OldTextJSON(ctx context.Context) (v []any, err error)
 	ClearTextJSON()
 }
 

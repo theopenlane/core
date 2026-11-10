@@ -41,7 +41,7 @@ func (p Price) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (p *Price) UnmarshalGQL(v interface{}) error {
+func (p *Price) UnmarshalGQL(v any) error {
 	byteData, err := json.Marshal(v)
 	if err != nil {
 		return err

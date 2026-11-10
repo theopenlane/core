@@ -246,6 +246,26 @@ func (_u *NarrativeUpdate) ClearIntegrationRunID() *NarrativeUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *NarrativeUpdate) SetSourceKey(v string) *NarrativeUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *NarrativeUpdate) SetNillableSourceKey(v *string) *NarrativeUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *NarrativeUpdate) ClearSourceKey() *NarrativeUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *NarrativeUpdate) SetExternalID(v string) *NarrativeUpdate {
 	_u.mutation.SetExternalID(v)
@@ -799,6 +819,12 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(narrative.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(narrative.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(narrative.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(narrative.FieldExternalID, field.TypeString, value)
@@ -1428,6 +1454,26 @@ func (_u *NarrativeUpdateOne) ClearIntegrationRunID() *NarrativeUpdateOne {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *NarrativeUpdateOne) SetSourceKey(v string) *NarrativeUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *NarrativeUpdateOne) SetNillableSourceKey(v *string) *NarrativeUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *NarrativeUpdateOne) ClearSourceKey() *NarrativeUpdateOne {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *NarrativeUpdateOne) SetExternalID(v string) *NarrativeUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -2011,6 +2057,12 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(narrative.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(narrative.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(narrative.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(narrative.FieldExternalID, field.TypeString, value)

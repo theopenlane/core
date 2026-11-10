@@ -19,7 +19,7 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.server }}
     server:
-      {{- if .Values.openlane.coreConfiguration.server.dev }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.dev) }}
       dev: {{ .Values.openlane.coreConfiguration.server.dev }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.listen }}
@@ -45,7 +45,7 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.tls }}
       tls:
-        {{- if .Values.openlane.coreConfiguration.server.tls.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.tls.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.server.tls.enabled }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.server.tls.certfile }}
@@ -54,13 +54,13 @@ data:
         {{- if .Values.openlane.coreConfiguration.server.tls.certkey }}
         certkey: {{ .Values.openlane.coreConfiguration.server.tls.certkey | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.server.tls.autocert }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.tls.autocert) }}
         autocert: {{ .Values.openlane.coreConfiguration.server.tls.autocert }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.cors }}
       cors:
-        {{- if .Values.openlane.coreConfiguration.server.cors.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.cors.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.server.cors.enabled }}
         {{- end }}
         {{- $mapValue := (.Values.openlane.coreConfiguration.server.cors.prefixes | default (dict)) }}
@@ -80,13 +80,13 @@ data:
         alloworigins:
           []
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.server.cors.cookieinsecure }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.cors.cookieinsecure) }}
         cookieinsecure: {{ .Values.openlane.coreConfiguration.server.cors.cookieinsecure }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.secure }}
       secure:
-        {{- if .Values.openlane.coreConfiguration.server.secure.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.secure.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.server.secure.enabled }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.server.secure.xssprotection }}
@@ -98,7 +98,7 @@ data:
         {{- if .Values.openlane.coreConfiguration.server.secure.xframeoptions }}
         xframeoptions: {{ .Values.openlane.coreConfiguration.server.secure.xframeoptions | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.server.secure.hstspreloadenabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.secure.hstspreloadenabled) }}
         hstspreloadenabled: {{ .Values.openlane.coreConfiguration.server.secure.hstspreloadenabled }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.server.secure.hstsmaxage }}
@@ -110,13 +110,13 @@ data:
         {{- if .Values.openlane.coreConfiguration.server.secure.referrerpolicy }}
         referrerpolicy: {{ .Values.openlane.coreConfiguration.server.secure.referrerpolicy | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.server.secure.cspreportonly }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.secure.cspreportonly) }}
         cspreportonly: {{ .Values.openlane.coreConfiguration.server.secure.cspreportonly }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.cachecontrol }}
       cachecontrol:
-        {{- if .Values.openlane.coreConfiguration.server.cachecontrol.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.cachecontrol.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.server.cachecontrol.enabled }}
         {{- end }}
         {{- $mapValue := (.Values.openlane.coreConfiguration.server.cachecontrol.nocacheheaders | default (dict)) }}
@@ -132,7 +132,7 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.mime }}
       mime:
-        {{- if .Values.openlane.coreConfiguration.server.mime.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.mime.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.server.mime.enabled }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.server.mime.mimetypesfile }}
@@ -148,10 +148,10 @@ data:
         maxworkers: {{ .Values.openlane.coreConfiguration.server.graphpool.maxworkers }}
         {{- end }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.server.enablegraphextensions }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.enablegraphextensions) }}
       enablegraphextensions: {{ .Values.openlane.coreConfiguration.server.enablegraphextensions }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.server.enablegraphsubscriptions }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.enablegraphsubscriptions) }}
       enablegraphsubscriptions: {{ .Values.openlane.coreConfiguration.server.enablegraphsubscriptions }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.complexitylimit }}
@@ -162,7 +162,7 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.csrfprotection }}
       csrfprotection:
-        {{- if .Values.openlane.coreConfiguration.server.csrfprotection.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.csrfprotection.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.server.csrfprotection.enabled }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.server.csrfprotection.header }}
@@ -171,13 +171,13 @@ data:
         {{- if .Values.openlane.coreConfiguration.server.csrfprotection.cookie }}
         cookie: {{ .Values.openlane.coreConfiguration.server.csrfprotection.cookie | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.server.csrfprotection.secure }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.csrfprotection.secure) }}
         secure: {{ .Values.openlane.coreConfiguration.server.csrfprotection.secure }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.server.csrfprotection.samesite }}
         samesite: {{ .Values.openlane.coreConfiguration.server.csrfprotection.samesite | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.server.csrfprotection.cookiehttponly }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.server.csrfprotection.cookiehttponly) }}
         cookiehttponly: {{ .Values.openlane.coreConfiguration.server.csrfprotection.cookiehttponly }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.server.csrfprotection.cookiedomain }}
@@ -222,7 +222,7 @@ data:
             {{- if .Values.openlane.coreConfiguration.entconfig.summarizer.llm.anthropic.betaheader }}
             betaheader: {{ .Values.openlane.coreConfiguration.entconfig.summarizer.llm.anthropic.betaheader | quote }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.entconfig.summarizer.llm.anthropic.legacytextcompletion }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.summarizer.llm.anthropic.legacytextcompletion) }}
             legacytextcompletion: {{ .Values.openlane.coreConfiguration.entconfig.summarizer.llm.anthropic.legacytextcompletion }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.entconfig.summarizer.llm.anthropic.baseurl }}
@@ -257,13 +257,13 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.entconfig.modules }}
       modules:
-        {{- if .Values.openlane.coreConfiguration.entconfig.modules.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.modules.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.entconfig.modules.enabled }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.entconfig.modules.usesandbox }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.modules.usesandbox) }}
         usesandbox: {{ .Values.openlane.coreConfiguration.entconfig.modules.usesandbox }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.entconfig.modules.devmode }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.modules.devmode) }}
         devmode: {{ .Values.openlane.coreConfiguration.entconfig.modules.devmode }}
         {{- end }}
       {{- end }}
@@ -272,27 +272,27 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.entconfig.emailvalidation }}
       emailvalidation:
-        {{- if .Values.openlane.coreConfiguration.entconfig.emailvalidation.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.emailvalidation.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.entconfig.emailvalidation.enabled }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.entconfig.emailvalidation.enableautoupdatedisposable }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.emailvalidation.enableautoupdatedisposable) }}
         enableautoupdatedisposable: {{ .Values.openlane.coreConfiguration.entconfig.emailvalidation.enableautoupdatedisposable }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.entconfig.emailvalidation.enablegravatarcheck }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.emailvalidation.enablegravatarcheck) }}
         enablegravatarcheck: {{ .Values.openlane.coreConfiguration.entconfig.emailvalidation.enablegravatarcheck }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.entconfig.emailvalidation.enablesmtpcheck }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.emailvalidation.enablesmtpcheck) }}
         enablesmtpcheck: {{ .Values.openlane.coreConfiguration.entconfig.emailvalidation.enablesmtpcheck }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes }}
         allowedemailtypes:
-          {{- if .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.disposable }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.disposable) }}
           disposable: {{ .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.disposable }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.free }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.free) }}
           free: {{ .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.free }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.role }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.role) }}
           role: {{ .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.role }}
           {{- end }}
         {{- end }}
@@ -304,7 +304,7 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.entconfig.billing }}
       billing:
-        {{- if .Values.openlane.coreConfiguration.entconfig.billing.requirepaymentmethod }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.entconfig.billing.requirepaymentmethod) }}
         requirepaymentmethod: {{ .Values.openlane.coreConfiguration.entconfig.billing.requirepaymentmethod }}
         {{- end }}
         {{- $sliceValue := (.Values.openlane.coreConfiguration.entconfig.billing.bypassemaildomains | default (list)) }}
@@ -329,7 +329,7 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.auth }}
     auth:
-      {{- if .Values.openlane.coreConfiguration.auth.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.auth.enabled }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.auth.token }}
@@ -379,7 +379,7 @@ data:
         keys:
         {{- toYaml $mapValue | nindent 10 }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.auth.token.generatekeys }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.token.generatekeys) }}
         generatekeys: {{ .Values.openlane.coreConfiguration.auth.token.generatekeys }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.auth.token.jwkscachettl }}
@@ -387,12 +387,12 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.auth.token.redis }}
         redis:
-          {{- if .Values.openlane.coreConfiguration.auth.token.redis.enabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.token.redis.enabled) }}
           enabled: {{ .Values.openlane.coreConfiguration.auth.token.redis.enabled }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.auth.token.redis.config }}
           config:
-            {{- if .Values.openlane.coreConfiguration.auth.token.redis.config.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.token.redis.config.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.auth.token.redis.config.enabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.auth.token.redis.config.address }}
@@ -438,7 +438,7 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.auth.token.apitokens }}
         apitokens:
-          {{- if .Values.openlane.coreConfiguration.auth.token.apitokens.enabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.token.apitokens.enabled) }}
           enabled: {{ .Values.openlane.coreConfiguration.auth.token.apitokens.enabled }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.auth.token.apitokens.envprefix }}
@@ -520,7 +520,7 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn }}
         webauthn:
-          {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.enabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.providers.webauthn.enabled) }}
           enabled: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.enabled }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.displayname }}
@@ -546,20 +546,20 @@ data:
           {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.maxdevices }}
           maxdevices: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.maxdevices }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.enforcetimeout }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.providers.webauthn.enforcetimeout) }}
           enforcetimeout: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.enforcetimeout }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.timeout }}
           timeout: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.timeout | quote }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.debug }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.providers.webauthn.debug) }}
           debug: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.debug }}
           {{- end }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.auth.supportaccess }}
       supportaccess:
-        {{- if .Values.openlane.coreConfiguration.auth.supportaccess.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.supportaccess.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.auth.supportaccess.enabled }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.auth.supportaccess.email }}
@@ -587,7 +587,7 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.authz }}
     authz:
-      {{- if .Values.openlane.coreConfiguration.authz.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.authz.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.authz.enabled }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.authz.storename }}
@@ -602,7 +602,7 @@ data:
       {{- if .Values.openlane.coreConfiguration.authz.modelid }}
       modelid: {{ .Values.openlane.coreConfiguration.authz.modelid | quote }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.authz.createnewmodel }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.authz.createnewmodel) }}
       createnewmodel: {{ .Values.openlane.coreConfiguration.authz.createnewmodel }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.authz.modelfile }}
@@ -629,7 +629,7 @@ data:
       {{- if .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
       maxbatchwritesize: {{ .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.authz.enableparentcontext }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.authz.enableparentcontext) }}
       enableparentcontext: {{ .Values.openlane.coreConfiguration.authz.enableparentcontext }}
       {{- end }}
       {{- $sliceValue := (.Values.openlane.coreConfiguration.authz.parentcontextskipkinds | default (list)) }}
@@ -645,7 +645,7 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.db }}
     db:
-      {{- if .Values.openlane.coreConfiguration.db.debug }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.db.debug) }}
       debug: {{ .Values.openlane.coreConfiguration.db.debug }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.db.databasename }}
@@ -654,19 +654,19 @@ data:
       {{- if .Values.openlane.coreConfiguration.db.drivername }}
       drivername: {{ .Values.openlane.coreConfiguration.db.drivername | quote }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.db.multiwrite }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.db.multiwrite) }}
       multiwrite: {{ .Values.openlane.coreConfiguration.db.multiwrite }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.db.cachettl }}
       cachettl: {{ .Values.openlane.coreConfiguration.db.cachettl | quote }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.db.runmigrations }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.db.runmigrations) }}
       runmigrations: {{ .Values.openlane.coreConfiguration.db.runmigrations }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.db.migrationprovider }}
       migrationprovider: {{ .Values.openlane.coreConfiguration.db.migrationprovider | quote }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.db.enablehistory }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.db.enablehistory) }}
       enablehistory: {{ .Values.openlane.coreConfiguration.db.enablehistory }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.db.maxconnections }}
@@ -678,25 +678,25 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.jobqueue }}
     jobqueue:
-      {{- if .Values.openlane.coreConfiguration.jobqueue.runmigrations }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.jobqueue.runmigrations) }}
       runmigrations: {{ .Values.openlane.coreConfiguration.jobqueue.runmigrations }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.jobqueue.metrics }}
       metrics:
-        {{- if .Values.openlane.coreConfiguration.jobqueue.metrics.enablemetrics }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.jobqueue.metrics.enablemetrics) }}
         enablemetrics: {{ .Values.openlane.coreConfiguration.jobqueue.metrics.enablemetrics }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.jobqueue.metrics.metricsdurationunit }}
         metricsdurationunit: {{ .Values.openlane.coreConfiguration.jobqueue.metrics.metricsdurationunit | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.jobqueue.metrics.enablesemanticmetrics }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.jobqueue.metrics.enablesemanticmetrics) }}
         enablesemanticmetrics: {{ .Values.openlane.coreConfiguration.jobqueue.metrics.enablesemanticmetrics }}
         {{- end }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.redis }}
     redis:
-      {{- if .Values.openlane.coreConfiguration.redis.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.redis.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.redis.enabled }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.redis.address }}
@@ -748,19 +748,28 @@ data:
       {{- if .Values.openlane.coreConfiguration.sessions.maxage }}
       maxage: {{ .Values.openlane.coreConfiguration.sessions.maxage }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.sessions.secure }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.sessions.secure) }}
       secure: {{ .Values.openlane.coreConfiguration.sessions.secure }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.sessions.httponly }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.sessions.httponly) }}
       httponly: {{ .Values.openlane.coreConfiguration.sessions.httponly }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.sessions.samesite }}
       samesite: {{ .Values.openlane.coreConfiguration.sessions.samesite | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.sessions.absolutetimeout }}
+      absolutetimeout: {{ .Values.openlane.coreConfiguration.sessions.absolutetimeout | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.sessions.renewalinterval }}
+      renewalinterval: {{ .Values.openlane.coreConfiguration.sessions.renewalinterval | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.sessions.renewalgrace }}
+      renewalgrace: {{ .Values.openlane.coreConfiguration.sessions.renewalgrace | quote }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.totp }}
     totp:
-      {{- if .Values.openlane.coreConfiguration.totp.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.totp.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.totp.enabled }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.totp.codelength }}
@@ -773,7 +782,7 @@ data:
       {{- else }}
       issuer: ""
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.totp.redis }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.totp.redis) }}
       redis: {{ .Values.openlane.coreConfiguration.totp.redis }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.totp.recoverycodecount }}
@@ -782,10 +791,16 @@ data:
       {{- if .Values.openlane.coreConfiguration.totp.recoverycodelength }}
       recoverycodelength: {{ .Values.openlane.coreConfiguration.totp.recoverycodelength }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.totp.maxfailedattempts }}
+      maxfailedattempts: {{ .Values.openlane.coreConfiguration.totp.maxfailedattempts }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.totp.failurewindow }}
+      failurewindow: {{ .Values.openlane.coreConfiguration.totp.failurewindow | quote }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.ratelimit }}
     ratelimit:
-      {{- if .Values.openlane.coreConfiguration.ratelimit.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimit.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.ratelimit.enabled }}
       {{- end }}
       {{- $sliceValue := (.Values.openlane.coreConfiguration.ratelimit.options | default (list)) }}
@@ -801,10 +816,10 @@ data:
       {{- if .Values.openlane.coreConfiguration.ratelimit.forwardedindexfrombehind }}
       forwardedindexfrombehind: {{ .Values.openlane.coreConfiguration.ratelimit.forwardedindexfrombehind }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.ratelimit.includepath }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimit.includepath) }}
       includepath: {{ .Values.openlane.coreConfiguration.ratelimit.includepath }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.ratelimit.includemethod }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimit.includemethod) }}
       includemethod: {{ .Values.openlane.coreConfiguration.ratelimit.includemethod }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.ratelimit.keyprefix }}
@@ -816,16 +831,16 @@ data:
       {{- if .Values.openlane.coreConfiguration.ratelimit.denymessage }}
       denymessage: {{ .Values.openlane.coreConfiguration.ratelimit.denymessage | quote }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.ratelimit.sendretryafterheader }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimit.sendretryafterheader) }}
       sendretryafterheader: {{ .Values.openlane.coreConfiguration.ratelimit.sendretryafterheader }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.ratelimit.dryrun }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimit.dryrun) }}
       dryrun: {{ .Values.openlane.coreConfiguration.ratelimit.dryrun }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.ratelimitunmatched }}
     ratelimitunmatched:
-      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimitunmatched.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.enabled }}
       {{- end }}
       {{- $sliceValue := (.Values.openlane.coreConfiguration.ratelimitunmatched.options | default (list)) }}
@@ -841,10 +856,10 @@ data:
       {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.forwardedindexfrombehind }}
       forwardedindexfrombehind: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.forwardedindexfrombehind }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.includepath }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimitunmatched.includepath) }}
       includepath: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.includepath }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.includemethod }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimitunmatched.includemethod) }}
       includemethod: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.includemethod }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.keyprefix }}
@@ -856,16 +871,16 @@ data:
       {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.denymessage }}
       denymessage: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.denymessage | quote }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.sendretryafterheader }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimitunmatched.sendretryafterheader) }}
       sendretryafterheader: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.sendretryafterheader }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.ratelimitunmatched.dryrun }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.ratelimitunmatched.dryrun) }}
       dryrun: {{ .Values.openlane.coreConfiguration.ratelimitunmatched.dryrun }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.objectstorage }}
     objectstorage:
-      {{- if .Values.openlane.coreConfiguration.objectstorage.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.objectstorage.enabled }}
       {{- end }}
       {{- $sliceValue := (.Values.openlane.coreConfiguration.objectstorage.keys | default (list)) }}
@@ -879,17 +894,17 @@ data:
       {{- if .Values.openlane.coreConfiguration.objectstorage.maxmemorymb }}
       maxmemorymb: {{ .Values.openlane.coreConfiguration.objectstorage.maxmemorymb }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.objectstorage.devmode }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.devmode) }}
       devmode: {{ .Values.openlane.coreConfiguration.objectstorage.devmode }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.objectstorage.providers }}
       providers:
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3 }}
         s3:
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.enabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.s3.enabled) }}
           enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.enabled }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.ensureavailable }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.s3.ensureavailable) }}
           ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.ensureavailable }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.bucket }}
@@ -897,20 +912,20 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup }}
           backup:
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.enabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.provider }}
             provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.provider | quote }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.readfrombackup }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.readfrombackup) }}
             readfrombackup: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.readfrombackup }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.region }}
             region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.region | quote }}
             {{- end }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.proxypresignenabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.s3.proxypresignenabled) }}
           proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.proxypresignenabled }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.baseurl }}
@@ -925,10 +940,10 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2 }}
         r2:
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.enabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.r2.enabled) }}
           enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.enabled }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.ensureavailable }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.r2.ensureavailable) }}
           ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.ensureavailable }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.bucket }}
@@ -936,20 +951,20 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup }}
           backup:
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.enabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.provider }}
             provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.provider | quote }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.readfrombackup }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.readfrombackup) }}
             readfrombackup: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.readfrombackup }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.region }}
             region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.region | quote }}
             {{- end }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.proxypresignenabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.r2.proxypresignenabled) }}
           proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.proxypresignenabled }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.baseurl }}
@@ -961,10 +976,10 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs }}
         gcs:
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.enabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.gcs.enabled) }}
           enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.enabled }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.ensureavailable }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.gcs.ensureavailable) }}
           ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.ensureavailable }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.bucket }}
@@ -972,20 +987,20 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup }}
           backup:
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.enabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.provider }}
             provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.provider | quote }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.readfrombackup }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.readfrombackup) }}
             readfrombackup: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.readfrombackup }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.region }}
             region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.region | quote }}
             {{- end }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.proxypresignenabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.gcs.proxypresignenabled) }}
           proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.proxypresignenabled }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.baseurl }}
@@ -1000,10 +1015,10 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk }}
         disk:
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.enabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.disk.enabled) }}
           enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.enabled }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.ensureavailable }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.disk.ensureavailable) }}
           ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.ensureavailable }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.bucket }}
@@ -1011,20 +1026,20 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup }}
           backup:
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.enabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.provider }}
             provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.provider | quote }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.readfrombackup }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.readfrombackup) }}
             readfrombackup: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.readfrombackup }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.region }}
             region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.region | quote }}
             {{- end }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.proxypresignenabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.disk.proxypresignenabled) }}
           proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.proxypresignenabled }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.baseurl }}
@@ -1036,10 +1051,10 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database }}
         database:
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.enabled }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.database.enabled) }}
           enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.enabled }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.ensureavailable }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.database.ensureavailable) }}
           ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.ensureavailable }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.bucket }}
@@ -1047,13 +1062,13 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup }}
           backup:
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.enabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.provider }}
             provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.provider | quote }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.readfrombackup }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.readfrombackup) }}
             readfrombackup: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.readfrombackup }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.region }}
@@ -1068,7 +1083,7 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.subscription }}
     subscription:
-      {{- if .Values.openlane.coreConfiguration.subscription.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.subscription.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.subscription.enabled }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.subscription.stripewebhookurl }}
@@ -1106,7 +1121,7 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.keywatcher }}
     keywatcher:
-      {{- if .Values.openlane.coreConfiguration.keywatcher.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.keywatcher.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.keywatcher.enabled }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.keywatcher.keydir }}
@@ -1131,7 +1146,7 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan }}
         domainscan:
-          {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.bulkscan }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.bulkscan) }}
           bulkscan: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.bulkscan }}
           {{- end }}
           {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.nonvendorcategories | default (list)) }}
@@ -1185,10 +1200,10 @@ data:
         providers:
           {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3 }}
           s3:
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.enabled }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.ensureavailable }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.ensureavailable) }}
             ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.ensureavailable }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.bucket }}
@@ -1196,20 +1211,20 @@ data:
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup }}
             backup:
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.enabled }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.enabled) }}
               enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.enabled }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.provider }}
               provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.provider | quote }}
               {{- end }}
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.readfrombackup }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.readfrombackup) }}
               readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.readfrombackup }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.region }}
               region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.region | quote }}
               {{- end }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.proxypresignenabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.proxypresignenabled) }}
             proxypresignenabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.proxypresignenabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.baseurl }}
@@ -1224,10 +1239,10 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2 }}
           r2:
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.enabled }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.ensureavailable }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.ensureavailable) }}
             ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.ensureavailable }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.bucket }}
@@ -1235,20 +1250,20 @@ data:
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup }}
             backup:
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.enabled }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.enabled) }}
               enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.enabled }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.provider }}
               provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.provider | quote }}
               {{- end }}
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.readfrombackup }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.readfrombackup) }}
               readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.readfrombackup }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.region }}
               region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.region | quote }}
               {{- end }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.proxypresignenabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.proxypresignenabled) }}
             proxypresignenabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.proxypresignenabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.baseurl }}
@@ -1260,10 +1275,10 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs }}
           gcs:
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.enabled }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.ensureavailable }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.ensureavailable) }}
             ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.ensureavailable }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.bucket }}
@@ -1271,20 +1286,20 @@ data:
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup }}
             backup:
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.enabled }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.enabled) }}
               enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.enabled }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.provider }}
               provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.provider | quote }}
               {{- end }}
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.readfrombackup }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.readfrombackup) }}
               readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.readfrombackup }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.region }}
               region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.region | quote }}
               {{- end }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.proxypresignenabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.proxypresignenabled) }}
             proxypresignenabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.proxypresignenabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.baseurl }}
@@ -1299,10 +1314,10 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk }}
           disk:
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.enabled }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.ensureavailable }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.ensureavailable) }}
             ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.ensureavailable }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.bucket }}
@@ -1310,20 +1325,20 @@ data:
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup }}
             backup:
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.enabled }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.enabled) }}
               enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.enabled }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.provider }}
               provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.provider | quote }}
               {{- end }}
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.readfrombackup }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.readfrombackup) }}
               readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.readfrombackup }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.region }}
               region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.region | quote }}
               {{- end }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.proxypresignenabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.proxypresignenabled) }}
             proxypresignenabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.proxypresignenabled }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.baseurl }}
@@ -1335,10 +1350,10 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database }}
           database:
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.enabled }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.enabled) }}
             enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.enabled }}
             {{- end }}
-            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.ensureavailable }}
+            {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.ensureavailable) }}
             ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.ensureavailable }}
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.bucket }}
@@ -1346,13 +1361,13 @@ data:
             {{- end }}
             {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup }}
             backup:
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.enabled }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.enabled) }}
               enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.enabled }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.provider }}
               provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.provider | quote }}
               {{- end }}
-              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.readfrombackup }}
+              {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.readfrombackup) }}
               readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.readfrombackup }}
               {{- end }}
               {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.region }}
@@ -1369,7 +1384,7 @@ data:
           {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.prefix }}
           prefix: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.prefix | quote }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.moveprocessed }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.moveprocessed) }}
           moveprocessed: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.moveprocessed }}
           {{- end }}
         {{- end }}
@@ -1490,7 +1505,7 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.oidclocal }}
       oidclocal:
-        {{- if .Values.openlane.coreConfiguration.integrations.oidclocal.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.oidclocal.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.integrations.oidclocal.enabled }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.oidclocal.clientid }}
@@ -1516,7 +1531,7 @@ data:
           {{- if .Values.openlane.coreConfiguration.integrations.email.postmark.messagestream }}
           messagestream: {{ .Values.openlane.coreConfiguration.integrations.email.postmark.messagestream | quote }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.integrations.email.postmark.trackopens }}
+          {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.email.postmark.trackopens) }}
           trackopens: {{ .Values.openlane.coreConfiguration.integrations.email.postmark.trackopens }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.integrations.email.postmark.tracklinks }}
@@ -1553,10 +1568,10 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.deletiondays }}
         deletiondays: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.deletiondays }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.paymentreminder.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.enabled }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.dryrun }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.paymentreminder.dryrun) }}
         dryrun: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.dryrun }}
         {{- end }}
       {{- end }}
@@ -1565,16 +1580,16 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete.maxdeletesperrun }}
         maxdeletesperrun: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.maxdeletesperrun }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.integrationlifecycle }}
       integrationlifecycle:
-        {{- if .Values.openlane.coreConfiguration.integrations.integrationlifecycle.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.integrationlifecycle.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.integrations.integrationlifecycle.enabled }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.integrationlifecycle.dryrun }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.integrationlifecycle.dryrun) }}
         dryrun: {{ .Values.openlane.coreConfiguration.integrations.integrationlifecycle.dryrun }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.integrationlifecycle.maxperrun }}
@@ -1584,7 +1599,7 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:
-      {{- if .Values.openlane.coreConfiguration.workflows.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.workflows.enabled }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.workflows.cel }}
@@ -1607,31 +1622,31 @@ data:
         {{- if .Values.openlane.coreConfiguration.workflows.cel.comprehensionnestinglimit }}
         comprehensionnestinglimit: {{ .Values.openlane.coreConfiguration.workflows.cel.comprehensionnestinglimit }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.cel.extendedvalidations }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.cel.extendedvalidations) }}
         extendedvalidations: {{ .Values.openlane.coreConfiguration.workflows.cel.extendedvalidations }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.cel.optionaltypes }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.cel.optionaltypes) }}
         optionaltypes: {{ .Values.openlane.coreConfiguration.workflows.cel.optionaltypes }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.cel.identifierescapesyntax }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.cel.identifierescapesyntax) }}
         identifierescapesyntax: {{ .Values.openlane.coreConfiguration.workflows.cel.identifierescapesyntax }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.cel.crosstypenumericcomparisons }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.cel.crosstypenumericcomparisons) }}
         crosstypenumericcomparisons: {{ .Values.openlane.coreConfiguration.workflows.cel.crosstypenumericcomparisons }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.cel.macrocalltracking }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.cel.macrocalltracking) }}
         macrocalltracking: {{ .Values.openlane.coreConfiguration.workflows.cel.macrocalltracking }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.cel.evaloptimize }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.cel.evaloptimize) }}
         evaloptimize: {{ .Values.openlane.coreConfiguration.workflows.cel.evaloptimize }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.cel.trackstate }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.cel.trackstate) }}
         trackstate: {{ .Values.openlane.coreConfiguration.workflows.cel.trackstate }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.workflows.gala }}
       gala:
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.enabled }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.gala.enabled) }}
         enabled: {{ .Values.openlane.coreConfiguration.workflows.gala.enabled }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.workflows.gala.workercount }}
@@ -1640,26 +1655,26 @@ data:
         {{- if .Values.openlane.coreConfiguration.workflows.gala.maxretries }}
         maxretries: {{ .Values.openlane.coreConfiguration.workflows.gala.maxretries }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror) }}
         failonenqueueerror: {{ .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.workflows.gala.queuename }}
         queuename: {{ .Values.openlane.coreConfiguration.workflows.gala.queuename | quote }}
         {{- end }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.workflows.webhookallowprivateaddresses }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.workflows.webhookallowprivateaddresses) }}
       webhookallowprivateaddresses: {{ .Values.openlane.coreConfiguration.workflows.webhookallowprivateaddresses }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.cloudflare }}
     cloudflare:
-      {{- if .Values.openlane.coreConfiguration.cloudflare.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.cloudflare.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.cloudflare.enabled }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.shortlinks }}
     shortlinks:
-      {{- if .Values.openlane.coreConfiguration.shortlinks.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.shortlinks.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.shortlinks.enabled }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.shortlinks.clientid }}
@@ -1674,7 +1689,7 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.backfill }}
     backfill:
-      {{- if .Values.openlane.coreConfiguration.backfill.enabled }}
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.backfill.enabled) }}
       enabled: {{ .Values.openlane.coreConfiguration.backfill.enabled }}
       {{- end }}
     {{- end }}

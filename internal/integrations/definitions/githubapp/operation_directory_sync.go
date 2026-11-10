@@ -289,7 +289,7 @@ func queryViewerOrganizations(ctx context.Context, client GraphQLClient) ([]orgN
 			break
 		}
 
-		after = githubv4.NewString(githubv4.String(query.Viewer.Repositories.PageInfo.EndCursor))
+		after = new(githubv4.String(query.Viewer.Repositories.PageInfo.EndCursor))
 	}
 
 	return orgs, nil
@@ -356,7 +356,7 @@ func queryExternalIdentities(ctx context.Context, client GraphQLClient, orgLogin
 			break
 		}
 
-		after = githubv4.NewString(githubv4.String(pi.EndCursor))
+		after = new(githubv4.String(pi.EndCursor))
 	}
 
 	return identities, nil
@@ -470,7 +470,7 @@ func queryOrganizationTeams(ctx context.Context, client GraphQLClient, orgLogin 
 			break
 		}
 
-		after = githubv4.NewString(githubv4.String(query.Organization.Teams.PageInfo.EndCursor))
+		after = new(githubv4.String(query.Organization.Teams.PageInfo.EndCursor))
 	}
 
 	return teams, memberships, nil
@@ -479,7 +479,7 @@ func queryOrganizationTeams(ctx context.Context, client GraphQLClient, orgLogin 
 // queryOrganizationTeamMembers fetches additional member pages for the requested team
 func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, orgLogin string, teamSlug string, firstAfter string) ([]teamMemberEdgeGQL, error) {
 	members := make([]teamMemberEdgeGQL, 0)
-	after := githubv4.NewString(githubv4.String(firstAfter))
+	after := new(githubv4.String(firstAfter))
 
 	for {
 		if err := ctx.Err(); err != nil {
@@ -514,7 +514,7 @@ func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, org
 			break
 		}
 
-		after = githubv4.NewString(githubv4.String(query.Organization.Team.Members.PageInfo.EndCursor))
+		after = new(githubv4.String(query.Organization.Team.Members.PageInfo.EndCursor))
 	}
 
 	return members, nil

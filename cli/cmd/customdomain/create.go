@@ -5,7 +5,6 @@ package customdomain
 import (
 	"context"
 
-	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
@@ -77,7 +76,7 @@ func create(ctx context.Context) error {
 	input := graphclient.CreateCustomDomainInput{
 		CnameRecord:      cnameRecord,
 		MappableDomainID: mappableDomains.MappableDomains.Edges[0].Node.ID,
-		OwnerID:          lo.ToPtr(cmd.Config.String("org-id")),
+		OwnerID:          new(cmd.Config.String("org-id")),
 	}
 
 	o, err := client.CreateCustomDomain(ctx, input)

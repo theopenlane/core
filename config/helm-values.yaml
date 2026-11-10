@@ -388,6 +388,9 @@ coreConfiguration:
     secure: true  # @schema type:boolean; default:true
     httponly: true  # @schema type:boolean; default:true
     samesite: "Strict"  # @schema type:string; default:Strict
+    absolutetimeout: "24h0m0s"  # @schema type:integer; default:24h
+    renewalinterval: "15m0s"  # @schema type:integer; default:15m
+    renewalgrace: "30s"  # @schema type:integer; default:30s
   # -- TOTP contains the configuration for the TOTP provider
   totp:
     enabled: true  # @schema type:boolean; default:true
@@ -396,6 +399,8 @@ coreConfiguration:
     redis: true  # @schema type:boolean; default:true
     recoverycodecount: 16  # @schema type:integer; default:16
     recoverycodelength: 8  # @schema type:integer; default:8
+    maxfailedattempts: 5  # @schema type:integer; default:5
+    failurewindow: "15m0s"  # @schema type:integer; default:15m
   # -- Ratelimit contains the configuration for the global rate limiter applied to all requests
   ratelimit:
     enabled: false  # @schema type:boolean; default:false
@@ -983,6 +988,14 @@ externalSecrets:
       secretKey: "CORE_SERVER_TRUSTCENTERPREVIEWZONEID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-trustcenterpreviewzoneid"  # @schema type:string
+    # -- core-server-trustcentercacherefreshsecret secret configuration
+    core-server-trustcentercacherefreshsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for server.trustcentercacherefreshsecret
+      secretKey: "CORE_SERVER_TRUSTCENTERCACHEREFRESHSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-server-trustcentercacherefreshsecret"  # @schema type:string
     # -- core-auth-providers-github-clientsecret secret configuration
     core-auth-providers-github-clientsecret:
       # -- Enable this external secret
@@ -1087,6 +1100,22 @@ externalSecrets:
       secretKey: "CORE_TOTP_SECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-totp-secret"  # @schema type:string
+    # -- core-ratelimit-forwardersecret secret configuration
+    core-ratelimit-forwardersecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for ratelimit.forwardersecret
+      secretKey: "CORE_RATELIMIT_FORWARDERSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-ratelimit-forwardersecret"  # @schema type:string
+    # -- core-ratelimitunmatched-forwardersecret secret configuration
+    core-ratelimitunmatched-forwardersecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for ratelimitunmatched.forwardersecret
+      secretKey: "CORE_RATELIMITUNMATCHED_FORWARDERSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-ratelimitunmatched-forwardersecret"  # @schema type:string
     # -- core-objectstorage-providers-s3-credentials-accesskeyid secret configuration
     core-objectstorage-providers-s3-credentials-accesskeyid:
       # -- Enable this external secret

@@ -47,6 +47,8 @@ type Narrative struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -199,7 +201,7 @@ func (*Narrative) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case narrative.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case narrative.FieldID, narrative.FieldCreatedBy, narrative.FieldUpdatedBy, narrative.FieldUpdatedByImpersonator, narrative.FieldDeletedBy, narrative.FieldDisplayID, narrative.FieldSourceDefinitionID, narrative.FieldSourceDefinitionVersion, narrative.FieldSourceInstanceID, narrative.FieldManagedBy, narrative.FieldIntegrationRunID, narrative.FieldExternalID, narrative.FieldOwnerID, narrative.FieldInternalNotes, narrative.FieldSystemInternalID, narrative.FieldName, narrative.FieldDescription, narrative.FieldDetails:
+		case narrative.FieldID, narrative.FieldCreatedBy, narrative.FieldUpdatedBy, narrative.FieldUpdatedByImpersonator, narrative.FieldDeletedBy, narrative.FieldDisplayID, narrative.FieldSourceDefinitionID, narrative.FieldSourceDefinitionVersion, narrative.FieldSourceInstanceID, narrative.FieldManagedBy, narrative.FieldIntegrationRunID, narrative.FieldSourceKey, narrative.FieldExternalID, narrative.FieldOwnerID, narrative.FieldInternalNotes, narrative.FieldSystemInternalID, narrative.FieldName, narrative.FieldDescription, narrative.FieldDetails:
 			values[i] = new(sql.NullString)
 		case narrative.FieldCreatedAt, narrative.FieldUpdatedAt, narrative.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -314,6 +316,12 @@ func (_m *Narrative) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case narrative.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case narrative.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -503,6 +511,9 @@ func (_m *Narrative) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

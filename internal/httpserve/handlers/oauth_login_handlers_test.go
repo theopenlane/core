@@ -6,10 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/common/enums"
@@ -17,10 +13,12 @@ import (
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
-	t := suite.T()
+func TestHandlerCheckAndCreateUser(t *testing.T) {
+	suite := suite.setupTest(t)
 
 	// add login handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
@@ -61,7 +59,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 		}
 
 		_, err := builder.Save(ctx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 	}
 
 	type args struct {
@@ -93,7 +91,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				Email:             "wmaximoff@marvel.com",
 				AuthProvider:      enums.AuthProviderGitHub,
 				LastLoginProvider: enums.AuthProviderGitHub,
-				AvatarRemoteURL:   lo.ToPtr("https://example.com/images/photo.jpg"),
+				AvatarRemoteURL:   new("https://example.com/images/photo.jpg"),
 			},
 			writes: true,
 		},
@@ -114,7 +112,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				Email:             "wmaximoff@marvel.com",
 				AuthProvider:      enums.AuthProviderGitHub,
 				LastLoginProvider: enums.AuthProviderGoogle,
-				AvatarRemoteURL:   lo.ToPtr("https://example.com/images/photo.jpg"),
+				AvatarRemoteURL:   new("https://example.com/images/photo.jpg"),
 			},
 			writes:  true,
 			wantErr: false,
@@ -136,7 +134,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				Email:             "wmaximoff@marvel.com",
 				AuthProvider:      enums.AuthProviderGitHub,
 				LastLoginProvider: enums.AuthProviderGitHub,
-				AvatarRemoteURL:   lo.ToPtr("https://example.com/images/photo.jpg"),
+				AvatarRemoteURL:   new("https://example.com/images/photo.jpg"),
 			},
 			writes: false,
 		},
@@ -198,7 +196,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 
 			// start transaction because the query expects a transaction in the context
 			tx, err := suite.h.DBClient.Tx(ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			// commit transaction after test finishes
 			defer tx.Commit() //nolint:errcheck
@@ -208,28 +206,28 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 
 			got, err := suite.h.CheckAndCreateUser(ctx, args.name, args.email, args.provider, args.image)
 			if tt.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, got)
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Nil(got))
 
 				return
 			}
 
 			// check if user was created
-			require.NoError(t, err)
-			require.NotNil(t, got)
+			assert.NilError(t, err)
+			assert.Assert(t, got != nil)
 
 			// verify fields
-			assert.Equal(t, want.FirstName, got.FirstName)
-			assert.Equal(t, want.LastName, got.LastName)
-			assert.Equal(t, want.Email, got.Email)
-			assert.Equal(t, want.AuthProvider, got.AuthProvider)
-			assert.Equal(t, want.LastLoginProvider, got.LastLoginProvider)
-			assert.WithinDuration(t, now, *got.LastSeen, time.Second*5)
+			assert.Check(t, is.DeepEqual(want.FirstName, got.FirstName))
+			assert.Check(t, is.DeepEqual(want.LastName, got.LastName))
+			assert.Check(t, is.DeepEqual(want.Email, got.Email))
+			assert.Check(t, is.DeepEqual(want.AuthProvider, got.AuthProvider))
+			assert.Check(t, is.DeepEqual(want.LastLoginProvider, got.LastLoginProvider))
+			assert.Check(t, got.LastSeen.Sub(now).Abs() <= 5*time.Second)
 
 			if args.image == "" {
-				assert.NotEmpty(t, got.AvatarRemoteURL)
+				assert.Check(t, got.AvatarRemoteURL != nil && *got.AvatarRemoteURL != "")
 			} else {
-				assert.Equal(t, *want.AvatarRemoteURL, *got.AvatarRemoteURL)
+				assert.Check(t, is.DeepEqual(*want.AvatarRemoteURL, *got.AvatarRemoteURL))
 			}
 		})
 	}

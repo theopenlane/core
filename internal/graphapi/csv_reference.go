@@ -104,7 +104,7 @@ func resolveCSVReferenceRules[T any](ctx context.Context, inputs []*T, rules ...
 		return nil
 	}
 
-	elemType := reflect.TypeOf((*T)(nil)).Elem()
+	elemType := reflect.TypeFor[T]()
 	for elemType.Kind() == reflect.Pointer {
 		elemType = elemType.Elem()
 	}
@@ -338,8 +338,8 @@ func csvFieldMetaForType(t reflect.Type, fieldName string) (csvFieldMeta, bool) 
 		return csvFieldMeta{}, false
 	}
 
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
+	for field := range t.Fields() {
+		field := field
 		if field.PkgPath != "" {
 			continue
 		}
@@ -376,7 +376,7 @@ func csvJSONFieldName(field reflect.StructField) string {
 		return ""
 	}
 
-	name := strings.Split(tag, ",")[0]
+	name, _, _ := strings.Cut(tag, ",")
 	if name == "" {
 		return field.Name
 	}
@@ -665,8 +665,8 @@ func getInputFieldTypeName(t reflect.Type) string {
 
 // getAnonymousInputTypeName finds an anonymous embedded field matching the Create*Input pattern.
 func getAnonymousInputTypeName(t reflect.Type) string {
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
+	for field := range t.Fields() {
+		field := field
 		if !field.Anonymous {
 			continue
 		}

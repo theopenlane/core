@@ -3,7 +3,8 @@ package workflows
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -31,17 +32,17 @@ func TestTriggerChangeSet(t *testing.T) {
 
 	changeSet := TriggerChangeSet(contextData)
 
-	require.Equal(t, []string{"status"}, changeSet.ChangedFields)
-	require.Equal(t, map[string]any{"status": "approved"}, changeSet.ProposedChanges)
+	assert.Assert(t, is.DeepEqual([]string{"status"}, changeSet.ChangedFields))
+	assert.Assert(t, is.DeepEqual(map[string]any{"status": "approved"}, changeSet.ProposedChanges))
 
 	changeSet.ChangedFields[0] = "mutated"
 	changeSet.AddedIDs["controls"][0] = "mutated"
 	changeSet.OldValues["status"] = "mutated"
 
-	require.Equal(t, "status", contextData.TriggerChangedFields[0])
-	require.Equal(t, "one", contextData.TriggerAddedIDs["controls"][0])
-	require.Equal(t, "approved", contextData.TriggerProposedChanges["status"])
-	require.Equal(t, "draft", contextData.TriggerOldValues["status"])
+	assert.Assert(t, is.Equal("status", contextData.TriggerChangedFields[0]))
+	assert.Assert(t, is.Equal("one", contextData.TriggerAddedIDs["controls"][0]))
+	assert.Assert(t, is.Equal("approved", contextData.TriggerProposedChanges["status"]))
+	assert.Assert(t, is.Equal("draft", contextData.TriggerOldValues["status"]))
 }
 
 // TestSetTriggerChangeSet verifies applying a change-set decodes proposed changes back
@@ -65,10 +66,10 @@ func TestSetTriggerChangeSet(t *testing.T) {
 	var contextData models.WorkflowInstanceContext
 	SetTriggerChangeSet(&contextData, changeSet)
 
-	require.Equal(t, changeSet.ChangedFields, contextData.TriggerChangedFields)
-	require.Equal(t, changeSet.ChangedEdges, contextData.TriggerChangedEdges)
-	require.Equal(t, changeSet.AddedIDs, contextData.TriggerAddedIDs)
-	require.Equal(t, changeSet.RemovedIDs, contextData.TriggerRemovedIDs)
-	require.Equal(t, map[string]any{"status": "approved"}, contextData.TriggerProposedChanges)
-	require.Equal(t, changeSet.OldValues, contextData.TriggerOldValues)
+	assert.Assert(t, is.DeepEqual(changeSet.ChangedFields, contextData.TriggerChangedFields))
+	assert.Assert(t, is.DeepEqual(changeSet.ChangedEdges, contextData.TriggerChangedEdges))
+	assert.Assert(t, is.DeepEqual(changeSet.AddedIDs, contextData.TriggerAddedIDs))
+	assert.Assert(t, is.DeepEqual(changeSet.RemovedIDs, contextData.TriggerRemovedIDs))
+	assert.Assert(t, is.DeepEqual(map[string]any{"status": "approved"}, contextData.TriggerProposedChanges))
+	assert.Assert(t, is.DeepEqual(changeSet.OldValues, contextData.TriggerOldValues))
 }

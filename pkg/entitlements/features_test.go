@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/entitlements/mocks"
@@ -43,20 +44,20 @@ func TestGetFeatureByLookupKey(t *testing.T) {
 	sc, _ := setupFeatureClient([]*stripe.EntitlementsFeature{feature}, nil)
 
 	found, err := sc.GetFeatureByLookupKey(ctx, "basic")
-	assert.NoError(t, err)
-	assert.Equal(t, feature, found)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(feature, found))
 }
 
 func TestGetFeatureByLookupKeyNotFound(t *testing.T) {
 	sc, _ := setupFeatureClient(nil, nil)
 	feat, err := sc.GetFeatureByLookupKey(context.Background(), "missing")
-	assert.NoError(t, err)
-	assert.Nil(t, feat)
+	assert.Check(t, err)
+	assert.Check(t, is.Nil(feat))
 }
 
 func TestGetFeatureByLookupKeyError(t *testing.T) {
-	sc, _ := setupFeatureClient(nil, assert.AnError)
+	sc, _ := setupFeatureClient(nil, errMock)
 	feat, err := sc.GetFeatureByLookupKey(context.Background(), "err")
-	assert.Error(t, err)
-	assert.Nil(t, feat)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Nil(feat))
 }

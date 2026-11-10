@@ -16,10 +16,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	awss3 "github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -47,7 +47,7 @@ func TestNewS3Provider(t *testing.T) {
 		t.Skip("Skipping test due to missing AWS credentials or environment")
 	}
 
-	assert.NotNil(t, provider)
+	assert.Check(t, provider != nil)
 }
 
 func TestNewS3ProviderWithOptions(t *testing.T) {
@@ -57,7 +57,7 @@ func TestNewS3ProviderWithOptions(t *testing.T) {
 		t.Skip("Skipping test due to missing AWS credentials or environment")
 	}
 
-	assert.NotNil(t, provider)
+	assert.Check(t, provider != nil)
 }
 
 func TestNewS3ProviderMissingBucket(t *testing.T) {
@@ -65,8 +65,8 @@ func TestNewS3ProviderMissingBucket(t *testing.T) {
 	opts.Bucket = ""
 
 	_, err := s3provider.NewS3Provider(opts)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "bucket")
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Contains(err.Error(), "bucket"))
 }
 
 func TestNewS3ProviderMissingRegion(t *testing.T) {
@@ -74,14 +74,14 @@ func TestNewS3ProviderMissingRegion(t *testing.T) {
 	opts.Region = ""
 
 	_, err := s3provider.NewS3Provider(opts)
-	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "missing required S3 credentials")
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Contains(err.Error(), "missing required S3 credentials"))
 }
 
 func TestS3ProviderConstants(t *testing.T) {
-	assert.Equal(t, 15*time.Minute, s3provider.DefaultPresignedURLExpiry)
-	assert.Equal(t, 64*1024*1024, s3provider.DefaultPartSize)
-	assert.Equal(t, 5, s3provider.DefaultConcurrency)
+	assert.Check(t, is.Equal(15*time.Minute, s3provider.DefaultPresignedURLExpiry))
+	assert.Check(t, is.Equal(64*1024*1024, s3provider.DefaultPartSize))
+	assert.Check(t, is.Equal(5, s3provider.DefaultConcurrency))
 }
 
 func TestS3ProviderMethods(t *testing.T) {
@@ -93,17 +93,17 @@ func TestS3ProviderMethods(t *testing.T) {
 	}
 
 	t.Run("ProviderType", func(t *testing.T) {
-		assert.Equal(t, storagetypes.S3Provider, provider.ProviderType())
+		assert.Check(t, is.Equal(storagetypes.S3Provider, provider.ProviderType()))
 	})
 
 	t.Run("GetScheme", func(t *testing.T) {
 		scheme := provider.GetScheme()
-		assert.NotNil(t, scheme)
-		assert.Equal(t, "s3://", *scheme)
+		assert.Check(t, scheme != nil)
+		assert.Check(t, is.Equal("s3://", *scheme))
 	})
 
 	t.Run("Close", func(t *testing.T) {
-		assert.NoError(t, provider.Close())
+		assert.Check(t, provider.Close())
 	})
 }
 
@@ -115,7 +115,7 @@ func TestNewS3ProviderResult(t *testing.T) {
 	}
 
 	provider := result.MustGet()
-	assert.NotNil(t, provider)
+	assert.Check(t, provider != nil)
 }
 
 func TestNewS3ProviderFromCredentials(t *testing.T) {
@@ -127,11 +127,11 @@ func TestNewS3ProviderFromCredentials(t *testing.T) {
 		t.Skip("Skipping test due to missing AWS credentials or environment")
 	}
 
-	assert.NotNil(t, result.MustGet())
+	assert.Check(t, result.MustGet() != nil)
 
 	t.Run("missing options", func(t *testing.T) {
 		errResult := s3provider.NewS3ProviderFromCredentials(creds, nil)
-		assert.True(t, errResult.IsError())
+		assert.Check(t, errResult.IsError())
 	})
 }
 
@@ -143,7 +143,7 @@ func TestWithACL(t *testing.T) {
 			t.Skip("Skipping test due to missing AWS credentials or environment")
 		}
 
-		assert.NotNil(t, provider)
+		assert.Check(t, provider != nil)
 	})
 
 	t.Run("private ACL", func(t *testing.T) {
@@ -153,7 +153,7 @@ func TestWithACL(t *testing.T) {
 			t.Skip("Skipping test due to missing AWS credentials or environment")
 		}
 
-		assert.NotNil(t, provider)
+		assert.Check(t, provider != nil)
 	})
 }
 
@@ -170,7 +170,7 @@ func TestS3Provider_Upload_Errors(t *testing.T) {
 			FileName: "",
 		}
 		_, err = provider.Upload(context.Background(), reader, uploadOpts)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -183,15 +183,13 @@ func TestS3Provider_Download_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		downloadOpts := &storagetypes.DownloadFileOptions{
 			FileName: "test.txt",
 		}
 		_, err = provider.Download(context.Background(), file, downloadOpts)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -204,12 +202,10 @@ func TestS3Provider_Delete_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		err = provider.Delete(context.Background(), file, nil)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -222,15 +218,13 @@ func TestS3Provider_GetPresignedURL_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		urlOpts := &storagetypes.PresignedURLOptions{
 			Duration: 15 * time.Minute,
 		}
 		_, err = provider.GetPresignedURL(context.Background(), file, urlOpts)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -243,12 +237,10 @@ func TestS3Provider_Exists_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		_, err = provider.Exists(context.Background(), file)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -261,7 +253,7 @@ func TestS3Provider_ListBuckets(t *testing.T) {
 		}
 
 		_, err = provider.ListBuckets()
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -270,7 +262,7 @@ func TestWithOptions_Builder(t *testing.T) {
 		builder := s3provider.NewS3Builder()
 
 		builder = builder.WithOptions(s3provider.WithACL("private"), s3provider.WithUsePathStyle(true), s3provider.WithDebugMode(false))
-		assert.NotNil(t, builder)
+		assert.Check(t, builder != nil)
 	})
 }
 
@@ -300,7 +292,7 @@ func TestS3ProviderPresignURLProxyDisabled(t *testing.T) {
 	)
 
 	providerInterface, err := builder.Build(ctx, storage.ProviderCredentials{AccessKeyID: minioUser, SecretAccessKey: minioSecret}, options)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	provider := providerInterface
 	t.Cleanup(func() { _ = provider.Close() })
 
@@ -309,30 +301,28 @@ func TestS3ProviderPresignURLProxyDisabled(t *testing.T) {
 		FileName:    "folder/object.txt",
 		ContentType: "text/plain",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	url, err := provider.GetPresignedURL(ctx, &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket:      minioBucket,
-			Key:         "folder/object.txt",
-			ContentType: "text/plain",
-		},
+		Bucket:      minioBucket,
+		Key:         "folder/object.txt",
+		ContentType: "text/plain",
 	}, &storagetypes.PresignedURLOptions{Duration: time.Minute})
-	require.NoError(t, err)
-	require.True(t, strings.HasPrefix(url, "http://"), "expected upstream S3 URL, got %q", url)
-	require.Contains(t, url, "X-Amz-Algorithm=AWS4-HMAC-SHA256", "URL should contain AWS signature")
-	require.Contains(t, url, "X-Amz-Credential=", "URL should contain AWS credentials")
-	require.Contains(t, url, "X-Amz-Signature=", "URL should contain AWS signature")
-	require.Contains(t, url, "folder/object.txt", "URL should contain object key")
-	require.Contains(t, url, "response-content-type=text%2Fplain", "URL should contain response content type")
+	assert.NilError(t, err)
+	assert.Assert(t, strings.HasPrefix(url, "http://"), "expected upstream S3 URL, got %q", url)
+	assert.Assert(t, is.Contains(url, "X-Amz-Algorithm=AWS4-HMAC-SHA256"), "URL should contain AWS signature")
+	assert.Assert(t, is.Contains(url, "X-Amz-Credential="), "URL should contain AWS credentials")
+	assert.Assert(t, is.Contains(url, "X-Amz-Signature="), "URL should contain AWS signature")
+	assert.Assert(t, is.Contains(url, "folder/object.txt"), "URL should contain object key")
+	assert.Assert(t, is.Contains(url, "response-content-type=text%2Fplain"), "URL should contain response content type")
 
 	resp, err := http.Get(url)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
-	require.NoError(t, err)
-	require.Equal(t, http.StatusOK, resp.StatusCode)
-	require.Equal(t, string(content), string(body))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(http.StatusOK, resp.StatusCode))
+	assert.Assert(t, is.Equal(string(content), string(body)))
 }
 
 func TestS3ProviderPresignURLProxyEnabled(t *testing.T) {
@@ -360,7 +350,7 @@ func TestS3ProviderPresignURLProxyEnabled(t *testing.T) {
 	)
 
 	providerInterface, err := builder.Build(ctx, storage.ProviderCredentials{AccessKeyID: minioUser, SecretAccessKey: minioSecret}, options)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	provider := providerInterface
 	t.Cleanup(func() { _ = provider.Close() })
 
@@ -369,31 +359,29 @@ func TestS3ProviderPresignURLProxyEnabled(t *testing.T) {
 		FileName:    "folder/object.txt",
 		ContentType: "text/plain",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILE00000000000000",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket:  minioBucket,
-			Key:     "folder/object.txt",
-			FullURI: "s3://" + minioBucket + "/folder/object.txt",
-		},
+		ID:      "01HZZTESTFILE00000000000000",
+		Bucket:  minioBucket,
+		Key:     "folder/object.txt",
+		FullURI: "s3://" + minioBucket + "/folder/object.txt",
 	}
 
 	secret := make([]byte, 128)
 	_, err = rand.Read(secret)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	url, err := proxy.GenerateDownloadURLWithSecret(file, secret, time.Minute, &storage.ProxyPresignConfig{
 		TokenManager: tm,
 		BaseURL:      baseURL,
 	})
-	require.NoError(t, err, "with proxy presign enabled, should generate proxy URL")
-	require.NotEmpty(t, url)
-	require.True(t, strings.HasPrefix(url, baseURL), "URL should start with BaseURL, got %q", url)
-	require.Contains(t, url, file.ID, "URL should contain file ID")
-	require.Contains(t, url, "token=", "URL should contain token parameter")
-	require.NotContains(t, url, "X-Amz-Algorithm", "proxy URL should not contain AWS signature parameters")
+	assert.NilError(t, err, "with proxy presign enabled, should generate proxy URL")
+	assert.Assert(t, len(url) > 0)
+	assert.Assert(t, strings.HasPrefix(url, baseURL), "URL should start with BaseURL, got %q", url)
+	assert.Assert(t, is.Contains(url, file.ID), "URL should contain file ID")
+	assert.Assert(t, is.Contains(url, "token="), "URL should contain token parameter")
+	assert.Assert(t, !strings.Contains(url, "X-Amz-Algorithm"), "proxy URL should not contain AWS signature parameters")
 }
 
 func startMinio(t *testing.T, ctx context.Context) (string, func(context.Context, ...testcontainers.TerminateOption) error) {
@@ -411,12 +399,12 @@ func startMinio(t *testing.T, ctx context.Context) (string, func(context.Context
 	}
 
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{ContainerRequest: req, Started: true})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	host, err := container.Host(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	port, err := container.MappedPort(ctx, "9000/tcp")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	endpoint := "http://" + host + ":" + port.Port()
 	return endpoint, container.Terminate
@@ -437,22 +425,21 @@ func createBucket(t *testing.T, ctx context.Context, endpoint, bucket string) {
 
 	_, err := client.CreateBucket(ctx, &awss3.CreateBucketInput{Bucket: aws.String(bucket)})
 	if err != nil {
-		var existsErr *types.BucketAlreadyOwnedByYou
-		if !errors.As(err, &existsErr) {
-			require.NoError(t, err)
+		if _, ok := errors.AsType[*types.BucketAlreadyOwnedByYou](err); !ok {
+			assert.NilError(t, err)
 		}
 	}
 
 	waitCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	waiter := awss3.NewBucketExistsWaiter(client)
-	require.NoError(t, waiter.Wait(waitCtx, &awss3.HeadBucketInput{Bucket: aws.String(bucket)}, 1*time.Second))
+	assert.NilError(t, waiter.Wait(waitCtx, &awss3.HeadBucketInput{Bucket: aws.String(bucket)}, 1*time.Second))
 }
 
 func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 	_, key, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	conf := tokens.Config{
 		Audience:        "http://localhost:17608",
 		Issuer:          "http://localhost:17608",
@@ -461,6 +448,6 @@ func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 		RefreshOverlap:  -15 * time.Minute,
 	}
 	tm, err := tokens.NewWithKey(key, conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	return tm
 }

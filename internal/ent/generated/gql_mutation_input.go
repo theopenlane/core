@@ -26104,7 +26104,6 @@ type CreateTaskInput struct {
 	IsSuggested              *bool                  `json:"is_suggested,omitempty"`
 	Priority                 *int                   `json:"priority,omitempty"`
 	Source                   *string                `json:"source,omitempty"`
-	SourceKey                *string                `json:"source_key,omitempty"`
 	ExternalReferenceURL     []string               `json:"external_reference_url,omitempty"`
 	IntegrationRunIDs        []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                  *string                `json:"owner_id,omitempty"`
@@ -26191,9 +26190,6 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
-	}
-	if v := i.SourceKey; v != nil {
-		m.SetSourceKey(*v)
 	}
 	if v := i.ExternalReferenceURL; v != nil {
 		m.SetExternalReferenceURL(v)
@@ -26323,8 +26319,6 @@ type UpdateTaskInput struct {
 	Priority                       *int             `json:"priority,omitempty"`
 	ClearSource                    bool
 	Source                         *string `json:"source,omitempty"`
-	ClearSourceKey                 bool
-	SourceKey                      *string `json:"source_key,omitempty"`
 	ClearExternalReferenceURL      bool
 	ExternalReferenceURL           []string `json:"external_reference_url,omitempty"`
 	AppendExternalReferenceURL     []string
@@ -26505,12 +26499,6 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
-	}
-	if i.ClearSourceKey {
-		m.ClearSourceKey()
-	}
-	if v := i.SourceKey; v != nil {
-		m.SetSourceKey(*v)
 	}
 	if i.ClearExternalReferenceURL {
 		m.ClearExternalReferenceURL()
@@ -28188,6 +28176,7 @@ type CreateTrustCenterSettingInput struct {
 	NoindexDefaultDomain                  *bool                                `json:"noindex_default_domain,omitempty"`
 	EnableAutoApproval                    *bool                                `json:"enable_auto_approval,omitempty"`
 	AutoApprovalRules                     *models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`
+	DisableDefaultDomain                  *bool                                `json:"disable_default_domain,omitempty"`
 	BlockedGroupIDs                       []string                             `json:"blocked_group_ids,omitempty"`
 	EditorIDs                             []string                             `json:"editor_ids,omitempty"`
 	LogoFileID                            *string                              `json:"logo_file_id,omitempty"`
@@ -28273,6 +28262,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.AutoApprovalRules; v != nil {
 		m.SetAutoApprovalRules(*v)
 	}
+	if v := i.DisableDefaultDomain; v != nil {
+		m.SetDisableDefaultDomain(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -28347,6 +28339,8 @@ type UpdateTrustCenterSettingInput struct {
 	EnableAutoApproval                         *bool `json:"enable_auto_approval,omitempty"`
 	ClearAutoApprovalRules                     bool
 	AutoApprovalRules                          *models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`
+	ClearDisableDefaultDomain                  bool
+	DisableDefaultDomain                       *bool `json:"disable_default_domain,omitempty"`
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs                      []string `json:"remove_blocked_group_ids,omitempty"`
@@ -28502,6 +28496,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.AutoApprovalRules; v != nil {
 		m.SetAutoApprovalRules(*v)
+	}
+	if i.ClearDisableDefaultDomain {
+		m.ClearDisableDefaultDomain()
+	}
+	if v := i.DisableDefaultDomain; v != nil {
+		m.SetDisableDefaultDomain(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -29622,6 +29622,7 @@ func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUp
 // CreateVendorRiskScoreInput represents a mutation input for creating vendorriskscores.
 type CreateVendorRiskScoreInput struct {
 	Tags                  []string                    `json:"tags,omitempty"`
+	ExternalID            *string                     `json:"external_id,omitempty"`
 	QuestionKey           string                      `json:"question_key,omitempty"`
 	QuestionName          string                      `json:"question_name,omitempty"`
 	QuestionDescription   *string                     `json:"question_description,omitempty"`
@@ -29631,6 +29632,7 @@ type CreateVendorRiskScoreInput struct {
 	Answer                *string                     `json:"answer,omitempty"`
 	Notes                 *string                     `json:"notes,omitempty"`
 	OwnerID               *string                     `json:"owner_id,omitempty"`
+	IntegrationRunIDs     []string                    `json:"integration_run_ids,omitempty"`
 	VendorScoringConfigID *string                     `json:"vendor_scoring_config_id,omitempty"`
 	EntityID              string                      `json:"entity_id,omitempty"`
 	AssessmentResponseID  *string                     `json:"assessment_response_id,omitempty"`
@@ -29640,6 +29642,9 @@ type CreateVendorRiskScoreInput struct {
 func (i *CreateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	m.SetQuestionKey(i.QuestionKey)
 	m.SetQuestionName(i.QuestionName)
@@ -29657,6 +29662,9 @@ func (i *CreateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.VendorScoringConfigID; v != nil {
 		m.SetVendorScoringConfigID(*v)
@@ -29678,6 +29686,8 @@ type UpdateVendorRiskScoreInput struct {
 	ClearTags                bool
 	Tags                     []string `json:"tags,omitempty"`
 	AppendTags               []string
+	ClearExternalID          bool
+	ExternalID               *string `json:"external_id,omitempty"`
 	QuestionKey              *string `json:"question_key,omitempty"`
 	QuestionName             *string `json:"question_name,omitempty"`
 	ClearQuestionDescription bool
@@ -29689,6 +29699,9 @@ type UpdateVendorRiskScoreInput struct {
 	Answer                   *string `json:"answer,omitempty"`
 	ClearNotes               bool
 	Notes                    *string `json:"notes,omitempty"`
+	ClearIntegrationRuns     bool
+	AddIntegrationRunIDs     []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs  []string `json:"remove_integration_run_ids,omitempty"`
 	ClearVendorScoringConfig bool
 	VendorScoringConfigID    *string `json:"vendor_scoring_config_id,omitempty"`
 	EntityID                 *string `json:"entity_id,omitempty"`
@@ -29706,6 +29719,12 @@ func (i *UpdateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.QuestionKey; v != nil {
 		m.SetQuestionKey(*v)
@@ -29739,6 +29758,15 @@ func (i *UpdateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
 	}
 	if v := i.Notes; v != nil {
 		m.SetNotes(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearVendorScoringConfig {
 		m.ClearVendorScoringConfig()

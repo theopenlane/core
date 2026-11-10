@@ -10,7 +10,6 @@ import (
 
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -38,10 +37,10 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 		// Recreate the setting
 		resp, err := suite.Client.API.CreateTrustCenterSetting(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterSettingInput{
 			TrustCenterID: &tcOrg.TrustCenter.ID,
-			Title:         lo.ToPtr("Test Setting"),
-			Overview:      lo.ToPtr("Test Overview"),
-			PrimaryColor:  lo.ToPtr("#FF0000"),
-			Environment:   lo.ToPtr(enums.TrustCenterEnvironmentLive),
+			Title:         new("Test Setting"),
+			Overview:      new("Test Overview"),
+			PrimaryColor:  new("#FF0000"),
+			Environment:   new(enums.TrustCenterEnvironmentLive),
 		}, nil, nil, nil, nil)
 
 		assert.NilError(t, err)
@@ -68,14 +67,14 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 		// Recreate with all color fields
 		resp, err := suite.Client.API.CreateTrustCenterSetting(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterSettingInput{
-			Title:                    lo.ToPtr("Full Color Setting"),
-			PrimaryColor:             lo.ToPtr("#FF0000"),
-			ForegroundColor:          lo.ToPtr("#000000"),
-			BackgroundColor:          lo.ToPtr("#FFFFFF"),
-			AccentColor:              lo.ToPtr("#0000FF"),
-			SecondaryBackgroundColor: lo.ToPtr("#F0F0F0"),
-			SecondaryForegroundColor: lo.ToPtr("#333333"),
-			Environment:              lo.ToPtr(enums.TrustCenterEnvironmentLive),
+			Title:                    new("Full Color Setting"),
+			PrimaryColor:             new("#FF0000"),
+			ForegroundColor:          new("#000000"),
+			BackgroundColor:          new("#FFFFFF"),
+			AccentColor:              new("#0000FF"),
+			SecondaryBackgroundColor: new("#F0F0F0"),
+			SecondaryForegroundColor: new("#333333"),
+			Environment:              new(enums.TrustCenterEnvironmentLive),
 		}, nil, nil, nil, nil)
 
 		assert.NilError(t, err)
@@ -100,10 +99,10 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 		// Recreate with theme mode
 		resp, err := suite.Client.API.CreateTrustCenterSetting(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterSettingInput{
-			Title:       lo.ToPtr("Theme Setting"),
-			ThemeMode:   lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
-			Font:        lo.ToPtr("Arial, sans-serif"),
-			Environment: lo.ToPtr(enums.TrustCenterEnvironmentLive),
+			Title:       new("Theme Setting"),
+			ThemeMode:   new(enums.TrustCenterThemeModeAdvanced),
+			Font:        new("Arial, sans-serif"),
+			Environment: new(enums.TrustCenterEnvironmentLive),
 		}, nil, nil, nil, nil)
 
 		assert.NilError(t, err)
@@ -127,8 +126,8 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 		// Try to recreate as view only user
 		_, err = suite.Client.API.CreateTrustCenterSetting(tcOrg.Member.UserCtx, testclient.CreateTrustCenterSettingInput{
-			Title:       lo.ToPtr("Unauthorized"),
-			Environment: lo.ToPtr(enums.TrustCenterEnvironmentLive),
+			Title:       new("Unauthorized"),
+			Environment: new(enums.TrustCenterEnvironmentLive),
 		}, nil, nil, nil, nil)
 
 		assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
@@ -205,13 +204,12 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
-		expectJob   bool
 	}{
 		{
 			name:      "happy path - update title by admin user",
 			settingID: trustCenter.Edges.Setting.ID,
 			input: testclient.UpdateTrustCenterSettingInput{
-				Title: lo.ToPtr("Updated Title"),
+				Title: new("Updated Title"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Admin.UserCtx,
@@ -220,21 +218,20 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update title of preview setting",
 			settingID: trustCenter.Edges.PreviewSetting.ID,
 			input: testclient.UpdateTrustCenterSettingInput{
-				Title: lo.ToPtr("Updated Title Preview"),
+				Title: new("Updated Title Preview"),
 			},
-			client:    suite.Client.API,
-			ctx:       tcOrg.SuperAdmin.UserCtx,
-			expectJob: true, // updating preview setting should enqueue a job to create preview domain
+			client: suite.Client.API,
+			ctx:    tcOrg.SuperAdmin.UserCtx,
 		},
 		{
 			name:      "happy path - update multiple fields",
 			settingID: trustCenter.Edges.Setting.ID,
 			input: testclient.UpdateTrustCenterSettingInput{
-				Title:           lo.ToPtr("New Title"),
-				Overview:        lo.ToPtr("New Overview"),
-				PrimaryColor:    lo.ToPtr("#00FF00"),
-				ForegroundColor: lo.ToPtr("#111111"),
-				SecurityContact: lo.ToPtr("Security@example.com"),
+				Title:           new("New Title"),
+				Overview:        new("New Overview"),
+				PrimaryColor:    new("#00FF00"),
+				ForegroundColor: new("#111111"),
+				SecurityContact: new("Security@example.com"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -243,7 +240,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			name:      "happy path - update theme mode",
 			settingID: trustCenter.Edges.Setting.ID,
 			input: testclient.UpdateTrustCenterSettingInput{
-				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeEasy),
+				ThemeMode: new(enums.TrustCenterThemeModeEasy),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
@@ -252,7 +249,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			name:      "not authorized - view only user",
 			settingID: trustCenter.Edges.Setting.ID,
 			input: testclient.UpdateTrustCenterSettingInput{
-				Title: lo.ToPtr("Unauthorized"),
+				Title: new("Unauthorized"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Member.UserCtx,
@@ -262,7 +259,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			name:      "not authorized - different org user",
 			settingID: trustCenter.Edges.Setting.ID,
 			input: testclient.UpdateTrustCenterSettingInput{
-				Title: lo.ToPtr("Unauthorized"),
+				Title: new("Unauthorized"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg2.Owner.UserCtx,
@@ -272,7 +269,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			name:      "trust center setting not found",
 			settingID: "non-existent-id",
 			input: testclient.UpdateTrustCenterSettingInput{
-				Title: lo.ToPtr("Not Found"),
+				Title: new("Not Found"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Owner.UserCtx,
@@ -312,22 +309,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 				assert.Check(t, is.Equal(strings.ToLower(*tc.input.SecurityContact), *resp.UpdateTrustCenterSetting.TrustCenterSetting.SecurityContact))
 			}
 
-			if tc.expectJob {
-				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.Client.DB.Job.GetPool()),
-					[]rivertest.ExpectedJob{
-						{
-							Args: jobspec.CreatePreviewDomainArgs{
-								TrustCenterID:            *resp.UpdateTrustCenterSetting.TrustCenterSetting.TrustCenterID,
-								TrustCenterPreviewZoneID: th.MappableDomainZoneTestID,
-								TrustCenterCnameTarget:   th.CnameTargetTest,
-							},
-						},
-					})
-				assert.Assert(t, jobs != nil)
-				assert.Assert(t, is.Len(jobs, 1))
-			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.Client.DB.Job.GetPool()), &jobspec.CreatePreviewDomainArgs{}, nil)
-			}
+			rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.Client.DB.Job.GetPool()), &jobspec.CreatePreviewDomainArgs{}, nil)
 		})
 	}
 
@@ -345,8 +327,8 @@ func TestUpdateTrustCenterSettingSupportUser(t *testing.T) {
 	settingID := trustCenter.Edges.Setting.ID
 
 	resp, err := suite.Client.API.UpdateTrustCenterSetting(tcOrg.SupportCtx, settingID, testclient.UpdateTrustCenterSettingInput{
-		Title:        lo.ToPtr("Support Updated Branding"),
-		PrimaryColor: lo.ToPtr("#123456"),
+		Title:        new("Support Updated Branding"),
+		PrimaryColor: new("#123456"),
 	}, nil, nil, nil, nil, nil, nil)
 
 	assert.NilError(t, err)
@@ -374,7 +356,7 @@ func TestSubprocessorNotifyWatermarkInitialized(t *testing.T) {
 
 	// enabling the flag stamps the watermark
 	_, err = suite.Client.API.UpdateTrustCenterSetting(tcOrg.Owner.UserCtx, settingID, testclient.UpdateTrustCenterSettingInput{
-		NotifySubscribersOnSubprocessorChange: lo.ToPtr(true),
+		NotifySubscribersOnSubprocessorChange: new(true),
 	}, nil, nil, nil, nil, nil, nil)
 	assert.NilError(t, err)
 
@@ -386,8 +368,8 @@ func TestSubprocessorNotifyWatermarkInitialized(t *testing.T) {
 
 	// updating the setting with the flag already on leaves the watermark alone
 	_, err = suite.Client.API.UpdateTrustCenterSetting(tcOrg.Owner.UserCtx, settingID, testclient.UpdateTrustCenterSettingInput{
-		Title:                                 lo.ToPtr("Updated Title"),
-		NotifySubscribersOnSubprocessorChange: lo.ToPtr(true),
+		Title:                                 new("Updated Title"),
+		NotifySubscribersOnSubprocessorChange: new(true),
 	}, nil, nil, nil, nil, nil, nil)
 	assert.NilError(t, err)
 

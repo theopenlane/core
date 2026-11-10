@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -113,7 +112,7 @@ func TestQueryDNSVerifications(t *testing.T) {
 			client: suite.Client.API,
 			ctx:    th.SharedSystemAdminUser.UserCtx,
 			where: &testclient.DNSVerificationWhereInput{
-				OwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				OwnerID: new(th.SharedTestUser1.OrganizationID),
 			},
 			expectedResults: 2,
 		},
@@ -179,9 +178,9 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 				CloudflareHostnameID:       "test-cloudflare-id",
 				DNSTxtRecord:               "_openlane-challenge.example.com",
 				DNSTxtValue:                "test-dns-value",
-				AcmeChallengePath:          lo.ToPtr("acmepaththing"),
-				ExpectedAcmeChallengeValue: lo.ToPtr("test-ssl-value"),
-				OwnerID:                    lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				AcmeChallengePath:          new("acmepaththing"),
+				ExpectedAcmeChallengeValue: new("test-ssl-value"),
+				OwnerID:                    new(th.SharedTestUser1.OrganizationID),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedSystemAdminUser.UserCtx,
@@ -192,9 +191,9 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 				CloudflareHostnameID:       "test-cloudflare-id-unauthorized",
 				DNSTxtRecord:               "_openlane-challenge.unauthorized.example.com",
 				DNSTxtValue:                "test-dns-value-unauthorized",
-				AcmeChallengePath:          lo.ToPtr("acmepaththing"),
-				ExpectedAcmeChallengeValue: lo.ToPtr("test-ssl-value"),
-				OwnerID:                    lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				AcmeChallengePath:          new("acmepaththing"),
+				ExpectedAcmeChallengeValue: new("test-ssl-value"),
+				OwnerID:                    new(th.SharedTestUser1.OrganizationID),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -205,9 +204,9 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 			request: testclient.CreateDNSVerificationInput{
 				DNSTxtRecord:               "_openlane-challenge.missing.example.com",
 				DNSTxtValue:                "test-dns-value-missing",
-				AcmeChallengePath:          lo.ToPtr("acmepaththing"),
-				ExpectedAcmeChallengeValue: lo.ToPtr("test-ssl-value"),
-				OwnerID:                    lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				AcmeChallengePath:          new("acmepaththing"),
+				ExpectedAcmeChallengeValue: new("test-ssl-value"),
+				OwnerID:                    new(th.SharedTestUser1.OrganizationID),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedSystemAdminUser.UserCtx,
@@ -310,11 +309,11 @@ func TestUpdateDNSVerification(t *testing.T) {
 			client:  suite.Client.API,
 			ctx:     th.SharedSystemAdminUser.UserCtx,
 			updateInput: testclient.UpdateDNSVerificationInput{
-				AcmeChallengeStatus:         lo.ToPtr(enums.SSLVerificationStatusActive),
-				DNSVerificationStatus:       lo.ToPtr(enums.DNSVerificationStatusActive),
-				AcmeChallengeStatusReason:   lo.ToPtr("all good!"),
-				DNSVerificationStatusReason: lo.ToPtr("all good for the domain!"),
-				OwnerID:                     lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				AcmeChallengeStatus:         new(enums.SSLVerificationStatusActive),
+				DNSVerificationStatus:       new(enums.DNSVerificationStatusActive),
+				AcmeChallengeStatusReason:   new("all good!"),
+				DNSVerificationStatusReason: new("all good for the domain!"),
+				OwnerID:                     new(th.SharedTestUser1.OrganizationID),
 			},
 		},
 		{

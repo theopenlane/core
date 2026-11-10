@@ -7,7 +7,6 @@ import (
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -94,7 +93,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, RunIntegrationOperationResponse{
-		Reply:     rout.Reply{Success: true},
+		Success:   true,
 		Provider:  def.ID,
 		Operation: req.Body.Operation,
 		Status:    "queued",
@@ -183,7 +182,7 @@ func (h *Handler) runInlineOperation(ctx echo.Context, req *RunIntegrationOperat
 	}
 
 	return h.Success(ctx, RunIntegrationOperationResponse{
-		Reply:     rout.Reply{Success: true},
+		Success:   true,
 		Provider:  def.ID,
 		Operation: req.Body.Operation,
 		Status:    "ok",

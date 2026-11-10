@@ -48,7 +48,7 @@ func UnmatchedRouteLimiterWithConfig(conf *Config) echo.MiddlewareFunc {
 
 // buildUnmatchedKey derives an IP-only limiter key for unrouted requests, deliberately ignoring path and method
 func buildUnmatchedKey(c echo.Context, headers []string, conf *Config) string {
-	ip := extractIP(c, headers, conf.ForwardedIndexFromBehind)
+	ip := extractIP(c, headers, conf)
 	if ip == "" {
 		return ""
 	}

@@ -200,6 +200,20 @@ func (_c *MappedControlCreate) SetNillableIntegrationRunID(v *string) *MappedCon
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *MappedControlCreate) SetSourceKey(v string) *MappedControlCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *MappedControlCreate) SetNillableSourceKey(v *string) *MappedControlCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *MappedControlCreate) SetExternalID(v string) *MappedControlCreate {
 	_c.mutation.SetExternalID(v)
@@ -633,6 +647,10 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(mappedcontrol.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(mappedcontrol.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(mappedcontrol.FieldExternalID, field.TypeString, value)

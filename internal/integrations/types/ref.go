@@ -427,6 +427,8 @@ type OperationRef[Config any] struct {
 	ingest IngestHandler
 	// replaces lists the retired operation names this operation takes over
 	replaces []string
+	// variables is the JSON schema of the built-in variables the operation's records can use in placeholders
+	variables json.RawMessage
 	// policy controls synchronous execution behavior for the operation
 	policy ExecutionPolicy
 	// contracts declares the normalized schemas emitted by the operation
@@ -535,6 +537,13 @@ func (r OperationRef[Config]) Ingests[C any](fn func(context.Context, OperationR
 
 		return fn(ctx, request, typed, cfg)
 	}
+
+	return r
+}
+
+// Variables declares the JSON schema of the built-in variables the operation's records can use in placeholders
+func (r OperationRef[Config]) Variables(schema json.RawMessage) OperationRef[Config] {
+	r.variables = schema
 
 	return r
 }
@@ -704,6 +713,7 @@ func (r OperationRef[Config]) Registration() OperationRegistration {
 		IngestHandle:          r.ingest,
 		DisabledForAll:        r.disabledForAll,
 		Input:                 r.input.Clone(),
+		Variables:             r.variables,
 		Stored:                r.stored,
 		Schedule:              r.schedule,
 		SkipDefaultLookback:   r.skipDefaultLookback,

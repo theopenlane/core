@@ -49,6 +49,8 @@ type Template struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -232,7 +234,7 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case template.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldUpdatedByImpersonator, template.FieldDeletedBy, template.FieldSourceDefinitionID, template.FieldSourceDefinitionVersion, template.FieldSourceInstanceID, template.FieldManagedBy, template.FieldIntegrationRunID, template.FieldExternalID, template.FieldOwnerID, template.FieldInternalNotes, template.FieldSystemInternalID, template.FieldEnvironmentName, template.FieldEnvironmentID, template.FieldScopeName, template.FieldScopeID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind, template.FieldTrustCenterID:
+		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldUpdatedByImpersonator, template.FieldDeletedBy, template.FieldSourceDefinitionID, template.FieldSourceDefinitionVersion, template.FieldSourceInstanceID, template.FieldManagedBy, template.FieldIntegrationRunID, template.FieldSourceKey, template.FieldExternalID, template.FieldOwnerID, template.FieldInternalNotes, template.FieldSystemInternalID, template.FieldEnvironmentName, template.FieldEnvironmentID, template.FieldScopeName, template.FieldScopeID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind, template.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case template.FieldCreatedAt, template.FieldUpdatedAt, template.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -337,6 +339,12 @@ func (_m *Template) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case template.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case template.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -574,6 +582,9 @@ func (_m *Template) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

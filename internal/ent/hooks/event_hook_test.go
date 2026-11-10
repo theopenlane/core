@@ -420,3 +420,52 @@ func TestTaskRuleListenersUseDedicatedConcern(t *testing.T) {
 		t.Fatal("expected no task rule listener on the direct topic")
 	}
 }
+
+func TestEmitGalaEventHookInnerVetoSuppressesCreateEmission(t *testing.T) {
+	createMutation := func() *fakeMutation {
+		return &fakeMutation{op: ent.OpCreate, typ: entgen.TypeTask}
+	}
+
+	t.Run("create emits once without veto", func(t *testing.T) {
+		runtime, recorder := newRecordingRuntime(t, entgen.TypeTask)
+
+		hooked := EmitGalaEventHook(runtime)(ent.MutateFunc(func(context.Context, ent.Mutation) (ent.Value, error) {
+			return &entgen.Task{ID: "task-1"}, nil
+		}))
+
+		if _, err := hooked.Mutate(context.Background(), createMutation()); err != nil {
+			t.Fatalf("mutate failed: %v", err)
+		}
+
+		waitRuntimeIdle(t, runtime)
+
+		events := recorder.recorded()
+		if len(events) != 1 {
+			t.Fatalf("expected one emission for a create, got %d", len(events))
+		}
+
+		if events[0].payload.EntityID != "task-1" {
+			t.Fatalf("expected entity id %q, got %q", "task-1", events[0].payload.EntityID)
+		}
+	})
+
+	t.Run("inner hook veto suppresses the create emission", func(t *testing.T) {
+		runtime, recorder := newRecordingRuntime(t, entgen.TypeTask)
+
+		hooked := EmitGalaEventHook(runtime)(ent.MutateFunc(func(ctx context.Context, _ ent.Mutation) (ent.Value, error) {
+			entityops.VetoEmission(ctx)
+
+			return &entgen.Task{ID: "task-1"}, nil
+		}))
+
+		if _, err := hooked.Mutate(context.Background(), createMutation()); err != nil {
+			t.Fatalf("mutate failed: %v", err)
+		}
+
+		waitRuntimeIdle(t, runtime)
+
+		if events := recorder.recorded(); len(events) != 0 {
+			t.Fatalf("expected no emissions after inner veto, got %d", len(events))
+		}
+	})
+}

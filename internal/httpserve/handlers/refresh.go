@@ -5,8 +5,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -38,6 +36,13 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 		logx.FromContext(reqCtx).Info().Str("userID", claims.Subject).Msg("token presented for refresh is not a refresh token")
 
 		return h.BadRequest(ctx, ErrUnableToVerifyToken)
+	}
+
+	// an enrollment-only session is never exchanged for a full one
+	if claims.TFAEnrollmentRequired {
+		logx.FromContext(reqCtx).Info().Str("userID", claims.Subject).Msg("token presented for refresh belongs to an enrollment-only session")
+
+		return h.Unauthorized(ctx, auth.ErrTFAEnrollmentRequired)
 	}
 
 	// check user in the database, sub == claims subject and ensure only one record is returned
@@ -89,12 +94,10 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 	}
 
 	out := &models.RefreshResponse{
-		Reply:   rout.Reply{Success: true},
-		Message: "success",
-		AuthData: models.AuthData{
-			AccessToken:  accessToken,
-			RefreshToken: refreshToken,
-		},
+		Success:      true,
+		Message:      "success",
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
 	}
 
 	return h.Success(ctx, out)

@@ -3,8 +3,8 @@ package objects
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/objects/mocks"
 )
@@ -32,8 +32,9 @@ func TestNewGenericMutationAdapter(t *testing.T) {
 
 	adapter := NewGenericMutationAdapter(mutation, idFunc, typeFunc)
 
-	require.NotNil(t, adapter)
-	assert.IsType(t, &GenericMutationAdapter[*testMutation]{}, adapter)
+	assert.Assert(t, adapter != nil)
+	_, ok := adapter.(*GenericMutationAdapter[*testMutation])
+	assert.Check(t, ok)
 }
 
 func TestGenericMutationAdapter_ID(t *testing.T) {
@@ -86,8 +87,8 @@ func TestGenericMutationAdapter_ID(t *testing.T) {
 			adapter := NewGenericMutationAdapter(mutation, idFunc, typeFunc)
 
 			id, exists := adapter.ID()
-			assert.Equal(t, tt.expectedID, id)
-			assert.Equal(t, tt.expectedBool, exists)
+			assert.Check(t, is.Equal(tt.expectedID, id))
+			assert.Check(t, is.Equal(tt.expectedBool, exists))
 		})
 	}
 }
@@ -134,7 +135,7 @@ func TestGenericMutationAdapter_Type(t *testing.T) {
 			adapter := NewGenericMutationAdapter(mutation, idFunc, typeFunc)
 
 			result := adapter.Type()
-			assert.Equal(t, tt.expectedType, result)
+			assert.Check(t, is.Equal(tt.expectedType, result))
 		})
 	}
 }
@@ -146,11 +147,11 @@ func TestGenericMutationAdapter_WithMock(t *testing.T) {
 	mockMutation.EXPECT().Type().Return("MockType")
 
 	id, exists := mockMutation.ID()
-	assert.Equal(t, "mock-id", id)
-	assert.True(t, exists)
+	assert.Check(t, is.Equal("mock-id", id))
+	assert.Check(t, exists)
 
 	typeName := mockMutation.Type()
-	assert.Equal(t, "MockType", typeName)
+	assert.Check(t, is.Equal("MockType", typeName))
 }
 
 func TestGenericMutationAdapter_WithDifferentTypes(t *testing.T) {
@@ -168,11 +169,11 @@ func TestGenericMutationAdapter_WithDifferentTypes(t *testing.T) {
 		adapter := NewGenericMutationAdapter(stringMutation, idFunc, typeFunc)
 
 		id, exists := adapter.ID()
-		assert.Equal(t, "string-id", id)
-		assert.True(t, exists)
+		assert.Check(t, is.Equal("string-id", id))
+		assert.Check(t, exists)
 
 		typeName := adapter.Type()
-		assert.Equal(t, "String", typeName)
+		assert.Check(t, is.Equal("String", typeName))
 	})
 
 	t.Run("int mutation", func(t *testing.T) {
@@ -189,10 +190,10 @@ func TestGenericMutationAdapter_WithDifferentTypes(t *testing.T) {
 		adapter := NewGenericMutationAdapter(intMutation, idFunc, typeFunc)
 
 		id, exists := adapter.ID()
-		assert.Equal(t, "42", id)
-		assert.True(t, exists)
+		assert.Check(t, is.Equal("42", id))
+		assert.Check(t, exists)
 
 		typeName := adapter.Type()
-		assert.Equal(t, "Integer", typeName)
+		assert.Check(t, is.Equal("Integer", typeName))
 	})
 }

@@ -5,7 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/entdb"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
@@ -17,32 +18,32 @@ func TestHealthEndpointsShutdown(t *testing.T) {
 	r := newTestRouter()
 	r.Handler = &handlers.Handler{}
 
-	require.NoError(t, registerLivenessHandler(r))
-	require.NoError(t, registerReadinessHandler(r))
+	assert.NilError(t, registerLivenessHandler(r))
+	assert.NilError(t, registerReadinessHandler(r))
 
 	ts := httptest.NewServer(r.Echo)
 	defer ts.Close()
 
 	resp, err := http.Get(ts.URL + "/livez")
-	require.NoError(t, err)
-	require.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(http.StatusOK, resp.StatusCode))
 	resp.Body.Close()
 
 	resp, err = http.Get(ts.URL + "/ready")
-	require.NoError(t, err)
-	require.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(http.StatusOK, resp.StatusCode))
 	resp.Body.Close()
 
 	entdb.BeginShutdown()
 
 	resp, err = http.Get(ts.URL + "/livez")
-	require.NoError(t, err)
-	require.Equal(t, http.StatusServiceUnavailable, resp.StatusCode)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(http.StatusServiceUnavailable, resp.StatusCode))
 	resp.Body.Close()
 
 	resp, err = http.Get(ts.URL + "/ready")
-	require.NoError(t, err)
-	require.Equal(t, http.StatusServiceUnavailable, resp.StatusCode)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(http.StatusServiceUnavailable, resp.StatusCode))
 	resp.Body.Close()
 
 	entdb.ResetShutdown()

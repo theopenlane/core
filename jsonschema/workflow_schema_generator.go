@@ -97,43 +97,43 @@ func reflectSchemaType(typ reflect.Type) any {
 // workflowTypeMapper handles custom type mappings for enums
 func workflowTypeMapper(t reflect.Type) *jsonschema.Schema {
 	switch t {
-	case reflect.TypeOf(enums.WorkflowKind("")):
+	case reflect.TypeFor[enums.WorkflowKind]():
 		return &jsonschema.Schema{
 			Type:        "string",
 			Enum:        toInterfaceSlice(enums.WorkflowKinds),
 			Description: "The kind of workflow (APPROVAL, LIFECYCLE, NOTIFICATION)",
 		}
-	case reflect.TypeOf(enums.WorkflowObjectType("")):
+	case reflect.TypeFor[enums.WorkflowObjectType]():
 		return &jsonschema.Schema{
 			Type:        "string",
 			Enum:        toInterfaceSlice(enums.WorkflowObjectTypes),
 			Description: "The object type the workflow applies to",
 		}
-	case reflect.TypeOf(enums.WorkflowApprovalSubmissionMode("")):
+	case reflect.TypeFor[enums.WorkflowApprovalSubmissionMode]():
 		return &jsonschema.Schema{
 			Type:        "string",
 			Enum:        toInterfaceSlice(enums.WorkflowApprovalSubmissionModes),
 			Description: "Controls draft vs auto-submit behavior for approval domains",
 		}
-	case reflect.TypeOf(enums.WorkflowApprovalTiming("")):
+	case reflect.TypeFor[enums.WorkflowApprovalTiming]():
 		return &jsonschema.Schema{
 			Type:        "string",
 			Enum:        toInterfaceSlice(enums.WorkflowApprovalTimings),
 			Description: "Controls whether approvals block changes (PRE_COMMIT) or happen after commit (POST_COMMIT)",
 		}
-	case reflect.TypeOf(enums.WorkflowTargetType("")):
+	case reflect.TypeFor[enums.WorkflowTargetType]():
 		return &jsonschema.Schema{
 			Type:        "string",
 			Enum:        toInterfaceSlice(enums.WorkflowTargetTypes),
 			Description: "The type of target (USER, GROUP, ROLE, RESOLVER)",
 		}
-	case reflect.TypeOf(enums.WorkflowActionType("")):
+	case reflect.TypeFor[enums.WorkflowActionType]():
 		return &jsonschema.Schema{
 			Type:        "string",
 			Enum:        toInterfaceSlice(enums.WorkflowActionTypes),
 			Description: "The type of workflow action",
 		}
-	case reflect.TypeOf(json.RawMessage{}):
+	case reflect.TypeFor[json.RawMessage]():
 		return &jsonschema.Schema{
 			Description: "Action-specific parameters (schema varies by action type)",
 		}

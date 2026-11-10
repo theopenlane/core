@@ -261,6 +261,26 @@ func (_u *IdentityHolderUpdate) ClearIntegrationRunID() *IdentityHolderUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *IdentityHolderUpdate) SetSourceKey(v string) *IdentityHolderUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *IdentityHolderUpdate) SetNillableSourceKey(v *string) *IdentityHolderUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *IdentityHolderUpdate) ClearSourceKey() *IdentityHolderUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *IdentityHolderUpdate) SetExternalID(v string) *IdentityHolderUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1839,6 +1859,12 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(identityholder.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(identityholder.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(identityholder.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(identityholder.FieldExternalID, field.TypeString, value)
 	}
@@ -3305,6 +3331,26 @@ func (_u *IdentityHolderUpdateOne) SetNillableIntegrationRunID(v *string) *Ident
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *IdentityHolderUpdateOne) ClearIntegrationRunID() *IdentityHolderUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *IdentityHolderUpdateOne) SetSourceKey(v string) *IdentityHolderUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *IdentityHolderUpdateOne) SetNillableSourceKey(v *string) *IdentityHolderUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *IdentityHolderUpdateOne) ClearSourceKey() *IdentityHolderUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -4915,6 +4961,12 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(identityholder.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(identityholder.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(identityholder.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(identityholder.FieldExternalID, field.TypeString, value)

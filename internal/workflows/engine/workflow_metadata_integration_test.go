@@ -4,6 +4,7 @@ package engine_test
 
 import (
 	"encoding/json"
+	"testing"
 
 	"github.com/oklog/ulid/v2"
 	"github.com/samber/lo"
@@ -12,6 +13,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 type metadataProvider struct {
@@ -42,7 +45,8 @@ type metadataTemplate struct {
 // availability: a provider is marked available only when the calling org has
 // both a connected installation and at least one active workflow-action template
 // whose topic_pattern matches an operation
-func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_AvailableWithIntegrationAndTemplates() {
+func TestWorkflowMetadataExtensions_AvailableWithIntegrationAndTemplates(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -53,7 +57,7 @@ func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_AvailableWithIn
 		SetDefinitionID(slackdef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Create a connected Email integration for this org
 	_, err = s.client.Integration.Create().
@@ -62,7 +66,7 @@ func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_AvailableWithIn
 		SetDefinitionID(emaildef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Create a notification template matching the Slack message.send operation
 	slackTemplateKey := "metadata-slack-" + ulid.Make().String()
@@ -81,43 +85,44 @@ func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_AvailableWithIn
 		}).
 		SetActive(true).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	defer func() {
+	t.Cleanup(func() {
 		_, _ = s.client.NotificationTemplate.Delete().Where().Exec(seedCtx)
-	}()
+	})
 
 	extensions := graphapi.WorkflowMetadataExtensions(userCtx, s.integrationsRT, s.client)
-	s.Require().NotNil(extensions)
+	assert.Assert(t, extensions != nil)
 
 	providers := unmarshalMetadataProviders(s, extensions)
-	s.Require().NotEmpty(providers, "should have at least one provider")
+	assert.Assert(t, len(providers) > 0, "should have at least one provider")
 
 	// Slack has both a connected installation AND a matching template → Available
 	slack := findProvider(s, providers, slackdef.DefinitionID.ID())
-	s.True(slack.Available, "Slack should be available (has installation + template)")
-	s.Len(slack.Installations, 1)
-	s.Equal("Slack for Metadata Test", slack.Installations[0].Name)
+	assert.Check(t, slack.Available, "Slack should be available (has installation + template)")
+	assert.Check(t, is.Len(slack.Installations, 1))
+	assert.Check(t, is.Equal("Slack for Metadata Test", slack.Installations[0].Name))
 
 	msgSendOp, opFound := lo.Find(slack.Operations, func(op metadataOperation) bool {
 		return op.Name == slackdef.MessageSendOp.Name()
 	})
-	s.Require().True(opFound, "MessageSendOperation should be in operations")
-	s.Require().Len(msgSendOp.Templates, 1)
-	s.Equal(slackTemplateKey, msgSendOp.Templates[0].Key)
-	s.Equal("Slack Alert Template", msgSendOp.Templates[0].Name)
+	assert.Assert(t, opFound, "MessageSendOperation should be in operations")
+	assert.Assert(t, is.Len(msgSendOp.Templates, 1))
+	assert.Check(t, is.DeepEqual(slackTemplateKey, msgSendOp.Templates[0].Key))
+	assert.Check(t, is.Equal("Slack Alert Template", msgSendOp.Templates[0].Name))
 
 	// Email has an installation but NO workflow action template → not available
 	email := findProvider(s, providers, emaildef.DefinitionID.ID())
-	s.False(email.Available, "Email should NOT be available (has installation but no workflow action template)")
-	s.Len(email.Installations, 1)
-	s.Equal("Email for Metadata Test", email.Installations[0].Name)
+	assert.Check(t, !email.Available, "Email should NOT be available (has installation but no workflow action template)")
+	assert.Check(t, is.Len(email.Installations, 1))
+	assert.Check(t, is.Equal("Email for Metadata Test", email.Installations[0].Name))
 }
 
 // TestWorkflowMetadataExtensions_DisconnectedIntegrationNotAvailable verifies
 // that a disabled integration does not make the provider available even when
 // matching templates exist
-func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_DisconnectedIntegrationNotAvailable() {
+func TestWorkflowMetadataExtensions_DisconnectedIntegrationNotAvailable(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -128,7 +133,7 @@ func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_DisconnectedInt
 		SetDefinitionID(slackdef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusDisabled).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Create a matching template
 	_, err = s.client.NotificationTemplate.Create().
@@ -142,24 +147,25 @@ func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_DisconnectedInt
 		SetDefaults(map[string]any{"text": "unreachable"}).
 		SetActive(true).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	defer func() {
+	t.Cleanup(func() {
 		_, _ = s.client.NotificationTemplate.Delete().Where().Exec(seedCtx)
-	}()
+	})
 
 	extensions := graphapi.WorkflowMetadataExtensions(userCtx, s.integrationsRT, s.client)
 	providers := unmarshalMetadataProviders(s, extensions)
 
 	slack := findProvider(s, providers, slackdef.DefinitionID.ID())
-	s.False(slack.Available, "disabled integration should not make provider available")
-	s.Empty(slack.Installations, "disabled integration should not appear in installations")
+	assert.Check(t, !slack.Available, "disabled integration should not make provider available")
+	assert.Check(t, is.Len(slack.Installations, 0), "disabled integration should not appear in installations")
 }
 
 // TestWorkflowMetadataExtensions_ReconnectedIntegrationBecomesAvailable verifies
 // that when a new connected installation replaces a disabled one, the provider
 // becomes available again without any change to the workflow definition
-func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_ReconnectedIntegrationBecomesAvailable() {
+func TestWorkflowMetadataExtensions_ReconnectedIntegrationBecomesAvailable(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -170,7 +176,7 @@ func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_ReconnectedInte
 		SetDefinitionID(slackdef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusDisabled).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Create a matching template
 	_, err = s.client.NotificationTemplate.Create().
@@ -184,17 +190,17 @@ func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_ReconnectedInte
 		SetDefaults(map[string]any{"text": "reconnected"}).
 		SetActive(true).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	defer func() {
+	t.Cleanup(func() {
 		_, _ = s.client.NotificationTemplate.Delete().Where().Exec(seedCtx)
-	}()
+	})
 
 	// Before reconnect: not available
 	extensions := graphapi.WorkflowMetadataExtensions(userCtx, s.integrationsRT, s.client)
 	providers := unmarshalMetadataProviders(s, extensions)
 	slack := findProvider(s, providers, slackdef.DefinitionID.ID())
-	s.False(slack.Available, "should not be available before reconnection")
+	assert.Check(t, !slack.Available, "should not be available before reconnection")
 
 	// Reconnect: create a new connected installation for the same definition
 	_, err = s.client.Integration.Create().
@@ -203,15 +209,15 @@ func (s *WorkflowEngineTestSuite) TestWorkflowMetadataExtensions_ReconnectedInte
 		SetDefinitionID(slackdef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// After reconnect: available, new installation appears
 	extensions = graphapi.WorkflowMetadataExtensions(userCtx, s.integrationsRT, s.client)
 	providers = unmarshalMetadataProviders(s, extensions)
 	slack = findProvider(s, providers, slackdef.DefinitionID.ID())
-	s.True(slack.Available, "should be available after reconnection")
-	s.Len(slack.Installations, 1, "only the connected installation should appear")
-	s.Equal("New Slack (connected)", slack.Installations[0].Name)
+	assert.Check(t, slack.Available, "should be available after reconnection")
+	assert.Check(t, is.Len(slack.Installations, 1), "only the connected installation should appear")
+	assert.Check(t, is.Equal("New Slack (connected)", slack.Installations[0].Name))
 }
 
 // unmarshalMetadataProviders extracts the providers list from the extensions map
@@ -219,14 +225,14 @@ func unmarshalMetadataProviders(s *WorkflowEngineTestSuite, extensions map[strin
 	s.T().Helper()
 
 	raw, err := json.Marshal(extensions)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	var doc struct {
 		Integrations struct {
 			Providers []metadataProvider `json:"providers"`
 		} `json:"integrations"`
 	}
-	s.Require().NoError(json.Unmarshal(raw, &doc))
+	assert.NilError(s.T(), json.Unmarshal(raw, &doc))
 
 	return doc.Integrations.Providers
 }
@@ -238,7 +244,7 @@ func findProvider(s *WorkflowEngineTestSuite, providers []metadataProvider, defi
 	p, found := lo.Find(providers, func(p metadataProvider) bool {
 		return p.Provider == definitionID
 	})
-	s.Require().True(found, "provider %s not found in metadata", definitionID)
+	assert.Assert(s.T(), found, "provider %s not found in metadata", definitionID)
 
 	return p
 }

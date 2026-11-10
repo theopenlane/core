@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
-	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/logx"
@@ -239,7 +238,7 @@ func groupPermissionInterceptorSkipper(ctx context.Context, caller *auth.Caller)
 	}
 
 	// skip for org owners + super admins (full_access), they might not have explicit access to the object, but they can view all objects in the org
-	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.FullAccessRelation); access.Allow(err) {
+	if rule.HasCurrentOrgFullAccess(ctx) {
 		return true
 	}
 

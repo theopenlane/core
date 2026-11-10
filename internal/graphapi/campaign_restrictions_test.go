@@ -10,7 +10,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -31,7 +30,7 @@ func TestCampaignTargetLimit(t *testing.T) {
 	uid := ulids.New().String()
 	assessmentResp, err := suite.Client.API.CreateAssessment(th.SharedTestUser1.UserCtx, testclient.CreateAssessmentInput{
 		Name:       fmt.Sprintf("assessment-limit-%s", uid),
-		TemplateID: lo.ToPtr(template.ID),
+		TemplateID: new(template.ID),
 		Jsonconfig: map[string]any{
 			"title": "Limit Test Assessment",
 			"questions": []map[string]any{
@@ -61,8 +60,8 @@ func TestCampaignTargetLimit(t *testing.T) {
 		input := testclient.CreateCampaignWithTargetsInput{
 			Campaign: &testclient.CreateCampaignInput{
 				Name:                fmt.Sprintf("campaign-overlimit-%s", uid),
-				AssessmentID:        lo.ToPtr(assessmentID),
-				RecurrenceFrequency: lo.ToPtr(enums.FrequencyYearly),
+				AssessmentID:        new(assessmentID),
+				RecurrenceFrequency: new(enums.FrequencyYearly),
 			},
 			Targets: targets,
 		}
@@ -72,34 +71,7 @@ func TestCampaignTargetLimit(t *testing.T) {
 		assert.Assert(t, strings.Contains(err.Error(), "500"), "error should mention 500 target limit")
 	})
 
-	t.Run("accepts exactly 500 targets", func(t *testing.T) {
-		t.Parallel()
-
-		targets := make([]*testclient.CreateCampaignTargetInput, 500)
-		for i := range targets {
-			targets[i] = &testclient.CreateCampaignTargetInput{
-				Email: fmt.Sprintf("target%d-%s@test.example", i, uid),
-			}
-		}
-
-		input := testclient.CreateCampaignWithTargetsInput{
-			Campaign: &testclient.CreateCampaignInput{
-				Name:                fmt.Sprintf("campaign-at-limit-%s", uid),
-				AssessmentID:        lo.ToPtr(assessmentID),
-				RecurrenceFrequency: lo.ToPtr(enums.FrequencyYearly),
-			},
-			Targets: targets,
-		}
-
-		resp, err := suite.Client.API.CreateCampaignWithTargets(th.SharedTestUser1.UserCtx, input)
-		assert.NilError(t, err)
-		assert.Assert(t, resp != nil)
-		assert.Check(t, is.Equal(500, len(resp.CreateCampaignWithTargets.CampaignTargets)))
-
-		cleanupCampaignWithTargets(t, resp.CreateCampaignWithTargets.Campaign.ID, resp.CreateCampaignWithTargets.CampaignTargets)
-	})
-
-	t.Run("nil targets allowed", func(t *testing.T) {
+	t.Run("accepts exactly 500 targets once nil targets are compacted", func(t *testing.T) {
 		t.Parallel()
 
 		targets := make([]*testclient.CreateCampaignTargetInput, 502)
@@ -113,15 +85,19 @@ func TestCampaignTargetLimit(t *testing.T) {
 
 		input := testclient.CreateCampaignWithTargetsInput{
 			Campaign: &testclient.CreateCampaignInput{
-				Name:                fmt.Sprintf("campaign-compacted-%s", uid),
-				AssessmentID:        lo.ToPtr(assessmentID),
-				RecurrenceFrequency: lo.ToPtr(enums.FrequencyYearly),
+				Name:                fmt.Sprintf("campaign-at-limit-%s", uid),
+				AssessmentID:        new(assessmentID),
+				RecurrenceFrequency: new(enums.FrequencyYearly),
 			},
 			Targets: targets,
 		}
 
-		_, err := suite.Client.API.CreateCampaignWithTargets(th.SharedTestUser1.UserCtx, input)
+		resp, err := suite.Client.API.CreateCampaignWithTargets(th.SharedTestUser1.UserCtx, input)
 		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Check(t, is.Equal(500, len(resp.CreateCampaignWithTargets.CampaignTargets)))
+
+		cleanupCampaignWithTargets(t, resp.CreateCampaignWithTargets.Campaign.ID, resp.CreateCampaignWithTargets.CampaignTargets)
 	})
 }
 
@@ -200,7 +176,7 @@ func TestCampaignDispatchStatusRestrictions(t *testing.T) {
 			}
 
 			cfg := email.SendBrandedCampaignRequest{
-				CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+				CampaignID: campaignObj.ID,
 			}
 			req := types.OperationRequest{
 				Client: emailClient,
@@ -271,7 +247,7 @@ func TestCampaignDispatchMissingTemplate(t *testing.T) {
 	}
 
 	cfg := email.SendBrandedCampaignRequest{
-		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+		CampaignID: campaignObj.ID,
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -353,10 +329,8 @@ func TestCampaignDispatchResendBehavior(t *testing.T) {
 		}
 
 		cfg := email.SendBrandedCampaignRequest{
-			CampaignDispatchInput: email.CampaignDispatchInput{
-				CampaignID: campaignObj.ID,
-				Resend:     false,
-			},
+			CampaignID: campaignObj.ID,
+			Resend:     false,
 		}
 		req := types.OperationRequest{Client: emailClient, DB: suite.Client.DB}
 
@@ -386,10 +360,8 @@ func TestCampaignDispatchResendBehavior(t *testing.T) {
 		}
 
 		cfg := email.SendBrandedCampaignRequest{
-			CampaignDispatchInput: email.CampaignDispatchInput{
-				CampaignID: campaignObj.ID,
-				Resend:     true,
-			},
+			CampaignID: campaignObj.ID,
+			Resend:     true,
 		}
 		req := types.OperationRequest{Client: emailClient, DB: suite.Client.DB}
 
@@ -479,10 +451,8 @@ func TestCampaignDispatchCompletedTargetsAlwaysSkipped(t *testing.T) {
 	}
 
 	cfg := email.SendBrandedCampaignRequest{
-		CampaignDispatchInput: email.CampaignDispatchInput{
-			CampaignID: campaignObj.ID,
-			Resend:     true,
-		},
+		CampaignID: campaignObj.ID,
+		Resend:     true,
 	}
 	req := types.OperationRequest{Client: emailClient, DB: suite.Client.DB}
 

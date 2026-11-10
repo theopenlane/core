@@ -47,6 +47,8 @@ type Assessment struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -261,7 +263,7 @@ func (*Assessment) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case assessment.FieldResponseDueDuration:
 			values[i] = new(sql.NullInt64)
-		case assessment.FieldID, assessment.FieldCreatedBy, assessment.FieldUpdatedBy, assessment.FieldUpdatedByImpersonator, assessment.FieldDeletedBy, assessment.FieldSourceDefinitionID, assessment.FieldSourceDefinitionVersion, assessment.FieldSourceInstanceID, assessment.FieldManagedBy, assessment.FieldIntegrationRunID, assessment.FieldExternalID, assessment.FieldOwnerID, assessment.FieldInternalNotes, assessment.FieldSystemInternalID, assessment.FieldName, assessment.FieldAssessmentType, assessment.FieldTemplateID:
+		case assessment.FieldID, assessment.FieldCreatedBy, assessment.FieldUpdatedBy, assessment.FieldUpdatedByImpersonator, assessment.FieldDeletedBy, assessment.FieldSourceDefinitionID, assessment.FieldSourceDefinitionVersion, assessment.FieldSourceInstanceID, assessment.FieldManagedBy, assessment.FieldIntegrationRunID, assessment.FieldSourceKey, assessment.FieldExternalID, assessment.FieldOwnerID, assessment.FieldInternalNotes, assessment.FieldSystemInternalID, assessment.FieldName, assessment.FieldAssessmentType, assessment.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case assessment.FieldCreatedAt, assessment.FieldUpdatedAt, assessment.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -366,6 +368,12 @@ func (_m *Assessment) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case assessment.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case assessment.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -586,6 +594,9 @@ func (_m *Assessment) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

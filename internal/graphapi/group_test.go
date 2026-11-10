@@ -11,7 +11,6 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
@@ -144,7 +143,7 @@ func TestQueryGroupsByOwner(t *testing.T) {
 					ID: &org1,
 				},
 			},
-			IsManaged: lo.ToPtr(false),
+			IsManaged: new(false),
 		}
 
 		resp, err := suite.Client.API.GetGroups(reqCtx, whereInput)
@@ -177,7 +176,7 @@ func TestQueryGroupsByOwner(t *testing.T) {
 					ID: &org2,
 				},
 			},
-			IsManaged: lo.ToPtr(false),
+			IsManaged: new(false),
 		}
 
 		resp, err = suite.Client.API.GetGroups(reqCtx2, whereInput)
@@ -273,6 +272,29 @@ func TestQueryGroups(t *testing.T) {
 	// delete created groups
 	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{group1.ID, privateGroup.ID}}).MustDelete(users.Owner.UserCtx, t)
 	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{group2.ID, group3.ID}}).MustDelete(usersAnother.UserCtx, t)
+}
+
+func TestMutationCreateBulkGroup(t *testing.T) {
+	name := "Bulk Group " + ulids.New().String()
+
+	resp, err := suite.Client.API.CreateBulkGroup(th.SharedTestUser1.UserCtx, []*testclient.CreateGroupInput{
+		{Name: name + " 1"},
+		{Name: name + " 2"},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkGroup.Groups, 2))
+
+	groupIDs := make([]string, 0, len(resp.CreateBulkGroup.Groups))
+	for _, group := range resp.CreateBulkGroup.Groups {
+		groupIDs = append(groupIDs, group.ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: groupIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeGroup, groupIDs)
 }
 
 func TestMutationCreateGroup(t *testing.T) {
@@ -1253,7 +1275,7 @@ func TestManagedGroups(t *testing.T) {
 	t.Parallel()
 
 	whereInput := &testclient.GroupWhereInput{
-		IsManaged: lo.ToPtr(true),
+		IsManaged: new(true),
 	}
 
 	testUser := suite.UserBuilder(context.Background(), t)
@@ -1379,6 +1401,7 @@ func TestManagedGroupMembership_AdminGroup(t *testing.T) {
 }
 
 func TestMutationGroup_ReportSelfAccess(t *testing.T) {
+	t.Parallel()
 
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 

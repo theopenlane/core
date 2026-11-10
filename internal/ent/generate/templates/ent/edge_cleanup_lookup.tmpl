@@ -1,0 +1,19 @@
+{{/* The line below tells Intellij/GoLand to enable the autocompletion based on the *gen.Graph type. */}}
+{{/* gotype: entgo.io/ent/entc/gen.Graph */}}
+
+{{ define "edge_cleanup_lookup" }}
+
+{{/* Add the base header for the generated file */}}
+{{ $pkg := base $.Config.Package }}
+{{ template "header" $ }}
+
+import "context"
+
+// edgeCleanups maps a schema name to its edge cleanup, filled by the edge cleanup file, which code generation excludes
+var edgeCleanups = map[string]func(ctx context.Context, id string) error{}
+
+// EdgeCleanupFor returns the schema's edge cleanup, nil when the schema has none or during code generation
+func EdgeCleanupFor(schema string) func(ctx context.Context, id string) error {
+	return edgeCleanups[schema]
+}
+{{ end }}

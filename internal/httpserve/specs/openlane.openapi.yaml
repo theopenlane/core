@@ -626,6 +626,8 @@ components:
                                             properties:
                                                 inline:
                                                     type: boolean
+                                                noRetry:
+                                                    type: boolean
                                                 reconcile:
                                                     type: boolean
                                                 scheduled:
@@ -643,6 +645,7 @@ components:
                                             type: boolean
                                         topic:
                                             type: string
+                                        variables: {}
                                     type: object
                                 type: array
                             operatorConfig:
@@ -1601,6 +1604,18 @@ components:
                     type: string
                 unverified:
                     type: boolean
+            type: object
+        TFARequest:
+            description: TFARequest holds the payload for verifying the 2fa code (/2fa/validate)
+            properties:
+                recovery_code:
+                    description: The recovery code to validate, only used if TOTP code is not provided
+                    example: 8VM7AL91
+                    type: string
+                totp_code:
+                    description: The TOTP code to validate, always takes precedence over recovery code
+                    example: "113371"
+                    type: string
             type: object
         UnsubscribeRequest:
             description: UnsubscribeRequest contains the token used to unsubscribe from communications
@@ -3727,7 +3742,8 @@ paths:
                 - Invites
     /v1/login:
         post:
-            description: Login is oriented towards human users who use their email and password for authentication. Login verifies the password submitted for the user is correct by looking up the user by email and using the argon2 derived key verification process to confirm the password matches. Upon authentication an access token and a refresh token with the authorized claims of the user are returned. The user can use the access token to authenticate to our systems. The access token has an expiration and the refresh token can be used with the refresh endpoint to get a new access token without the user having to log in again. The refresh token overlaps with the access token to provide a seamless authentication experience and the user can refresh their access token so long as the refresh token is valid
+            description: |
+                Login is oriented towards human users who use their email and password for authentication. Login verifies the password submitted for the user is correct by looking up the user by email and using the argon2 derived key verification process to confirm the password matches. Upon authentication an access token and a refresh token with the authorized claims of the user are returned. The user can use the access token to authenticate to our systems.The access token has an expiration and the refresh token can be used with the refresh endpoint to get a new access token without the user having to log in again. The refresh token overlaps with the access token to provide a seamless authentication experience and the user can refresh their access token so long as the refresh token is valid. For users with 2FA enabled either from the org or user level, a new token is not minted for them and they have to verify via an otp first
             operationId: LoginHandler
             requestBody:
                 content:
@@ -3836,6 +3852,81 @@ paths:
                     description: Internal Server Error
             security: []
             summary: Login
+            tags:
+                - Authentication
+    /v1/login/2fa/validate:
+        post:
+            description: Complete a pending login by validating a TOTP or recovery code
+            operationId: ValidateLoginTOTP
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TFARequest'
+                description: Request body
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                LoginSuccessResponse:
+                                    value:
+                                        access_token: access_token
+                                        message: ""
+                                        refresh_token: refresh_token
+                                        session: session
+                                        success: true
+                                        tfa_enabled: true
+                                        token_type: bearer
+                            schema:
+                                $ref: '#/components/schemas/LoginResponse'
+                    description: OK
+                "400":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: bad request
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: unauthorized
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Unauthorized
+                "429":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: too many requests
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Too Many Requests
+                "500":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: internal server error
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Internal Server Error
+            security: []
+            summary: LoginTFAValidation
             tags:
                 - Authentication
     /v1/logout:

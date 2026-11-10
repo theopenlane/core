@@ -3,7 +3,6 @@ package interceptors
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -17,7 +16,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/logx"
 )
@@ -76,7 +74,7 @@ func trustCenterInterceptor(applyToAllRequests, allowAnonAccess bool) ent.Interc
 
 				// only do this for anon trust center tokens
 				if _, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && graphql.HasOperationContext(ctx) {
-					entity := utils.PluralizerClientFromContext(ctx).Plural(strings.ToLower(query.Type()))
+					entity := listQueryName(query.Type())
 
 					path := graphql.GetPath(ctx)
 

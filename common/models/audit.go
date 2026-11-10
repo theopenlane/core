@@ -23,7 +23,7 @@ func (c Change) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (c *Change) UnmarshalGQL(v interface{}) error {
+func (c *Change) UnmarshalGQL(v any) error {
 	return unmarshalGQLJSON(v, c)
 }
 

@@ -5,6 +5,8 @@ package engine_test
 import (
 	"context"
 	"encoding/json"
+	"flag"
+	"os"
 	"sort"
 	"testing"
 	"time"
@@ -13,7 +15,6 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/iam/auth"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
@@ -55,6 +56,7 @@ import (
 
 	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 	_ "github.com/theopenlane/core/v2/internal/ent/historygenerated/runtime"
+	"gotest.tools/v3/assert"
 )
 
 const (
@@ -64,13 +66,15 @@ const (
 )
 
 // boolPtr returns a pointer to the provided bool
+//
+//go:fix inline
 func boolPtr(v bool) *bool {
-	return &v
+	return new(v)
 }
 
 // WorkflowEngineTestSuite handles the setup and teardown between tests
 type WorkflowEngineTestSuite struct {
-	suite.Suite
+	t                 *testing.T
 	ctx               context.Context
 	client            *generated.Client
 	tf                *dbtestutils.TestFixture
@@ -81,13 +85,51 @@ type WorkflowEngineTestSuite struct {
 	slackMock         *slackdef.MockSlackRuntime
 }
 
-// TestWorkflowEngineTestSuite runs all the tests in the WorkflowEngineTestSuite
-func TestWorkflowEngineTestSuite(t *testing.T) {
-	suite.Run(t, new(WorkflowEngineTestSuite))
+// suite is the shared engine test state set up once in TestMain, each test works on its own copy from setupTest
+var suite = &WorkflowEngineTestSuite{}
+
+func TestMain(m *testing.M) {
+	flag.Parse()
+
+	// only used for setup and teardown, failures there exit through coreutils.RequireNoError
+	suite.t = &testing.T{}
+
+	suite.setupSuite()
+
+	exitCode := m.Run()
+
+	suite.tearDownSuite()
+
+	os.Exit(exitCode)
 }
 
-// SetupSuite prepares test dependencies
-func (s *WorkflowEngineTestSuite) SetupSuite() {
+// T returns the test currently using the suite
+func (s *WorkflowEngineTestSuite) T() *testing.T {
+	return s.t
+}
+
+// setupTest returns a per-test copy of the suite for tests that use shared state (gala queue, mock senders)
+func (s *WorkflowEngineTestSuite) setupTest(t *testing.T) *WorkflowEngineTestSuite {
+	return s.withT(t)
+}
+
+// setupParallelTest marks the test parallel and returns a per-test copy of the suite
+func (s *WorkflowEngineTestSuite) setupParallelTest(t *testing.T) *WorkflowEngineTestSuite {
+	t.Parallel()
+
+	return s.withT(t)
+}
+
+// withT returns a copy of the suite bound to the given test or subtest
+func (s *WorkflowEngineTestSuite) withT(t *testing.T) *WorkflowEngineTestSuite {
+	ts := *s
+	ts.t = t
+
+	return &ts
+}
+
+// setupSuite prepares test dependencies
+func (s *WorkflowEngineTestSuite) setupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 
 	if testing.Verbose() {
@@ -99,7 +141,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	s.tf = entdb.NewTestFixture()
 
 	version, err := fgaversion.GetVersion()
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
 	s.ofgaTF = fgatest.NewFGATestcontainer(s.ctx,
 		fgatest.WithModuleFile(fgaModuleFile),
@@ -108,10 +150,10 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	)
 
 	fgaClient, err := s.ofgaTF.NewFgaClient(s.ctx)
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
 	tm, err := coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
@@ -138,9 +180,10 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	}
 
 	historyClient, err := entdb.NewTestHistoryClient(s.ctx, s.tf)
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
 	entitlements, err := s.mockStripeClient()
+	coreutils.RequireNoError(s.T(), err)
 
 	var pool *gala.Pool
 	if entCfg.MaxPoolSize > 0 {
@@ -151,7 +194,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	}
 
 	summarizerClient, err := summarizer.NewSummarizer(entCfg.Summarizer)
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
 	opts := []generated.Option{
 		generated.EntConfig(entCfg),
@@ -168,44 +211,46 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(s.tf.URI)}
 
 	runtime, err := gala.NewGala(s.ctx, gala.Config{
-		DispatchMode:      gala.DispatchModeDurable,
-		ConnectionURI:     s.tf.URI,
-		QueueName:         "workflow_engine_test",
-		WorkerCount:       5,
-		RunMigrations:     true,
-		FetchCooldown:     time.Millisecond,
-		FetchPollInterval: 10 * time.Millisecond,
+		DispatchMode:         gala.DispatchModeDurable,
+		ConnectionURI:        s.tf.URI,
+		QueueName:            "workflow_engine_test",
+		WorkerCount:          5,
+		RunMigrations:        true,
+		FetchCooldown:        time.Millisecond,
+		FetchPollInterval:    10 * time.Millisecond,
+		WaitIdlePollInterval: 10 * time.Millisecond,
+		CompleteJobsInline:   true,
 	})
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
 	workflowCfg := workflows.NewDefaultConfig(workflows.WithEnabled(true), workflows.WithWebhookAllowPrivateAddresses(true))
 
 	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, nil, opts)
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
 	wfEngine, err := engine.NewWorkflowEngineWithConfig(db, runtime, workflowCfg)
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 	engine.SetDefault(wfEngine)
 
 	db.Use(hooks.EmitGalaEventHook(runtime))
 
 	_, err = gala.Register(runtime, hooks.WorkflowListeners()...)
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
-	s.Require().NoError(runtime.Attach(
+	coreutils.RequireNoError(s.T(), runtime.Attach(
 		gala.WithValue(runtime),
 		gala.WithValue(db),
 		gala.WithValue(wfEngine),
 		gala.WithRestoredValue("ent_client", generated.NewContext),
 	))
 
-	s.Require().NoError(runtime.StartWorkers(s.ctx))
+	coreutils.RequireNoError(s.T(), runtime.StartWorkers(s.ctx))
 
 	s.client = db
 	s.galaRuntime = runtime
 
 	credStore, err := keystore.NewStore(db)
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
 	s.slackMock = slackdef.NewMockSlackRuntime()
 
@@ -218,12 +263,12 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 			s.slackMock.Builder(),
 		},
 	})
-	s.Require().NoError(err)
+	coreutils.RequireNoError(s.T(), err)
 
 	intruntime.SetDefault(rt)
 	s.integrationsRT = rt
 
-	s.Require().NoError(wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
+	coreutils.RequireNoError(s.T(), wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
 		Runtime: rt,
 	}))
 
@@ -232,23 +277,23 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 // mockSlackRecorder returns the mock Slack message recorder
 func (s *WorkflowEngineTestSuite) mockSlackRecorder() *slackdef.MessageRecorder {
-	s.Require().NotNil(s.slackMock, "slack mock not initialized")
+	assert.Assert(s.T(), s.slackMock != nil, "slack mock not initialized")
 	return s.slackMock.Recorder
 }
 
 // mockEmailSender returns the mock email sender from the integration runtime
 func (s *WorkflowEngineTestSuite) mockEmailSender() *mockprovider.EmailSender {
 	rc, ok := s.integrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
-	s.Require().True(ok, "email runtime client not found")
+	assert.Assert(s.T(), ok, "email runtime client not found")
 
 	ms := emaildef.MockSenderFromClient(rc)
-	s.Require().NotNil(ms, "mock sender not found")
+	assert.Assert(s.T(), ms != nil, "mock sender not found")
 
 	return ms
 }
 
-// TearDownSuite cleans up test dependencies
-func (s *WorkflowEngineTestSuite) TearDownSuite() {
+// tearDownSuite cleans up test dependencies
+func (s *WorkflowEngineTestSuite) tearDownSuite() {
 	if s.slackMock != nil {
 		s.slackMock.Close()
 	}
@@ -282,7 +327,7 @@ func (s *WorkflowEngineTestSuite) Context() context.Context {
 // Engine returns the suite's workflow engine initialized in SetupSuite
 func (s *WorkflowEngineTestSuite) Engine() *engine.WorkflowEngine {
 	wfEngine := engine.Default()
-	s.Require().NotNil(wfEngine, "workflow engine not initialized")
+	assert.Assert(s.T(), wfEngine != nil, "workflow engine not initialized")
 
 	return wfEngine
 }
@@ -290,38 +335,45 @@ func (s *WorkflowEngineTestSuite) Engine() *engine.WorkflowEngine {
 // NewIsolatedEngine creates a new workflow engine with a custom Gala runtime for tests that need isolation (e.g., failure testing)
 func (s *WorkflowEngineTestSuite) NewIsolatedEngine(runtime *gala.Gala) *engine.WorkflowEngine {
 	wfEngine, err := engine.NewWorkflowEngine(s.client, runtime)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return wfEngine
 }
 
 func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, runtime *gala.Gala) {
-	s.Require().NotNil(s.client, "ent client not initialized")
-	s.Require().NotNil(runtime, "gala runtime not initialized")
+	if s.client == nil {
+		coreutils.FailNow(s.T(), "ent client not initialized")
+	}
 
-	s.Require().NotNil(engine.Default(), "workflow engine not initialized")
+	if runtime == nil {
+		coreutils.FailNow(s.T(), "gala runtime not initialized")
+	}
 
-	s.Require().True(
-		runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
-		"mutation listeners not registered",
-	)
+	if engine.Default() == nil {
+		coreutils.FailNow(s.T(), "workflow engine not initialized")
+	}
 
-	if cfg != nil && cfg.Enabled {
-		s.Require().True(
-			runtime.InterestedIn(engine.WorkflowTriggeredEventTopic.Name, ""),
-			"workflow listeners not registered",
-		)
+	if !runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()) {
+		coreutils.FailNow(s.T(), "mutation listeners not registered")
+	}
+
+	if cfg != nil && cfg.Enabled && !runtime.InterestedIn(engine.WorkflowTriggeredEventTopic.Name, "") {
+		coreutils.FailNow(s.T(), "workflow listeners not registered")
 	}
 
 	eligible := workflows.EligibleWorkflowFields(enums.WorkflowObjectTypeControl)
-	s.Require().NotEmpty(eligible, "workflow eligible fields not registered")
-	_, ok := eligible["reference_id"]
-	s.Require().True(ok, "workflow eligible fields missing control.reference_id")
+	if len(eligible) == 0 {
+		coreutils.FailNow(s.T(), "workflow eligible fields not registered")
+	}
+
+	if _, ok := eligible["reference_id"]; !ok {
+		coreutils.FailNow(s.T(), "workflow eligible fields missing control.reference_id")
+	}
 }
 
 // WaitForEvents blocks until runnable and in-flight Gala jobs complete
 func (s *WorkflowEngineTestSuite) WaitForEvents() {
-	s.Require().NoError(s.galaRuntime.WaitIdle(s.T().Context()))
+	assert.NilError(s.T(), s.galaRuntime.WaitIdle(s.T().Context()))
 }
 
 // SetupSystemAdmin creates a system admin user and returns user ID, org ID, and admin context
@@ -332,10 +384,10 @@ func (s *WorkflowEngineTestSuite) SetupSystemAdmin() (string, string, context.Co
 		SetEmail("admin-" + ulids.New().String() + "@example.com").
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		Save(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	personalOrg, err := user.Edges.Setting.DefaultOrg(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, personalOrg.ID)
 	setCtx := generated.NewContext(auth.WithInternalCrossOrgContext(userCtx), s.client)
@@ -343,7 +395,7 @@ func (s *WorkflowEngineTestSuite) SetupSystemAdmin() (string, string, context.Co
 	testOrg, err := s.client.Organization.Create().
 		SetName("Admin Organization " + ulids.New().String()).
 		Save(setCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	s.enableModules(user.ID, testOrg.ID)
 
@@ -361,10 +413,10 @@ func (s *WorkflowEngineTestSuite) SetupTestUser() (string, string, context.Conte
 		SetEmail("test-" + ulids.New().String() + "@example.com").
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		Save(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	personalOrg, err := user.Edges.Setting.DefaultOrg(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, personalOrg.ID)
 	setCtx := generated.NewContext(auth.WithInternalCrossOrgContext(userCtx), s.client)
@@ -372,7 +424,7 @@ func (s *WorkflowEngineTestSuite) SetupTestUser() (string, string, context.Conte
 	testOrg, err := s.client.Organization.Create().
 		SetName("Test Organization " + ulids.New().String()).
 		Save(setCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	s.enableModules(user.ID, testOrg.ID)
 
@@ -399,11 +451,11 @@ func (s *WorkflowEngineTestSuite) enableModules(userID, orgID string) {
 			SetActive(true).
 			SetPrice(models.Price{Amount: 0, Interval: "month"}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(s.T(), err)
 	}
 
 	err := entitlements.CreateFeatureTuples(userCtx, &s.client.Authz, orgID, features)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 }
 
 // CreateTestUserID creates an additional test user and returns the ID
@@ -414,7 +466,7 @@ func (s *WorkflowEngineTestSuite) CreateTestUserID() string {
 		SetEmail("test-" + ulids.New().String() + "@example.com").
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		Save(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return user.ID
 }
@@ -427,7 +479,7 @@ func (s *WorkflowEngineTestSuite) CreateTestUserInOrg(orgID string, role enums.R
 		SetEmail("test-" + ulids.New().String() + "@example.com").
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		Save(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	authCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
 	membershipCtx := generated.NewContext(auth.WithInternalCrossOrgContext(authCtx), s.client)
@@ -437,7 +489,7 @@ func (s *WorkflowEngineTestSuite) CreateTestUserInOrg(orgID string, role enums.R
 		SetUserID(user.ID).
 		SetRole(role).
 		Save(membershipCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	userCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, s.client)
@@ -477,7 +529,7 @@ func (s *WorkflowEngineTestSuite) CreateTestWorkflowDefinition(ctx context.Conte
 	}
 
 	def, err := builder.Save(ctx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return def
 }
@@ -508,7 +560,7 @@ func (s *WorkflowEngineTestSuite) CreateTestWorkflowDefinitionWithPrefilter(ctx 
 	}
 
 	def, err := builder.Save(ctx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return def
 }
@@ -536,7 +588,7 @@ func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinition(def *generated.Workfl
 	updated, err := def.Update().
 		SetDefinitionJSON(doc).
 		Save(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return updated
 }
@@ -549,7 +601,7 @@ func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinitionWithPrefilter(def *gen
 	update = s.ApplyTriggerPrefilter(update, doc)
 
 	updated, err := update.Save(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return updated
 }
@@ -562,7 +614,7 @@ func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinitionInactive(def *generate
 	update = s.ApplyTriggerPrefilter(update, doc)
 
 	updated, err := update.Save(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return updated
 }
@@ -572,28 +624,28 @@ func (s *WorkflowEngineTestSuite) ClearWorkflowDefinitionsForOrg(orgID string) {
 	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
 	_, err := s.client.WorkflowEvent.Delete().Where(workflowevent.OwnerIDEQ(orgID)).Exec(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	_, err = s.client.WorkflowAssignmentTarget.Delete().Where(workflowassignmenttarget.OwnerIDEQ(orgID)).Exec(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	_, err = s.client.WorkflowAssignment.Delete().Where(workflowassignment.OwnerIDEQ(orgID)).Exec(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	err = s.client.WorkflowInstance.Update().Where(workflowinstance.OwnerIDEQ(orgID)).ClearWorkflowProposal().Exec(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	_, err = s.client.WorkflowProposal.Delete().Where(workflowproposal.OwnerIDEQ(orgID)).Exec(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	_, err = s.client.WorkflowObjectRef.Delete().Where(workflowobjectref.OwnerIDEQ(orgID)).Exec(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	_, err = s.client.WorkflowInstance.Delete().Where(workflowinstance.OwnerIDEQ(orgID)).Exec(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	_, err = s.client.WorkflowDefinition.Delete().Where(workflowdefinition.OwnerIDEQ(orgID)).Exec(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 }
 
 // InternalContext returns an internal context with privacy bypass for test setup operations
@@ -607,18 +659,18 @@ func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Cont
 	ctx = auth.WithInternalOperationContext(ctx)
 	ctx = generated.NewContext(ctx, s.client)
 	ctxClient := generated.FromContext(ctx)
-	s.Require().NotNil(ctxClient, "seed context missing ent client")
-	s.Require().NotNil(engine.Default(), "workflow engine not initialized")
+	assert.Assert(s.T(), ctxClient != nil, "seed context missing ent client")
+	assert.Assert(s.T(), engine.Default() != nil, "workflow engine not initialized")
 	seedCaller, seedCallerOk := auth.CallerFromContext(ctx)
-	s.Require().True(seedCallerOk && seedCaller != nil && seedCaller.OrganizationID != "", "seed context missing org")
+	assert.Assert(s.T(), seedCallerOk && seedCaller != nil && seedCaller.OrganizationID != "", "seed context missing org")
 	return ctx
 }
 
 // TriggerInstance creates a workflow instance via the engine to avoid manual instance construction in tests
 func (s *WorkflowEngineTestSuite) TriggerInstance(ctx context.Context, wfEngine *engine.WorkflowEngine, def *generated.WorkflowDefinition, obj *workflows.Object, input engine.TriggerInput) *generated.WorkflowInstance {
 	instance, err := wfEngine.TriggerWorkflow(ctx, def, obj, input)
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
+	assert.NilError(s.T(), err)
+	assert.Assert(s.T(), instance != nil)
 	return instance
 }
 
@@ -628,7 +680,7 @@ func (s *WorkflowEngineTestSuite) CreateApprovalWorkflowDefinition(ctx context.C
 	if len(action.Params) > 0 {
 		var params workflows.ApprovalActionParams
 		err := json.Unmarshal(action.Params, &params)
-		s.Require().NoError(err, "failed to parse approval action params")
+		assert.NilError(s.T(), err, "failed to parse approval action params")
 		fields := entityops.NormalizeStrings(params.Fields)
 		if len(fields) > 0 {
 			triggerFields = fields
@@ -662,7 +714,7 @@ func (s *WorkflowEngineTestSuite) CreateApprovalWorkflowDefinition(ctx context.C
 		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
 		SetDefinitionJSON(doc).
 		Save(ctx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return def
 }

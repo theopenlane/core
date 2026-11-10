@@ -165,6 +165,56 @@ func TestOAuthToken(t *testing.T) {
 	}
 }
 
+func TestEdgeKeyLinks(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name        string
+		schema      *entityops.Schema
+		edge        string
+		targetField string
+		list        string
+		field       string
+	}{
+		{name: "to-many edge reads external ids keyed by the edge", schema: entityops.SchemaProcedure, edge: "programs", targetField: externalIDField, list: "programs_external_ids"},
+		{name: "unique edge reads an external id keyed by the edge", schema: entityops.SchemaCampaign, edge: "assessment", targetField: externalIDField, field: "assessment_external_id"},
+		{name: "edges to the same target stay apart", schema: entityops.SchemaPlatform, edge: "out_of_scope_assets", targetField: externalIDField, list: "out_of_scope_assets_external_ids"},
+		{name: "unique group edge reads a name", schema: entityops.SchemaControl, edge: "control_owner", targetField: nameField, field: "control_owner_name"},
+		{name: "to-many group edge reads names", schema: entityops.SchemaControl, edge: "editors", targetField: nameField, list: "editors_names"},
+		{name: "entity type edge reads a name", schema: entityops.SchemaEntity, edge: "entity_type", targetField: nameField, field: "entity_type_name"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			rule, found := lo.Find(EdgeKeyLinks(tc.schema), func(rule types.LinkRule) bool {
+				return rule.Edge == tc.edge && rule.TargetField == tc.targetField
+			})
+			if !found {
+				t.Fatalf("expected a %s link through %s.%s", tc.targetField, tc.schema.Name, tc.edge)
+			}
+
+			if !rule.PayloadKeys || rule.SourceList != tc.list || rule.SourceField != tc.field {
+				t.Fatalf("unexpected rule %+v", rule)
+			}
+		})
+	}
+}
+
+func TestEdgeKeyLinksSkipCollidingKeys(t *testing.T) {
+	t.Parallel()
+
+	for _, schema := range entityops.AllSchemas() {
+		for _, rule := range EdgeKeyLinks(schema) {
+			key := lo.CoalesceOrEmpty(rule.SourceList, rule.SourceField)
+			if inputKeyCollides(schema, key) {
+				t.Fatalf("%s link key %s collides with an input key", schema.Name, key)
+			}
+		}
+	}
+}
+
 func TestUpgradeFromSection(t *testing.T) {
 	t.Parallel()
 

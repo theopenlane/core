@@ -705,6 +705,26 @@ func (_u *TrustCenterSettingUpdate) ClearAutoApprovalRules() *TrustCenterSetting
 	return _u
 }
 
+// SetDisableDefaultDomain sets the "disable_default_domain" field.
+func (_u *TrustCenterSettingUpdate) SetDisableDefaultDomain(v bool) *TrustCenterSettingUpdate {
+	_u.mutation.SetDisableDefaultDomain(v)
+	return _u
+}
+
+// SetNillableDisableDefaultDomain sets the "disable_default_domain" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableDisableDefaultDomain(v *bool) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetDisableDefaultDomain(*v)
+	}
+	return _u
+}
+
+// ClearDisableDefaultDomain clears the value of the "disable_default_domain" field.
+func (_u *TrustCenterSettingUpdate) ClearDisableDefaultDomain() *TrustCenterSettingUpdate {
+	_u.mutation.ClearDisableDefaultDomain()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterSettingUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1199,6 +1219,12 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.AutoApprovalRulesCleared() {
 		_spec.ClearField(trustcentersetting.FieldAutoApprovalRules, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.DisableDefaultDomain(); ok {
+		_spec.SetField(trustcentersetting.FieldDisableDefaultDomain, field.TypeBool, value)
+	}
+	if _u.mutation.DisableDefaultDomainCleared() {
+		_spec.ClearField(trustcentersetting.FieldDisableDefaultDomain, field.TypeBool)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2100,6 +2126,26 @@ func (_u *TrustCenterSettingUpdateOne) ClearAutoApprovalRules() *TrustCenterSett
 	return _u
 }
 
+// SetDisableDefaultDomain sets the "disable_default_domain" field.
+func (_u *TrustCenterSettingUpdateOne) SetDisableDefaultDomain(v bool) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetDisableDefaultDomain(v)
+	return _u
+}
+
+// SetNillableDisableDefaultDomain sets the "disable_default_domain" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableDisableDefaultDomain(v *bool) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetDisableDefaultDomain(*v)
+	}
+	return _u
+}
+
+// ClearDisableDefaultDomain clears the value of the "disable_default_domain" field.
+func (_u *TrustCenterSettingUpdateOne) ClearDisableDefaultDomain() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearDisableDefaultDomain()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterSettingUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -2624,6 +2670,12 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.AutoApprovalRulesCleared() {
 		_spec.ClearField(trustcentersetting.FieldAutoApprovalRules, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.DisableDefaultDomain(); ok {
+		_spec.SetField(trustcentersetting.FieldDisableDefaultDomain, field.TypeBool, value)
+	}
+	if _u.mutation.DisableDefaultDomainCleared() {
+		_spec.ClearField(trustcentersetting.FieldDisableDefaultDomain, field.TypeBool)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

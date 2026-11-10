@@ -16,6 +16,7 @@ mutation CreateBulkCSVNarrative ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -43,6 +44,7 @@ mutation CreateBulkNarrative ($input: [CreateNarrativeInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -70,6 +72,7 @@ mutation CreateNarrative ($input: CreateNarrativeInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags
@@ -183,6 +186,7 @@ query GetNarrativeByID ($narrativeId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		tags
@@ -291,6 +295,7 @@ mutation UpdateNarrative ($updateNarrativeId: ID!, $input: UpdateNarrativeInput!
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			tags

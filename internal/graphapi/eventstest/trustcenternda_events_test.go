@@ -33,7 +33,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	_, err = suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
-			EnableAutoApproval: lo.ToPtr(true),
+			EnableAutoApproval: new(true),
 		},
 	})
 	assert.NilError(t, err)
@@ -62,7 +62,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	ndaCreateResp, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtxForRequest, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     "Test",
 		LastName:      "User",
-		CompanyName:   lo.ToPtr("Test Company"),
+		CompanyName:   new("Test Company"),
 		Email:         email,
 		TrustCenterID: &trustCenter.ID,
 	})

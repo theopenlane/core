@@ -4,7 +4,6 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
@@ -102,14 +101,14 @@ func TestBuildDomainScanImportEnvelope(t *testing.T) {
 			{
 				Ref:         "platform-1",
 				Name:        "Openlane",
-				Description: lo.ToPtr("Compliance platform"),
+				Description: new("Compliance platform"),
 				EntityRefs:  []string{"vendor-1"},
 				AssetRefs:   []string{"asset-1"},
 			},
 			{
 				Ref:         "platform-2",
 				Name:        "Admin Portal",
-				Description: lo.ToPtr("Internal admin tooling"),
+				Description: new("Internal admin tooling"),
 				EntityRefs:  []string{"vendor-2"},
 				AssetRefs:   []string{"asset-2"},
 			},
@@ -117,40 +116,40 @@ func TestBuildDomainScanImportEnvelope(t *testing.T) {
 		Systems: []*model.ImportDomainScanReviewSystemInput{
 			{
 				Name:         "Console",
-				Description:  lo.ToPtr("Web console"),
+				Description:  new("Web console"),
 				EntityRefs:   []string{"vendor-1"},
 				AssetRefs:    []string{"asset-1"},
 				PlatformRefs: []string{"platform-1"},
 			},
 			{
 				Name:         "Admin",
-				Description:  lo.ToPtr("Admin backend"),
+				Description:  new("Admin backend"),
 				EntityRefs:   []string{"vendor-2"},
 				AssetRefs:    []string{"asset-2"},
 				PlatformRefs: []string{"platform-1", "platform-2"},
 			},
 		},
 		Vendors: []*model.ImportDomainScanReviewVendorInput{
-			{Ref: "vendor-1", Name: "Stripe", Domain: lo.ToPtr("stripe.com"), Categories: []string{"payments"}},
-			{Ref: "vendor-2", Name: "Datadog", Domain: lo.ToPtr("datadoghq.com"), Categories: []string{"monitoring"}},
+			{Ref: "vendor-1", Name: "Stripe", Domain: new("stripe.com"), Categories: []string{"payments"}},
+			{Ref: "vendor-2", Name: "Datadog", Domain: new("datadoghq.com"), Categories: []string{"monitoring"}},
 		},
 		Assets: []*model.ImportDomainScanReviewAssetInput{
-			{Ref: "asset-1", Name: "example.com", Identifier: lo.ToPtr("example.com"), Website: lo.ToPtr("https://example.com")},
-			{Ref: "asset-2", Name: "api.example.com", Identifier: lo.ToPtr("api.example.com"), Website: lo.ToPtr("https://api.example.com")},
+			{Ref: "asset-1", Name: "example.com", Identifier: new("example.com"), Website: new("https://example.com")},
+			{Ref: "asset-2", Name: "api.example.com", Identifier: new("api.example.com"), Website: new("https://api.example.com")},
 		},
 		Findings: []*model.ImportDomainScanReviewFindingInput{
-			{Category: lo.ToPtr("security"), Description: lo.ToPtr("missing SPF"), Severity: lo.ToPtr("medium")},
+			{Category: new("security"), Description: new("missing SPF"), Severity: new("medium")},
 		},
 		Branding: &model.ImportDomainScanReviewBrandDesignInput{
-			LogoURL:                  lo.ToPtr("https://theopenlane.io/logo.svg"),
-			FaviconURL:               lo.ToPtr("https://theopenlane.io/favicon.ico"),
-			PrimaryColor:             lo.ToPtr("#123456"),
-			Font:                     lo.ToPtr("Inter"),
-			ForegroundColor:          lo.ToPtr("#111111"),
-			BackgroundColor:          lo.ToPtr("#FFFFFF"),
-			AccentColor:              lo.ToPtr("#654321"),
-			SecondaryBackgroundColor: lo.ToPtr("#F5F5F5"),
-			SecondaryForegroundColor: lo.ToPtr("#222222"),
+			LogoURL:                  new("https://theopenlane.io/logo.svg"),
+			FaviconURL:               new("https://theopenlane.io/favicon.ico"),
+			PrimaryColor:             new("#123456"),
+			Font:                     new("Inter"),
+			ForegroundColor:          new("#111111"),
+			BackgroundColor:          new("#FFFFFF"),
+			AccentColor:              new("#654321"),
+			SecondaryBackgroundColor: new("#F5F5F5"),
+			SecondaryForegroundColor: new("#222222"),
 		},
 	}
 

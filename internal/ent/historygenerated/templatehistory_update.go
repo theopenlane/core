@@ -112,6 +112,9 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(templatehistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(templatehistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(templatehistory.FieldExternalID, field.TypeString)
 	}
@@ -286,6 +289,9 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(templatehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(templatehistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(templatehistory.FieldExternalID, field.TypeString)

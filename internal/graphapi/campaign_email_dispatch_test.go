@@ -108,7 +108,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -266,7 +266,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -344,7 +344,7 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -406,7 +406,7 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -475,8 +475,8 @@ func TestQuestionnaireTestEmailDispatch(t *testing.T) {
 
 	recipient := "test-recipient@test.example"
 	cfg := email.SendQuestionnaireCampaignRequest{
-		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
-		TestEmail:             recipient,
+		CampaignID: campaignObj.ID,
+		TestEmail:  recipient,
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -512,6 +512,102 @@ func TestQuestionnaireTestEmailDispatch(t *testing.T) {
 		).
 		IDs(ctx)
 	assert.NilError(t, err)
+}
+
+func TestQuestionnaireCampaignDispatchAsUserMarksTargetSent(t *testing.T) {
+	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	userCtx := th.SetUserContext(th.SharedAdminUser.UserCtx, suite.Client.DB)
+
+	assessmentObj := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	campaignObj, err := suite.Client.DB.Campaign.Create().
+		SetName("Questionnaire User Dispatch Campaign").
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
+		SetCampaignType(enums.CampaignTypeQuestionnaire).
+		SetAssessmentID(assessmentObj.ID).
+		SetRecurrenceFrequency(enums.FrequencyNone).
+		Save(ctx)
+	th.RequireNoError(t, err)
+
+	recipient := "questionnaire-user-dispatch@test.example"
+
+	target, err := suite.Client.DB.CampaignTarget.Create().
+		SetCampaignID(campaignObj.ID).
+		SetEmail(recipient).
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
+		Save(ctx)
+	th.RequireNoError(t, err)
+
+	t.Cleanup(func() {
+		responseIDs, err := suite.Client.DB.AssessmentResponse.Query().
+			Where(assessmentresponse.CampaignIDEQ(campaignObj.ID)).
+			IDs(ctx)
+		assert.NilError(t, err)
+
+		if len(responseIDs) > 0 {
+			(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{
+				Client: suite.Client.DB.AssessmentResponse,
+				IDs:    responseIDs,
+			}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		}
+		(&th.Cleanup[*generated.CampaignTargetDeleteOne]{
+			Client: suite.Client.DB.CampaignTarget,
+			ID:     target.ID,
+		}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.CampaignDeleteOne]{
+			Client: suite.Client.DB.Campaign,
+			ID:     campaignObj.ID,
+		}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.AssessmentDeleteOne]{
+			Client: suite.Client.DB.Assessment,
+			ID:     assessmentObj.ID,
+		}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.TemplateDeleteOne]{
+			Client: suite.Client.DB.Template,
+			ID:     assessmentObj.TemplateID,
+		}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	mockSender, err := mock.New("")
+	assert.NilError(t, err)
+
+	emailClient := &email.Client{
+		Sender: mockSender,
+		Config: email.RuntimeEmailConfig{
+			FromEmail:   "questionnaire@test.example",
+			CompanyName: "QuestionnaireCo",
+			ProductURL:  "https://app.example.com",
+		},
+	}
+
+	cfg := email.SendQuestionnaireCampaignRequest{
+		CampaignID: campaignObj.ID,
+	}
+	req := types.OperationRequest{
+		Client: emailClient,
+		DB:     suite.Client.DB,
+	}
+
+	configBytes, err := json.Marshal(cfg)
+	assert.NilError(t, err)
+	req.Config = configBytes
+
+	out, err := email.SendQuestionnaireCampaign{}.Run(userCtx, req, emailClient, cfg)
+	assert.NilError(t, err)
+
+	var result email.CampaignDispatchResult
+	assert.NilError(t, json.Unmarshal(out, &result))
+	assert.Check(t, is.Equal(result.SentCount, 1))
+	assert.Check(t, is.Equal(result.FailedCount, 0))
+
+	messages := mockSender.Messages()
+	assert.Assert(t, is.Len(messages, 1))
+	assert.Check(t, strings.Contains(strings.Join(messages[0].To, " "), recipient))
+
+	updated, err := suite.Client.DB.CampaignTarget.Get(ctx, target.ID)
+	assert.NilError(t, err)
+	assert.Check(t, updated.SentAt != nil)
+	assert.Check(t, is.Equal(updated.Status, enums.AssessmentResponseStatusSent))
 }
 
 // TestCustomCampaignCompletesWhenAllSent verifies a custom campaign is marked completed
@@ -638,7 +734,7 @@ func TestCustomCampaignCompletesWhenAllSent(t *testing.T) {
 				},
 			}
 
-			cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+			cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 
 			_, err = email.SendBrandedCampaign{}.Run(ctx, types.OperationRequest{Client: emailClient, DB: suite.Client.DB}, emailClient, cfg)
 			assert.NilError(t, err)
@@ -703,7 +799,7 @@ func TestCampaignEmailDispatchWithoutTrustCenterModule(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 
 	userCtx := generated.NewContext(graphql.WithResponseContext(user.UserCtx, gqlerrors.ErrorPresenter, graphql.DefaultRecover), suite.Client.DB)
 

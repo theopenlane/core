@@ -8,13 +8,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/v2/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -32,73 +29,6 @@ func (r *mutationResolver) CreateHush(ctx context.Context, input generated.Creat
 	return &model.HushCreatePayload{
 		Hush: res,
 	}, nil
-}
-
-// CreateBulkHush is the resolver for the createBulkHush field.
-func (r *mutationResolver) CreateBulkHush(ctx context.Context, input []*generated.CreateHushInput) (*model.HushBulkCreatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-	for _, entry := range input {
-		if entry == nil {
-			return nil, rout.NewMissingRequiredFieldError("input")
-		}
-		if err := validateCreateHushInput(*entry); err != nil {
-			return nil, err
-		}
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateHush(ctx, input)
-}
-
-// CreateBulkCSVHush is the resolver for the createBulkCSVHush field.
-func (r *mutationResolver) CreateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[csvgenerated.HushCSVInput](input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "hush"})
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
-			return nil, ownerErr
-		}
-
-		return nil, rout.ErrPermissionDenied
-	}
-
-	if err := resolveCSVReferencesForSchema(ctx, "Hush", data); err != nil {
-		return nil, err
-	}
-
-	inputs := make([]*generated.CreateHushInput, 0, len(data))
-	for i := range data {
-		if err := validateCreateHushInput(data[i].Input); err != nil {
-			return nil, err
-		}
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateHush(ctx, inputs)
 }
 
 // UpdateBulkHush is the resolver for the updateBulkHush field.
@@ -152,26 +82,6 @@ func (r *mutationResolver) DeleteBulkHush(ctx context.Context, ids []string) (*m
 	}
 
 	return r.bulkDeleteHush(ctx, ids)
-}
-
-// UpdateBulkCSVHush is the resolver for the updateBulkCSVHush field.
-func (r *mutationResolver) UpdateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkUpdatePayload, error) {
-	data, err := common.UnmarshalBulkData[csvgenerated.HushCSVUpdateInput](input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "hush"})
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	if err := resolveCSVReferencesForSchema(ctx, "Hush", data); err != nil {
-		return nil, err
-	}
-
-	return r.bulkUpdateCSVHush(ctx, data)
 }
 
 // Hush is the resolver for the hush field.

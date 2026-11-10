@@ -54,6 +54,8 @@ const (
 	FieldManagedBy = "managed_by"
 	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldSourceKey holds the string denoting the source_key field in the database.
+	FieldSourceKey = "source_key"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
@@ -102,8 +104,6 @@ const (
 	FieldPriority = "priority"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
-	// FieldSourceKey holds the string denoting the source_key field in the database.
-	FieldSourceKey = "source_key"
 	// FieldIdempotencyKey holds the string denoting the idempotency_key field in the database.
 	FieldIdempotencyKey = "idempotency_key"
 	// FieldExternalReferenceURL holds the string denoting the external_reference_url field in the database.
@@ -134,6 +134,7 @@ var Columns = []string{
 	FieldSourceInstanceID,
 	FieldManagedBy,
 	FieldIntegrationRunID,
+	FieldSourceKey,
 	FieldExternalID,
 	FieldOwnerID,
 	FieldTaskKindName,
@@ -158,7 +159,6 @@ var Columns = []string{
 	FieldIsSuggested,
 	FieldPriority,
 	FieldSource,
-	FieldSourceKey,
 	FieldIdempotencyKey,
 	FieldExternalReferenceURL,
 	FieldParentTaskID,
@@ -315,6 +315,11 @@ func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
 }
 
+// BySourceKey orders the results by the source_key field.
+func BySourceKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceKey, opts...).ToFunc()
+}
+
 // ByExternalID orders the results by the external_id field.
 func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
@@ -423,11 +428,6 @@ func ByPriority(opts ...sql.OrderTermOption) OrderOption {
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
-}
-
-// BySourceKey orders the results by the source_key field.
-func BySourceKey(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSourceKey, opts...).ToFunc()
 }
 
 // ByIdempotencyKey orders the results by the idempotency_key field.

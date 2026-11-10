@@ -5,7 +5,6 @@ import (
 
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -61,7 +60,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context) error {
 	}
 
 	resp := models.DeleteIntegrationResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Message: lo.CoalesceOrEmpty(result.Message, fmt.Sprintf("%s integration disconnected", def.DisplayName)),
 	}
 

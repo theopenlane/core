@@ -420,9 +420,8 @@ func isNonGlobalEnumInUse(ctrlCtx, logCtx context.Context, client *generated.Cli
 
 	tblInfo := findTableWithColumn(columnName)
 	if tblInfo == nil {
-		// fallback to convention if no table found
-		tableName := client.Pluralizer.Plural(strcase.SnakeCase(edgeName))
-		tblInfo = &tableInfo{name: tableName, hasSoftDelete: true}
+		// no table has the column, so nothing can reference this enum
+		return func() {}
 	}
 
 	return func() {
@@ -461,7 +460,7 @@ func isNonGlobalEnumInUse(ctrlCtx, logCtx context.Context, client *generated.Cli
 
 			displayLabel := label
 			if count != 1 {
-				displayLabel = client.Pluralizer.Plural(label)
+				displayLabel = utils.Plural(label)
 			}
 
 			*allErrors = append(*allErrors, fmt.Sprintf("the %s value of %s is in use by %d %s and cannot be deleted until those are updated", objectType, name, count, displayLabel))

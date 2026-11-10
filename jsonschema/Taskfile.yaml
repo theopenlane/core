@@ -8,26 +8,43 @@ tasks:
 
   generate:
     desc: generate the jsonschema and documentation
+    # run in sequence, parallel go runs each compile internal/ent/generated and run out of memory
+    cmds:
+      - task: workflow-schema-and-docs
+      - task: integration-schema
+      - task: schema-and-docs
+      - task: openapi
+
+  schema-and-docs:
+    internal: true
     cmds:
       - task: schema
-      - task: workflow-schema
-      - task: integration-schema
       - task: docs
+
+  workflow-schema-and-docs:
+    internal: true
+    cmds:
+      - task: workflow-schema
       - task: workflow-docs
-      - task: openapi
 
   schema:
     desc: generate a new jsonschema and corresponding config/config.example.yaml
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go run jsonschema/schema_generator.go
 
   workflow-schema:
     desc: generate the workflow definition jsonschema
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go run jsonschema/workflow_schema_generator.go
 
   integration-schema:
     desc: snapshot the installation-facing surface of every integration definition
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go run jsonschema/integration_schema_generator.go
 
@@ -43,6 +60,8 @@ tasks:
 
   openapi:
     desc: generate the OpenAPI specification and its spec types from the registered routes
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go generate internal/httpserve/specs/generate/generate.go
 
@@ -50,11 +69,4 @@ tasks:
     desc: a task that runs during CI to confirm there are no changes after running generate
     cmds:
       - task: generate
-      - "git config --global --add safe.directory /workdir"
-      - |
-        status=$(git status --porcelain)
-        if [ -n "$status" ]; then
-        echo "detected git diff after running generate; please re-run tasks"
-        echo "$status"
-        exit 1
-        fi
+      - task: :check:clean

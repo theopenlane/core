@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
@@ -36,7 +36,7 @@ func TestValidateIPAddress(t *testing.T) {
 		t.Run(fmt.Sprintf("valid ip: %s", ip), func(t *testing.T) {
 			funcCheck := validator.ValidateIPAddress()
 			err := funcCheck(ip)
-			assert.NoError(t, err)
+			assert.Check(t, err)
 		})
 	}
 
@@ -59,7 +59,7 @@ func TestValidateIPAddress(t *testing.T) {
 		t.Run(fmt.Sprintf("invalid ip: %s", ip), func(t *testing.T) {
 			funcCheck := validator.ValidateIPAddress()
 			err := funcCheck(ip)
-			assert.Error(t, err)
+			assert.Check(t, err != nil)
 		})
 	}
 }

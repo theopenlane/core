@@ -8,27 +8,27 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestUnsubscribeHandler verifies the unsubscribe endpoint marks the subscriber unsubscribed (which the
 // update hook also deactivates) on a valid token, and rejects a request without a token
-func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
-	t := suite.T()
+func TestUnsubscribeHandler(t *testing.T) {
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "unsubscribe", suite.h.UnsubscribeHandler)
 
-	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 	t.Run("happy path unsubscribes an active subscriber", func(t *testing.T) {
 		suite.ClearTestData()
 
 		sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
-		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(internalCtx))
+		assert.NilError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(internalCtx))
 
 		target := fmt.Sprintf("/unsubscribe?token=%s", sub.Token)
 		req := httptest.NewRequest(http.MethodPost, target, nil)
@@ -39,15 +39,15 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		defer res.Body.Close()
 
 		var out *models.UnsubscribeResponse
-		require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
+		assert.NilError(t, json.NewDecoder(res.Body).Decode(&out))
 
-		assert.Equal(t, http.StatusOK, recorder.Code)
-		assert.NotEmpty(t, out.Message)
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Check(t, len(out.Message) > 0)
 
 		updated, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
-		require.NoError(t, err)
-		assert.True(t, updated.Unsubscribed)
-		assert.False(t, updated.Active)
+		assert.NilError(t, err)
+		assert.Check(t, updated.Unsubscribed)
+		assert.Check(t, !updated.Active)
 	})
 
 	t.Run("happy path unsubscribes a trust center subscriber", func(t *testing.T) {
@@ -56,27 +56,27 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		// the create hook provisions the trust center's live setting (allow_subscribers defaults true)
 		tc, err := suite.db.TrustCenter.Create().
 			SetSlug("audit-unsub").
-			SetOwnerID(testUser1.OrganizationID).
-			Save(testUser1.UserCtx)
-		require.NoError(t, err)
+			SetOwnerID(suite.testUser1.OrganizationID).
+			Save(suite.testUser1.UserCtx)
+		assert.NilError(t, err)
 		t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(internalCtx) })
 
 		sub := suite.createTestSubscriber(t, tc.ID, gofakeit.Email(), "")
-		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(internalCtx))
+		assert.NilError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(internalCtx))
 
 		target := fmt.Sprintf("/unsubscribe?token=%s", sub.Token)
 		req := httptest.NewRequest(http.MethodPost, target, nil)
 		recorder := httptest.NewRecorder()
 		suite.e.ServeHTTP(recorder, req)
 
-		assert.Equal(t, http.StatusOK, recorder.Code)
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
 
 		updated, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
-		require.NoError(t, err)
-		assert.True(t, updated.Unsubscribed)
-		assert.False(t, updated.Active)
-		require.NotNil(t, updated.TrustCenterID)
-		assert.Equal(t, tc.ID, *updated.TrustCenterID)
+		assert.NilError(t, err)
+		assert.Check(t, updated.Unsubscribed)
+		assert.Check(t, !updated.Active)
+		assert.Assert(t, updated.TrustCenterID != nil)
+		assert.Check(t, is.DeepEqual(tc.ID, *updated.TrustCenterID))
 	})
 
 	t.Run("missing token is rejected", func(t *testing.T) {
@@ -86,7 +86,7 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		recorder := httptest.NewRecorder()
 		suite.e.ServeHTTP(recorder, req)
 
-		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
 	})
 
 	t.Run("unknown token is rejected", func(t *testing.T) {
@@ -96,14 +96,14 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		recorder := httptest.NewRecorder()
 		suite.e.ServeHTTP(recorder, req)
 
-		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
 	})
 
 	t.Run("reusing a token after the subscriber is already unsubscribed is idempotent", func(t *testing.T) {
 		suite.ClearTestData()
 
 		sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
-		require.NoError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(internalCtx))
+		assert.NilError(t, suite.db.Subscriber.UpdateOneID(sub.ID).SetVerifiedEmail(true).SetActive(true).Exec(internalCtx))
 
 		target := fmt.Sprintf("/unsubscribe?token=%s", sub.Token)
 
@@ -111,25 +111,25 @@ func (suite *HandlerTestSuite) TestUnsubscribeHandler() {
 		req := httptest.NewRequest(http.MethodPost, target, nil)
 		recorder := httptest.NewRecorder()
 		suite.e.ServeHTTP(recorder, req)
-		assert.Equal(t, http.StatusOK, recorder.Code)
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
 
 		// reuse the same token against an already-unsubscribed subscriber: idempotent success with a
 		// distinct "already unsubscribed" acknowledgment, state unchanged
 		req2 := httptest.NewRequest(http.MethodPost, target, nil)
 		recorder2 := httptest.NewRecorder()
 		suite.e.ServeHTTP(recorder2, req2)
-		assert.Equal(t, http.StatusOK, recorder2.Code)
+		assert.Check(t, is.Equal(http.StatusOK, recorder2.Code))
 
 		res2 := recorder2.Result()
 		defer res2.Body.Close()
 
 		var out2 *models.UnsubscribeResponse
-		require.NoError(t, json.NewDecoder(res2.Body).Decode(&out2))
-		assert.Contains(t, out2.Message, "already unsubscribed")
+		assert.NilError(t, json.NewDecoder(res2.Body).Decode(&out2))
+		assert.Check(t, is.Contains(out2.Message, "already unsubscribed"))
 
 		updated, err := suite.db.Subscriber.Get(internalCtx, sub.ID)
-		require.NoError(t, err)
-		assert.True(t, updated.Unsubscribed)
-		assert.False(t, updated.Active)
+		assert.NilError(t, err)
+		assert.Check(t, updated.Unsubscribed)
+		assert.Check(t, !updated.Active)
 	})
 }

@@ -222,6 +222,7 @@ func (CampaignTarget) Policy() ent.Policy {
 			policy.CanCreateObjectsUnderParents([]string{
 				Campaign{}.PluralName(),
 			}),
+			policy.CanEditObjectUnderParents([]string{Campaign{}.Name()}, policy.ParentIDFromMutation),
 			entfga.CheckEditAccess[*generated.CampaignTargetMutation](),
 		),
 	)

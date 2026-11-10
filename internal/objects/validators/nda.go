@@ -1,6 +1,7 @@
 package validators
 
 import (
+	"context"
 	"errors"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
@@ -30,7 +31,7 @@ func ndaValidator(f storage.File) error {
 		return nil
 	}
 
-	_, err := api.ReadContext(f.RawFile, model.NewDefaultConfiguration())
+	_, err := api.ReadContext(context.Background(), f.RawFile, model.NewDefaultConfiguration())
 	if err != nil {
 		if errors.Is(err, pdfcpu.ErrWrongPassword) {
 			log.Warn().Str("file", f.OriginalName).Msg("rejected password protected nda upload")

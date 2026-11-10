@@ -2046,6 +2046,7 @@ type ActionPlanMutation struct {
 	source_instance_id                      *string
 	managed_by                              *string
 	integration_run_id                      *string
+	source_key                              *string
 	external_id                             *string
 	name                                    *string
 	status                                  *enums.DocumentStatus
@@ -2960,6 +2961,55 @@ func (m *ActionPlanMutation) IntegrationRunIDCleared() bool {
 func (m *ActionPlanMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, actionplan.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *ActionPlanMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *ActionPlanMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the ActionPlan entity.
+// If the ActionPlan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *ActionPlanMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[actionplan.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *ActionPlanMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[actionplan.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *ActionPlanMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, actionplan.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -6238,7 +6288,7 @@ func (m *ActionPlanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ActionPlanMutation) Fields() []string {
-	fields := make([]string, 0, 58)
+	fields := make([]string, 0, 59)
 	if m.created_at != nil {
 		fields = append(fields, actionplan.FieldCreatedAt)
 	}
@@ -6280,6 +6330,9 @@ func (m *ActionPlanMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, actionplan.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, actionplan.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, actionplan.FieldExternalID)
@@ -6449,6 +6502,8 @@ func (m *ActionPlanMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case actionplan.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case actionplan.FieldSourceKey:
+		return m.SourceKey()
 	case actionplan.FieldExternalID:
 		return m.ExternalID()
 	case actionplan.FieldName:
@@ -6574,6 +6629,8 @@ func (m *ActionPlanMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldManagedBy(ctx)
 	case actionplan.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case actionplan.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case actionplan.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case actionplan.FieldName:
@@ -6768,6 +6825,13 @@ func (m *ActionPlanMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case actionplan.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case actionplan.FieldExternalID:
 		v, ok := value.(string)
@@ -7149,6 +7213,9 @@ func (m *ActionPlanMutation) ClearedFields() []string {
 	if m.FieldCleared(actionplan.FieldIntegrationRunID) {
 		fields = append(fields, actionplan.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(actionplan.FieldSourceKey) {
+		fields = append(fields, actionplan.FieldSourceKey)
+	}
 	if m.FieldCleared(actionplan.FieldExternalID) {
 		fields = append(fields, actionplan.FieldExternalID)
 	}
@@ -7325,6 +7392,9 @@ func (m *ActionPlanMutation) ClearField(name string) error {
 	case actionplan.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case actionplan.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case actionplan.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -7494,6 +7564,9 @@ func (m *ActionPlanMutation) ResetField(name string) error {
 		return nil
 	case actionplan.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case actionplan.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case actionplan.FieldExternalID:
 		m.ResetExternalID()
@@ -8243,6 +8316,7 @@ type AssessmentMutation struct {
 	source_instance_id          *string
 	managed_by                  *string
 	integration_run_id          *string
+	source_key                  *string
 	external_id                 *string
 	system_owned                *bool
 	internal_notes              *string
@@ -9052,6 +9126,55 @@ func (m *AssessmentMutation) IntegrationRunIDCleared() bool {
 func (m *AssessmentMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, assessment.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *AssessmentMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *AssessmentMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Assessment entity.
+// If the Assessment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *AssessmentMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[assessment.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *AssessmentMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[assessment.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *AssessmentMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, assessment.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -10319,7 +10442,7 @@ func (m *AssessmentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AssessmentMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 26)
 	if m.created_at != nil {
 		fields = append(fields, assessment.FieldCreatedAt)
 	}
@@ -10358,6 +10481,9 @@ func (m *AssessmentMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, assessment.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, assessment.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, assessment.FieldExternalID)
@@ -10429,6 +10555,8 @@ func (m *AssessmentMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case assessment.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case assessment.FieldSourceKey:
+		return m.SourceKey()
 	case assessment.FieldExternalID:
 		return m.ExternalID()
 	case assessment.FieldOwnerID:
@@ -10488,6 +10616,8 @@ func (m *AssessmentMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldManagedBy(ctx)
 	case assessment.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case assessment.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case assessment.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case assessment.FieldOwnerID:
@@ -10611,6 +10741,13 @@ func (m *AssessmentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case assessment.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case assessment.FieldExternalID:
 		v, ok := value.(string)
@@ -10780,6 +10917,9 @@ func (m *AssessmentMutation) ClearedFields() []string {
 	if m.FieldCleared(assessment.FieldIntegrationRunID) {
 		fields = append(fields, assessment.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(assessment.FieldSourceKey) {
+		fields = append(fields, assessment.FieldSourceKey)
+	}
 	if m.FieldCleared(assessment.FieldExternalID) {
 		fields = append(fields, assessment.FieldExternalID)
 	}
@@ -10863,6 +11003,9 @@ func (m *AssessmentMutation) ClearField(name string) error {
 	case assessment.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case assessment.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case assessment.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -10939,6 +11082,9 @@ func (m *AssessmentMutation) ResetField(name string) error {
 		return nil
 	case assessment.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case assessment.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case assessment.FieldExternalID:
 		m.ResetExternalID()
@@ -11376,6 +11522,7 @@ type AssessmentPolicyMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	policy_revision           *string
 	clearedFields             map[string]struct{}
@@ -11987,6 +12134,55 @@ func (m *AssessmentPolicyMutation) ResetIntegrationRunID() {
 	delete(m.clearedFields, assessmentpolicy.FieldIntegrationRunID)
 }
 
+// SetSourceKey sets the "source_key" field.
+func (m *AssessmentPolicyMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *AssessmentPolicyMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the AssessmentPolicy entity.
+// If the AssessmentPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *AssessmentPolicyMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[assessmentpolicy.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *AssessmentPolicyMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicy.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *AssessmentPolicyMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, assessmentpolicy.FieldSourceKey)
+}
+
 // SetExternalID sets the "external_id" field.
 func (m *AssessmentPolicyMutation) SetExternalID(s string) {
 	m.external_id = &s
@@ -12375,7 +12571,7 @@ func (m *AssessmentPolicyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AssessmentPolicyMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 16)
 	if m.created_at != nil {
 		fields = append(fields, assessmentpolicy.FieldCreatedAt)
 	}
@@ -12405,6 +12601,9 @@ func (m *AssessmentPolicyMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, assessmentpolicy.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, assessmentpolicy.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, assessmentpolicy.FieldExternalID)
@@ -12449,6 +12648,8 @@ func (m *AssessmentPolicyMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case assessmentpolicy.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case assessmentpolicy.FieldSourceKey:
+		return m.SourceKey()
 	case assessmentpolicy.FieldExternalID:
 		return m.ExternalID()
 	case assessmentpolicy.FieldOwnerID:
@@ -12488,6 +12689,8 @@ func (m *AssessmentPolicyMutation) OldField(ctx context.Context, name string) (e
 		return m.OldManagedBy(ctx)
 	case assessmentpolicy.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case assessmentpolicy.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case assessmentpolicy.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case assessmentpolicy.FieldOwnerID:
@@ -12576,6 +12779,13 @@ func (m *AssessmentPolicyMutation) SetField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case assessmentpolicy.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case assessmentpolicy.FieldExternalID:
 		v, ok := value.(string)
@@ -12672,6 +12882,9 @@ func (m *AssessmentPolicyMutation) ClearedFields() []string {
 	if m.FieldCleared(assessmentpolicy.FieldIntegrationRunID) {
 		fields = append(fields, assessmentpolicy.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(assessmentpolicy.FieldSourceKey) {
+		fields = append(fields, assessmentpolicy.FieldSourceKey)
+	}
 	if m.FieldCleared(assessmentpolicy.FieldExternalID) {
 		fields = append(fields, assessmentpolicy.FieldExternalID)
 	}
@@ -12725,6 +12938,9 @@ func (m *AssessmentPolicyMutation) ClearField(name string) error {
 	case assessmentpolicy.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case assessmentpolicy.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case assessmentpolicy.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -12771,6 +12987,9 @@ func (m *AssessmentPolicyMutation) ResetField(name string) error {
 		return nil
 	case assessmentpolicy.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case assessmentpolicy.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case assessmentpolicy.FieldExternalID:
 		m.ResetExternalID()
@@ -15929,6 +16148,7 @@ type AssetMutation struct {
 	source_instance_id                    *string
 	managed_by                            *string
 	integration_run_id                    *string
+	source_key                            *string
 	external_id                           *string
 	internal_owner                        *string
 	asset_subtype_name                    *string
@@ -16807,6 +17027,55 @@ func (m *AssetMutation) IntegrationRunIDCleared() bool {
 func (m *AssetMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, asset.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *AssetMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *AssetMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Asset entity.
+// If the Asset object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssetMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *AssetMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[asset.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *AssetMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[asset.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *AssetMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, asset.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -20401,7 +20670,7 @@ func (m *AssetMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AssetMutation) Fields() []string {
-	fields := make([]string, 0, 57)
+	fields := make([]string, 0, 58)
 	if m.created_at != nil {
 		fields = append(fields, asset.FieldCreatedAt)
 	}
@@ -20440,6 +20709,9 @@ func (m *AssetMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, asset.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, asset.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, asset.FieldExternalID)
@@ -20607,6 +20879,8 @@ func (m *AssetMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case asset.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case asset.FieldSourceKey:
+		return m.SourceKey()
 	case asset.FieldExternalID:
 		return m.ExternalID()
 	case asset.FieldOwnerID:
@@ -20730,6 +21004,8 @@ func (m *AssetMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldManagedBy(ctx)
 	case asset.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case asset.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case asset.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case asset.FieldOwnerID:
@@ -20917,6 +21193,13 @@ func (m *AssetMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case asset.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case asset.FieldExternalID:
 		v, ok := value.(string)
@@ -21310,6 +21593,9 @@ func (m *AssetMutation) ClearedFields() []string {
 	if m.FieldCleared(asset.FieldIntegrationRunID) {
 		fields = append(fields, asset.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(asset.FieldSourceKey) {
+		fields = append(fields, asset.FieldSourceKey)
+	}
 	if m.FieldCleared(asset.FieldExternalID) {
 		fields = append(fields, asset.FieldExternalID)
 	}
@@ -21486,6 +21772,9 @@ func (m *AssetMutation) ClearField(name string) error {
 	case asset.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case asset.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case asset.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -21655,6 +21944,9 @@ func (m *AssetMutation) ResetField(name string) error {
 		return nil
 	case asset.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case asset.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case asset.FieldExternalID:
 		m.ResetExternalID()
@@ -22617,6 +22909,7 @@ type CampaignMutation struct {
 	source_instance_id                    *string
 	managed_by                            *string
 	integration_run_id                    *string
+	source_key                            *string
 	external_id                           *string
 	internal_owner                        *string
 	workflow_eligible_marker              *bool
@@ -23498,6 +23791,55 @@ func (m *CampaignMutation) IntegrationRunIDCleared() bool {
 func (m *CampaignMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, campaign.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *CampaignMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *CampaignMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Campaign entity.
+// If the Campaign object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *CampaignMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[campaign.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *CampaignMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[campaign.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *CampaignMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, campaign.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -26165,7 +26507,7 @@ func (m *CampaignMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CampaignMutation) Fields() []string {
-	fields := make([]string, 0, 49)
+	fields := make([]string, 0, 50)
 	if m.created_at != nil {
 		fields = append(fields, campaign.FieldCreatedAt)
 	}
@@ -26207,6 +26549,9 @@ func (m *CampaignMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, campaign.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, campaign.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, campaign.FieldExternalID)
@@ -26349,6 +26694,8 @@ func (m *CampaignMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case campaign.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case campaign.FieldSourceKey:
+		return m.SourceKey()
 	case campaign.FieldExternalID:
 		return m.ExternalID()
 	case campaign.FieldOwnerID:
@@ -26456,6 +26803,8 @@ func (m *CampaignMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldManagedBy(ctx)
 	case campaign.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case campaign.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case campaign.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case campaign.FieldOwnerID:
@@ -26632,6 +26981,13 @@ func (m *CampaignMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case campaign.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case campaign.FieldExternalID:
 		v, ok := value.(string)
@@ -26986,6 +27342,9 @@ func (m *CampaignMutation) ClearedFields() []string {
 	if m.FieldCleared(campaign.FieldIntegrationRunID) {
 		fields = append(fields, campaign.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(campaign.FieldSourceKey) {
+		fields = append(fields, campaign.FieldSourceKey)
+	}
 	if m.FieldCleared(campaign.FieldExternalID) {
 		fields = append(fields, campaign.FieldExternalID)
 	}
@@ -27129,6 +27488,9 @@ func (m *CampaignMutation) ClearField(name string) error {
 	case campaign.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case campaign.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case campaign.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -27268,6 +27630,9 @@ func (m *CampaignMutation) ResetField(name string) error {
 		return nil
 	case campaign.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case campaign.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case campaign.FieldExternalID:
 		m.ResetExternalID()
@@ -30020,6 +30385,7 @@ type CheckResultMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	status                    *enums.CheckStatus
 	source                    *string
 	last_observed_at          *models.DateTime
@@ -30811,6 +31177,55 @@ func (m *CheckResultMutation) ResetIntegrationRunID() {
 	delete(m.clearedFields, checkresult.FieldIntegrationRunID)
 }
 
+// SetSourceKey sets the "source_key" field.
+func (m *CheckResultMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *CheckResultMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the CheckResult entity.
+// If the CheckResult object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CheckResultMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *CheckResultMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[checkresult.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *CheckResultMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[checkresult.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *CheckResultMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, checkresult.FieldSourceKey)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *CheckResultMutation) SetOwnerID(s string) {
 	m.owner = &s
@@ -31589,7 +32004,7 @@ func (m *CheckResultMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CheckResultMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, checkresult.FieldCreatedAt)
 	}
@@ -31628,6 +32043,9 @@ func (m *CheckResultMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, checkresult.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, checkresult.FieldSourceKey)
 	}
 	if m.owner != nil {
 		fields = append(fields, checkresult.FieldOwnerID)
@@ -31687,6 +32105,8 @@ func (m *CheckResultMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case checkresult.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case checkresult.FieldSourceKey:
+		return m.SourceKey()
 	case checkresult.FieldOwnerID:
 		return m.OwnerID()
 	case checkresult.FieldStatus:
@@ -31738,6 +32158,8 @@ func (m *CheckResultMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldManagedBy(ctx)
 	case checkresult.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case checkresult.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case checkresult.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case checkresult.FieldStatus:
@@ -31853,6 +32275,13 @@ func (m *CheckResultMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case checkresult.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case checkresult.FieldOwnerID:
 		v, ok := value.(string)
@@ -31979,6 +32408,9 @@ func (m *CheckResultMutation) ClearedFields() []string {
 	if m.FieldCleared(checkresult.FieldIntegrationRunID) {
 		fields = append(fields, checkresult.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(checkresult.FieldSourceKey) {
+		fields = append(fields, checkresult.FieldSourceKey)
+	}
 	if m.FieldCleared(checkresult.FieldOwnerID) {
 		fields = append(fields, checkresult.FieldOwnerID)
 	}
@@ -32050,6 +32482,9 @@ func (m *CheckResultMutation) ClearField(name string) error {
 	case checkresult.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case checkresult.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case checkresult.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -32114,6 +32549,9 @@ func (m *CheckResultMutation) ResetField(name string) error {
 		return nil
 	case checkresult.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case checkresult.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case checkresult.FieldOwnerID:
 		m.ResetOwnerID()
@@ -32413,6 +32851,7 @@ type ContactMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	full_name                 *string
 	title                     *string
@@ -33204,6 +33643,55 @@ func (m *ContactMutation) IntegrationRunIDCleared() bool {
 func (m *ContactMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, contact.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *ContactMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *ContactMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *ContactMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[contact.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *ContactMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[contact.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *ContactMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, contact.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -34117,7 +34605,7 @@ func (m *ContactMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ContactMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 25)
 	if m.created_at != nil {
 		fields = append(fields, contact.FieldCreatedAt)
 	}
@@ -34156,6 +34644,9 @@ func (m *ContactMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, contact.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, contact.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, contact.FieldExternalID)
@@ -34224,6 +34715,8 @@ func (m *ContactMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case contact.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case contact.FieldSourceKey:
+		return m.SourceKey()
 	case contact.FieldExternalID:
 		return m.ExternalID()
 	case contact.FieldOwnerID:
@@ -34281,6 +34774,8 @@ func (m *ContactMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldManagedBy(ctx)
 	case contact.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case contact.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case contact.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case contact.FieldOwnerID:
@@ -34402,6 +34897,13 @@ func (m *ContactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case contact.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case contact.FieldExternalID:
 		v, ok := value.(string)
@@ -34549,6 +35051,9 @@ func (m *ContactMutation) ClearedFields() []string {
 	if m.FieldCleared(contact.FieldIntegrationRunID) {
 		fields = append(fields, contact.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(contact.FieldSourceKey) {
+		fields = append(fields, contact.FieldSourceKey)
+	}
 	if m.FieldCleared(contact.FieldExternalID) {
 		fields = append(fields, contact.FieldExternalID)
 	}
@@ -34632,6 +35137,9 @@ func (m *ContactMutation) ClearField(name string) error {
 	case contact.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case contact.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case contact.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -34708,6 +35216,9 @@ func (m *ContactMutation) ResetField(name string) error {
 		return nil
 	case contact.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case contact.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case contact.FieldExternalID:
 		m.ResetExternalID()
@@ -34999,6 +35510,7 @@ type ControlMutation struct {
 	source_instance_id             *string
 	managed_by                     *string
 	integration_run_id             *string
+	source_key                     *string
 	external_id                    *string
 	external_uuid                  *string
 	title                          *string
@@ -35954,6 +36466,55 @@ func (m *ControlMutation) IntegrationRunIDCleared() bool {
 func (m *ControlMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, control.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *ControlMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *ControlMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Control entity.
+// If the Control object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *ControlMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[control.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *ControlMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[control.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *ControlMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, control.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -40297,7 +40858,7 @@ func (m *ControlMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlMutation) Fields() []string {
-	fields := make([]string, 0, 60)
+	fields := make([]string, 0, 61)
 	if m.created_at != nil {
 		fields = append(fields, control.FieldCreatedAt)
 	}
@@ -40339,6 +40900,9 @@ func (m *ControlMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, control.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, control.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, control.FieldExternalID)
@@ -40514,6 +41078,8 @@ func (m *ControlMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case control.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case control.FieldSourceKey:
+		return m.SourceKey()
 	case control.FieldExternalID:
 		return m.ExternalID()
 	case control.FieldExternalUUID:
@@ -40643,6 +41209,8 @@ func (m *ControlMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldManagedBy(ctx)
 	case control.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case control.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case control.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case control.FieldExternalUUID:
@@ -40841,6 +41409,13 @@ func (m *ControlMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case control.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case control.FieldExternalID:
 		v, ok := value.(string)
@@ -41233,6 +41808,9 @@ func (m *ControlMutation) ClearedFields() []string {
 	if m.FieldCleared(control.FieldIntegrationRunID) {
 		fields = append(fields, control.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(control.FieldSourceKey) {
+		fields = append(fields, control.FieldSourceKey)
+	}
 	if m.FieldCleared(control.FieldExternalID) {
 		fields = append(fields, control.FieldExternalID)
 	}
@@ -41421,6 +41999,9 @@ func (m *ControlMutation) ClearField(name string) error {
 	case control.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case control.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case control.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -41605,6 +42186,9 @@ func (m *ControlMutation) ResetField(name string) error {
 		return nil
 	case control.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case control.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case control.FieldExternalID:
 		m.ResetExternalID()
@@ -42776,6 +43360,7 @@ type ControlImplementationMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	system_owned              *bool
 	internal_notes            *string
@@ -43571,6 +44156,55 @@ func (m *ControlImplementationMutation) IntegrationRunIDCleared() bool {
 func (m *ControlImplementationMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, controlimplementation.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *ControlImplementationMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *ControlImplementationMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the ControlImplementation entity.
+// If the ControlImplementation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *ControlImplementationMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[controlimplementation.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *ControlImplementationMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[controlimplementation.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *ControlImplementationMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, controlimplementation.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -44567,7 +45201,7 @@ func (m *ControlImplementationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlImplementationMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 25)
 	if m.created_at != nil {
 		fields = append(fields, controlimplementation.FieldCreatedAt)
 	}
@@ -44606,6 +45240,9 @@ func (m *ControlImplementationMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, controlimplementation.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, controlimplementation.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, controlimplementation.FieldExternalID)
@@ -44674,6 +45311,8 @@ func (m *ControlImplementationMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case controlimplementation.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case controlimplementation.FieldSourceKey:
+		return m.SourceKey()
 	case controlimplementation.FieldExternalID:
 		return m.ExternalID()
 	case controlimplementation.FieldOwnerID:
@@ -44731,6 +45370,8 @@ func (m *ControlImplementationMutation) OldField(ctx context.Context, name strin
 		return m.OldManagedBy(ctx)
 	case controlimplementation.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case controlimplementation.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case controlimplementation.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case controlimplementation.FieldOwnerID:
@@ -44852,6 +45493,13 @@ func (m *ControlImplementationMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case controlimplementation.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case controlimplementation.FieldExternalID:
 		v, ok := value.(string)
@@ -44999,6 +45647,9 @@ func (m *ControlImplementationMutation) ClearedFields() []string {
 	if m.FieldCleared(controlimplementation.FieldIntegrationRunID) {
 		fields = append(fields, controlimplementation.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(controlimplementation.FieldSourceKey) {
+		fields = append(fields, controlimplementation.FieldSourceKey)
+	}
 	if m.FieldCleared(controlimplementation.FieldExternalID) {
 		fields = append(fields, controlimplementation.FieldExternalID)
 	}
@@ -45085,6 +45736,9 @@ func (m *ControlImplementationMutation) ClearField(name string) error {
 	case controlimplementation.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case controlimplementation.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case controlimplementation.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -45164,6 +45818,9 @@ func (m *ControlImplementationMutation) ResetField(name string) error {
 		return nil
 	case controlimplementation.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case controlimplementation.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case controlimplementation.FieldExternalID:
 		m.ResetExternalID()
@@ -45482,6 +46139,7 @@ type ControlObjectiveMutation struct {
 	source_instance_id         *string
 	managed_by                 *string
 	integration_run_id         *string
+	source_key                 *string
 	external_id                *string
 	system_owned               *bool
 	internal_notes             *string
@@ -46382,6 +47040,55 @@ func (m *ControlObjectiveMutation) IntegrationRunIDCleared() bool {
 func (m *ControlObjectiveMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, controlobjective.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *ControlObjectiveMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *ControlObjectiveMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the ControlObjective entity.
+// If the ControlObjective object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlObjectiveMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *ControlObjectiveMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[controlobjective.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *ControlObjectiveMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[controlobjective.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *ControlObjectiveMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, controlobjective.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -47787,7 +48494,7 @@ func (m *ControlObjectiveMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlObjectiveMutation) Fields() []string {
-	fields := make([]string, 0, 28)
+	fields := make([]string, 0, 29)
 	if m.created_at != nil {
 		fields = append(fields, controlobjective.FieldCreatedAt)
 	}
@@ -47832,6 +48539,9 @@ func (m *ControlObjectiveMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, controlobjective.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, controlobjective.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, controlobjective.FieldExternalID)
@@ -47910,6 +48620,8 @@ func (m *ControlObjectiveMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case controlobjective.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case controlobjective.FieldSourceKey:
+		return m.SourceKey()
 	case controlobjective.FieldExternalID:
 		return m.ExternalID()
 	case controlobjective.FieldOwnerID:
@@ -47975,6 +48687,8 @@ func (m *ControlObjectiveMutation) OldField(ctx context.Context, name string) (e
 		return m.OldManagedBy(ctx)
 	case controlobjective.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case controlobjective.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case controlobjective.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case controlobjective.FieldOwnerID:
@@ -48114,6 +48828,13 @@ func (m *ControlObjectiveMutation) SetField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case controlobjective.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case controlobjective.FieldExternalID:
 		v, ok := value.(string)
@@ -48278,6 +48999,9 @@ func (m *ControlObjectiveMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjective.FieldIntegrationRunID) {
 		fields = append(fields, controlobjective.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(controlobjective.FieldSourceKey) {
+		fields = append(fields, controlobjective.FieldSourceKey)
+	}
 	if m.FieldCleared(controlobjective.FieldExternalID) {
 		fields = append(fields, controlobjective.FieldExternalID)
 	}
@@ -48370,6 +49094,9 @@ func (m *ControlObjectiveMutation) ClearField(name string) error {
 	case controlobjective.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case controlobjective.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case controlobjective.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -48458,6 +49185,9 @@ func (m *ControlObjectiveMutation) ResetField(name string) error {
 		return nil
 	case controlobjective.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case controlobjective.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case controlobjective.FieldExternalID:
 		m.ResetExternalID()
@@ -50635,6 +51365,7 @@ type CustomTypeEnumMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	system_owned              *bool
 	internal_notes            *string
@@ -51376,6 +52107,55 @@ func (m *CustomTypeEnumMutation) IntegrationRunIDCleared() bool {
 func (m *CustomTypeEnumMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, customtypeenum.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *CustomTypeEnumMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *CustomTypeEnumMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the CustomTypeEnum entity.
+// If the CustomTypeEnum object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CustomTypeEnumMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *CustomTypeEnumMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[customtypeenum.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *CustomTypeEnumMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[customtypeenum.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *CustomTypeEnumMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, customtypeenum.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -52533,7 +53313,7 @@ func (m *CustomTypeEnumMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CustomTypeEnumMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 24)
 	if m.created_at != nil {
 		fields = append(fields, customtypeenum.FieldCreatedAt)
 	}
@@ -52569,6 +53349,9 @@ func (m *CustomTypeEnumMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, customtypeenum.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, customtypeenum.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, customtypeenum.FieldExternalID)
@@ -52635,6 +53418,8 @@ func (m *CustomTypeEnumMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case customtypeenum.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case customtypeenum.FieldSourceKey:
+		return m.SourceKey()
 	case customtypeenum.FieldExternalID:
 		return m.ExternalID()
 	case customtypeenum.FieldOwnerID:
@@ -52690,6 +53475,8 @@ func (m *CustomTypeEnumMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldManagedBy(ctx)
 	case customtypeenum.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case customtypeenum.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case customtypeenum.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case customtypeenum.FieldOwnerID:
@@ -52804,6 +53591,13 @@ func (m *CustomTypeEnumMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case customtypeenum.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case customtypeenum.FieldExternalID:
 		v, ok := value.(string)
@@ -52948,6 +53742,9 @@ func (m *CustomTypeEnumMutation) ClearedFields() []string {
 	if m.FieldCleared(customtypeenum.FieldIntegrationRunID) {
 		fields = append(fields, customtypeenum.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(customtypeenum.FieldSourceKey) {
+		fields = append(fields, customtypeenum.FieldSourceKey)
+	}
 	if m.FieldCleared(customtypeenum.FieldExternalID) {
 		fields = append(fields, customtypeenum.FieldExternalID)
 	}
@@ -53022,6 +53819,9 @@ func (m *CustomTypeEnumMutation) ClearField(name string) error {
 	case customtypeenum.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case customtypeenum.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case customtypeenum.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -53089,6 +53889,9 @@ func (m *CustomTypeEnumMutation) ResetField(name string) error {
 		return nil
 	case customtypeenum.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case customtypeenum.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case customtypeenum.FieldExternalID:
 		m.ResetExternalID()
@@ -55164,6 +55967,7 @@ type DirectoryAccountMutation struct {
 	source_instance_id          *string
 	managed_by                  *string
 	integration_run_id          *string
+	source_key                  *string
 	external_id                 *string
 	environment_name            *string
 	scope_name                  *string
@@ -55921,6 +56725,55 @@ func (m *DirectoryAccountMutation) IntegrationRunIDCleared() bool {
 func (m *DirectoryAccountMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, directoryaccount.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *DirectoryAccountMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *DirectoryAccountMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the DirectoryAccount entity.
+// If the DirectoryAccount object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DirectoryAccountMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *DirectoryAccountMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[directoryaccount.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *DirectoryAccountMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[directoryaccount.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *DirectoryAccountMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, directoryaccount.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -58095,7 +58948,7 @@ func (m *DirectoryAccountMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DirectoryAccountMutation) Fields() []string {
-	fields := make([]string, 0, 47)
+	fields := make([]string, 0, 48)
 	if m.created_at != nil {
 		fields = append(fields, directoryaccount.FieldCreatedAt)
 	}
@@ -58131,6 +58984,9 @@ func (m *DirectoryAccountMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, directoryaccount.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, directoryaccount.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, directoryaccount.FieldExternalID)
@@ -58269,6 +59125,8 @@ func (m *DirectoryAccountMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case directoryaccount.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case directoryaccount.FieldSourceKey:
+		return m.SourceKey()
 	case directoryaccount.FieldExternalID:
 		return m.ExternalID()
 	case directoryaccount.FieldOwnerID:
@@ -58372,6 +59230,8 @@ func (m *DirectoryAccountMutation) OldField(ctx context.Context, name string) (e
 		return m.OldManagedBy(ctx)
 	case directoryaccount.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case directoryaccount.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case directoryaccount.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case directoryaccount.FieldOwnerID:
@@ -58534,6 +59394,13 @@ func (m *DirectoryAccountMutation) SetField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case directoryaccount.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case directoryaccount.FieldExternalID:
 		v, ok := value.(string)
@@ -58843,6 +59710,9 @@ func (m *DirectoryAccountMutation) ClearedFields() []string {
 	if m.FieldCleared(directoryaccount.FieldIntegrationRunID) {
 		fields = append(fields, directoryaccount.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(directoryaccount.FieldSourceKey) {
+		fields = append(fields, directoryaccount.FieldSourceKey)
+	}
 	if m.FieldCleared(directoryaccount.FieldOwnerID) {
 		fields = append(fields, directoryaccount.FieldOwnerID)
 	}
@@ -58980,6 +59850,9 @@ func (m *DirectoryAccountMutation) ClearField(name string) error {
 	case directoryaccount.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case directoryaccount.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case directoryaccount.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -59113,6 +59986,9 @@ func (m *DirectoryAccountMutation) ResetField(name string) error {
 		return nil
 	case directoryaccount.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case directoryaccount.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case directoryaccount.FieldExternalID:
 		m.ResetExternalID()
@@ -59556,6 +60432,7 @@ type DirectoryGroupMutation struct {
 	source_instance_id          *string
 	managed_by                  *string
 	integration_run_id          *string
+	source_key                  *string
 	external_id                 *string
 	environment_name            *string
 	scope_name                  *string
@@ -60296,6 +61173,55 @@ func (m *DirectoryGroupMutation) IntegrationRunIDCleared() bool {
 func (m *DirectoryGroupMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, directorygroup.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *DirectoryGroupMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *DirectoryGroupMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the DirectoryGroup entity.
+// If the DirectoryGroup object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DirectoryGroupMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *DirectoryGroupMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[directorygroup.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *DirectoryGroupMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[directorygroup.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *DirectoryGroupMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, directorygroup.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -61766,7 +62692,7 @@ func (m *DirectoryGroupMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DirectoryGroupMutation) Fields() []string {
-	fields := make([]string, 0, 35)
+	fields := make([]string, 0, 36)
 	if m.created_at != nil {
 		fields = append(fields, directorygroup.FieldCreatedAt)
 	}
@@ -61802,6 +62728,9 @@ func (m *DirectoryGroupMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, directorygroup.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, directorygroup.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, directorygroup.FieldExternalID)
@@ -61904,6 +62833,8 @@ func (m *DirectoryGroupMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case directorygroup.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case directorygroup.FieldSourceKey:
+		return m.SourceKey()
 	case directorygroup.FieldExternalID:
 		return m.ExternalID()
 	case directorygroup.FieldOwnerID:
@@ -61983,6 +62914,8 @@ func (m *DirectoryGroupMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldManagedBy(ctx)
 	case directorygroup.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case directorygroup.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case directorygroup.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case directorygroup.FieldOwnerID:
@@ -62121,6 +63054,13 @@ func (m *DirectoryGroupMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case directorygroup.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case directorygroup.FieldExternalID:
 		v, ok := value.(string)
@@ -62361,6 +63301,9 @@ func (m *DirectoryGroupMutation) ClearedFields() []string {
 	if m.FieldCleared(directorygroup.FieldIntegrationRunID) {
 		fields = append(fields, directorygroup.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(directorygroup.FieldSourceKey) {
+		fields = append(fields, directorygroup.FieldSourceKey)
+	}
 	if m.FieldCleared(directorygroup.FieldOwnerID) {
 		fields = append(fields, directorygroup.FieldOwnerID)
 	}
@@ -62462,6 +63405,9 @@ func (m *DirectoryGroupMutation) ClearField(name string) error {
 	case directorygroup.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case directorygroup.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case directorygroup.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -62559,6 +63505,9 @@ func (m *DirectoryGroupMutation) ResetField(name string) error {
 		return nil
 	case directorygroup.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case directorygroup.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case directorygroup.FieldExternalID:
 		m.ResetExternalID()
@@ -62902,6 +63851,7 @@ type DirectoryMembershipMutation struct {
 	source_instance_id          *string
 	managed_by                  *string
 	integration_run_id          *string
+	source_key                  *string
 	environment_name            *string
 	scope_name                  *string
 	role                        *enums.DirectoryMembershipRole
@@ -63568,6 +64518,55 @@ func (m *DirectoryMembershipMutation) IntegrationRunIDCleared() bool {
 func (m *DirectoryMembershipMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, directorymembership.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *DirectoryMembershipMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *DirectoryMembershipMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the DirectoryMembership entity.
+// If the DirectoryMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DirectoryMembershipMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *DirectoryMembershipMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[directorymembership.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *DirectoryMembershipMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[directorymembership.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *DirectoryMembershipMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, directorymembership.FieldSourceKey)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -64687,7 +65686,7 @@ func (m *DirectoryMembershipMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DirectoryMembershipMutation) Fields() []string {
-	fields := make([]string, 0, 27)
+	fields := make([]string, 0, 28)
 	if m.created_at != nil {
 		fields = append(fields, directorymembership.FieldCreatedAt)
 	}
@@ -64720,6 +65719,9 @@ func (m *DirectoryMembershipMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, directorymembership.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, directorymembership.FieldSourceKey)
 	}
 	if m.owner != nil {
 		fields = append(fields, directorymembership.FieldOwnerID)
@@ -64799,6 +65801,8 @@ func (m *DirectoryMembershipMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case directorymembership.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case directorymembership.FieldSourceKey:
+		return m.SourceKey()
 	case directorymembership.FieldOwnerID:
 		return m.OwnerID()
 	case directorymembership.FieldEnvironmentName:
@@ -64862,6 +65866,8 @@ func (m *DirectoryMembershipMutation) OldField(ctx context.Context, name string)
 		return m.OldManagedBy(ctx)
 	case directorymembership.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case directorymembership.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case directorymembership.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case directorymembership.FieldEnvironmentName:
@@ -64979,6 +65985,13 @@ func (m *DirectoryMembershipMutation) SetField(name string, value ent.Value) err
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case directorymembership.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case directorymembership.FieldOwnerID:
 		v, ok := value.(string)
@@ -65152,6 +66165,9 @@ func (m *DirectoryMembershipMutation) ClearedFields() []string {
 	if m.FieldCleared(directorymembership.FieldIntegrationRunID) {
 		fields = append(fields, directorymembership.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(directorymembership.FieldSourceKey) {
+		fields = append(fields, directorymembership.FieldSourceKey)
+	}
 	if m.FieldCleared(directorymembership.FieldOwnerID) {
 		fields = append(fields, directorymembership.FieldOwnerID)
 	}
@@ -65232,6 +66248,9 @@ func (m *DirectoryMembershipMutation) ClearField(name string) error {
 	case directorymembership.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case directorymembership.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case directorymembership.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -65308,6 +66327,9 @@ func (m *DirectoryMembershipMutation) ResetField(name string) error {
 		return nil
 	case directorymembership.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case directorymembership.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case directorymembership.FieldOwnerID:
 		m.ResetOwnerID()
@@ -68802,6 +69824,7 @@ type EmailTemplateMutation struct {
 	source_instance_id            *string
 	managed_by                    *string
 	integration_run_id            *string
+	source_key                    *string
 	external_id                   *string
 	system_owned                  *bool
 	internal_notes                *string
@@ -69599,6 +70622,55 @@ func (m *EmailTemplateMutation) IntegrationRunIDCleared() bool {
 func (m *EmailTemplateMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, emailtemplate.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *EmailTemplateMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *EmailTemplateMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the EmailTemplate entity.
+// If the EmailTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EmailTemplateMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *EmailTemplateMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[emailtemplate.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *EmailTemplateMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[emailtemplate.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *EmailTemplateMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, emailtemplate.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -71328,7 +72400,7 @@ func (m *EmailTemplateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EmailTemplateMutation) Fields() []string {
-	fields := make([]string, 0, 38)
+	fields := make([]string, 0, 39)
 	if m.created_at != nil {
 		fields = append(fields, emailtemplate.FieldCreatedAt)
 	}
@@ -71367,6 +72439,9 @@ func (m *EmailTemplateMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, emailtemplate.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, emailtemplate.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, emailtemplate.FieldExternalID)
@@ -71477,6 +72552,8 @@ func (m *EmailTemplateMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case emailtemplate.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case emailtemplate.FieldSourceKey:
+		return m.SourceKey()
 	case emailtemplate.FieldExternalID:
 		return m.ExternalID()
 	case emailtemplate.FieldOwnerID:
@@ -71562,6 +72639,8 @@ func (m *EmailTemplateMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldManagedBy(ctx)
 	case emailtemplate.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case emailtemplate.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case emailtemplate.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case emailtemplate.FieldOwnerID:
@@ -71711,6 +72790,13 @@ func (m *EmailTemplateMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case emailtemplate.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case emailtemplate.FieldExternalID:
 		v, ok := value.(string)
@@ -71971,6 +73057,9 @@ func (m *EmailTemplateMutation) ClearedFields() []string {
 	if m.FieldCleared(emailtemplate.FieldIntegrationRunID) {
 		fields = append(fields, emailtemplate.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(emailtemplate.FieldSourceKey) {
+		fields = append(fields, emailtemplate.FieldSourceKey)
+	}
 	if m.FieldCleared(emailtemplate.FieldExternalID) {
 		fields = append(fields, emailtemplate.FieldExternalID)
 	}
@@ -72084,6 +73173,9 @@ func (m *EmailTemplateMutation) ClearField(name string) error {
 	case emailtemplate.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case emailtemplate.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case emailtemplate.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -72190,6 +73282,9 @@ func (m *EmailTemplateMutation) ResetField(name string) error {
 		return nil
 	case emailtemplate.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case emailtemplate.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case emailtemplate.FieldExternalID:
 		m.ResetExternalID()
@@ -73663,6 +74758,7 @@ type EntityMutation struct {
 	source_instance_id                          *string
 	managed_by                                  *string
 	integration_run_id                          *string
+	source_key                                  *string
 	external_id                                 *string
 	internal_owner                              *string
 	reviewed_by                                 *string
@@ -74599,6 +75695,55 @@ func (m *EntityMutation) IntegrationRunIDCleared() bool {
 func (m *EntityMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, entity.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *EntityMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *EntityMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Entity entity.
+// If the Entity object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *EntityMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[entity.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *EntityMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[entity.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *EntityMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, entity.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -79906,7 +81051,7 @@ func (m *EntityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EntityMutation) Fields() []string {
-	fields := make([]string, 0, 77)
+	fields := make([]string, 0, 78)
 	if m.created_at != nil {
 		fields = append(fields, entity.FieldCreatedAt)
 	}
@@ -79945,6 +81090,9 @@ func (m *EntityMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, entity.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, entity.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, entity.FieldExternalID)
@@ -80172,6 +81320,8 @@ func (m *EntityMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case entity.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case entity.FieldSourceKey:
+		return m.SourceKey()
 	case entity.FieldExternalID:
 		return m.ExternalID()
 	case entity.FieldOwnerID:
@@ -80335,6 +81485,8 @@ func (m *EntityMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldManagedBy(ctx)
 	case entity.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case entity.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case entity.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case entity.FieldOwnerID:
@@ -80562,6 +81714,13 @@ func (m *EntityMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case entity.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case entity.FieldExternalID:
 		v, ok := value.(string)
@@ -81131,6 +82290,9 @@ func (m *EntityMutation) ClearedFields() []string {
 	if m.FieldCleared(entity.FieldIntegrationRunID) {
 		fields = append(fields, entity.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(entity.FieldSourceKey) {
+		fields = append(fields, entity.FieldSourceKey)
+	}
 	if m.FieldCleared(entity.FieldExternalID) {
 		fields = append(fields, entity.FieldExternalID)
 	}
@@ -81376,6 +82538,9 @@ func (m *EntityMutation) ClearField(name string) error {
 	case entity.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case entity.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case entity.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -81614,6 +82779,9 @@ func (m *EntityMutation) ResetField(name string) error {
 		return nil
 	case entity.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case entity.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case entity.FieldExternalID:
 		m.ResetExternalID()
@@ -86223,6 +87391,7 @@ type EvidenceMutation struct {
 	source_instance_id             *string
 	managed_by                     *string
 	integration_run_id             *string
+	source_key                     *string
 	external_id                    *string
 	environment_name               *string
 	scope_name                     *string
@@ -87084,6 +88253,55 @@ func (m *EvidenceMutation) IntegrationRunIDCleared() bool {
 func (m *EvidenceMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, evidence.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *EvidenceMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *EvidenceMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *EvidenceMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[evidence.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *EvidenceMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *EvidenceMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, evidence.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -88862,7 +90080,7 @@ func (m *EvidenceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EvidenceMutation) Fields() []string {
-	fields := make([]string, 0, 33)
+	fields := make([]string, 0, 34)
 	if m.created_at != nil {
 		fields = append(fields, evidence.FieldCreatedAt)
 	}
@@ -88904,6 +90122,9 @@ func (m *EvidenceMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, evidence.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, evidence.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, evidence.FieldExternalID)
@@ -88998,6 +90219,8 @@ func (m *EvidenceMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case evidence.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case evidence.FieldSourceKey:
+		return m.SourceKey()
 	case evidence.FieldExternalID:
 		return m.ExternalID()
 	case evidence.FieldOwnerID:
@@ -89073,6 +90296,8 @@ func (m *EvidenceMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldManagedBy(ctx)
 	case evidence.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case evidence.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case evidence.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case evidence.FieldOwnerID:
@@ -89217,6 +90442,13 @@ func (m *EvidenceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case evidence.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case evidence.FieldExternalID:
 		v, ok := value.(string)
@@ -89420,6 +90652,9 @@ func (m *EvidenceMutation) ClearedFields() []string {
 	if m.FieldCleared(evidence.FieldIntegrationRunID) {
 		fields = append(fields, evidence.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(evidence.FieldSourceKey) {
+		fields = append(fields, evidence.FieldSourceKey)
+	}
 	if m.FieldCleared(evidence.FieldExternalID) {
 		fields = append(fields, evidence.FieldExternalID)
 	}
@@ -89524,6 +90759,9 @@ func (m *EvidenceMutation) ClearField(name string) error {
 	case evidence.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case evidence.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case evidence.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -89624,6 +90862,9 @@ func (m *EvidenceMutation) ResetField(name string) error {
 		return nil
 	case evidence.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case evidence.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case evidence.FieldExternalID:
 		m.ResetExternalID()
@@ -97715,6 +98956,7 @@ type FindingMutation struct {
 	source_instance_id                    *string
 	managed_by                            *string
 	integration_run_id                    *string
+	source_key                            *string
 	external_id                           *string
 	internal_owner                        *string
 	reviewed_by                           *string
@@ -98663,6 +99905,55 @@ func (m *FindingMutation) IntegrationRunIDCleared() bool {
 func (m *FindingMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, finding.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *FindingMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *FindingMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Finding entity.
+// If the Finding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FindingMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *FindingMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[finding.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *FindingMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[finding.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *FindingMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, finding.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -103401,7 +104692,7 @@ func (m *FindingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FindingMutation) Fields() []string {
-	fields := make([]string, 0, 74)
+	fields := make([]string, 0, 75)
 	if m.created_at != nil {
 		fields = append(fields, finding.FieldCreatedAt)
 	}
@@ -103443,6 +104734,9 @@ func (m *FindingMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, finding.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, finding.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, finding.FieldExternalID)
@@ -103660,6 +104954,8 @@ func (m *FindingMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case finding.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case finding.FieldSourceKey:
+		return m.SourceKey()
 	case finding.FieldExternalID:
 		return m.ExternalID()
 	case finding.FieldOwnerID:
@@ -103817,6 +105113,8 @@ func (m *FindingMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldManagedBy(ctx)
 	case finding.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case finding.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case finding.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case finding.FieldOwnerID:
@@ -104043,6 +105341,13 @@ func (m *FindingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case finding.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case finding.FieldExternalID:
 		v, ok := value.(string)
@@ -104596,6 +105901,9 @@ func (m *FindingMutation) ClearedFields() []string {
 	if m.FieldCleared(finding.FieldIntegrationRunID) {
 		fields = append(fields, finding.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(finding.FieldSourceKey) {
+		fields = append(fields, finding.FieldSourceKey)
+	}
 	if m.FieldCleared(finding.FieldExternalID) {
 		fields = append(fields, finding.FieldExternalID)
 	}
@@ -104829,6 +106137,9 @@ func (m *FindingMutation) ClearField(name string) error {
 	case finding.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case finding.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case finding.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -105058,6 +106369,9 @@ func (m *FindingMutation) ResetField(name string) error {
 		return nil
 	case finding.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case finding.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case finding.FieldExternalID:
 		m.ResetExternalID()
@@ -107684,6 +108998,7 @@ type GroupMutation struct {
 	source_instance_id                           *string
 	managed_by                                   *string
 	integration_run_id                           *string
+	source_key                                   *string
 	external_id                                  *string
 	name                                         *string
 	description                                  *string
@@ -108667,6 +109982,55 @@ func (m *GroupMutation) IntegrationRunIDCleared() bool {
 func (m *GroupMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, group.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *GroupMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *GroupMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Group entity.
+// If the Group object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *GroupMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[group.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *GroupMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[group.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *GroupMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, group.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -112553,7 +113917,7 @@ func (m *GroupMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GroupMutation) Fields() []string {
-	fields := make([]string, 0, 30)
+	fields := make([]string, 0, 31)
 	if m.created_at != nil {
 		fields = append(fields, group.FieldCreatedAt)
 	}
@@ -112595,6 +113959,9 @@ func (m *GroupMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, group.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, group.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, group.FieldExternalID)
@@ -112680,6 +114047,8 @@ func (m *GroupMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case group.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case group.FieldSourceKey:
+		return m.SourceKey()
 	case group.FieldExternalID:
 		return m.ExternalID()
 	case group.FieldOwnerID:
@@ -112749,6 +114118,8 @@ func (m *GroupMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldManagedBy(ctx)
 	case group.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case group.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case group.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case group.FieldOwnerID:
@@ -112887,6 +114258,13 @@ func (m *GroupMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case group.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case group.FieldExternalID:
 		v, ok := value.(string)
@@ -113069,6 +114447,9 @@ func (m *GroupMutation) ClearedFields() []string {
 	if m.FieldCleared(group.FieldIntegrationRunID) {
 		fields = append(fields, group.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(group.FieldSourceKey) {
+		fields = append(fields, group.FieldSourceKey)
+	}
 	if m.FieldCleared(group.FieldExternalID) {
 		fields = append(fields, group.FieldExternalID)
 	}
@@ -113164,6 +114545,9 @@ func (m *GroupMutation) ClearField(name string) error {
 	case group.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case group.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case group.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -113255,6 +114639,9 @@ func (m *GroupMutation) ResetField(name string) error {
 		return nil
 	case group.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case group.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case group.FieldExternalID:
 		m.ResetExternalID()
@@ -119123,6 +120510,7 @@ type IdentityHolderMutation struct {
 	source_instance_id                    *string
 	managed_by                            *string
 	integration_run_id                    *string
+	source_key                            *string
 	external_id                           *string
 	internal_owner                        *string
 	environment_name                      *string
@@ -120021,6 +121409,55 @@ func (m *IdentityHolderMutation) IntegrationRunIDCleared() bool {
 func (m *IdentityHolderMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, identityholder.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *IdentityHolderMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *IdentityHolderMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the IdentityHolder entity.
+// If the IdentityHolder object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IdentityHolderMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *IdentityHolderMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[identityholder.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *IdentityHolderMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[identityholder.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *IdentityHolderMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, identityholder.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -122885,7 +124322,7 @@ func (m *IdentityHolderMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IdentityHolderMutation) Fields() []string {
-	fields := make([]string, 0, 46)
+	fields := make([]string, 0, 47)
 	if m.created_at != nil {
 		fields = append(fields, identityholder.FieldCreatedAt)
 	}
@@ -122927,6 +124364,9 @@ func (m *IdentityHolderMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, identityholder.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, identityholder.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, identityholder.FieldExternalID)
@@ -123060,6 +124500,8 @@ func (m *IdentityHolderMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case identityholder.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case identityholder.FieldSourceKey:
+		return m.SourceKey()
 	case identityholder.FieldExternalID:
 		return m.ExternalID()
 	case identityholder.FieldOwnerID:
@@ -123161,6 +124603,8 @@ func (m *IdentityHolderMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldManagedBy(ctx)
 	case identityholder.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case identityholder.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case identityholder.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case identityholder.FieldOwnerID:
@@ -123331,6 +124775,13 @@ func (m *IdentityHolderMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case identityholder.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case identityholder.FieldExternalID:
 		v, ok := value.(string)
@@ -123625,6 +125076,9 @@ func (m *IdentityHolderMutation) ClearedFields() []string {
 	if m.FieldCleared(identityholder.FieldIntegrationRunID) {
 		fields = append(fields, identityholder.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(identityholder.FieldSourceKey) {
+		fields = append(fields, identityholder.FieldSourceKey)
+	}
 	if m.FieldCleared(identityholder.FieldExternalID) {
 		fields = append(fields, identityholder.FieldExternalID)
 	}
@@ -123759,6 +125213,9 @@ func (m *IdentityHolderMutation) ClearField(name string) error {
 	case identityholder.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case identityholder.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case identityholder.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -123889,6 +125346,9 @@ func (m *IdentityHolderMutation) ResetField(name string) error {
 		return nil
 	case identityholder.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case identityholder.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case identityholder.FieldExternalID:
 		m.ResetExternalID()
@@ -136180,6 +137640,7 @@ type InternalPolicyMutation struct {
 	source_instance_id                      *string
 	managed_by                              *string
 	integration_run_id                      *string
+	source_key                              *string
 	external_id                             *string
 	system_owned                            *bool
 	internal_notes                          *string
@@ -137140,6 +138601,55 @@ func (m *InternalPolicyMutation) IntegrationRunIDCleared() bool {
 func (m *InternalPolicyMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, internalpolicy.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *InternalPolicyMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *InternalPolicyMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the InternalPolicy entity.
+// If the InternalPolicy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *InternalPolicyMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *InternalPolicyMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[internalpolicy.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *InternalPolicyMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[internalpolicy.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *InternalPolicyMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, internalpolicy.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -140318,7 +141828,7 @@ func (m *InternalPolicyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *InternalPolicyMutation) Fields() []string {
-	fields := make([]string, 0, 49)
+	fields := make([]string, 0, 50)
 	if m.created_at != nil {
 		fields = append(fields, internalpolicy.FieldCreatedAt)
 	}
@@ -140363,6 +141873,9 @@ func (m *InternalPolicyMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, internalpolicy.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, internalpolicy.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, internalpolicy.FieldExternalID)
@@ -140504,6 +142017,8 @@ func (m *InternalPolicyMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case internalpolicy.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case internalpolicy.FieldSourceKey:
+		return m.SourceKey()
 	case internalpolicy.FieldExternalID:
 		return m.ExternalID()
 	case internalpolicy.FieldOwnerID:
@@ -140611,6 +142126,8 @@ func (m *InternalPolicyMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldManagedBy(ctx)
 	case internalpolicy.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case internalpolicy.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case internalpolicy.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case internalpolicy.FieldOwnerID:
@@ -140792,6 +142309,13 @@ func (m *InternalPolicyMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case internalpolicy.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case internalpolicy.FieldExternalID:
 		v, ok := value.(string)
@@ -141103,6 +142627,9 @@ func (m *InternalPolicyMutation) ClearedFields() []string {
 	if m.FieldCleared(internalpolicy.FieldIntegrationRunID) {
 		fields = append(fields, internalpolicy.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(internalpolicy.FieldSourceKey) {
+		fields = append(fields, internalpolicy.FieldSourceKey)
+	}
 	if m.FieldCleared(internalpolicy.FieldExternalID) {
 		fields = append(fields, internalpolicy.FieldExternalID)
 	}
@@ -141258,6 +142785,9 @@ func (m *InternalPolicyMutation) ClearField(name string) error {
 	case internalpolicy.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case internalpolicy.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case internalpolicy.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -141409,6 +142939,9 @@ func (m *InternalPolicyMutation) ResetField(name string) error {
 		return nil
 	case internalpolicy.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case internalpolicy.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case internalpolicy.FieldExternalID:
 		m.ResetExternalID()
@@ -145114,6 +146647,7 @@ type MappedControlMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	system_owned              *bool
 	internal_notes            *string
@@ -145907,6 +147441,55 @@ func (m *MappedControlMutation) IntegrationRunIDCleared() bool {
 func (m *MappedControlMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, mappedcontrol.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *MappedControlMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *MappedControlMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the MappedControl entity.
+// If the MappedControl object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *MappedControlMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[mappedcontrol.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *MappedControlMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[mappedcontrol.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *MappedControlMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, mappedcontrol.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -146797,7 +148380,7 @@ func (m *MappedControlMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MappedControlMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 23)
 	if m.created_at != nil {
 		fields = append(fields, mappedcontrol.FieldCreatedAt)
 	}
@@ -146836,6 +148419,9 @@ func (m *MappedControlMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, mappedcontrol.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, mappedcontrol.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, mappedcontrol.FieldExternalID)
@@ -146898,6 +148484,8 @@ func (m *MappedControlMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case mappedcontrol.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case mappedcontrol.FieldSourceKey:
+		return m.SourceKey()
 	case mappedcontrol.FieldExternalID:
 		return m.ExternalID()
 	case mappedcontrol.FieldSystemOwned:
@@ -146951,6 +148539,8 @@ func (m *MappedControlMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldManagedBy(ctx)
 	case mappedcontrol.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case mappedcontrol.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case mappedcontrol.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case mappedcontrol.FieldSystemOwned:
@@ -147068,6 +148658,13 @@ func (m *MappedControlMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case mappedcontrol.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case mappedcontrol.FieldExternalID:
 		v, ok := value.(string)
@@ -147216,6 +148813,9 @@ func (m *MappedControlMutation) ClearedFields() []string {
 	if m.FieldCleared(mappedcontrol.FieldIntegrationRunID) {
 		fields = append(fields, mappedcontrol.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(mappedcontrol.FieldSourceKey) {
+		fields = append(fields, mappedcontrol.FieldSourceKey)
+	}
 	if m.FieldCleared(mappedcontrol.FieldExternalID) {
 		fields = append(fields, mappedcontrol.FieldExternalID)
 	}
@@ -147293,6 +148893,9 @@ func (m *MappedControlMutation) ClearField(name string) error {
 	case mappedcontrol.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case mappedcontrol.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case mappedcontrol.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -147363,6 +148966,9 @@ func (m *MappedControlMutation) ResetField(name string) error {
 		return nil
 	case mappedcontrol.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case mappedcontrol.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case mappedcontrol.FieldExternalID:
 		m.ResetExternalID()
@@ -147674,6 +149280,7 @@ type NarrativeMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	system_owned              *bool
 	internal_notes            *string
@@ -148504,6 +150111,55 @@ func (m *NarrativeMutation) IntegrationRunIDCleared() bool {
 func (m *NarrativeMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, narrative.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *NarrativeMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *NarrativeMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Narrative entity.
+// If the Narrative object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NarrativeMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *NarrativeMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[narrative.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *NarrativeMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[narrative.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *NarrativeMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, narrative.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -149378,7 +151034,7 @@ func (m *NarrativeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NarrativeMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 23)
 	if m.created_at != nil {
 		fields = append(fields, narrative.FieldCreatedAt)
 	}
@@ -149420,6 +151076,9 @@ func (m *NarrativeMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, narrative.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, narrative.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, narrative.FieldExternalID)
@@ -149481,6 +151140,8 @@ func (m *NarrativeMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case narrative.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case narrative.FieldSourceKey:
+		return m.SourceKey()
 	case narrative.FieldExternalID:
 		return m.ExternalID()
 	case narrative.FieldOwnerID:
@@ -149534,6 +151195,8 @@ func (m *NarrativeMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldManagedBy(ctx)
 	case narrative.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case narrative.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case narrative.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case narrative.FieldOwnerID:
@@ -149656,6 +151319,13 @@ func (m *NarrativeMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case narrative.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case narrative.FieldExternalID:
 		v, ok := value.(string)
@@ -149782,6 +151452,9 @@ func (m *NarrativeMutation) ClearedFields() []string {
 	if m.FieldCleared(narrative.FieldIntegrationRunID) {
 		fields = append(fields, narrative.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(narrative.FieldSourceKey) {
+		fields = append(fields, narrative.FieldSourceKey)
+	}
 	if m.FieldCleared(narrative.FieldExternalID) {
 		fields = append(fields, narrative.FieldExternalID)
 	}
@@ -149856,6 +151529,9 @@ func (m *NarrativeMutation) ClearField(name string) error {
 	case narrative.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case narrative.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case narrative.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -149926,6 +151602,9 @@ func (m *NarrativeMutation) ResetField(name string) error {
 		return nil
 	case narrative.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case narrative.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case narrative.FieldExternalID:
 		m.ResetExternalID()
@@ -191765,6 +193444,7 @@ type PlatformMutation struct {
 	source_instance_id                     *string
 	managed_by                             *string
 	integration_run_id                     *string
+	source_key                             *string
 	external_id                            *string
 	internal_owner                         *string
 	business_owner                         *string
@@ -192726,6 +194406,55 @@ func (m *PlatformMutation) IntegrationRunIDCleared() bool {
 func (m *PlatformMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, platform.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *PlatformMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *PlatformMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *PlatformMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[platform.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *PlatformMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[platform.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *PlatformMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, platform.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -197550,7 +199279,7 @@ func (m *PlatformMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PlatformMutation) Fields() []string {
-	fields := make([]string, 0, 68)
+	fields := make([]string, 0, 69)
 	if m.created_at != nil {
 		fields = append(fields, platform.FieldCreatedAt)
 	}
@@ -197592,6 +199321,9 @@ func (m *PlatformMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, platform.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, platform.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, platform.FieldExternalID)
@@ -197791,6 +199523,8 @@ func (m *PlatformMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case platform.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case platform.FieldSourceKey:
+		return m.SourceKey()
 	case platform.FieldExternalID:
 		return m.ExternalID()
 	case platform.FieldOwnerID:
@@ -197936,6 +199670,8 @@ func (m *PlatformMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldManagedBy(ctx)
 	case platform.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case platform.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case platform.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case platform.FieldOwnerID:
@@ -198150,6 +199886,13 @@ func (m *PlatformMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case platform.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case platform.FieldExternalID:
 		v, ok := value.(string)
@@ -198613,6 +200356,9 @@ func (m *PlatformMutation) ClearedFields() []string {
 	if m.FieldCleared(platform.FieldIntegrationRunID) {
 		fields = append(fields, platform.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(platform.FieldSourceKey) {
+		fields = append(fields, platform.FieldSourceKey)
+	}
 	if m.FieldCleared(platform.FieldExternalID) {
 		fields = append(fields, platform.FieldExternalID)
 	}
@@ -198819,6 +200565,9 @@ func (m *PlatformMutation) ClearField(name string) error {
 	case platform.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case platform.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case platform.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -199021,6 +200770,9 @@ func (m *PlatformMutation) ResetField(name string) error {
 		return nil
 	case platform.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case platform.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case platform.FieldExternalID:
 		m.ResetExternalID()
@@ -200418,6 +202170,7 @@ type ProcedureMutation struct {
 	source_instance_id                      *string
 	managed_by                              *string
 	integration_run_id                      *string
+	source_key                              *string
 	external_id                             *string
 	name                                    *string
 	status                                  *enums.DocumentStatus
@@ -201350,6 +203103,55 @@ func (m *ProcedureMutation) IntegrationRunIDCleared() bool {
 func (m *ProcedureMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, procedure.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *ProcedureMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *ProcedureMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Procedure entity.
+// If the Procedure object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcedureMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *ProcedureMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[procedure.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *ProcedureMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[procedure.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *ProcedureMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, procedure.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -203993,7 +205795,7 @@ func (m *ProcedureMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProcedureMutation) Fields() []string {
-	fields := make([]string, 0, 48)
+	fields := make([]string, 0, 49)
 	if m.created_at != nil {
 		fields = append(fields, procedure.FieldCreatedAt)
 	}
@@ -204038,6 +205840,9 @@ func (m *ProcedureMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, procedure.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, procedure.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, procedure.FieldExternalID)
@@ -204176,6 +205981,8 @@ func (m *ProcedureMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case procedure.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case procedure.FieldSourceKey:
+		return m.SourceKey()
 	case procedure.FieldExternalID:
 		return m.ExternalID()
 	case procedure.FieldOwnerID:
@@ -204281,6 +206088,8 @@ func (m *ProcedureMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldManagedBy(ctx)
 	case procedure.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case procedure.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case procedure.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case procedure.FieldOwnerID:
@@ -204460,6 +206269,13 @@ func (m *ProcedureMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case procedure.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case procedure.FieldExternalID:
 		v, ok := value.(string)
@@ -204764,6 +206580,9 @@ func (m *ProcedureMutation) ClearedFields() []string {
 	if m.FieldCleared(procedure.FieldIntegrationRunID) {
 		fields = append(fields, procedure.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(procedure.FieldSourceKey) {
+		fields = append(fields, procedure.FieldSourceKey)
+	}
 	if m.FieldCleared(procedure.FieldExternalID) {
 		fields = append(fields, procedure.FieldExternalID)
 	}
@@ -204916,6 +206735,9 @@ func (m *ProcedureMutation) ClearField(name string) error {
 	case procedure.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case procedure.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case procedure.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -205064,6 +206886,9 @@ func (m *ProcedureMutation) ResetField(name string) error {
 		return nil
 	case procedure.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case procedure.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case procedure.FieldExternalID:
 		m.ResetExternalID()
@@ -205711,6 +207536,7 @@ type ProgramMutation struct {
 	source_instance_id            *string
 	managed_by                    *string
 	integration_run_id            *string
+	source_key                    *string
 	external_id                   *string
 	program_kind_name             *string
 	external_uuid                 *string
@@ -206602,6 +208428,55 @@ func (m *ProgramMutation) IntegrationRunIDCleared() bool {
 func (m *ProgramMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, program.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *ProgramMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *ProgramMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *ProgramMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[program.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *ProgramMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[program.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *ProgramMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, program.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -208974,7 +210849,7 @@ func (m *ProgramMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProgramMutation) Fields() []string {
-	fields := make([]string, 0, 36)
+	fields := make([]string, 0, 37)
 	if m.created_at != nil {
 		fields = append(fields, program.FieldCreatedAt)
 	}
@@ -209016,6 +210891,9 @@ func (m *ProgramMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, program.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, program.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, program.FieldExternalID)
@@ -209119,6 +210997,8 @@ func (m *ProgramMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case program.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case program.FieldSourceKey:
+		return m.SourceKey()
 	case program.FieldExternalID:
 		return m.ExternalID()
 	case program.FieldOwnerID:
@@ -209200,6 +211080,8 @@ func (m *ProgramMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldManagedBy(ctx)
 	case program.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case program.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case program.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case program.FieldOwnerID:
@@ -209350,6 +211232,13 @@ func (m *ProgramMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case program.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case program.FieldExternalID:
 		v, ok := value.(string)
@@ -209574,6 +211463,9 @@ func (m *ProgramMutation) ClearedFields() []string {
 	if m.FieldCleared(program.FieldIntegrationRunID) {
 		fields = append(fields, program.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(program.FieldSourceKey) {
+		fields = append(fields, program.FieldSourceKey)
+	}
 	if m.FieldCleared(program.FieldExternalID) {
 		fields = append(fields, program.FieldExternalID)
 	}
@@ -209678,6 +211570,9 @@ func (m *ProgramMutation) ClearField(name string) error {
 	case program.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case program.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case program.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -209778,6 +211673,9 @@ func (m *ProgramMutation) ResetField(name string) error {
 		return nil
 	case program.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case program.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case program.FieldExternalID:
 		m.ResetExternalID()
@@ -211547,6 +213445,7 @@ type RemediationMutation struct {
 	source_instance_id          *string
 	managed_by                  *string
 	integration_run_id          *string
+	source_key                  *string
 	external_id                 *string
 	system_owned                *bool
 	internal_notes              *string
@@ -212433,6 +214332,55 @@ func (m *RemediationMutation) IntegrationRunIDCleared() bool {
 func (m *RemediationMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, remediation.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *RemediationMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *RemediationMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Remediation entity.
+// If the Remediation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RemediationMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *RemediationMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[remediation.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *RemediationMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[remediation.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *RemediationMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, remediation.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -214997,7 +216945,7 @@ func (m *RemediationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RemediationMutation) Fields() []string {
-	fields := make([]string, 0, 43)
+	fields := make([]string, 0, 44)
 	if m.created_at != nil {
 		fields = append(fields, remediation.FieldCreatedAt)
 	}
@@ -215039,6 +216987,9 @@ func (m *RemediationMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, remediation.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, remediation.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, remediation.FieldExternalID)
@@ -215163,6 +217114,8 @@ func (m *RemediationMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case remediation.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case remediation.FieldSourceKey:
+		return m.SourceKey()
 	case remediation.FieldExternalID:
 		return m.ExternalID()
 	case remediation.FieldOwnerID:
@@ -215258,6 +217211,8 @@ func (m *RemediationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldManagedBy(ctx)
 	case remediation.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case remediation.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case remediation.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case remediation.FieldOwnerID:
@@ -215422,6 +217377,13 @@ func (m *RemediationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case remediation.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case remediation.FieldExternalID:
 		v, ok := value.(string)
@@ -215695,6 +217657,9 @@ func (m *RemediationMutation) ClearedFields() []string {
 	if m.FieldCleared(remediation.FieldIntegrationRunID) {
 		fields = append(fields, remediation.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(remediation.FieldSourceKey) {
+		fields = append(fields, remediation.FieldSourceKey)
+	}
 	if m.FieldCleared(remediation.FieldExternalID) {
 		fields = append(fields, remediation.FieldExternalID)
 	}
@@ -215835,6 +217800,9 @@ func (m *RemediationMutation) ClearField(name string) error {
 	case remediation.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case remediation.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case remediation.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -215971,6 +217939,9 @@ func (m *RemediationMutation) ResetField(name string) error {
 		return nil
 	case remediation.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case remediation.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case remediation.FieldExternalID:
 		m.ResetExternalID()
@@ -219828,6 +221799,7 @@ type ReviewMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	system_owned              *bool
 	internal_notes            *string
@@ -220674,6 +222646,55 @@ func (m *ReviewMutation) IntegrationRunIDCleared() bool {
 func (m *ReviewMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, review.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *ReviewMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *ReviewMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Review entity.
+// If the Review object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *ReviewMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[review.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *ReviewMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[review.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *ReviewMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, review.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -223100,7 +225121,7 @@ func (m *ReviewMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ReviewMutation) Fields() []string {
-	fields := make([]string, 0, 40)
+	fields := make([]string, 0, 41)
 	if m.created_at != nil {
 		fields = append(fields, review.FieldCreatedAt)
 	}
@@ -223139,6 +225160,9 @@ func (m *ReviewMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, review.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, review.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, review.FieldExternalID)
@@ -223255,6 +225279,8 @@ func (m *ReviewMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case review.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case review.FieldSourceKey:
+		return m.SourceKey()
 	case review.FieldExternalID:
 		return m.ExternalID()
 	case review.FieldOwnerID:
@@ -223344,6 +225370,8 @@ func (m *ReviewMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldManagedBy(ctx)
 	case review.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case review.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case review.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case review.FieldOwnerID:
@@ -223497,6 +225525,13 @@ func (m *ReviewMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case review.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case review.FieldExternalID:
 		v, ok := value.(string)
@@ -223756,6 +225791,9 @@ func (m *ReviewMutation) ClearedFields() []string {
 	if m.FieldCleared(review.FieldIntegrationRunID) {
 		fields = append(fields, review.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(review.FieldSourceKey) {
+		fields = append(fields, review.FieldSourceKey)
+	}
 	if m.FieldCleared(review.FieldExternalID) {
 		fields = append(fields, review.FieldExternalID)
 	}
@@ -223887,6 +225925,9 @@ func (m *ReviewMutation) ClearField(name string) error {
 	case review.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case review.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case review.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -224011,6 +226052,9 @@ func (m *ReviewMutation) ResetField(name string) error {
 		return nil
 	case review.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case review.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case review.FieldExternalID:
 		m.ResetExternalID()
@@ -224716,6 +226760,7 @@ type RiskMutation struct {
 	source_instance_id                 *string
 	managed_by                         *string
 	integration_run_id                 *string
+	source_key                         *string
 	external_id                        *string
 	stakeholder_name                   *string
 	delegate_name                      *string
@@ -225640,6 +227685,55 @@ func (m *RiskMutation) IntegrationRunIDCleared() bool {
 func (m *RiskMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, risk.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *RiskMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *RiskMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Risk entity.
+// If the Risk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RiskMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *RiskMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[risk.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *RiskMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[risk.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *RiskMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, risk.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -229399,7 +231493,7 @@ func (m *RiskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RiskMutation) Fields() []string {
-	fields := make([]string, 0, 57)
+	fields := make([]string, 0, 58)
 	if m.created_at != nil {
 		fields = append(fields, risk.FieldCreatedAt)
 	}
@@ -229441,6 +231535,9 @@ func (m *RiskMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, risk.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, risk.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, risk.FieldExternalID)
@@ -229607,6 +231704,8 @@ func (m *RiskMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case risk.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case risk.FieldSourceKey:
+		return m.SourceKey()
 	case risk.FieldExternalID:
 		return m.ExternalID()
 	case risk.FieldOwnerID:
@@ -229730,6 +231829,8 @@ func (m *RiskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldManagedBy(ctx)
 	case risk.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case risk.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case risk.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case risk.FieldOwnerID:
@@ -229922,6 +232023,13 @@ func (m *RiskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case risk.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case risk.FieldExternalID:
 		v, ok := value.(string)
@@ -230320,6 +232428,9 @@ func (m *RiskMutation) ClearedFields() []string {
 	if m.FieldCleared(risk.FieldIntegrationRunID) {
 		fields = append(fields, risk.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(risk.FieldSourceKey) {
+		fields = append(fields, risk.FieldSourceKey)
+	}
 	if m.FieldCleared(risk.FieldExternalID) {
 		fields = append(fields, risk.FieldExternalID)
 	}
@@ -230499,6 +232610,9 @@ func (m *RiskMutation) ClearField(name string) error {
 	case risk.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case risk.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case risk.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -230674,6 +232788,9 @@ func (m *RiskMutation) ResetField(name string) error {
 		return nil
 	case risk.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case risk.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case risk.FieldExternalID:
 		m.ResetExternalID()
@@ -233067,6 +235184,7 @@ type ScanMutation struct {
 	source_instance_id                 *string
 	managed_by                         *string
 	integration_run_id                 *string
+	source_key                         *string
 	external_id                        *string
 	system_owned                       *bool
 	internal_notes                     *string
@@ -233915,6 +236033,55 @@ func (m *ScanMutation) IntegrationRunIDCleared() bool {
 func (m *ScanMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, scan.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *ScanMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *ScanMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *ScanMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[scan.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *ScanMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[scan.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *ScanMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, scan.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -236483,7 +238650,7 @@ func (m *ScanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScanMutation) Fields() []string {
-	fields := make([]string, 0, 42)
+	fields := make([]string, 0, 43)
 	if m.created_at != nil {
 		fields = append(fields, scan.FieldCreatedAt)
 	}
@@ -236522,6 +238689,9 @@ func (m *ScanMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, scan.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, scan.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, scan.FieldExternalID)
@@ -236644,6 +238814,8 @@ func (m *ScanMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case scan.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case scan.FieldSourceKey:
+		return m.SourceKey()
 	case scan.FieldExternalID:
 		return m.ExternalID()
 	case scan.FieldOwnerID:
@@ -236737,6 +238909,8 @@ func (m *ScanMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldManagedBy(ctx)
 	case scan.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case scan.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case scan.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case scan.FieldOwnerID:
@@ -236894,6 +239068,13 @@ func (m *ScanMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case scan.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case scan.FieldExternalID:
 		v, ok := value.(string)
@@ -237167,6 +239348,9 @@ func (m *ScanMutation) ClearedFields() []string {
 	if m.FieldCleared(scan.FieldIntegrationRunID) {
 		fields = append(fields, scan.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(scan.FieldSourceKey) {
+		fields = append(fields, scan.FieldSourceKey)
+	}
 	if m.FieldCleared(scan.FieldExternalID) {
 		fields = append(fields, scan.FieldExternalID)
 	}
@@ -237298,6 +239482,9 @@ func (m *ScanMutation) ClearField(name string) error {
 	case scan.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case scan.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case scan.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -237422,6 +239609,9 @@ func (m *ScanMutation) ResetField(name string) error {
 		return nil
 	case scan.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case scan.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case scan.FieldExternalID:
 		m.ResetExternalID()
@@ -240900,6 +243090,7 @@ type SubcontrolMutation struct {
 	source_instance_id             *string
 	managed_by                     *string
 	integration_run_id             *string
+	source_key                     *string
 	external_id                    *string
 	external_uuid                  *string
 	title                          *string
@@ -241823,6 +244014,55 @@ func (m *SubcontrolMutation) IntegrationRunIDCleared() bool {
 func (m *SubcontrolMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, subcontrol.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *SubcontrolMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *SubcontrolMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Subcontrol entity.
+// If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *SubcontrolMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[subcontrol.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *SubcontrolMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[subcontrol.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *SubcontrolMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, subcontrol.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -245373,7 +247613,7 @@ func (m *SubcontrolMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubcontrolMutation) Fields() []string {
-	fields := make([]string, 0, 54)
+	fields := make([]string, 0, 55)
 	if m.created_at != nil {
 		fields = append(fields, subcontrol.FieldCreatedAt)
 	}
@@ -245415,6 +247655,9 @@ func (m *SubcontrolMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, subcontrol.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, subcontrol.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, subcontrol.FieldExternalID)
@@ -245572,6 +247815,8 @@ func (m *SubcontrolMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case subcontrol.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case subcontrol.FieldSourceKey:
+		return m.SourceKey()
 	case subcontrol.FieldExternalID:
 		return m.ExternalID()
 	case subcontrol.FieldExternalUUID:
@@ -245689,6 +247934,8 @@ func (m *SubcontrolMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldManagedBy(ctx)
 	case subcontrol.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case subcontrol.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case subcontrol.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case subcontrol.FieldExternalUUID:
@@ -245875,6 +248122,13 @@ func (m *SubcontrolMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case subcontrol.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case subcontrol.FieldExternalID:
 		v, ok := value.(string)
@@ -246225,6 +248479,9 @@ func (m *SubcontrolMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrol.FieldIntegrationRunID) {
 		fields = append(fields, subcontrol.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(subcontrol.FieldSourceKey) {
+		fields = append(fields, subcontrol.FieldSourceKey)
+	}
 	if m.FieldCleared(subcontrol.FieldExternalID) {
 		fields = append(fields, subcontrol.FieldExternalID)
 	}
@@ -246392,6 +248649,9 @@ func (m *SubcontrolMutation) ClearField(name string) error {
 	case subcontrol.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case subcontrol.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case subcontrol.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -246555,6 +248815,9 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 		return nil
 	case subcontrol.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case subcontrol.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case subcontrol.FieldExternalID:
 		m.ResetExternalID()
@@ -251309,6 +253572,7 @@ type SystemDetailMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	system_name               *string
 	version                   *string
@@ -252135,6 +254399,55 @@ func (m *SystemDetailMutation) ResetIntegrationRunID() {
 	delete(m.clearedFields, systemdetail.FieldIntegrationRunID)
 }
 
+// SetSourceKey sets the "source_key" field.
+func (m *SystemDetailMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *SystemDetailMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the SystemDetail entity.
+// If the SystemDetail object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *SystemDetailMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[systemdetail.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *SystemDetailMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[systemdetail.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *SystemDetailMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, systemdetail.FieldSourceKey)
+}
+
 // SetExternalID sets the "external_id" field.
 func (m *SystemDetailMutation) SetExternalID(s string) {
 	m.external_id = &s
@@ -252959,7 +255272,7 @@ func (m *SystemDetailMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemDetailMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 25)
 	if m.created_at != nil {
 		fields = append(fields, systemdetail.FieldCreatedAt)
 	}
@@ -253001,6 +255314,9 @@ func (m *SystemDetailMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, systemdetail.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, systemdetail.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, systemdetail.FieldExternalID)
@@ -253068,6 +255384,8 @@ func (m *SystemDetailMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case systemdetail.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case systemdetail.FieldSourceKey:
+		return m.SourceKey()
 	case systemdetail.FieldExternalID:
 		return m.ExternalID()
 	case systemdetail.FieldOwnerID:
@@ -253125,6 +255443,8 @@ func (m *SystemDetailMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldManagedBy(ctx)
 	case systemdetail.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case systemdetail.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case systemdetail.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case systemdetail.FieldOwnerID:
@@ -253251,6 +255571,13 @@ func (m *SystemDetailMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case systemdetail.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case systemdetail.FieldExternalID:
 		v, ok := value.(string)
@@ -253391,6 +255718,9 @@ func (m *SystemDetailMutation) ClearedFields() []string {
 	if m.FieldCleared(systemdetail.FieldIntegrationRunID) {
 		fields = append(fields, systemdetail.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(systemdetail.FieldSourceKey) {
+		fields = append(fields, systemdetail.FieldSourceKey)
+	}
 	if m.FieldCleared(systemdetail.FieldExternalID) {
 		fields = append(fields, systemdetail.FieldExternalID)
 	}
@@ -253471,6 +255801,9 @@ func (m *SystemDetailMutation) ClearField(name string) error {
 	case systemdetail.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case systemdetail.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case systemdetail.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -253547,6 +255880,9 @@ func (m *SystemDetailMutation) ResetField(name string) error {
 		return nil
 	case systemdetail.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case systemdetail.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case systemdetail.FieldExternalID:
 		m.ResetExternalID()
@@ -255161,6 +257497,7 @@ type TagDefinitionMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	system_owned              *bool
 	internal_notes            *string
@@ -255874,6 +258211,55 @@ func (m *TagDefinitionMutation) ResetIntegrationRunID() {
 	delete(m.clearedFields, tagdefinition.FieldIntegrationRunID)
 }
 
+// SetSourceKey sets the "source_key" field.
+func (m *TagDefinitionMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *TagDefinitionMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the TagDefinition entity.
+// If the TagDefinition object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TagDefinitionMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *TagDefinitionMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[tagdefinition.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *TagDefinitionMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[tagdefinition.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *TagDefinitionMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, tagdefinition.FieldSourceKey)
+}
+
 // SetExternalID sets the "external_id" field.
 func (m *TagDefinitionMutation) SetExternalID(s string) {
 	m.external_id = &s
@@ -256482,7 +258868,7 @@ func (m *TagDefinitionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TagDefinitionMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 23)
 	if m.created_at != nil {
 		fields = append(fields, tagdefinition.FieldCreatedAt)
 	}
@@ -256518,6 +258904,9 @@ func (m *TagDefinitionMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, tagdefinition.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, tagdefinition.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, tagdefinition.FieldExternalID)
@@ -256581,6 +258970,8 @@ func (m *TagDefinitionMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case tagdefinition.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case tagdefinition.FieldSourceKey:
+		return m.SourceKey()
 	case tagdefinition.FieldExternalID:
 		return m.ExternalID()
 	case tagdefinition.FieldOwnerID:
@@ -256634,6 +259025,8 @@ func (m *TagDefinitionMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldManagedBy(ctx)
 	case tagdefinition.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case tagdefinition.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case tagdefinition.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case tagdefinition.FieldOwnerID:
@@ -256746,6 +259139,13 @@ func (m *TagDefinitionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case tagdefinition.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case tagdefinition.FieldExternalID:
 		v, ok := value.(string)
@@ -256883,6 +259283,9 @@ func (m *TagDefinitionMutation) ClearedFields() []string {
 	if m.FieldCleared(tagdefinition.FieldIntegrationRunID) {
 		fields = append(fields, tagdefinition.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(tagdefinition.FieldSourceKey) {
+		fields = append(fields, tagdefinition.FieldSourceKey)
+	}
 	if m.FieldCleared(tagdefinition.FieldExternalID) {
 		fields = append(fields, tagdefinition.FieldExternalID)
 	}
@@ -256960,6 +259363,9 @@ func (m *TagDefinitionMutation) ClearField(name string) error {
 	case tagdefinition.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case tagdefinition.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case tagdefinition.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -257030,6 +259436,9 @@ func (m *TagDefinitionMutation) ResetField(name string) error {
 		return nil
 	case tagdefinition.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case tagdefinition.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case tagdefinition.FieldExternalID:
 		m.ResetExternalID()
@@ -257188,6 +259597,7 @@ type TaskMutation struct {
 	source_instance_id             *string
 	managed_by                     *string
 	integration_run_id             *string
+	source_key                     *string
 	external_id                    *string
 	task_kind_name                 *string
 	environment_name               *string
@@ -257208,7 +259618,6 @@ type TaskMutation struct {
 	priority                       *int
 	addpriority                    *int
 	source                         *string
-	source_key                     *string
 	idempotency_key                *string
 	external_reference_url         *[]string
 	appendexternal_reference_url   []string
@@ -258083,6 +260492,55 @@ func (m *TaskMutation) IntegrationRunIDCleared() bool {
 func (m *TaskMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, task.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *TaskMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *TaskMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *TaskMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[task.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *TaskMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[task.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *TaskMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, task.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -259217,55 +261675,6 @@ func (m *TaskMutation) SourceCleared() bool {
 func (m *TaskMutation) ResetSource() {
 	m.source = nil
 	delete(m.clearedFields, task.FieldSource)
-}
-
-// SetSourceKey sets the "source_key" field.
-func (m *TaskMutation) SetSourceKey(s string) {
-	m.source_key = &s
-}
-
-// SourceKey returns the value of the "source_key" field in the mutation.
-func (m *TaskMutation) SourceKey() (r string, exists bool) {
-	v := m.source_key
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldSourceKey returns the old "source_key" field's value of the Task entity.
-// If the Task object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TaskMutation) OldSourceKey(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSourceKey requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
-	}
-	return oldValue.SourceKey, nil
-}
-
-// ClearSourceKey clears the value of the "source_key" field.
-func (m *TaskMutation) ClearSourceKey() {
-	m.source_key = nil
-	m.clearedFields[task.FieldSourceKey] = struct{}{}
-}
-
-// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
-func (m *TaskMutation) SourceKeyCleared() bool {
-	_, ok := m.clearedFields[task.FieldSourceKey]
-	return ok
-}
-
-// ResetSourceKey resets all changes to the "source_key" field.
-func (m *TaskMutation) ResetSourceKey() {
-	m.source_key = nil
-	delete(m.clearedFields, task.FieldSourceKey)
 }
 
 // SetIdempotencyKey sets the "idempotency_key" field.
@@ -260790,6 +263199,9 @@ func (m *TaskMutation) Fields() []string {
 	if m.integration_run_id != nil {
 		fields = append(fields, task.FieldIntegrationRunID)
 	}
+	if m.source_key != nil {
+		fields = append(fields, task.FieldSourceKey)
+	}
 	if m.external_id != nil {
 		fields = append(fields, task.FieldExternalID)
 	}
@@ -260862,9 +263274,6 @@ func (m *TaskMutation) Fields() []string {
 	if m.source != nil {
 		fields = append(fields, task.FieldSource)
 	}
-	if m.source_key != nil {
-		fields = append(fields, task.FieldSourceKey)
-	}
 	if m.idempotency_key != nil {
 		fields = append(fields, task.FieldIdempotencyKey)
 	}
@@ -260910,6 +263319,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case task.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case task.FieldSourceKey:
+		return m.SourceKey()
 	case task.FieldExternalID:
 		return m.ExternalID()
 	case task.FieldOwnerID:
@@ -260958,8 +263369,6 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.Priority()
 	case task.FieldSource:
 		return m.Source()
-	case task.FieldSourceKey:
-		return m.SourceKey()
 	case task.FieldIdempotencyKey:
 		return m.IdempotencyKey()
 	case task.FieldExternalReferenceURL:
@@ -261003,6 +263412,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldManagedBy(ctx)
 	case task.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case task.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case task.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case task.FieldOwnerID:
@@ -261051,8 +263462,6 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldPriority(ctx)
 	case task.FieldSource:
 		return m.OldSource(ctx)
-	case task.FieldSourceKey:
-		return m.OldSourceKey(ctx)
 	case task.FieldIdempotencyKey:
 		return m.OldIdempotencyKey(ctx)
 	case task.FieldExternalReferenceURL:
@@ -261165,6 +263574,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case task.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case task.FieldExternalID:
 		v, ok := value.(string)
@@ -261334,13 +263750,6 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSource(v)
 		return nil
-	case task.FieldSourceKey:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetSourceKey(v)
-		return nil
 	case task.FieldIdempotencyKey:
 		v, ok := value.(string)
 		if !ok {
@@ -261446,6 +263855,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldIntegrationRunID) {
 		fields = append(fields, task.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(task.FieldSourceKey) {
+		fields = append(fields, task.FieldSourceKey)
+	}
 	if m.FieldCleared(task.FieldExternalID) {
 		fields = append(fields, task.FieldExternalID)
 	}
@@ -261499,9 +263911,6 @@ func (m *TaskMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(task.FieldSource) {
 		fields = append(fields, task.FieldSource)
-	}
-	if m.FieldCleared(task.FieldSourceKey) {
-		fields = append(fields, task.FieldSourceKey)
 	}
 	if m.FieldCleared(task.FieldIdempotencyKey) {
 		fields = append(fields, task.FieldIdempotencyKey)
@@ -261565,6 +263974,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case task.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case task.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -261618,9 +264030,6 @@ func (m *TaskMutation) ClearField(name string) error {
 		return nil
 	case task.FieldSource:
 		m.ClearSource()
-		return nil
-	case task.FieldSourceKey:
-		m.ClearSourceKey()
 		return nil
 	case task.FieldIdempotencyKey:
 		m.ClearIdempotencyKey()
@@ -261680,6 +264089,9 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case task.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case task.FieldExternalID:
 		m.ResetExternalID()
@@ -261752,9 +264164,6 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldSource:
 		m.ResetSource()
-		return nil
-	case task.FieldSourceKey:
-		m.ResetSourceKey()
 		return nil
 	case task.FieldIdempotencyKey:
 		m.ResetIdempotencyKey()
@@ -262493,6 +264902,7 @@ type TemplateMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	source_key                *string
 	external_id               *string
 	system_owned              *bool
 	internal_notes            *string
@@ -263293,6 +265703,55 @@ func (m *TemplateMutation) IntegrationRunIDCleared() bool {
 func (m *TemplateMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, template.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *TemplateMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *TemplateMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Template entity.
+// If the Template object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemplateMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *TemplateMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[template.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *TemplateMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[template.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *TemplateMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, template.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -264555,7 +267014,7 @@ func (m *TemplateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TemplateMutation) Fields() []string {
-	fields := make([]string, 0, 30)
+	fields := make([]string, 0, 31)
 	if m.created_at != nil {
 		fields = append(fields, template.FieldCreatedAt)
 	}
@@ -264594,6 +267053,9 @@ func (m *TemplateMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, template.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, template.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, template.FieldExternalID)
@@ -264680,6 +267142,8 @@ func (m *TemplateMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case template.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case template.FieldSourceKey:
+		return m.SourceKey()
 	case template.FieldExternalID:
 		return m.ExternalID()
 	case template.FieldOwnerID:
@@ -264749,6 +267213,8 @@ func (m *TemplateMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldManagedBy(ctx)
 	case template.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case template.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case template.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case template.FieldOwnerID:
@@ -264882,6 +267348,13 @@ func (m *TemplateMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case template.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case template.FieldExternalID:
 		v, ok := value.(string)
@@ -265071,6 +267544,9 @@ func (m *TemplateMutation) ClearedFields() []string {
 	if m.FieldCleared(template.FieldIntegrationRunID) {
 		fields = append(fields, template.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(template.FieldSourceKey) {
+		fields = append(fields, template.FieldSourceKey)
+	}
 	if m.FieldCleared(template.FieldExternalID) {
 		fields = append(fields, template.FieldExternalID)
 	}
@@ -265166,6 +267642,9 @@ func (m *TemplateMutation) ClearField(name string) error {
 	case template.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case template.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case template.FieldExternalID:
 		m.ClearExternalID()
 		return nil
@@ -265254,6 +267733,9 @@ func (m *TemplateMutation) ResetField(name string) error {
 		return nil
 	case template.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case template.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case template.FieldExternalID:
 		m.ResetExternalID()
@@ -277172,6 +279654,7 @@ type TrustCenterSettingMutation struct {
 	noindex_default_domain                    *bool
 	enable_auto_approval                      *bool
 	auto_approval_rules                       *models.TrustCenterNDARequestSetting
+	disable_default_domain                    *bool
 	clearedFields                             map[string]struct{}
 	blocked_groups                            map[string]struct{}
 	removedblocked_groups                     map[string]struct{}
@@ -279158,6 +281641,55 @@ func (m *TrustCenterSettingMutation) ResetAutoApprovalRules() {
 	delete(m.clearedFields, trustcentersetting.FieldAutoApprovalRules)
 }
 
+// SetDisableDefaultDomain sets the "disable_default_domain" field.
+func (m *TrustCenterSettingMutation) SetDisableDefaultDomain(b bool) {
+	m.disable_default_domain = &b
+}
+
+// DisableDefaultDomain returns the value of the "disable_default_domain" field in the mutation.
+func (m *TrustCenterSettingMutation) DisableDefaultDomain() (r bool, exists bool) {
+	v := m.disable_default_domain
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisableDefaultDomain returns the old "disable_default_domain" field's value of the TrustCenterSetting entity.
+// If the TrustCenterSetting object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterSettingMutation) OldDisableDefaultDomain(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisableDefaultDomain is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisableDefaultDomain requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisableDefaultDomain: %w", err)
+	}
+	return oldValue.DisableDefaultDomain, nil
+}
+
+// ClearDisableDefaultDomain clears the value of the "disable_default_domain" field.
+func (m *TrustCenterSettingMutation) ClearDisableDefaultDomain() {
+	m.disable_default_domain = nil
+	m.clearedFields[trustcentersetting.FieldDisableDefaultDomain] = struct{}{}
+}
+
+// DisableDefaultDomainCleared returns if the "disable_default_domain" field was cleared in this mutation.
+func (m *TrustCenterSettingMutation) DisableDefaultDomainCleared() bool {
+	_, ok := m.clearedFields[trustcentersetting.FieldDisableDefaultDomain]
+	return ok
+}
+
+// ResetDisableDefaultDomain resets all changes to the "disable_default_domain" field.
+func (m *TrustCenterSettingMutation) ResetDisableDefaultDomain() {
+	m.disable_default_domain = nil
+	delete(m.clearedFields, trustcentersetting.FieldDisableDefaultDomain)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by ids.
 func (m *TrustCenterSettingMutation) AddBlockedGroupIDs(ids ...string) {
 	if m.blocked_groups == nil {
@@ -279447,7 +281979,7 @@ func (m *TrustCenterSettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrustCenterSettingMutation) Fields() []string {
-	fields := make([]string, 0, 38)
+	fields := make([]string, 0, 39)
 	if m.created_at != nil {
 		fields = append(fields, trustcentersetting.FieldCreatedAt)
 	}
@@ -279562,6 +282094,9 @@ func (m *TrustCenterSettingMutation) Fields() []string {
 	if m.auto_approval_rules != nil {
 		fields = append(fields, trustcentersetting.FieldAutoApprovalRules)
 	}
+	if m.disable_default_domain != nil {
+		fields = append(fields, trustcentersetting.FieldDisableDefaultDomain)
+	}
 	return fields
 }
 
@@ -279646,6 +282181,8 @@ func (m *TrustCenterSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.EnableAutoApproval()
 	case trustcentersetting.FieldAutoApprovalRules:
 		return m.AutoApprovalRules()
+	case trustcentersetting.FieldDisableDefaultDomain:
+		return m.DisableDefaultDomain()
 	}
 	return nil, false
 }
@@ -279731,6 +282268,8 @@ func (m *TrustCenterSettingMutation) OldField(ctx context.Context, name string) 
 		return m.OldEnableAutoApproval(ctx)
 	case trustcentersetting.FieldAutoApprovalRules:
 		return m.OldAutoApprovalRules(ctx)
+	case trustcentersetting.FieldDisableDefaultDomain:
+		return m.OldDisableDefaultDomain(ctx)
 	}
 	return nil, fmt.Errorf("unknown TrustCenterSetting field %s", name)
 }
@@ -280006,6 +282545,13 @@ func (m *TrustCenterSettingMutation) SetField(name string, value ent.Value) erro
 		}
 		m.SetAutoApprovalRules(v)
 		return nil
+	case trustcentersetting.FieldDisableDefaultDomain:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisableDefaultDomain(v)
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSetting field %s", name)
 }
@@ -280150,6 +282696,9 @@ func (m *TrustCenterSettingMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcentersetting.FieldAutoApprovalRules) {
 		fields = append(fields, trustcentersetting.FieldAutoApprovalRules)
 	}
+	if m.FieldCleared(trustcentersetting.FieldDisableDefaultDomain) {
+		fields = append(fields, trustcentersetting.FieldDisableDefaultDomain)
+	}
 	return fields
 }
 
@@ -280278,6 +282827,9 @@ func (m *TrustCenterSettingMutation) ClearField(name string) error {
 	case trustcentersetting.FieldAutoApprovalRules:
 		m.ClearAutoApprovalRules()
 		return nil
+	case trustcentersetting.FieldDisableDefaultDomain:
+		m.ClearDisableDefaultDomain()
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSetting nullable field %s", name)
 }
@@ -280399,6 +282951,9 @@ func (m *TrustCenterSettingMutation) ResetField(name string) error {
 		return nil
 	case trustcentersetting.FieldAutoApprovalRules:
 		m.ResetAutoApprovalRules()
+		return nil
+	case trustcentersetting.FieldDisableDefaultDomain:
+		m.ResetDisableDefaultDomain()
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSetting field %s", name)
@@ -290447,6 +293002,13 @@ type VendorRiskScoreMutation struct {
 	deleted_by                   *string
 	tags                         *[]string
 	appendtags                   []string
+	source_definition_id         *string
+	source_definition_version    *string
+	source_instance_id           *string
+	managed_by                   *string
+	integration_run_id           *string
+	source_key                   *string
+	external_id                  *string
 	question_key                 *string
 	question_name                *string
 	question_description         *string
@@ -290461,6 +293023,9 @@ type VendorRiskScoreMutation struct {
 	clearedFields                map[string]struct{}
 	owner                        *string
 	clearedowner                 bool
+	integration_runs             map[string]struct{}
+	removedintegration_runs      map[string]struct{}
+	clearedintegration_runs      bool
 	vendor_scoring_config        *string
 	clearedvendor_scoring_config bool
 	entity                       *string
@@ -291031,6 +293596,349 @@ func (m *VendorRiskScoreMutation) OwnerIDCleared() bool {
 func (m *VendorRiskScoreMutation) ResetOwnerID() {
 	m.owner = nil
 	delete(m.clearedFields, vendorriskscore.FieldOwnerID)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *VendorRiskScoreMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *VendorRiskScoreMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *VendorRiskScoreMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[vendorriskscore.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *VendorRiskScoreMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, vendorriskscore.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *VendorRiskScoreMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *VendorRiskScoreMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *VendorRiskScoreMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[vendorriskscore.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *VendorRiskScoreMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, vendorriskscore.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *VendorRiskScoreMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *VendorRiskScoreMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *VendorRiskScoreMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[vendorriskscore.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *VendorRiskScoreMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, vendorriskscore.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *VendorRiskScoreMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *VendorRiskScoreMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *VendorRiskScoreMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[vendorriskscore.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *VendorRiskScoreMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, vendorriskscore.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *VendorRiskScoreMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *VendorRiskScoreMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *VendorRiskScoreMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[vendorriskscore.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *VendorRiskScoreMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, vendorriskscore.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *VendorRiskScoreMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *VendorRiskScoreMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *VendorRiskScoreMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[vendorriskscore.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *VendorRiskScoreMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, vendorriskscore.FieldSourceKey)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *VendorRiskScoreMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *VendorRiskScoreMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the VendorRiskScore entity.
+// If the VendorRiskScore object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorRiskScoreMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *VendorRiskScoreMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[vendorriskscore.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *VendorRiskScoreMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[vendorriskscore.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *VendorRiskScoreMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, vendorriskscore.FieldExternalID)
 }
 
 // SetQuestionKey sets the "question_key" field.
@@ -291613,6 +294521,60 @@ func (m *VendorRiskScoreMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by ids.
+func (m *VendorRiskScoreMutation) AddIntegrationRunIDs(ids ...string) {
+	if m.integration_runs == nil {
+		m.integration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRuns clears the "integration_runs" edge to the IntegrationRun entity.
+func (m *VendorRiskScoreMutation) ClearIntegrationRuns() {
+	m.clearedintegration_runs = true
+}
+
+// IntegrationRunsCleared reports if the "integration_runs" edge to the IntegrationRun entity was cleared.
+func (m *VendorRiskScoreMutation) IntegrationRunsCleared() bool {
+	return m.clearedintegration_runs
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (m *VendorRiskScoreMutation) RemoveIntegrationRunIDs(ids ...string) {
+	if m.removedintegration_runs == nil {
+		m.removedintegration_runs = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_runs, ids[i])
+		m.removedintegration_runs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRuns returns the removed IDs of the "integration_runs" edge to the IntegrationRun entity.
+func (m *VendorRiskScoreMutation) RemovedIntegrationRunsIDs() (ids []string) {
+	for id := range m.removedintegration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRunsIDs returns the "integration_runs" edge IDs in the mutation.
+func (m *VendorRiskScoreMutation) IntegrationRunsIDs() (ids []string) {
+	for id := range m.integration_runs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRuns resets all changes to the "integration_runs" edge.
+func (m *VendorRiskScoreMutation) ResetIntegrationRuns() {
+	m.integration_runs = nil
+	m.clearedintegration_runs = false
+	m.removedintegration_runs = nil
+}
+
 // ClearVendorScoringConfig clears the "vendor_scoring_config" edge to the VendorScoringConfig entity.
 func (m *VendorRiskScoreMutation) ClearVendorScoringConfig() {
 	m.clearedvendor_scoring_config = true
@@ -291728,7 +294690,7 @@ func (m *VendorRiskScoreMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VendorRiskScoreMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 29)
 	if m.created_at != nil {
 		fields = append(fields, vendorriskscore.FieldCreatedAt)
 	}
@@ -291755,6 +294717,27 @@ func (m *VendorRiskScoreMutation) Fields() []string {
 	}
 	if m.owner != nil {
 		fields = append(fields, vendorriskscore.FieldOwnerID)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, vendorriskscore.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, vendorriskscore.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, vendorriskscore.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, vendorriskscore.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, vendorriskscore.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, vendorriskscore.FieldSourceKey)
+	}
+	if m.external_id != nil {
+		fields = append(fields, vendorriskscore.FieldExternalID)
 	}
 	if m.question_key != nil {
 		fields = append(fields, vendorriskscore.FieldQuestionKey)
@@ -291821,6 +294804,20 @@ func (m *VendorRiskScoreMutation) Field(name string) (ent.Value, bool) {
 		return m.Tags()
 	case vendorriskscore.FieldOwnerID:
 		return m.OwnerID()
+	case vendorriskscore.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case vendorriskscore.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case vendorriskscore.FieldManagedBy:
+		return m.ManagedBy()
+	case vendorriskscore.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case vendorriskscore.FieldSourceKey:
+		return m.SourceKey()
+	case vendorriskscore.FieldExternalID:
+		return m.ExternalID()
 	case vendorriskscore.FieldQuestionKey:
 		return m.QuestionKey()
 	case vendorriskscore.FieldQuestionName:
@@ -291874,6 +294871,20 @@ func (m *VendorRiskScoreMutation) OldField(ctx context.Context, name string) (en
 		return m.OldTags(ctx)
 	case vendorriskscore.FieldOwnerID:
 		return m.OldOwnerID(ctx)
+	case vendorriskscore.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case vendorriskscore.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case vendorriskscore.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case vendorriskscore.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case vendorriskscore.FieldSourceKey:
+		return m.OldSourceKey(ctx)
+	case vendorriskscore.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case vendorriskscore.FieldQuestionKey:
 		return m.OldQuestionKey(ctx)
 	case vendorriskscore.FieldQuestionName:
@@ -291971,6 +294982,55 @@ func (m *VendorRiskScoreMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOwnerID(v)
+		return nil
+	case vendorriskscore.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case vendorriskscore.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case vendorriskscore.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case vendorriskscore.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case vendorriskscore.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
+		return nil
+	case vendorriskscore.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case vendorriskscore.FieldQuestionKey:
 		v, ok := value.(string)
@@ -292135,6 +295195,27 @@ func (m *VendorRiskScoreMutation) ClearedFields() []string {
 	if m.FieldCleared(vendorriskscore.FieldOwnerID) {
 		fields = append(fields, vendorriskscore.FieldOwnerID)
 	}
+	if m.FieldCleared(vendorriskscore.FieldSourceDefinitionID) {
+		fields = append(fields, vendorriskscore.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(vendorriskscore.FieldSourceDefinitionVersion) {
+		fields = append(fields, vendorriskscore.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(vendorriskscore.FieldSourceInstanceID) {
+		fields = append(fields, vendorriskscore.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(vendorriskscore.FieldManagedBy) {
+		fields = append(fields, vendorriskscore.FieldManagedBy)
+	}
+	if m.FieldCleared(vendorriskscore.FieldIntegrationRunID) {
+		fields = append(fields, vendorriskscore.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(vendorriskscore.FieldSourceKey) {
+		fields = append(fields, vendorriskscore.FieldSourceKey)
+	}
+	if m.FieldCleared(vendorriskscore.FieldExternalID) {
+		fields = append(fields, vendorriskscore.FieldExternalID)
+	}
 	if m.FieldCleared(vendorriskscore.FieldQuestionDescription) {
 		fields = append(fields, vendorriskscore.FieldQuestionDescription)
 	}
@@ -292191,6 +295272,27 @@ func (m *VendorRiskScoreMutation) ClearField(name string) error {
 	case vendorriskscore.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
+	case vendorriskscore.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case vendorriskscore.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case vendorriskscore.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case vendorriskscore.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case vendorriskscore.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
+	case vendorriskscore.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case vendorriskscore.FieldQuestionDescription:
 		m.ClearQuestionDescription()
 		return nil
@@ -292241,6 +295343,27 @@ func (m *VendorRiskScoreMutation) ResetField(name string) error {
 	case vendorriskscore.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
+	case vendorriskscore.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case vendorriskscore.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case vendorriskscore.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case vendorriskscore.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case vendorriskscore.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case vendorriskscore.FieldSourceKey:
+		m.ResetSourceKey()
+		return nil
+	case vendorriskscore.FieldExternalID:
+		m.ResetExternalID()
+		return nil
 	case vendorriskscore.FieldQuestionKey:
 		m.ResetQuestionKey()
 		return nil
@@ -292286,9 +295409,12 @@ func (m *VendorRiskScoreMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VendorRiskScoreMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.owner != nil {
 		edges = append(edges, vendorriskscore.EdgeOwner)
+	}
+	if m.integration_runs != nil {
+		edges = append(edges, vendorriskscore.EdgeIntegrationRuns)
 	}
 	if m.vendor_scoring_config != nil {
 		edges = append(edges, vendorriskscore.EdgeVendorScoringConfig)
@@ -292310,6 +295436,12 @@ func (m *VendorRiskScoreMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
+	case vendorriskscore.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.integration_runs))
+		for id := range m.integration_runs {
+			ids = append(ids, id)
+		}
+		return ids
 	case vendorriskscore.EdgeVendorScoringConfig:
 		if id := m.vendor_scoring_config; id != nil {
 			return []ent.Value{*id}
@@ -292328,21 +295460,35 @@ func (m *VendorRiskScoreMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VendorRiskScoreMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
+	if m.removedintegration_runs != nil {
+		edges = append(edges, vendorriskscore.EdgeIntegrationRuns)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *VendorRiskScoreMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case vendorriskscore.EdgeIntegrationRuns:
+		ids := make([]ent.Value, 0, len(m.removedintegration_runs))
+		for id := range m.removedintegration_runs {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *VendorRiskScoreMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.clearedowner {
 		edges = append(edges, vendorriskscore.EdgeOwner)
+	}
+	if m.clearedintegration_runs {
+		edges = append(edges, vendorriskscore.EdgeIntegrationRuns)
 	}
 	if m.clearedvendor_scoring_config {
 		edges = append(edges, vendorriskscore.EdgeVendorScoringConfig)
@@ -292362,6 +295508,8 @@ func (m *VendorRiskScoreMutation) EdgeCleared(name string) bool {
 	switch name {
 	case vendorriskscore.EdgeOwner:
 		return m.clearedowner
+	case vendorriskscore.EdgeIntegrationRuns:
+		return m.clearedintegration_runs
 	case vendorriskscore.EdgeVendorScoringConfig:
 		return m.clearedvendor_scoring_config
 	case vendorriskscore.EdgeEntity:
@@ -292398,6 +295546,9 @@ func (m *VendorRiskScoreMutation) ResetEdge(name string) error {
 	switch name {
 	case vendorriskscore.EdgeOwner:
 		m.ResetOwner()
+		return nil
+	case vendorriskscore.EdgeIntegrationRuns:
+		m.ResetIntegrationRuns()
 		return nil
 	case vendorriskscore.EdgeVendorScoringConfig:
 		m.ResetVendorScoringConfig()
@@ -293689,6 +296840,7 @@ type VulnerabilityMutation struct {
 	source_instance_id                    *string
 	managed_by                            *string
 	integration_run_id                    *string
+	source_key                            *string
 	external_id                           *string
 	internal_owner                        *string
 	reviewed_by                           *string
@@ -294631,6 +297783,55 @@ func (m *VulnerabilityMutation) IntegrationRunIDCleared() bool {
 func (m *VulnerabilityMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, vulnerability.FieldIntegrationRunID)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *VulnerabilityMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *VulnerabilityMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Vulnerability entity.
+// If the Vulnerability object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VulnerabilityMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *VulnerabilityMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[vulnerability.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *VulnerabilityMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[vulnerability.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *VulnerabilityMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, vulnerability.FieldSourceKey)
 }
 
 // SetExternalID sets the "external_id" field.
@@ -299402,7 +302603,7 @@ func (m *VulnerabilityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VulnerabilityMutation) Fields() []string {
-	fields := make([]string, 0, 79)
+	fields := make([]string, 0, 80)
 	if m.created_at != nil {
 		fields = append(fields, vulnerability.FieldCreatedAt)
 	}
@@ -299444,6 +302645,9 @@ func (m *VulnerabilityMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, vulnerability.FieldIntegrationRunID)
+	}
+	if m.source_key != nil {
+		fields = append(fields, vulnerability.FieldSourceKey)
 	}
 	if m.external_id != nil {
 		fields = append(fields, vulnerability.FieldExternalID)
@@ -299676,6 +302880,8 @@ func (m *VulnerabilityMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case vulnerability.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case vulnerability.FieldSourceKey:
+		return m.SourceKey()
 	case vulnerability.FieldExternalID:
 		return m.ExternalID()
 	case vulnerability.FieldOwnerID:
@@ -299843,6 +303049,8 @@ func (m *VulnerabilityMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldManagedBy(ctx)
 	case vulnerability.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case vulnerability.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case vulnerability.FieldExternalID:
 		return m.OldExternalID(ctx)
 	case vulnerability.FieldOwnerID:
@@ -300079,6 +303287,13 @@ func (m *VulnerabilityMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case vulnerability.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
 		return nil
 	case vulnerability.FieldExternalID:
 		v, ok := value.(string)
@@ -300655,6 +303870,9 @@ func (m *VulnerabilityMutation) ClearedFields() []string {
 	if m.FieldCleared(vulnerability.FieldIntegrationRunID) {
 		fields = append(fields, vulnerability.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(vulnerability.FieldSourceKey) {
+		fields = append(fields, vulnerability.FieldSourceKey)
+	}
 	if m.FieldCleared(vulnerability.FieldOwnerID) {
 		fields = append(fields, vulnerability.FieldOwnerID)
 	}
@@ -300900,6 +304118,9 @@ func (m *VulnerabilityMutation) ClearField(name string) error {
 	case vulnerability.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case vulnerability.FieldSourceKey:
+		m.ClearSourceKey()
+		return nil
 	case vulnerability.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -301141,6 +304362,9 @@ func (m *VulnerabilityMutation) ResetField(name string) error {
 		return nil
 	case vulnerability.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case vulnerability.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case vulnerability.FieldExternalID:
 		m.ResetExternalID()

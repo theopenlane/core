@@ -412,6 +412,10 @@
           "type": "string",
           "description": "TrustCenterPreviewZoneID is the cloudflare zone id that holds trust center preview domain records"
         },
+        "trustcentercacherefreshsecret": {
+          "type": "string",
+          "description": "TrustCenterCacheRefreshSecret is the shared secret sent in the X-Openlane-Cache-Refresh header on trust center\ncache refresh requests so the trust center frontend can authenticate forced-fresh renders; no header is sent when empty"
+        },
         "notificationlookbackdays": {
           "type": "integer",
           "description": "NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription\nUnread notifications are always pulled regardless of this setting"
@@ -1457,6 +1461,10 @@
           "type": "integer",
           "description": "ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.\n0 means the closest client, 1 the proxy behind it, etc."
         },
+        "forwardersecret": {
+          "type": "string",
+          "description": "ForwarderSecret is the shared secret a trusted forwarding proxy presents in X-Openlane-Forwarder-Secret"
+        },
         "includepath": {
           "type": "boolean",
           "description": "IncludePath appends the request path to the limiter key when true."
@@ -1531,6 +1539,9 @@
         "FetchCooldown": {
           "type": "integer"
         },
+        "FetchOnlyKnownKinds": {
+          "type": "boolean"
+        },
         "FetchPollInterval": {
           "type": "integer"
         },
@@ -1552,6 +1563,9 @@
         },
         "Hooks": {
           "$ref": "#/$defs/[]rivertype.Hook"
+        },
+        "LeaderElectionDisabled": {
+          "type": "boolean"
         },
         "Logger": {
           "$ref": "#/$defs/slog.Logger"
@@ -1746,6 +1760,15 @@
         },
         "samesite": {
           "type": "string"
+        },
+        "absolutetimeout": {
+          "type": "integer"
+        },
+        "renewalinterval": {
+          "type": "integer"
+        },
+        "renewalgrace": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,
@@ -2417,6 +2440,12 @@
           "type": "integer"
         },
         "recoverycodelength": {
+          "type": "integer"
+        },
+        "maxfailedattempts": {
+          "type": "integer"
+        },
+        "failurewindow": {
           "type": "integer"
         }
       },

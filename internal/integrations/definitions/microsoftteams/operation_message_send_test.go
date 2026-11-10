@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -20,10 +21,10 @@ func TestResolveOperationTemplateNoop(t *testing.T) {
 	}
 
 	err := cfg.ResolveTemplate(context.Background(), types.OperationRequest{}, &cfg)
-	require.NoError(t, err)
-	require.Equal(t, "team-1", cfg.TeamID)
-	require.Equal(t, "channel-1", cfg.Channel)
-	require.Equal(t, "hello", cfg.Text)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal("team-1", cfg.TeamID))
+	assert.Assert(t, is.Equal("channel-1", cfg.Channel))
+	assert.Assert(t, is.Equal("hello", cfg.Text))
 }
 
 func TestResolveOperationTemplateBothRefsUseResolutionPath(t *testing.T) {
@@ -38,5 +39,5 @@ func TestResolveOperationTemplateBothRefsUseResolutionPath(t *testing.T) {
 	}
 
 	err := cfg.ResolveTemplate(context.Background(), types.OperationRequest{}, &cfg)
-	require.ErrorIs(t, err, templatekit.ErrTemplateNotFound)
+	assert.ErrorIs(t, err, templatekit.ErrTemplateNotFound)
 }

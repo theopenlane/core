@@ -35,11 +35,9 @@ func findingIngestTestDefinition(defID string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
 	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          defID,
-			DisplayName: "Finding Ingest Test",
-			Active:      true,
-		},
+		ID:          defID,
+		DisplayName: "Finding Ingest Test",
+		Active:      true,
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:  findingIngestTestOperation,
@@ -229,9 +227,9 @@ func TestFindingForeignDefinitionReadOnly(t *testing.T) {
 	assert.Check(t, !linkedToB, "a foreign-definition ingest must not add its integration edge")
 }
 
-// TestFindingClaimUnclaimedRowTakenOverInOneWrite verifies a finding ingest payload takes over a row
-// that carries no recorded source definition, in the same write that applies its other field changes
-func TestFindingClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
+// TestFindingUnclaimedRowFilledNotClaimed verifies a finding ingest payload matching an organization's own row fills its
+// empty fields without overwriting its values or claiming it
+func TestFindingUnclaimedRowFilledNotClaimed(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	installation, err := suite.Client.DB.Integration.Create().
@@ -255,16 +253,18 @@ func TestFindingClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 
 	result := ingestFindingPayloads(ctx, t, installation, `{"external_id":"find-claim-unclaimed-1","display_name":"Claimed Finding","description":"claimed"}`)
 	assert.Check(t, is.Equal(0, result.Failed))
-	assert.Check(t, is.Equal(1, result.Changed), "the display name change and the claim land in the same write")
+	assert.Check(t, is.Equal(1, result.Skipped))
+	assert.Check(t, is.Equal(0, result.Changed))
 
 	after := findingByExternalID(ctx, t, "find-claim-unclaimed-1")
-	assert.Check(t, is.Equal(unclaimed.ID, after.ID), "the takeover must update the existing row, not create a new one")
-	assert.Check(t, is.Equal("Claimed Finding", after.DisplayName))
-	assert.Check(t, is.Equal(installation.ID, after.ManagedBy))
+	assert.Check(t, is.Equal(unclaimed.ID, after.ID))
+	assert.Check(t, is.Equal("Pre-existing Finding", after.DisplayName))
+	assert.Check(t, is.Equal("claimed", after.Description))
+	assert.Check(t, is.Equal("", after.ManagedBy))
 
 	linked, err := after.QueryIntegrations().Where(integration.ID(installation.ID)).Exist(ctx)
 	th.RequireNoError(t, err)
-	assert.Check(t, linked, "the claim must add the claiming installation's integration edge")
+	assert.Check(t, !linked)
 }
 
 // TestFindingClaimActiveOtherInstallationReadOnly verifies a finding managed by another

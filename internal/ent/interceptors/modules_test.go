@@ -3,8 +3,8 @@ package interceptors
 import (
 	"testing"
 
-	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -27,12 +27,12 @@ func TestInterceptorModules(t *testing.T) {
 	}{
 		{
 			title:            "modules enabled - should continue processing",
-			entConfigEnabled: lo.ToPtr(true),
+			entConfigEnabled: new(true),
 			expectedSkip:     true,
 		},
 		{
 			title:            "modules disabled - should skip",
-			entConfigEnabled: lo.ToPtr(false),
+			entConfigEnabled: new(false),
 			expectedSkip:     false,
 		},
 		{
@@ -54,7 +54,7 @@ func TestInterceptorModules(t *testing.T) {
 			}
 
 			shouldSkip := testInterceptorLogic(client)
-			assert.Equal(t, tt.expectedSkip, shouldSkip)
+			assert.Check(t, is.Equal(tt.expectedSkip, shouldSkip))
 		})
 	}
 }

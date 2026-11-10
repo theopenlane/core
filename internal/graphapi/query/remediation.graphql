@@ -31,6 +31,7 @@ mutation CreateBulkCSVRemediation ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -79,6 +80,7 @@ mutation CreateBulkRemediation ($input: [CreateRemediationInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -127,6 +129,7 @@ mutation CreateRemediation ($input: CreateRemediationInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -226,6 +229,7 @@ query GetRemediationByID ($remediationId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		state
 		status
 		summary
@@ -313,6 +317,7 @@ mutation UpdateBulkCSVRemediation ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -364,6 +369,7 @@ mutation UpdateBulkRemediation ($ids: [ID!]!, $input: UpdateRemediationInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary
@@ -415,6 +421,7 @@ mutation UpdateRemediation ($updateRemediationId: ID!, $input: UpdateRemediation
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			state
 			status
 			summary

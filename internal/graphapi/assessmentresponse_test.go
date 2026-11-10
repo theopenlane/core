@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
@@ -331,7 +330,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		{
 			name: "success - can create via GraphQL",
 			request: testclient.CreateAssessmentResponseInput{
-				Email:        lo.ToPtr(gofakeit.Email()),
+				Email:        new(gofakeit.Email()),
 				AssessmentID: assessment.ID,
 			},
 			client: suite.Client.API,
@@ -340,7 +339,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		{
 			name: "success - can create via PAT",
 			request: testclient.CreateAssessmentResponseInput{
-				Email:        lo.ToPtr(gofakeit.Email()),
+				Email:        new(gofakeit.Email()),
 				AssessmentID: assessment.ID,
 			},
 			client: suite.Client.APIWithPAT,
@@ -349,7 +348,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		{
 			name: "success - different org user can create",
 			request: testclient.CreateAssessmentResponseInput{
-				Email:        lo.ToPtr(gofakeit.Email()),
+				Email:        new(gofakeit.Email()),
 				AssessmentID: assessment2.ID,
 				OwnerID:      &th.SharedTestUser2.OrganizationID,
 			},
@@ -378,7 +377,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 
 	t.Run("send attempts should increment on duplicate response", func(t *testing.T) {
 		req := testclient.CreateAssessmentResponseInput{
-			Email:        lo.ToPtr(gofakeit.Email()),
+			Email:        new(gofakeit.Email()),
 			AssessmentID: assessment.ID,
 			OwnerID:      &th.SharedTestUser1.OrganizationID,
 		}
@@ -402,7 +401,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 
 	t.Run("completed response should not be updated", func(t *testing.T) {
 		req := testclient.CreateAssessmentResponseInput{
-			Email:        lo.ToPtr(gofakeit.Email()),
+			Email:        new(gofakeit.Email()),
 			AssessmentID: assessment.ID,
 			OwnerID:      &th.SharedTestUser1.OrganizationID,
 		}

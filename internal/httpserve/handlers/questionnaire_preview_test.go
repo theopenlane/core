@@ -8,7 +8,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
@@ -18,8 +17,8 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 )
 
-func (suite *HandlerTestSuite) TestGetQuestionnairePreviewAndRealResponse() {
-	t := suite.T()
+func TestGetQuestionnairePreviewAndRealResponse(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
@@ -37,21 +36,21 @@ func (suite *HandlerTestSuite) TestGetQuestionnairePreviewAndRealResponse() {
 		SetName("Preview vs Real Template").
 		SetTemplateType(enums.Document).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Preview vs Real Assessment").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	testEmail := "preview-vs-real@example.com"
 
-	anonUser := auth.NewQuestionnaireCaller(testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", assessment.ID), "", testEmail)
+	anonUser := auth.NewQuestionnaireCaller(suite.testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", assessment.ID), "", testEmail)
 	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, anonUser))
 	questionnaireCtx = auth.ActiveAssessmentIDKey.Set(questionnaireCtx, assessment.ID)
 
@@ -74,7 +73,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnairePreviewAndRealResponse() {
 		t.Run(tc.name, func(t *testing.T) {
 			anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 			accessToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(&tokens.Claims{
-				RegisteredClaims:  jwt.RegisteredClaims{Subject: anonUserID},
+				Subject:           anonUserID,
 				UserID:            anonUserID,
 				OrgID:             assessment.OwnerID,
 				AssessmentID:      assessment.ID,
@@ -116,7 +115,7 @@ func (suite *HandlerTestSuite) createResponseWithData(createCtx, internalCtx con
 	create := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessmentID).
 		SetEmail(email).
-		SetOwnerID(testUser1.OrganizationID)
+		SetOwnerID(suite.testUser1.OrganizationID)
 
 	if isTest {
 		create.SetIsTest(true)
@@ -127,7 +126,7 @@ func (suite *HandlerTestSuite) createResponseWithData(createCtx, internalCtx con
 
 	documentData, err := suite.db.DocumentData.Create().
 		SetTemplateID(templateID).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetData(map[string]any{"q1": marker}).
 		Save(internalCtx)
 	assert.NilError(t, err)

@@ -9,13 +9,14 @@ import (
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	storagetypes "github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
-	"github.com/theopenlane/core/v2/internal/testutils/pdftest"
+	"github.com/theopenlane/core/v2/pkg/pdftext/pdftest"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 var (
@@ -37,29 +38,29 @@ func TestCreateAttestationCertificate(t *testing.T) {
 		},
 	}
 
-	pdfBytes, err := createAttestationCertificate(data)
-	require.NoError(t, err)
-	require.NotEmpty(t, pdfBytes)
+	pdfBytes, err := createAttestationCertificate(t.Context(), data)
+	assert.NilError(t, err)
+	assert.Assert(t, len(pdfBytes) > 0)
 
-	assert.Equal(t, "%PDF", string(pdfBytes[:4]))
+	assert.Check(t, is.Equal("%PDF", string(pdfBytes[:4])))
 
-	pageCount, err := api.PageCount(bytes.NewReader(pdfBytes), conf)
-	require.NoError(t, err)
-	assert.Equal(t, 1, pageCount)
+	pageCount, err := api.PageCount(t.Context(), bytes.NewReader(pdfBytes), conf)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(1, pageCount))
 
-	err = api.Validate(bytes.NewReader(pdfBytes), nil)
-	assert.NoError(t, err)
+	err = api.Validate(t.Context(), bytes.NewReader(pdfBytes), nil, nil)
+	assert.Check(t, err)
 }
 
 func TestCreateAttestationCertificate_EmptyFields(t *testing.T) {
 	data := &signedNDADocumentData{}
 
-	pdfBytes, err := createAttestationCertificate(data)
-	require.NoError(t, err)
-	require.NotEmpty(t, pdfBytes)
+	pdfBytes, err := createAttestationCertificate(t.Context(), data)
+	assert.NilError(t, err)
+	assert.Assert(t, len(pdfBytes) > 0)
 
-	err = api.Validate(bytes.NewReader(pdfBytes), conf)
-	assert.NoError(t, err)
+	err = api.Validate(t.Context(), bytes.NewReader(pdfBytes), conf, nil)
+	assert.Check(t, err)
 }
 
 func TestAppendAttestationPage(t *testing.T) {
@@ -80,41 +81,41 @@ func TestAppendAttestationPage(t *testing.T) {
 	}
 
 	merged, err := appendAttestationPage(t.Context(), bytes.NewReader(originalPDF), data)
-	require.NoError(t, err)
-	require.NotEmpty(t, merged)
+	assert.NilError(t, err)
+	assert.Assert(t, len(merged) > 0)
 
-	assert.Equal(t, "%PDF", string(merged[:4]))
+	assert.Check(t, is.Equal("%PDF", string(merged[:4])))
 
-	pageCount, err := api.PageCount(bytes.NewReader(merged), conf)
-	require.NoError(t, err)
-	assert.Equal(t, 2, pageCount)
+	pageCount, err := api.PageCount(t.Context(), bytes.NewReader(merged), conf)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(2, pageCount))
 
-	err = api.Validate(bytes.NewReader(merged), conf)
-	assert.NoError(t, err)
+	err = api.Validate(t.Context(), bytes.NewReader(merged), conf, nil)
+	assert.Check(t, err)
 }
 
 func TestAppendAttestationPage_OwnerLockedSource(t *testing.T) {
 	encryptedPDF := pdftest.EncryptPDF(t, pdftest.MinimalPDF(t), "")
 
-	info, err := api.PDFInfo(bytes.NewReader(encryptedPDF), "", nil, false, model.NewDefaultConfiguration())
-	require.NoError(t, err)
-	require.True(t, info.Encrypted)
+	info, err := api.PDFInfo(t.Context(), bytes.NewReader(encryptedPDF), "", nil, false, model.NewDefaultConfiguration())
+	assert.NilError(t, err)
+	assert.Assert(t, info.Encrypted)
 
 	attested, err := appendAttestationPage(t.Context(), bytes.NewReader(encryptedPDF), testSignedNDAData())
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	pageCount, err := api.PageCount(bytes.NewReader(attested), conf)
-	require.NoError(t, err)
-	assert.Equal(t, info.PageCount+1, pageCount)
+	pageCount, err := api.PageCount(t.Context(), bytes.NewReader(attested), conf)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(info.PageCount+1, pageCount))
 
-	require.NoError(t, api.Validate(bytes.NewReader(attested), conf))
+	assert.NilError(t, api.Validate(t.Context(), bytes.NewReader(attested), conf, nil))
 }
 
 func TestAppendAttestationPage_PasswordProtectedSource(t *testing.T) {
 	encryptedPDF := pdftest.EncryptPDF(t, pdftest.MinimalPDF(t), "user-secret")
 
 	_, err := appendAttestationPage(t.Context(), bytes.NewReader(encryptedPDF), testSignedNDAData())
-	require.ErrorIs(t, err, ErrFailedToDecryptNDAPDF)
+	assert.ErrorIs(t, err, ErrFailedToDecryptNDAPDF)
 }
 
 func testSignedNDAData() *signedNDADocumentData {
@@ -154,7 +155,7 @@ func TestFormatAttestTimestamp(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.expect, formatAttestTimestamp(tc.input))
+			assert.Check(t, is.Equal(tc.expect, formatAttestTimestamp(tc.input)))
 		})
 	}
 }
@@ -164,20 +165,20 @@ func TestResolveOrgName(t *testing.T) {
 		tc := &generated.TrustCenter{}
 		tc.Edges.Setting = &generated.TrustCenterSetting{CompanyName: "Acme"}
 
-		assert.Equal(t, "Acme", resolveOrgName(tc))
+		assert.Check(t, is.Equal("Acme", resolveOrgName(tc)))
 	})
 
 	t.Run("empty when no setting", func(t *testing.T) {
 		tc := &generated.TrustCenter{}
 
-		assert.Equal(t, "", resolveOrgName(tc))
+		assert.Check(t, is.Equal("", resolveOrgName(tc)))
 	})
 
 	t.Run("empty when company name blank", func(t *testing.T) {
 		tc := &generated.TrustCenter{}
 		tc.Edges.Setting = &generated.TrustCenterSetting{}
 
-		assert.Equal(t, "", resolveOrgName(tc))
+		assert.Check(t, is.Equal("", resolveOrgName(tc)))
 	})
 }
 
@@ -196,15 +197,15 @@ func TestStorageFileFromEnt(t *testing.T) {
 
 	result := interceptors.StorageFileFromEnt(entFile)
 
-	assert.Equal(t, entFile.ID, result.ID)
-	assert.Equal(t, entFile.ProvidedFileName, result.OriginalName)
-	assert.Equal(t, entFile.StoragePath, result.FileMetadata.Key)
-	assert.Equal(t, entFile.StorageVolume, result.FileMetadata.Bucket)
-	assert.Equal(t, entFile.StorageRegion, result.FileMetadata.Region)
-	assert.Equal(t, entFile.DetectedContentType, result.FileMetadata.ContentType)
-	assert.Equal(t, entFile.PersistedFileSize, result.FileMetadata.Size)
-	assert.Equal(t, entFile.URI, result.FileMetadata.FullURI)
-	assert.Equal(t, storagetypes.ProviderType(entFile.StorageProvider), result.FileMetadata.ProviderType)
+	assert.Check(t, is.Equal(entFile.ID, result.ID))
+	assert.Check(t, is.Equal(entFile.ProvidedFileName, result.OriginalName))
+	assert.Check(t, is.Equal(entFile.StoragePath, result.FileMetadata.Key))
+	assert.Check(t, is.Equal(entFile.StorageVolume, result.FileMetadata.Bucket))
+	assert.Check(t, is.Equal(entFile.StorageRegion, result.FileMetadata.Region))
+	assert.Check(t, is.Equal(entFile.DetectedContentType, result.FileMetadata.ContentType))
+	assert.Check(t, is.Equal(entFile.PersistedFileSize, result.FileMetadata.Size))
+	assert.Check(t, is.Equal(entFile.URI, result.FileMetadata.FullURI))
+	assert.Check(t, is.Equal(storagetypes.ProviderType(entFile.StorageProvider), result.FileMetadata.ProviderType))
 }
 
 func TestValidateTrustCenterNDAJSON(t *testing.T) {
@@ -234,22 +235,22 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 
 	t.Run("valid document passes", func(t *testing.T) {
 		err := validateTrustCenterNDAJSON(context.Background(), validDoc, "tc-123", "jane@example.com", "user-456", templateFile)
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("mismatched trust center id", func(t *testing.T) {
 		err := validateTrustCenterNDAJSON(context.Background(), validDoc, "tc-wrong", "jane@example.com", "user-456", templateFile)
-		assert.ErrorIs(t, err, errDocInfoDoesNotMatchCaller)
+		assert.Check(t, is.ErrorIs(err, errDocInfoDoesNotMatchCaller))
 	})
 
 	t.Run("mismatched email", func(t *testing.T) {
 		err := validateTrustCenterNDAJSON(context.Background(), validDoc, "tc-123", "wrong@example.com", "user-456", templateFile)
-		assert.ErrorIs(t, err, errDocInfoDoesNotMatchCaller)
+		assert.Check(t, is.ErrorIs(err, errDocInfoDoesNotMatchCaller))
 	})
 
 	t.Run("mismatched user id", func(t *testing.T) {
 		err := validateTrustCenterNDAJSON(context.Background(), validDoc, "tc-123", "jane@example.com", "user-wrong", templateFile)
-		assert.ErrorIs(t, err, errDocInfoDoesNotMatchCaller)
+		assert.Check(t, is.ErrorIs(err, errDocInfoDoesNotMatchCaller))
 	})
 
 	t.Run("missing required field", func(t *testing.T) {
@@ -260,7 +261,7 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 		}
 
 		err := validateTrustCenterNDAJSON(context.Background(), incomplete, "tc-123", "jane@example.com", "user-456", templateFile)
-		assert.ErrorIs(t, err, errValidationFailed)
+		assert.Check(t, is.ErrorIs(err, errValidationFailed))
 	})
 
 	t.Run("empty signatory name fails schema", func(t *testing.T) {
@@ -283,12 +284,12 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 		}
 
 		err := validateTrustCenterNDAJSON(context.Background(), doc, "tc-123", "jane@example.com", "user-456", templateFile)
-		assert.ErrorIs(t, err, errValidationFailed)
+		assert.Check(t, is.ErrorIs(err, errValidationFailed))
 	})
 
 	t.Run("nil document", func(t *testing.T) {
 		err := validateTrustCenterNDAJSON(context.Background(), nil, "tc-123", "jane@example.com", "user-456", templateFile)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -318,7 +319,7 @@ func TestAttestationFieldsFrom_IncludesHash(t *testing.T) {
 		}
 	}
 
-	assert.Equal(t, "deadbeef1234", hashField.Value)
+	assert.Check(t, is.Equal("deadbeef1234", hashField.Value))
 }
 
 func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
@@ -340,25 +341,25 @@ func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
 
 	// first pass: generate combined document to compute hash
 	combined, err := appendAttestationPage(t.Context(), bytes.NewReader(originalPDF), data)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	pdfHash := sha256.Sum256(combined)
 	computedHash := hex.EncodeToString(pdfHash[:])
-	require.NotEmpty(t, computedHash)
+	assert.Assert(t, computedHash != "")
 
 	// second pass: assign hash and regenerate
 	data.SignatureMetadata.PDFHash = computedHash
 
 	attestedPDF, err := appendAttestationPage(t.Context(), bytes.NewReader(originalPDF), data)
-	require.NoError(t, err)
-	require.NotEmpty(t, attestedPDF)
+	assert.NilError(t, err)
+	assert.Assert(t, len(attestedPDF) > 0)
 
-	pageCount, err := api.PageCount(bytes.NewReader(attestedPDF), conf)
-	require.NoError(t, err)
-	assert.Equal(t, 2, pageCount)
+	pageCount, err := api.PageCount(t.Context(), bytes.NewReader(attestedPDF), conf)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(2, pageCount))
 
-	err = api.Validate(bytes.NewReader(attestedPDF), conf)
-	assert.NoError(t, err)
+	err = api.Validate(t.Context(), bytes.NewReader(attestedPDF), conf, nil)
+	assert.Check(t, err)
 
 	// attestation fields should reflect the computed hash
 	fields := attestationFieldsFrom(data)
@@ -370,5 +371,5 @@ func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
 		}
 	}
 
-	assert.Equal(t, computedHash, hashField.Value)
+	assert.Check(t, is.Equal(computedHash, hashField.Value))
 }

@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 type testEnum string
@@ -47,7 +47,7 @@ func TestMarshalGQL(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			var buf bytes.Buffer
 			marshalGQL(tc.input, &buf)
-			assert.Equal(t, tc.expected, buf.String())
+			assert.Check(t, is.Equal(tc.expected, buf.String()))
 		})
 	}
 }
@@ -92,12 +92,12 @@ func TestUnmarshalGQL(t *testing.T) {
 
 			err := unmarshalGQL(&result, tc.input)
 			if tc.wantErr {
-				require.ErrorIs(t, err, ErrInvalidType)
+				assert.ErrorIs(t, err, ErrInvalidType)
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tc.expected, result)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.expected, result))
 		})
 	}
 }
@@ -138,8 +138,8 @@ func TestParse(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			result := parse(tc.input, testValues, &testInvalid)
-			require.NotNil(t, result)
-			assert.Equal(t, tc.expected, *result)
+			assert.Assert(t, result != nil)
+			assert.Check(t, is.Equal(tc.expected, *result))
 		})
 	}
 }
@@ -150,7 +150,7 @@ func TestParseReturnsSlicePointer(t *testing.T) {
 	result := parse("FOO", vals, &testInvalid)
 
 	// the returned pointer should reference the slice element, not a new allocation
-	assert.Equal(t, &vals[0], result)
+	assert.Check(t, is.DeepEqual(&vals[0], result))
 }
 
 func TestStringValues(t *testing.T) {
@@ -179,7 +179,7 @@ func TestStringValues(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			result := stringValues(tc.input)
-			assert.Equal(t, tc.expected, result)
+			assert.Check(t, is.DeepEqual(tc.expected, result))
 		})
 	}
 }

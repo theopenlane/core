@@ -15,6 +15,7 @@ import (
 )
 
 func TestMutation_ReportMembers(t *testing.T) {
+	t.Parallel()
 
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 
@@ -100,7 +101,7 @@ func TestMutation_ReportMembers(t *testing.T) {
 		assert.NilError(t, err)
 	})
 
-	t.Run("changing report to private visibility removes all members automtically", func(t *testing.T) {
+	t.Run("changing report to private visibility removes all members automatically", func(t *testing.T) {
 		_, err := suite.Client.API.AddUserToReportWithRole(org.Owner.UserCtx, testclient.CreateReportMembershipInput{
 			ReportID: report.ID,
 			UserID:   org.Member.ID,

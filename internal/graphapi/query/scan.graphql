@@ -34,6 +34,7 @@ mutation CreateBulkCSVScan ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -81,6 +82,7 @@ mutation CreateBulkScan ($input: [CreateScanInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -128,6 +130,7 @@ mutation CreateScan ($input: CreateScanInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned
@@ -205,6 +208,7 @@ query GetScanByID ($scanId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		systemInternalID
 		systemOwned
@@ -277,6 +281,7 @@ mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			systemInternalID
 			systemOwned

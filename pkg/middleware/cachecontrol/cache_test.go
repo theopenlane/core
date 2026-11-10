@@ -6,8 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/middleware/cachecontrol"
 )
@@ -38,10 +39,10 @@ func TestNewWithConfig(t *testing.T) {
 	err := wrappedHandler(c)
 
 	// Assert that the handler returned no error
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// Assert that the response has the expected status code
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 	// Assert that the response headers have been set correctly
 	expectedHeaders := map[string]string{
@@ -50,6 +51,6 @@ func TestNewWithConfig(t *testing.T) {
 		"Expires":       epoch,
 	}
 	for k, v := range expectedHeaders {
-		assert.Equal(t, v, rec.Header().Get(k))
+		assert.Check(t, is.Equal(v, rec.Header().Get(k)))
 	}
 }

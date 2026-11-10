@@ -10,7 +10,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -106,7 +105,7 @@ func TestQueryTaskTemplates(t *testing.T) {
 
 	taskWithTemplate, err := suite.Client.API.CreateTask(freshOrg.Owner.UserCtx, testclient.CreateTaskInput{
 		Title:      "New task template",
-		IsTemplate: lo.ToPtr(true),
+		IsTemplate: new(true),
 	})
 	assert.NilError(t, err)
 
@@ -135,7 +134,7 @@ func TestQueryTaskTemplates(t *testing.T) {
 
 	// convert it to a non templated task
 	_, err = suite.Client.API.UpdateTask(freshOrg.Owner.UserCtx, taskTemplateID, testclient.UpdateTaskInput{
-		IsTemplate: lo.ToPtr(false),
+		IsTemplate: new(false),
 	})
 	assert.NilError(t, err)
 
@@ -160,16 +159,8 @@ func TestQueryTasks(t *testing.T) {
 	// create a bunch to test the pagination with different users
 	// works with overfetching
 	numTasks := 10
-	org1TaskIDs := []string{}
-	org2TaskIDs := []string{}
-	for range numTasks {
-		t1 := (&th.TaskBuilder{Client: suite.Client, Due: gofakeit.Date()}).MustNew(testUser.UserCtx, t)
-		t2 := (&th.TaskBuilder{Client: suite.Client, Due: gofakeit.Date()}).MustNew(viewUser.UserCtx, t)
-		t3 := (&th.TaskBuilder{Client: suite.Client, Due: gofakeit.Date()}).MustNew(adminUser.UserCtx, t)
-		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
-
-		t4 := (&th.TaskBuilder{Client: suite.Client, Due: gofakeit.Date()}).MustNew(anotherUser.UserCtx, t)
-		org2TaskIDs = append(org2TaskIDs, t4.ID)
+	for _, ctx := range []context.Context{testUser.UserCtx, viewUser.UserCtx, adminUser.UserCtx, anotherUser.UserCtx} {
+		(&th.TaskBuilder{Client: suite.Client, DueFunc: gofakeit.Date}).MustNewBulk(ctx, t, numTasks)
 	}
 
 	userCtxPersonalOrg := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
@@ -179,9 +170,7 @@ func TestQueryTasks(t *testing.T) {
 	taskPersonal := (&th.TaskBuilder{Client: suite.Client, AssigneeID: testUser.ID}).MustNew(userCtxPersonalOrg, t)
 
 	risk := (&th.RiskBuilder{Client: suite.Client}).MustNew(adminUser.UserCtx, t)
-	taskWithRisk := (&th.TaskBuilder{Client: suite.Client, RiskID: risk.ID}).MustNew(testUser.UserCtx, t)
-
-	org1TaskIDs = append(org1TaskIDs, taskWithRisk.ID)
+	(&th.TaskBuilder{Client: suite.Client, RiskID: risk.ID}).MustNew(testUser.UserCtx, t)
 
 	var (
 		startCursorDue     *string
@@ -433,7 +422,7 @@ func TestTaskNotifications(t *testing.T) {
 	// creating the task should notify the original assignee
 	response, err := suite.Client.API.CreateTask(owner.UserCtx, testclient.CreateTaskInput{
 		Title:      "Here is a new task",
-		Details:    lo.ToPtr("Here is the details of the task"),
+		Details:    new("Here is the details of the task"),
 		AssigneeID: &originalAssignee.ID,
 	})
 	assert.NilError(t, err)
@@ -448,7 +437,7 @@ func TestTaskNotifications(t *testing.T) {
 	for _, status := range []enums.TaskStatus{enums.TaskStatusInProgress, enums.TaskStatusInReview} {
 		newTask, err := suite.Client.API.CreateTask(owner.UserCtx, testclient.CreateTaskInput{
 			Title:      "Test with status apart from open",
-			Details:    lo.ToPtr("Verify active task assignment notifications"),
+			Details:    new("Verify active task assignment notifications"),
 			Status:     &status,
 			AssigneeID: &originalAssignee.ID,
 		})
@@ -472,7 +461,7 @@ func TestTaskNotifications(t *testing.T) {
 
 	// updating fields should not create another notification for the assignee.
 	_, err = suite.Client.API.UpdateTask(owner.UserCtx, taskID, testclient.UpdateTaskInput{
-		Details: lo.ToPtr("Updated task details to check notifications"),
+		Details: new("Updated task details to check notifications"),
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 3)
@@ -489,7 +478,7 @@ func TestTaskNotifications(t *testing.T) {
 	// but reassigning to a new user should make notify the new assignee.
 	_, err = suite.Client.API.UpdateTask(owner.UserCtx, taskID, testclient.UpdateTaskInput{
 		AssigneeID: &nextAssignee.ID,
-		Status:     lo.ToPtr(enums.TaskStatusOpen),
+		Status:     new(enums.TaskStatusOpen),
 	})
 	assert.NilError(t, err)
 
@@ -506,17 +495,16 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 	// create a bunch to test the pagination with different users
 	// to ensure we are paginating correctly when viewing as org admin
 	numTasks := 95
-	org1TaskIDs := []string{}
-	org2TaskIDs := []string{}
-	for range numTasks {
-		t1 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg.Owner.UserCtx, t)
-		t2 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg.Member.UserCtx, t)
-		t3 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg.Admin.UserCtx, t)
-		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
-
-		t4 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg2.Owner.UserCtx, t)
-		org2TaskIDs = append(org2TaskIDs, t4.ID)
+	for _, ctx := range []context.Context{localTestOrg.Owner.UserCtx, localTestOrg.Member.UserCtx, localTestOrg2.Owner.UserCtx} {
+		(&th.TaskBuilder{Client: suite.Client, DueFunc: getFutureDate}).MustNewBulk(ctx, t, numTasks)
 	}
+
+	adminTaskIDs := map[string]bool{}
+	for _, task := range (&th.TaskBuilder{Client: suite.Client, DueFunc: getFutureDate}).MustNewBulk(localTestOrg.Admin.UserCtx, t, numTasks) {
+		adminTaskIDs[task.ID] = true
+	}
+
+	seenTaskIDs := map[string]string{}
 
 	var startCursorDue *string
 
@@ -645,6 +633,17 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
+			for _, edge := range resp.Tasks.Edges {
+				id := edge.Node.ID
+				assert.Check(t, adminTaskIDs[id], "task %s due %v is not one of the admin's tasks", id, edge.Node.Due)
+
+				if page, ok := seenTaskIDs[id]; ok {
+					t.Errorf("task %s due %v was already returned on %q", id, edge.Node.Due, page)
+				}
+
+				seenTaskIDs[id] = tc.name
+			}
+
 			assert.Check(t, is.Len(resp.Tasks.Edges, tc.expectedResults))
 			assert.Check(t, is.Equal(tc.totalCount, resp.Tasks.TotalCount))
 
@@ -695,15 +694,8 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 	viewOnlyUserCtx := localTestOrg.Member.UserCtx
 
 	numTasks := 93
-	org1TaskIDs := []string{}
-	org2TaskIDs := []string{}
-	for range numTasks {
-		t1 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(testUser.UserCtx, t)
-		t2 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(viewOnlyUserCtx, t)
-		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID)
-
-		t4 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg2.Owner.UserCtx, t)
-		org2TaskIDs = append(org2TaskIDs, t4.ID)
+	for _, ctx := range []context.Context{testUser.UserCtx, viewOnlyUserCtx, localTestOrg2.Owner.UserCtx} {
+		(&th.TaskBuilder{Client: suite.Client, DueFunc: getFutureDate}).MustNewBulk(ctx, t, numTasks)
 	}
 
 	var startCursorDue *string
@@ -873,7 +865,32 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 	th.CleanupOrganizationDataWithContext(localTestOrg2.Owner.UserCtx, t)
 }
 
+func TestMutationCreateBulkTask(t *testing.T) {
+	title := "Bulk Task " + ulids.New().String()
+
+	resp, err := suite.Client.API.CreateBulkTask(th.SharedTestUser1.UserCtx, []*testclient.CreateTaskInput{
+		{Title: title + " 1"},
+		{Title: title + " 2"},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateBulkTask.Tasks, 2))
+
+	taskIDs := make([]string, 0, len(resp.CreateBulkTask.Tasks))
+	for _, task := range resp.CreateBulkTask.Tasks {
+		taskIDs = append(taskIDs, task.ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.TaskDeleteOne]{Client: suite.Client.DB.Task, IDs: taskIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeTask, taskIDs)
+}
+
 func TestMutationCreateTask(t *testing.T) {
+	t.Parallel()
+
 	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, true)
 
 	testUser := localTestOrg.Owner
@@ -906,9 +923,9 @@ func TestMutationCreateTask(t *testing.T) {
 			name: "happy path, minimal input by member user with edges",
 			request: testclient.CreateTaskInput{
 				Title:             "test-task",
-				Details:           lo.ToPtr("test details of the task"),
+				Details:           new("test details of the task"),
 				Status:            &enums.TaskStatusInProgress,
-				Due:               lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
+				Due:               new(models.DateTime(time.Now().Add(time.Hour * 24))),
 				ControlIDs:        []string{control.ID},
 				InternalPolicyIDs: []string{internalPolicy.ID},
 				AssigneeID:        &localTestOrg.Member.ID, // assign the task to self
@@ -920,9 +937,9 @@ func TestMutationCreateTask(t *testing.T) {
 			name: "happy path, all input",
 			request: testclient.CreateTaskInput{
 				Title:      "test-task",
-				Details:    lo.ToPtr("test details of the task"),
+				Details:    new("test details of the task"),
 				Status:     &enums.TaskStatusInProgress,
-				Due:        lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
+				Due:        new(models.DateTime(time.Now().Add(time.Hour * 24))),
 				AssigneeID: &localTestOrg.Member.ID, // assign the task to another user
 			},
 			client: suite.Client.API,
@@ -960,7 +977,7 @@ func TestMutationCreateTask(t *testing.T) {
 		{
 			name: "missing title, but display name provided",
 			request: testclient.CreateTaskInput{
-				Details: lo.ToPtr("making a list, checking it twice"),
+				Details: new("making a list, checking it twice"),
 			},
 			client:      suite.Client.API,
 			ctx:         testUser.UserCtx,
@@ -1131,7 +1148,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "happy path, update details",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				Details:    lo.ToPtr(("making a list, checking it twice")),
+				Details:    new(("making a list, checking it twice")),
 				AssigneeID: &th.SharedAdminUser.ID,
 			},
 			client: suite.Client.API,
@@ -1152,7 +1169,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "happy path, update comment with files",
 			taskID: task.ID,
 			updateCommentRequest: &testclient.UpdateNoteInput{
-				Text: lo.ToPtr("sarah is better"),
+				Text: new("sarah is better"),
 			},
 			files: []*graphql.Upload{
 				pngFile,
@@ -1164,7 +1181,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "happy path, update comment with file using PAT",
 			taskID: task.ID,
 			updateCommentRequest: &testclient.UpdateNoteInput{
-				Text: lo.ToPtr("sarah is still better"),
+				Text: new("sarah is still better"),
 			},
 			files: []*graphql.Upload{
 				pdfFile,
@@ -1201,7 +1218,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "update assignee to user not in org should now allowed",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				AssigneeID: lo.ToPtr(th.SharedTestUser2.ID),
+				AssigneeID: new(th.SharedTestUser2.ID),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedAdminUser.UserCtx,
@@ -1211,7 +1228,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "update assignee to view only user",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				AssigneeID: lo.ToPtr(assignee.ID),
+				AssigneeID: new(assignee.ID),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -1220,7 +1237,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "update assignee to same user, should not error",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				AssigneeID: lo.ToPtr(assignee.ID),
+				AssigneeID: new(assignee.ID),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -1230,7 +1247,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
 				Status:  &enums.TaskStatusInProgress,
-				Details: lo.ToPtr("do all the things for the thing"),
+				Details: new("do all the things for the thing"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -1248,7 +1265,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "update assigner to another org member, no longer see it because no parent linked",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				AssignerID: lo.ToPtr(th.SharedViewOnlyUser2.ID),
+				AssignerID: new(th.SharedViewOnlyUser2.ID),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -1257,7 +1274,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "clear assignee",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				ClearAssignee: lo.ToPtr(true),
+				ClearAssignee: new(true),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedViewOnlyUser2.UserCtx,
@@ -1444,6 +1461,8 @@ func TestMutationDeleteTask(t *testing.T) {
 }
 
 func TestMutationUpdateBulkTask(t *testing.T) {
+	t.Parallel()
+
 	testUser := suite.SeedOrgOwner(t)
 
 	task1 := (&th.TaskBuilder{Client: suite.Client}).MustNew(testUser.Owner.UserCtx, t)
@@ -1467,8 +1486,8 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 			name: "happy path, clear tags on multiple tasks",
 			ids:  []string{task1.ID, task2.ID},
 			input: testclient.UpdateTaskInput{
-				ClearTags: lo.ToPtr(true),
-				Details:   lo.ToPtr("Cleared all tags"),
+				ClearTags: new(true),
+				Details:   new("Cleared all tags"),
 			},
 			client:               suite.Client.API,
 			ctx:                  testUser.Owner.UserCtx,
@@ -1478,8 +1497,8 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 			name: "support user should be able to update tasks",
 			ids:  []string{task1.ID, task2.ID},
 			input: testclient.UpdateTaskInput{
-				ClearTags: lo.ToPtr(true),
-				Details:   lo.ToPtr("Cleared all tags"),
+				ClearTags: new(true),
+				Details:   new("Cleared all tags"),
 			},
 			client:               suite.Client.API,
 			ctx:                  th.NewSupportCtx(th.SharedTestUser1.UserCtx, testUser.Owner.OrganizationID),
@@ -1488,7 +1507,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 		{
 			name:        "empty ids array",
 			ids:         []string{},
-			input:       testclient.UpdateTaskInput{Title: lo.ToPtr("test")},
+			input:       testclient.UpdateTaskInput{Title: new("test")},
 			client:      suite.Client.API,
 			ctx:         testUser.Owner.UserCtx,
 			expectedErr: "ids is required",
@@ -1497,7 +1516,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 			name: "mixed success and failure - some tasks not authorized",
 			ids:  []string{task1.ID, taskAnotherUser.ID}, // second task should fail authorization
 			input: testclient.UpdateTaskInput{
-				Title: lo.ToPtr("Updated by authorized user"),
+				Title: new("Updated by authorized user"),
 			},
 			client:               suite.Client.API,
 			ctx:                  testUser.Owner.UserCtx,
@@ -1507,7 +1526,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 			name: "update not allowed, no permissions to tasks",
 			ids:  []string{task1.ID},
 			input: testclient.UpdateTaskInput{
-				Title: lo.ToPtr("Should not update"),
+				Title: new("Should not update"),
 			},
 			client:               suite.Client.API,
 			ctx:                  th.SharedTestUser2.UserCtx,
@@ -1599,13 +1618,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 
 			// verify that the returned IDs match the ones that were actually updated
 			for _, updatedID := range resp.UpdateBulkTask.UpdatedIDs {
-				found := false
-				for _, expectedID := range tc.ids {
-					if expectedID == updatedID {
-						found = true
-						break
-					}
-				}
+				found := slices.Contains(tc.ids, updatedID)
 				assert.Check(t, found, "Updated ID %s should be in the original request", updatedID)
 			}
 		})

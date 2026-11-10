@@ -154,6 +154,9 @@ type Server struct {
 	AssessmentCnameTarget string `json:"assessmentcnametarget" koanf:"assessmentcnametarget" default:""`
 	// TrustCenterPreviewZoneID is the cloudflare zone id that holds trust center preview domain records
 	TrustCenterPreviewZoneID string `json:"trustcenterpreviewzoneid" koanf:"trustcenterpreviewzoneid" default:"" sensitive:"true"`
+	// TrustCenterCacheRefreshSecret is the shared secret sent in the X-Openlane-Cache-Refresh header on trust center
+	// cache refresh requests so the trust center frontend can authenticate forced-fresh renders; no header is sent when empty
+	TrustCenterCacheRefreshSecret string `json:"trustcentercacherefreshsecret" koanf:"trustcentercacherefreshsecret" default:"" sensitive:"true"`
 	// NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
 	// Unread notifications are always pulled regardless of this setting
 	NotificationLookbackDays int `json:"notificationlookbackdays" koanf:"notificationlookbackdays" default:"30"`

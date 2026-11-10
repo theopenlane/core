@@ -5,18 +5,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestNewManager(t *testing.T) {
 	t.Parallel()
 
 	manager := NewManager()
-	require.NotNil(t, manager)
-	require.NotNil(t, manager.subscribers)
-	assert.Empty(t, manager.subscribers)
+	assert.Assert(t, manager != nil)
+	assert.Assert(t, manager.subscribers != nil)
+	assert.Check(t, is.Len(manager.subscribers, 0))
 }
 
 func TestSubscribeAndPublish(t *testing.T) {
@@ -34,7 +34,7 @@ func TestSubscribeAndPublish(t *testing.T) {
 
 	// Verify subscription was added
 	manager.mu.RLock()
-	assert.Len(t, manager.subscribers[subscriberKey{userID: userID, orgID: orgID}], 1)
+	assert.Check(t, is.Len(manager.subscribers[subscriberKey{userID: userID, orgID: orgID}], 1))
 	manager.mu.RUnlock()
 
 	// Create a mock notification
@@ -45,16 +45,16 @@ func TestSubscribeAndPublish(t *testing.T) {
 
 	// Publish the notification
 	err := manager.Publish(userID, orgID, notification)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// Verify the notification was received
 	select {
 	case receivedNotification := <-notificationChan:
 		// Cast back to concrete type for assertions
 		concreteNotif, ok := receivedNotification.(*generated.Notification)
-		require.True(t, ok, "Should be able to cast to *generated.Notification")
-		assert.Equal(t, notification.ID, concreteNotif.ID)
-		assert.Equal(t, notification.Title, concreteNotif.Title)
+		assert.Assert(t, ok, "Should be able to cast to *generated.Notification")
+		assert.Check(t, is.Equal(notification.ID, concreteNotif.ID))
+		assert.Check(t, is.Equal(notification.Title, concreteNotif.Title))
 	case <-time.After(1 * time.Second):
 		t.Fatal("Timeout waiting for notification")
 	}
@@ -74,7 +74,7 @@ func TestPublishNoSubscribers(t *testing.T) {
 
 	// Publish to user with no subscribers should not error
 	err := manager.Publish(userID, orgID, notification)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 func TestUnsubscribe(t *testing.T) {
@@ -90,7 +90,7 @@ func TestUnsubscribe(t *testing.T) {
 
 	// Verify subscription exists
 	manager.mu.RLock()
-	assert.Len(t, manager.subscribers[subscriberKey{userID: userID, orgID: orgID}], 1)
+	assert.Check(t, is.Len(manager.subscribers[subscriberKey{userID: userID, orgID: orgID}], 1))
 	manager.mu.RUnlock()
 
 	// Unsubscribe
@@ -98,12 +98,12 @@ func TestUnsubscribe(t *testing.T) {
 
 	// Verify subscription was removed
 	manager.mu.RLock()
-	assert.Len(t, manager.subscribers[subscriberKey{userID: userID, orgID: orgID}], 0)
+	assert.Check(t, is.Len(manager.subscribers[subscriberKey{userID: userID, orgID: orgID}], 0))
 	manager.mu.RUnlock()
 
 	// Verify channel is closed
 	_, ok := <-notificationChan
-	assert.False(t, ok, "Channel should be closed")
+	assert.Check(t, !ok, "Channel should be closed")
 }
 
 func TestMultipleSubscribers(t *testing.T) {
@@ -125,7 +125,7 @@ func TestMultipleSubscribers(t *testing.T) {
 
 	// Verify all subscriptions
 	manager.mu.RLock()
-	assert.Len(t, manager.subscribers[subscriberKey{userID: userID, orgID: orgID}], 3)
+	assert.Check(t, is.Len(manager.subscribers[subscriberKey{userID: userID, orgID: orgID}], 3))
 	manager.mu.RUnlock()
 
 	// Publish a notification
@@ -135,15 +135,15 @@ func TestMultipleSubscribers(t *testing.T) {
 	}
 
 	err := manager.Publish(userID, orgID, notification)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// Verify all subscribers received the notification
 	for i, ch := range []chan Notification{chan1, chan2, chan3} {
 		select {
 		case receivedNotification := <-ch:
 			concreteNotif, ok := receivedNotification.(*generated.Notification)
-			require.True(t, ok, "Subscriber %d: should be able to cast to *generated.Notification", i+1)
-			assert.Equal(t, notification.ID, concreteNotif.ID, "Subscriber %d should receive notification", i+1)
+			assert.Assert(t, ok, "Subscriber %d: should be able to cast to *generated.Notification", i+1)
+			assert.Check(t, is.Equal(notification.ID, concreteNotif.ID), "Subscriber %d should receive notification", i+1)
 		case <-time.After(1 * time.Second):
 			t.Fatalf("Subscriber %d timeout waiting for notification", i+1)
 		}
@@ -160,9 +160,7 @@ func TestUnsubscribeNonExistent(t *testing.T) {
 	notificationChan := make(chan Notification, NotificationChannelBufferSize)
 
 	// Unsubscribe without subscribing should not panic
-	require.NotPanics(t, func() {
-		manager.Unsubscribe(userID, orgID, notificationChan)
-	})
+	manager.Unsubscribe(userID, orgID, notificationChan)
 }
 
 func TestConcurrentPublish(t *testing.T) {
@@ -182,16 +180,16 @@ func TestConcurrentPublish(t *testing.T) {
 	wg.Add(numGoroutines)
 
 	// Publish notifications concurrently
-	for i := 0; i < numGoroutines; i++ {
+	for i := range numGoroutines {
 		go func(goroutineID int) {
 			defer wg.Done()
-			for j := 0; j < numNotificationsPerGoroutine; j++ {
+			for j := range numNotificationsPerGoroutine {
 				notification := &generated.Notification{
 					ID:    "notification-" + string(rune(goroutineID)) + "-" + string(rune(j)),
 					Title: "Concurrent Notification",
 				}
 				err := manager.Publish(userID, orgID, notification)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 		}(i)
 	}
@@ -211,7 +209,7 @@ func TestConcurrentPublish(t *testing.T) {
 		}
 	}
 
-	assert.Equal(t, numGoroutines*numNotificationsPerGoroutine, receivedCount)
+	assert.Check(t, is.Equal(numGoroutines*numNotificationsPerGoroutine, receivedCount))
 }
 
 func TestPublishToFullChannel(t *testing.T) {
@@ -226,13 +224,13 @@ func TestPublishToFullChannel(t *testing.T) {
 	manager.Subscribe(userID, orgID, notificationChan)
 
 	// Fill the channel
-	for i := 0; i < 2; i++ {
+	for i := range 2 {
 		notification := &generated.Notification{
 			ID:    "notification-fill-" + string(rune(i)),
 			Title: "Fill Notification",
 		}
 		err := manager.Publish(userID, orgID, notification)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 	}
 
 	// Try to publish to full channel - should not block or error
@@ -244,7 +242,7 @@ func TestPublishToFullChannel(t *testing.T) {
 	done := make(chan bool, 1)
 	go func() {
 		err := manager.Publish(userID, orgID, notification)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 		done <- true
 	}()
 
@@ -260,7 +258,7 @@ func TestChannelBufferSize(t *testing.T) {
 	t.Parallel()
 
 	// Verify the constant is set to expected value
-	assert.Equal(t, 10, NotificationChannelBufferSize)
+	assert.Check(t, is.Equal(10, NotificationChannelBufferSize))
 }
 
 // receives reports whether a notification with the given id arrived on the channel
@@ -270,8 +268,8 @@ func receives(t *testing.T, ch chan Notification, id string) bool {
 	select {
 	case received := <-ch:
 		notif, ok := received.(*generated.Notification)
-		require.True(t, ok)
-		assert.Equal(t, id, notif.ID)
+		assert.Assert(t, ok)
+		assert.Check(t, is.Equal(id, notif.ID))
 
 		return true
 	case <-time.After(100 * time.Millisecond):
@@ -296,11 +294,11 @@ func TestPublishOrgWide(t *testing.T) {
 
 	// an org-wide notification names no user
 	notification := &generated.Notification{ID: "org-wide", Title: "Organization ready"}
-	require.NoError(t, manager.Publish("", orgID, notification))
+	assert.NilError(t, manager.Publish("", orgID, notification))
 
-	assert.True(t, receives(t, memberOne, "org-wide"), "member of the org should receive it")
-	assert.True(t, receives(t, memberTwo, "org-wide"), "every member of the org should receive it")
-	assert.False(t, receives(t, outsider, "org-wide"), "member of another org should not receive it")
+	assert.Check(t, receives(t, memberOne, "org-wide"), "member of the org should receive it")
+	assert.Check(t, receives(t, memberTwo, "org-wide"), "every member of the org should receive it")
+	assert.Check(t, !receives(t, outsider, "org-wide"), "member of another org should not receive it")
 }
 
 func TestPublishUserScopedToOrg(t *testing.T) {
@@ -317,10 +315,10 @@ func TestPublishUserScopedToOrg(t *testing.T) {
 	manager.Subscribe(userID, "org-b", inOrgB)
 
 	notification := &generated.Notification{ID: "personal", Title: "Assigned to you"}
-	require.NoError(t, manager.Publish(userID, "org-a", notification))
+	assert.NilError(t, manager.Publish(userID, "org-a", notification))
 
-	assert.True(t, receives(t, inOrgA, "personal"), "session in the owning org should receive it")
-	assert.False(t, receives(t, inOrgB, "personal"), "session in another org should not receive it")
+	assert.Check(t, receives(t, inOrgA, "personal"), "session in the owning org should receive it")
+	assert.Check(t, !receives(t, inOrgB, "personal"), "session in another org should not receive it")
 }
 
 func TestPublishOrgWideDoesNotReachSessionWithoutOrg(t *testing.T) {
@@ -334,9 +332,9 @@ func TestPublishOrgWideDoesNotReachSessionWithoutOrg(t *testing.T) {
 	manager.Subscribe("user-without-org", "", noOrg)
 
 	notification := &generated.Notification{ID: "org-wide", Title: "Organization ready"}
-	require.NoError(t, manager.Publish("", orgID, notification))
+	assert.NilError(t, manager.Publish("", orgID, notification))
 
-	assert.False(t, receives(t, noOrg, "org-wide"), "session with no org should not receive org notifications")
+	assert.Check(t, !receives(t, noOrg, "org-wide"), "session with no org should not receive org notifications")
 }
 
 func TestPublishNoRoutingTarget(t *testing.T) {
@@ -348,7 +346,7 @@ func TestPublishNoRoutingTarget(t *testing.T) {
 	manager.Subscribe("user-1", "org-a", ch)
 
 	// nothing to route on, so nothing is delivered
-	require.NoError(t, manager.Publish("", "", &generated.Notification{ID: "orphan"}))
+	assert.NilError(t, manager.Publish("", "", &generated.Notification{ID: "orphan"}))
 
-	assert.False(t, receives(t, ch, "orphan"))
+	assert.Check(t, !receives(t, ch, "orphan"))
 }

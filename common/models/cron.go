@@ -101,7 +101,7 @@ func (c Cron) MarshalGQL(w io.Writer) {
 // Value returns human readable cron from the database
 func (c Cron) Value() (driver.Value, error) { return string(c), nil }
 
-func (c *Cron) Scan(value interface{}) error {
+func (c *Cron) Scan(value any) error {
 	if value == nil {
 		return nil
 	}

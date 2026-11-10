@@ -43,6 +43,6 @@ func (a Address) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (a *Address) UnmarshalGQL(v interface{}) error {
+func (a *Address) UnmarshalGQL(v any) error {
 	return unmarshalGQLJSON(v, a)
 }

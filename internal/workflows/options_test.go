@@ -4,7 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestConfigOptions(t *testing.T) {
@@ -25,21 +26,21 @@ func TestConfigOptions(t *testing.T) {
 		WithCELTrackState(true),
 	)
 
-	assert.True(t, cfg.Enabled)
-	assert.Equal(t, 250*time.Millisecond, cfg.CEL.Timeout)
-	assert.Equal(t, uint64(99), cfg.CEL.CostLimit)
-	assert.Equal(t, uint(7), cfg.CEL.InterruptCheckFrequency)
-	assert.Equal(t, 5, cfg.CEL.ParserRecursionLimit)
-	assert.Equal(t, 123, cfg.CEL.ParserExpressionSizeLimit)
-	assert.Equal(t, 3, cfg.CEL.ComprehensionNestingLimit)
-	assert.False(t, cfg.CEL.ExtendedValidations)
-	assert.True(t, cfg.CEL.OptionalTypes)
-	assert.True(t, cfg.CEL.IdentifierEscapeSyntax)
-	assert.True(t, cfg.CEL.CrossTypeNumericComparisons)
-	assert.True(t, cfg.CEL.MacroCallTracking)
-	assert.False(t, cfg.CEL.EvalOptimize)
-	assert.True(t, cfg.CEL.TrackState)
-	assert.Equal(t, "events", cfg.Gala.QueueName)
+	assert.Check(t, cfg.Enabled)
+	assert.Check(t, is.Equal(250*time.Millisecond, cfg.CEL.Timeout))
+	assert.Check(t, is.Equal(uint64(99), cfg.CEL.CostLimit))
+	assert.Check(t, is.Equal(uint(7), cfg.CEL.InterruptCheckFrequency))
+	assert.Check(t, is.Equal(5, cfg.CEL.ParserRecursionLimit))
+	assert.Check(t, is.Equal(123, cfg.CEL.ParserExpressionSizeLimit))
+	assert.Check(t, is.Equal(3, cfg.CEL.ComprehensionNestingLimit))
+	assert.Check(t, !cfg.CEL.ExtendedValidations)
+	assert.Check(t, cfg.CEL.OptionalTypes)
+	assert.Check(t, cfg.CEL.IdentifierEscapeSyntax)
+	assert.Check(t, cfg.CEL.CrossTypeNumericComparisons)
+	assert.Check(t, cfg.CEL.MacroCallTracking)
+	assert.Check(t, !cfg.CEL.EvalOptimize)
+	assert.Check(t, cfg.CEL.TrackState)
+	assert.Check(t, is.Equal("events", cfg.Gala.QueueName))
 
 	override := Config{
 		Enabled: false,
@@ -57,18 +58,18 @@ func TestConfigOptions(t *testing.T) {
 		WebhookAllowPrivateAddresses: true,
 	}
 	cfg = NewDefaultConfig(WithConfig(override))
-	assert.Equal(t, override.Enabled, cfg.Enabled)
-	assert.Equal(t, override.CEL.Timeout, cfg.CEL.Timeout)
-	assert.Equal(t, override.CEL.CostLimit, cfg.CEL.CostLimit)
-	assert.Equal(t, override.Gala.Enabled, cfg.Gala.Enabled)
-	assert.Equal(t, override.Gala.WorkerCount, cfg.Gala.WorkerCount)
-	assert.Equal(t, override.Gala.MaxRetries, cfg.Gala.MaxRetries)
-	assert.Equal(t, override.Gala.FailOnEnqueueError, cfg.Gala.FailOnEnqueueError)
-	assert.Equal(t, override.Gala.QueueName, cfg.Gala.QueueName)
-	assert.Equal(t, override.WebhookAllowPrivateAddresses, cfg.WebhookAllowPrivateAddresses)
+	assert.Check(t, is.Equal(override.Enabled, cfg.Enabled))
+	assert.Check(t, is.Equal(override.CEL.Timeout, cfg.CEL.Timeout))
+	assert.Check(t, is.Equal(override.CEL.CostLimit, cfg.CEL.CostLimit))
+	assert.Check(t, is.Equal(override.Gala.Enabled, cfg.Gala.Enabled))
+	assert.Check(t, is.Equal(override.Gala.WorkerCount, cfg.Gala.WorkerCount))
+	assert.Check(t, is.Equal(override.Gala.MaxRetries, cfg.Gala.MaxRetries))
+	assert.Check(t, is.Equal(override.Gala.FailOnEnqueueError, cfg.Gala.FailOnEnqueueError))
+	assert.Check(t, is.Equal(override.Gala.QueueName, cfg.Gala.QueueName))
+	assert.Check(t, is.Equal(override.WebhookAllowPrivateAddresses, cfg.WebhookAllowPrivateAddresses))
 }
 
 func TestConfigIsEnabledNil(t *testing.T) {
 	var cfg *Config
-	assert.False(t, cfg.IsEnabled())
+	assert.Check(t, !cfg.IsEnabled())
 }

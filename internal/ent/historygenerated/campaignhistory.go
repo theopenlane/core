@@ -57,6 +57,8 @@ type CampaignHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -147,7 +149,7 @@ func (*CampaignHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case campaignhistory.FieldRecurrenceInterval, campaignhistory.FieldRecipientCount, campaignhistory.FieldResendCount:
 			values[i] = new(sql.NullInt64)
-		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldUpdatedByImpersonator, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldSourceDefinitionID, campaignhistory.FieldSourceDefinitionVersion, campaignhistory.FieldSourceInstanceID, campaignhistory.FieldManagedBy, campaignhistory.FieldIntegrationRunID, campaignhistory.FieldExternalID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldInternalOwnerIdentityHolderID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldEntityID, campaignhistory.FieldTemplateID, campaignhistory.FieldAssessmentID, campaignhistory.FieldEmailTemplateID, campaignhistory.FieldIntegrationID, campaignhistory.FieldEmailBrandingID, campaignhistory.FieldTrustCenterID:
+		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldUpdatedByImpersonator, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldSourceDefinitionID, campaignhistory.FieldSourceDefinitionVersion, campaignhistory.FieldSourceInstanceID, campaignhistory.FieldManagedBy, campaignhistory.FieldIntegrationRunID, campaignhistory.FieldSourceKey, campaignhistory.FieldExternalID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldInternalOwnerIdentityHolderID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldEntityID, campaignhistory.FieldTemplateID, campaignhistory.FieldAssessmentID, campaignhistory.FieldEmailTemplateID, campaignhistory.FieldIntegrationID, campaignhistory.FieldEmailBrandingID, campaignhistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case campaignhistory.FieldHistoryTime, campaignhistory.FieldCreatedAt, campaignhistory.FieldUpdatedAt, campaignhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -276,6 +278,12 @@ func (_m *CampaignHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case campaignhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case campaignhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -587,6 +595,9 @@ func (_m *CampaignHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

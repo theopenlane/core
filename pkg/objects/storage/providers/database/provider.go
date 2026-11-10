@@ -54,13 +54,11 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 	bucket := p.bucket()
 
 	metadata := &storagetypes.UploadedFileMetadata{
-		FileMetadata: storagetypes.FileMetadata{
-			Key:          fileID,
-			Size:         size,
-			Bucket:       bucket,
-			ProviderType: storagetypes.DatabaseProvider,
-			FullURI:      storage.Scheme(storagetypes.DatabaseProvider) + bucket + "/" + fileID,
-		},
+		Key:          fileID,
+		Size:         size,
+		Bucket:       bucket,
+		ProviderType: storagetypes.DatabaseProvider,
+		FullURI:      storage.Scheme(storagetypes.DatabaseProvider) + bucket + "/" + fileID,
 	}
 
 	return metadata, nil
@@ -94,14 +92,12 @@ func (p *Provider) Download(ctx context.Context, fileRef *storagetypes.File, _ *
 		File:           record.FileContents,
 		Size:           size,
 		TimeDownloaded: time.Now(),
-		FileMetadata: storagetypes.FileMetadata{
-			Key:          fileID,
-			Bucket:       p.bucket(),
-			Region:       p.options.Region,
-			ContentType:  record.DetectedContentType,
-			Name:         record.ProvidedFileName,
-			ProviderType: storagetypes.DatabaseProvider,
-		},
+		Key:            fileID,
+		Bucket:         p.bucket(),
+		Region:         p.options.Region,
+		ContentType:    record.DetectedContentType,
+		Name:           record.ProvidedFileName,
+		ProviderType:   storagetypes.DatabaseProvider,
 	}
 
 	return metadata, nil

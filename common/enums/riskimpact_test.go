@@ -3,7 +3,8 @@ package enums
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestToRiskImpact(t *testing.T) {
@@ -23,6 +24,6 @@ func TestToRiskImpact(t *testing.T) {
 
 	for _, test := range tests {
 		result := ToRiskImpact(test.input)
-		assert.Equal(t, test.expected, *result, "ToRiskImpact(%q)", test.input)
+		assert.Check(t, is.Equal(test.expected, *result), "ToRiskImpact(%q)", test.input)
 	}
 }

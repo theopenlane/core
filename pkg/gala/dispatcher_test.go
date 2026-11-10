@@ -455,3 +455,48 @@ func TestSoftStopKeepsInFlightJobsRunning(t *testing.T) {
 		t.Fatal("listener never completed")
 	}
 }
+
+func TestCompleteJobsInlineFinishesJobBeforeNextOneRuns(t *testing.T) {
+	fixture := NewTestGala(t, WithTestWorkerCount(1), WithTestCompleteJobsInline(true))
+
+	topic := NamespacedTopic[runtimeTestPayload](Mutation, "GalaCompleteInline")
+
+	runningDuringSecondJob := make(chan int, 1)
+
+	if _, err := Register(fixture.Gala, Definition[runtimeTestPayload]{
+		Topic: topic,
+		Handle: func(handlerContext HandlerContext, payload runtimeTestPayload) error {
+			if payload.Message != "second" {
+				return nil
+			}
+
+			params := river.NewJobListParams().States(rivertype.JobStateRunning)
+
+			running, err := fixture.Gala.jobController.JobList(handlerContext.Context, params)
+			if err != nil {
+				return err
+			}
+
+			runningDuringSecondJob <- len(running.Jobs)
+
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	for _, message := range []string{"first", "second"} {
+		if _, err := fixture.Gala.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: message}, Headers{}); err != nil {
+			t.Fatalf("failed to emit event: %v", err)
+		}
+	}
+
+	select {
+	case running := <-runningDuringSecondJob:
+		if running != 1 {
+			t.Fatalf("expected only the second job running, got %d running jobs", running)
+		}
+	case <-time.After(30 * time.Second):
+		t.Fatal("second job never ran")
+	}
+}

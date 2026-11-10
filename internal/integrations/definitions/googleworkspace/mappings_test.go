@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/mappingtest"
@@ -20,7 +20,7 @@ func testMappings(t *testing.T) []types.MappingRegistration {
 	t.Helper()
 
 	def, err := Builder(Config{})()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return def.Mappings
 }
@@ -46,19 +46,19 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 			"customerId":"C123"
 		}`),
 	}, types.MappingInstallation{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	accountMapped, err := jsonx.ToMap(accountRaw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "user-123", accountMapped["external_id"])
-	assert.Equal(t, "alice@example.com", accountMapped["canonical_email"])
-	assert.Equal(t, "Alice Example", accountMapped["display_name"])
-	assert.Equal(t, "Alice", accountMapped["given_name"])
-	assert.Equal(t, "Example", accountMapped["family_name"])
-	assert.Equal(t, "/Engineering", accountMapped["organization_unit"])
-	assert.Equal(t, "ACTIVE", accountMapped["status"])
-	assert.Equal(t, "ENFORCED", accountMapped["mfa_state"])
+	assert.Check(t, is.Equal("user-123", accountMapped["external_id"]))
+	assert.Check(t, is.Equal("alice@example.com", accountMapped["canonical_email"]))
+	assert.Check(t, is.Equal("Alice Example", accountMapped["display_name"]))
+	assert.Check(t, is.Equal("Alice", accountMapped["given_name"]))
+	assert.Check(t, is.Equal("Example", accountMapped["family_name"]))
+	assert.Check(t, is.Equal("/Engineering", accountMapped["organization_unit"]))
+	assert.Check(t, is.Equal("ACTIVE", accountMapped["status"]))
+	assert.Check(t, is.Equal("ENFORCED", accountMapped["mfa_state"]))
 
 	groupRaw, err := providerkit.EvalMap(context.Background(), mappingtest.MappingSpec(t, testMappings(t), entityops.SchemaDirectoryGroup.Name).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
@@ -70,16 +70,16 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 			"etag":"group-etag"
 		}`),
 	}, types.MappingInstallation{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	groupMapped, err := jsonx.ToMap(groupRaw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "group-123", groupMapped["external_id"])
-	assert.Equal(t, "eng@example.com", groupMapped["email"])
-	assert.Equal(t, "Engineering", groupMapped["display_name"])
-	assert.Equal(t, "DISTRIBUTION", groupMapped["classification"])
-	assert.Equal(t, "ACTIVE", groupMapped["status"])
+	assert.Check(t, is.Equal("group-123", groupMapped["external_id"]))
+	assert.Check(t, is.Equal("eng@example.com", groupMapped["email"]))
+	assert.Check(t, is.Equal("Engineering", groupMapped["display_name"]))
+	assert.Check(t, is.Equal("DISTRIBUTION", groupMapped["classification"]))
+	assert.Check(t, is.Equal("ACTIVE", groupMapped["status"]))
 
 	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingtest.MappingSpec(t, testMappings(t), entityops.SchemaDirectoryMembership.Name).MapExpr, types.MappingEnvelope{
 		Resource: "group-123",
@@ -90,14 +90,14 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 			"id":"member-123"
 		}`),
 	}, types.MappingInstallation{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	membershipMapped, err := jsonx.ToMap(membershipRaw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "member-123", membershipMapped["directory_account_id"], "the membership references the member's user id, which is the account's external id")
-	assert.Equal(t, "group-123", membershipMapped["directory_group_id"], "the membership references the group id, which is the group's external id")
-	assert.Equal(t, "OWNER", membershipMapped["role"])
+	assert.Check(t, is.Equal("member-123", membershipMapped["directory_account_id"]), "the membership references the member's user id, which is the account's external id")
+	assert.Check(t, is.Equal("group-123", membershipMapped["directory_group_id"]), "the membership references the group id, which is the group's external id")
+	assert.Check(t, is.Equal("OWNER", membershipMapped["role"]))
 }
 
 // TestGoogleWorkspaceMappingsFallbacks verifies fallback when payload fields are missing
@@ -106,39 +106,39 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 		Resource: "sparse@example.com",
 		Payload:  json.RawMessage(`{"id":"user-sparse","primaryEmail":"sparse@example.com"}`),
 	}, types.MappingInstallation{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	accountMapped, err := jsonx.ToMap(accountRaw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "user-sparse", accountMapped["external_id"])
-	assert.Equal(t, "sparse@example.com", accountMapped["canonical_email"])
-	assert.Equal(t, "", accountMapped["display_name"])
-	assert.Equal(t, "", accountMapped["given_name"])
-	assert.Equal(t, "", accountMapped["family_name"])
-	assert.Equal(t, "", accountMapped["organization_unit"])
-	assert.Equal(t, "ACTIVE", accountMapped["status"])
-	assert.Equal(t, "DISABLED", accountMapped["mfa_state"])
+	assert.Check(t, is.Equal("user-sparse", accountMapped["external_id"]))
+	assert.Check(t, is.Equal("sparse@example.com", accountMapped["canonical_email"]))
+	assert.Check(t, is.Equal("", accountMapped["display_name"]))
+	assert.Check(t, is.Equal("", accountMapped["given_name"]))
+	assert.Check(t, is.Equal("", accountMapped["family_name"]))
+	assert.Check(t, is.Equal("", accountMapped["organization_unit"]))
+	assert.Check(t, is.Equal("ACTIVE", accountMapped["status"]))
+	assert.Check(t, is.Equal("DISABLED", accountMapped["mfa_state"]))
 
 	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingtest.MappingSpec(t, testMappings(t), entityops.SchemaDirectoryMembership.Name).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
 		Payload:  json.RawMessage(`{"email":"norole@example.com","type":"USER","id":"member-norole"}`),
 	}, types.MappingInstallation{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	membershipMapped, err := jsonx.ToMap(membershipRaw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "MEMBER", membershipMapped["role"], "missing role must fall back to MEMBER so the row survives enum validation")
+	assert.Check(t, is.Equal("MEMBER", membershipMapped["role"]), "missing role must fall back to MEMBER so the row survives enum validation")
 
 	emptyRoleRaw, err := providerkit.EvalMap(context.Background(), mappingtest.MappingSpec(t, testMappings(t), entityops.SchemaDirectoryMembership.Name).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
 		Payload:  json.RawMessage(`{"email":"emptyrole@example.com","role":"","type":"USER","id":"member-emptyrole"}`),
 	}, types.MappingInstallation{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	emptyRoleMapped, err := jsonx.ToMap(emptyRoleRaw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "MEMBER", emptyRoleMapped["role"], "empty role must fall back to MEMBER so the row survives enum validation")
+	assert.Check(t, is.Equal("MEMBER", emptyRoleMapped["role"]), "empty role must fall back to MEMBER so the row survives enum validation")
 }

@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
-	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
@@ -22,6 +21,8 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	coreutils "github.com/theopenlane/core/v2/internal/testutils"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // newSessionConfig builds a session config the way serveropts.WithSessionManager does for a
@@ -38,10 +39,10 @@ func newSessionConfig(t *testing.T, client *redis.Client) sessions.SessionConfig
 	blockKey := make([]byte, 32)
 
 	_, err := rand.Read(hashKey)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	_, err = rand.Read(blockKey)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	sm := sessions.NewCookieStore[map[string]any](cc, hashKey, blockKey)
 
@@ -58,10 +59,10 @@ func TestLogoutHandler(t *testing.T) {
 	defer client.Close()
 
 	tm, err := coreutils.CreateTokenManager(-15 * time.Minute)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	tm.WithBlacklist(tokens.NewRedisTokenBlacklist(client, "token:blacklist:"))
-	assert.True(t, tm.RevocationEnabled())
+	assert.Check(t, tm.RevocationEnabled())
 
 	sc := newSessionConfig(t, client)
 
@@ -75,19 +76,19 @@ func TestLogoutHandler(t *testing.T) {
 	claims := &tokens.Claims{UserID: "user-123", OrgID: "org-456"}
 
 	access, refresh, err := tm.CreateTokenPair(claims)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// the access and refresh token in a pair share a jwt id, so one blacklist entry covers both
 	accessClaims, err := tokens.ParseUnverifiedTokenClaims(access)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	jti := accessClaims.ID
-	assert.NotEmpty(t, jti)
+	assert.Check(t, len(jti) > 0)
 
 	// create a persisted session and capture its cookie so the handler can delete it
 	sessionRec := httptest.NewRecorder()
 	_, err = sc.CreateAndStoreSession(context.Background(), sessionRec, claims.UserID)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// build the logout request with the bearer access token, refresh token body, and session cookie
 	body := fmt.Sprintf(`{"refresh_token":%q}`, refresh)
@@ -104,31 +105,31 @@ func TestLogoutHandler(t *testing.T) {
 
 	// resolve the session id and confirm both the token and session are live beforehand
 	sessionForReq, err := sc.SessionManager.Get(req, sc.CookieConfig.Name)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	sessionID := sc.SessionManager.GetSessionIDFromCookie(sessionForReq)
-	assert.NotEmpty(t, sessionID)
+	assert.Check(t, len(sessionID) > 0)
 
 	_, err = sc.RedisStore.GetSession(context.Background(), sessionID)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	revoked, err := tm.IsTokenRevoked(context.Background(), jti)
-	assert.NoError(t, err)
-	assert.False(t, revoked)
+	assert.Check(t, err)
+	assert.Check(t, !revoked)
 
 	// perform the logout
 	err = h.LogoutHandler(ctx)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 	// the shared jwt id is now revoked, so both the access and refresh tokens are rejected
 	revoked, err = tm.IsTokenRevoked(context.Background(), jti)
-	assert.NoError(t, err)
-	assert.True(t, revoked)
+	assert.Check(t, err)
+	assert.Check(t, revoked)
 
 	// the server-side session was deleted
 	_, err = sc.RedisStore.GetSession(context.Background(), sessionID)
-	assert.Error(t, err)
+	assert.Check(t, err != nil)
 
 	// the auth cookies were cleared on the response
 	cleared := map[string]bool{}
@@ -139,8 +140,8 @@ func TestLogoutHandler(t *testing.T) {
 		}
 	}
 
-	assert.True(t, cleared[auth.AccessTokenCookie], "access token cookie should be cleared")
-	assert.True(t, cleared[auth.RefreshTokenCookie], "refresh token cookie should be cleared")
+	assert.Check(t, cleared[auth.AccessTokenCookie], "access token cookie should be cleared")
+	assert.Check(t, cleared[auth.RefreshTokenCookie], "refresh token cookie should be cleared")
 }
 
 // TestLogoutHandlerWithoutCredentials verifies that logout succeeds and is idempotent when no
@@ -150,7 +151,7 @@ func TestLogoutHandlerWithoutCredentials(t *testing.T) {
 	defer client.Close()
 
 	tm, err := coreutils.CreateTokenManager(-15 * time.Minute)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	tm.WithBlacklist(tokens.NewRedisTokenBlacklist(client, "token:blacklist:"))
 
@@ -169,6 +170,6 @@ func TestLogoutHandlerWithoutCredentials(t *testing.T) {
 	ctx := echo.New().NewContext(req, rec)
 
 	err = h.LogoutHandler(ctx)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 }

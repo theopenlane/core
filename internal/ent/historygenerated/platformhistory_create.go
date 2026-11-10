@@ -239,6 +239,20 @@ func (_c *PlatformHistoryCreate) SetNillableIntegrationRunID(v *string) *Platfor
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *PlatformHistoryCreate) SetSourceKey(v string) *PlatformHistoryCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *PlatformHistoryCreate) SetNillableSourceKey(v *string) *PlatformHistoryCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *PlatformHistoryCreate) SetExternalID(v string) *PlatformHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -1218,6 +1232,10 @@ func (_c *PlatformHistoryCreate) createSpec() (*PlatformHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(platformhistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(platformhistory.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(platformhistory.FieldExternalID, field.TypeString, value)

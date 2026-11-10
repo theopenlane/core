@@ -28,9 +28,10 @@ type DispatchRequest struct {
 	Workflow *WorkflowMeta
 	// ScheduledAt defers execution until the specified time; nil means immediate
 	ScheduledAt *time.Time
-	// UniqueKey optionally dedups this dispatch across live and terminal job states, so a
-	// retried caller never enqueues the operation twice
+	// UniqueKey optionally dedups this dispatch against queued and running jobs with the same key
 	UniqueKey string
+	// UniqueOnce extends UniqueKey to finished jobs too, so a retried caller never enqueues the operation twice
+	UniqueOnce bool
 	// Runtime signals that this dispatch should use the runtime provider path
 	Runtime bool
 }

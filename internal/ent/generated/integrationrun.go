@@ -87,6 +87,7 @@ type IntegrationRun struct {
 	tag_definition_integration_runs         *string
 	task_integration_runs                   *string
 	template_integration_runs               *string
+	vendor_risk_score_integration_runs      *string
 	selectValues                            sql.SelectValues
 }
 
@@ -340,6 +341,8 @@ func (*IntegrationRun) scanValues(columns []string) ([]any, error) {
 		case integrationrun.ForeignKeys[21]: // task_integration_runs
 			values[i] = new(sql.NullString)
 		case integrationrun.ForeignKeys[22]: // template_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[23]: // vendor_risk_score_integration_runs
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -648,6 +651,13 @@ func (_m *IntegrationRun) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.template_integration_runs = new(string)
 				*_m.template_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[23]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vendor_risk_score_integration_runs", values[i])
+			} else if value.Valid {
+				_m.vendor_risk_score_integration_runs = new(string)
+				*_m.vendor_risk_score_integration_runs = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

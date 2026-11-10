@@ -9,8 +9,8 @@ import (
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/v2"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -65,15 +65,15 @@ func TestConfigureProviderRulesDevMode(t *testing.T) {
 	)
 
 	option := resolver.Resolve(context.Background())
-	assert.True(t, option.IsPresent(), "expected dev mode rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected dev mode rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, diskBuilder, result.Builder, "expected disk builder for dev mode")
-	assert.NotNil(t, result.Config)
-	assert.Equal(t, objects.DefaultDevStorageBucket, result.Config.Bucket)
+	assert.Check(t, is.Equal(diskBuilder, result.Builder), "expected disk builder for dev mode")
+	assert.Check(t, result.Config != nil)
+	assert.Check(t, is.Equal(objects.DefaultDevStorageBucket, result.Config.Bucket))
 	extra, ok := result.Config.Extra("dev_mode")
-	assert.True(t, ok)
-	assert.Equal(t, true, extra)
+	assert.Check(t, ok)
+	assert.Check(t, is.Equal(true, extra))
 }
 
 func TestKnownProviderRule(t *testing.T) {
@@ -106,12 +106,12 @@ func TestKnownProviderRule(t *testing.T) {
 	)
 
 	option := resolver.Resolve(ctx)
-	assert.True(t, option.IsPresent(), "expected known provider rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected known provider rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, diskBuilder, result.Builder)
-	assert.Equal(t, "/mnt/storage", result.Config.Bucket)
-	assert.Equal(t, "http://local", result.Config.LocalURL)
+	assert.Check(t, is.Equal(diskBuilder, result.Builder))
+	assert.Check(t, is.Equal("/mnt/storage", result.Config.Bucket))
+	assert.Check(t, is.Equal("http://local", result.Config.LocalURL))
 }
 
 func TestModuleRules(t *testing.T) {
@@ -141,11 +141,11 @@ func TestModuleRules(t *testing.T) {
 	)
 
 	option := resolver.Resolve(ctx)
-	assert.True(t, option.IsPresent(), "expected module rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected module rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, r2Builder, result.Builder)
-	assert.Equal(t, "tc-bucket", result.Config.Bucket)
+	assert.Check(t, is.Equal(r2Builder, result.Builder))
+	assert.Check(t, is.Equal("tc-bucket", result.Config.Bucket))
 }
 
 func TestTemplateKindRule(t *testing.T) {
@@ -175,11 +175,11 @@ func TestTemplateKindRule(t *testing.T) {
 	)
 
 	option := resolver.Resolve(ctx)
-	assert.True(t, option.IsPresent(), "expected template kind rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected template kind rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, r2Builder, result.Builder)
-	assert.Equal(t, "nda-bucket", result.Config.Bucket)
+	assert.Check(t, is.Equal(r2Builder, result.Builder))
+	assert.Check(t, is.Equal("nda-bucket", result.Config.Bucket))
 }
 
 func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
@@ -213,11 +213,11 @@ func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
 	)
 
 	option := resolver.Resolve(context.Background())
-	assert.True(t, option.IsPresent(), "expected default rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected default rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, r2Builder, result.Builder, "expected first enabled provider to be used")
-	assert.Equal(t, "r2-bucket", result.Config.Bucket)
+	assert.Check(t, is.Equal(r2Builder, result.Builder), "expected first enabled provider to be used")
+	assert.Check(t, is.Equal("r2-bucket", result.Config.Bucket))
 }
 
 func TestDefaultRuleUsesS3WhenEnabled(t *testing.T) {
@@ -246,11 +246,11 @@ func TestDefaultRuleUsesS3WhenEnabled(t *testing.T) {
 	)
 
 	option := resolver.Resolve(context.Background())
-	assert.True(t, option.IsPresent(), "expected default rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected default rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, s3Builder, result.Builder)
-	assert.Equal(t, "default-bucket", result.Config.Bucket)
+	assert.Check(t, is.Equal(s3Builder, result.Builder))
+	assert.Check(t, is.Equal("default-bucket", result.Config.Bucket))
 }
 
 func TestProviderEnabledChecksConfig(t *testing.T) {
@@ -263,8 +263,8 @@ func TestProviderEnabledChecksConfig(t *testing.T) {
 		},
 	}
 
-	assert.True(t, rc.providerEnabled(storage.S3Provider))
-	assert.False(t, rc.providerEnabled(storage.DiskProvider))
+	assert.Check(t, rc.providerEnabled(storage.S3Provider))
+	assert.Check(t, !rc.providerEnabled(storage.DiskProvider))
 }
 
 func TestResolveProviderWithUnsupportedBuilder(t *testing.T) {
@@ -276,8 +276,8 @@ func TestResolveProviderWithUnsupportedBuilder(t *testing.T) {
 	)
 
 	_, err := rc.resolveProviderWithBuilder(storage.ProviderType("unsupported"))
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, errUnsupportedProvider)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, errUnsupportedProvider))
 }
 
 func TestResolveProviderFromConfigCopiesOptions(t *testing.T) {
@@ -301,9 +301,9 @@ func TestResolveProviderFromConfigCopiesOptions(t *testing.T) {
 	)
 
 	resolved, err := rc.resolveProvider(storage.S3Provider)
-	assert.NoError(t, err)
-	assert.Equal(t, "bucket", resolved.Config.Bucket)
-	assert.Equal(t, "us-east-1", resolved.Config.Region)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal("bucket", resolved.Config.Bucket))
+	assert.Check(t, is.Equal("us-east-1", resolved.Config.Region))
 }
 
 func TestProviderResolveFromConfigDisabled(t *testing.T) {
@@ -312,7 +312,7 @@ func TestProviderResolveFromConfigDisabled(t *testing.T) {
 			S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: false}},
 		},
 	}, serviceOptions{})
-	assert.Error(t, err)
+	assert.Check(t, err != nil)
 }
 
 func TestHandleDevModeOptionClone(t *testing.T) {
@@ -331,20 +331,20 @@ func TestHandleDevModeOptionClone(t *testing.T) {
 		}),
 	)
 
-	assert.True(t, rc.handleDevMode())
+	assert.Check(t, rc.handleDevMode())
 
 	option := resolver.Resolve(context.Background())
-	assert.True(t, option.IsPresent())
+	assert.Check(t, option.IsPresent())
 
 	result := option.MustGet()
-	assert.NotNil(t, result.Config)
+	assert.Check(t, result.Config != nil)
 	// ensure options cloned on each invocation
 	result.Config.Apply(storage.WithExtra("mutated", true))
 
 	option = resolver.Resolve(context.Background())
-	assert.True(t, option.IsPresent())
+	assert.Check(t, option.IsPresent())
 	_, ok := option.MustGet().Config.Extra("mutated")
-	assert.False(t, ok)
+	assert.Check(t, !ok)
 }
 
 func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
@@ -353,8 +353,8 @@ func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
 		resolver,
 		WithProviderConfig(storage.ProviderConfig{
 			Providers: storage.Providers{
-				S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: false}},
-				R2: storage.R2Config{ProviderCommon: storage.ProviderCommon{Enabled: true}},
+				S3: storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: true}},
+				R2: storage.R2Config{ProviderCommon: storage.ProviderCommon{Enabled: false}},
 			},
 		}),
 		WithProviderBuilders(providerBuilders{
@@ -366,8 +366,8 @@ func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
 	rc.addDefaultProviderRule()
 
 	option := resolver.Resolve(context.Background())
-	assert.True(t, option.IsPresent())
-	assert.Equal(t, "r2", option.MustGet().Builder.ProviderType())
+	assert.Check(t, option.IsPresent())
+	assert.Check(t, is.Equal("s3", option.MustGet().Builder.ProviderType()))
 }
 
 type oldProvidersStructWithCloudflareR2 struct {
@@ -405,16 +405,16 @@ providers:
 `
 
 	path := filepath.Join(t.TempDir(), "config.yaml")
-	require.NoError(t, os.WriteFile(path, []byte(yamlConfig), 0o600))
+	assert.NilError(t, os.WriteFile(path, []byte(yamlConfig), 0o600))
 
 	k := koanf.New(".")
-	require.NoError(t, k.Load(file.Provider(path), yaml.Parser()))
+	assert.NilError(t, k.Load(file.Provider(path), yaml.Parser()))
 
 	var oldStyleConfig oldProviderConfigWithCloudflareR2
-	require.NoError(t, k.Unmarshal("", &oldStyleConfig))
+	assert.NilError(t, k.Unmarshal("", &oldStyleConfig))
 
-	assert.True(t, oldStyleConfig.Providers.CloudflareR2.Enabled, "CloudflareR2 config populated from YAML")
-	assert.Equal(t, "ol-trust-center", oldStyleConfig.Providers.CloudflareR2.Bucket)
+	assert.Check(t, oldStyleConfig.Providers.CloudflareR2.Enabled, "CloudflareR2 config populated from YAML")
+	assert.Check(t, is.Equal("ol-trust-center", oldStyleConfig.Providers.CloudflareR2.Bucket))
 
 	actualConfig := storage.ProviderConfig{
 		Enabled: true,
@@ -442,16 +442,16 @@ providers:
 	rc.addModuleRule(models.CatalogTrustCenterModule, storage.R2Provider)
 	rc.addDefaultProviderRule()
 
-	assert.True(t, actualConfig.Providers.R2.Enabled, "R2 config is enabled from CloudflareR2 YAML")
-	assert.Equal(t, "ol-trust-center", actualConfig.Providers.R2.Bucket, "R2 bucket populated from cloudflarer2 config")
+	assert.Check(t, actualConfig.Providers.R2.Enabled, "R2 config is enabled from CloudflareR2 YAML")
+	assert.Check(t, is.Equal("ol-trust-center", actualConfig.Providers.R2.Bucket), "R2 bucket populated from cloudflarer2 config")
 
 	option := resolver.Resolve(ctx)
-	assert.True(t, option.IsPresent())
+	assert.Check(t, option.IsPresent())
 
 	result := option.MustGet()
-	assert.Equal(t, cloudflareR2BuilderReportingCloudflareR2Type, result.Builder, "module rule with storage.R2Provider ('r2') matches config.Providers.R2, resolver builds provider successfully")
-	assert.Equal(t, "ol-trust-center", result.Config.Bucket, "trust center documents go to R2 as expected")
-	assert.Equal(t, "cloudflarer2", result.Builder.ProviderType(), "but provider reports 'cloudflarer2' type - validateProviderType would catch this mismatch")
+	assert.Check(t, is.Equal(cloudflareR2BuilderReportingCloudflareR2Type, result.Builder), "module rule with storage.R2Provider ('r2') matches config.Providers.R2, resolver builds provider successfully")
+	assert.Check(t, is.Equal("ol-trust-center", result.Config.Bucket), "trust center documents go to R2 as expected")
+	assert.Check(t, is.Equal("cloudflarer2", result.Builder.ProviderType()), "but provider reports 'cloudflarer2' type - validateProviderType would catch this mismatch")
 }
 
 // backupRuleResolver wires the rule chain for a config and returns the resolver
@@ -500,15 +500,15 @@ func TestBackupRuleResolvesDifferentProvider(t *testing.T) {
 	ctx := objects.WithBackupSourceHint(context.Background(), storage.S3Provider)
 
 	option := resolver.Resolve(ctx)
-	assert.True(t, option.IsPresent(), "expected backup rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected backup rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, r2Builder, result.Builder)
-	assert.Equal(t, "r2-bucket-backup", result.Config.Bucket)
+	assert.Check(t, is.Equal(r2Builder, result.Builder))
+	assert.Check(t, is.Equal("r2-bucket-backup", result.Config.Bucket))
 
 	marker, ok := result.Config.Extra(storage.BackupTargetExtraKey)
-	assert.True(t, ok, "expected the resolved backup to carry its marker")
-	assert.Equal(t, true, marker)
+	assert.Check(t, ok, "expected the resolved backup to carry its marker")
+	assert.Check(t, is.Equal(true, marker))
 }
 
 func TestBackupRuleResolvesDifferentRegionOnSameProvider(t *testing.T) {
@@ -539,18 +539,18 @@ func TestBackupRuleResolvesDifferentRegionOnSameProvider(t *testing.T) {
 	ctx := objects.WithBackupSourceHint(context.Background(), storage.S3Provider)
 
 	option := resolver.Resolve(ctx)
-	assert.True(t, option.IsPresent(), "expected backup rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected backup rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, s3Builder, result.Builder)
-	assert.Equal(t, "live-bucket-backup", result.Config.Bucket)
-	assert.Equal(t, "us-west-2", result.Config.Region)
+	assert.Check(t, is.Equal(s3Builder, result.Builder))
+	assert.Check(t, is.Equal("live-bucket-backup", result.Config.Bucket))
+	assert.Check(t, is.Equal("us-west-2", result.Config.Region))
 
 	// the live provider keeps its own region, so the two clients never share a configuration
 	liveOption := resolver.Resolve(objects.WithKnownProviderHint(context.Background(), storage.S3Provider))
-	assert.True(t, liveOption.IsPresent())
-	assert.Equal(t, "us-east-1", liveOption.MustGet().Config.Region)
-	assert.Equal(t, "live-bucket", liveOption.MustGet().Config.Bucket)
+	assert.Check(t, liveOption.IsPresent())
+	assert.Check(t, is.Equal("us-east-1", liveOption.MustGet().Config.Region))
+	assert.Check(t, is.Equal("live-bucket", liveOption.MustGet().Config.Bucket))
 }
 
 func TestBackupRuleAbsentWithoutBackupConfig(t *testing.T) {
@@ -573,8 +573,8 @@ func TestBackupRuleAbsentWithoutBackupConfig(t *testing.T) {
 	// provider for a backup destination
 	result := resolver.Resolve(ctx).MustGet()
 	_, ok := result.Config.Extra(storage.BackupTargetExtraKey)
-	assert.False(t, ok)
-	assert.Equal(t, "live-bucket", result.Config.Bucket)
+	assert.Check(t, !ok)
+	assert.Check(t, is.Equal("live-bucket", result.Config.Bucket))
 }
 
 func TestBackupRuleSuffixesDefaultDiskBucket(t *testing.T) {
@@ -598,11 +598,11 @@ func TestBackupRuleSuffixesDefaultDiskBucket(t *testing.T) {
 	ctx := objects.WithBackupSourceHint(context.Background(), storage.DiskProvider)
 
 	option := resolver.Resolve(ctx)
-	assert.True(t, option.IsPresent(), "expected backup rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected backup rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, diskBuilder, result.Builder)
-	assert.Equal(t, objects.DefaultDevStorageBucket+storage.BackupBucketSuffix, result.Config.Bucket)
+	assert.Check(t, is.Equal(diskBuilder, result.Builder))
+	assert.Check(t, is.Equal(objects.DefaultDevStorageBucket+storage.BackupBucketSuffix, result.Config.Bucket))
 }
 
 func TestDatabaseOptionsForceProxyPresign(t *testing.T) {
@@ -629,9 +629,9 @@ func TestDatabaseOptionsForceProxyPresign(t *testing.T) {
 	)
 
 	option := resolver.Resolve(ctx)
-	assert.True(t, option.IsPresent(), "expected known provider rule to resolve")
+	assert.Check(t, option.IsPresent(), "expected known provider rule to resolve")
 
 	result := option.MustGet()
-	assert.Equal(t, dbBuilder, result.Builder)
-	assert.True(t, result.Config.ProxyPresignEnabled)
+	assert.Check(t, is.Equal(dbBuilder, result.Builder))
+	assert.Check(t, result.Config.ProxyPresignEnabled)
 }

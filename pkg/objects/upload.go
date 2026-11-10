@@ -75,11 +75,9 @@ func parseVariablesMap(variables map[string]any, keys ...string) (map[string][]F
 					RawFile:      upload.File,
 					OriginalName: upload.Filename,
 					FieldName:    key,
-					FileMetadata: FileMetadata{
-						Size:        upload.Size,
-						ContentType: upload.ContentType,
-						Key:         key,
-					},
+					Size:         upload.Size,
+					ContentType:  upload.ContentType,
+					Key:          key,
 				}
 			})
 			result[key] = files
@@ -193,11 +191,9 @@ func parseMultipartForm(form *multipart.Form, keys ...string) (map[string][]File
 					RawFile:      file,
 					OriginalName: header.Filename,
 					FieldName:    key,
-					FileMetadata: FileMetadata{
-						Size:        header.Size,
-						ContentType: contentType,
-						Key:         key,
-					},
+					Size:         header.Size,
+					ContentType:  contentType,
+					Key:          key,
 				})
 			}
 

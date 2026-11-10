@@ -10,10 +10,10 @@ import (
 
 	echo_log "github.com/labstack/gommon/log"
 	"github.com/mcuadros/go-defaults"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/httpsling"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/config"
 	serverconfig "github.com/theopenlane/core/v2/internal/httpserve/config"
@@ -119,7 +119,7 @@ func TestServerCSRF(t *testing.T) {
 	so.AddServerOptions(serveropts.WithCSRF())
 
 	srv, err := server.NewServer(so.Config)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// apply middleware to echo instance
 	for _, m := range so.Config.Handler.AdditionalMiddleware {
@@ -135,28 +135,28 @@ func TestServerCSRF(t *testing.T) {
 	testHandler{}.Routes(srv.Router.Echo.Group(""))
 
 	client, err := newHTTPSlingTestClient(srv.Router.Echo)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	ctx := context.Background()
 
 	// first request should set csrf cookie
 	resp, err := client.get(ctx, "/livez")
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	resp.Body.Close()
 	token := client.cookieValue("ol.csrf-token")
-	assert.NotEmpty(t, token)
+	assert.Check(t, token != "")
 
 	// missing header should return 400
 	resp, err = client.post(ctx, "/test", nil)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(http.StatusBadRequest, resp.StatusCode))
 	resp.Body.Close()
 
 	// include token header
 	headers := make(http.Header)
 	headers.Set("X-CSRF-Token", token)
 	resp, err = client.post(ctx, "/test", headers)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(http.StatusOK, resp.StatusCode))
 	resp.Body.Close()
 }
 
@@ -179,7 +179,7 @@ func TestServerDisabledCSRF(t *testing.T) {
 	so.AddServerOptions(serveropts.WithCSRF())
 
 	srv, err := server.NewServer(so.Config)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// apply middleware to echo instance
 	for _, m := range so.Config.Handler.AdditionalMiddleware {
@@ -195,27 +195,27 @@ func TestServerDisabledCSRF(t *testing.T) {
 	testHandler{}.Routes(srv.Router.Echo.Group(""))
 
 	client, err := newHTTPSlingTestClient(srv.Router.Echo)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	ctx := context.Background()
 
 	// first request should not set csrf cookie since CSRF is disabled
 	resp, err := client.get(ctx, "/livez")
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	resp.Body.Close()
-	assert.Empty(t, client.cookieValue("ol.csrf-token"))
+	assert.Check(t, is.Equal(client.cookieValue("ol.csrf-token"), ""))
 
 	// missing header should return 200 OK since CSRF is disabled
 	resp, err = client.post(ctx, "/test", nil)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(http.StatusOK, resp.StatusCode))
 	resp.Body.Close()
 
 	// include token header, no effect since CSRF is disabled
 	headers := make(http.Header)
 	headers.Set("X-CSRF-Token", "unused")
 	resp, err = client.post(ctx, "/test", headers)
-	assert.NoError(t, err)
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(http.StatusOK, resp.StatusCode))
 	resp.Body.Close()
 }
 
@@ -239,18 +239,18 @@ func TestRecoverMiddleware(t *testing.T) {
 	})
 
 	client, err := newHTTPSlingTestClient(e)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	ctx := context.Background()
 
 	// verify panic is recovered and returns 500
 	resp, err := client.get(ctx, "/panic")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer resp.Body.Close()
-	assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
+	assert.Check(t, is.Equal(http.StatusInternalServerError, resp.StatusCode))
 
 	// verify server still works after panic
 	resp2, err := client.get(ctx, "/ok")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer resp2.Body.Close()
-	assert.Equal(t, http.StatusOK, resp2.StatusCode)
+	assert.Check(t, is.Equal(http.StatusOK, resp2.StatusCode))
 }

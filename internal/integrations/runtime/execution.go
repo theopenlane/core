@@ -256,13 +256,6 @@ func IngestRunSummary(result operations.IngestResult) string {
 	return fmt.Sprintf("attempted %d, persisted %d, changed %d, failed %d, removed %d, excluded %d", result.Attempted, result.Persisted, result.Changed, result.Failed, result.Removed, result.Excluded)
 }
 
-// RecordFailureSummary renders a compact summary of a run's failed records
-func RecordFailureSummary(result operations.IngestResult) string {
-	first := result.Failures[0]
-
-	return fmt.Sprintf("%d of %d records failed to import; first failure: %s %s: %v", result.Failed, result.Attempted, first.Schema, first.Resource, first.Err)
-}
-
 // executionRunResult renders one execution's terminal run result from its response and error
 func executionRunResult(ingest bool, response json.RawMessage, ingestResult operations.IngestResult, execErr error) operations.RunResult {
 	metrics := IngestMetrics(ingestResult)
@@ -279,7 +272,7 @@ func executionRunResult(ingest bool, response json.RawMessage, ingestResult oper
 	}
 
 	if ingestResult.Failed > 0 {
-		result.Error = RecordFailureSummary(ingestResult)
+		result.Error = ingestResult.FailureSummary()
 	}
 
 	return result
@@ -509,13 +502,20 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		return nil, operations.IngestResult{}, ErrOperationRateLimited
 	}
 
-	var definitionID string
+	var definitionID, ownerID string
 
 	if integration == nil {
 		oc, _ := gala.OperationContextFromContext(ctx)
 		definitionID = types.IntegrationSourceFrom(oc).DefinitionID
+		ownerID = oc.OwnerID
 
-		if operation.IngestHandle != nil || len(operation.Ingest) > 0 {
+		switch {
+		// runtime operations that do not ingest keep the caller they were dispatched with
+		case operation.IngestHandle == nil && len(operation.Ingest) == 0:
+		// runtime ingest dispatched on behalf of an organization writes as that organization
+		case ownerID != "":
+			ctx = auth.EnsureIntegrationCaller(ctx, ownerID)
+		default:
 			ctx = systemIngestContext(ctx)
 		}
 	}

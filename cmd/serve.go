@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"sync"
 	"time"
 
 	"github.com/gertd/go-pluralize"
@@ -110,23 +109,12 @@ func serve(ctx context.Context) error {
 	// Setup Redis connection
 	redisClient := cache.New(so.Config.Settings.Redis)
 
-	// closeRedis ensures the redis client is closed exactly once; both the shutdown
-	// goroutine and the defer call this, and sync.Once guarantees only one executes
-	var closeRedisOnce sync.Once
-	closeRedis := func() {
-		closeRedisOnce.Do(func() {
-			if err := redisClient.Close(); err != nil {
-				log.Error().Err(err).Msg("error closing redis")
-			}
-		})
-	}
-
-	go func() {
-		<-ctx.Done()
-		closeRedis()
+	// deferred so redis outlives the HTTP drain; requests finishing during the grace period still refresh sessions
+	defer func() {
+		if err := redisClient.Close(); err != nil {
+			log.Error().Err(err).Msg("error closing redis")
+		}
 	}()
-
-	defer closeRedis()
 
 	// Setup pool if max workers is greater than 0
 	var pool *gala.Pool
@@ -161,6 +149,7 @@ func serve(ctx context.Context) error {
 		CnameTarget:              so.Config.Settings.Server.TrustCenterCnameTarget,
 		PreviewZoneID:            so.Config.Settings.Server.TrustCenterPreviewZoneID,
 		DefaultTrustCenterDomain: so.Config.Settings.Server.DefaultTrustCenterDomain,
+		CacheRefreshSecret:       so.Config.Settings.Server.TrustCenterCacheRefreshSecret,
 	})
 
 	email.SetDefaultTrustCenterDomain(so.Config.Settings.Server.DefaultTrustCenterDomain)
@@ -238,48 +227,12 @@ func serve(ctx context.Context) error {
 
 	so.AddServerOptions(serveropts.WithSupportAccessConfig())
 
-	// closeDB ensures the database client is closed exactly once; both the shutdown
-	// goroutine and the defer call this, and sync.Once guarantees only one executes
-	var closeDBOnce sync.Once
-	closeDB := func() {
-		closeDBOnce.Do(func() {
-			if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
-				log.Error().Err(err).Msg("error closing database")
-			}
-		})
-	}
-
-	go func() { //nolint:gosec
-		// context.Background() is intentional: ctx is already cancelled when this runs
-		<-ctx.Done()
-
-		log.Ctx(ctx).Info().Msg("waiting for in-flight uploads to complete")
-		pkgobjects.WaitForUploads()
-		log.Ctx(ctx).Info().Msg("all uploads completed")
-
-		if galaApp != nil {
-			stopCtx, cancel := context.WithTimeout(context.Background(), galaShutdownTimeout)
-			defer cancel()
-
-			if stopErr := galaApp.StopWorkers(stopCtx); stopErr != nil {
-				log.Error().Err(stopErr).Msg("error stopping gala worker client")
-			}
-
-			if closeErr := galaApp.Close(); closeErr != nil {
-				log.Error().Err(closeErr).Msg("error closing gala runtime")
-			}
+	// deferred so the database outlives the HTTP drain and the gala worker stop below
+	defer func() {
+		if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
+			log.Error().Err(err).Msg("error closing database")
 		}
-
-		if notifGala != nil {
-			if closeErr := notifGala.Close(); closeErr != nil {
-				log.Error().Err(closeErr).Msg("error closing notification gala runtime")
-			}
-		}
-
-		closeDB()
 	}()
-
-	defer closeDB()
 
 	// add auth session manager
 	so.Config.Handler.AuthManager = authmanager.New(dbClient)
@@ -345,6 +298,31 @@ func serve(ctx context.Context) error {
 
 	if err := srv.StartEchoServer(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error().Err(err).Msg("failed to run server")
+	}
+
+	// the server has drained in-flight requests at this point; ctx is already cancelled so
+	// the stop context below uses context.Background()
+	log.Ctx(ctx).Info().Msg("waiting for in-flight uploads to complete")
+	pkgobjects.WaitForUploads()
+	log.Ctx(ctx).Info().Msg("all uploads completed")
+
+	if galaApp != nil {
+		galaStopCtx, galaCancel := context.WithTimeout(context.Background(), galaShutdownTimeout)
+		defer galaCancel()
+
+		if stopErr := galaApp.StopWorkers(galaStopCtx); stopErr != nil {
+			log.Error().Err(stopErr).Msg("error stopping gala worker client")
+		}
+
+		if closeErr := galaApp.Close(); closeErr != nil {
+			log.Error().Err(closeErr).Msg("error closing gala runtime")
+		}
+	}
+
+	if notifGala != nil {
+		if closeErr := notifGala.Close(); closeErr != nil {
+			log.Error().Err(closeErr).Msg("error closing notification gala runtime")
+		}
 	}
 
 	// release the JWKS refresh workers only after the server has drained in-flight requests,

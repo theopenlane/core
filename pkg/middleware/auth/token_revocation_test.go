@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
@@ -34,7 +35,7 @@ func TestAPITokenRevocation(t *testing.T) {
 		}
 
 		_, _, err := isValidAPIToken(context.Background(), (*generated.Client)(nil), "tola")
-		assert.ErrorIs(t, err, ErrTokenRevoked)
+		assert.Check(t, is.ErrorIs(err, ErrTokenRevoked))
 	})
 
 	t.Run("revoked token is rejected", func(t *testing.T) {
@@ -45,7 +46,7 @@ func TestAPITokenRevocation(t *testing.T) {
 		}
 
 		_, _, err := isValidAPIToken(context.Background(), (*generated.Client)(nil), "tola")
-		assert.ErrorIs(t, err, ErrTokenRevoked)
+		assert.Check(t, is.ErrorIs(err, ErrTokenRevoked))
 	})
 
 	t.Run("active token passes the revocation check", func(t *testing.T) {
@@ -54,9 +55,9 @@ func TestAPITokenRevocation(t *testing.T) {
 		}
 
 		au, id, err := isValidAPIToken(context.Background(), (*generated.Client)(nil), "tola")
-		assert.NoError(t, err)
-		assert.Equal(t, "t1", id)
-		assert.Equal(t, "org", au.OrganizationID)
+		assert.Check(t, err)
+		assert.Check(t, is.Equal("t1", id))
+		assert.Check(t, is.Equal("org", au.OrganizationID))
 	})
 }
 
@@ -113,7 +114,7 @@ func TestPATRevocation(t *testing.T) {
 		}
 
 		_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
-		assert.ErrorIs(t, err, ErrTokenRevoked)
+		assert.Check(t, is.ErrorIs(err, ErrTokenRevoked))
 	})
 
 	t.Run("revoked token is rejected", func(t *testing.T) {
@@ -127,7 +128,7 @@ func TestPATRevocation(t *testing.T) {
 		}
 
 		_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
-		assert.ErrorIs(t, err, ErrTokenRevoked)
+		assert.Check(t, is.ErrorIs(err, ErrTokenRevoked))
 	})
 
 	t.Run("active token passes the revocation check", func(t *testing.T) {
@@ -139,9 +140,9 @@ func TestPATRevocation(t *testing.T) {
 		}
 
 		au, id, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
-		assert.NoError(t, err)
-		assert.Equal(t, pat.ID, id)
-		assert.Equal(t, user.ID, au.SubjectID)
+		assert.Check(t, err)
+		assert.Check(t, is.Equal(pat.ID, id))
+		assert.Check(t, is.Equal(user.ID, au.SubjectID))
 	})
 
 	t.Run("orgs the owner is not a member of are dropped", func(t *testing.T) {
@@ -154,9 +155,9 @@ func TestPATRevocation(t *testing.T) {
 		}
 
 		au, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
-		assert.NoError(t, err)
-		assert.Equal(t, []string{org.ID}, au.OrganizationIDs)
-		assert.Equal(t, auth.MemberRole, au.OrganizationRole)
+		assert.Check(t, err)
+		assert.Check(t, is.DeepEqual([]string{org.ID}, au.OrganizationIDs))
+		assert.Check(t, is.Equal(auth.MemberRole, au.OrganizationRole))
 	})
 
 	t.Run("token with no member orgs is rejected", func(t *testing.T) {
@@ -169,6 +170,6 @@ func TestPATRevocation(t *testing.T) {
 		}
 
 		_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
-		assert.ErrorIs(t, err, rout.ErrInvalidCredentials)
+		assert.Check(t, is.ErrorIs(err, rout.ErrInvalidCredentials))
 	})
 }

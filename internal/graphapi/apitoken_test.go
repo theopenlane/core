@@ -126,7 +126,7 @@ func TestMutationCreateAPIToken(t *testing.T) {
 			input: testclient.CreateAPITokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
-				ExpiresAt:   lo.ToPtr(time.Now().Add(-time.Hour)),
+				ExpiresAt:   new(time.Now().Add(-time.Hour)),
 			},
 			errorMsg: hooks.ErrPastTimeNotAllowed.Error(),
 		},
@@ -224,7 +224,7 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 			tokenID: token.ID,
 			input: testclient.UpdateAPITokenInput{
 				Name:      &tokenName,
-				ExpiresAt: lo.ToPtr(time.Now().Add(time.Hour)),
+				ExpiresAt: new(time.Now().Add(time.Hour)),
 			},
 			ctx: th.SharedTestUser1.UserCtx,
 		},
@@ -300,6 +300,8 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 }
 
 func TestMutationDeleteAPIToken(t *testing.T) {
+	t.Parallel()
+
 	// create user to make tokens
 	user := suite.UserBuilder(context.Background(), t)
 	user2 := suite.UserBuilder(context.Background(), t)
@@ -507,7 +509,7 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 		assert.NilError(t, err)
 
 		_, err = client.UpdateEvidence(context.Background(), evidence.ID, testclient.UpdateEvidenceInput{
-			Name: lo.ToPtr(gofakeit.Word()),
+			Name: new(gofakeit.Word()),
 		}, nil)
 		assert.ErrorContains(t, err, th.MissingScopeErrorMsg)
 	})
@@ -539,7 +541,7 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 		assert.Check(t, !lo.Contains(listScopedOrgIDs(token.ID, editRelation), orgUser.OrganizationID))
 
 		_, err = client.UpdateEvidence(context.Background(), evidence.ID, testclient.UpdateEvidenceInput{
-			Name: lo.ToPtr(gofakeit.Word()),
+			Name: new(gofakeit.Word()),
 		}, nil)
 		assert.ErrorContains(t, err, th.MissingScopeErrorMsg)
 	})

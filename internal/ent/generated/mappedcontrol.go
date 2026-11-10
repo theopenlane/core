@@ -46,6 +46,8 @@ type MappedControl struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -188,7 +190,7 @@ func (*MappedControl) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case mappedcontrol.FieldConfidence:
 			values[i] = new(sql.NullInt64)
-		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldUpdatedByImpersonator, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldSourceDefinitionID, mappedcontrol.FieldSourceDefinitionVersion, mappedcontrol.FieldSourceInstanceID, mappedcontrol.FieldManagedBy, mappedcontrol.FieldIntegrationRunID, mappedcontrol.FieldExternalID, mappedcontrol.FieldInternalNotes, mappedcontrol.FieldSystemInternalID, mappedcontrol.FieldOwnerID, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation, mappedcontrol.FieldSource:
+		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldUpdatedByImpersonator, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldSourceDefinitionID, mappedcontrol.FieldSourceDefinitionVersion, mappedcontrol.FieldSourceInstanceID, mappedcontrol.FieldManagedBy, mappedcontrol.FieldIntegrationRunID, mappedcontrol.FieldSourceKey, mappedcontrol.FieldExternalID, mappedcontrol.FieldInternalNotes, mappedcontrol.FieldSystemInternalID, mappedcontrol.FieldOwnerID, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation, mappedcontrol.FieldSource:
 			values[i] = new(sql.NullString)
 		case mappedcontrol.FieldCreatedAt, mappedcontrol.FieldUpdatedAt, mappedcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -293,6 +295,12 @@ func (_m *MappedControl) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case mappedcontrol.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case mappedcontrol.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -467,6 +475,9 @@ func (_m *MappedControl) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

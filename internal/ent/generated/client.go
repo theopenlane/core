@@ -33238,6 +33238,22 @@ func (c *VendorRiskScoreClient) QueryOwner(_m *VendorRiskScore) *OrganizationQue
 	return query
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a VendorRiskScore.
+func (c *VendorRiskScoreClient) QueryIntegrationRuns(_m *VendorRiskScore) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorriskscore.Table, vendorriskscore.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vendorriskscore.IntegrationRunsTable, vendorriskscore.IntegrationRunsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryVendorScoringConfig queries the vendor_scoring_config edge of a VendorRiskScore.
 func (c *VendorRiskScoreClient) QueryVendorScoringConfig(_m *VendorRiskScore) *VendorScoringConfigQuery {
 	query := (&VendorScoringConfigClient{config: c.config}).Query()

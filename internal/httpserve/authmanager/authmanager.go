@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/golang-jwt/jwt/v5"
-
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
@@ -60,9 +58,10 @@ func (a *Client) GetSessionConfig() *sessions.SessionConfig {
 // this is used when the user is switching organizations, or when the user deletes their authorized organization
 // and is automatically switched into another organization
 // Before the sessions is issues, we check that the user still has access to the target organization
-// if not, the user's default org (or personal org) is used
-func (a *Client) GenerateUserAuthSessionWithOrg(ctx context.Context, w http.ResponseWriter, user *generated.User, targetOrgID string) (*models.AuthData, error) {
-	auth, err := a.createTokenPair(ctx, user, targetOrgID)
+// if not, the user's default org (or personal org) is used. When tfaEnrollmentRequired is set the session
+// may only be used to enroll in two factor authentication
+func (a *Client) GenerateUserAuthSessionWithOrg(ctx context.Context, w http.ResponseWriter, user *generated.User, targetOrgID string, tfaEnrollmentRequired bool) (*models.AuthData, error) {
+	auth, err := a.createTokenPair(ctx, user, targetOrgID, tfaEnrollmentRequired)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +79,7 @@ func (a *Client) GenerateUserAuthSessionWithOrg(ctx context.Context, w http.Resp
 // GenerateUserAuthSession creates a new auth session for the user and their default organization id
 // this is used during the login process
 func (a *Client) GenerateUserAuthSession(ctx context.Context, w http.ResponseWriter, user *generated.User) (*models.AuthData, error) {
-	return a.GenerateUserAuthSessionWithOrg(ctx, w, user, "")
+	return a.GenerateUserAuthSessionWithOrg(ctx, w, user, "", false)
 }
 
 func (a *Client) generateAnonymousSession(ctx context.Context, w http.ResponseWriter, anonUserID string, claims *tokens.Claims) (*models.AuthData, error) {
@@ -108,9 +107,7 @@ func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http
 	anonUserID := fmt.Sprintf("%s%s", AnonTrustCenterJWTPrefix, ulids.New().String())
 
 	claims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
+		Subject:       anonUserID,
 		UserID:        anonUserID,
 		OrgID:         targetOrgID,
 		TrustCenterID: targetTrustCenterID,
@@ -121,7 +118,7 @@ func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http
 
 // GenerateOauthAuthSession creates a new auth session for the oauth user and their default organization id
 func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWriter, user *generated.User, oauthRequest models.OauthTokenRequest) (*models.AuthData, error) {
-	auth, err := a.createTokenPair(ctx, user, oauthRequest.OrgID)
+	auth, err := a.createTokenPair(ctx, user, oauthRequest.OrgID, false)
 	if err != nil {
 		return nil, err
 	}
@@ -151,9 +148,7 @@ func createClaimsWithOrg(ctx context.Context, u *generated.User, targetOrgID str
 	}
 
 	return &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: u.ID,
-		},
+		Subject: u.ID,
 		UserID:  u.ID,
 		OrgID:   targetOrgID,
 		Modules: modules,
@@ -161,7 +156,7 @@ func createClaimsWithOrg(ctx context.Context, u *generated.User, targetOrgID str
 }
 
 // createTokenPair creates a new token pair for the user and the target organization id (or default org if none provided)
-func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targetOrgID string) (*models.AuthData, error) {
+func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targetOrgID string, tfaEnrollmentRequired bool) (*models.AuthData, error) {
 	newTarget, err := a.authCheck(ctx, user, targetOrgID)
 	if err != nil {
 		if targetOrgID != "" {
@@ -175,6 +170,7 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 
 	// create new claims for the user
 	newClaims := createClaimsWithOrg(ctx, user, targetOrgID)
+	newClaims.TFAEnrollmentRequired = tfaEnrollmentRequired
 
 	// create a new token pair for the user
 	access, refresh, err := a.db.TokenManager.CreateTokenPair(newClaims)

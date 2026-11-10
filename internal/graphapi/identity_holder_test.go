@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/samber/lo"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -156,12 +155,12 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 			request: testclient.CreateIdentityHolderInput{
 				FullName:           gofakeit.Name(),
 				Email:              gofakeit.Email(),
-				AlternateEmail:     lo.ToPtr(gofakeit.Email()),
-				PhoneNumber:        lo.ToPtr(gofakeit.Phone()),
-				Title:              lo.ToPtr(gofakeit.JobTitle()),
-				Department:         lo.ToPtr(gofakeit.JobDescriptor()),
-				Team:               lo.ToPtr(gofakeit.AppName()),
-				Location:           lo.ToPtr(gofakeit.City()),
+				AlternateEmail:     new(gofakeit.Email()),
+				PhoneNumber:        new(gofakeit.Phone()),
+				Title:              new(gofakeit.JobTitle()),
+				Department:         new(gofakeit.JobDescriptor()),
+				Team:               new(gofakeit.AppName()),
+				Location:           new(gofakeit.City()),
 				IdentityHolderType: &enums.IdentityHolderTypeContractor,
 				Status:             &enums.UserStatusOnboarding,
 			},
@@ -230,7 +229,7 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 			request: testclient.CreateIdentityHolderInput{
 				FullName:    gofakeit.Name(),
 				Email:       gofakeit.Email(),
-				PhoneNumber: lo.ToPtr("not a phone number"),
+				PhoneNumber: new("not a phone number"),
 			},
 			expectedErr: rout.InvalidField("phone_number").Error(),
 			client:      suite.Client.API,
@@ -311,7 +310,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 		{
 			name: "happy path, update name",
 			request: testclient.UpdateIdentityHolderInput{
-				FullName: lo.ToPtr(gofakeit.Name()),
+				FullName: new(gofakeit.Name()),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -319,7 +318,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 		{
 			name: "happy path, update email",
 			request: testclient.UpdateIdentityHolderInput{
-				Email: lo.ToPtr(gofakeit.Email()),
+				Email: new(gofakeit.Email()),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -327,8 +326,8 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 		{
 			name: "happy path, update department and team",
 			request: testclient.UpdateIdentityHolderInput{
-				Department: lo.ToPtr(gofakeit.JobDescriptor()),
-				Team:       lo.ToPtr(gofakeit.AppName()),
+				Department: new(gofakeit.JobDescriptor()),
+				Team:       new(gofakeit.AppName()),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -352,8 +351,8 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 		{
 			name: "happy path, update title and location",
 			request: testclient.UpdateIdentityHolderInput{
-				Title:    lo.ToPtr(gofakeit.JobTitle()),
-				Location: lo.ToPtr(gofakeit.City()),
+				Title:    new(gofakeit.JobTitle()),
+				Location: new(gofakeit.City()),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -361,7 +360,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 		{
 			name: "not authorized, view only user",
 			request: testclient.UpdateIdentityHolderInput{
-				FullName: lo.ToPtr(gofakeit.Name()),
+				FullName: new(gofakeit.Name()),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -370,7 +369,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 		{
 			name: "not found, no access",
 			request: testclient.UpdateIdentityHolderInput{
-				FullName: lo.ToPtr(gofakeit.Name()),
+				FullName: new(gofakeit.Name()),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -379,7 +378,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 		{
 			name: "invalid phone number",
 			request: testclient.UpdateIdentityHolderInput{
-				PhoneNumber: lo.ToPtr("not a phone number"),
+				PhoneNumber: new("not a phone number"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -388,7 +387,7 @@ func TestMutationUpdateIdentityHolder(t *testing.T) {
 		{
 			name: "invalid email",
 			request: testclient.UpdateIdentityHolderInput{
-				Email: lo.ToPtr("not-an-email"),
+				Email: new("not-an-email"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,

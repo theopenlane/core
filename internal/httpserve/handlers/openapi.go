@@ -66,10 +66,9 @@ func NewErrorResponse(statusCode int) *openapi3.Response {
 func RedirectResponse() *openapi3.Response {
 	response := openapi3.NewResponse().WithDescription(http.StatusText(http.StatusFound))
 	response.Headers = openapi3.Headers{
-		"Location": &openapi3.HeaderRef{Value: &openapi3.Header{Parameter: openapi3.Parameter{
+		"Location": &openapi3.HeaderRef{Value: &openapi3.Header{
 			Description: "Destination URL of the redirect",
-			Schema:      openapi3.NewStringSchema().NewRef(),
-		}}},
+			Schema:      openapi3.NewStringSchema().NewRef()}},
 	}
 
 	return response
@@ -172,7 +171,6 @@ func RegisterParameters(op *openapi3.Operation, instance any, pathParams map[str
 	}
 
 	for field := range typ.Fields() {
-		field := field
 		description := field.Tag.Get("description")
 		exampleTag := field.Tag.Get("example")
 

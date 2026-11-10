@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"testing"
 	"time"
 
 	"github.com/oklog/ulid/v2"
@@ -20,6 +21,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestObjectFieldCondition verifies that workflow conditions can evaluate object field values
@@ -47,12 +50,14 @@ import (
 //	Conditions allow workflows to be more selective about when they execute. A workflow
 //	might only fire when an object reaches a certain state, preventing unnecessary
 //	workflow instances for irrelevant changes.
-func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
+func TestObjectFieldCondition(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
-	s.Run("condition passes when object field matches", func() {
+	t.Run("condition passes when object field matches", func(t *testing.T) {
+		s := s.withT(t)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Object Field Condition " + ulid.Make().String()).
@@ -77,14 +82,14 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-OBJ-FIELD-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusApproved).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -93,11 +98,12 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 		}
 
 		result, err := wfEngine.EvaluateConditions(userCtx, def, obj, "UPDATE", []string{"status"}, nil, nil, nil, nil)
-		s.NoError(err)
-		s.True(result)
+		assert.Check(t, err)
+		assert.Check(t, result)
 	})
 
-	s.Run("condition fails when object field does not match", func() {
+	t.Run("condition fails when object field does not match", func(t *testing.T) {
+		s := s.withT(t)
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Object Field Condition Fail " + ulid.Make().String()).
 			SetWorkflowKind(enums.WorkflowKindNotification).
@@ -121,14 +127,14 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-OBJ-FIELD-FAIL-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -137,11 +143,12 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 		}
 
 		result, err := wfEngine.EvaluateConditions(userCtx, def, obj, "UPDATE", []string{"status"}, nil, nil, nil, nil)
-		s.NoError(err)
-		s.False(result)
+		assert.Check(t, err)
+		assert.Check(t, !result)
 	})
 
-	s.Run("condition with category field check", func() {
+	t.Run("condition with category field check", func(t *testing.T) {
+		s := s.withT(t)
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Category Condition " + ulid.Make().String()).
 			SetWorkflowKind(enums.WorkflowKindApproval).
@@ -165,14 +172,14 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-CATEGORY-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetCategory("Technical").
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -181,15 +188,15 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 		}
 
 		result, err := wfEngine.EvaluateConditions(userCtx, def, obj, "UPDATE", []string{"status"}, nil, nil, nil, nil)
-		s.NoError(err)
-		s.True(result)
+		assert.Check(t, err)
+		assert.Check(t, result)
 
 		controlNonTechnical, err := s.client.Control.Create().
 			SetRefCode("CTL-CATEGORY-OTHER-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetCategory("Administrative").
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		objNonTechnical := &workflows.Object{
 			ID:   controlNonTechnical.ID,
@@ -198,8 +205,8 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 		}
 
 		result, err = wfEngine.EvaluateConditions(userCtx, def, objNonTechnical, "UPDATE", []string{"status"}, nil, nil, nil, nil)
-		s.NoError(err)
-		s.False(result)
+		assert.Check(t, err)
+		assert.Check(t, !result)
 	})
 }
 
@@ -226,12 +233,14 @@ func (s *WorkflowEngineTestSuite) TestObjectFieldCondition() {
 //	NOTIFICATION workflows are distinct from APPROVAL workflows. They execute their actions
 //	immediately and complete, without pausing for human interaction. This is useful for
 //	automated notifications, audit logging, and integrations.
-func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
+func TestNotificationWorkflowKind(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
-	s.Run("notification workflow triggers and completes without approval", func() {
+	t.Run("notification workflow triggers and completes without approval", func(t *testing.T) {
+		s := s.withT(t)
 
 		webhookCalled := make(chan struct{}, 1)
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -244,7 +253,7 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
 			URL: server.URL,
 		}
 		webhookParamsBytes, err := json.Marshal(webhookParams)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Notification Workflow " + ulid.Make().String()).
@@ -270,13 +279,13 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-NOTIFICATION-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -287,27 +296,28 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
 			EventType:     "UPDATE",
 			ChangedFields: []string{"status"},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		<-webhookCalled
 		s.WaitForEvents()
 
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Len(assignments, 0)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(assignments, 0))
 	})
 }
 
 // TestNotificationWorkflowOnCreate verifies CREATE triggers execute NOTIFICATION workflows
 // and fire webhook actions without creating approval assignments.
-func (s *WorkflowEngineTestSuite) TestNotificationWorkflowOnCreate() {
+func TestNotificationWorkflowOnCreate(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	webhookCalled := make(chan struct{}, 1)
@@ -321,7 +331,7 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowOnCreate() {
 		URL: server.URL,
 	}
 	webhookParamsBytes, err := json.Marshal(webhookParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	doc := models.WorkflowDefinitionDocument{
 		Triggers: []models.WorkflowTrigger{
@@ -352,20 +362,20 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowOnCreate() {
 		SetTriggerFields(fields).
 		SetDefinitionJSON(doc).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-CREATE-WEBHOOK-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	select {
 	case <-webhookCalled:
 	case <-time.After(5 * time.Second):
-		s.FailNow("webhook not received")
+		t.Fatal("webhook not received")
 	}
 	s.WaitForEvents()
 
@@ -377,14 +387,14 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowOnCreate() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(userCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, instance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, instance.State))
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 0)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 0))
 }
 
 // TestMultiStepParallelApprovals verifies that a single workflow can contain multiple approval
@@ -417,39 +427,37 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowOnCreate() {
 //	Complex approval workflows may require different approvers for different field changes.
 //	Using "when" clauses on actions allows a single workflow definition to route approvals
 //	based on what actually changed.
-func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
+func TestMultiStepParallelApprovals(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	user2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
 	wfEngine := s.Engine()
 
 	categoryApprovalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Category Review",
 		Fields:   []string{"category"},
 	}
 	categoryParamsBytes, err := json.Marshal(categoryApprovalParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	statusApprovalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: user2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: user2ID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Compliance Approval",
 		Fields:   []string{"status"},
 	}
 	statusParamsBytes, err := json.Marshal(statusApprovalParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	s.Run("only category approval when category changes", func() {
+	t.Run("only category approval when category changes", func(t *testing.T) {
+		s := s.withT(t)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Multi-Step Approval " + ulid.Make().String()).
@@ -480,13 +488,13 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-MULTI-STEP-CAT-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -498,20 +506,21 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 			ChangedFields:   []string{"category"},
 			ProposedChanges: map[string]any{"category": "Technical"},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		s.WaitForEvents()
 
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Len(assignments, 1)
-		s.Equal("Category Review", assignments[0].Label)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(assignments, 1))
+		assert.Check(t, is.Equal("Category Review", assignments[0].Label))
 	})
 
-	s.Run("only status approval when status changes", func() {
+	t.Run("only status approval when status changes", func(t *testing.T) {
+		s := s.withT(t)
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Multi-Step Approval Status " + ulid.Make().String()).
 			SetWorkflowKind(enums.WorkflowKindApproval).
@@ -541,13 +550,13 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-MULTI-STEP-STATUS-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -559,20 +568,21 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		s.WaitForEvents()
 
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Len(assignments, 1)
-		s.Equal("Compliance Approval", assignments[0].Label)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(assignments, 1))
+		assert.Check(t, is.Equal("Compliance Approval", assignments[0].Label))
 	})
 
-	s.Run("both approvals when both fields change", func() {
+	t.Run("both approvals when both fields change", func(t *testing.T) {
+		s := s.withT(t)
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Multi-Step Approval Both " + ulid.Make().String()).
 			SetWorkflowKind(enums.WorkflowKindApproval).
@@ -602,13 +612,13 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-MULTI-STEP-BOTH-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -620,23 +630,23 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 			ChangedFields:   []string{"category", "status"},
 			ProposedChanges: map[string]any{"category": "Technical", "status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		s.WaitForEvents()
 
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Len(assignments, 2)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(assignments, 2))
 
 		labels := make([]string, len(assignments))
 		for i, a := range assignments {
 			labels[i] = a.Label
 		}
-		s.Contains(labels, "Category Review")
-		s.Contains(labels, "Compliance Approval")
+		assert.Check(t, is.Contains(labels, "Category Review"))
+		assert.Check(t, is.Contains(labels, "Compliance Approval"))
 	})
 }
 
@@ -669,61 +679,55 @@ func (s *WorkflowEngineTestSuite) TestMultiStepParallelApprovals() {
 //	Approval workflows often need to notify stakeholders as progress occurs. Using
 //	assignments.by_action["action_key"].approved/rejected/pending in "when" clauses
 //	enables reactive notifications based on approval state transitions.
-func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
+func TestApprovalStatusBasedNotifications(t *testing.T) {
+	s := suite.setupTest(t)
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
 	wfEngine := s.Engine()
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 2,
 		Label:         "Team Review",
 		Fields:        []string{"status"},
 	}
 	approvalParamsBytes, err := json.Marshal(approvalParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	notifyFirstApprovalParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
 		},
 		Title: "First Approval Received",
 	}
 	notifyFirstParamsBytes, err := json.Marshal(notifyFirstApprovalParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	notifyQuorumParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
 		},
 		Title: "Quorum Reached",
 	}
 	notifyQuorumParamsBytes, err := json.Marshal(notifyQuorumParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	notifyRejectionParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
 		},
 		Title: "Request Rejected",
 	}
 	notifyRejectionParamsBytes, err := json.Marshal(notifyRejectionParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	s.Run("first approval triggers partial notification", func() {
+	t.Run("first approval triggers partial notification", func(t *testing.T) {
+		s := s.withT(t)
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Approval Status Notifications " + ulid.Make().String()).
 			SetWorkflowKind(enums.WorkflowKindApproval).
@@ -763,14 +767,14 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-APPROVAL-NOTIF-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -782,8 +786,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		// Wait for the trigger event chain to complete (assignments created, instance paused)
 		s.WaitForEvents()
@@ -791,8 +795,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Require().Len(assignments, 2)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(assignments, 2))
 
 		assignmentsByUser := map[string]*generated.WorkflowAssignment{}
 		for _, a := range assignments {
@@ -803,22 +807,22 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 				assignmentsByUser[approver2ID] = a
 			}
 		}
-		s.Require().NotNil(assignmentsByUser[approver1ID])
+		assert.Assert(t, assignmentsByUser[approver1ID] != nil)
 
 		err = wfEngine.CompleteAssignment(userCtx, assignmentsByUser[approver1ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		s.WaitForEvents()
 
 		// Check the assignment was actually updated
 		updatedAssignment, err := s.client.WorkflowAssignment.Get(userCtx, assignmentsByUser[approver1ID].ID)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 		s.T().Logf("Assignment after completion: status=%s", updatedAssignment.Status)
 
 		events, err := s.client.WorkflowEvent.Query().
 			Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 		s.T().Logf("Total events: %d", len(events))
 
 		hasFirstApprovalEvent := false
@@ -837,16 +841,17 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 				}
 			}
 		}
-		s.True(hasFirstApprovalEvent, "expected first approval notification event")
+		assert.Check(t, hasFirstApprovalEvent, "expected first approval notification event")
 
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 		// Workflow should remain PAUSED until all required approvals are completed
 		// Only 1 of 2 required approvals has been completed
-		s.Equal(enums.WorkflowInstanceStatePaused, updatedInstance.State)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStatePaused, updatedInstance.State))
 	})
 
-	s.Run("rejection triggers rejection notification", func() {
+	t.Run("rejection triggers rejection notification", func(t *testing.T) {
+		s := s.withT(t)
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Rejection Notifications " + ulid.Make().String()).
 			SetWorkflowKind(enums.WorkflowKindApproval).
@@ -874,14 +879,14 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-REJECTION-NOTIF-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -893,8 +898,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		// Wait for the trigger event chain to complete (assignments created, instance paused)
 		s.WaitForEvents()
@@ -902,8 +907,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Require().Len(assignments, 2)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(assignments, 2))
 
 		assignmentsByUser := map[string]*generated.WorkflowAssignment{}
 		for _, a := range assignments {
@@ -914,17 +919,17 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 				assignmentsByUser[approver2ID] = a
 			}
 		}
-		s.Require().NotNil(assignmentsByUser[approver2ID])
+		assert.Assert(t, assignmentsByUser[approver2ID] != nil)
 
 		err = wfEngine.CompleteAssignment(approver2Ctx, assignmentsByUser[approver2ID].ID, enums.WorkflowAssignmentStatusRejected, nil, nil)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		s.WaitForEvents()
 
 		events, err := s.client.WorkflowEvent.Query().
 			Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		hasRejectionEvent := false
 		for _, e := range events {
@@ -942,7 +947,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 				}
 			}
 		}
-		s.True(hasRejectionEvent, "expected rejection notification event")
+		assert.Check(t, hasRejectionEvent, "expected rejection notification event")
 	})
 }
 
@@ -971,7 +976,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 //	Real-world workflows often need to notify external systems after approval. This test
 //	confirms that actions execute in sequence and that post-approval webhooks receive
 //	appropriate context about the completed workflow.
-func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
+func TestApprovalWithWebhook(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -987,25 +993,24 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 	defer server.Close()
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Evidence Review",
 		Fields:   []string{"status"},
 	}
 	approvalParamsBytes, err := json.Marshal(approvalParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	webhookParams := workflows.WebhookActionParams{
 		URL: server.URL,
 	}
 	webhookParamsBytes, err := json.Marshal(webhookParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	s.Run("webhook fires after approval completes", func() {
+	t.Run("webhook fires after approval completes", func(t *testing.T) {
+		s := s.withT(t)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Approval with Webhook " + ulid.Make().String()).
@@ -1033,14 +1038,14 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-APPROVAL-WEBHOOK-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -1052,8 +1057,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		// Wait for the trigger event chain to complete (assignment created, instance paused)
 		s.WaitForEvents()
@@ -1061,24 +1066,24 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Require().Len(assignments, 1)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(assignments, 1))
 
 		err = wfEngine.CompleteAssignment(userCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		select {
 		case payload := <-webhookCalled:
-			s.Equal(instance.ID, payload["instance_id"])
+			assert.Check(t, is.DeepEqual(instance.ID, payload["instance_id"]))
 		case <-time.After(10 * time.Second):
-			s.Fail("timed out waiting for webhook callback")
+			t.Error("timed out waiting for webhook callback")
 		}
 
 		s.WaitForEvents()
 
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 	})
 }
 
@@ -1108,12 +1113,14 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 //
 //	Edge-based workflows enable triggering on relationship changes, not just field changes.
 //	The size() function allows distinguishing between "edge touched" and "items actually added".
-func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
+func TestEdgeTriggerWithCondition(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
-	s.Run("edge trigger with size condition evaluates correctly", func() {
+	t.Run("edge trigger with size condition evaluates correctly", func(t *testing.T) {
+		s := s.withT(t)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Edge Trigger Size " + ulid.Make().String()).
@@ -1141,7 +1148,7 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   "evidence-123",
@@ -1159,8 +1166,8 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 			nil,
 			nil,
 		)
-		s.NoError(err)
-		s.True(result)
+		assert.Check(t, err)
+		assert.Check(t, result)
 
 		result, err = wfEngine.EvaluateConditions(
 			userCtx,
@@ -1173,8 +1180,8 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 			nil,
 			nil,
 		)
-		s.NoError(err)
-		s.False(result)
+		assert.Check(t, err)
+		assert.Check(t, !result)
 
 		result, err = wfEngine.EvaluateConditions(
 			userCtx,
@@ -1187,8 +1194,8 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 			nil,
 			nil,
 		)
-		s.NoError(err)
-		s.False(result)
+		assert.Check(t, err)
+		assert.Check(t, !result)
 	})
 }
 
@@ -1211,23 +1218,23 @@ func (s *WorkflowEngineTestSuite) TestEdgeTriggerWithCondition() {
 //
 //	Proposal submission uses TriggerExistingInstance to resume paused approval workflows.
 //	This test ensures the API correctly handles valid (PAUSED) and invalid (COMPLETED) states.
-func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
+func TestTriggerExistingInstanceResumes(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
-	s.Run("resumes paused instance successfully", func() {
+	t.Run("resumes paused instance successfully", func(t *testing.T) {
+		s := s.withT(t)
 
 		approvalParams := workflows.ApprovalActionParams{
-			TargetedActionParams: workflows.TargetedActionParams{
-				Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
-			},
-			Required: boolPtr(true),
+			Targets:  []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+			Required: new(true),
 			Label:    "Resume Test Approval",
 			Fields:   []string{"status"},
 		}
 		paramsBytes, err := json.Marshal(approvalParams)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Resume Paused Workflow " + ulid.Make().String()).
@@ -1246,14 +1253,14 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-PAUSED-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -1263,25 +1270,26 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		// Wait for the trigger event chain to complete (assignment created, instance paused)
 		s.WaitForEvents()
 
 		// Instance should be paused waiting for approval
 		pausedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowInstanceStatePaused, pausedInstance.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStatePaused, pausedInstance.State))
 
 		// TriggerExistingInstance should succeed on paused instance (no error)
 		err = wfEngine.TriggerExistingInstance(userCtx, pausedInstance, def, obj, engine.TriggerInput{
 			EventType:     "UPDATE",
 			ChangedFields: []string{"status"},
 		})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 	})
 
-	s.Run("rejects completed instance", func() {
+	t.Run("rejects completed instance", func(t *testing.T) {
+		s := s.withT(t)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Reject Completed Workflow " + ulid.Make().String()).
@@ -1298,13 +1306,13 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 				Actions: []models.WorkflowAction{},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-COMPLETE-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -1312,21 +1320,21 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 			EventType:     "UPDATE",
 			ChangedFields: []string{"status"},
 		})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		// Wait for the trigger event chain to complete
 		s.WaitForEvents()
 
 		// Instance completes immediately since no actions
 		completedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowInstanceStateCompleted, completedInstance.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, completedInstance.State))
 
 		// Completed instance should reject TriggerExistingInstance
 		err = wfEngine.TriggerExistingInstance(userCtx, completedInstance, def, obj, engine.TriggerInput{
 			EventType: "UPDATE",
 		})
-		s.Require().ErrorIs(err, engine.ErrInvalidState)
+		assert.Assert(t, is.ErrorIs(err, engine.ErrInvalidState))
 	})
 }
 
@@ -1348,24 +1356,24 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 //	Without this guard, users could trigger multiple parallel approval workflows for the
 //	same object change, leading to confusion and potential data inconsistencies. The guard
 //	ensures at most one active approval workflow per domain.
-func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance() {
+func TestTriggerWorkflowGuardsActiveDomainInstance(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
-	s.Run("blocks duplicate approval workflow for same domain", func() {
+	t.Run("blocks duplicate approval workflow for same domain", func(t *testing.T) {
+		s := s.withT(t)
 
 		approvalParams := workflows.ApprovalActionParams{
-			TargetedActionParams: workflows.TargetedActionParams{
-				Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
-			},
-			Required:      boolPtr(true),
+			Targets:       []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+			Required:      new(true),
 			RequiredCount: 1,
 			Label:         "Status Approval",
 			Fields:        []string{"status"},
 		}
 		paramsBytes, err := json.Marshal(approvalParams)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Guard Workflow " + ulid.Make().String()).
@@ -1388,14 +1396,14 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance(
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-GUARD-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -1404,8 +1412,8 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance(
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
-		s.Require().NotEmpty(instance.WorkflowProposalID)
+		assert.NilError(t, err)
+		assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 		// Second trigger for same domain should be blocked
 		_, err = wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
@@ -1413,7 +1421,7 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance(
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().ErrorIs(err, workflows.ErrWorkflowAlreadyActive)
+		assert.Assert(t, is.ErrorIs(err, workflows.ErrWorkflowAlreadyActive))
 	})
 }
 
@@ -1435,12 +1443,14 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowGuardsActiveDomainInstance(
 //	Cooldowns prevent notification spam when objects are rapidly updated. Without cooldowns,
 //	a burst of updates would generate a burst of notifications. The cooldown ensures
 //	workflows have a "quiet period" after execution.
-func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
+func TestTriggerWorkflowCooldownGuard(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
-	s.Run("cooldown blocks workflow trigger after recent completion", func() {
+	t.Run("cooldown blocks workflow trigger after recent completion", func(t *testing.T) {
+		s := s.withT(t)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Cooldown Workflow " + ulid.Make().String()).
@@ -1458,14 +1468,14 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
 				Actions: []models.WorkflowAction{},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-COOLDOWN-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -1474,20 +1484,20 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
 			EventType:     "UPDATE",
 			ChangedFields: []string{"status"},
 		})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		s.WaitForEvents()
 
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 
 		// Second trigger within cooldown should be blocked
 		_, err = wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 			EventType:     "UPDATE",
 			ChangedFields: []string{"status"},
 		})
-		s.Require().ErrorIs(err, workflows.ErrWorkflowAlreadyActive)
+		assert.Assert(t, is.ErrorIs(err, workflows.ErrWorkflowAlreadyActive))
 	})
 }
 
@@ -1505,13 +1515,15 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
 //	Event emission failures should not crash the workflow system. By recording failures,
 //	a reconciliation process can later retry publishing the events, ensuring eventual
 //	consistency even during infrastructure issues.
-func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
+func TestTriggerWorkflowRecordsEmitFailure(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	// Create isolated engine without emitter to test failure recording
 	wfEngine := s.NewIsolatedEngine(nil)
 
-	s.Run("records emit failure when emitter is nil", func() {
+	t.Run("records emit failure when emitter is nil", func(t *testing.T) {
+		s := s.withT(t)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Emit Failure Workflow " + ulid.Make().String()).
@@ -1528,14 +1540,14 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
 				Actions: []models.WorkflowAction{},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-EMIT-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -1543,8 +1555,8 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
 			EventType:     "UPDATE",
 			ChangedFields: []string{"status"},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		// Check that emit failure was recorded
 		count, err := s.client.WorkflowEvent.Query().
@@ -1553,8 +1565,8 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
 				workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed),
 			).
 			Count(userCtx)
-		s.Require().NoError(err)
-		s.GreaterOrEqual(count, 1)
+		assert.NilError(t, err)
+		assert.Check(t, count >= 1)
 	})
 }
 
@@ -1578,19 +1590,21 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowRecordsEmitFailure() {
 //	Tag selectors enable scoping workflows to specific subsets of objects. This is essential
 //	for teams that want different approval workflows for different categories of controls
 //	(e.g., PCI-tagged controls require extra approval).
-func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
+func TestSelectorWithTagMismatch(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.Engine()
 
-	s.Run("workflow skipped when object lacks required tag", func() {
+	t.Run("workflow skipped when object lacks required tag", func(t *testing.T) {
+		s := s.withT(t)
 
 		tag, err := s.client.TagDefinition.Create().
 			SetName("RequiredTag-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(seedCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		// Create definition requiring the tag
 		def, err := s.client.WorkflowDefinition.Create().
@@ -1614,21 +1628,21 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
 				Actions: []models.WorkflowAction{},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		// Create control WITHOUT the required tag
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-NO-TAG-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
 		// Should find no matching definitions because tag doesn't match
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Empty(defs)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 0))
 	})
 }
 
@@ -1651,19 +1665,21 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithTagMismatch() {
 //
 //	Group selectors enable department-specific workflows. Different teams can have different
 //	approval requirements for controls they own, without affecting other teams' controls.
-func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
+func TestSelectorWithGroupMismatch(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.Engine()
 
-	s.Run("workflow skipped when object lacks required group", func() {
+	t.Run("workflow skipped when object lacks required group", func(t *testing.T) {
+		s := s.withT(t)
 
 		group, err := s.client.Group.Create().
 			SetName("RequiredGroup-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(seedCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		// Create definition requiring the group
 		def, err := s.client.WorkflowDefinition.Create().
@@ -1687,21 +1703,21 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
 				Actions: []models.WorkflowAction{},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		// Create control WITHOUT the required group
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-NO-GROUP-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
 		// Should find no matching definitions because group doesn't match
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Empty(defs)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 0))
 	})
 }
 
@@ -1725,23 +1741,23 @@ func (s *WorkflowEngineTestSuite) TestSelectorWithGroupMismatch() {
 //	Optional approvals with "when" clauses allow for conditional approval gates. When the
 //	condition is false, the approval is not needed and the workflow should proceed without
 //	creating unnecessary assignments.
-func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
+func TestOptionalApprovalSkipped(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
-	s.Run("optional approval skipped when when clause is false", func() {
+	t.Run("optional approval skipped when when clause is false", func(t *testing.T) {
+		s := s.withT(t)
 
 		approvalParams := workflows.ApprovalActionParams{
-			TargetedActionParams: workflows.TargetedActionParams{
-				Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
-			},
-			Required: boolPtr(false),
+			Targets:  []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+			Required: new(false),
 			Label:    "Optional Approval",
 			Fields:   []string{"status"},
 		}
 		paramsBytes, err := json.Marshal(approvalParams)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		def, err := s.client.WorkflowDefinition.Create().
 			SetName("Optional Approval Workflow " + ulid.Make().String()).
@@ -1765,14 +1781,14 @@ func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-OPTIONAL-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -1781,7 +1797,7 @@ func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		s.WaitForEvents()
 
@@ -1789,13 +1805,13 @@ func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Empty(assignments)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(assignments, 0))
 
 		// Instance should complete since no approvals were needed
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 	})
 }
 
@@ -1820,12 +1836,14 @@ func (s *WorkflowEngineTestSuite) TestOptionalApprovalSkipped() {
 //	Action ordering is often critical for integrations. For example, you might want to
 //	notify an upstream system before notifying downstream consumers. This test ensures
 //	the engine respects the defined action order.
-func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
+func TestMultipleWebhooksInSequence(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
-	s.Run("multiple webhooks execute in sequence", func() {
+	t.Run("multiple webhooks execute in sequence", func(t *testing.T) {
+		s := s.withT(t)
 
 		callOrder := make(chan string, 2)
 		server1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -1869,13 +1887,13 @@ func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 				},
 			}).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-MULTI-HOOK-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -1883,28 +1901,28 @@ func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 			EventType:     "UPDATE",
 			ChangedFields: []string{"status"},
 		})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		readWithTimeout := func(label string) string {
 			select {
 			case value := <-callOrder:
 				return value
 			case <-time.After(5 * time.Second):
-				s.FailNow("webhook not received", label)
+				t.Fatal("webhook not received", label)
 			}
 			return ""
 		}
 
 		first := readWithTimeout("webhook1")
 		second := readWithTimeout("webhook2")
-		s.Equal("webhook1", first)
-		s.Equal("webhook2", second)
+		assert.Check(t, is.Equal("webhook1", first))
+		assert.Check(t, is.Equal("webhook2", second))
 
 		s.WaitForEvents()
 
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 	})
 }
 
@@ -1931,22 +1949,21 @@ func (s *WorkflowEngineTestSuite) TestMultipleWebhooksInSequence() {
 //	The workflow engine must correctly transition instance state based on approval outcomes.
 //	Rejection of required approvals should fail the workflow, while approval should complete
 //	it and apply the proposed changes.
-func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
+func TestResolveAssignmentStateTransitions(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
-		},
-		Required:      boolPtr(true),
+		Targets:       []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: userID}},
+		Required:      new(true),
 		RequiredCount: 1,
 		Label:         "Status Approval",
 		Fields:        []string{"status"},
 	}
 	paramsBytes, err := json.Marshal(approvalParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	def, err := s.client.WorkflowDefinition.Create().
 		SetName("State Transition Workflow " + ulid.Make().String()).
@@ -1969,15 +1986,16 @@ func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
 			},
 		}).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	s.Run("rejected required approval fails instance", func() {
+	t.Run("rejected required approval fails instance", func(t *testing.T) {
+		s := s.withT(t)
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-REJECT-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -1986,7 +2004,7 @@ func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		// Wait for the trigger event chain to complete (assignment created, instance paused)
 		s.WaitForEvents()
@@ -1994,28 +2012,29 @@ func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Require().Len(assignments, 1)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(assignments, 1))
 
 		// Reject the approval
 		err = wfEngine.CompleteAssignment(userCtx, assignments[0].ID, enums.WorkflowAssignmentStatusRejected, nil, nil)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		s.WaitForEvents()
 
 		// Instance should be failed
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowInstanceStateFailed, updatedInstance.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateFailed, updatedInstance.State))
 	})
 
-	s.Run("approved required approval completes instance", func() {
+	t.Run("approved required approval completes instance", func(t *testing.T) {
+		s := s.withT(t)
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-APPROVE-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetStatus(enums.ControlStatusNotImplemented).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -2024,7 +2043,7 @@ func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
 			ChangedFields:   []string{"status"},
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		// Wait for the trigger event chain to complete (assignment created, instance paused)
 		s.WaitForEvents()
@@ -2032,23 +2051,23 @@ func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Require().Len(assignments, 1)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(assignments, 1))
 
 		// Approve the assignment
 		err = wfEngine.CompleteAssignment(userCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		s.WaitForEvents()
 
 		// Instance should be completed
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 
 		// Control status should be updated
 		updatedControl, err := s.client.Control.Get(userCtx, control.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.ControlStatusApproved, updatedControl.Status)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.ControlStatusApproved, updatedControl.Status))
 	})
 }

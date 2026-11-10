@@ -1,0 +1,16 @@
+[
+  {
+    "external_id": "procedure::minimal-procedure",
+    "name": "Minimal Access Review",
+    "details": "Steps for the quarterly access review",
+    "internal_policies_external_ids": [
+      "internal_policy::minimal-policy"
+    ],
+    "control_ref_codes": [
+      "MIN-01"
+    ],
+    "status": "{{STATUS|DRAFT}}",
+    "approver_name": "{{APPROVER|Admins}}",
+    "programs_external_ids": []
+  }
+]

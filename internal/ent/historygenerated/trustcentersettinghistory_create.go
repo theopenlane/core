@@ -591,6 +591,20 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableAutoApprovalRules(v *model
 	return _c
 }
 
+// SetDisableDefaultDomain sets the "disable_default_domain" field.
+func (_c *TrustCenterSettingHistoryCreate) SetDisableDefaultDomain(v bool) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetDisableDefaultDomain(v)
+	return _c
+}
+
+// SetNillableDisableDefaultDomain sets the "disable_default_domain" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableDisableDefaultDomain(v *bool) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetDisableDefaultDomain(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingHistoryCreate) SetID(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetID(v)
@@ -694,6 +708,10 @@ func (_c *TrustCenterSettingHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.AutoApprovalRules(); !ok {
 		v := trustcentersettinghistory.DefaultAutoApprovalRules
 		_c.mutation.SetAutoApprovalRules(v)
+	}
+	if _, ok := _c.mutation.DisableDefaultDomain(); !ok {
+		v := trustcentersettinghistory.DefaultDisableDefaultDomain
+		_c.mutation.SetDisableDefaultDomain(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersettinghistory.DefaultID == nil {
@@ -926,6 +944,10 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.AutoApprovalRules(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldAutoApprovalRules, field.TypeJSON, value)
 		_node.AutoApprovalRules = value
+	}
+	if value, ok := _c.mutation.DisableDefaultDomain(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldDisableDefaultDomain, field.TypeBool, value)
+		_node.DisableDefaultDomain = value
 	}
 	return _node, _spec
 }

@@ -1,9 +1,8 @@
 package objectstore
 
 import (
-	"context"
 	"encoding/json"
-	"reflect"
+	"path/filepath"
 	"testing"
 
 	"github.com/samber/lo"
@@ -11,53 +10,32 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/mappingtest"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/celx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
-// vendorMappingSpec returns the vendor kind's mapping as the builder registers it
-func vendorMappingSpec(t *testing.T) types.MappingOverride {
+func builderMappings(t *testing.T) []types.MappingRegistration {
 	t.Helper()
 
 	def, err := Builder(&RuntimeConfig{}, "", Config{})()
 	assert.NilError(t, err)
 
-	mapping, found := lo.Find(def.Mappings, func(m types.MappingRegistration) bool {
-		return m.Schema == entityMapping.Schema && m.Variant == ""
-	})
-	assert.Assert(t, found, "expected the builder to register the Entity mapping")
-	assert.DeepEqual(t, entityMapping.Spec, mapping.Spec)
-
-	return mapping.Spec
+	return def.Mappings
 }
 
 func TestMappingExpressionsValid(t *testing.T) {
-	def, err := Builder(&RuntimeConfig{}, "", Config{})()
-	assert.NilError(t, err)
-
-	for _, m := range def.Mappings {
-		name := m.Schema
-
-		t.Run(name+"/filter", func(t *testing.T) {
-			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
-		})
-
-		t.Run(name+"/map", func(t *testing.T) {
-			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
-		})
-	}
+	mappingtest.AssertExpressionsValid(t, builderMappings(t))
 }
 
 func TestEntityMapping(t *testing.T) {
-	spec := vendorMappingSpec(t)
+	spec := mappingtest.MappingSpec(t, builderMappings(t), entityops.SchemaEntity.Name)
 
 	envelope := types.MappingEnvelope{
 		Resource: "vendors/1password-vendor.json#0",
 		Payload:  mappingtest.LoadExample(t, "examples", "1password-vendor.json"),
 	}
 
-	assert.Assert(t, mappingtest.AssertFiltered(t, spec, envelope), "expected the vendor record to pass the vendor kind filter")
+	assert.Check(t, mappingtest.AssertFiltered(t, spec, envelope))
 
 	mapped := mappingtest.EvalMap(t, spec, envelope)
 
@@ -69,64 +47,120 @@ func TestEntityMapping(t *testing.T) {
 	assert.DeepEqual(t, []any{"technology", "password management"}, mapped["tags"])
 	assert.Equal(t, "https://www.google.com/s2/favicons?domain=1password.com&sz=128", mapped["logo_remote_url"])
 	assert.Equal(t, true, mapped["externally_visible"])
-	assert.Assert(t, mapped["description"] != nil)
-	assert.Assert(t, mapped["aliases"] == nil)
-
-	mapped = mappingtest.EvalMap(t, spec, types.MappingEnvelope{
-		Resource: "vendors/minimal.json#0",
-		Payload:  json.RawMessage(`{"systemInternalID":"entity::minimal","name":"minimal"}`),
-	})
-
-	assert.Equal(t, "entity::minimal", mapped["external_id"])
-	assert.Equal(t, "minimal", mapped["name"])
-	assert.Assert(t, mapped["display_name"] == nil)
-	assert.Assert(t, mapped["description"] == nil)
-	assert.Assert(t, mapped["domains"] == nil)
-	assert.Assert(t, mapped["aliases"] == nil)
-	assert.Assert(t, mapped["tags"] == nil)
-	assert.Assert(t, mapped["logo_remote_url"] == nil)
-	assert.Equal(t, false, mapped["externally_visible"])
-
-	mapped = mappingtest.EvalMap(t, spec, types.MappingEnvelope{
-		Resource: "vendors/aliased.json#0",
-		Payload:  json.RawMessage(`{"systemInternalID":"entity::aliased","name":"aliased","aliases":["alias-one","alias-two"],"externallyVisible":true}`),
-	})
-
-	assert.DeepEqual(t, []any{"alias-one", "alias-two"}, mapped["aliases"])
-	assert.Equal(t, true, mapped["externally_visible"])
+	assert.Equal(t, vendorEntityTypeName, mapped[recordEntityTypeKey])
 }
 
-func TestEntityMappingFilter(t *testing.T) {
-	spec := vendorMappingSpec(t)
+func TestEntityExamplesUseInputKeys(t *testing.T) {
+	spec := mappingtest.MappingSpec(t, builderMappings(t), entityops.SchemaEntity.Name)
 
-	vendor := types.MappingEnvelope{Payload: mappingtest.LoadExample(t, "examples", "adobe.json")}
-	assert.Assert(t, mappingtest.AssertFiltered(t, spec, vendor), "expected a vendor record to pass the filter")
+	inputKeys := lo.Map(entityops.SchemaEntity.Fields, func(field entityops.FieldDescriptor, _ int) string { return field.InputKey })
+	linkKeys := lo.Map(spec.Links, func(link types.LinkRule, _ int) string { return lo.CoalesceOrEmpty(link.SourceList, link.SourceField) })
 
-	minimal := types.MappingEnvelope{Payload: json.RawMessage(`{"systemInternalID":"entity::u","name":"u"}`)}
-	assert.Assert(t, mappingtest.AssertFiltered(t, spec, minimal), "the Entity mapping filters nothing")
+	examples, err := filepath.Glob(filepath.Join("examples", "*.json"))
+	assert.NilError(t, err)
+	assert.Check(t, len(examples) > 0)
+
+	for _, example := range examples {
+		t.Run(filepath.Base(example), func(t *testing.T) {
+			record, err := jsonx.ToRawMap(mappingtest.LoadExample(t, "examples", filepath.Base(example)))
+			assert.NilError(t, err)
+
+			for key := range record {
+				assert.Check(t, lo.Contains(inputKeys, key) || lo.Contains(linkKeys, key), "%s is not an entity input or link key", key)
+			}
+		})
+	}
 }
 
-func TestEntityMappingLinkExpression(t *testing.T) {
-	spec := vendorMappingSpec(t)
-	assert.Equal(t, mapExprEntity, spec.MapExpr)
-	assert.Equal(t, 1, len(spec.Links))
-	assert.Equal(t, entityops.SchemaEntityType.Name, spec.Links[0].TargetSchema)
+func TestEntityMappingEntityType(t *testing.T) {
+	spec := mappingtest.MappingSpec(t, builderMappings(t), entityops.SchemaEntity.Name)
 
-	envCfg := celx.StrictEnvConfig()
-	envCfg.CrossTypeNumericComparisons = true
+	testCases := []struct {
+		name     string
+		payload  string
+		expected string
+	}{
+		{name: "unnamed type links the vendor type", payload: `{"external_id":"entity::a","name":"a"}`, expected: vendorEntityTypeName},
+		{name: "named type is kept", payload: `{"external_id":"entity::b","name":"b","entity_type_name":"customer"}`, expected: "customer"},
+	}
 
-	eval, err := celx.NewNativeEntityEvaluator(envCfg, celx.FastEvalConfig(), reflect.TypeFor[entityops.EntityTypeProjection](), reflect.TypeFor[entityops.EntityProjection]())
-	assert.NilError(t, err)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			mapped := mappingtest.EvalMap(t, spec, types.MappingEnvelope{Payload: json.RawMessage(tc.payload)})
 
-	vendorType := json.RawMessage(`{"id":"et_01","name":"vendor"}`)
-	customerType := json.RawMessage(`{"id":"et_02","name":"customer"}`)
-	source := json.RawMessage(`{"external_id":"vendor:okta","name":"Okta"}`)
+			assert.Equal(t, tc.expected, mapped[recordEntityTypeKey])
+		})
+	}
+}
 
-	matched, err := eval.EvaluateBoolWithSource(context.Background(), spec.Links[0].Expression, vendorType, source)
-	assert.NilError(t, err)
-	assert.Assert(t, matched, "expected the vendor entity type to match")
+func TestRecordMappings(t *testing.T) {
+	mappings := builderMappings(t)
 
-	matched, err = eval.EvaluateBoolWithSource(context.Background(), spec.Links[0].Expression, customerType, source)
-	assert.NilError(t, err)
-	assert.Assert(t, !matched, "expected the customer entity type not to match")
+	mappingtest.AssertExpressionsValid(t, mappings)
+	assert.Equal(t, len(recordSchemas), len(mappings))
+
+	for _, schema := range recordSchemas {
+		count := lo.CountBy(mappings, func(m types.MappingRegistration) bool { return m.Schema == schema.Name })
+		assert.Check(t, count == 1, "%s registered %d times", schema.Name, count)
+	}
+
+	for schema, links := range recordLinks {
+		_, found := entityops.LookupSchema(schema)
+		assert.Check(t, found, "link source %s", schema)
+
+		for _, link := range links {
+			assert.Check(t, link.PayloadKeys, "%s %s", schema, link.SourceList)
+		}
+	}
+
+	for schema := range recordMapExprs {
+		_, found := entityops.LookupSchema(schema)
+		assert.Check(t, found, "map expression for %s", schema)
+	}
+}
+
+func TestRecordMappingEdgeKeys(t *testing.T) {
+	mappings := builderMappings(t)
+
+	testCases := []struct {
+		schema *entityops.Schema
+		key    string
+	}{
+		{schema: entityops.SchemaSystemDetail, key: "platforms_external_ids"},
+		{schema: entityops.SchemaPlatform, key: "assets_external_ids"},
+		{schema: entityops.SchemaPlatform, key: "entities_external_ids"},
+		{schema: entityops.SchemaEntity, key: "assets_external_ids"},
+		{schema: entityops.SchemaContact, key: "entities_external_ids"},
+		{schema: entityops.SchemaInternalPolicy, key: "programs_external_ids"},
+		{schema: entityops.SchemaProcedure, key: "internal_policies_external_ids"},
+		{schema: entityops.SchemaEvidence, key: "tasks_external_ids"},
+		{schema: entityops.SchemaRemediation, key: "vulnerabilities_external_ids"},
+		{schema: entityops.SchemaAssessmentPolicy, key: "assessment_external_id"},
+		{schema: entityops.SchemaAssessmentPolicy, key: "internal_policy_external_id"},
+		{schema: entityops.SchemaCampaign, key: "email_template_external_id"},
+		{schema: entityops.SchemaCampaign, key: "identity_holders_external_ids"},
+		{schema: entityops.SchemaInternalPolicy, key: "approver_name"},
+		{schema: entityops.SchemaProcedure, key: "approver_name"},
+		{schema: entityops.SchemaControl, key: "control_owner_name"},
+		{schema: entityops.SchemaControl, key: "delegate_name"},
+		{schema: entityops.SchemaEntity, key: "entity_type_name"},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.schema.Snake+"/"+tc.key, func(t *testing.T) {
+			spec := mappingtest.MappingSpec(t, mappings, tc.schema.Name)
+
+			found := lo.ContainsBy(spec.Links, func(link types.LinkRule) bool {
+				return lo.CoalesceOrEmpty(link.SourceList, link.SourceField) == tc.key
+			})
+			assert.Check(t, found)
+		})
+	}
+}
+
+func TestRecordMappingFilter(t *testing.T) {
+	spec := mappingtest.MappingSpec(t, builderMappings(t), entityops.SchemaControl.Name)
+
+	assert.Check(t, mappingtest.AssertFiltered(t, spec, types.MappingEnvelope{Payload: json.RawMessage(`{"external_id":"control::1","ref_code":"MIN-01"}`)}))
+	assert.Check(t, !mappingtest.AssertFiltered(t, spec, types.MappingEnvelope{Payload: json.RawMessage(`{"ref_code":"MIN-01"}`)}), "a record without an external id is filtered")
 }

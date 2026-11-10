@@ -38,7 +38,7 @@ var (
 	}
 )
 
-func (s *SchemaInfo) functionContainsCheckCreateAccess(body *ast.BlockStmt) {
+func (s *parsedSchema) functionContainsCheckCreateAccess(body *ast.BlockStmt) {
 	hasInternalPolicy := false
 
 	inQueryRules := false
@@ -131,7 +131,7 @@ func (s *SchemaInfo) functionContainsCheckCreateAccess(body *ast.BlockStmt) {
 }
 
 func parsePolicyBody(schema *load.Schema) *ast.BlockStmt {
-	srcFile := strings.SplitN(schema.Pos, ":", 2)[0] //nolint:mnd
+	srcFile, _, _ := strings.Cut(schema.Pos, ":") //nolint:mnd
 	if srcFile == "" {
 		return nil
 	}

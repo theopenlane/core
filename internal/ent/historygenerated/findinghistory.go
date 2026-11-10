@@ -57,6 +57,8 @@ type FindingHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -197,7 +199,7 @@ func (*FindingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case findinghistory.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldUpdatedByImpersonator, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldSourceDefinitionID, findinghistory.FieldSourceDefinitionVersion, findinghistory.FieldSourceInstanceID, findinghistory.FieldManagedBy, findinghistory.FieldIntegrationRunID, findinghistory.FieldExternalID, findinghistory.FieldOwnerID, findinghistory.FieldInternalOwner, findinghistory.FieldInternalOwnerUserID, findinghistory.FieldInternalOwnerGroupID, findinghistory.FieldInternalOwnerIdentityHolderID, findinghistory.FieldReviewedBy, findinghistory.FieldReviewedByUserID, findinghistory.FieldReviewedByGroupID, findinghistory.FieldReviewedByIdentityHolderID, findinghistory.FieldAssignedTo, findinghistory.FieldAssignedToUserID, findinghistory.FieldAssignedToGroupID, findinghistory.FieldAssignedToIdentityHolderID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldFindingStatusName, findinghistory.FieldFindingStatusID, findinghistory.FieldSecurityLevel, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldExternalURI:
+		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldUpdatedByImpersonator, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldSourceDefinitionID, findinghistory.FieldSourceDefinitionVersion, findinghistory.FieldSourceInstanceID, findinghistory.FieldManagedBy, findinghistory.FieldIntegrationRunID, findinghistory.FieldSourceKey, findinghistory.FieldExternalID, findinghistory.FieldOwnerID, findinghistory.FieldInternalOwner, findinghistory.FieldInternalOwnerUserID, findinghistory.FieldInternalOwnerGroupID, findinghistory.FieldInternalOwnerIdentityHolderID, findinghistory.FieldReviewedBy, findinghistory.FieldReviewedByUserID, findinghistory.FieldReviewedByGroupID, findinghistory.FieldReviewedByIdentityHolderID, findinghistory.FieldAssignedTo, findinghistory.FieldAssignedToUserID, findinghistory.FieldAssignedToGroupID, findinghistory.FieldAssignedToIdentityHolderID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldFindingStatusName, findinghistory.FieldFindingStatusID, findinghistory.FieldSecurityLevel, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case findinghistory.FieldHistoryTime, findinghistory.FieldCreatedAt, findinghistory.FieldUpdatedAt, findinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -326,6 +328,12 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case findinghistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case findinghistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -794,6 +802,9 @@ func (_m *FindingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

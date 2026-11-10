@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -18,21 +18,19 @@ func TestPopulateProviderHints(t *testing.T) {
 		OriginalName:         "evidence.json",
 		FieldName:            "uploadFile",
 		CorrelatedObjectType: "evidence",
-		FileMetadata: pkgobjects.FileMetadata{
-			Size:        1024,
-			ContentType: "application/json",
-		},
+		Size:                 1024,
+		ContentType:          "application/json",
 	}
 
 	PopulateProviderHints(&file, "org-123")
 
-	require.NotNil(t, file.ProviderHints)
-	assert.Equal(t, "org-123", file.ProviderHints.OrganizationID)
-	assert.Equal(t, models.CatalogComplianceModule, file.ProviderHints.Module)
-	assert.Equal(t, "uploadFile", file.ProviderHints.Metadata["key"])
-	assert.Equal(t, "evidence", file.ProviderHints.Metadata["object_type"])
-	assert.Equal(t, "1024", file.ProviderHints.Metadata["size_bytes"])
-	assert.Equal(t, string(models.CatalogComplianceModule), file.ProviderHints.Metadata["module"])
+	assert.Assert(t, file.ProviderHints != nil)
+	assert.Check(t, is.Equal("org-123", file.ProviderHints.OrganizationID))
+	assert.Check(t, is.Equal(models.CatalogComplianceModule, file.ProviderHints.Module))
+	assert.Check(t, is.Equal("uploadFile", file.ProviderHints.Metadata["key"]))
+	assert.Check(t, is.Equal("evidence", file.ProviderHints.Metadata["object_type"]))
+	assert.Check(t, is.Equal("1024", file.ProviderHints.Metadata["size_bytes"]))
+	assert.Check(t, is.Equal(string(models.CatalogComplianceModule), file.ProviderHints.Metadata["module"]))
 }
 
 func TestApplyProviderHints(t *testing.T) {
@@ -51,22 +49,22 @@ func TestApplyProviderHints(t *testing.T) {
 	ctx := ApplyProviderHints(context.Background(), hints)
 
 	pref, ok := PreferredProviderHintFromContext(ctx)
-	require.True(t, ok)
-	assert.Equal(t, storagetypes.ProviderType(pref), storagetypes.ProviderType("s3"))
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal(storagetypes.ProviderType(pref), storagetypes.ProviderType("s3")))
 
 	known, ok := KnownProviderHintFromContext(ctx)
-	require.True(t, ok)
-	assert.Equal(t, storagetypes.ProviderType(known), storagetypes.ProviderType("disk"))
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal(storagetypes.ProviderType(known), storagetypes.ProviderType("disk")))
 
 	resModule, ok := ModuleHintFromContext(ctx)
-	require.True(t, ok)
-	assert.Equal(t, models.OrgModule(resModule), module)
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal(models.OrgModule(resModule), module))
 
 	size, ok := SizeBytesHintFromContext(ctx)
-	require.True(t, ok)
-	assert.Equal(t, int64(size), int64(2048))
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal(int64(size), int64(2048)))
 
 	kind, ok := TemplateKindHintFromContext(ctx)
-	require.True(t, ok)
-	assert.Equal(t, enums.TemplateKindTrustCenterNda, enums.TemplateKind(kind))
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal(enums.TemplateKindTrustCenterNda, enums.TemplateKind(kind)))
 }

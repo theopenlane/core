@@ -290,6 +290,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit).
 			WithWorkflowsConfig(s.Config.Settings.Workflows).
 			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
+			WithTrustCenterPreviewZoneID(s.Config.Settings.Server.TrustCenterPreviewZoneID).
 			WithAssessmentCnameTarget(s.Config.Settings.Server.AssessmentCnameTarget).
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
 			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions, subscriptionRedisClient).
@@ -409,6 +410,9 @@ func WithSessionManager(rc *redis.Client) ServerOption {
 			sessions.WithPersistence(rc),
 			sessions.WithSkipperFunc(authmw.SessionSkipperFunc),
 			sessions.WithFallbackUserID(authmw.SessionFallbackUserID),
+			sessions.WithAbsoluteTimeout(s.Config.Settings.Sessions.AbsoluteTimeout),
+			sessions.WithRenewalInterval(s.Config.Settings.Sessions.RenewalInterval),
+			sessions.WithRenewalGrace(s.Config.Settings.Sessions.RenewalGrace),
 		)
 
 		// set cookie config to be used
@@ -451,6 +455,8 @@ func WithOTP() ServerOption {
 				}),
 				totp.WithRecoveryCodeLength(s.Config.Settings.TOTP.RecoveryCodeLength),
 				totp.WithRecoveryCodeCount(s.Config.Settings.TOTP.RecoveryCodeCount),
+				totp.WithMaxFailedAttempts(s.Config.Settings.TOTP.MaxFailedAttempts),
+				totp.WithFailureWindow(s.Config.Settings.TOTP.FailureWindow),
 			}
 
 			// append redis client if enabled
@@ -496,6 +502,7 @@ func graphRateLimitConfig(cfg ratelimit.Config) *ratelimit.Config {
 	return &ratelimit.Config{
 		Enabled:              cfg.Enabled,
 		Headers:              ratelimit.DefaultClientIPHeaders,
+		ForwarderSecret:      cfg.ForwarderSecret,
 		Options:              []ratelimit.RateOption{{Requests: graphRateLimitRequests, Window: graphRateLimitWindow}},
 		SendRetryAfterHeader: cfg.SendRetryAfterHeader,
 		DryRun:               cfg.DryRun,

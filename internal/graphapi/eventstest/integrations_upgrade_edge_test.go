@@ -53,11 +53,9 @@ func previousOAuthDefinition[T any](t *testing.T, current integrationtypes.Defin
 
 	return func() (integrationtypes.Definition, error) {
 		return integrationtypes.Definition{
-			DefinitionSpec: integrationtypes.DefinitionSpec{
-				ID:          testint.DefinitionID.ID(),
-				DisplayName: "Test Integration",
-				Active:      true,
-			},
+			ID:           testint.DefinitionID.ID(),
+			DisplayName:  "Test Integration",
+			Active:       true,
 			Installation: integrationtypes.InstallationOf[testMetadata]().Registration(),
 			Connections: []integrationtypes.Connector{
 				slotOf(integrationtypes.NewConnection[T](connection.Credential.Name).Authenticates(flow)).connector,

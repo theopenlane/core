@@ -2,6 +2,7 @@ package ratelimit
 
 import (
 	"context"
+	"crypto/subtle"
 	"math"
 	"net"
 	"net/http"
@@ -28,6 +29,13 @@ const (
 // (authenticated origin pulls or firewalling to Cloudflare IP ranges); otherwise a direct-to-origin request can spoof them
 var DefaultClientIPHeaders = []string{"CF-Connecting-IP", "True-Client-IP", "RemoteAddr"}
 
+const (
+	// ForwardedClientIPHeader carries the originating visitor IP asserted by a trusted forwarding proxy
+	ForwardedClientIPHeader = "X-Openlane-Client-IP"
+	// ForwarderSecretHeader carries the shared secret a trusted forwarding proxy presents
+	ForwarderSecretHeader = "X-Openlane-Forwarder-Secret" //nolint:gosec // header name, not a credential
+)
+
 // RateOption defines a distinct rate limiting window and request allowance.
 type RateOption struct {
 	// Requests is the number of requests allowed within the configured window.
@@ -53,6 +61,8 @@ type Config struct {
 	// ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
 	// 0 means the closest client, 1 the proxy behind it, etc.
 	ForwardedIndexFromBehind int `json:"forwardedindexfrombehind" koanf:"forwardedindexfrombehind" default:"0"`
+	// ForwarderSecret is the shared secret a trusted forwarding proxy presents in X-Openlane-Forwarder-Secret
+	ForwarderSecret string `json:"forwardersecret" koanf:"forwardersecret" default:"" sensitive:"true"`
 	// IncludePath appends the request path to the limiter key when true.
 	IncludePath bool `json:"includepath" koanf:"includepath" default:"false"`
 	// IncludeMethod appends the request method to the limiter key when true.
@@ -240,7 +250,7 @@ func buildLimiters(conf *Config) []*RateLimiter {
 }
 
 func buildLimiterKey(c echo.Context, headers []string, conf *Config) string {
-	ip := extractIP(c, headers, conf.ForwardedIndexFromBehind)
+	ip := extractIP(c, headers, conf)
 	if ip == "" {
 		return ""
 	}
@@ -307,8 +317,13 @@ func logRateLimitDecision(input limitDecisionLogInput) {
 	event.Msg("rate limit exceeded")
 }
 
-func extractIP(c echo.Context, headers []string, forwardedIndex int) string {
+// extractIP derives the client IP for the limiter key
+func extractIP(c echo.Context, headers []string, conf *Config) string {
 	req := c.Request()
+
+	if ip := trustedForwardedIP(req, conf.ForwarderSecret); ip != "" {
+		return ip
+	}
 
 	for _, header := range headers {
 		switch strings.ToLower(header) {
@@ -334,7 +349,7 @@ func extractIP(c echo.Context, headers []string, forwardedIndex int) string {
 				parts[i] = strings.TrimSpace(part)
 			}
 
-			index := max(len(parts)-1-forwardedIndex, 0)
+			index := max(len(parts)-1-conf.ForwardedIndexFromBehind, 0)
 
 			if parts[index] != "" {
 				return parts[index]
@@ -347,4 +362,23 @@ func extractIP(c echo.Context, headers []string, forwardedIndex int) string {
 	}
 
 	return ""
+}
+
+// trustedForwardedIP returns the client IP asserted in ForwardedClientIPHeader
+func trustedForwardedIP(req *http.Request, secret string) string {
+	if secret == "" {
+		return ""
+	}
+
+	presented := req.Header.Get(ForwarderSecretHeader)
+	if subtle.ConstantTimeCompare([]byte(presented), []byte(secret)) != 1 {
+		return ""
+	}
+
+	ip := net.ParseIP(strings.TrimSpace(req.Header.Get(ForwardedClientIPHeader)))
+	if ip == nil {
+		return ""
+	}
+
+	return ip.String()
 }

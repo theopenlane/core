@@ -33,6 +33,7 @@ query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $be
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemInternalID
 				systemOwned
 				templateContext
@@ -82,6 +83,7 @@ query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $befor
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				systemInternalID
 				systemOwned
 				templateContext

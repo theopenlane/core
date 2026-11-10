@@ -9,17 +9,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestNewBufferedReader(t *testing.T) {
 	data := []byte("test data")
 	br := NewBufferedReader(data)
 
-	require.NotNil(t, br)
-	assert.Equal(t, int64(len(data)), br.Size())
-	assert.Equal(t, data, br.Data())
+	assert.Assert(t, br != nil)
+	assert.Check(t, is.Equal(int64(len(data)), br.Size()))
+	assert.Check(t, is.DeepEqual(data, br.Data()))
 }
 
 func TestNewBufferedReaderFromReader(t *testing.T) {
@@ -59,12 +59,12 @@ func TestNewBufferedReaderFromReader(t *testing.T) {
 			br, err := NewBufferedReaderFromReader(tt.input)
 
 			if tt.expectError != nil {
-				assert.ErrorIs(t, err, tt.expectError)
-				assert.Nil(t, br)
+				assert.Check(t, is.ErrorIs(err, tt.expectError))
+				assert.Check(t, is.Nil(br))
 			} else {
-				require.NoError(t, err)
-				require.NotNil(t, br)
-				assert.Equal(t, tt.expectSize, br.Size())
+				assert.NilError(t, err)
+				assert.Assert(t, br != nil)
+				assert.Check(t, is.Equal(tt.expectSize, br.Size()))
 			}
 		})
 	}
@@ -112,12 +112,12 @@ func TestNewBufferedReaderFromReaderWithLimit(t *testing.T) {
 			br, err := NewBufferedReaderFromReaderWithLimit(tt.input, tt.maxSize)
 
 			if tt.expectError != nil {
-				assert.ErrorIs(t, err, tt.expectError)
-				assert.Nil(t, br)
+				assert.Check(t, is.ErrorIs(err, tt.expectError))
+				assert.Check(t, is.Nil(br))
 			} else {
-				require.NoError(t, err)
-				require.NotNil(t, br)
-				assert.Equal(t, tt.expectSize, br.Size())
+				assert.NilError(t, err)
+				assert.Assert(t, br != nil)
+				assert.Check(t, is.Equal(tt.expectSize, br.Size()))
 			}
 		})
 	}
@@ -130,9 +130,9 @@ func TestBufferedReaderRead(t *testing.T) {
 	buf := make([]byte, 5)
 	n, err := br.Read(buf)
 
-	require.NoError(t, err)
-	assert.Equal(t, 5, n)
-	assert.Equal(t, []byte("hello"), buf)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(5, n))
+	assert.Check(t, is.DeepEqual([]byte("hello"), buf))
 }
 
 func TestBufferedReaderSeek(t *testing.T) {
@@ -141,15 +141,15 @@ func TestBufferedReaderSeek(t *testing.T) {
 
 	// Seek to position 6
 	pos, err := br.Seek(6, io.SeekStart)
-	require.NoError(t, err)
-	assert.Equal(t, int64(6), pos)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(int64(6), pos))
 
 	// Read from new position
 	buf := make([]byte, 5)
 	n, err := br.Read(buf)
-	require.NoError(t, err)
-	assert.Equal(t, 5, n)
-	assert.Equal(t, []byte("world"), buf)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(5, n))
+	assert.Check(t, is.DeepEqual([]byte("world"), buf))
 }
 
 func TestBufferedReaderClose(t *testing.T) {
@@ -157,7 +157,7 @@ func TestBufferedReaderClose(t *testing.T) {
 	br := NewBufferedReader(data)
 
 	err := br.Close()
-	assert.NoError(t, err)
+	assert.Check(t, err)
 }
 
 func TestBufferedReaderReset(t *testing.T) {
@@ -174,9 +174,9 @@ func TestBufferedReaderReset(t *testing.T) {
 	// Read again from start
 	buf2 := make([]byte, 5)
 	n, err := br.Read(buf2)
-	require.NoError(t, err)
-	assert.Equal(t, 5, n)
-	assert.Equal(t, []byte("hello"), buf2)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(5, n))
+	assert.Check(t, is.DeepEqual([]byte("hello"), buf2))
 }
 
 func TestBufferedReaderData(t *testing.T) {
@@ -187,12 +187,12 @@ func TestBufferedReaderData(t *testing.T) {
 	dataCopy := br.Data()
 
 	// Verify it's a copy, not the same slice
-	assert.Equal(t, data, dataCopy)
-	assert.NotSame(t, &data[0], &dataCopy[0])
+	assert.Check(t, is.DeepEqual(data, dataCopy))
+	assert.Check(t, &data[0] != &dataCopy[0])
 
 	// Modify copy shouldn't affect original
 	dataCopy[0] = 'X'
-	assert.NotEqual(t, data, dataCopy)
+	assert.Check(t, string(data) != string(dataCopy))
 }
 
 func TestBufferedReaderNewReader(t *testing.T) {
@@ -209,9 +209,9 @@ func TestBufferedReaderNewReader(t *testing.T) {
 	// New reader should start from beginning
 	buf2 := make([]byte, 5)
 	n, err := newReader.Read(buf2)
-	require.NoError(t, err)
-	assert.Equal(t, 5, n)
-	assert.Equal(t, data, buf2)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(5, n))
+	assert.Check(t, is.DeepEqual(data, buf2))
 }
 
 func TestBufferedReaderNewReadSeeker(t *testing.T) {
@@ -219,19 +219,19 @@ func TestBufferedReaderNewReadSeeker(t *testing.T) {
 	br := NewBufferedReader(data)
 
 	rs := br.NewReadSeeker()
-	require.NotNil(t, rs)
+	assert.Assert(t, rs != nil)
 
 	// Test Read
 	buf := make([]byte, 5)
 	n, err := rs.Read(buf)
-	require.NoError(t, err)
-	assert.Equal(t, 5, n)
-	assert.Equal(t, data, buf)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(5, n))
+	assert.Check(t, is.DeepEqual(data, buf))
 
 	// Test Seek
 	pos, err := rs.Seek(0, io.SeekStart)
-	require.NoError(t, err)
-	assert.Equal(t, int64(0), pos)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(int64(0), pos))
 }
 
 type mockSizedReader struct {
@@ -270,7 +270,7 @@ func (m *mockFileInfo) Size() int64        { return m.size }
 func (m *mockFileInfo) Mode() fs.FileMode  { return 0644 }
 func (m *mockFileInfo) ModTime() time.Time { return time.Time{} }
 func (m *mockFileInfo) IsDir() bool        { return false }
-func (m *mockFileInfo) Sys() interface{}   { return nil }
+func (m *mockFileInfo) Sys() any           { return nil }
 
 func TestInferReaderSize(t *testing.T) {
 	tests := []struct {
@@ -320,9 +320,9 @@ func TestInferReaderSize(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			size, found := InferReaderSize(tt.reader)
-			assert.Equal(t, tt.expectFound, found)
+			assert.Check(t, is.Equal(tt.expectFound, found))
 			if found {
-				assert.Equal(t, tt.expectSize, size)
+				assert.Check(t, is.Equal(tt.expectSize, size))
 			}
 		})
 	}

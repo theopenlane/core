@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cenkalti/backoff/v5"
+	"github.com/cenkalti/backoff/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/httpsling"
@@ -251,11 +251,16 @@ func handleTrustCenterMutationGala(inv entityops.Invocation, _ entityops.Mutatio
 }
 
 const (
-	cacheRefreshTimeout        = 10 * time.Second
-	cacheRefreshUserAgent      = "Openlane-CacheRefresh/1.0"
-	cacheRefreshParam          = "fresh"
-	cacheRefreshValue          = "1"
-	cacheRefreshMaxRetries     = 3
+	cacheRefreshTimeout    = 10 * time.Second
+	cacheRefreshUserAgent  = "Openlane-CacheRefresh/1.0"
+	cacheRefreshAuthHeader = "X-Openlane-Cache-Refresh"
+	cacheRefreshParam      = "fresh"
+	cacheRefreshValue      = "1"
+	cacheRefreshMaxRetries = 3
+)
+
+// cache refresh retry backoff, variables so tests can shorten the waits
+var (
 	cacheRefreshInitialBackoff = 3 * time.Second
 	cacheRefreshMaxBackoff     = 30 * time.Second
 )
@@ -382,6 +387,10 @@ func triggerCacheRefresh(ctx context.Context, targetURL string) error {
 		httpsling.Get(targetURL),
 		httpsling.QueryParam(cacheRefreshParam, cacheRefreshValue),
 		httpsling.Header(httpsling.HeaderUserAgent, cacheRefreshUserAgent),
+	}
+
+	if secret := trustCenterConfig.CacheRefreshSecret; secret != "" {
+		requestOpts = append(requestOpts, httpsling.Header(cacheRefreshAuthHeader, secret))
 	}
 
 	for attempt := range cacheRefreshMaxRetries {

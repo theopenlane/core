@@ -85,6 +85,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID              func(childComplexity int) int
 		SourceDefinitionVersion         func(childComplexity int) int
 		SourceInstanceID                func(childComplexity int) int
+		SourceKey                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
 		SystemInternalID                func(childComplexity int) int
@@ -129,6 +130,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -168,6 +170,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
 		UpdatedBy               func(childComplexity int) int
 		UpdatedByImpersonator   func(childComplexity int) int
@@ -282,6 +285,7 @@ type ComplexityRoot struct {
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceIdentifier              func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		SourcePlatformID              func(childComplexity int) int
 		SourceType                    func(childComplexity int) int
 		SystemInternalID              func(childComplexity int) int
@@ -348,6 +352,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID            func(childComplexity int) int
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		Status                        func(childComplexity int) int
 		Tags                          func(childComplexity int) int
 		TemplateID                    func(childComplexity int) int
@@ -426,6 +431,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Tags                    func(childComplexity int) int
 		Title                   func(childComplexity int) int
@@ -494,6 +500,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID         func(childComplexity int) int
 		SourceDefinitionVersion    func(childComplexity int) int
 		SourceInstanceID           func(childComplexity int) int
+		SourceKey                  func(childComplexity int) int
 		SourceName                 func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
@@ -539,6 +546,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
@@ -584,6 +592,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Subcategory             func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
@@ -721,6 +730,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		TemplateContext         func(childComplexity int) int
@@ -812,6 +822,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID                    func(childComplexity int) int
 		SourceDefinitionVersion               func(childComplexity int) int
 		SourceInstanceID                      func(childComplexity int) int
+		SourceKey                             func(childComplexity int) int
 		SpendCurrency                         func(childComplexity int) int
 		Status                                func(childComplexity int) int
 		StatusPageURL                         func(childComplexity int) int
@@ -895,6 +906,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Tags                    func(childComplexity int) int
 		URL                     func(childComplexity int) int
@@ -1061,6 +1073,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID            func(childComplexity int) int
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		SourceUpdatedAt               func(childComplexity int) int
 		State                         func(childComplexity int) int
 		StepsToReproduce              func(childComplexity int) int
@@ -1117,6 +1130,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		Tags                    func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
 		UpdatedBy               func(childComplexity int) int
@@ -1261,6 +1275,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID            func(childComplexity int) int
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		StartDate                     func(childComplexity int) int
 		Status                        func(childComplexity int) int
 		Tags                          func(childComplexity int) int
@@ -1325,6 +1340,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID              func(childComplexity int) int
 		SourceDefinitionVersion         func(childComplexity int) int
 		SourceInstanceID                func(childComplexity int) int
+		SourceKey                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
 		SystemInternalID                func(childComplexity int) int
@@ -1394,6 +1410,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -1432,6 +1449,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -1796,6 +1814,7 @@ type ComplexityRoot struct {
 		SourceDefinitionVersion        func(childComplexity int) int
 		SourceIdentifier               func(childComplexity int) int
 		SourceInstanceID               func(childComplexity int) int
+		SourceKey                      func(childComplexity int) int
 		SourceType                     func(childComplexity int) int
 		Status                         func(childComplexity int) int
 		Tags                           func(childComplexity int) int
@@ -1861,6 +1880,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID              func(childComplexity int) int
 		SourceDefinitionVersion         func(childComplexity int) int
 		SourceInstanceID                func(childComplexity int) int
+		SourceKey                       func(childComplexity int) int
 		Status                          func(childComplexity int) int
 		Summary                         func(childComplexity int) int
 		SystemInternalID                func(childComplexity int) int
@@ -1918,6 +1938,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID         func(childComplexity int) int
 		SourceDefinitionVersion    func(childComplexity int) int
 		SourceInstanceID           func(childComplexity int) int
+		SourceKey                  func(childComplexity int) int
 		StartDate                  func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Tags                       func(childComplexity int) int
@@ -2072,6 +2093,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		State                   func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Summary                 func(childComplexity int) int
@@ -2191,6 +2213,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		State                   func(childComplexity int) int
 		Status                  func(childComplexity int) int
 		Summary                 func(childComplexity int) int
@@ -2263,6 +2286,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID          func(childComplexity int) int
 		SourceDefinitionVersion     func(childComplexity int) int
 		SourceInstanceID            func(childComplexity int) int
+		SourceKey                   func(childComplexity int) int
 		StakeholderGroupID          func(childComplexity int) int
 		StakeholderID               func(childComplexity int) int
 		StakeholderIdentityHolderID func(childComplexity int) int
@@ -2401,6 +2425,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID         func(childComplexity int) int
 		SourceDefinitionVersion    func(childComplexity int) int
 		SourceInstanceID           func(childComplexity int) int
+		SourceKey                  func(childComplexity int) int
 		SourceName                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
@@ -2481,6 +2506,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemName              func(childComplexity int) int
 		Tags                    func(childComplexity int) int
 		UpdatedAt               func(childComplexity int) int
@@ -2581,6 +2607,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
 		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
 		Tags                    func(childComplexity int) int
@@ -2802,6 +2829,7 @@ type ComplexityRoot struct {
 		CompanyName                           func(childComplexity int) int
 		CreatedAt                             func(childComplexity int) int
 		CreatedBy                             func(childComplexity int) int
+		DisableDefaultDomain                  func(childComplexity int) int
 		EnableAutoApproval                    func(childComplexity int) int
 		Environment                           func(childComplexity int) int
 		FaviconLocalFileID                    func(childComplexity int) int
@@ -2984,30 +3012,37 @@ type ComplexityRoot struct {
 	}
 
 	VendorRiskScoreHistory struct {
-		Answer                func(childComplexity int) int
-		AnswerType            func(childComplexity int) int
-		AssessmentResponseID  func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		EntityID              func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Impact                func(childComplexity int) int
-		Likelihood            func(childComplexity int) int
-		Notes                 func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		QuestionCategory      func(childComplexity int) int
-		QuestionDescription   func(childComplexity int) int
-		QuestionKey           func(childComplexity int) int
-		QuestionName          func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		Score                 func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		VendorScoringConfigID func(childComplexity int) int
+		Answer                  func(childComplexity int) int
+		AnswerType              func(childComplexity int) int
+		AssessmentResponseID    func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		EntityID                func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Impact                  func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		Likelihood              func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Notes                   func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		QuestionCategory        func(childComplexity int) int
+		QuestionDescription     func(childComplexity int) int
+		QuestionKey             func(childComplexity int) int
+		QuestionName            func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		Score                   func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		VendorScoringConfigID   func(childComplexity int) int
 	}
 
 	VendorRiskScoreHistoryConnection struct {
@@ -3117,6 +3152,7 @@ type ComplexityRoot struct {
 		SourceDefinitionID            func(childComplexity int) int
 		SourceDefinitionVersion       func(childComplexity int) int
 		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
 		SourceUpdatedAt               func(childComplexity int) int
 		Summary                       func(childComplexity int) int
 		SystemInternalID              func(childComplexity int) int
@@ -3561,6 +3597,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlanHistory.SourceInstanceID(childComplexity), true
+	case "ActionPlanHistory.sourceKey":
+		if e.ComplexityRoot.ActionPlanHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.SourceKey(childComplexity), true
 	case "ActionPlanHistory.status":
 		if e.ComplexityRoot.ActionPlanHistory.Status == nil {
 			break
@@ -3774,6 +3816,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistory.SourceInstanceID(childComplexity), true
+	case "AssessmentHistory.sourceKey":
+		if e.ComplexityRoot.AssessmentHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.SourceKey(childComplexity), true
 	case "AssessmentHistory.systemInternalID":
 		if e.ComplexityRoot.AssessmentHistory.SystemInternalID == nil {
 			break
@@ -3957,6 +4005,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentPolicyHistory.SourceInstanceID(childComplexity), true
+	case "AssessmentPolicyHistory.sourceKey":
+		if e.ComplexityRoot.AssessmentPolicyHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.SourceKey(childComplexity), true
 	case "AssessmentPolicyHistory.updatedAt":
 		if e.ComplexityRoot.AssessmentPolicyHistory.UpdatedAt == nil {
 			break
@@ -4539,6 +4593,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssetHistory.SourceInstanceID(childComplexity), true
+	case "AssetHistory.sourceKey":
+		if e.ComplexityRoot.AssetHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetHistory.SourceKey(childComplexity), true
 	case "AssetHistory.sourcePlatformID":
 		if e.ComplexityRoot.AssetHistory.SourcePlatformID == nil {
 			break
@@ -4884,6 +4944,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.SourceInstanceID(childComplexity), true
+	case "CampaignHistory.sourceKey":
+		if e.ComplexityRoot.CampaignHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.SourceKey(childComplexity), true
 	case "CampaignHistory.status":
 		if e.ComplexityRoot.CampaignHistory.Status == nil {
 			break
@@ -5250,6 +5316,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ContactHistory.SourceInstanceID(childComplexity), true
+	case "ContactHistory.sourceKey":
+		if e.ComplexityRoot.ContactHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactHistory.SourceKey(childComplexity), true
 	case "ContactHistory.status":
 		if e.ComplexityRoot.ContactHistory.Status == nil {
 			break
@@ -5607,6 +5679,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlHistory.SourceInstanceID(childComplexity), true
+	case "ControlHistory.sourceKey":
+		if e.ComplexityRoot.ControlHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.SourceKey(childComplexity), true
 	case "ControlHistory.sourceName":
 		if e.ComplexityRoot.ControlHistory.SourceName == nil {
 			break
@@ -5826,6 +5904,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementationHistory.SourceInstanceID(childComplexity), true
+	case "ControlImplementationHistory.sourceKey":
+		if e.ComplexityRoot.ControlImplementationHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.SourceKey(childComplexity), true
 	case "ControlImplementationHistory.status":
 		if e.ComplexityRoot.ControlImplementationHistory.Status == nil {
 			break
@@ -6045,6 +6129,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlObjectiveHistory.SourceInstanceID(childComplexity), true
+	case "ControlObjectiveHistory.sourceKey":
+		if e.ComplexityRoot.ControlObjectiveHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveHistory.SourceKey(childComplexity), true
 	case "ControlObjectiveHistory.status":
 		if e.ComplexityRoot.ControlObjectiveHistory.Status == nil {
 			break
@@ -6663,6 +6753,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.SourceInstanceID(childComplexity), true
+	case "EmailTemplateHistory.sourceKey":
+		if e.ComplexityRoot.EmailTemplateHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.SourceKey(childComplexity), true
 	case "EmailTemplateHistory.systemInternalID":
 		if e.ComplexityRoot.EmailTemplateHistory.SystemInternalID == nil {
 			break
@@ -7158,6 +7254,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.SourceInstanceID(childComplexity), true
+	case "EntityHistory.sourceKey":
+		if e.ComplexityRoot.EntityHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.SourceKey(childComplexity), true
 	case "EntityHistory.spendCurrency":
 		if e.ComplexityRoot.EntityHistory.SpendCurrency == nil {
 			break
@@ -7554,6 +7656,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.SourceInstanceID(childComplexity), true
+	case "EvidenceHistory.sourceKey":
+		if e.ComplexityRoot.EvidenceHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.SourceKey(childComplexity), true
 	case "EvidenceHistory.status":
 		if e.ComplexityRoot.EvidenceHistory.Status == nil {
 			break
@@ -8397,6 +8505,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.SourceInstanceID(childComplexity), true
+	case "FindingHistory.sourceKey":
+		if e.ComplexityRoot.FindingHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.SourceKey(childComplexity), true
 	case "FindingHistory.sourceUpdatedAt":
 		if e.ComplexityRoot.FindingHistory.SourceUpdatedAt == nil {
 			break
@@ -8682,6 +8796,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupHistory.SourceInstanceID(childComplexity), true
+	case "GroupHistory.sourceKey":
+		if e.ComplexityRoot.GroupHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.SourceKey(childComplexity), true
 	case "GroupHistory.tags":
 		if e.ComplexityRoot.GroupHistory.Tags == nil {
 			break
@@ -9342,6 +9462,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistory.SourceInstanceID(childComplexity), true
+	case "IdentityHolderHistory.sourceKey":
+		if e.ComplexityRoot.IdentityHolderHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.SourceKey(childComplexity), true
 	case "IdentityHolderHistory.startDate":
 		if e.ComplexityRoot.IdentityHolderHistory.StartDate == nil {
 			break
@@ -9675,6 +9801,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicyHistory.SourceInstanceID(childComplexity), true
+	case "InternalPolicyHistory.sourceKey":
+		if e.ComplexityRoot.InternalPolicyHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyHistory.SourceKey(childComplexity), true
 	case "InternalPolicyHistory.status":
 		if e.ComplexityRoot.InternalPolicyHistory.Status == nil {
 			break
@@ -9987,6 +10119,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappedControlHistory.SourceInstanceID(childComplexity), true
+	case "MappedControlHistory.sourceKey":
+		if e.ComplexityRoot.MappedControlHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlHistory.SourceKey(childComplexity), true
 	case "MappedControlHistory.systemInternalID":
 		if e.ComplexityRoot.MappedControlHistory.SystemInternalID == nil {
 			break
@@ -10164,6 +10302,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NarrativeHistory.SourceInstanceID(childComplexity), true
+	case "NarrativeHistory.sourceKey":
+		if e.ComplexityRoot.NarrativeHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeHistory.SourceKey(childComplexity), true
 	case "NarrativeHistory.systemInternalID":
 		if e.ComplexityRoot.NarrativeHistory.SystemInternalID == nil {
 			break
@@ -11923,6 +12067,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.PlatformHistory.SourceInstanceID(childComplexity), true
+	case "PlatformHistory.sourceKey":
+		if e.ComplexityRoot.PlatformHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PlatformHistory.SourceKey(childComplexity), true
 	case "PlatformHistory.sourceType":
 		if e.ComplexityRoot.PlatformHistory.SourceType == nil {
 			break
@@ -12262,6 +12412,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProcedureHistory.SourceInstanceID(childComplexity), true
+	case "ProcedureHistory.sourceKey":
+		if e.ComplexityRoot.ProcedureHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureHistory.SourceKey(childComplexity), true
 	case "ProcedureHistory.status":
 		if e.ComplexityRoot.ProcedureHistory.Status == nil {
 			break
@@ -12553,6 +12709,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramHistory.SourceInstanceID(childComplexity), true
+	case "ProgramHistory.sourceKey":
+		if e.ComplexityRoot.ProgramHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.SourceKey(childComplexity), true
 	case "ProgramHistory.startDate":
 		if e.ComplexityRoot.ProgramHistory.StartDate == nil {
 			break
@@ -13719,6 +13881,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RemediationHistory.SourceInstanceID(childComplexity), true
+	case "RemediationHistory.sourceKey":
+		if e.ComplexityRoot.RemediationHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.SourceKey(childComplexity), true
 	case "RemediationHistory.state":
 		if e.ComplexityRoot.RemediationHistory.State == nil {
 			break
@@ -14280,6 +14448,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewHistory.SourceInstanceID(childComplexity), true
+	case "ReviewHistory.sourceKey":
+		if e.ComplexityRoot.ReviewHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.SourceKey(childComplexity), true
 	case "ReviewHistory.state":
 		if e.ComplexityRoot.ReviewHistory.State == nil {
 			break
@@ -14661,6 +14835,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.SourceInstanceID(childComplexity), true
+	case "RiskHistory.sourceKey":
+		if e.ComplexityRoot.RiskHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.SourceKey(childComplexity), true
 	case "RiskHistory.stakeholderGroupID":
 		if e.ComplexityRoot.RiskHistory.StakeholderGroupID == nil {
 			break
@@ -15336,6 +15516,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.SourceInstanceID(childComplexity), true
+	case "SubcontrolHistory.sourceKey":
+		if e.ComplexityRoot.SubcontrolHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.SourceKey(childComplexity), true
 	case "SubcontrolHistory.sourceName":
 		if e.ComplexityRoot.SubcontrolHistory.SourceName == nil {
 			break
@@ -15714,6 +15900,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetailHistory.SourceInstanceID(childComplexity), true
+	case "SystemDetailHistory.sourceKey":
+		if e.ComplexityRoot.SystemDetailHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.SourceKey(childComplexity), true
 	case "SystemDetailHistory.systemName":
 		if e.ComplexityRoot.SystemDetailHistory.SystemName == nil {
 			break
@@ -16212,6 +16404,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateHistory.SourceInstanceID(childComplexity), true
+	case "TemplateHistory.sourceKey":
+		if e.ComplexityRoot.TemplateHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.SourceKey(childComplexity), true
 	case "TemplateHistory.systemInternalID":
 		if e.ComplexityRoot.TemplateHistory.SystemInternalID == nil {
 			break
@@ -17181,6 +17379,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.CreatedBy(childComplexity), true
+	case "TrustCenterSettingHistory.disableDefaultDomain":
+		if e.ComplexityRoot.TrustCenterSettingHistory.DisableDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.DisableDefaultDomain(childComplexity), true
 	case "TrustCenterSettingHistory.enableAutoApproval":
 		if e.ComplexityRoot.TrustCenterSettingHistory.EnableAutoApproval == nil {
 			break
@@ -18054,6 +18258,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScoreHistory.EntityID(childComplexity), true
+	case "VendorRiskScoreHistory.externalID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.ExternalID(childComplexity), true
 	case "VendorRiskScoreHistory.historyTime":
 		if e.ComplexityRoot.VendorRiskScoreHistory.HistoryTime == nil {
 			break
@@ -18072,12 +18282,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScoreHistory.Impact(childComplexity), true
+	case "VendorRiskScoreHistory.integrationRunID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.IntegrationRunID(childComplexity), true
 	case "VendorRiskScoreHistory.likelihood":
 		if e.ComplexityRoot.VendorRiskScoreHistory.Likelihood == nil {
 			break
 		}
 
 		return e.ComplexityRoot.VendorRiskScoreHistory.Likelihood(childComplexity), true
+	case "VendorRiskScoreHistory.managedBy":
+		if e.ComplexityRoot.VendorRiskScoreHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.ManagedBy(childComplexity), true
 	case "VendorRiskScoreHistory.notes":
 		if e.ComplexityRoot.VendorRiskScoreHistory.Notes == nil {
 			break
@@ -18132,6 +18354,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VendorRiskScoreHistory.Score(childComplexity), true
+	case "VendorRiskScoreHistory.sourceDefinitionID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.SourceDefinitionID(childComplexity), true
+	case "VendorRiskScoreHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.VendorRiskScoreHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.SourceDefinitionVersion(childComplexity), true
+	case "VendorRiskScoreHistory.sourceInstanceID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.SourceInstanceID(childComplexity), true
+	case "VendorRiskScoreHistory.sourceKey":
+		if e.ComplexityRoot.VendorRiskScoreHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.SourceKey(childComplexity), true
 	case "VendorRiskScoreHistory.tags":
 		if e.ComplexityRoot.VendorRiskScoreHistory.Tags == nil {
 			break
@@ -18714,6 +18960,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.SourceInstanceID(childComplexity), true
+	case "VulnerabilityHistory.sourceKey":
+		if e.ComplexityRoot.VulnerabilityHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.SourceKey(childComplexity), true
 	case "VulnerabilityHistory.sourceUpdatedAt":
 		if e.ComplexityRoot.VulnerabilityHistory.SourceUpdatedAt == nil {
 			break
@@ -19795,6 +20047,10 @@ type ActionPlanHistory implements Node {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -20202,244 +20458,6 @@ input ActionPlanHistoryWhereInput {
   revisionEqualFold: String
   revisionContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  status field predicates
-  """
-  status: ActionPlanHistoryDocumentStatus
-  statusNEQ: ActionPlanHistoryDocumentStatus
-  statusIn: [ActionPlanHistoryDocumentStatus!]
-  statusNotIn: [ActionPlanHistoryDocumentStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  management_mode field predicates
-  """
-  managementMode: ActionPlanHistoryDocumentManagementMode
-  managementModeNEQ: ActionPlanHistoryDocumentManagementMode
-  managementModeIn: [ActionPlanHistoryDocumentManagementMode!]
-  managementModeNotIn: [ActionPlanHistoryDocumentManagementMode!]
-  managementModeIsNil: Boolean
-  managementModeNotNil: Boolean
-  """
-  details field predicates
-  """
-  details: String
-  detailsNEQ: String
-  detailsIn: [String!]
-  detailsNotIn: [String!]
-  detailsContains: String
-  detailsHasPrefix: String
-  detailsHasSuffix: String
-  detailsIsNil: Boolean
-  detailsNotNil: Boolean
-  detailsEqualFold: String
-  detailsContainsFold: String
-  """
-  approval_required field predicates
-  """
-  approvalRequired: Boolean
-  approvalRequiredNEQ: Boolean
-  approvalRequiredIsNil: Boolean
-  approvalRequiredNotNil: Boolean
-  """
-  review_due field predicates
-  """
-  reviewDue: Time
-  reviewDueGT: Time
-  reviewDueGTE: Time
-  reviewDueLT: Time
-  reviewDueLTE: Time
-  reviewDueIsNil: Boolean
-  reviewDueNotNil: Boolean
-  """
-  review_frequency field predicates
-  """
-  reviewFrequency: ActionPlanHistoryFrequency
-  reviewFrequencyNEQ: ActionPlanHistoryFrequency
-  reviewFrequencyIn: [ActionPlanHistoryFrequency!]
-  reviewFrequencyNotIn: [ActionPlanHistoryFrequency!]
-  reviewFrequencyIsNil: Boolean
-  reviewFrequencyNotNil: Boolean
-  """
-  approver_id field predicates
-  """
-  approverID: String
-  approverIDNEQ: String
-  approverIDIn: [String!]
-  approverIDNotIn: [String!]
-  approverIDContains: String
-  approverIDHasPrefix: String
-  approverIDHasSuffix: String
-  approverIDIsNil: Boolean
-  approverIDNotNil: Boolean
-  approverIDEqualFold: String
-  approverIDContainsFold: String
-  """
-  delegate_id field predicates
-  """
-  delegateID: String
-  delegateIDNEQ: String
-  delegateIDIn: [String!]
-  delegateIDNotIn: [String!]
-  delegateIDContains: String
-  delegateIDHasPrefix: String
-  delegateIDHasSuffix: String
-  delegateIDIsNil: Boolean
-  delegateIDNotNil: Boolean
-  delegateIDEqualFold: String
-  delegateIDContainsFold: String
-  """
-  url field predicates
-  """
-  url: String
-  urlNEQ: String
-  urlIn: [String!]
-  urlNotIn: [String!]
-  urlContains: String
-  urlHasPrefix: String
-  urlHasSuffix: String
-  urlIsNil: Boolean
-  urlNotNil: Boolean
-  urlEqualFold: String
-  urlContainsFold: String
-  """
-  file_id field predicates
-  """
-  fileID: String
-  fileIDNEQ: String
-  fileIDIn: [String!]
-  fileIDNotIn: [String!]
-  fileIDContains: String
-  fileIDHasPrefix: String
-  fileIDHasSuffix: String
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: String
-  fileIDContainsFold: String
-  """
-  external_file_id field predicates
-  """
-  externalFileID: String
-  externalFileIDNEQ: String
-  externalFileIDIn: [String!]
-  externalFileIDNotIn: [String!]
-  externalFileIDContains: String
-  externalFileIDHasPrefix: String
-  externalFileIDHasSuffix: String
-  externalFileIDIsNil: Boolean
-  externalFileIDNotNil: Boolean
-  externalFileIDEqualFold: String
-  externalFileIDContainsFold: String
-  """
-  external_contents field predicates
-  """
-  externalContents: String
-  externalContentsNEQ: String
-  externalContentsIn: [String!]
-  externalContentsNotIn: [String!]
-  externalContentsContains: String
-  externalContentsHasPrefix: String
-  externalContentsHasSuffix: String
-  externalContentsIsNil: Boolean
-  externalContentsNotNil: Boolean
-  externalContentsEqualFold: String
-  externalContentsContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -20453,225 +20471,6 @@ input ActionPlanHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  action_plan_kind_name field predicates
-  """
-  actionPlanKindName: String
-  actionPlanKindNameNEQ: String
-  actionPlanKindNameIn: [String!]
-  actionPlanKindNameNotIn: [String!]
-  actionPlanKindNameContains: String
-  actionPlanKindNameHasPrefix: String
-  actionPlanKindNameHasSuffix: String
-  actionPlanKindNameIsNil: Boolean
-  actionPlanKindNameNotNil: Boolean
-  actionPlanKindNameEqualFold: String
-  actionPlanKindNameContainsFold: String
-  """
-  action_plan_kind_id field predicates
-  """
-  actionPlanKindID: String
-  actionPlanKindIDNEQ: String
-  actionPlanKindIDIn: [String!]
-  actionPlanKindIDNotIn: [String!]
-  actionPlanKindIDContains: String
-  actionPlanKindIDHasPrefix: String
-  actionPlanKindIDHasSuffix: String
-  actionPlanKindIDIsNil: Boolean
-  actionPlanKindIDNotNil: Boolean
-  actionPlanKindIDEqualFold: String
-  actionPlanKindIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  internal_owner field predicates
-  """
-  internalOwner: String
-  internalOwnerNEQ: String
-  internalOwnerIn: [String!]
-  internalOwnerNotIn: [String!]
-  internalOwnerContains: String
-  internalOwnerHasPrefix: String
-  internalOwnerHasSuffix: String
-  internalOwnerIsNil: Boolean
-  internalOwnerNotNil: Boolean
-  internalOwnerEqualFold: String
-  internalOwnerContainsFold: String
-  """
-  internal_owner_user_id field predicates
-  """
-  internalOwnerUserID: String
-  internalOwnerUserIDNEQ: String
-  internalOwnerUserIDIn: [String!]
-  internalOwnerUserIDNotIn: [String!]
-  internalOwnerUserIDContains: String
-  internalOwnerUserIDHasPrefix: String
-  internalOwnerUserIDHasSuffix: String
-  internalOwnerUserIDIsNil: Boolean
-  internalOwnerUserIDNotNil: Boolean
-  internalOwnerUserIDEqualFold: String
-  internalOwnerUserIDContainsFold: String
-  """
-  internal_owner_group_id field predicates
-  """
-  internalOwnerGroupID: String
-  internalOwnerGroupIDNEQ: String
-  internalOwnerGroupIDIn: [String!]
-  internalOwnerGroupIDNotIn: [String!]
-  internalOwnerGroupIDContains: String
-  internalOwnerGroupIDHasPrefix: String
-  internalOwnerGroupIDHasSuffix: String
-  internalOwnerGroupIDIsNil: Boolean
-  internalOwnerGroupIDNotNil: Boolean
-  internalOwnerGroupIDEqualFold: String
-  internalOwnerGroupIDContainsFold: String
-  """
-  internal_owner_identity_holder_id field predicates
-  """
-  internalOwnerIdentityHolderID: String
-  internalOwnerIdentityHolderIDNEQ: String
-  internalOwnerIdentityHolderIDIn: [String!]
-  internalOwnerIdentityHolderIDNotIn: [String!]
-  internalOwnerIdentityHolderIDContains: String
-  internalOwnerIdentityHolderIDHasPrefix: String
-  internalOwnerIdentityHolderIDHasSuffix: String
-  internalOwnerIdentityHolderIDIsNil: Boolean
-  internalOwnerIdentityHolderIDNotNil: Boolean
-  internalOwnerIdentityHolderIDEqualFold: String
-  internalOwnerIdentityHolderIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  due_date field predicates
-  """
-  dueDate: Time
-  dueDateGT: Time
-  dueDateGTE: Time
-  dueDateLT: Time
-  dueDateLTE: Time
-  dueDateIsNil: Boolean
-  dueDateNotNil: Boolean
-  """
-  completed_at field predicates
-  """
-  completedAt: Time
-  completedAtGT: Time
-  completedAtGTE: Time
-  completedAtLT: Time
-  completedAtLTE: Time
-  completedAtIsNil: Boolean
-  completedAtNotNil: Boolean
-  """
-  priority field predicates
-  """
-  priority: ActionPlanHistoryPriority
-  priorityNEQ: ActionPlanHistoryPriority
-  priorityIn: [ActionPlanHistoryPriority!]
-  priorityNotIn: [ActionPlanHistoryPriority!]
-  priorityIsNil: Boolean
-  priorityNotNil: Boolean
-  """
-  requires_approval field predicates
-  """
-  requiresApproval: Boolean
-  requiresApprovalNEQ: Boolean
-  """
-  blocked field predicates
-  """
-  blocked: Boolean
-  blockedNEQ: Boolean
-  """
-  blocker_reason field predicates
-  """
-  blockerReason: String
-  blockerReasonNEQ: String
-  blockerReasonIn: [String!]
-  blockerReasonNotIn: [String!]
-  blockerReasonContains: String
-  blockerReasonHasPrefix: String
-  blockerReasonHasSuffix: String
-  blockerReasonIsNil: Boolean
-  blockerReasonNotNil: Boolean
-  blockerReasonEqualFold: String
-  blockerReasonContainsFold: String
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
 }
 type AssessmentHistory implements Node {
   id: ID!
@@ -20710,6 +20509,10 @@ type AssessmentHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -20935,90 +20738,6 @@ input AssessmentHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -21032,92 +20751,6 @@ input AssessmentHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  assessment_type field predicates
-  """
-  assessmentType: AssessmentHistoryAssessmentType
-  assessmentTypeNEQ: AssessmentHistoryAssessmentType
-  assessmentTypeIn: [AssessmentHistoryAssessmentType!]
-  assessmentTypeNotIn: [AssessmentHistoryAssessmentType!]
-  """
-  template_id field predicates
-  """
-  templateID: String
-  templateIDNEQ: String
-  templateIDIn: [String!]
-  templateIDNotIn: [String!]
-  templateIDContains: String
-  templateIDHasPrefix: String
-  templateIDHasSuffix: String
-  templateIDIsNil: Boolean
-  templateIDNotNil: Boolean
-  templateIDEqualFold: String
-  templateIDContainsFold: String
-  """
-  response_due_duration field predicates
-  """
-  responseDueDuration: Int
-  responseDueDurationNEQ: Int
-  responseDueDurationGT: Int
-  responseDueDurationGTE: Int
-  responseDueDurationLT: Int
-  responseDueDurationLTE: Int
-  responseDueDurationIsNil: Boolean
-  responseDueDurationNotNil: Boolean
 }
 type AssessmentPolicyHistory implements Node {
   id: ID!
@@ -21152,6 +20785,10 @@ type AssessmentPolicyHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -21342,90 +20979,6 @@ input AssessmentPolicyHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -21439,44 +20992,6 @@ input AssessmentPolicyHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  assessment_id field predicates
-  """
-  assessmentID: String
-  assessmentIDNEQ: String
-  assessmentIDIn: [String!]
-  assessmentIDNotIn: [String!]
-  assessmentIDContains: String
-  assessmentIDHasPrefix: String
-  assessmentIDHasSuffix: String
-  assessmentIDEqualFold: String
-  assessmentIDContainsFold: String
-  """
-  internal_policy_id field predicates
-  """
-  internalPolicyID: String
-  internalPolicyIDNEQ: String
-  internalPolicyIDIn: [String!]
-  internalPolicyIDNotIn: [String!]
-  internalPolicyIDContains: String
-  internalPolicyIDHasPrefix: String
-  internalPolicyIDHasSuffix: String
-  internalPolicyIDEqualFold: String
-  internalPolicyIDContainsFold: String
-  """
-  policy_revision field predicates
-  """
-  policyRevision: String
-  policyRevisionNEQ: String
-  policyRevisionIn: [String!]
-  policyRevisionNotIn: [String!]
-  policyRevisionContains: String
-  policyRevisionHasPrefix: String
-  policyRevisionHasSuffix: String
-  policyRevisionIsNil: Boolean
-  policyRevisionNotNil: Boolean
-  policyRevisionEqualFold: String
-  policyRevisionContainsFold: String
 }
 type AssessmentResponseHistory implements Node {
   id: ID!
@@ -21794,219 +21309,6 @@ input AssessmentResponseHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  assessment_id field predicates
-  """
-  assessmentID: String
-  assessmentIDNEQ: String
-  assessmentIDIn: [String!]
-  assessmentIDNotIn: [String!]
-  assessmentIDContains: String
-  assessmentIDHasPrefix: String
-  assessmentIDHasSuffix: String
-  assessmentIDEqualFold: String
-  assessmentIDContainsFold: String
-  """
-  is_test field predicates
-  """
-  isTest: Boolean
-  isTestNEQ: Boolean
-  """
-  campaign_id field predicates
-  """
-  campaignID: String
-  campaignIDNEQ: String
-  campaignIDIn: [String!]
-  campaignIDNotIn: [String!]
-  campaignIDContains: String
-  campaignIDHasPrefix: String
-  campaignIDHasSuffix: String
-  campaignIDIsNil: Boolean
-  campaignIDNotNil: Boolean
-  campaignIDEqualFold: String
-  campaignIDContainsFold: String
-  """
-  identity_holder_id field predicates
-  """
-  identityHolderID: String
-  identityHolderIDNEQ: String
-  identityHolderIDIn: [String!]
-  identityHolderIDNotIn: [String!]
-  identityHolderIDContains: String
-  identityHolderIDHasPrefix: String
-  identityHolderIDHasSuffix: String
-  identityHolderIDIsNil: Boolean
-  identityHolderIDNotNil: Boolean
-  identityHolderIDEqualFold: String
-  identityHolderIDContainsFold: String
-  """
-  entity_id field predicates
-  """
-  entityID: String
-  entityIDNEQ: String
-  entityIDIn: [String!]
-  entityIDNotIn: [String!]
-  entityIDContains: String
-  entityIDHasPrefix: String
-  entityIDHasSuffix: String
-  entityIDIsNil: Boolean
-  entityIDNotNil: Boolean
-  entityIDEqualFold: String
-  entityIDContainsFold: String
-  """
-  display_name field predicates
-  """
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameIsNil: Boolean
-  displayNameNotNil: Boolean
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """
-  email field predicates
-  """
-  email: String
-  emailNEQ: String
-  emailIn: [String!]
-  emailNotIn: [String!]
-  emailContains: String
-  emailHasPrefix: String
-  emailHasSuffix: String
-  emailIsNil: Boolean
-  emailNotNil: Boolean
-  emailEqualFold: String
-  emailContainsFold: String
-  """
-  send_attempts field predicates
-  """
-  sendAttempts: Int
-  sendAttemptsNEQ: Int
-  sendAttemptsGT: Int
-  sendAttemptsGTE: Int
-  sendAttemptsLT: Int
-  sendAttemptsLTE: Int
-  """
-  email_delivered_at field predicates
-  """
-  emailDeliveredAt: Time
-  emailDeliveredAtGT: Time
-  emailDeliveredAtGTE: Time
-  emailDeliveredAtLT: Time
-  emailDeliveredAtLTE: Time
-  emailDeliveredAtIsNil: Boolean
-  emailDeliveredAtNotNil: Boolean
-  """
-  email_opened_at field predicates
-  """
-  emailOpenedAt: Time
-  emailOpenedAtGT: Time
-  emailOpenedAtGTE: Time
-  emailOpenedAtLT: Time
-  emailOpenedAtLTE: Time
-  emailOpenedAtIsNil: Boolean
-  emailOpenedAtNotNil: Boolean
-  """
-  email_clicked_at field predicates
-  """
-  emailClickedAt: Time
-  emailClickedAtGT: Time
-  emailClickedAtGTE: Time
-  emailClickedAtLT: Time
-  emailClickedAtLTE: Time
-  emailClickedAtIsNil: Boolean
-  emailClickedAtNotNil: Boolean
-  """
-  email_open_count field predicates
-  """
-  emailOpenCount: Int
-  emailOpenCountNEQ: Int
-  emailOpenCountGT: Int
-  emailOpenCountGTE: Int
-  emailOpenCountLT: Int
-  emailOpenCountLTE: Int
-  emailOpenCountIsNil: Boolean
-  emailOpenCountNotNil: Boolean
-  """
-  email_click_count field predicates
-  """
-  emailClickCount: Int
-  emailClickCountNEQ: Int
-  emailClickCountGT: Int
-  emailClickCountGTE: Int
-  emailClickCountLT: Int
-  emailClickCountLTE: Int
-  emailClickCountIsNil: Boolean
-  emailClickCountNotNil: Boolean
-  """
-  last_email_event_at field predicates
-  """
-  lastEmailEventAt: Time
-  lastEmailEventAtGT: Time
-  lastEmailEventAtGTE: Time
-  lastEmailEventAtLT: Time
-  lastEmailEventAtLTE: Time
-  lastEmailEventAtIsNil: Boolean
-  lastEmailEventAtNotNil: Boolean
-  """
-  status field predicates
-  """
-  status: AssessmentResponseHistoryAssessmentResponseStatus
-  statusNEQ: AssessmentResponseHistoryAssessmentResponseStatus
-  statusIn: [AssessmentResponseHistoryAssessmentResponseStatus!]
-  statusNotIn: [AssessmentResponseHistoryAssessmentResponseStatus!]
-  """
-  assigned_at field predicates
-  """
-  assignedAt: Time
-  assignedAtGT: Time
-  assignedAtGTE: Time
-  assignedAtLT: Time
-  assignedAtLTE: Time
-  """
-  started_at field predicates
-  """
-  startedAt: Time
-  startedAtGT: Time
-  startedAtGTE: Time
-  startedAtLT: Time
-  startedAtLTE: Time
-  """
-  completed_at field predicates
-  """
-  completedAt: Time
-  completedAtGT: Time
-  completedAtGTE: Time
-  completedAtLT: Time
-  completedAtLTE: Time
-  completedAtIsNil: Boolean
-  completedAtNotNil: Boolean
-  """
-  due_date field predicates
-  """
-  dueDate: Time
-  dueDateGT: Time
-  dueDateGTE: Time
-  dueDateLT: Time
-  dueDateLTE: Time
-  dueDateIsNil: Boolean
-  dueDateNotNil: Boolean
-  """
-  is_draft field predicates
-  """
-  isDraft: Boolean
-  isDraftNEQ: Boolean
 }
 type AssetHistory implements Node {
   id: ID!
@@ -22045,6 +21347,10 @@ type AssetHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -22420,90 +21726,6 @@ input AssetHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -22517,527 +21739,6 @@ input AssetHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  internal_owner field predicates
-  """
-  internalOwner: String
-  internalOwnerNEQ: String
-  internalOwnerIn: [String!]
-  internalOwnerNotIn: [String!]
-  internalOwnerContains: String
-  internalOwnerHasPrefix: String
-  internalOwnerHasSuffix: String
-  internalOwnerIsNil: Boolean
-  internalOwnerNotNil: Boolean
-  internalOwnerEqualFold: String
-  internalOwnerContainsFold: String
-  """
-  internal_owner_user_id field predicates
-  """
-  internalOwnerUserID: String
-  internalOwnerUserIDNEQ: String
-  internalOwnerUserIDIn: [String!]
-  internalOwnerUserIDNotIn: [String!]
-  internalOwnerUserIDContains: String
-  internalOwnerUserIDHasPrefix: String
-  internalOwnerUserIDHasSuffix: String
-  internalOwnerUserIDIsNil: Boolean
-  internalOwnerUserIDNotNil: Boolean
-  internalOwnerUserIDEqualFold: String
-  internalOwnerUserIDContainsFold: String
-  """
-  internal_owner_group_id field predicates
-  """
-  internalOwnerGroupID: String
-  internalOwnerGroupIDNEQ: String
-  internalOwnerGroupIDIn: [String!]
-  internalOwnerGroupIDNotIn: [String!]
-  internalOwnerGroupIDContains: String
-  internalOwnerGroupIDHasPrefix: String
-  internalOwnerGroupIDHasSuffix: String
-  internalOwnerGroupIDIsNil: Boolean
-  internalOwnerGroupIDNotNil: Boolean
-  internalOwnerGroupIDEqualFold: String
-  internalOwnerGroupIDContainsFold: String
-  """
-  internal_owner_identity_holder_id field predicates
-  """
-  internalOwnerIdentityHolderID: String
-  internalOwnerIdentityHolderIDNEQ: String
-  internalOwnerIdentityHolderIDIn: [String!]
-  internalOwnerIdentityHolderIDNotIn: [String!]
-  internalOwnerIdentityHolderIDContains: String
-  internalOwnerIdentityHolderIDHasPrefix: String
-  internalOwnerIdentityHolderIDHasSuffix: String
-  internalOwnerIdentityHolderIDIsNil: Boolean
-  internalOwnerIdentityHolderIDNotNil: Boolean
-  internalOwnerIdentityHolderIDEqualFold: String
-  internalOwnerIdentityHolderIDContainsFold: String
-  """
-  asset_subtype_name field predicates
-  """
-  assetSubtypeName: String
-  assetSubtypeNameNEQ: String
-  assetSubtypeNameIn: [String!]
-  assetSubtypeNameNotIn: [String!]
-  assetSubtypeNameContains: String
-  assetSubtypeNameHasPrefix: String
-  assetSubtypeNameHasSuffix: String
-  assetSubtypeNameIsNil: Boolean
-  assetSubtypeNameNotNil: Boolean
-  assetSubtypeNameEqualFold: String
-  assetSubtypeNameContainsFold: String
-  """
-  asset_subtype_id field predicates
-  """
-  assetSubtypeID: String
-  assetSubtypeIDNEQ: String
-  assetSubtypeIDIn: [String!]
-  assetSubtypeIDNotIn: [String!]
-  assetSubtypeIDContains: String
-  assetSubtypeIDHasPrefix: String
-  assetSubtypeIDHasSuffix: String
-  assetSubtypeIDIsNil: Boolean
-  assetSubtypeIDNotNil: Boolean
-  assetSubtypeIDEqualFold: String
-  assetSubtypeIDContainsFold: String
-  """
-  asset_data_classification_name field predicates
-  """
-  assetDataClassificationName: String
-  assetDataClassificationNameNEQ: String
-  assetDataClassificationNameIn: [String!]
-  assetDataClassificationNameNotIn: [String!]
-  assetDataClassificationNameContains: String
-  assetDataClassificationNameHasPrefix: String
-  assetDataClassificationNameHasSuffix: String
-  assetDataClassificationNameIsNil: Boolean
-  assetDataClassificationNameNotNil: Boolean
-  assetDataClassificationNameEqualFold: String
-  assetDataClassificationNameContainsFold: String
-  """
-  asset_data_classification_id field predicates
-  """
-  assetDataClassificationID: String
-  assetDataClassificationIDNEQ: String
-  assetDataClassificationIDIn: [String!]
-  assetDataClassificationIDNotIn: [String!]
-  assetDataClassificationIDContains: String
-  assetDataClassificationIDHasPrefix: String
-  assetDataClassificationIDHasSuffix: String
-  assetDataClassificationIDIsNil: Boolean
-  assetDataClassificationIDNotNil: Boolean
-  assetDataClassificationIDEqualFold: String
-  assetDataClassificationIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  access_model_name field predicates
-  """
-  accessModelName: String
-  accessModelNameNEQ: String
-  accessModelNameIn: [String!]
-  accessModelNameNotIn: [String!]
-  accessModelNameContains: String
-  accessModelNameHasPrefix: String
-  accessModelNameHasSuffix: String
-  accessModelNameIsNil: Boolean
-  accessModelNameNotNil: Boolean
-  accessModelNameEqualFold: String
-  accessModelNameContainsFold: String
-  """
-  access_model_id field predicates
-  """
-  accessModelID: String
-  accessModelIDNEQ: String
-  accessModelIDIn: [String!]
-  accessModelIDNotIn: [String!]
-  accessModelIDContains: String
-  accessModelIDHasPrefix: String
-  accessModelIDHasSuffix: String
-  accessModelIDIsNil: Boolean
-  accessModelIDNotNil: Boolean
-  accessModelIDEqualFold: String
-  accessModelIDContainsFold: String
-  """
-  encryption_status_name field predicates
-  """
-  encryptionStatusName: String
-  encryptionStatusNameNEQ: String
-  encryptionStatusNameIn: [String!]
-  encryptionStatusNameNotIn: [String!]
-  encryptionStatusNameContains: String
-  encryptionStatusNameHasPrefix: String
-  encryptionStatusNameHasSuffix: String
-  encryptionStatusNameIsNil: Boolean
-  encryptionStatusNameNotNil: Boolean
-  encryptionStatusNameEqualFold: String
-  encryptionStatusNameContainsFold: String
-  """
-  encryption_status_id field predicates
-  """
-  encryptionStatusID: String
-  encryptionStatusIDNEQ: String
-  encryptionStatusIDIn: [String!]
-  encryptionStatusIDNotIn: [String!]
-  encryptionStatusIDContains: String
-  encryptionStatusIDHasPrefix: String
-  encryptionStatusIDHasSuffix: String
-  encryptionStatusIDIsNil: Boolean
-  encryptionStatusIDNotNil: Boolean
-  encryptionStatusIDEqualFold: String
-  encryptionStatusIDContainsFold: String
-  """
-  security_tier_name field predicates
-  """
-  securityTierName: String
-  securityTierNameNEQ: String
-  securityTierNameIn: [String!]
-  securityTierNameNotIn: [String!]
-  securityTierNameContains: String
-  securityTierNameHasPrefix: String
-  securityTierNameHasSuffix: String
-  securityTierNameIsNil: Boolean
-  securityTierNameNotNil: Boolean
-  securityTierNameEqualFold: String
-  securityTierNameContainsFold: String
-  """
-  security_tier_id field predicates
-  """
-  securityTierID: String
-  securityTierIDNEQ: String
-  securityTierIDIn: [String!]
-  securityTierIDNotIn: [String!]
-  securityTierIDContains: String
-  securityTierIDHasPrefix: String
-  securityTierIDHasSuffix: String
-  securityTierIDIsNil: Boolean
-  securityTierIDNotNil: Boolean
-  securityTierIDEqualFold: String
-  securityTierIDContainsFold: String
-  """
-  criticality_name field predicates
-  """
-  criticalityName: String
-  criticalityNameNEQ: String
-  criticalityNameIn: [String!]
-  criticalityNameNotIn: [String!]
-  criticalityNameContains: String
-  criticalityNameHasPrefix: String
-  criticalityNameHasSuffix: String
-  criticalityNameIsNil: Boolean
-  criticalityNameNotNil: Boolean
-  criticalityNameEqualFold: String
-  criticalityNameContainsFold: String
-  """
-  criticality_id field predicates
-  """
-  criticalityID: String
-  criticalityIDNEQ: String
-  criticalityIDIn: [String!]
-  criticalityIDNotIn: [String!]
-  criticalityIDContains: String
-  criticalityIDHasPrefix: String
-  criticalityIDHasSuffix: String
-  criticalityIDIsNil: Boolean
-  criticalityIDNotNil: Boolean
-  criticalityIDEqualFold: String
-  criticalityIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  asset_type field predicates
-  """
-  assetType: AssetHistoryAssetType
-  assetTypeNEQ: AssetHistoryAssetType
-  assetTypeIn: [AssetHistoryAssetType!]
-  assetTypeNotIn: [AssetHistoryAssetType!]
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  display_name field predicates
-  """
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameIsNil: Boolean
-  displayNameNotNil: Boolean
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  identifier field predicates
-  """
-  identifier: String
-  identifierNEQ: String
-  identifierIn: [String!]
-  identifierNotIn: [String!]
-  identifierContains: String
-  identifierHasPrefix: String
-  identifierHasSuffix: String
-  identifierIsNil: Boolean
-  identifierNotNil: Boolean
-  identifierEqualFold: String
-  identifierContainsFold: String
-  """
-  website field predicates
-  """
-  website: String
-  websiteNEQ: String
-  websiteIn: [String!]
-  websiteNotIn: [String!]
-  websiteContains: String
-  websiteHasPrefix: String
-  websiteHasSuffix: String
-  websiteIsNil: Boolean
-  websiteNotNil: Boolean
-  websiteEqualFold: String
-  websiteContainsFold: String
-  """
-  physical_location field predicates
-  """
-  physicalLocation: String
-  physicalLocationNEQ: String
-  physicalLocationIn: [String!]
-  physicalLocationNotIn: [String!]
-  physicalLocationContains: String
-  physicalLocationHasPrefix: String
-  physicalLocationHasSuffix: String
-  physicalLocationIsNil: Boolean
-  physicalLocationNotNil: Boolean
-  physicalLocationEqualFold: String
-  physicalLocationContainsFold: String
-  """
-  region field predicates
-  """
-  region: String
-  regionNEQ: String
-  regionIn: [String!]
-  regionNotIn: [String!]
-  regionContains: String
-  regionHasPrefix: String
-  regionHasSuffix: String
-  regionIsNil: Boolean
-  regionNotNil: Boolean
-  regionEqualFold: String
-  regionContainsFold: String
-  """
-  contains_pii field predicates
-  """
-  containsPii: Boolean
-  containsPiiNEQ: Boolean
-  containsPiiIsNil: Boolean
-  containsPiiNotNil: Boolean
-  """
-  source_type field predicates
-  """
-  sourceType: AssetHistorySourceType
-  sourceTypeNEQ: AssetHistorySourceType
-  sourceTypeIn: [AssetHistorySourceType!]
-  sourceTypeNotIn: [AssetHistorySourceType!]
-  """
-  source_platform_id field predicates
-  """
-  sourcePlatformID: String
-  sourcePlatformIDNEQ: String
-  sourcePlatformIDIn: [String!]
-  sourcePlatformIDNotIn: [String!]
-  sourcePlatformIDContains: String
-  sourcePlatformIDHasPrefix: String
-  sourcePlatformIDHasSuffix: String
-  sourcePlatformIDIsNil: Boolean
-  sourcePlatformIDNotNil: Boolean
-  sourcePlatformIDEqualFold: String
-  sourcePlatformIDContainsFold: String
-  """
-  source_identifier field predicates
-  """
-  sourceIdentifier: String
-  sourceIdentifierNEQ: String
-  sourceIdentifierIn: [String!]
-  sourceIdentifierNotIn: [String!]
-  sourceIdentifierContains: String
-  sourceIdentifierHasPrefix: String
-  sourceIdentifierHasSuffix: String
-  sourceIdentifierIsNil: Boolean
-  sourceIdentifierNotNil: Boolean
-  sourceIdentifierEqualFold: String
-  sourceIdentifierContainsFold: String
-  """
-  cost_center field predicates
-  """
-  costCenter: String
-  costCenterNEQ: String
-  costCenterIn: [String!]
-  costCenterNotIn: [String!]
-  costCenterContains: String
-  costCenterHasPrefix: String
-  costCenterHasSuffix: String
-  costCenterIsNil: Boolean
-  costCenterNotNil: Boolean
-  costCenterEqualFold: String
-  costCenterContainsFold: String
-  """
-  estimated_monthly_cost field predicates
-  """
-  estimatedMonthlyCost: Float
-  estimatedMonthlyCostNEQ: Float
-  estimatedMonthlyCostIn: [Float!]
-  estimatedMonthlyCostNotIn: [Float!]
-  estimatedMonthlyCostGT: Float
-  estimatedMonthlyCostGTE: Float
-  estimatedMonthlyCostLT: Float
-  estimatedMonthlyCostLTE: Float
-  estimatedMonthlyCostIsNil: Boolean
-  estimatedMonthlyCostNotNil: Boolean
-  """
-  purchase_date field predicates
-  """
-  purchaseDate: DateTime
-  purchaseDateGT: DateTime
-  purchaseDateGTE: DateTime
-  purchaseDateLT: DateTime
-  purchaseDateLTE: DateTime
-  purchaseDateIsNil: Boolean
-  purchaseDateNotNil: Boolean
-  """
-  integration_id field predicates
-  """
-  integrationID: String
-  integrationIDNEQ: String
-  integrationIDIn: [String!]
-  integrationIDNotIn: [String!]
-  integrationIDContains: String
-  integrationIDHasPrefix: String
-  integrationIDHasSuffix: String
-  integrationIDIsNil: Boolean
-  integrationIDNotNil: Boolean
-  integrationIDEqualFold: String
-  integrationIDContainsFold: String
-  """
-  observed_at field predicates
-  """
-  observedAt: DateTime
-  observedAtGT: DateTime
-  observedAtGTE: DateTime
-  observedAtLT: DateTime
-  observedAtLTE: DateTime
-  observedAtIsNil: Boolean
-  observedAtNotNil: Boolean
 }
 type CampaignHistory implements Node {
   id: ID!
@@ -23080,6 +21781,10 @@ type CampaignHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -23442,102 +22147,6 @@ input CampaignHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -23551,353 +22160,6 @@ input CampaignHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  internal_owner field predicates
-  """
-  internalOwner: String
-  internalOwnerNEQ: String
-  internalOwnerIn: [String!]
-  internalOwnerNotIn: [String!]
-  internalOwnerContains: String
-  internalOwnerHasPrefix: String
-  internalOwnerHasSuffix: String
-  internalOwnerIsNil: Boolean
-  internalOwnerNotNil: Boolean
-  internalOwnerEqualFold: String
-  internalOwnerContainsFold: String
-  """
-  internal_owner_user_id field predicates
-  """
-  internalOwnerUserID: String
-  internalOwnerUserIDNEQ: String
-  internalOwnerUserIDIn: [String!]
-  internalOwnerUserIDNotIn: [String!]
-  internalOwnerUserIDContains: String
-  internalOwnerUserIDHasPrefix: String
-  internalOwnerUserIDHasSuffix: String
-  internalOwnerUserIDIsNil: Boolean
-  internalOwnerUserIDNotNil: Boolean
-  internalOwnerUserIDEqualFold: String
-  internalOwnerUserIDContainsFold: String
-  """
-  internal_owner_group_id field predicates
-  """
-  internalOwnerGroupID: String
-  internalOwnerGroupIDNEQ: String
-  internalOwnerGroupIDIn: [String!]
-  internalOwnerGroupIDNotIn: [String!]
-  internalOwnerGroupIDContains: String
-  internalOwnerGroupIDHasPrefix: String
-  internalOwnerGroupIDHasSuffix: String
-  internalOwnerGroupIDIsNil: Boolean
-  internalOwnerGroupIDNotNil: Boolean
-  internalOwnerGroupIDEqualFold: String
-  internalOwnerGroupIDContainsFold: String
-  """
-  internal_owner_identity_holder_id field predicates
-  """
-  internalOwnerIdentityHolderID: String
-  internalOwnerIdentityHolderIDNEQ: String
-  internalOwnerIdentityHolderIDIn: [String!]
-  internalOwnerIdentityHolderIDNotIn: [String!]
-  internalOwnerIdentityHolderIDContains: String
-  internalOwnerIdentityHolderIDHasPrefix: String
-  internalOwnerIdentityHolderIDHasSuffix: String
-  internalOwnerIdentityHolderIDIsNil: Boolean
-  internalOwnerIdentityHolderIDNotNil: Boolean
-  internalOwnerIdentityHolderIDEqualFold: String
-  internalOwnerIdentityHolderIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  campaign_type field predicates
-  """
-  campaignType: CampaignHistoryCampaignType
-  campaignTypeNEQ: CampaignHistoryCampaignType
-  campaignTypeIn: [CampaignHistoryCampaignType!]
-  campaignTypeNotIn: [CampaignHistoryCampaignType!]
-  """
-  status field predicates
-  """
-  status: CampaignHistoryCampaignStatus
-  statusNEQ: CampaignHistoryCampaignStatus
-  statusIn: [CampaignHistoryCampaignStatus!]
-  statusNotIn: [CampaignHistoryCampaignStatus!]
-  """
-  is_active field predicates
-  """
-  isActive: Boolean
-  isActiveNEQ: Boolean
-  """
-  scheduled_at field predicates
-  """
-  scheduledAt: DateTime
-  scheduledAtGT: DateTime
-  scheduledAtGTE: DateTime
-  scheduledAtLT: DateTime
-  scheduledAtLTE: DateTime
-  scheduledAtIsNil: Boolean
-  scheduledAtNotNil: Boolean
-  """
-  launched_at field predicates
-  """
-  launchedAt: DateTime
-  launchedAtGT: DateTime
-  launchedAtGTE: DateTime
-  launchedAtLT: DateTime
-  launchedAtLTE: DateTime
-  launchedAtIsNil: Boolean
-  launchedAtNotNil: Boolean
-  """
-  completed_at field predicates
-  """
-  completedAt: DateTime
-  completedAtGT: DateTime
-  completedAtGTE: DateTime
-  completedAtLT: DateTime
-  completedAtLTE: DateTime
-  completedAtIsNil: Boolean
-  completedAtNotNil: Boolean
-  """
-  due_date field predicates
-  """
-  dueDate: DateTime
-  dueDateGT: DateTime
-  dueDateGTE: DateTime
-  dueDateLT: DateTime
-  dueDateLTE: DateTime
-  dueDateIsNil: Boolean
-  dueDateNotNil: Boolean
-  """
-  is_recurring field predicates
-  """
-  isRecurring: Boolean
-  isRecurringNEQ: Boolean
-  """
-  recurrence_frequency field predicates
-  """
-  recurrenceFrequency: CampaignHistoryFrequency
-  recurrenceFrequencyNEQ: CampaignHistoryFrequency
-  recurrenceFrequencyIn: [CampaignHistoryFrequency!]
-  recurrenceFrequencyNotIn: [CampaignHistoryFrequency!]
-  recurrenceFrequencyIsNil: Boolean
-  recurrenceFrequencyNotNil: Boolean
-  """
-  recurrence_interval field predicates
-  """
-  recurrenceInterval: Int
-  recurrenceIntervalNEQ: Int
-  recurrenceIntervalGT: Int
-  recurrenceIntervalGTE: Int
-  recurrenceIntervalLT: Int
-  recurrenceIntervalLTE: Int
-  recurrenceIntervalIsNil: Boolean
-  recurrenceIntervalNotNil: Boolean
-  """
-  recurrence_timezone field predicates
-  """
-  recurrenceTimezone: String
-  recurrenceTimezoneNEQ: String
-  recurrenceTimezoneIn: [String!]
-  recurrenceTimezoneNotIn: [String!]
-  recurrenceTimezoneContains: String
-  recurrenceTimezoneHasPrefix: String
-  recurrenceTimezoneHasSuffix: String
-  recurrenceTimezoneIsNil: Boolean
-  recurrenceTimezoneNotNil: Boolean
-  recurrenceTimezoneEqualFold: String
-  recurrenceTimezoneContainsFold: String
-  """
-  last_run_at field predicates
-  """
-  lastRunAt: DateTime
-  lastRunAtGT: DateTime
-  lastRunAtGTE: DateTime
-  lastRunAtLT: DateTime
-  lastRunAtLTE: DateTime
-  lastRunAtIsNil: Boolean
-  lastRunAtNotNil: Boolean
-  """
-  next_run_at field predicates
-  """
-  nextRunAt: DateTime
-  nextRunAtGT: DateTime
-  nextRunAtGTE: DateTime
-  nextRunAtLT: DateTime
-  nextRunAtLTE: DateTime
-  nextRunAtIsNil: Boolean
-  nextRunAtNotNil: Boolean
-  """
-  recurrence_end_at field predicates
-  """
-  recurrenceEndAt: DateTime
-  recurrenceEndAtGT: DateTime
-  recurrenceEndAtGTE: DateTime
-  recurrenceEndAtLT: DateTime
-  recurrenceEndAtLTE: DateTime
-  recurrenceEndAtIsNil: Boolean
-  recurrenceEndAtNotNil: Boolean
-  """
-  recipient_count field predicates
-  """
-  recipientCount: Int
-  recipientCountNEQ: Int
-  recipientCountGT: Int
-  recipientCountGTE: Int
-  recipientCountLT: Int
-  recipientCountLTE: Int
-  recipientCountIsNil: Boolean
-  recipientCountNotNil: Boolean
-  """
-  resend_count field predicates
-  """
-  resendCount: Int
-  resendCountNEQ: Int
-  resendCountGT: Int
-  resendCountGTE: Int
-  resendCountLT: Int
-  resendCountLTE: Int
-  resendCountIsNil: Boolean
-  resendCountNotNil: Boolean
-  """
-  last_resent_at field predicates
-  """
-  lastResentAt: DateTime
-  lastResentAtGT: DateTime
-  lastResentAtGTE: DateTime
-  lastResentAtLT: DateTime
-  lastResentAtLTE: DateTime
-  lastResentAtIsNil: Boolean
-  lastResentAtNotNil: Boolean
-  """
-  entity_id field predicates
-  """
-  entityID: String
-  entityIDNEQ: String
-  entityIDIn: [String!]
-  entityIDNotIn: [String!]
-  entityIDContains: String
-  entityIDHasPrefix: String
-  entityIDHasSuffix: String
-  entityIDIsNil: Boolean
-  entityIDNotNil: Boolean
-  entityIDEqualFold: String
-  entityIDContainsFold: String
-  """
-  template_id field predicates
-  """
-  templateID: String
-  templateIDNEQ: String
-  templateIDIn: [String!]
-  templateIDNotIn: [String!]
-  templateIDContains: String
-  templateIDHasPrefix: String
-  templateIDHasSuffix: String
-  templateIDIsNil: Boolean
-  templateIDNotNil: Boolean
-  templateIDEqualFold: String
-  templateIDContainsFold: String
-  """
-  assessment_id field predicates
-  """
-  assessmentID: String
-  assessmentIDNEQ: String
-  assessmentIDIn: [String!]
-  assessmentIDNotIn: [String!]
-  assessmentIDContains: String
-  assessmentIDHasPrefix: String
-  assessmentIDHasSuffix: String
-  assessmentIDIsNil: Boolean
-  assessmentIDNotNil: Boolean
-  assessmentIDEqualFold: String
-  assessmentIDContainsFold: String
-  """
-  email_template_id field predicates
-  """
-  emailTemplateID: String
-  emailTemplateIDNEQ: String
-  emailTemplateIDIn: [String!]
-  emailTemplateIDNotIn: [String!]
-  emailTemplateIDContains: String
-  emailTemplateIDHasPrefix: String
-  emailTemplateIDHasSuffix: String
-  emailTemplateIDIsNil: Boolean
-  emailTemplateIDNotNil: Boolean
-  emailTemplateIDEqualFold: String
-  emailTemplateIDContainsFold: String
-  """
-  integration_id field predicates
-  """
-  integrationID: String
-  integrationIDNEQ: String
-  integrationIDIn: [String!]
-  integrationIDNotIn: [String!]
-  integrationIDContains: String
-  integrationIDHasPrefix: String
-  integrationIDHasSuffix: String
-  integrationIDIsNil: Boolean
-  integrationIDNotNil: Boolean
-  integrationIDEqualFold: String
-  integrationIDContainsFold: String
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: String
-  emailBrandingIDNEQ: String
-  emailBrandingIDIn: [String!]
-  emailBrandingIDNotIn: [String!]
-  emailBrandingIDContains: String
-  emailBrandingIDHasPrefix: String
-  emailBrandingIDHasSuffix: String
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: String
-  emailBrandingIDContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
 }
 type CampaignTargetHistory implements Node {
   id: ID!
@@ -24161,136 +22423,6 @@ input CampaignTargetHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  campaign_id field predicates
-  """
-  campaignID: String
-  campaignIDNEQ: String
-  campaignIDIn: [String!]
-  campaignIDNotIn: [String!]
-  campaignIDContains: String
-  campaignIDHasPrefix: String
-  campaignIDHasSuffix: String
-  campaignIDIsNil: Boolean
-  campaignIDNotNil: Boolean
-  campaignIDEqualFold: String
-  campaignIDContainsFold: String
-  """
-  contact_id field predicates
-  """
-  contactID: String
-  contactIDNEQ: String
-  contactIDIn: [String!]
-  contactIDNotIn: [String!]
-  contactIDContains: String
-  contactIDHasPrefix: String
-  contactIDHasSuffix: String
-  contactIDIsNil: Boolean
-  contactIDNotNil: Boolean
-  contactIDEqualFold: String
-  contactIDContainsFold: String
-  """
-  user_id field predicates
-  """
-  userID: String
-  userIDNEQ: String
-  userIDIn: [String!]
-  userIDNotIn: [String!]
-  userIDContains: String
-  userIDHasPrefix: String
-  userIDHasSuffix: String
-  userIDIsNil: Boolean
-  userIDNotNil: Boolean
-  userIDEqualFold: String
-  userIDContainsFold: String
-  """
-  group_id field predicates
-  """
-  groupID: String
-  groupIDNEQ: String
-  groupIDIn: [String!]
-  groupIDNotIn: [String!]
-  groupIDContains: String
-  groupIDHasPrefix: String
-  groupIDHasSuffix: String
-  groupIDIsNil: Boolean
-  groupIDNotNil: Boolean
-  groupIDEqualFold: String
-  groupIDContainsFold: String
-  """
-  subscriber_id field predicates
-  """
-  subscriberID: String
-  subscriberIDNEQ: String
-  subscriberIDIn: [String!]
-  subscriberIDNotIn: [String!]
-  subscriberIDContains: String
-  subscriberIDHasPrefix: String
-  subscriberIDHasSuffix: String
-  subscriberIDIsNil: Boolean
-  subscriberIDNotNil: Boolean
-  subscriberIDEqualFold: String
-  subscriberIDContainsFold: String
-  """
-  email field predicates
-  """
-  email: String
-  emailNEQ: String
-  emailIn: [String!]
-  emailNotIn: [String!]
-  emailContains: String
-  emailHasPrefix: String
-  emailHasSuffix: String
-  emailEqualFold: String
-  emailContainsFold: String
-  """
-  full_name field predicates
-  """
-  fullName: String
-  fullNameNEQ: String
-  fullNameIn: [String!]
-  fullNameNotIn: [String!]
-  fullNameContains: String
-  fullNameHasPrefix: String
-  fullNameHasSuffix: String
-  fullNameIsNil: Boolean
-  fullNameNotNil: Boolean
-  fullNameEqualFold: String
-  fullNameContainsFold: String
-  """
-  status field predicates
-  """
-  status: CampaignTargetHistoryAssessmentResponseStatus
-  statusNEQ: CampaignTargetHistoryAssessmentResponseStatus
-  statusIn: [CampaignTargetHistoryAssessmentResponseStatus!]
-  statusNotIn: [CampaignTargetHistoryAssessmentResponseStatus!]
-  """
-  sent_at field predicates
-  """
-  sentAt: DateTime
-  sentAtGT: DateTime
-  sentAtGTE: DateTime
-  sentAtLT: DateTime
-  sentAtLTE: DateTime
-  sentAtIsNil: Boolean
-  sentAtNotNil: Boolean
-  """
-  completed_at field predicates
-  """
-  completedAt: DateTime
-  completedAtGT: DateTime
-  completedAtGTE: DateTime
-  completedAtLT: DateTime
-  completedAtLTE: DateTime
-  completedAtIsNil: Boolean
-  completedAtNotNil: Boolean
 }
 type ContactHistory implements Node {
   id: ID!
@@ -24329,6 +22461,10 @@ type ContactHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -24560,90 +22696,6 @@ input ContactHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -24657,121 +22709,6 @@ input ContactHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  full_name field predicates
-  """
-  fullName: String
-  fullNameNEQ: String
-  fullNameIn: [String!]
-  fullNameNotIn: [String!]
-  fullNameContains: String
-  fullNameHasPrefix: String
-  fullNameHasSuffix: String
-  fullNameIsNil: Boolean
-  fullNameNotNil: Boolean
-  fullNameEqualFold: String
-  fullNameContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleIsNil: Boolean
-  titleNotNil: Boolean
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  company field predicates
-  """
-  company: String
-  companyNEQ: String
-  companyIn: [String!]
-  companyNotIn: [String!]
-  companyContains: String
-  companyHasPrefix: String
-  companyHasSuffix: String
-  companyIsNil: Boolean
-  companyNotNil: Boolean
-  companyEqualFold: String
-  companyContainsFold: String
-  """
-  email field predicates
-  """
-  email: String
-  emailNEQ: String
-  emailIn: [String!]
-  emailNotIn: [String!]
-  emailContains: String
-  emailHasPrefix: String
-  emailHasSuffix: String
-  emailIsNil: Boolean
-  emailNotNil: Boolean
-  emailEqualFold: String
-  emailContainsFold: String
-  """
-  phone_number field predicates
-  """
-  phoneNumber: String
-  phoneNumberNEQ: String
-  phoneNumberIn: [String!]
-  phoneNumberNotIn: [String!]
-  phoneNumberContains: String
-  phoneNumberHasPrefix: String
-  phoneNumberHasSuffix: String
-  phoneNumberIsNil: Boolean
-  phoneNumberNotNil: Boolean
-  phoneNumberEqualFold: String
-  phoneNumberContainsFold: String
-  """
-  address field predicates
-  """
-  address: String
-  addressNEQ: String
-  addressIn: [String!]
-  addressNotIn: [String!]
-  addressContains: String
-  addressHasPrefix: String
-  addressHasSuffix: String
-  addressIsNil: Boolean
-  addressNotNil: Boolean
-  addressEqualFold: String
-  addressContainsFold: String
-  """
-  status field predicates
-  """
-  status: ContactHistoryUserStatus
-  statusNEQ: ContactHistoryUserStatus
-  statusIn: [ContactHistoryUserStatus!]
-  statusNotIn: [ContactHistoryUserStatus!]
-  """
-  integration_id field predicates
-  """
-  integrationID: String
-  integrationIDNEQ: String
-  integrationIDIn: [String!]
-  integrationIDNotIn: [String!]
-  integrationIDContains: String
-  integrationIDHasPrefix: String
-  integrationIDHasSuffix: String
-  integrationIDIsNil: Boolean
-  integrationIDNotNil: Boolean
-  integrationIDEqualFold: String
-  integrationIDContainsFold: String
-  """
-  observed_at field predicates
-  """
-  observedAt: DateTime
-  observedAtGT: DateTime
-  observedAtGTE: DateTime
-  observedAtLT: DateTime
-  observedAtLTE: DateTime
-  observedAtIsNil: Boolean
-  observedAtNotNil: Boolean
 }
 type ControlHistory implements Node {
   id: ID!
@@ -24814,6 +22751,10 @@ type ControlHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -25214,353 +23155,6 @@ input ControlHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
-  external_uuid field predicates
-  """
-  externalUUID: String
-  externalUUIDNEQ: String
-  externalUUIDIn: [String!]
-  externalUUIDNotIn: [String!]
-  externalUUIDContains: String
-  externalUUIDHasPrefix: String
-  externalUUIDHasSuffix: String
-  externalUUIDIsNil: Boolean
-  externalUUIDNotNil: Boolean
-  externalUUIDEqualFold: String
-  externalUUIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleIsNil: Boolean
-  titleNotNil: Boolean
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  reference_id field predicates
-  """
-  referenceID: String
-  referenceIDNEQ: String
-  referenceIDIn: [String!]
-  referenceIDNotIn: [String!]
-  referenceIDContains: String
-  referenceIDHasPrefix: String
-  referenceIDHasSuffix: String
-  referenceIDIsNil: Boolean
-  referenceIDNotNil: Boolean
-  referenceIDEqualFold: String
-  referenceIDContainsFold: String
-  """
-  auditor_reference_id field predicates
-  """
-  auditorReferenceID: String
-  auditorReferenceIDNEQ: String
-  auditorReferenceIDIn: [String!]
-  auditorReferenceIDNotIn: [String!]
-  auditorReferenceIDContains: String
-  auditorReferenceIDHasPrefix: String
-  auditorReferenceIDHasSuffix: String
-  auditorReferenceIDIsNil: Boolean
-  auditorReferenceIDNotNil: Boolean
-  auditorReferenceIDEqualFold: String
-  auditorReferenceIDContainsFold: String
-  """
-  responsible_party_id field predicates
-  """
-  responsiblePartyID: String
-  responsiblePartyIDNEQ: String
-  responsiblePartyIDIn: [String!]
-  responsiblePartyIDNotIn: [String!]
-  responsiblePartyIDContains: String
-  responsiblePartyIDHasPrefix: String
-  responsiblePartyIDHasSuffix: String
-  responsiblePartyIDIsNil: Boolean
-  responsiblePartyIDNotNil: Boolean
-  responsiblePartyIDEqualFold: String
-  responsiblePartyIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: ControlHistoryControlStatus
-  statusNEQ: ControlHistoryControlStatus
-  statusIn: [ControlHistoryControlStatus!]
-  statusNotIn: [ControlHistoryControlStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  implementation_status field predicates
-  """
-  implementationStatus: ControlHistoryControlImplementationStatus
-  implementationStatusNEQ: ControlHistoryControlImplementationStatus
-  implementationStatusIn: [ControlHistoryControlImplementationStatus!]
-  implementationStatusNotIn: [ControlHistoryControlImplementationStatus!]
-  implementationStatusIsNil: Boolean
-  implementationStatusNotNil: Boolean
-  """
-  implementation_description field predicates
-  """
-  implementationDescription: String
-  implementationDescriptionNEQ: String
-  implementationDescriptionIn: [String!]
-  implementationDescriptionNotIn: [String!]
-  implementationDescriptionContains: String
-  implementationDescriptionHasPrefix: String
-  implementationDescriptionHasSuffix: String
-  implementationDescriptionIsNil: Boolean
-  implementationDescriptionNotNil: Boolean
-  implementationDescriptionEqualFold: String
-  implementationDescriptionContainsFold: String
-  """
-  public_representation field predicates
-  """
-  publicRepresentation: String
-  publicRepresentationNEQ: String
-  publicRepresentationIn: [String!]
-  publicRepresentationNotIn: [String!]
-  publicRepresentationContains: String
-  publicRepresentationHasPrefix: String
-  publicRepresentationHasSuffix: String
-  publicRepresentationIsNil: Boolean
-  publicRepresentationNotNil: Boolean
-  publicRepresentationEqualFold: String
-  publicRepresentationContainsFold: String
-  """
-  source field predicates
-  """
-  source: ControlHistoryControlSource
-  sourceNEQ: ControlHistoryControlSource
-  sourceIn: [ControlHistoryControlSource!]
-  sourceNotIn: [ControlHistoryControlSource!]
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  """
-  source_name field predicates
-  """
-  sourceName: String
-  sourceNameNEQ: String
-  sourceNameIn: [String!]
-  sourceNameNotIn: [String!]
-  sourceNameContains: String
-  sourceNameHasPrefix: String
-  sourceNameHasSuffix: String
-  sourceNameIsNil: Boolean
-  sourceNameNotNil: Boolean
-  sourceNameEqualFold: String
-  sourceNameContainsFold: String
-  """
-  reference_framework field predicates
-  """
-  referenceFramework: String
-  referenceFrameworkNEQ: String
-  referenceFrameworkIn: [String!]
-  referenceFrameworkNotIn: [String!]
-  referenceFrameworkContains: String
-  referenceFrameworkHasPrefix: String
-  referenceFrameworkHasSuffix: String
-  referenceFrameworkIsNil: Boolean
-  referenceFrameworkNotNil: Boolean
-  referenceFrameworkEqualFold: String
-  referenceFrameworkContainsFold: String
-  """
-  reference_framework_revision field predicates
-  """
-  referenceFrameworkRevision: String
-  referenceFrameworkRevisionNEQ: String
-  referenceFrameworkRevisionIn: [String!]
-  referenceFrameworkRevisionNotIn: [String!]
-  referenceFrameworkRevisionContains: String
-  referenceFrameworkRevisionHasPrefix: String
-  referenceFrameworkRevisionHasSuffix: String
-  referenceFrameworkRevisionIsNil: Boolean
-  referenceFrameworkRevisionNotNil: Boolean
-  referenceFrameworkRevisionEqualFold: String
-  referenceFrameworkRevisionContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
-  """
-  category_id field predicates
-  """
-  categoryID: String
-  categoryIDNEQ: String
-  categoryIDIn: [String!]
-  categoryIDNotIn: [String!]
-  categoryIDContains: String
-  categoryIDHasPrefix: String
-  categoryIDHasSuffix: String
-  categoryIDIsNil: Boolean
-  categoryIDNotNil: Boolean
-  categoryIDEqualFold: String
-  categoryIDContainsFold: String
-  """
-  subcategory field predicates
-  """
-  subcategory: String
-  subcategoryNEQ: String
-  subcategoryIn: [String!]
-  subcategoryNotIn: [String!]
-  subcategoryContains: String
-  subcategoryHasPrefix: String
-  subcategoryHasSuffix: String
-  subcategoryIsNil: Boolean
-  subcategoryNotNil: Boolean
-  subcategoryEqualFold: String
-  subcategoryContainsFold: String
-  """
-  control_owner_id field predicates
-  """
-  controlOwnerID: String
-  controlOwnerIDNEQ: String
-  controlOwnerIDIn: [String!]
-  controlOwnerIDNotIn: [String!]
-  controlOwnerIDContains: String
-  controlOwnerIDHasPrefix: String
-  controlOwnerIDHasSuffix: String
-  controlOwnerIDIsNil: Boolean
-  controlOwnerIDNotNil: Boolean
-  controlOwnerIDEqualFold: String
-  controlOwnerIDContainsFold: String
-  """
-  delegate_id field predicates
-  """
-  delegateID: String
-  delegateIDNEQ: String
-  delegateIDIn: [String!]
-  delegateIDNotIn: [String!]
-  delegateIDContains: String
-  delegateIDHasPrefix: String
-  delegateIDHasSuffix: String
-  delegateIDIsNil: Boolean
-  delegateIDNotNil: Boolean
-  delegateIDEqualFold: String
-  delegateIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -25574,174 +23168,6 @@ input ControlHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  control_kind_name field predicates
-  """
-  controlKindName: String
-  controlKindNameNEQ: String
-  controlKindNameIn: [String!]
-  controlKindNameNotIn: [String!]
-  controlKindNameContains: String
-  controlKindNameHasPrefix: String
-  controlKindNameHasSuffix: String
-  controlKindNameIsNil: Boolean
-  controlKindNameNotNil: Boolean
-  controlKindNameEqualFold: String
-  controlKindNameContainsFold: String
-  """
-  control_kind_id field predicates
-  """
-  controlKindID: String
-  controlKindIDNEQ: String
-  controlKindIDIn: [String!]
-  controlKindIDNotIn: [String!]
-  controlKindIDContains: String
-  controlKindIDHasPrefix: String
-  controlKindIDHasSuffix: String
-  controlKindIDIsNil: Boolean
-  controlKindIDNotNil: Boolean
-  controlKindIDEqualFold: String
-  controlKindIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  ref_code field predicates
-  """
-  refCode: String
-  refCodeNEQ: String
-  refCodeIn: [String!]
-  refCodeNotIn: [String!]
-  refCodeContains: String
-  refCodeHasPrefix: String
-  refCodeHasSuffix: String
-  refCodeEqualFold: String
-  refCodeContainsFold: String
-  """
-  standard_id field predicates
-  """
-  standardID: String
-  standardIDNEQ: String
-  standardIDIn: [String!]
-  standardIDNotIn: [String!]
-  standardIDContains: String
-  standardIDHasPrefix: String
-  standardIDHasSuffix: String
-  standardIDIsNil: Boolean
-  standardIDNotNil: Boolean
-  standardIDEqualFold: String
-  standardIDContainsFold: String
-  """
-  trust_center_visibility field predicates
-  """
-  trustCenterVisibility: ControlHistoryTrustCenterControlVisibility
-  trustCenterVisibilityNEQ: ControlHistoryTrustCenterControlVisibility
-  trustCenterVisibilityIn: [ControlHistoryTrustCenterControlVisibility!]
-  trustCenterVisibilityNotIn: [ControlHistoryTrustCenterControlVisibility!]
-  trustCenterVisibilityIsNil: Boolean
-  trustCenterVisibilityNotNil: Boolean
-  """
-  is_trust_center_control field predicates
-  """
-  isTrustCenterControl: Boolean
-  isTrustCenterControlNEQ: Boolean
-  isTrustCenterControlIsNil: Boolean
-  isTrustCenterControlNotNil: Boolean
 }
 type ControlImplementationHistory implements Node {
   id: ID!
@@ -25780,6 +23206,10 @@ type ControlImplementationHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -26009,90 +23439,6 @@ input ControlImplementationHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -26106,91 +23452,6 @@ input ControlImplementationHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: ControlImplementationHistoryDocumentStatus
-  statusNEQ: ControlImplementationHistoryDocumentStatus
-  statusIn: [ControlImplementationHistoryDocumentStatus!]
-  statusNotIn: [ControlImplementationHistoryDocumentStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  implementation_date field predicates
-  """
-  implementationDate: Time
-  implementationDateGT: Time
-  implementationDateGTE: Time
-  implementationDateLT: Time
-  implementationDateLTE: Time
-  implementationDateIsNil: Boolean
-  implementationDateNotNil: Boolean
-  """
-  verified field predicates
-  """
-  verified: Boolean
-  verifiedNEQ: Boolean
-  verifiedIsNil: Boolean
-  verifiedNotNil: Boolean
-  """
-  verification_date field predicates
-  """
-  verificationDate: Time
-  verificationDateGT: Time
-  verificationDateGTE: Time
-  verificationDateLT: Time
-  verificationDateLTE: Time
-  verificationDateIsNil: Boolean
-  verificationDateNotNil: Boolean
-  """
-  details field predicates
-  """
-  details: String
-  detailsNEQ: String
-  detailsIn: [String!]
-  detailsNotIn: [String!]
-  detailsContains: String
-  detailsHasPrefix: String
-  detailsHasSuffix: String
-  detailsIsNil: Boolean
-  detailsNotNil: Boolean
-  detailsEqualFold: String
-  detailsContainsFold: String
 }
 type ControlObjectiveHistory implements Node {
   id: ID!
@@ -26237,6 +23498,10 @@ type ControlObjectiveHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -26483,18 +23748,6 @@ input ControlObjectiveHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
   revision field predicates
   """
   revision: String
@@ -26509,90 +23762,6 @@ input ControlObjectiveHistoryWhereInput {
   revisionEqualFold: String
   revisionContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -26606,127 +23775,6 @@ input ControlObjectiveHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  desired_outcome field predicates
-  """
-  desiredOutcome: String
-  desiredOutcomeNEQ: String
-  desiredOutcomeIn: [String!]
-  desiredOutcomeNotIn: [String!]
-  desiredOutcomeContains: String
-  desiredOutcomeHasPrefix: String
-  desiredOutcomeHasSuffix: String
-  desiredOutcomeIsNil: Boolean
-  desiredOutcomeNotNil: Boolean
-  desiredOutcomeEqualFold: String
-  desiredOutcomeContainsFold: String
-  """
-  status field predicates
-  """
-  status: ControlObjectiveHistoryObjectiveStatus
-  statusNEQ: ControlObjectiveHistoryObjectiveStatus
-  statusIn: [ControlObjectiveHistoryObjectiveStatus!]
-  statusNotIn: [ControlObjectiveHistoryObjectiveStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  source field predicates
-  """
-  source: ControlObjectiveHistoryControlSource
-  sourceNEQ: ControlObjectiveHistoryControlSource
-  sourceIn: [ControlObjectiveHistoryControlSource!]
-  sourceNotIn: [ControlObjectiveHistoryControlSource!]
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  """
-  control_objective_type field predicates
-  """
-  controlObjectiveType: String
-  controlObjectiveTypeNEQ: String
-  controlObjectiveTypeIn: [String!]
-  controlObjectiveTypeNotIn: [String!]
-  controlObjectiveTypeContains: String
-  controlObjectiveTypeHasPrefix: String
-  controlObjectiveTypeHasSuffix: String
-  controlObjectiveTypeIsNil: Boolean
-  controlObjectiveTypeNotNil: Boolean
-  controlObjectiveTypeEqualFold: String
-  controlObjectiveTypeContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
-  """
-  subcategory field predicates
-  """
-  subcategory: String
-  subcategoryNEQ: String
-  subcategoryIn: [String!]
-  subcategoryNotIn: [String!]
-  subcategoryContains: String
-  subcategoryHasPrefix: String
-  subcategoryHasSuffix: String
-  subcategoryIsNil: Boolean
-  subcategoryNotNil: Boolean
-  subcategoryEqualFold: String
-  subcategoryContainsFold: String
 }
 """
 Define a Relay Cursor type:
@@ -26988,109 +24036,6 @@ input CustomDomainHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  cname_record field predicates
-  """
-  cnameRecord: String
-  cnameRecordNEQ: String
-  cnameRecordIn: [String!]
-  cnameRecordNotIn: [String!]
-  cnameRecordContains: String
-  cnameRecordHasPrefix: String
-  cnameRecordHasSuffix: String
-  cnameRecordEqualFold: String
-  cnameRecordContainsFold: String
-  """
-  mappable_domain_id field predicates
-  """
-  mappableDomainID: String
-  mappableDomainIDNEQ: String
-  mappableDomainIDIn: [String!]
-  mappableDomainIDNotIn: [String!]
-  mappableDomainIDContains: String
-  mappableDomainIDHasPrefix: String
-  mappableDomainIDHasSuffix: String
-  mappableDomainIDEqualFold: String
-  mappableDomainIDContainsFold: String
-  """
-  dns_verification_id field predicates
-  """
-  dnsVerificationID: String
-  dnsVerificationIDNEQ: String
-  dnsVerificationIDIn: [String!]
-  dnsVerificationIDNotIn: [String!]
-  dnsVerificationIDContains: String
-  dnsVerificationIDHasPrefix: String
-  dnsVerificationIDHasSuffix: String
-  dnsVerificationIDIsNil: Boolean
-  dnsVerificationIDNotNil: Boolean
-  dnsVerificationIDEqualFold: String
-  dnsVerificationIDContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
-  """
-  domain_type field predicates
-  """
-  domainType: CustomDomainHistoryCustomDomainType
-  domainTypeNEQ: CustomDomainHistoryCustomDomainType
-  domainTypeIn: [CustomDomainHistoryCustomDomainType!]
-  domainTypeNotIn: [CustomDomainHistoryCustomDomainType!]
-  """
-  purpose field predicates
-  """
-  purpose: CustomDomainHistoryDomainPurpose
-  purposeNEQ: CustomDomainHistoryDomainPurpose
-  purposeIn: [CustomDomainHistoryDomainPurpose!]
-  purposeNotIn: [CustomDomainHistoryDomainPurpose!]
-  purposeIsNil: Boolean
-  purposeNotNil: Boolean
 }
 type DiscussionHistory implements Node {
   id: ID!
@@ -27299,25 +24244,6 @@ input DiscussionHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
-  is_resolved field predicates
-  """
-  isResolved: Boolean
-  isResolvedNEQ: Boolean
 }
 type DocumentDataHistory implements Node {
   id: ID!
@@ -27546,76 +24472,6 @@ input DocumentDataHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  template_id field predicates
-  """
-  templateID: String
-  templateIDNEQ: String
-  templateIDIn: [String!]
-  templateIDNotIn: [String!]
-  templateIDContains: String
-  templateIDHasPrefix: String
-  templateIDHasSuffix: String
-  templateIDIsNil: Boolean
-  templateIDNotNil: Boolean
-  templateIDEqualFold: String
-  templateIDContainsFold: String
 }
 type EmailTemplateHistory implements Node {
   id: ID!
@@ -27654,6 +24510,10 @@ type EmailTemplateHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -27939,90 +24799,6 @@ input EmailTemplateHistoryWhereInput {
   revisionEqualFold: String
   revisionContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -28036,235 +24812,6 @@ input EmailTemplateHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  key field predicates
-  """
-  key: String
-  keyNEQ: String
-  keyIn: [String!]
-  keyNotIn: [String!]
-  keyContains: String
-  keyHasPrefix: String
-  keyHasSuffix: String
-  keyEqualFold: String
-  keyContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  format field predicates
-  """
-  format: EmailTemplateHistoryNotificationTemplateFormat
-  formatNEQ: EmailTemplateHistoryNotificationTemplateFormat
-  formatIn: [EmailTemplateHistoryNotificationTemplateFormat!]
-  formatNotIn: [EmailTemplateHistoryNotificationTemplateFormat!]
-  formatIsNil: Boolean
-  formatNotNil: Boolean
-  """
-  locale field predicates
-  """
-  locale: String
-  localeNEQ: String
-  localeIn: [String!]
-  localeNotIn: [String!]
-  localeContains: String
-  localeHasPrefix: String
-  localeHasSuffix: String
-  localeEqualFold: String
-  localeContainsFold: String
-  """
-  subject_template field predicates
-  """
-  subjectTemplate: String
-  subjectTemplateNEQ: String
-  subjectTemplateIn: [String!]
-  subjectTemplateNotIn: [String!]
-  subjectTemplateContains: String
-  subjectTemplateHasPrefix: String
-  subjectTemplateHasSuffix: String
-  subjectTemplateIsNil: Boolean
-  subjectTemplateNotNil: Boolean
-  subjectTemplateEqualFold: String
-  subjectTemplateContainsFold: String
-  """
-  preheader_template field predicates
-  """
-  preheaderTemplate: String
-  preheaderTemplateNEQ: String
-  preheaderTemplateIn: [String!]
-  preheaderTemplateNotIn: [String!]
-  preheaderTemplateContains: String
-  preheaderTemplateHasPrefix: String
-  preheaderTemplateHasSuffix: String
-  preheaderTemplateIsNil: Boolean
-  preheaderTemplateNotNil: Boolean
-  preheaderTemplateEqualFold: String
-  preheaderTemplateContainsFold: String
-  """
-  body_template field predicates
-  """
-  bodyTemplate: String
-  bodyTemplateNEQ: String
-  bodyTemplateIn: [String!]
-  bodyTemplateNotIn: [String!]
-  bodyTemplateContains: String
-  bodyTemplateHasPrefix: String
-  bodyTemplateHasSuffix: String
-  bodyTemplateIsNil: Boolean
-  bodyTemplateNotNil: Boolean
-  bodyTemplateEqualFold: String
-  bodyTemplateContainsFold: String
-  """
-  text_template field predicates
-  """
-  textTemplate: String
-  textTemplateNEQ: String
-  textTemplateIn: [String!]
-  textTemplateNotIn: [String!]
-  textTemplateContains: String
-  textTemplateHasPrefix: String
-  textTemplateHasSuffix: String
-  textTemplateIsNil: Boolean
-  textTemplateNotNil: Boolean
-  textTemplateEqualFold: String
-  textTemplateContainsFold: String
-  """
-  active field predicates
-  """
-  active: Boolean
-  activeNEQ: Boolean
-  """
-  version field predicates
-  """
-  version: Int
-  versionNEQ: Int
-  versionGT: Int
-  versionGTE: Int
-  versionLT: Int
-  versionLTE: Int
-  """
-  template_context field predicates
-  """
-  templateContext: EmailTemplateHistoryTemplateContext
-  templateContextNEQ: EmailTemplateHistoryTemplateContext
-  templateContextIn: [EmailTemplateHistoryTemplateContext!]
-  templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
-  templateContextIsNil: Boolean
-  templateContextNotNil: Boolean
-  """
-  integration_id field predicates
-  """
-  integrationID: String
-  integrationIDNEQ: String
-  integrationIDIn: [String!]
-  integrationIDNotIn: [String!]
-  integrationIDContains: String
-  integrationIDHasPrefix: String
-  integrationIDHasSuffix: String
-  integrationIDIsNil: Boolean
-  integrationIDNotNil: Boolean
-  integrationIDEqualFold: String
-  integrationIDContainsFold: String
-  """
-  workflow_definition_id field predicates
-  """
-  workflowDefinitionID: String
-  workflowDefinitionIDNEQ: String
-  workflowDefinitionIDIn: [String!]
-  workflowDefinitionIDNotIn: [String!]
-  workflowDefinitionIDContains: String
-  workflowDefinitionIDHasPrefix: String
-  workflowDefinitionIDHasSuffix: String
-  workflowDefinitionIDIsNil: Boolean
-  workflowDefinitionIDNotNil: Boolean
-  workflowDefinitionIDEqualFold: String
-  workflowDefinitionIDContainsFold: String
-  """
-  workflow_instance_id field predicates
-  """
-  workflowInstanceID: String
-  workflowInstanceIDNEQ: String
-  workflowInstanceIDIn: [String!]
-  workflowInstanceIDNotIn: [String!]
-  workflowInstanceIDContains: String
-  workflowInstanceIDHasPrefix: String
-  workflowInstanceIDHasSuffix: String
-  workflowInstanceIDIsNil: Boolean
-  workflowInstanceIDNotNil: Boolean
-  workflowInstanceIDEqualFold: String
-  workflowInstanceIDContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
 }
 type EntityHistory implements Node {
   id: ID!
@@ -28303,6 +24850,10 @@ type EntityHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -28422,19 +24973,19 @@ type EntityHistory implements Node {
   """
   The entity's displayed 'friendly' name
   """
-  displayName: String
+  displayName: String @catalogManaged
   """
   An optional description of the entity
   """
-  description: String
+  description: String @catalogManaged
   """
   domains associated with the entity
   """
-  domains: [String!]
+  domains: [String!] @catalogManaged
   """
   common matching names that should match with the entity
   """
-  aliases: [String!]
+  aliases: [String!] @catalogManaged
   """
   The type of the entity
   """
@@ -28506,15 +25057,15 @@ type EntityHistory implements Node {
   """
   status page URL for the entity
   """
-  statusPageURL: String
+  statusPageURL: String @catalogManaged
   """
   services provided by the entity
   """
-  providedServices: [String!]
+  providedServices: [String!] @catalogManaged
   """
   external links associated with the entity
   """
-  links: [String!]
+  links: [String!] @catalogManaged
   """
   the risk rating label for the entity
   """
@@ -28550,7 +25101,7 @@ type EntityHistory implements Node {
   """
   URL of the logo for the entity
   """
-  logoRemoteURL: String
+  logoRemoteURL: String @catalogManaged
   """
   The logo file id for the entity
   """
@@ -28793,90 +25344,6 @@ input EntityHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -28890,667 +25357,6 @@ input EntityHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  internal_owner field predicates
-  """
-  internalOwner: String
-  internalOwnerNEQ: String
-  internalOwnerIn: [String!]
-  internalOwnerNotIn: [String!]
-  internalOwnerContains: String
-  internalOwnerHasPrefix: String
-  internalOwnerHasSuffix: String
-  internalOwnerIsNil: Boolean
-  internalOwnerNotNil: Boolean
-  internalOwnerEqualFold: String
-  internalOwnerContainsFold: String
-  """
-  internal_owner_user_id field predicates
-  """
-  internalOwnerUserID: String
-  internalOwnerUserIDNEQ: String
-  internalOwnerUserIDIn: [String!]
-  internalOwnerUserIDNotIn: [String!]
-  internalOwnerUserIDContains: String
-  internalOwnerUserIDHasPrefix: String
-  internalOwnerUserIDHasSuffix: String
-  internalOwnerUserIDIsNil: Boolean
-  internalOwnerUserIDNotNil: Boolean
-  internalOwnerUserIDEqualFold: String
-  internalOwnerUserIDContainsFold: String
-  """
-  internal_owner_group_id field predicates
-  """
-  internalOwnerGroupID: String
-  internalOwnerGroupIDNEQ: String
-  internalOwnerGroupIDIn: [String!]
-  internalOwnerGroupIDNotIn: [String!]
-  internalOwnerGroupIDContains: String
-  internalOwnerGroupIDHasPrefix: String
-  internalOwnerGroupIDHasSuffix: String
-  internalOwnerGroupIDIsNil: Boolean
-  internalOwnerGroupIDNotNil: Boolean
-  internalOwnerGroupIDEqualFold: String
-  internalOwnerGroupIDContainsFold: String
-  """
-  internal_owner_identity_holder_id field predicates
-  """
-  internalOwnerIdentityHolderID: String
-  internalOwnerIdentityHolderIDNEQ: String
-  internalOwnerIdentityHolderIDIn: [String!]
-  internalOwnerIdentityHolderIDNotIn: [String!]
-  internalOwnerIdentityHolderIDContains: String
-  internalOwnerIdentityHolderIDHasPrefix: String
-  internalOwnerIdentityHolderIDHasSuffix: String
-  internalOwnerIdentityHolderIDIsNil: Boolean
-  internalOwnerIdentityHolderIDNotNil: Boolean
-  internalOwnerIdentityHolderIDEqualFold: String
-  internalOwnerIdentityHolderIDContainsFold: String
-  """
-  reviewed_by field predicates
-  """
-  reviewedBy: String
-  reviewedByNEQ: String
-  reviewedByIn: [String!]
-  reviewedByNotIn: [String!]
-  reviewedByContains: String
-  reviewedByHasPrefix: String
-  reviewedByHasSuffix: String
-  reviewedByIsNil: Boolean
-  reviewedByNotNil: Boolean
-  reviewedByEqualFold: String
-  reviewedByContainsFold: String
-  """
-  reviewed_by_user_id field predicates
-  """
-  reviewedByUserID: String
-  reviewedByUserIDNEQ: String
-  reviewedByUserIDIn: [String!]
-  reviewedByUserIDNotIn: [String!]
-  reviewedByUserIDContains: String
-  reviewedByUserIDHasPrefix: String
-  reviewedByUserIDHasSuffix: String
-  reviewedByUserIDIsNil: Boolean
-  reviewedByUserIDNotNil: Boolean
-  reviewedByUserIDEqualFold: String
-  reviewedByUserIDContainsFold: String
-  """
-  reviewed_by_group_id field predicates
-  """
-  reviewedByGroupID: String
-  reviewedByGroupIDNEQ: String
-  reviewedByGroupIDIn: [String!]
-  reviewedByGroupIDNotIn: [String!]
-  reviewedByGroupIDContains: String
-  reviewedByGroupIDHasPrefix: String
-  reviewedByGroupIDHasSuffix: String
-  reviewedByGroupIDIsNil: Boolean
-  reviewedByGroupIDNotNil: Boolean
-  reviewedByGroupIDEqualFold: String
-  reviewedByGroupIDContainsFold: String
-  """
-  reviewed_by_identity_holder_id field predicates
-  """
-  reviewedByIdentityHolderID: String
-  reviewedByIdentityHolderIDNEQ: String
-  reviewedByIdentityHolderIDIn: [String!]
-  reviewedByIdentityHolderIDNotIn: [String!]
-  reviewedByIdentityHolderIDContains: String
-  reviewedByIdentityHolderIDHasPrefix: String
-  reviewedByIdentityHolderIDHasSuffix: String
-  reviewedByIdentityHolderIDIsNil: Boolean
-  reviewedByIdentityHolderIDNotNil: Boolean
-  reviewedByIdentityHolderIDEqualFold: String
-  reviewedByIdentityHolderIDContainsFold: String
-  """
-  last_reviewed_at field predicates
-  """
-  lastReviewedAt: DateTime
-  lastReviewedAtGT: DateTime
-  lastReviewedAtGTE: DateTime
-  lastReviewedAtLT: DateTime
-  lastReviewedAtLTE: DateTime
-  lastReviewedAtIsNil: Boolean
-  lastReviewedAtNotNil: Boolean
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  catalog_id field predicates
-  """
-  catalogID: String
-  catalogIDNEQ: String
-  catalogIDIn: [String!]
-  catalogIDNotIn: [String!]
-  catalogIDContains: String
-  catalogIDHasPrefix: String
-  catalogIDHasSuffix: String
-  catalogIDIsNil: Boolean
-  catalogIDNotNil: Boolean
-  catalogIDEqualFold: String
-  catalogIDContainsFold: String
-  """
-  externally_visible field predicates
-  """
-  externallyVisible: Boolean
-  externallyVisibleNEQ: Boolean
-  externallyVisibleIsNil: Boolean
-  externallyVisibleNotNil: Boolean
-  """
-  catalog_key field predicates
-  """
-  catalogKey: String
-  catalogKeyNEQ: String
-  catalogKeyIn: [String!]
-  catalogKeyNotIn: [String!]
-  catalogKeyContains: String
-  catalogKeyHasPrefix: String
-  catalogKeyHasSuffix: String
-  catalogKeyIsNil: Boolean
-  catalogKeyNotNil: Boolean
-  catalogKeyEqualFold: String
-  catalogKeyContainsFold: String
-  """
-  entity_relationship_state_name field predicates
-  """
-  entityRelationshipStateName: String
-  entityRelationshipStateNameNEQ: String
-  entityRelationshipStateNameIn: [String!]
-  entityRelationshipStateNameNotIn: [String!]
-  entityRelationshipStateNameContains: String
-  entityRelationshipStateNameHasPrefix: String
-  entityRelationshipStateNameHasSuffix: String
-  entityRelationshipStateNameIsNil: Boolean
-  entityRelationshipStateNameNotNil: Boolean
-  entityRelationshipStateNameEqualFold: String
-  entityRelationshipStateNameContainsFold: String
-  """
-  entity_relationship_state_id field predicates
-  """
-  entityRelationshipStateID: String
-  entityRelationshipStateIDNEQ: String
-  entityRelationshipStateIDIn: [String!]
-  entityRelationshipStateIDNotIn: [String!]
-  entityRelationshipStateIDContains: String
-  entityRelationshipStateIDHasPrefix: String
-  entityRelationshipStateIDHasSuffix: String
-  entityRelationshipStateIDIsNil: Boolean
-  entityRelationshipStateIDNotNil: Boolean
-  entityRelationshipStateIDEqualFold: String
-  entityRelationshipStateIDContainsFold: String
-  """
-  entity_security_questionnaire_status_name field predicates
-  """
-  entitySecurityQuestionnaireStatusName: String
-  entitySecurityQuestionnaireStatusNameNEQ: String
-  entitySecurityQuestionnaireStatusNameIn: [String!]
-  entitySecurityQuestionnaireStatusNameNotIn: [String!]
-  entitySecurityQuestionnaireStatusNameContains: String
-  entitySecurityQuestionnaireStatusNameHasPrefix: String
-  entitySecurityQuestionnaireStatusNameHasSuffix: String
-  entitySecurityQuestionnaireStatusNameIsNil: Boolean
-  entitySecurityQuestionnaireStatusNameNotNil: Boolean
-  entitySecurityQuestionnaireStatusNameEqualFold: String
-  entitySecurityQuestionnaireStatusNameContainsFold: String
-  """
-  entity_security_questionnaire_status_id field predicates
-  """
-  entitySecurityQuestionnaireStatusID: String
-  entitySecurityQuestionnaireStatusIDNEQ: String
-  entitySecurityQuestionnaireStatusIDIn: [String!]
-  entitySecurityQuestionnaireStatusIDNotIn: [String!]
-  entitySecurityQuestionnaireStatusIDContains: String
-  entitySecurityQuestionnaireStatusIDHasPrefix: String
-  entitySecurityQuestionnaireStatusIDHasSuffix: String
-  entitySecurityQuestionnaireStatusIDIsNil: Boolean
-  entitySecurityQuestionnaireStatusIDNotNil: Boolean
-  entitySecurityQuestionnaireStatusIDEqualFold: String
-  entitySecurityQuestionnaireStatusIDContainsFold: String
-  """
-  entity_source_type_name field predicates
-  """
-  entitySourceTypeName: String
-  entitySourceTypeNameNEQ: String
-  entitySourceTypeNameIn: [String!]
-  entitySourceTypeNameNotIn: [String!]
-  entitySourceTypeNameContains: String
-  entitySourceTypeNameHasPrefix: String
-  entitySourceTypeNameHasSuffix: String
-  entitySourceTypeNameIsNil: Boolean
-  entitySourceTypeNameNotNil: Boolean
-  entitySourceTypeNameEqualFold: String
-  entitySourceTypeNameContainsFold: String
-  """
-  entity_source_type_id field predicates
-  """
-  entitySourceTypeID: String
-  entitySourceTypeIDNEQ: String
-  entitySourceTypeIDIn: [String!]
-  entitySourceTypeIDNotIn: [String!]
-  entitySourceTypeIDContains: String
-  entitySourceTypeIDHasPrefix: String
-  entitySourceTypeIDHasSuffix: String
-  entitySourceTypeIDIsNil: Boolean
-  entitySourceTypeIDNotNil: Boolean
-  entitySourceTypeIDEqualFold: String
-  entitySourceTypeIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameIsNil: Boolean
-  nameNotNil: Boolean
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  display_name field predicates
-  """
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameIsNil: Boolean
-  displayNameNotNil: Boolean
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  entity_type_id field predicates
-  """
-  entityTypeID: String
-  entityTypeIDNEQ: String
-  entityTypeIDIn: [String!]
-  entityTypeIDNotIn: [String!]
-  entityTypeIDContains: String
-  entityTypeIDHasPrefix: String
-  entityTypeIDHasSuffix: String
-  entityTypeIDIsNil: Boolean
-  entityTypeIDNotNil: Boolean
-  entityTypeIDEqualFold: String
-  entityTypeIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: EntityHistoryEntityStatus
-  statusNEQ: EntityHistoryEntityStatus
-  statusIn: [EntityHistoryEntityStatus!]
-  statusNotIn: [EntityHistoryEntityStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  approved_for_use field predicates
-  """
-  approvedForUse: Boolean
-  approvedForUseNEQ: Boolean
-  approvedForUseIsNil: Boolean
-  approvedForUseNotNil: Boolean
-  """
-  has_soc2 field predicates
-  """
-  hasSoc2: Boolean
-  hasSoc2NEQ: Boolean
-  hasSoc2IsNil: Boolean
-  hasSoc2NotNil: Boolean
-  """
-  soc2_period_end field predicates
-  """
-  soc2PeriodEnd: DateTime
-  soc2PeriodEndGT: DateTime
-  soc2PeriodEndGTE: DateTime
-  soc2PeriodEndLT: DateTime
-  soc2PeriodEndLTE: DateTime
-  soc2PeriodEndIsNil: Boolean
-  soc2PeriodEndNotNil: Boolean
-  """
-  contract_start_date field predicates
-  """
-  contractStartDate: DateTime
-  contractStartDateGT: DateTime
-  contractStartDateGTE: DateTime
-  contractStartDateLT: DateTime
-  contractStartDateLTE: DateTime
-  contractStartDateIsNil: Boolean
-  contractStartDateNotNil: Boolean
-  """
-  contract_end_date field predicates
-  """
-  contractEndDate: DateTime
-  contractEndDateGT: DateTime
-  contractEndDateGTE: DateTime
-  contractEndDateLT: DateTime
-  contractEndDateLTE: DateTime
-  contractEndDateIsNil: Boolean
-  contractEndDateNotNil: Boolean
-  """
-  auto_renews field predicates
-  """
-  autoRenews: Boolean
-  autoRenewsNEQ: Boolean
-  autoRenewsIsNil: Boolean
-  autoRenewsNotNil: Boolean
-  """
-  termination_notice_days field predicates
-  """
-  terminationNoticeDays: Int
-  terminationNoticeDaysNEQ: Int
-  terminationNoticeDaysGT: Int
-  terminationNoticeDaysGTE: Int
-  terminationNoticeDaysLT: Int
-  terminationNoticeDaysLTE: Int
-  terminationNoticeDaysIsNil: Boolean
-  terminationNoticeDaysNotNil: Boolean
-  """
-  annual_spend field predicates
-  """
-  annualSpend: Float
-  annualSpendNEQ: Float
-  annualSpendIn: [Float!]
-  annualSpendNotIn: [Float!]
-  annualSpendGT: Float
-  annualSpendGTE: Float
-  annualSpendLT: Float
-  annualSpendLTE: Float
-  annualSpendIsNil: Boolean
-  annualSpendNotNil: Boolean
-  """
-  spend_currency field predicates
-  """
-  spendCurrency: String
-  spendCurrencyNEQ: String
-  spendCurrencyIn: [String!]
-  spendCurrencyNotIn: [String!]
-  spendCurrencyContains: String
-  spendCurrencyHasPrefix: String
-  spendCurrencyHasSuffix: String
-  spendCurrencyIsNil: Boolean
-  spendCurrencyNotNil: Boolean
-  spendCurrencyEqualFold: String
-  spendCurrencyContainsFold: String
-  """
-  billing_model field predicates
-  """
-  billingModel: String
-  billingModelNEQ: String
-  billingModelIn: [String!]
-  billingModelNotIn: [String!]
-  billingModelContains: String
-  billingModelHasPrefix: String
-  billingModelHasSuffix: String
-  billingModelIsNil: Boolean
-  billingModelNotNil: Boolean
-  billingModelEqualFold: String
-  billingModelContainsFold: String
-  """
-  renewal_risk field predicates
-  """
-  renewalRisk: String
-  renewalRiskNEQ: String
-  renewalRiskIn: [String!]
-  renewalRiskNotIn: [String!]
-  renewalRiskContains: String
-  renewalRiskHasPrefix: String
-  renewalRiskHasSuffix: String
-  renewalRiskIsNil: Boolean
-  renewalRiskNotNil: Boolean
-  renewalRiskEqualFold: String
-  renewalRiskContainsFold: String
-  """
-  sso_enforced field predicates
-  """
-  ssoEnforced: Boolean
-  ssoEnforcedNEQ: Boolean
-  ssoEnforcedIsNil: Boolean
-  ssoEnforcedNotNil: Boolean
-  """
-  mfa_supported field predicates
-  """
-  mfaSupported: Boolean
-  mfaSupportedNEQ: Boolean
-  mfaSupportedIsNil: Boolean
-  mfaSupportedNotNil: Boolean
-  """
-  mfa_enforced field predicates
-  """
-  mfaEnforced: Boolean
-  mfaEnforcedNEQ: Boolean
-  mfaEnforcedIsNil: Boolean
-  mfaEnforcedNotNil: Boolean
-  """
-  status_page_url field predicates
-  """
-  statusPageURL: String
-  statusPageURLNEQ: String
-  statusPageURLIn: [String!]
-  statusPageURLNotIn: [String!]
-  statusPageURLContains: String
-  statusPageURLHasPrefix: String
-  statusPageURLHasSuffix: String
-  statusPageURLIsNil: Boolean
-  statusPageURLNotNil: Boolean
-  statusPageURLEqualFold: String
-  statusPageURLContainsFold: String
-  """
-  risk_rating field predicates
-  """
-  riskRating: String
-  riskRatingNEQ: String
-  riskRatingIn: [String!]
-  riskRatingNotIn: [String!]
-  riskRatingContains: String
-  riskRatingHasPrefix: String
-  riskRatingHasSuffix: String
-  riskRatingIsNil: Boolean
-  riskRatingNotNil: Boolean
-  riskRatingEqualFold: String
-  riskRatingContainsFold: String
-  """
-  risk_score field predicates
-  """
-  riskScore: Int
-  riskScoreNEQ: Int
-  riskScoreGT: Int
-  riskScoreGTE: Int
-  riskScoreLT: Int
-  riskScoreLTE: Int
-  riskScoreIsNil: Boolean
-  riskScoreNotNil: Boolean
-  """
-  risk_score_coverage field predicates
-  """
-  riskScoreCoverage: Int
-  riskScoreCoverageNEQ: Int
-  riskScoreCoverageGT: Int
-  riskScoreCoverageGTE: Int
-  riskScoreCoverageLT: Int
-  riskScoreCoverageLTE: Int
-  riskScoreCoverageIsNil: Boolean
-  riskScoreCoverageNotNil: Boolean
-  """
-  tier field predicates
-  """
-  tier: EntityHistoryVendorTier
-  tierNEQ: EntityHistoryVendorTier
-  tierIn: [EntityHistoryVendorTier!]
-  tierNotIn: [EntityHistoryVendorTier!]
-  tierIsNil: Boolean
-  tierNotNil: Boolean
-  """
-  review_frequency field predicates
-  """
-  reviewFrequency: EntityHistoryFrequency
-  reviewFrequencyNEQ: EntityHistoryFrequency
-  reviewFrequencyIn: [EntityHistoryFrequency!]
-  reviewFrequencyNotIn: [EntityHistoryFrequency!]
-  reviewFrequencyIsNil: Boolean
-  reviewFrequencyNotNil: Boolean
-  """
-  next_review_at field predicates
-  """
-  nextReviewAt: DateTime
-  nextReviewAtGT: DateTime
-  nextReviewAtGTE: DateTime
-  nextReviewAtLT: DateTime
-  nextReviewAtLTE: DateTime
-  nextReviewAtIsNil: Boolean
-  nextReviewAtNotNil: Boolean
-  """
-  contract_renewal_at field predicates
-  """
-  contractRenewalAt: DateTime
-  contractRenewalAtGT: DateTime
-  contractRenewalAtGTE: DateTime
-  contractRenewalAtLT: DateTime
-  contractRenewalAtLTE: DateTime
-  contractRenewalAtIsNil: Boolean
-  contractRenewalAtNotNil: Boolean
-  """
-  logo_remote_url field predicates
-  """
-  logoRemoteURL: String
-  logoRemoteURLNEQ: String
-  logoRemoteURLIn: [String!]
-  logoRemoteURLNotIn: [String!]
-  logoRemoteURLContains: String
-  logoRemoteURLHasPrefix: String
-  logoRemoteURLHasSuffix: String
-  logoRemoteURLIsNil: Boolean
-  logoRemoteURLNotNil: Boolean
-  logoRemoteURLEqualFold: String
-  logoRemoteURLContainsFold: String
-  """
-  logo_file_id field predicates
-  """
-  logoFileID: String
-  logoFileIDNEQ: String
-  logoFileIDIn: [String!]
-  logoFileIDNotIn: [String!]
-  logoFileIDContains: String
-  logoFileIDHasPrefix: String
-  logoFileIDHasSuffix: String
-  logoFileIDIsNil: Boolean
-  logoFileIDNotNil: Boolean
-  logoFileIDEqualFold: String
-  logoFileIDContainsFold: String
-  """
-  observed_at field predicates
-  """
-  observedAt: DateTime
-  observedAtGT: DateTime
-  observedAtGTE: DateTime
-  observedAtLT: DateTime
-  observedAtLTE: DateTime
-  observedAtIsNil: Boolean
-  observedAtNotNil: Boolean
 }
 type EntityTypeHistory implements Node {
   id: ID!
@@ -29772,53 +25578,6 @@ input EntityTypeHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
 }
 type EvidenceHistory implements Node {
   id: ID!
@@ -29861,6 +25620,10 @@ type EvidenceHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -30138,102 +25901,6 @@ input EvidenceHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -30247,208 +25914,6 @@ input EvidenceHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  external_uuid field predicates
-  """
-  externalUUID: String
-  externalUUIDNEQ: String
-  externalUUIDIn: [String!]
-  externalUUIDNotIn: [String!]
-  externalUUIDContains: String
-  externalUUIDHasPrefix: String
-  externalUUIDHasSuffix: String
-  externalUUIDIsNil: Boolean
-  externalUUIDNotNil: Boolean
-  externalUUIDEqualFold: String
-  externalUUIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  collection_procedure field predicates
-  """
-  collectionProcedure: String
-  collectionProcedureNEQ: String
-  collectionProcedureIn: [String!]
-  collectionProcedureNotIn: [String!]
-  collectionProcedureContains: String
-  collectionProcedureHasPrefix: String
-  collectionProcedureHasSuffix: String
-  collectionProcedureIsNil: Boolean
-  collectionProcedureNotNil: Boolean
-  collectionProcedureEqualFold: String
-  collectionProcedureContainsFold: String
-  """
-  creation_date field predicates
-  """
-  creationDate: DateTime
-  creationDateGT: DateTime
-  creationDateGTE: DateTime
-  creationDateLT: DateTime
-  creationDateLTE: DateTime
-  """
-  renewal_date field predicates
-  """
-  renewalDate: DateTime
-  renewalDateGT: DateTime
-  renewalDateGTE: DateTime
-  renewalDateLT: DateTime
-  renewalDateLTE: DateTime
-  renewalDateIsNil: Boolean
-  renewalDateNotNil: Boolean
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
-  """
-  is_automated field predicates
-  """
-  isAutomated: Boolean
-  isAutomatedNEQ: Boolean
-  isAutomatedIsNil: Boolean
-  isAutomatedNotNil: Boolean
-  """
-  url field predicates
-  """
-  url: String
-  urlNEQ: String
-  urlIn: [String!]
-  urlNotIn: [String!]
-  urlContains: String
-  urlHasPrefix: String
-  urlHasSuffix: String
-  urlIsNil: Boolean
-  urlNotNil: Boolean
-  urlEqualFold: String
-  urlContainsFold: String
-  """
-  status field predicates
-  """
-  status: EvidenceHistoryEvidenceStatus
-  statusNEQ: EvidenceHistoryEvidenceStatus
-  statusIn: [EvidenceHistoryEvidenceStatus!]
-  statusNotIn: [EvidenceHistoryEvidenceStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  review_frequency field predicates
-  """
-  reviewFrequency: EvidenceHistoryFrequency
-  reviewFrequencyNEQ: EvidenceHistoryFrequency
-  reviewFrequencyIn: [EvidenceHistoryFrequency!]
-  reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
-  reviewFrequencyIsNil: Boolean
-  reviewFrequencyNotNil: Boolean
-  """
-  auditor_reference_id field predicates
-  """
-  auditorReferenceID: String
-  auditorReferenceIDNEQ: String
-  auditorReferenceIDIn: [String!]
-  auditorReferenceIDNotIn: [String!]
-  auditorReferenceIDContains: String
-  auditorReferenceIDHasPrefix: String
-  auditorReferenceIDHasSuffix: String
-  auditorReferenceIDIsNil: Boolean
-  auditorReferenceIDNotNil: Boolean
-  auditorReferenceIDEqualFold: String
-  auditorReferenceIDContainsFold: String
 }
 type FileHistory implements Node {
   id: ID!
@@ -30734,333 +26199,6 @@ input FileHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  category_name field predicates
-  """
-  categoryName: String
-  categoryNameNEQ: String
-  categoryNameIn: [String!]
-  categoryNameNotIn: [String!]
-  categoryNameContains: String
-  categoryNameHasPrefix: String
-  categoryNameHasSuffix: String
-  categoryNameIsNil: Boolean
-  categoryNameNotNil: Boolean
-  categoryNameEqualFold: String
-  categoryNameContainsFold: String
-  """
-  category_id field predicates
-  """
-  categoryID: String
-  categoryIDNEQ: String
-  categoryIDIn: [String!]
-  categoryIDNotIn: [String!]
-  categoryIDContains: String
-  categoryIDHasPrefix: String
-  categoryIDHasSuffix: String
-  categoryIDIsNil: Boolean
-  categoryIDNotNil: Boolean
-  categoryIDEqualFold: String
-  categoryIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameIsNil: Boolean
-  nameNotNil: Boolean
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  provided_file_name field predicates
-  """
-  providedFileName: String
-  providedFileNameNEQ: String
-  providedFileNameIn: [String!]
-  providedFileNameNotIn: [String!]
-  providedFileNameContains: String
-  providedFileNameHasPrefix: String
-  providedFileNameHasSuffix: String
-  providedFileNameEqualFold: String
-  providedFileNameContainsFold: String
-  """
-  provided_file_extension field predicates
-  """
-  providedFileExtension: String
-  providedFileExtensionNEQ: String
-  providedFileExtensionIn: [String!]
-  providedFileExtensionNotIn: [String!]
-  providedFileExtensionContains: String
-  providedFileExtensionHasPrefix: String
-  providedFileExtensionHasSuffix: String
-  providedFileExtensionEqualFold: String
-  providedFileExtensionContainsFold: String
-  """
-  provided_file_size field predicates
-  """
-  providedFileSize: Int
-  providedFileSizeNEQ: Int
-  providedFileSizeGT: Int
-  providedFileSizeGTE: Int
-  providedFileSizeLT: Int
-  providedFileSizeLTE: Int
-  providedFileSizeIsNil: Boolean
-  providedFileSizeNotNil: Boolean
-  """
-  persisted_file_size field predicates
-  """
-  persistedFileSize: Int
-  persistedFileSizeNEQ: Int
-  persistedFileSizeGT: Int
-  persistedFileSizeGTE: Int
-  persistedFileSizeLT: Int
-  persistedFileSizeLTE: Int
-  persistedFileSizeIsNil: Boolean
-  persistedFileSizeNotNil: Boolean
-  """
-  detected_mime_type field predicates
-  """
-  detectedMimeType: String
-  detectedMimeTypeNEQ: String
-  detectedMimeTypeIn: [String!]
-  detectedMimeTypeNotIn: [String!]
-  detectedMimeTypeContains: String
-  detectedMimeTypeHasPrefix: String
-  detectedMimeTypeHasSuffix: String
-  detectedMimeTypeIsNil: Boolean
-  detectedMimeTypeNotNil: Boolean
-  detectedMimeTypeEqualFold: String
-  detectedMimeTypeContainsFold: String
-  """
-  md5_hash field predicates
-  """
-  md5Hash: String
-  md5HashNEQ: String
-  md5HashIn: [String!]
-  md5HashNotIn: [String!]
-  md5HashContains: String
-  md5HashHasPrefix: String
-  md5HashHasSuffix: String
-  md5HashIsNil: Boolean
-  md5HashNotNil: Boolean
-  md5HashEqualFold: String
-  md5HashContainsFold: String
-  """
-  detected_content_type field predicates
-  """
-  detectedContentType: String
-  detectedContentTypeNEQ: String
-  detectedContentTypeIn: [String!]
-  detectedContentTypeNotIn: [String!]
-  detectedContentTypeContains: String
-  detectedContentTypeHasPrefix: String
-  detectedContentTypeHasSuffix: String
-  detectedContentTypeEqualFold: String
-  detectedContentTypeContainsFold: String
-  """
-  store_key field predicates
-  """
-  storeKey: String
-  storeKeyNEQ: String
-  storeKeyIn: [String!]
-  storeKeyNotIn: [String!]
-  storeKeyContains: String
-  storeKeyHasPrefix: String
-  storeKeyHasSuffix: String
-  storeKeyIsNil: Boolean
-  storeKeyNotNil: Boolean
-  storeKeyEqualFold: String
-  storeKeyContainsFold: String
-  """
-  uri field predicates
-  """
-  uri: String
-  uriNEQ: String
-  uriIn: [String!]
-  uriNotIn: [String!]
-  uriContains: String
-  uriHasPrefix: String
-  uriHasSuffix: String
-  uriIsNil: Boolean
-  uriNotNil: Boolean
-  uriEqualFold: String
-  uriContainsFold: String
-  """
-  storage_scheme field predicates
-  """
-  storageScheme: String
-  storageSchemeNEQ: String
-  storageSchemeIn: [String!]
-  storageSchemeNotIn: [String!]
-  storageSchemeContains: String
-  storageSchemeHasPrefix: String
-  storageSchemeHasSuffix: String
-  storageSchemeIsNil: Boolean
-  storageSchemeNotNil: Boolean
-  storageSchemeEqualFold: String
-  storageSchemeContainsFold: String
-  """
-  storage_volume field predicates
-  """
-  storageVolume: String
-  storageVolumeNEQ: String
-  storageVolumeIn: [String!]
-  storageVolumeNotIn: [String!]
-  storageVolumeContains: String
-  storageVolumeHasPrefix: String
-  storageVolumeHasSuffix: String
-  storageVolumeIsNil: Boolean
-  storageVolumeNotNil: Boolean
-  storageVolumeEqualFold: String
-  storageVolumeContainsFold: String
-  """
-  storage_path field predicates
-  """
-  storagePath: String
-  storagePathNEQ: String
-  storagePathIn: [String!]
-  storagePathNotIn: [String!]
-  storagePathContains: String
-  storagePathHasPrefix: String
-  storagePathHasSuffix: String
-  storagePathIsNil: Boolean
-  storagePathNotNil: Boolean
-  storagePathEqualFold: String
-  storagePathContainsFold: String
-  """
-  storage_region field predicates
-  """
-  storageRegion: String
-  storageRegionNEQ: String
-  storageRegionIn: [String!]
-  storageRegionNotIn: [String!]
-  storageRegionContains: String
-  storageRegionHasPrefix: String
-  storageRegionHasSuffix: String
-  storageRegionIsNil: Boolean
-  storageRegionNotNil: Boolean
-  storageRegionEqualFold: String
-  storageRegionContainsFold: String
-  """
-  storage_provider field predicates
-  """
-  storageProvider: String
-  storageProviderNEQ: String
-  storageProviderIn: [String!]
-  storageProviderNotIn: [String!]
-  storageProviderContains: String
-  storageProviderHasPrefix: String
-  storageProviderHasSuffix: String
-  storageProviderIsNil: Boolean
-  storageProviderNotNil: Boolean
-  storageProviderEqualFold: String
-  storageProviderContainsFold: String
-  """
-  last_accessed_at field predicates
-  """
-  lastAccessedAt: Time
-  lastAccessedAtGT: Time
-  lastAccessedAtGTE: Time
-  lastAccessedAtLT: Time
-  lastAccessedAtLTE: Time
-  lastAccessedAtIsNil: Boolean
-  lastAccessedAtNotNil: Boolean
 }
 type FindingControlHistory implements Node {
   id: ID!
@@ -31297,110 +26435,6 @@ input FindingControlHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  finding_id field predicates
-  """
-  findingID: String
-  findingIDNEQ: String
-  findingIDIn: [String!]
-  findingIDNotIn: [String!]
-  findingIDContains: String
-  findingIDHasPrefix: String
-  findingIDHasSuffix: String
-  findingIDEqualFold: String
-  findingIDContainsFold: String
-  """
-  control_id field predicates
-  """
-  controlID: String
-  controlIDNEQ: String
-  controlIDIn: [String!]
-  controlIDNotIn: [String!]
-  controlIDContains: String
-  controlIDHasPrefix: String
-  controlIDHasSuffix: String
-  controlIDEqualFold: String
-  controlIDContainsFold: String
-  """
-  standard_id field predicates
-  """
-  standardID: String
-  standardIDNEQ: String
-  standardIDIn: [String!]
-  standardIDNotIn: [String!]
-  standardIDContains: String
-  standardIDHasPrefix: String
-  standardIDHasSuffix: String
-  standardIDIsNil: Boolean
-  standardIDNotNil: Boolean
-  standardIDEqualFold: String
-  standardIDContainsFold: String
-  """
-  external_standard field predicates
-  """
-  externalStandard: String
-  externalStandardNEQ: String
-  externalStandardIn: [String!]
-  externalStandardNotIn: [String!]
-  externalStandardContains: String
-  externalStandardHasPrefix: String
-  externalStandardHasSuffix: String
-  externalStandardIsNil: Boolean
-  externalStandardNotNil: Boolean
-  externalStandardEqualFold: String
-  externalStandardContainsFold: String
-  """
-  external_standard_version field predicates
-  """
-  externalStandardVersion: String
-  externalStandardVersionNEQ: String
-  externalStandardVersionIn: [String!]
-  externalStandardVersionNotIn: [String!]
-  externalStandardVersionContains: String
-  externalStandardVersionHasPrefix: String
-  externalStandardVersionHasSuffix: String
-  externalStandardVersionIsNil: Boolean
-  externalStandardVersionNotNil: Boolean
-  externalStandardVersionEqualFold: String
-  externalStandardVersionContainsFold: String
-  """
-  external_control_id field predicates
-  """
-  externalControlID: String
-  externalControlIDNEQ: String
-  externalControlIDIn: [String!]
-  externalControlIDNotIn: [String!]
-  externalControlIDContains: String
-  externalControlIDHasPrefix: String
-  externalControlIDHasSuffix: String
-  externalControlIDIsNil: Boolean
-  externalControlIDNotNil: Boolean
-  externalControlIDEqualFold: String
-  externalControlIDContainsFold: String
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
-  """
-  discovered_at field predicates
-  """
-  discoveredAt: DateTime
-  discoveredAtGT: DateTime
-  discoveredAtGTE: DateTime
-  discoveredAtLT: DateTime
-  discoveredAtLTE: DateTime
-  discoveredAtIsNil: Boolean
-  discoveredAtNotNil: Boolean
 }
 type FindingHistory implements Node {
   id: ID!
@@ -31443,6 +26477,10 @@ type FindingHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -31870,102 +26908,6 @@ input FindingHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -31979,647 +26921,6 @@ input FindingHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  internal_owner field predicates
-  """
-  internalOwner: String
-  internalOwnerNEQ: String
-  internalOwnerIn: [String!]
-  internalOwnerNotIn: [String!]
-  internalOwnerContains: String
-  internalOwnerHasPrefix: String
-  internalOwnerHasSuffix: String
-  internalOwnerIsNil: Boolean
-  internalOwnerNotNil: Boolean
-  internalOwnerEqualFold: String
-  internalOwnerContainsFold: String
-  """
-  internal_owner_user_id field predicates
-  """
-  internalOwnerUserID: String
-  internalOwnerUserIDNEQ: String
-  internalOwnerUserIDIn: [String!]
-  internalOwnerUserIDNotIn: [String!]
-  internalOwnerUserIDContains: String
-  internalOwnerUserIDHasPrefix: String
-  internalOwnerUserIDHasSuffix: String
-  internalOwnerUserIDIsNil: Boolean
-  internalOwnerUserIDNotNil: Boolean
-  internalOwnerUserIDEqualFold: String
-  internalOwnerUserIDContainsFold: String
-  """
-  internal_owner_group_id field predicates
-  """
-  internalOwnerGroupID: String
-  internalOwnerGroupIDNEQ: String
-  internalOwnerGroupIDIn: [String!]
-  internalOwnerGroupIDNotIn: [String!]
-  internalOwnerGroupIDContains: String
-  internalOwnerGroupIDHasPrefix: String
-  internalOwnerGroupIDHasSuffix: String
-  internalOwnerGroupIDIsNil: Boolean
-  internalOwnerGroupIDNotNil: Boolean
-  internalOwnerGroupIDEqualFold: String
-  internalOwnerGroupIDContainsFold: String
-  """
-  internal_owner_identity_holder_id field predicates
-  """
-  internalOwnerIdentityHolderID: String
-  internalOwnerIdentityHolderIDNEQ: String
-  internalOwnerIdentityHolderIDIn: [String!]
-  internalOwnerIdentityHolderIDNotIn: [String!]
-  internalOwnerIdentityHolderIDContains: String
-  internalOwnerIdentityHolderIDHasPrefix: String
-  internalOwnerIdentityHolderIDHasSuffix: String
-  internalOwnerIdentityHolderIDIsNil: Boolean
-  internalOwnerIdentityHolderIDNotNil: Boolean
-  internalOwnerIdentityHolderIDEqualFold: String
-  internalOwnerIdentityHolderIDContainsFold: String
-  """
-  reviewed_by field predicates
-  """
-  reviewedBy: String
-  reviewedByNEQ: String
-  reviewedByIn: [String!]
-  reviewedByNotIn: [String!]
-  reviewedByContains: String
-  reviewedByHasPrefix: String
-  reviewedByHasSuffix: String
-  reviewedByIsNil: Boolean
-  reviewedByNotNil: Boolean
-  reviewedByEqualFold: String
-  reviewedByContainsFold: String
-  """
-  reviewed_by_user_id field predicates
-  """
-  reviewedByUserID: String
-  reviewedByUserIDNEQ: String
-  reviewedByUserIDIn: [String!]
-  reviewedByUserIDNotIn: [String!]
-  reviewedByUserIDContains: String
-  reviewedByUserIDHasPrefix: String
-  reviewedByUserIDHasSuffix: String
-  reviewedByUserIDIsNil: Boolean
-  reviewedByUserIDNotNil: Boolean
-  reviewedByUserIDEqualFold: String
-  reviewedByUserIDContainsFold: String
-  """
-  reviewed_by_group_id field predicates
-  """
-  reviewedByGroupID: String
-  reviewedByGroupIDNEQ: String
-  reviewedByGroupIDIn: [String!]
-  reviewedByGroupIDNotIn: [String!]
-  reviewedByGroupIDContains: String
-  reviewedByGroupIDHasPrefix: String
-  reviewedByGroupIDHasSuffix: String
-  reviewedByGroupIDIsNil: Boolean
-  reviewedByGroupIDNotNil: Boolean
-  reviewedByGroupIDEqualFold: String
-  reviewedByGroupIDContainsFold: String
-  """
-  reviewed_by_identity_holder_id field predicates
-  """
-  reviewedByIdentityHolderID: String
-  reviewedByIdentityHolderIDNEQ: String
-  reviewedByIdentityHolderIDIn: [String!]
-  reviewedByIdentityHolderIDNotIn: [String!]
-  reviewedByIdentityHolderIDContains: String
-  reviewedByIdentityHolderIDHasPrefix: String
-  reviewedByIdentityHolderIDHasSuffix: String
-  reviewedByIdentityHolderIDIsNil: Boolean
-  reviewedByIdentityHolderIDNotNil: Boolean
-  reviewedByIdentityHolderIDEqualFold: String
-  reviewedByIdentityHolderIDContainsFold: String
-  """
-  assigned_to field predicates
-  """
-  assignedTo: String
-  assignedToNEQ: String
-  assignedToIn: [String!]
-  assignedToNotIn: [String!]
-  assignedToContains: String
-  assignedToHasPrefix: String
-  assignedToHasSuffix: String
-  assignedToIsNil: Boolean
-  assignedToNotNil: Boolean
-  assignedToEqualFold: String
-  assignedToContainsFold: String
-  """
-  assigned_to_user_id field predicates
-  """
-  assignedToUserID: String
-  assignedToUserIDNEQ: String
-  assignedToUserIDIn: [String!]
-  assignedToUserIDNotIn: [String!]
-  assignedToUserIDContains: String
-  assignedToUserIDHasPrefix: String
-  assignedToUserIDHasSuffix: String
-  assignedToUserIDIsNil: Boolean
-  assignedToUserIDNotNil: Boolean
-  assignedToUserIDEqualFold: String
-  assignedToUserIDContainsFold: String
-  """
-  assigned_to_group_id field predicates
-  """
-  assignedToGroupID: String
-  assignedToGroupIDNEQ: String
-  assignedToGroupIDIn: [String!]
-  assignedToGroupIDNotIn: [String!]
-  assignedToGroupIDContains: String
-  assignedToGroupIDHasPrefix: String
-  assignedToGroupIDHasSuffix: String
-  assignedToGroupIDIsNil: Boolean
-  assignedToGroupIDNotNil: Boolean
-  assignedToGroupIDEqualFold: String
-  assignedToGroupIDContainsFold: String
-  """
-  assigned_to_identity_holder_id field predicates
-  """
-  assignedToIdentityHolderID: String
-  assignedToIdentityHolderIDNEQ: String
-  assignedToIdentityHolderIDIn: [String!]
-  assignedToIdentityHolderIDNotIn: [String!]
-  assignedToIdentityHolderIDContains: String
-  assignedToIdentityHolderIDHasPrefix: String
-  assignedToIdentityHolderIDHasSuffix: String
-  assignedToIdentityHolderIDIsNil: Boolean
-  assignedToIdentityHolderIDNotNil: Boolean
-  assignedToIdentityHolderIDEqualFold: String
-  assignedToIdentityHolderIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  finding_status_name field predicates
-  """
-  findingStatusName: String
-  findingStatusNameNEQ: String
-  findingStatusNameIn: [String!]
-  findingStatusNameNotIn: [String!]
-  findingStatusNameContains: String
-  findingStatusNameHasPrefix: String
-  findingStatusNameHasSuffix: String
-  findingStatusNameIsNil: Boolean
-  findingStatusNameNotNil: Boolean
-  findingStatusNameEqualFold: String
-  findingStatusNameContainsFold: String
-  """
-  finding_status_id field predicates
-  """
-  findingStatusID: String
-  findingStatusIDNEQ: String
-  findingStatusIDIn: [String!]
-  findingStatusIDNotIn: [String!]
-  findingStatusIDContains: String
-  findingStatusIDHasPrefix: String
-  findingStatusIDHasSuffix: String
-  findingStatusIDIsNil: Boolean
-  findingStatusIDNotNil: Boolean
-  findingStatusIDEqualFold: String
-  findingStatusIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  security_level field predicates
-  """
-  securityLevel: FindingHistorySecurityLevel
-  securityLevelNEQ: FindingHistorySecurityLevel
-  securityLevelIn: [FindingHistorySecurityLevel!]
-  securityLevelNotIn: [FindingHistorySecurityLevel!]
-  securityLevelIsNil: Boolean
-  securityLevelNotNil: Boolean
-  """
-  external_owner_id field predicates
-  """
-  externalOwnerID: String
-  externalOwnerIDNEQ: String
-  externalOwnerIDIn: [String!]
-  externalOwnerIDNotIn: [String!]
-  externalOwnerIDContains: String
-  externalOwnerIDHasPrefix: String
-  externalOwnerIDHasSuffix: String
-  externalOwnerIDIsNil: Boolean
-  externalOwnerIDNotNil: Boolean
-  externalOwnerIDEqualFold: String
-  externalOwnerIDContainsFold: String
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
-  """
-  resource_name field predicates
-  """
-  resourceName: String
-  resourceNameNEQ: String
-  resourceNameIn: [String!]
-  resourceNameNotIn: [String!]
-  resourceNameContains: String
-  resourceNameHasPrefix: String
-  resourceNameHasSuffix: String
-  resourceNameIsNil: Boolean
-  resourceNameNotNil: Boolean
-  resourceNameEqualFold: String
-  resourceNameContainsFold: String
-  """
-  display_name field predicates
-  """
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameIsNil: Boolean
-  displayNameNotNil: Boolean
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """
-  state field predicates
-  """
-  state: String
-  stateNEQ: String
-  stateIn: [String!]
-  stateNotIn: [String!]
-  stateContains: String
-  stateHasPrefix: String
-  stateHasSuffix: String
-  stateIsNil: Boolean
-  stateNotNil: Boolean
-  stateEqualFold: String
-  stateContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
-  """
-  finding_class field predicates
-  """
-  findingClass: String
-  findingClassNEQ: String
-  findingClassIn: [String!]
-  findingClassNotIn: [String!]
-  findingClassContains: String
-  findingClassHasPrefix: String
-  findingClassHasSuffix: String
-  findingClassIsNil: Boolean
-  findingClassNotNil: Boolean
-  findingClassEqualFold: String
-  findingClassContainsFold: String
-  """
-  severity field predicates
-  """
-  severity: String
-  severityNEQ: String
-  severityIn: [String!]
-  severityNotIn: [String!]
-  severityContains: String
-  severityHasPrefix: String
-  severityHasSuffix: String
-  severityIsNil: Boolean
-  severityNotNil: Boolean
-  severityEqualFold: String
-  severityContainsFold: String
-  """
-  numeric_severity field predicates
-  """
-  numericSeverity: Float
-  numericSeverityNEQ: Float
-  numericSeverityIn: [Float!]
-  numericSeverityNotIn: [Float!]
-  numericSeverityGT: Float
-  numericSeverityGTE: Float
-  numericSeverityLT: Float
-  numericSeverityLTE: Float
-  numericSeverityIsNil: Boolean
-  numericSeverityNotNil: Boolean
-  """
-  score field predicates
-  """
-  score: Float
-  scoreNEQ: Float
-  scoreIn: [Float!]
-  scoreNotIn: [Float!]
-  scoreGT: Float
-  scoreGTE: Float
-  scoreLT: Float
-  scoreLTE: Float
-  scoreIsNil: Boolean
-  scoreNotNil: Boolean
-  """
-  impact field predicates
-  """
-  impact: Float
-  impactNEQ: Float
-  impactIn: [Float!]
-  impactNotIn: [Float!]
-  impactGT: Float
-  impactGTE: Float
-  impactLT: Float
-  impactLTE: Float
-  impactIsNil: Boolean
-  impactNotNil: Boolean
-  """
-  exploitability field predicates
-  """
-  exploitability: Float
-  exploitabilityNEQ: Float
-  exploitabilityIn: [Float!]
-  exploitabilityNotIn: [Float!]
-  exploitabilityGT: Float
-  exploitabilityGTE: Float
-  exploitabilityLT: Float
-  exploitabilityLTE: Float
-  exploitabilityIsNil: Boolean
-  exploitabilityNotNil: Boolean
-  """
-  priority field predicates
-  """
-  priority: String
-  priorityNEQ: String
-  priorityIn: [String!]
-  priorityNotIn: [String!]
-  priorityContains: String
-  priorityHasPrefix: String
-  priorityHasSuffix: String
-  priorityIsNil: Boolean
-  priorityNotNil: Boolean
-  priorityEqualFold: String
-  priorityContainsFold: String
-  """
-  open field predicates
-  """
-  open: Boolean
-  openNEQ: Boolean
-  openIsNil: Boolean
-  openNotNil: Boolean
-  """
-  blocks_production field predicates
-  """
-  blocksProduction: Boolean
-  blocksProductionNEQ: Boolean
-  blocksProductionIsNil: Boolean
-  blocksProductionNotNil: Boolean
-  """
-  production field predicates
-  """
-  production: Boolean
-  productionNEQ: Boolean
-  productionIsNil: Boolean
-  productionNotNil: Boolean
-  """
-  public field predicates
-  """
-  public: Boolean
-  publicNEQ: Boolean
-  publicIsNil: Boolean
-  publicNotNil: Boolean
-  """
-  validated field predicates
-  """
-  validated: Boolean
-  validatedNEQ: Boolean
-  validatedIsNil: Boolean
-  validatedNotNil: Boolean
-  """
-  assessment_id field predicates
-  """
-  assessmentID: String
-  assessmentIDNEQ: String
-  assessmentIDIn: [String!]
-  assessmentIDNotIn: [String!]
-  assessmentIDContains: String
-  assessmentIDHasPrefix: String
-  assessmentIDHasSuffix: String
-  assessmentIDIsNil: Boolean
-  assessmentIDNotNil: Boolean
-  assessmentIDEqualFold: String
-  assessmentIDContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  recommendation field predicates
-  """
-  recommendation: String
-  recommendationNEQ: String
-  recommendationIn: [String!]
-  recommendationNotIn: [String!]
-  recommendationContains: String
-  recommendationHasPrefix: String
-  recommendationHasSuffix: String
-  recommendationIsNil: Boolean
-  recommendationNotNil: Boolean
-  recommendationEqualFold: String
-  recommendationContainsFold: String
-  """
-  recommended_actions field predicates
-  """
-  recommendedActions: String
-  recommendedActionsNEQ: String
-  recommendedActionsIn: [String!]
-  recommendedActionsNotIn: [String!]
-  recommendedActionsContains: String
-  recommendedActionsHasPrefix: String
-  recommendedActionsHasSuffix: String
-  recommendedActionsIsNil: Boolean
-  recommendedActionsNotNil: Boolean
-  recommendedActionsEqualFold: String
-  recommendedActionsContainsFold: String
-  """
-  vector field predicates
-  """
-  vector: String
-  vectorNEQ: String
-  vectorIn: [String!]
-  vectorNotIn: [String!]
-  vectorContains: String
-  vectorHasPrefix: String
-  vectorHasSuffix: String
-  vectorIsNil: Boolean
-  vectorNotNil: Boolean
-  vectorEqualFold: String
-  vectorContainsFold: String
-  """
-  remediation_sla field predicates
-  """
-  remediationSLA: Int
-  remediationSLANEQ: Int
-  remediationSLAGT: Int
-  remediationSLAGTE: Int
-  remediationSLALT: Int
-  remediationSLALTE: Int
-  remediationSLAIsNil: Boolean
-  remediationSLANotNil: Boolean
-  """
-  event_time field predicates
-  """
-  eventTime: DateTime
-  eventTimeGT: DateTime
-  eventTimeGTE: DateTime
-  eventTimeLT: DateTime
-  eventTimeLTE: DateTime
-  eventTimeIsNil: Boolean
-  eventTimeNotNil: Boolean
-  """
-  reported_at field predicates
-  """
-  reportedAt: DateTime
-  reportedAtGT: DateTime
-  reportedAtGTE: DateTime
-  reportedAtLT: DateTime
-  reportedAtLTE: DateTime
-  reportedAtIsNil: Boolean
-  reportedAtNotNil: Boolean
-  """
-  source_updated_at field predicates
-  """
-  sourceUpdatedAt: DateTime
-  sourceUpdatedAtGT: DateTime
-  sourceUpdatedAtGTE: DateTime
-  sourceUpdatedAtLT: DateTime
-  sourceUpdatedAtLTE: DateTime
-  sourceUpdatedAtIsNil: Boolean
-  sourceUpdatedAtNotNil: Boolean
-  """
-  external_uri field predicates
-  """
-  externalURI: String
-  externalURINEQ: String
-  externalURIIn: [String!]
-  externalURINotIn: [String!]
-  externalURIContains: String
-  externalURIHasPrefix: String
-  externalURIHasSuffix: String
-  externalURIIsNil: Boolean
-  externalURINotNil: Boolean
-  externalURIEqualFold: String
-  externalURIContainsFold: String
 }
 type GroupHistory implements Node {
   id: ID!
@@ -32662,6 +26963,10 @@ type GroupHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -32898,102 +27203,6 @@ input GroupHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -33007,128 +27216,6 @@ input GroupHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  is_managed field predicates
-  """
-  isManaged: Boolean
-  isManagedNEQ: Boolean
-  isManagedIsNil: Boolean
-  isManagedNotNil: Boolean
-  """
-  avatar_local_file_id field predicates
-  """
-  avatarLocalFileID: String
-  avatarLocalFileIDNEQ: String
-  avatarLocalFileIDIn: [String!]
-  avatarLocalFileIDNotIn: [String!]
-  avatarLocalFileIDContains: String
-  avatarLocalFileIDHasPrefix: String
-  avatarLocalFileIDHasSuffix: String
-  avatarLocalFileIDIsNil: Boolean
-  avatarLocalFileIDNotNil: Boolean
-  avatarLocalFileIDEqualFold: String
-  avatarLocalFileIDContainsFold: String
-  """
-  display_name field predicates
-  """
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """
-  oscal_role field predicates
-  """
-  oscalRole: String
-  oscalRoleNEQ: String
-  oscalRoleIn: [String!]
-  oscalRoleNotIn: [String!]
-  oscalRoleContains: String
-  oscalRoleHasPrefix: String
-  oscalRoleHasSuffix: String
-  oscalRoleIsNil: Boolean
-  oscalRoleNotNil: Boolean
-  oscalRoleEqualFold: String
-  oscalRoleContainsFold: String
-  """
-  oscal_party_uuid field predicates
-  """
-  oscalPartyUUID: String
-  oscalPartyUUIDNEQ: String
-  oscalPartyUUIDIn: [String!]
-  oscalPartyUUIDNotIn: [String!]
-  oscalPartyUUIDContains: String
-  oscalPartyUUIDHasPrefix: String
-  oscalPartyUUIDHasSuffix: String
-  oscalPartyUUIDIsNil: Boolean
-  oscalPartyUUIDNotNil: Boolean
-  oscalPartyUUIDEqualFold: String
-  oscalPartyUUIDContainsFold: String
-  """
-  scim_external_id field predicates
-  """
-  scimExternalID: String
-  scimExternalIDNEQ: String
-  scimExternalIDIn: [String!]
-  scimExternalIDNotIn: [String!]
-  scimExternalIDContains: String
-  scimExternalIDHasPrefix: String
-  scimExternalIDHasSuffix: String
-  scimExternalIDIsNil: Boolean
-  scimExternalIDNotNil: Boolean
-  scimExternalIDEqualFold: String
-  scimExternalIDContainsFold: String
-  """
-  scim_display_name field predicates
-  """
-  scimDisplayName: String
-  scimDisplayNameNEQ: String
-  scimDisplayNameIn: [String!]
-  scimDisplayNameNotIn: [String!]
-  scimDisplayNameContains: String
-  scimDisplayNameHasPrefix: String
-  scimDisplayNameHasSuffix: String
-  scimDisplayNameIsNil: Boolean
-  scimDisplayNameNotNil: Boolean
-  scimDisplayNameEqualFold: String
-  scimDisplayNameContainsFold: String
-  """
-  scim_active field predicates
-  """
-  scimActive: Boolean
-  scimActiveNEQ: Boolean
-  scimActiveIsNil: Boolean
-  scimActiveNotNil: Boolean
-  """
-  scim_group_mailing field predicates
-  """
-  scimGroupMailing: String
-  scimGroupMailingNEQ: String
-  scimGroupMailingIn: [String!]
-  scimGroupMailingNotIn: [String!]
-  scimGroupMailingContains: String
-  scimGroupMailingHasPrefix: String
-  scimGroupMailingHasSuffix: String
-  scimGroupMailingIsNil: Boolean
-  scimGroupMailingNotNil: Boolean
-  scimGroupMailingEqualFold: String
-  scimGroupMailingContainsFold: String
 }
 type GroupMembershipHistory implements Node {
   id: ID!
@@ -33322,37 +27409,6 @@ input GroupMembershipHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  role field predicates
-  """
-  role: GroupMembershipHistoryRole
-  roleNEQ: GroupMembershipHistoryRole
-  roleIn: [GroupMembershipHistoryRole!]
-  roleNotIn: [GroupMembershipHistoryRole!]
-  """
-  group_id field predicates
-  """
-  groupID: String
-  groupIDNEQ: String
-  groupIDIn: [String!]
-  groupIDNotIn: [String!]
-  groupIDContains: String
-  groupIDHasPrefix: String
-  groupIDHasSuffix: String
-  groupIDEqualFold: String
-  groupIDContainsFold: String
-  """
-  user_id field predicates
-  """
-  userID: String
-  userIDNEQ: String
-  userIDIn: [String!]
-  userIDNotIn: [String!]
-  userIDContains: String
-  userIDHasPrefix: String
-  userIDHasSuffix: String
-  userIDEqualFold: String
-  userIDContainsFold: String
 }
 type GroupSettingHistory implements Node {
   id: ID!
@@ -33571,48 +27627,6 @@ input GroupSettingHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  visibility field predicates
-  """
-  visibility: GroupSettingHistoryVisibility
-  visibilityNEQ: GroupSettingHistoryVisibility
-  visibilityIn: [GroupSettingHistoryVisibility!]
-  visibilityNotIn: [GroupSettingHistoryVisibility!]
-  """
-  join_policy field predicates
-  """
-  joinPolicy: GroupSettingHistoryJoinPolicy
-  joinPolicyNEQ: GroupSettingHistoryJoinPolicy
-  joinPolicyIn: [GroupSettingHistoryJoinPolicy!]
-  joinPolicyNotIn: [GroupSettingHistoryJoinPolicy!]
-  """
-  sync_to_slack field predicates
-  """
-  syncToSlack: Boolean
-  syncToSlackNEQ: Boolean
-  syncToSlackIsNil: Boolean
-  syncToSlackNotNil: Boolean
-  """
-  sync_to_github field predicates
-  """
-  syncToGithub: Boolean
-  syncToGithubNEQ: Boolean
-  syncToGithubIsNil: Boolean
-  syncToGithubNotNil: Boolean
-  """
-  group_id field predicates
-  """
-  groupID: String
-  groupIDNEQ: String
-  groupIDIn: [String!]
-  groupIDNotIn: [String!]
-  groupIDContains: String
-  groupIDHasPrefix: String
-  groupIDHasSuffix: String
-  groupIDIsNil: Boolean
-  groupIDNotNil: Boolean
-  groupIDEqualFold: String
-  groupIDContainsFold: String
 }
 type HushHistory implements Node {
   id: ID!
@@ -33854,101 +27868,6 @@ input HushHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  kind field predicates
-  """
-  kind: String
-  kindNEQ: String
-  kindIn: [String!]
-  kindNotIn: [String!]
-  kindContains: String
-  kindHasPrefix: String
-  kindHasSuffix: String
-  kindIsNil: Boolean
-  kindNotNil: Boolean
-  kindEqualFold: String
-  kindContainsFold: String
-  """
-  secret_name field predicates
-  """
-  secretName: String
-  secretNameNEQ: String
-  secretNameIn: [String!]
-  secretNameNotIn: [String!]
-  secretNameContains: String
-  secretNameHasPrefix: String
-  secretNameHasSuffix: String
-  secretNameIsNil: Boolean
-  secretNameNotNil: Boolean
-  secretNameEqualFold: String
-  secretNameContainsFold: String
-  """
-  last_used_at field predicates
-  """
-  lastUsedAt: Time
-  lastUsedAtGT: Time
-  lastUsedAtGTE: Time
-  lastUsedAtLT: Time
-  lastUsedAtLTE: Time
-  lastUsedAtIsNil: Boolean
-  lastUsedAtNotNil: Boolean
-  """
-  expires_at field predicates
-  """
-  expiresAt: Time
-  expiresAtGT: Time
-  expiresAtGTE: Time
-  expiresAtLT: Time
-  expiresAtLTE: Time
-  expiresAtIsNil: Boolean
-  expiresAtNotNil: Boolean
 }
 type IdentityHolderHistory implements Node {
   id: ID!
@@ -33991,6 +27910,10 @@ type IdentityHolderHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -34327,102 +28250,6 @@ input IdentityHolderHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -34436,349 +28263,6 @@ input IdentityHolderHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  internal_owner field predicates
-  """
-  internalOwner: String
-  internalOwnerNEQ: String
-  internalOwnerIn: [String!]
-  internalOwnerNotIn: [String!]
-  internalOwnerContains: String
-  internalOwnerHasPrefix: String
-  internalOwnerHasSuffix: String
-  internalOwnerIsNil: Boolean
-  internalOwnerNotNil: Boolean
-  internalOwnerEqualFold: String
-  internalOwnerContainsFold: String
-  """
-  internal_owner_user_id field predicates
-  """
-  internalOwnerUserID: String
-  internalOwnerUserIDNEQ: String
-  internalOwnerUserIDIn: [String!]
-  internalOwnerUserIDNotIn: [String!]
-  internalOwnerUserIDContains: String
-  internalOwnerUserIDHasPrefix: String
-  internalOwnerUserIDHasSuffix: String
-  internalOwnerUserIDIsNil: Boolean
-  internalOwnerUserIDNotNil: Boolean
-  internalOwnerUserIDEqualFold: String
-  internalOwnerUserIDContainsFold: String
-  """
-  internal_owner_group_id field predicates
-  """
-  internalOwnerGroupID: String
-  internalOwnerGroupIDNEQ: String
-  internalOwnerGroupIDIn: [String!]
-  internalOwnerGroupIDNotIn: [String!]
-  internalOwnerGroupIDContains: String
-  internalOwnerGroupIDHasPrefix: String
-  internalOwnerGroupIDHasSuffix: String
-  internalOwnerGroupIDIsNil: Boolean
-  internalOwnerGroupIDNotNil: Boolean
-  internalOwnerGroupIDEqualFold: String
-  internalOwnerGroupIDContainsFold: String
-  """
-  internal_owner_identity_holder_id field predicates
-  """
-  internalOwnerIdentityHolderID: String
-  internalOwnerIdentityHolderIDNEQ: String
-  internalOwnerIdentityHolderIDIn: [String!]
-  internalOwnerIdentityHolderIDNotIn: [String!]
-  internalOwnerIdentityHolderIDContains: String
-  internalOwnerIdentityHolderIDHasPrefix: String
-  internalOwnerIdentityHolderIDHasSuffix: String
-  internalOwnerIdentityHolderIDIsNil: Boolean
-  internalOwnerIdentityHolderIDNotNil: Boolean
-  internalOwnerIdentityHolderIDEqualFold: String
-  internalOwnerIdentityHolderIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  full_name field predicates
-  """
-  fullName: String
-  fullNameNEQ: String
-  fullNameIn: [String!]
-  fullNameNotIn: [String!]
-  fullNameContains: String
-  fullNameHasPrefix: String
-  fullNameHasSuffix: String
-  fullNameEqualFold: String
-  fullNameContainsFold: String
-  """
-  email field predicates
-  """
-  email: String
-  emailNEQ: String
-  emailIn: [String!]
-  emailNotIn: [String!]
-  emailContains: String
-  emailHasPrefix: String
-  emailHasSuffix: String
-  emailEqualFold: String
-  emailContainsFold: String
-  """
-  alternate_email field predicates
-  """
-  alternateEmail: String
-  alternateEmailNEQ: String
-  alternateEmailIn: [String!]
-  alternateEmailNotIn: [String!]
-  alternateEmailContains: String
-  alternateEmailHasPrefix: String
-  alternateEmailHasSuffix: String
-  alternateEmailIsNil: Boolean
-  alternateEmailNotNil: Boolean
-  alternateEmailEqualFold: String
-  alternateEmailContainsFold: String
-  """
-  phone_number field predicates
-  """
-  phoneNumber: String
-  phoneNumberNEQ: String
-  phoneNumberIn: [String!]
-  phoneNumberNotIn: [String!]
-  phoneNumberContains: String
-  phoneNumberHasPrefix: String
-  phoneNumberHasSuffix: String
-  phoneNumberIsNil: Boolean
-  phoneNumberNotNil: Boolean
-  phoneNumberEqualFold: String
-  phoneNumberContainsFold: String
-  """
-  is_openlane_user field predicates
-  """
-  isOpenlaneUser: Boolean
-  isOpenlaneUserNEQ: Boolean
-  isOpenlaneUserIsNil: Boolean
-  isOpenlaneUserNotNil: Boolean
-  """
-  user_id field predicates
-  """
-  userID: String
-  userIDNEQ: String
-  userIDIn: [String!]
-  userIDNotIn: [String!]
-  userIDContains: String
-  userIDHasPrefix: String
-  userIDHasSuffix: String
-  userIDIsNil: Boolean
-  userIDNotNil: Boolean
-  userIDEqualFold: String
-  userIDContainsFold: String
-  """
-  identity_holder_type field predicates
-  """
-  identityHolderType: IdentityHolderHistoryIdentityHolderType
-  identityHolderTypeNEQ: IdentityHolderHistoryIdentityHolderType
-  identityHolderTypeIn: [IdentityHolderHistoryIdentityHolderType!]
-  identityHolderTypeNotIn: [IdentityHolderHistoryIdentityHolderType!]
-  """
-  status field predicates
-  """
-  status: IdentityHolderHistoryUserStatus
-  statusNEQ: IdentityHolderHistoryUserStatus
-  statusIn: [IdentityHolderHistoryUserStatus!]
-  statusNotIn: [IdentityHolderHistoryUserStatus!]
-  """
-  is_active field predicates
-  """
-  isActive: Boolean
-  isActiveNEQ: Boolean
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleIsNil: Boolean
-  titleNotNil: Boolean
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  department field predicates
-  """
-  department: String
-  departmentNEQ: String
-  departmentIn: [String!]
-  departmentNotIn: [String!]
-  departmentContains: String
-  departmentHasPrefix: String
-  departmentHasSuffix: String
-  departmentIsNil: Boolean
-  departmentNotNil: Boolean
-  departmentEqualFold: String
-  departmentContainsFold: String
-  """
-  team field predicates
-  """
-  team: String
-  teamNEQ: String
-  teamIn: [String!]
-  teamNotIn: [String!]
-  teamContains: String
-  teamHasPrefix: String
-  teamHasSuffix: String
-  teamIsNil: Boolean
-  teamNotNil: Boolean
-  teamEqualFold: String
-  teamContainsFold: String
-  """
-  location field predicates
-  """
-  location: String
-  locationNEQ: String
-  locationIn: [String!]
-  locationNotIn: [String!]
-  locationContains: String
-  locationHasPrefix: String
-  locationHasSuffix: String
-  locationIsNil: Boolean
-  locationNotNil: Boolean
-  locationEqualFold: String
-  locationContainsFold: String
-  """
-  start_date field predicates
-  """
-  startDate: DateTime
-  startDateGT: DateTime
-  startDateGTE: DateTime
-  startDateLT: DateTime
-  startDateLTE: DateTime
-  startDateIsNil: Boolean
-  startDateNotNil: Boolean
-  """
-  end_date field predicates
-  """
-  endDate: DateTime
-  endDateGT: DateTime
-  endDateGTE: DateTime
-  endDateLT: DateTime
-  endDateLTE: DateTime
-  endDateIsNil: Boolean
-  endDateNotNil: Boolean
-  """
-  employer_entity_id field predicates
-  """
-  employerEntityID: String
-  employerEntityIDNEQ: String
-  employerEntityIDIn: [String!]
-  employerEntityIDNotIn: [String!]
-  employerEntityIDContains: String
-  employerEntityIDHasPrefix: String
-  employerEntityIDHasSuffix: String
-  employerEntityIDIsNil: Boolean
-  employerEntityIDNotNil: Boolean
-  employerEntityIDEqualFold: String
-  employerEntityIDContainsFold: String
-  """
-  external_user_id field predicates
-  """
-  externalUserID: String
-  externalUserIDNEQ: String
-  externalUserIDIn: [String!]
-  externalUserIDNotIn: [String!]
-  externalUserIDContains: String
-  externalUserIDHasPrefix: String
-  externalUserIDHasSuffix: String
-  externalUserIDIsNil: Boolean
-  externalUserIDNotNil: Boolean
-  externalUserIDEqualFold: String
-  externalUserIDContainsFold: String
-  """
-  external_reference_id field predicates
-  """
-  externalReferenceID: String
-  externalReferenceIDNEQ: String
-  externalReferenceIDIn: [String!]
-  externalReferenceIDNotIn: [String!]
-  externalReferenceIDContains: String
-  externalReferenceIDHasPrefix: String
-  externalReferenceIDHasSuffix: String
-  externalReferenceIDIsNil: Boolean
-  externalReferenceIDNotNil: Boolean
-  externalReferenceIDEqualFold: String
-  externalReferenceIDContainsFold: String
-  """
-  avatar_remote_url field predicates
-  """
-  avatarRemoteURL: String
-  avatarRemoteURLNEQ: String
-  avatarRemoteURLIn: [String!]
-  avatarRemoteURLNotIn: [String!]
-  avatarRemoteURLContains: String
-  avatarRemoteURLHasPrefix: String
-  avatarRemoteURLHasSuffix: String
-  avatarRemoteURLIsNil: Boolean
-  avatarRemoteURLNotNil: Boolean
-  avatarRemoteURLEqualFold: String
-  avatarRemoteURLContainsFold: String
 }
 type InternalPolicyHistory implements Node {
   id: ID!
@@ -34825,6 +28309,10 @@ type InternalPolicyHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -35165,18 +28653,6 @@ input InternalPolicyHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
   revision field predicates
   """
   revision: String
@@ -35191,90 +28667,6 @@ input InternalPolicyHistoryWhereInput {
   revisionEqualFold: String
   revisionContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -35288,300 +28680,6 @@ input InternalPolicyHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  status field predicates
-  """
-  status: InternalPolicyHistoryDocumentStatus
-  statusNEQ: InternalPolicyHistoryDocumentStatus
-  statusIn: [InternalPolicyHistoryDocumentStatus!]
-  statusNotIn: [InternalPolicyHistoryDocumentStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  management_mode field predicates
-  """
-  managementMode: InternalPolicyHistoryDocumentManagementMode
-  managementModeNEQ: InternalPolicyHistoryDocumentManagementMode
-  managementModeIn: [InternalPolicyHistoryDocumentManagementMode!]
-  managementModeNotIn: [InternalPolicyHistoryDocumentManagementMode!]
-  managementModeIsNil: Boolean
-  managementModeNotNil: Boolean
-  """
-  details field predicates
-  """
-  details: String
-  detailsNEQ: String
-  detailsIn: [String!]
-  detailsNotIn: [String!]
-  detailsContains: String
-  detailsHasPrefix: String
-  detailsHasSuffix: String
-  detailsIsNil: Boolean
-  detailsNotNil: Boolean
-  detailsEqualFold: String
-  detailsContainsFold: String
-  """
-  approval_required field predicates
-  """
-  approvalRequired: Boolean
-  approvalRequiredNEQ: Boolean
-  approvalRequiredIsNil: Boolean
-  approvalRequiredNotNil: Boolean
-  """
-  review_due field predicates
-  """
-  reviewDue: Time
-  reviewDueGT: Time
-  reviewDueGTE: Time
-  reviewDueLT: Time
-  reviewDueLTE: Time
-  reviewDueIsNil: Boolean
-  reviewDueNotNil: Boolean
-  """
-  review_frequency field predicates
-  """
-  reviewFrequency: InternalPolicyHistoryFrequency
-  reviewFrequencyNEQ: InternalPolicyHistoryFrequency
-  reviewFrequencyIn: [InternalPolicyHistoryFrequency!]
-  reviewFrequencyNotIn: [InternalPolicyHistoryFrequency!]
-  reviewFrequencyIsNil: Boolean
-  reviewFrequencyNotNil: Boolean
-  """
-  approver_id field predicates
-  """
-  approverID: String
-  approverIDNEQ: String
-  approverIDIn: [String!]
-  approverIDNotIn: [String!]
-  approverIDContains: String
-  approverIDHasPrefix: String
-  approverIDHasSuffix: String
-  approverIDIsNil: Boolean
-  approverIDNotNil: Boolean
-  approverIDEqualFold: String
-  approverIDContainsFold: String
-  """
-  delegate_id field predicates
-  """
-  delegateID: String
-  delegateIDNEQ: String
-  delegateIDIn: [String!]
-  delegateIDNotIn: [String!]
-  delegateIDContains: String
-  delegateIDHasPrefix: String
-  delegateIDHasSuffix: String
-  delegateIDIsNil: Boolean
-  delegateIDNotNil: Boolean
-  delegateIDEqualFold: String
-  delegateIDContainsFold: String
-  """
-  url field predicates
-  """
-  url: String
-  urlNEQ: String
-  urlIn: [String!]
-  urlNotIn: [String!]
-  urlContains: String
-  urlHasPrefix: String
-  urlHasSuffix: String
-  urlIsNil: Boolean
-  urlNotNil: Boolean
-  urlEqualFold: String
-  urlContainsFold: String
-  """
-  file_id field predicates
-  """
-  fileID: String
-  fileIDNEQ: String
-  fileIDIn: [String!]
-  fileIDNotIn: [String!]
-  fileIDContains: String
-  fileIDHasPrefix: String
-  fileIDHasSuffix: String
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: String
-  fileIDContainsFold: String
-  """
-  external_file_id field predicates
-  """
-  externalFileID: String
-  externalFileIDNEQ: String
-  externalFileIDIn: [String!]
-  externalFileIDNotIn: [String!]
-  externalFileIDContains: String
-  externalFileIDHasPrefix: String
-  externalFileIDHasSuffix: String
-  externalFileIDIsNil: Boolean
-  externalFileIDNotNil: Boolean
-  externalFileIDEqualFold: String
-  externalFileIDContainsFold: String
-  """
-  external_contents field predicates
-  """
-  externalContents: String
-  externalContentsNEQ: String
-  externalContentsIn: [String!]
-  externalContentsNotIn: [String!]
-  externalContentsContains: String
-  externalContentsHasPrefix: String
-  externalContentsHasSuffix: String
-  externalContentsIsNil: Boolean
-  externalContentsNotNil: Boolean
-  externalContentsEqualFold: String
-  externalContentsContainsFold: String
-  """
-  internal_policy_kind_name field predicates
-  """
-  internalPolicyKindName: String
-  internalPolicyKindNameNEQ: String
-  internalPolicyKindNameIn: [String!]
-  internalPolicyKindNameNotIn: [String!]
-  internalPolicyKindNameContains: String
-  internalPolicyKindNameHasPrefix: String
-  internalPolicyKindNameHasSuffix: String
-  internalPolicyKindNameIsNil: Boolean
-  internalPolicyKindNameNotNil: Boolean
-  internalPolicyKindNameEqualFold: String
-  internalPolicyKindNameContainsFold: String
-  """
-  internal_policy_kind_id field predicates
-  """
-  internalPolicyKindID: String
-  internalPolicyKindIDNEQ: String
-  internalPolicyKindIDIn: [String!]
-  internalPolicyKindIDNotIn: [String!]
-  internalPolicyKindIDContains: String
-  internalPolicyKindIDHasPrefix: String
-  internalPolicyKindIDHasSuffix: String
-  internalPolicyKindIDIsNil: Boolean
-  internalPolicyKindIDNotNil: Boolean
-  internalPolicyKindIDEqualFold: String
-  internalPolicyKindIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  external_uuid field predicates
-  """
-  externalUUID: String
-  externalUUIDNEQ: String
-  externalUUIDIn: [String!]
-  externalUUIDNotIn: [String!]
-  externalUUIDContains: String
-  externalUUIDHasPrefix: String
-  externalUUIDHasSuffix: String
-  externalUUIDIsNil: Boolean
-  externalUUIDNotNil: Boolean
-  externalUUIDEqualFold: String
-  externalUUIDContainsFold: String
 }
 """
 The builtin Map type
@@ -35781,30 +28879,6 @@ input MappableDomainHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  zone_id field predicates
-  """
-  zoneID: String
-  zoneIDNEQ: String
-  zoneIDIn: [String!]
-  zoneIDNotIn: [String!]
-  zoneIDContains: String
-  zoneIDHasPrefix: String
-  zoneIDHasSuffix: String
-  zoneIDEqualFold: String
-  zoneIDContainsFold: String
 }
 type MappedControlHistory implements Node {
   id: ID!
@@ -35843,6 +28917,10 @@ type MappedControlHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -36069,125 +29147,6 @@ input MappedControlHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -36201,47 +29160,6 @@ input MappedControlHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  mapping_type field predicates
-  """
-  mappingType: MappedControlHistoryMappingType
-  mappingTypeNEQ: MappedControlHistoryMappingType
-  mappingTypeIn: [MappedControlHistoryMappingType!]
-  mappingTypeNotIn: [MappedControlHistoryMappingType!]
-  """
-  relation field predicates
-  """
-  relation: String
-  relationNEQ: String
-  relationIn: [String!]
-  relationNotIn: [String!]
-  relationContains: String
-  relationHasPrefix: String
-  relationHasSuffix: String
-  relationIsNil: Boolean
-  relationNotNil: Boolean
-  relationEqualFold: String
-  relationContainsFold: String
-  """
-  confidence field predicates
-  """
-  confidence: Int
-  confidenceNEQ: Int
-  confidenceGT: Int
-  confidenceGTE: Int
-  confidenceLT: Int
-  confidenceLTE: Int
-  confidenceIsNil: Boolean
-  confidenceNotNil: Boolean
-  """
-  source field predicates
-  """
-  source: MappedControlHistoryMappingSource
-  sourceNEQ: MappedControlHistoryMappingSource
-  sourceIn: [MappedControlHistoryMappingSource!]
-  sourceNotIn: [MappedControlHistoryMappingSource!]
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
 }
 type NarrativeHistory implements Node {
   id: ID!
@@ -36284,6 +29202,10 @@ type NarrativeHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -36487,102 +29409,6 @@ input NarrativeHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -36596,81 +29422,6 @@ input NarrativeHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  details field predicates
-  """
-  details: String
-  detailsNEQ: String
-  detailsIn: [String!]
-  detailsNotIn: [String!]
-  detailsContains: String
-  detailsHasPrefix: String
-  detailsHasSuffix: String
-  detailsIsNil: Boolean
-  detailsNotNil: Boolean
-  detailsEqualFold: String
-  detailsContainsFold: String
 }
 """
 An object with an ID.
@@ -36908,18 +29659,6 @@ input NoteHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -36933,96 +29672,6 @@ input NoteHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleIsNil: Boolean
-  titleNotNil: Boolean
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  text field predicates
-  """
-  text: String
-  textNEQ: String
-  textIn: [String!]
-  textNotIn: [String!]
-  textContains: String
-  textHasPrefix: String
-  textHasSuffix: String
-  textEqualFold: String
-  textContainsFold: String
-  """
-  note_ref field predicates
-  """
-  noteRef: String
-  noteRefNEQ: String
-  noteRefIn: [String!]
-  noteRefNotIn: [String!]
-  noteRefContains: String
-  noteRefHasPrefix: String
-  noteRefHasSuffix: String
-  noteRefIsNil: Boolean
-  noteRefNotNil: Boolean
-  noteRefEqualFold: String
-  noteRefContainsFold: String
-  """
-  discussion_id field predicates
-  """
-  discussionID: String
-  discussionIDNEQ: String
-  discussionIDIn: [String!]
-  discussionIDNotIn: [String!]
-  discussionIDContains: String
-  discussionIDHasPrefix: String
-  discussionIDHasSuffix: String
-  discussionIDIsNil: Boolean
-  discussionIDNotNil: Boolean
-  discussionIDEqualFold: String
-  discussionIDContainsFold: String
-  """
-  is_edited field predicates
-  """
-  isEdited: Boolean
-  isEditedNEQ: Boolean
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
-  """
-  notify_subscribers field predicates
-  """
-  notifySubscribers: Boolean
-  notifySubscribersNEQ: Boolean
-  notifySubscribersIsNil: Boolean
-  notifySubscribersNotNil: Boolean
-  """
-  notified_at field predicates
-  """
-  notifiedAt: Time
-  notifiedAtGT: Time
-  notifiedAtGTE: Time
-  notifiedAtLT: Time
-  notifiedAtLTE: Time
-  notifiedAtIsNil: Boolean
-  notifiedAtNotNil: Boolean
 }
 type NotificationPreferenceHistory implements Node {
   id: ID!
@@ -37348,186 +29997,6 @@ input NotificationPreferenceHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  user_id field predicates
-  """
-  userID: String
-  userIDNEQ: String
-  userIDIn: [String!]
-  userIDNotIn: [String!]
-  userIDContains: String
-  userIDHasPrefix: String
-  userIDHasSuffix: String
-  userIDEqualFold: String
-  userIDContainsFold: String
-  """
-  channel field predicates
-  """
-  channel: NotificationPreferenceHistoryChannel
-  channelNEQ: NotificationPreferenceHistoryChannel
-  channelIn: [NotificationPreferenceHistoryChannel!]
-  channelNotIn: [NotificationPreferenceHistoryChannel!]
-  """
-  status field predicates
-  """
-  status: NotificationPreferenceHistoryNotificationChannelStatus
-  statusNEQ: NotificationPreferenceHistoryNotificationChannelStatus
-  statusIn: [NotificationPreferenceHistoryNotificationChannelStatus!]
-  statusNotIn: [NotificationPreferenceHistoryNotificationChannelStatus!]
-  """
-  provider field predicates
-  """
-  provider: String
-  providerNEQ: String
-  providerIn: [String!]
-  providerNotIn: [String!]
-  providerContains: String
-  providerHasPrefix: String
-  providerHasSuffix: String
-  providerIsNil: Boolean
-  providerNotNil: Boolean
-  providerEqualFold: String
-  providerContainsFold: String
-  """
-  destination field predicates
-  """
-  destination: String
-  destinationNEQ: String
-  destinationIn: [String!]
-  destinationNotIn: [String!]
-  destinationContains: String
-  destinationHasPrefix: String
-  destinationHasSuffix: String
-  destinationIsNil: Boolean
-  destinationNotNil: Boolean
-  destinationEqualFold: String
-  destinationContainsFold: String
-  """
-  enabled field predicates
-  """
-  enabled: Boolean
-  enabledNEQ: Boolean
-  """
-  cadence field predicates
-  """
-  cadence: NotificationPreferenceHistoryNotificationCadence
-  cadenceNEQ: NotificationPreferenceHistoryNotificationCadence
-  cadenceIn: [NotificationPreferenceHistoryNotificationCadence!]
-  cadenceNotIn: [NotificationPreferenceHistoryNotificationCadence!]
-  """
-  priority field predicates
-  """
-  priority: NotificationPreferenceHistoryPriority
-  priorityNEQ: NotificationPreferenceHistoryPriority
-  priorityIn: [NotificationPreferenceHistoryPriority!]
-  priorityNotIn: [NotificationPreferenceHistoryPriority!]
-  priorityIsNil: Boolean
-  priorityNotNil: Boolean
-  """
-  template_id field predicates
-  """
-  templateID: String
-  templateIDNEQ: String
-  templateIDIn: [String!]
-  templateIDNotIn: [String!]
-  templateIDContains: String
-  templateIDHasPrefix: String
-  templateIDHasSuffix: String
-  templateIDIsNil: Boolean
-  templateIDNotNil: Boolean
-  templateIDEqualFold: String
-  templateIDContainsFold: String
-  """
-  mute_until field predicates
-  """
-  muteUntil: Time
-  muteUntilGT: Time
-  muteUntilGTE: Time
-  muteUntilLT: Time
-  muteUntilLTE: Time
-  muteUntilIsNil: Boolean
-  muteUntilNotNil: Boolean
-  """
-  quiet_hours_start field predicates
-  """
-  quietHoursStart: String
-  quietHoursStartNEQ: String
-  quietHoursStartIn: [String!]
-  quietHoursStartNotIn: [String!]
-  quietHoursStartContains: String
-  quietHoursStartHasPrefix: String
-  quietHoursStartHasSuffix: String
-  quietHoursStartIsNil: Boolean
-  quietHoursStartNotNil: Boolean
-  quietHoursStartEqualFold: String
-  quietHoursStartContainsFold: String
-  """
-  quiet_hours_end field predicates
-  """
-  quietHoursEnd: String
-  quietHoursEndNEQ: String
-  quietHoursEndIn: [String!]
-  quietHoursEndNotIn: [String!]
-  quietHoursEndContains: String
-  quietHoursEndHasPrefix: String
-  quietHoursEndHasSuffix: String
-  quietHoursEndIsNil: Boolean
-  quietHoursEndNotNil: Boolean
-  quietHoursEndEqualFold: String
-  quietHoursEndContainsFold: String
-  """
-  timezone field predicates
-  """
-  timezone: String
-  timezoneNEQ: String
-  timezoneIn: [String!]
-  timezoneNotIn: [String!]
-  timezoneContains: String
-  timezoneHasPrefix: String
-  timezoneHasSuffix: String
-  timezoneIsNil: Boolean
-  timezoneNotNil: Boolean
-  timezoneEqualFold: String
-  timezoneContainsFold: String
-  """
-  is_default field predicates
-  """
-  isDefault: Boolean
-  isDefaultNEQ: Boolean
-  """
-  verified_at field predicates
-  """
-  verifiedAt: Time
-  verifiedAtGT: Time
-  verifiedAtGTE: Time
-  verifiedAtLT: Time
-  verifiedAtLTE: Time
-  verifiedAtIsNil: Boolean
-  verifiedAtNotNil: Boolean
-  """
-  last_used_at field predicates
-  """
-  lastUsedAt: Time
-  lastUsedAtGT: Time
-  lastUsedAtGTE: Time
-  lastUsedAtLT: Time
-  lastUsedAtLTE: Time
-  lastUsedAtIsNil: Boolean
-  lastUsedAtNotNil: Boolean
-  """
-  last_error field predicates
-  """
-  lastError: String
-  lastErrorNEQ: String
-  lastErrorIn: [String!]
-  lastErrorNotIn: [String!]
-  lastErrorContains: String
-  lastErrorHasPrefix: String
-  lastErrorHasSuffix: String
-  lastErrorIsNil: Boolean
-  lastErrorNotNil: Boolean
-  lastErrorEqualFold: String
-  lastErrorContainsFold: String
 }
 type NotificationTemplateHistory implements Node {
   id: ID!
@@ -37882,226 +30351,6 @@ input NotificationTemplateHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  key field predicates
-  """
-  key: String
-  keyNEQ: String
-  keyIn: [String!]
-  keyNotIn: [String!]
-  keyContains: String
-  keyHasPrefix: String
-  keyHasSuffix: String
-  keyEqualFold: String
-  keyContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  channel field predicates
-  """
-  channel: NotificationTemplateHistoryChannel
-  channelNEQ: NotificationTemplateHistoryChannel
-  channelIn: [NotificationTemplateHistoryChannel!]
-  channelNotIn: [NotificationTemplateHistoryChannel!]
-  channelIsNil: Boolean
-  channelNotNil: Boolean
-  """
-  format field predicates
-  """
-  format: NotificationTemplateHistoryNotificationTemplateFormat
-  formatNEQ: NotificationTemplateHistoryNotificationTemplateFormat
-  formatIn: [NotificationTemplateHistoryNotificationTemplateFormat!]
-  formatNotIn: [NotificationTemplateHistoryNotificationTemplateFormat!]
-  """
-  locale field predicates
-  """
-  locale: String
-  localeNEQ: String
-  localeIn: [String!]
-  localeNotIn: [String!]
-  localeContains: String
-  localeHasPrefix: String
-  localeHasSuffix: String
-  localeEqualFold: String
-  localeContainsFold: String
-  """
-  topic_pattern field predicates
-  """
-  topicPattern: String
-  topicPatternNEQ: String
-  topicPatternIn: [String!]
-  topicPatternNotIn: [String!]
-  topicPatternContains: String
-  topicPatternHasPrefix: String
-  topicPatternHasSuffix: String
-  topicPatternEqualFold: String
-  topicPatternContainsFold: String
-  """
-  integration_id field predicates
-  """
-  integrationID: String
-  integrationIDNEQ: String
-  integrationIDIn: [String!]
-  integrationIDNotIn: [String!]
-  integrationIDContains: String
-  integrationIDHasPrefix: String
-  integrationIDHasSuffix: String
-  integrationIDIsNil: Boolean
-  integrationIDNotNil: Boolean
-  integrationIDEqualFold: String
-  integrationIDContainsFold: String
-  """
-  workflow_definition_id field predicates
-  """
-  workflowDefinitionID: String
-  workflowDefinitionIDNEQ: String
-  workflowDefinitionIDIn: [String!]
-  workflowDefinitionIDNotIn: [String!]
-  workflowDefinitionIDContains: String
-  workflowDefinitionIDHasPrefix: String
-  workflowDefinitionIDHasSuffix: String
-  workflowDefinitionIDIsNil: Boolean
-  workflowDefinitionIDNotNil: Boolean
-  workflowDefinitionIDEqualFold: String
-  workflowDefinitionIDContainsFold: String
-  """
-  email_template_id field predicates
-  """
-  emailTemplateID: String
-  emailTemplateIDNEQ: String
-  emailTemplateIDIn: [String!]
-  emailTemplateIDNotIn: [String!]
-  emailTemplateIDContains: String
-  emailTemplateIDHasPrefix: String
-  emailTemplateIDHasSuffix: String
-  emailTemplateIDIsNil: Boolean
-  emailTemplateIDNotNil: Boolean
-  emailTemplateIDEqualFold: String
-  emailTemplateIDContainsFold: String
-  """
-  title_template field predicates
-  """
-  titleTemplate: String
-  titleTemplateNEQ: String
-  titleTemplateIn: [String!]
-  titleTemplateNotIn: [String!]
-  titleTemplateContains: String
-  titleTemplateHasPrefix: String
-  titleTemplateHasSuffix: String
-  titleTemplateIsNil: Boolean
-  titleTemplateNotNil: Boolean
-  titleTemplateEqualFold: String
-  titleTemplateContainsFold: String
-  """
-  subject_template field predicates
-  """
-  subjectTemplate: String
-  subjectTemplateNEQ: String
-  subjectTemplateIn: [String!]
-  subjectTemplateNotIn: [String!]
-  subjectTemplateContains: String
-  subjectTemplateHasPrefix: String
-  subjectTemplateHasSuffix: String
-  subjectTemplateIsNil: Boolean
-  subjectTemplateNotNil: Boolean
-  subjectTemplateEqualFold: String
-  subjectTemplateContainsFold: String
-  """
-  body_template field predicates
-  """
-  bodyTemplate: String
-  bodyTemplateNEQ: String
-  bodyTemplateIn: [String!]
-  bodyTemplateNotIn: [String!]
-  bodyTemplateContains: String
-  bodyTemplateHasPrefix: String
-  bodyTemplateHasSuffix: String
-  bodyTemplateIsNil: Boolean
-  bodyTemplateNotNil: Boolean
-  bodyTemplateEqualFold: String
-  bodyTemplateContainsFold: String
-  """
-  active field predicates
-  """
-  active: Boolean
-  activeNEQ: Boolean
-  """
-  version field predicates
-  """
-  version: Int
-  versionNEQ: Int
-  versionGT: Int
-  versionGTE: Int
-  versionLT: Int
-  versionLTE: Int
-  """
-  template_context field predicates
-  """
-  templateContext: NotificationTemplateHistoryTemplateContext
-  templateContextNEQ: NotificationTemplateHistoryTemplateContext
-  templateContextIn: [NotificationTemplateHistoryTemplateContext!]
-  templateContextNotIn: [NotificationTemplateHistoryTemplateContext!]
-  templateContextIsNil: Boolean
-  templateContextNotNil: Boolean
 }
 """
 Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument.
@@ -38343,127 +30592,6 @@ input OrgMembershipHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  role field predicates
-  """
-  role: OrgMembershipHistoryRole
-  roleNEQ: OrgMembershipHistoryRole
-  roleIn: [OrgMembershipHistoryRole!]
-  roleNotIn: [OrgMembershipHistoryRole!]
-  """
-  organization_id field predicates
-  """
-  organizationID: String
-  organizationIDNEQ: String
-  organizationIDIn: [String!]
-  organizationIDNotIn: [String!]
-  organizationIDContains: String
-  organizationIDHasPrefix: String
-  organizationIDHasSuffix: String
-  organizationIDEqualFold: String
-  organizationIDContainsFold: String
-  """
-  user_id field predicates
-  """
-  userID: String
-  userIDNEQ: String
-  userIDIn: [String!]
-  userIDNotIn: [String!]
-  userIDContains: String
-  userIDHasPrefix: String
-  userIDHasSuffix: String
-  userIDEqualFold: String
-  userIDContainsFold: String
-  """
-  sso_exempt field predicates
-  """
-  ssoExempt: Boolean
-  ssoExemptNEQ: Boolean
-  ssoExemptIsNil: Boolean
-  ssoExemptNotNil: Boolean
-  """
-  sso_exempt_reason field predicates
-  """
-  ssoExemptReason: String
-  ssoExemptReasonNEQ: String
-  ssoExemptReasonIn: [String!]
-  ssoExemptReasonNotIn: [String!]
-  ssoExemptReasonContains: String
-  ssoExemptReasonHasPrefix: String
-  ssoExemptReasonHasSuffix: String
-  ssoExemptReasonIsNil: Boolean
-  ssoExemptReasonNotNil: Boolean
-  ssoExemptReasonEqualFold: String
-  ssoExemptReasonContainsFold: String
-  """
-  sso_exempt_granted_by field predicates
-  """
-  ssoExemptGrantedBy: String
-  ssoExemptGrantedByNEQ: String
-  ssoExemptGrantedByIn: [String!]
-  ssoExemptGrantedByNotIn: [String!]
-  ssoExemptGrantedByContains: String
-  ssoExemptGrantedByHasPrefix: String
-  ssoExemptGrantedByHasSuffix: String
-  ssoExemptGrantedByIsNil: Boolean
-  ssoExemptGrantedByNotNil: Boolean
-  ssoExemptGrantedByEqualFold: String
-  ssoExemptGrantedByContainsFold: String
-  """
-  sso_exempt_granted_at field predicates
-  """
-  ssoExemptGrantedAt: DateTime
-  ssoExemptGrantedAtGT: DateTime
-  ssoExemptGrantedAtGTE: DateTime
-  ssoExemptGrantedAtLT: DateTime
-  ssoExemptGrantedAtLTE: DateTime
-  ssoExemptGrantedAtIsNil: Boolean
-  ssoExemptGrantedAtNotNil: Boolean
-  """
-  tfa_enforced field predicates
-  """
-  tfaEnforced: Boolean
-  tfaEnforcedNEQ: Boolean
-  tfaEnforcedIsNil: Boolean
-  tfaEnforcedNotNil: Boolean
-  """
-  tfa_enforced_reason field predicates
-  """
-  tfaEnforcedReason: String
-  tfaEnforcedReasonNEQ: String
-  tfaEnforcedReasonIn: [String!]
-  tfaEnforcedReasonNotIn: [String!]
-  tfaEnforcedReasonContains: String
-  tfaEnforcedReasonHasPrefix: String
-  tfaEnforcedReasonHasSuffix: String
-  tfaEnforcedReasonIsNil: Boolean
-  tfaEnforcedReasonNotNil: Boolean
-  tfaEnforcedReasonEqualFold: String
-  tfaEnforcedReasonContainsFold: String
-  """
-  tfa_enforced_by field predicates
-  """
-  tfaEnforcedBy: String
-  tfaEnforcedByNEQ: String
-  tfaEnforcedByIn: [String!]
-  tfaEnforcedByNotIn: [String!]
-  tfaEnforcedByContains: String
-  tfaEnforcedByHasPrefix: String
-  tfaEnforcedByHasSuffix: String
-  tfaEnforcedByIsNil: Boolean
-  tfaEnforcedByNotNil: Boolean
-  tfaEnforcedByEqualFold: String
-  tfaEnforcedByContainsFold: String
-  """
-  tfa_enforced_at field predicates
-  """
-  tfaEnforcedAt: DateTime
-  tfaEnforcedAtGT: DateTime
-  tfaEnforcedAtGTE: DateTime
-  tfaEnforcedAtLT: DateTime
-  tfaEnforcedAtLTE: DateTime
-  tfaEnforcedAtIsNil: Boolean
-  tfaEnforcedAtNotNil: Boolean
 }
 type OrganizationBrandingSettingHistory implements Node {
   id: ID!
@@ -38678,97 +30806,6 @@ input OrganizationBrandingSettingHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  organization_id field predicates
-  """
-  organizationID: String
-  organizationIDNEQ: String
-  organizationIDIn: [String!]
-  organizationIDNotIn: [String!]
-  organizationIDContains: String
-  organizationIDHasPrefix: String
-  organizationIDHasSuffix: String
-  organizationIDIsNil: Boolean
-  organizationIDNotNil: Boolean
-  organizationIDEqualFold: String
-  organizationIDContainsFold: String
-  """
-  remove_assessment_branding field predicates
-  """
-  removeAssessmentBranding: Boolean
-  removeAssessmentBrandingNEQ: Boolean
-  removeAssessmentBrandingIsNil: Boolean
-  removeAssessmentBrandingNotNil: Boolean
-  """
-  primary_color field predicates
-  """
-  primaryColor: String
-  primaryColorNEQ: String
-  primaryColorIn: [String!]
-  primaryColorNotIn: [String!]
-  primaryColorContains: String
-  primaryColorHasPrefix: String
-  primaryColorHasSuffix: String
-  primaryColorIsNil: Boolean
-  primaryColorNotNil: Boolean
-  primaryColorEqualFold: String
-  primaryColorContainsFold: String
-  """
-  secondary_color field predicates
-  """
-  secondaryColor: String
-  secondaryColorNEQ: String
-  secondaryColorIn: [String!]
-  secondaryColorNotIn: [String!]
-  secondaryColorContains: String
-  secondaryColorHasPrefix: String
-  secondaryColorHasSuffix: String
-  secondaryColorIsNil: Boolean
-  secondaryColorNotNil: Boolean
-  secondaryColorEqualFold: String
-  secondaryColorContainsFold: String
-  """
-  background_color field predicates
-  """
-  backgroundColor: String
-  backgroundColorNEQ: String
-  backgroundColorIn: [String!]
-  backgroundColorNotIn: [String!]
-  backgroundColorContains: String
-  backgroundColorHasPrefix: String
-  backgroundColorHasSuffix: String
-  backgroundColorIsNil: Boolean
-  backgroundColorNotNil: Boolean
-  backgroundColorEqualFold: String
-  backgroundColorContainsFold: String
-  """
-  text_color field predicates
-  """
-  textColor: String
-  textColorNEQ: String
-  textColorIn: [String!]
-  textColorNotIn: [String!]
-  textColorContains: String
-  textColorHasPrefix: String
-  textColorHasSuffix: String
-  textColorIsNil: Boolean
-  textColorNotNil: Boolean
-  textColorEqualFold: String
-  textColorContainsFold: String
-  """
-  font_family field predicates
-  """
-  fontFamily: String
-  fontFamilyNEQ: String
-  fontFamilyIn: [String!]
-  fontFamilyNotIn: [String!]
-  fontFamilyContains: String
-  fontFamilyHasPrefix: String
-  fontFamilyHasSuffix: String
-  fontFamilyIsNil: Boolean
-  fontFamilyNotNil: Boolean
-  fontFamilyEqualFold: String
-  fontFamilyContainsFold: String
 }
 type OrganizationHistory implements Node {
   id: ID!
@@ -38993,91 +31030,6 @@ input OrganizationHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  display_name field predicates
-  """
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """
-  parent_organization_id field predicates
-  """
-  parentOrganizationID: ID
-  parentOrganizationIDNEQ: ID
-  parentOrganizationIDIn: [ID!]
-  parentOrganizationIDNotIn: [ID!]
-  parentOrganizationIDContains: ID
-  parentOrganizationIDHasPrefix: ID
-  parentOrganizationIDHasSuffix: ID
-  parentOrganizationIDIsNil: Boolean
-  parentOrganizationIDNotNil: Boolean
-  parentOrganizationIDEqualFold: ID
-  parentOrganizationIDContainsFold: ID
-  """
-  personal_org field predicates
-  """
-  personalOrg: Boolean
-  personalOrgNEQ: Boolean
-  personalOrgIsNil: Boolean
-  personalOrgNotNil: Boolean
-  """
-  avatar_remote_url field predicates
-  """
-  avatarRemoteURL: String
-  avatarRemoteURLNEQ: String
-  avatarRemoteURLIn: [String!]
-  avatarRemoteURLNotIn: [String!]
-  avatarRemoteURLContains: String
-  avatarRemoteURLHasPrefix: String
-  avatarRemoteURLHasSuffix: String
-  avatarRemoteURLIsNil: Boolean
-  avatarRemoteURLNotNil: Boolean
-  avatarRemoteURLEqualFold: String
-  avatarRemoteURLContainsFold: String
-  """
-  avatar_local_file_id field predicates
-  """
-  avatarLocalFileID: String
-  avatarLocalFileIDNEQ: String
-  avatarLocalFileIDIn: [String!]
-  avatarLocalFileIDNotIn: [String!]
-  avatarLocalFileIDContains: String
-  avatarLocalFileIDHasPrefix: String
-  avatarLocalFileIDHasSuffix: String
-  avatarLocalFileIDIsNil: Boolean
-  avatarLocalFileIDNotNil: Boolean
-  avatarLocalFileIDEqualFold: String
-  avatarLocalFileIDContainsFold: String
-  """
-  avatar_updated_at field predicates
-  """
-  avatarUpdatedAt: Time
-  avatarUpdatedAtGT: Time
-  avatarUpdatedAtGTE: Time
-  avatarUpdatedAtLT: Time
-  avatarUpdatedAtLTE: Time
-  avatarUpdatedAtIsNil: Boolean
-  avatarUpdatedAtNotNil: Boolean
-  """
-  slug_name field predicates
-  """
-  slugName: String
-  slugNameNEQ: String
-  slugNameIn: [String!]
-  slugNameNotIn: [String!]
-  slugNameContains: String
-  slugNameHasPrefix: String
-  slugNameHasSuffix: String
-  slugNameIsNil: Boolean
-  slugNameNotNil: Boolean
-  slugNameEqualFold: String
-  slugNameContainsFold: String
 }
 type OrganizationSettingHistory implements Node {
   id: ID!
@@ -39397,248 +31349,6 @@ input OrganizationSettingHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  billing_contact field predicates
-  """
-  billingContact: String
-  billingContactNEQ: String
-  billingContactIn: [String!]
-  billingContactNotIn: [String!]
-  billingContactContains: String
-  billingContactHasPrefix: String
-  billingContactHasSuffix: String
-  billingContactIsNil: Boolean
-  billingContactNotNil: Boolean
-  billingContactEqualFold: String
-  billingContactContainsFold: String
-  """
-  billing_email field predicates
-  """
-  billingEmail: String
-  billingEmailNEQ: String
-  billingEmailIn: [String!]
-  billingEmailNotIn: [String!]
-  billingEmailContains: String
-  billingEmailHasPrefix: String
-  billingEmailHasSuffix: String
-  billingEmailIsNil: Boolean
-  billingEmailNotNil: Boolean
-  billingEmailEqualFold: String
-  billingEmailContainsFold: String
-  """
-  billing_phone field predicates
-  """
-  billingPhone: String
-  billingPhoneNEQ: String
-  billingPhoneIn: [String!]
-  billingPhoneNotIn: [String!]
-  billingPhoneContains: String
-  billingPhoneHasPrefix: String
-  billingPhoneHasSuffix: String
-  billingPhoneIsNil: Boolean
-  billingPhoneNotNil: Boolean
-  billingPhoneEqualFold: String
-  billingPhoneContainsFold: String
-  """
-  tax_identifier field predicates
-  """
-  taxIdentifier: String
-  taxIdentifierNEQ: String
-  taxIdentifierIn: [String!]
-  taxIdentifierNotIn: [String!]
-  taxIdentifierContains: String
-  taxIdentifierHasPrefix: String
-  taxIdentifierHasSuffix: String
-  taxIdentifierIsNil: Boolean
-  taxIdentifierNotNil: Boolean
-  taxIdentifierEqualFold: String
-  taxIdentifierContainsFold: String
-  """
-  geo_location field predicates
-  """
-  geoLocation: OrganizationSettingHistoryRegion
-  geoLocationNEQ: OrganizationSettingHistoryRegion
-  geoLocationIn: [OrganizationSettingHistoryRegion!]
-  geoLocationNotIn: [OrganizationSettingHistoryRegion!]
-  geoLocationIsNil: Boolean
-  geoLocationNotNil: Boolean
-  """
-  organization_id field predicates
-  """
-  organizationID: String
-  organizationIDNEQ: String
-  organizationIDIn: [String!]
-  organizationIDNotIn: [String!]
-  organizationIDContains: String
-  organizationIDHasPrefix: String
-  organizationIDHasSuffix: String
-  organizationIDIsNil: Boolean
-  organizationIDNotNil: Boolean
-  organizationIDEqualFold: String
-  organizationIDContainsFold: String
-  """
-  billing_notifications_enabled field predicates
-  """
-  billingNotificationsEnabled: Boolean
-  billingNotificationsEnabledNEQ: Boolean
-  """
-  allow_matching_domains_autojoin field predicates
-  """
-  allowMatchingDomainsAutojoin: Boolean
-  allowMatchingDomainsAutojoinNEQ: Boolean
-  allowMatchingDomainsAutojoinIsNil: Boolean
-  allowMatchingDomainsAutojoinNotNil: Boolean
-  """
-  identity_provider field predicates
-  """
-  identityProvider: OrganizationSettingHistorySSOProvider
-  identityProviderNEQ: OrganizationSettingHistorySSOProvider
-  identityProviderIn: [OrganizationSettingHistorySSOProvider!]
-  identityProviderNotIn: [OrganizationSettingHistorySSOProvider!]
-  identityProviderIsNil: Boolean
-  identityProviderNotNil: Boolean
-  """
-  identity_provider_client_id field predicates
-  """
-  identityProviderClientID: String
-  identityProviderClientIDNEQ: String
-  identityProviderClientIDIn: [String!]
-  identityProviderClientIDNotIn: [String!]
-  identityProviderClientIDContains: String
-  identityProviderClientIDHasPrefix: String
-  identityProviderClientIDHasSuffix: String
-  identityProviderClientIDIsNil: Boolean
-  identityProviderClientIDNotNil: Boolean
-  identityProviderClientIDEqualFold: String
-  identityProviderClientIDContainsFold: String
-  """
-  identity_provider_metadata_endpoint field predicates
-  """
-  identityProviderMetadataEndpoint: String
-  identityProviderMetadataEndpointNEQ: String
-  identityProviderMetadataEndpointIn: [String!]
-  identityProviderMetadataEndpointNotIn: [String!]
-  identityProviderMetadataEndpointContains: String
-  identityProviderMetadataEndpointHasPrefix: String
-  identityProviderMetadataEndpointHasSuffix: String
-  identityProviderMetadataEndpointIsNil: Boolean
-  identityProviderMetadataEndpointNotNil: Boolean
-  identityProviderMetadataEndpointEqualFold: String
-  identityProviderMetadataEndpointContainsFold: String
-  """
-  identity_provider_auth_tested field predicates
-  """
-  identityProviderAuthTested: Boolean
-  identityProviderAuthTestedNEQ: Boolean
-  """
-  identity_provider_entity_id field predicates
-  """
-  identityProviderEntityID: String
-  identityProviderEntityIDNEQ: String
-  identityProviderEntityIDIn: [String!]
-  identityProviderEntityIDNotIn: [String!]
-  identityProviderEntityIDContains: String
-  identityProviderEntityIDHasPrefix: String
-  identityProviderEntityIDHasSuffix: String
-  identityProviderEntityIDIsNil: Boolean
-  identityProviderEntityIDNotNil: Boolean
-  identityProviderEntityIDEqualFold: String
-  identityProviderEntityIDContainsFold: String
-  """
-  oidc_discovery_endpoint field predicates
-  """
-  oidcDiscoveryEndpoint: String
-  oidcDiscoveryEndpointNEQ: String
-  oidcDiscoveryEndpointIn: [String!]
-  oidcDiscoveryEndpointNotIn: [String!]
-  oidcDiscoveryEndpointContains: String
-  oidcDiscoveryEndpointHasPrefix: String
-  oidcDiscoveryEndpointHasSuffix: String
-  oidcDiscoveryEndpointIsNil: Boolean
-  oidcDiscoveryEndpointNotNil: Boolean
-  oidcDiscoveryEndpointEqualFold: String
-  oidcDiscoveryEndpointContainsFold: String
-  """
-  saml_signin_url field predicates
-  """
-  samlSigninURL: String
-  samlSigninURLNEQ: String
-  samlSigninURLIn: [String!]
-  samlSigninURLNotIn: [String!]
-  samlSigninURLContains: String
-  samlSigninURLHasPrefix: String
-  samlSigninURLHasSuffix: String
-  samlSigninURLIsNil: Boolean
-  samlSigninURLNotNil: Boolean
-  samlSigninURLEqualFold: String
-  samlSigninURLContainsFold: String
-  """
-  saml_issuer field predicates
-  """
-  samlIssuer: String
-  samlIssuerNEQ: String
-  samlIssuerIn: [String!]
-  samlIssuerNotIn: [String!]
-  samlIssuerContains: String
-  samlIssuerHasPrefix: String
-  samlIssuerHasSuffix: String
-  samlIssuerIsNil: Boolean
-  samlIssuerNotNil: Boolean
-  samlIssuerEqualFold: String
-  samlIssuerContainsFold: String
-  """
-  saml_cert field predicates
-  """
-  samlCert: String
-  samlCertNEQ: String
-  samlCertIn: [String!]
-  samlCertNotIn: [String!]
-  samlCertContains: String
-  samlCertHasPrefix: String
-  samlCertHasSuffix: String
-  samlCertIsNil: Boolean
-  samlCertNotNil: Boolean
-  samlCertEqualFold: String
-  samlCertContainsFold: String
-  """
-  identity_provider_login_enforced field predicates
-  """
-  identityProviderLoginEnforced: Boolean
-  identityProviderLoginEnforcedNEQ: Boolean
-  """
-  identity_provider_jit_provisioning field predicates
-  """
-  identityProviderJitProvisioning: Boolean
-  identityProviderJitProvisioningNEQ: Boolean
-  """
-  multifactor_auth_enforced field predicates
-  """
-  multifactorAuthEnforced: Boolean
-  multifactorAuthEnforcedNEQ: Boolean
-  multifactorAuthEnforcedIsNil: Boolean
-  multifactorAuthEnforcedNotNil: Boolean
-  """
-  allow_support_access field predicates
-  """
-  allowSupportAccess: Boolean
-  allowSupportAccessNEQ: Boolean
-  allowSupportAccessIsNil: Boolean
-  allowSupportAccessNotNil: Boolean
-  """
-  payment_method_added field predicates
-  """
-  paymentMethodAdded: Boolean
-  paymentMethodAddedNEQ: Boolean
-  """
-  pending_deletion_at field predicates
-  """
-  pendingDeletionAt: DateTime
-  pendingDeletionAtGT: DateTime
-  pendingDeletionAtGTE: DateTime
-  pendingDeletionAtLT: DateTime
-  pendingDeletionAtLTE: DateTime
-  pendingDeletionAtIsNil: Boolean
-  pendingDeletionAtNotNil: Boolean
 }
 """
 Information about pagination in a connection.
@@ -39703,6 +31413,10 @@ type PlatformHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -40122,102 +31836,6 @@ input PlatformHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -40231,643 +31849,6 @@ input PlatformHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  internal_owner field predicates
-  """
-  internalOwner: String
-  internalOwnerNEQ: String
-  internalOwnerIn: [String!]
-  internalOwnerNotIn: [String!]
-  internalOwnerContains: String
-  internalOwnerHasPrefix: String
-  internalOwnerHasSuffix: String
-  internalOwnerIsNil: Boolean
-  internalOwnerNotNil: Boolean
-  internalOwnerEqualFold: String
-  internalOwnerContainsFold: String
-  """
-  internal_owner_user_id field predicates
-  """
-  internalOwnerUserID: String
-  internalOwnerUserIDNEQ: String
-  internalOwnerUserIDIn: [String!]
-  internalOwnerUserIDNotIn: [String!]
-  internalOwnerUserIDContains: String
-  internalOwnerUserIDHasPrefix: String
-  internalOwnerUserIDHasSuffix: String
-  internalOwnerUserIDIsNil: Boolean
-  internalOwnerUserIDNotNil: Boolean
-  internalOwnerUserIDEqualFold: String
-  internalOwnerUserIDContainsFold: String
-  """
-  internal_owner_group_id field predicates
-  """
-  internalOwnerGroupID: String
-  internalOwnerGroupIDNEQ: String
-  internalOwnerGroupIDIn: [String!]
-  internalOwnerGroupIDNotIn: [String!]
-  internalOwnerGroupIDContains: String
-  internalOwnerGroupIDHasPrefix: String
-  internalOwnerGroupIDHasSuffix: String
-  internalOwnerGroupIDIsNil: Boolean
-  internalOwnerGroupIDNotNil: Boolean
-  internalOwnerGroupIDEqualFold: String
-  internalOwnerGroupIDContainsFold: String
-  """
-  internal_owner_identity_holder_id field predicates
-  """
-  internalOwnerIdentityHolderID: String
-  internalOwnerIdentityHolderIDNEQ: String
-  internalOwnerIdentityHolderIDIn: [String!]
-  internalOwnerIdentityHolderIDNotIn: [String!]
-  internalOwnerIdentityHolderIDContains: String
-  internalOwnerIdentityHolderIDHasPrefix: String
-  internalOwnerIdentityHolderIDHasSuffix: String
-  internalOwnerIdentityHolderIDIsNil: Boolean
-  internalOwnerIdentityHolderIDNotNil: Boolean
-  internalOwnerIdentityHolderIDEqualFold: String
-  internalOwnerIdentityHolderIDContainsFold: String
-  """
-  business_owner field predicates
-  """
-  businessOwner: String
-  businessOwnerNEQ: String
-  businessOwnerIn: [String!]
-  businessOwnerNotIn: [String!]
-  businessOwnerContains: String
-  businessOwnerHasPrefix: String
-  businessOwnerHasSuffix: String
-  businessOwnerIsNil: Boolean
-  businessOwnerNotNil: Boolean
-  businessOwnerEqualFold: String
-  businessOwnerContainsFold: String
-  """
-  business_owner_user_id field predicates
-  """
-  businessOwnerUserID: String
-  businessOwnerUserIDNEQ: String
-  businessOwnerUserIDIn: [String!]
-  businessOwnerUserIDNotIn: [String!]
-  businessOwnerUserIDContains: String
-  businessOwnerUserIDHasPrefix: String
-  businessOwnerUserIDHasSuffix: String
-  businessOwnerUserIDIsNil: Boolean
-  businessOwnerUserIDNotNil: Boolean
-  businessOwnerUserIDEqualFold: String
-  businessOwnerUserIDContainsFold: String
-  """
-  business_owner_group_id field predicates
-  """
-  businessOwnerGroupID: String
-  businessOwnerGroupIDNEQ: String
-  businessOwnerGroupIDIn: [String!]
-  businessOwnerGroupIDNotIn: [String!]
-  businessOwnerGroupIDContains: String
-  businessOwnerGroupIDHasPrefix: String
-  businessOwnerGroupIDHasSuffix: String
-  businessOwnerGroupIDIsNil: Boolean
-  businessOwnerGroupIDNotNil: Boolean
-  businessOwnerGroupIDEqualFold: String
-  businessOwnerGroupIDContainsFold: String
-  """
-  business_owner_identity_holder_id field predicates
-  """
-  businessOwnerIdentityHolderID: String
-  businessOwnerIdentityHolderIDNEQ: String
-  businessOwnerIdentityHolderIDIn: [String!]
-  businessOwnerIdentityHolderIDNotIn: [String!]
-  businessOwnerIdentityHolderIDContains: String
-  businessOwnerIdentityHolderIDHasPrefix: String
-  businessOwnerIdentityHolderIDHasSuffix: String
-  businessOwnerIdentityHolderIDIsNil: Boolean
-  businessOwnerIdentityHolderIDNotNil: Boolean
-  businessOwnerIdentityHolderIDEqualFold: String
-  businessOwnerIdentityHolderIDContainsFold: String
-  """
-  technical_owner field predicates
-  """
-  technicalOwner: String
-  technicalOwnerNEQ: String
-  technicalOwnerIn: [String!]
-  technicalOwnerNotIn: [String!]
-  technicalOwnerContains: String
-  technicalOwnerHasPrefix: String
-  technicalOwnerHasSuffix: String
-  technicalOwnerIsNil: Boolean
-  technicalOwnerNotNil: Boolean
-  technicalOwnerEqualFold: String
-  technicalOwnerContainsFold: String
-  """
-  technical_owner_user_id field predicates
-  """
-  technicalOwnerUserID: String
-  technicalOwnerUserIDNEQ: String
-  technicalOwnerUserIDIn: [String!]
-  technicalOwnerUserIDNotIn: [String!]
-  technicalOwnerUserIDContains: String
-  technicalOwnerUserIDHasPrefix: String
-  technicalOwnerUserIDHasSuffix: String
-  technicalOwnerUserIDIsNil: Boolean
-  technicalOwnerUserIDNotNil: Boolean
-  technicalOwnerUserIDEqualFold: String
-  technicalOwnerUserIDContainsFold: String
-  """
-  technical_owner_group_id field predicates
-  """
-  technicalOwnerGroupID: String
-  technicalOwnerGroupIDNEQ: String
-  technicalOwnerGroupIDIn: [String!]
-  technicalOwnerGroupIDNotIn: [String!]
-  technicalOwnerGroupIDContains: String
-  technicalOwnerGroupIDHasPrefix: String
-  technicalOwnerGroupIDHasSuffix: String
-  technicalOwnerGroupIDIsNil: Boolean
-  technicalOwnerGroupIDNotNil: Boolean
-  technicalOwnerGroupIDEqualFold: String
-  technicalOwnerGroupIDContainsFold: String
-  """
-  technical_owner_identity_holder_id field predicates
-  """
-  technicalOwnerIdentityHolderID: String
-  technicalOwnerIdentityHolderIDNEQ: String
-  technicalOwnerIdentityHolderIDIn: [String!]
-  technicalOwnerIdentityHolderIDNotIn: [String!]
-  technicalOwnerIdentityHolderIDContains: String
-  technicalOwnerIdentityHolderIDHasPrefix: String
-  technicalOwnerIdentityHolderIDHasSuffix: String
-  technicalOwnerIdentityHolderIDIsNil: Boolean
-  technicalOwnerIdentityHolderIDNotNil: Boolean
-  technicalOwnerIdentityHolderIDEqualFold: String
-  technicalOwnerIdentityHolderIDContainsFold: String
-  """
-  security_owner field predicates
-  """
-  securityOwner: String
-  securityOwnerNEQ: String
-  securityOwnerIn: [String!]
-  securityOwnerNotIn: [String!]
-  securityOwnerContains: String
-  securityOwnerHasPrefix: String
-  securityOwnerHasSuffix: String
-  securityOwnerIsNil: Boolean
-  securityOwnerNotNil: Boolean
-  securityOwnerEqualFold: String
-  securityOwnerContainsFold: String
-  """
-  security_owner_user_id field predicates
-  """
-  securityOwnerUserID: String
-  securityOwnerUserIDNEQ: String
-  securityOwnerUserIDIn: [String!]
-  securityOwnerUserIDNotIn: [String!]
-  securityOwnerUserIDContains: String
-  securityOwnerUserIDHasPrefix: String
-  securityOwnerUserIDHasSuffix: String
-  securityOwnerUserIDIsNil: Boolean
-  securityOwnerUserIDNotNil: Boolean
-  securityOwnerUserIDEqualFold: String
-  securityOwnerUserIDContainsFold: String
-  """
-  security_owner_group_id field predicates
-  """
-  securityOwnerGroupID: String
-  securityOwnerGroupIDNEQ: String
-  securityOwnerGroupIDIn: [String!]
-  securityOwnerGroupIDNotIn: [String!]
-  securityOwnerGroupIDContains: String
-  securityOwnerGroupIDHasPrefix: String
-  securityOwnerGroupIDHasSuffix: String
-  securityOwnerGroupIDIsNil: Boolean
-  securityOwnerGroupIDNotNil: Boolean
-  securityOwnerGroupIDEqualFold: String
-  securityOwnerGroupIDContainsFold: String
-  """
-  security_owner_identity_holder_id field predicates
-  """
-  securityOwnerIdentityHolderID: String
-  securityOwnerIdentityHolderIDNEQ: String
-  securityOwnerIdentityHolderIDIn: [String!]
-  securityOwnerIdentityHolderIDNotIn: [String!]
-  securityOwnerIdentityHolderIDContains: String
-  securityOwnerIdentityHolderIDHasPrefix: String
-  securityOwnerIdentityHolderIDHasSuffix: String
-  securityOwnerIdentityHolderIDIsNil: Boolean
-  securityOwnerIdentityHolderIDNotNil: Boolean
-  securityOwnerIdentityHolderIDEqualFold: String
-  securityOwnerIdentityHolderIDContainsFold: String
-  """
-  platform_kind_name field predicates
-  """
-  platformKindName: String
-  platformKindNameNEQ: String
-  platformKindNameIn: [String!]
-  platformKindNameNotIn: [String!]
-  platformKindNameContains: String
-  platformKindNameHasPrefix: String
-  platformKindNameHasSuffix: String
-  platformKindNameIsNil: Boolean
-  platformKindNameNotNil: Boolean
-  platformKindNameEqualFold: String
-  platformKindNameContainsFold: String
-  """
-  platform_kind_id field predicates
-  """
-  platformKindID: String
-  platformKindIDNEQ: String
-  platformKindIDIn: [String!]
-  platformKindIDNotIn: [String!]
-  platformKindIDContains: String
-  platformKindIDHasPrefix: String
-  platformKindIDHasSuffix: String
-  platformKindIDIsNil: Boolean
-  platformKindIDNotNil: Boolean
-  platformKindIDEqualFold: String
-  platformKindIDContainsFold: String
-  """
-  platform_data_classification_name field predicates
-  """
-  platformDataClassificationName: String
-  platformDataClassificationNameNEQ: String
-  platformDataClassificationNameIn: [String!]
-  platformDataClassificationNameNotIn: [String!]
-  platformDataClassificationNameContains: String
-  platformDataClassificationNameHasPrefix: String
-  platformDataClassificationNameHasSuffix: String
-  platformDataClassificationNameIsNil: Boolean
-  platformDataClassificationNameNotNil: Boolean
-  platformDataClassificationNameEqualFold: String
-  platformDataClassificationNameContainsFold: String
-  """
-  platform_data_classification_id field predicates
-  """
-  platformDataClassificationID: String
-  platformDataClassificationIDNEQ: String
-  platformDataClassificationIDIn: [String!]
-  platformDataClassificationIDNotIn: [String!]
-  platformDataClassificationIDContains: String
-  platformDataClassificationIDHasPrefix: String
-  platformDataClassificationIDHasSuffix: String
-  platformDataClassificationIDIsNil: Boolean
-  platformDataClassificationIDNotNil: Boolean
-  platformDataClassificationIDEqualFold: String
-  platformDataClassificationIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  access_model_name field predicates
-  """
-  accessModelName: String
-  accessModelNameNEQ: String
-  accessModelNameIn: [String!]
-  accessModelNameNotIn: [String!]
-  accessModelNameContains: String
-  accessModelNameHasPrefix: String
-  accessModelNameHasSuffix: String
-  accessModelNameIsNil: Boolean
-  accessModelNameNotNil: Boolean
-  accessModelNameEqualFold: String
-  accessModelNameContainsFold: String
-  """
-  access_model_id field predicates
-  """
-  accessModelID: String
-  accessModelIDNEQ: String
-  accessModelIDIn: [String!]
-  accessModelIDNotIn: [String!]
-  accessModelIDContains: String
-  accessModelIDHasPrefix: String
-  accessModelIDHasSuffix: String
-  accessModelIDIsNil: Boolean
-  accessModelIDNotNil: Boolean
-  accessModelIDEqualFold: String
-  accessModelIDContainsFold: String
-  """
-  encryption_status_name field predicates
-  """
-  encryptionStatusName: String
-  encryptionStatusNameNEQ: String
-  encryptionStatusNameIn: [String!]
-  encryptionStatusNameNotIn: [String!]
-  encryptionStatusNameContains: String
-  encryptionStatusNameHasPrefix: String
-  encryptionStatusNameHasSuffix: String
-  encryptionStatusNameIsNil: Boolean
-  encryptionStatusNameNotNil: Boolean
-  encryptionStatusNameEqualFold: String
-  encryptionStatusNameContainsFold: String
-  """
-  encryption_status_id field predicates
-  """
-  encryptionStatusID: String
-  encryptionStatusIDNEQ: String
-  encryptionStatusIDIn: [String!]
-  encryptionStatusIDNotIn: [String!]
-  encryptionStatusIDContains: String
-  encryptionStatusIDHasPrefix: String
-  encryptionStatusIDHasSuffix: String
-  encryptionStatusIDIsNil: Boolean
-  encryptionStatusIDNotNil: Boolean
-  encryptionStatusIDEqualFold: String
-  encryptionStatusIDContainsFold: String
-  """
-  security_tier_name field predicates
-  """
-  securityTierName: String
-  securityTierNameNEQ: String
-  securityTierNameIn: [String!]
-  securityTierNameNotIn: [String!]
-  securityTierNameContains: String
-  securityTierNameHasPrefix: String
-  securityTierNameHasSuffix: String
-  securityTierNameIsNil: Boolean
-  securityTierNameNotNil: Boolean
-  securityTierNameEqualFold: String
-  securityTierNameContainsFold: String
-  """
-  security_tier_id field predicates
-  """
-  securityTierID: String
-  securityTierIDNEQ: String
-  securityTierIDIn: [String!]
-  securityTierIDNotIn: [String!]
-  securityTierIDContains: String
-  securityTierIDHasPrefix: String
-  securityTierIDHasSuffix: String
-  securityTierIDIsNil: Boolean
-  securityTierIDNotNil: Boolean
-  securityTierIDEqualFold: String
-  securityTierIDContainsFold: String
-  """
-  criticality_name field predicates
-  """
-  criticalityName: String
-  criticalityNameNEQ: String
-  criticalityNameIn: [String!]
-  criticalityNameNotIn: [String!]
-  criticalityNameContains: String
-  criticalityNameHasPrefix: String
-  criticalityNameHasSuffix: String
-  criticalityNameIsNil: Boolean
-  criticalityNameNotNil: Boolean
-  criticalityNameEqualFold: String
-  criticalityNameContainsFold: String
-  """
-  criticality_id field predicates
-  """
-  criticalityID: String
-  criticalityIDNEQ: String
-  criticalityIDIn: [String!]
-  criticalityIDNotIn: [String!]
-  criticalityIDContains: String
-  criticalityIDHasPrefix: String
-  criticalityIDHasSuffix: String
-  criticalityIDIsNil: Boolean
-  criticalityIDNotNil: Boolean
-  criticalityIDEqualFold: String
-  criticalityIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  external_uuid field predicates
-  """
-  externalUUID: String
-  externalUUIDNEQ: String
-  externalUUIDIn: [String!]
-  externalUUIDNotIn: [String!]
-  externalUUIDContains: String
-  externalUUIDHasPrefix: String
-  externalUUIDHasSuffix: String
-  externalUUIDIsNil: Boolean
-  externalUUIDNotNil: Boolean
-  externalUUIDEqualFold: String
-  externalUUIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  business_purpose field predicates
-  """
-  businessPurpose: String
-  businessPurposeNEQ: String
-  businessPurposeIn: [String!]
-  businessPurposeNotIn: [String!]
-  businessPurposeContains: String
-  businessPurposeHasPrefix: String
-  businessPurposeHasSuffix: String
-  businessPurposeIsNil: Boolean
-  businessPurposeNotNil: Boolean
-  businessPurposeEqualFold: String
-  businessPurposeContainsFold: String
-  """
-  status field predicates
-  """
-  status: PlatformHistoryPlatformStatus
-  statusNEQ: PlatformHistoryPlatformStatus
-  statusIn: [PlatformHistoryPlatformStatus!]
-  statusNotIn: [PlatformHistoryPlatformStatus!]
-  """
-  physical_location field predicates
-  """
-  physicalLocation: String
-  physicalLocationNEQ: String
-  physicalLocationIn: [String!]
-  physicalLocationNotIn: [String!]
-  physicalLocationContains: String
-  physicalLocationHasPrefix: String
-  physicalLocationHasSuffix: String
-  physicalLocationIsNil: Boolean
-  physicalLocationNotNil: Boolean
-  physicalLocationEqualFold: String
-  physicalLocationContainsFold: String
-  """
-  region field predicates
-  """
-  region: String
-  regionNEQ: String
-  regionIn: [String!]
-  regionNotIn: [String!]
-  regionContains: String
-  regionHasPrefix: String
-  regionHasSuffix: String
-  regionIsNil: Boolean
-  regionNotNil: Boolean
-  regionEqualFold: String
-  regionContainsFold: String
-  """
-  contains_pii field predicates
-  """
-  containsPii: Boolean
-  containsPiiNEQ: Boolean
-  containsPiiIsNil: Boolean
-  containsPiiNotNil: Boolean
-  """
-  source_type field predicates
-  """
-  sourceType: PlatformHistorySourceType
-  sourceTypeNEQ: PlatformHistorySourceType
-  sourceTypeIn: [PlatformHistorySourceType!]
-  sourceTypeNotIn: [PlatformHistorySourceType!]
-  """
-  source_identifier field predicates
-  """
-  sourceIdentifier: String
-  sourceIdentifierNEQ: String
-  sourceIdentifierIn: [String!]
-  sourceIdentifierNotIn: [String!]
-  sourceIdentifierContains: String
-  sourceIdentifierHasPrefix: String
-  sourceIdentifierHasSuffix: String
-  sourceIdentifierIsNil: Boolean
-  sourceIdentifierNotNil: Boolean
-  sourceIdentifierEqualFold: String
-  sourceIdentifierContainsFold: String
-  """
-  cost_center field predicates
-  """
-  costCenter: String
-  costCenterNEQ: String
-  costCenterIn: [String!]
-  costCenterNotIn: [String!]
-  costCenterContains: String
-  costCenterHasPrefix: String
-  costCenterHasSuffix: String
-  costCenterIsNil: Boolean
-  costCenterNotNil: Boolean
-  costCenterEqualFold: String
-  costCenterContainsFold: String
-  """
-  estimated_monthly_cost field predicates
-  """
-  estimatedMonthlyCost: Float
-  estimatedMonthlyCostNEQ: Float
-  estimatedMonthlyCostIn: [Float!]
-  estimatedMonthlyCostNotIn: [Float!]
-  estimatedMonthlyCostGT: Float
-  estimatedMonthlyCostGTE: Float
-  estimatedMonthlyCostLT: Float
-  estimatedMonthlyCostLTE: Float
-  estimatedMonthlyCostIsNil: Boolean
-  estimatedMonthlyCostNotNil: Boolean
-  """
-  purchase_date field predicates
-  """
-  purchaseDate: DateTime
-  purchaseDateGT: DateTime
-  purchaseDateGTE: DateTime
-  purchaseDateLT: DateTime
-  purchaseDateLTE: DateTime
-  purchaseDateIsNil: Boolean
-  purchaseDateNotNil: Boolean
-  """
-  platform_owner_id field predicates
-  """
-  platformOwnerID: String
-  platformOwnerIDNEQ: String
-  platformOwnerIDIn: [String!]
-  platformOwnerIDNotIn: [String!]
-  platformOwnerIDContains: String
-  platformOwnerIDHasPrefix: String
-  platformOwnerIDHasSuffix: String
-  platformOwnerIDIsNil: Boolean
-  platformOwnerIDNotNil: Boolean
-  platformOwnerIDEqualFold: String
-  platformOwnerIDContainsFold: String
-  """
-  external_reference_id field predicates
-  """
-  externalReferenceID: String
-  externalReferenceIDNEQ: String
-  externalReferenceIDIn: [String!]
-  externalReferenceIDNotIn: [String!]
-  externalReferenceIDContains: String
-  externalReferenceIDHasPrefix: String
-  externalReferenceIDHasSuffix: String
-  externalReferenceIDIsNil: Boolean
-  externalReferenceIDNotNil: Boolean
-  externalReferenceIDEqualFold: String
-  externalReferenceIDContainsFold: String
 }
 type ProcedureHistory implements Node {
   id: ID!
@@ -40914,6 +31895,10 @@ type ProcedureHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -41250,18 +32235,6 @@ input ProcedureHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
   revision field predicates
   """
   revision: String
@@ -41276,90 +32249,6 @@ input ProcedureHistoryWhereInput {
   revisionEqualFold: String
   revisionContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -41373,286 +32262,6 @@ input ProcedureHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  status field predicates
-  """
-  status: ProcedureHistoryDocumentStatus
-  statusNEQ: ProcedureHistoryDocumentStatus
-  statusIn: [ProcedureHistoryDocumentStatus!]
-  statusNotIn: [ProcedureHistoryDocumentStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  management_mode field predicates
-  """
-  managementMode: ProcedureHistoryDocumentManagementMode
-  managementModeNEQ: ProcedureHistoryDocumentManagementMode
-  managementModeIn: [ProcedureHistoryDocumentManagementMode!]
-  managementModeNotIn: [ProcedureHistoryDocumentManagementMode!]
-  managementModeIsNil: Boolean
-  managementModeNotNil: Boolean
-  """
-  details field predicates
-  """
-  details: String
-  detailsNEQ: String
-  detailsIn: [String!]
-  detailsNotIn: [String!]
-  detailsContains: String
-  detailsHasPrefix: String
-  detailsHasSuffix: String
-  detailsIsNil: Boolean
-  detailsNotNil: Boolean
-  detailsEqualFold: String
-  detailsContainsFold: String
-  """
-  approval_required field predicates
-  """
-  approvalRequired: Boolean
-  approvalRequiredNEQ: Boolean
-  approvalRequiredIsNil: Boolean
-  approvalRequiredNotNil: Boolean
-  """
-  review_due field predicates
-  """
-  reviewDue: Time
-  reviewDueGT: Time
-  reviewDueGTE: Time
-  reviewDueLT: Time
-  reviewDueLTE: Time
-  reviewDueIsNil: Boolean
-  reviewDueNotNil: Boolean
-  """
-  review_frequency field predicates
-  """
-  reviewFrequency: ProcedureHistoryFrequency
-  reviewFrequencyNEQ: ProcedureHistoryFrequency
-  reviewFrequencyIn: [ProcedureHistoryFrequency!]
-  reviewFrequencyNotIn: [ProcedureHistoryFrequency!]
-  reviewFrequencyIsNil: Boolean
-  reviewFrequencyNotNil: Boolean
-  """
-  approver_id field predicates
-  """
-  approverID: String
-  approverIDNEQ: String
-  approverIDIn: [String!]
-  approverIDNotIn: [String!]
-  approverIDContains: String
-  approverIDHasPrefix: String
-  approverIDHasSuffix: String
-  approverIDIsNil: Boolean
-  approverIDNotNil: Boolean
-  approverIDEqualFold: String
-  approverIDContainsFold: String
-  """
-  delegate_id field predicates
-  """
-  delegateID: String
-  delegateIDNEQ: String
-  delegateIDIn: [String!]
-  delegateIDNotIn: [String!]
-  delegateIDContains: String
-  delegateIDHasPrefix: String
-  delegateIDHasSuffix: String
-  delegateIDIsNil: Boolean
-  delegateIDNotNil: Boolean
-  delegateIDEqualFold: String
-  delegateIDContainsFold: String
-  """
-  url field predicates
-  """
-  url: String
-  urlNEQ: String
-  urlIn: [String!]
-  urlNotIn: [String!]
-  urlContains: String
-  urlHasPrefix: String
-  urlHasSuffix: String
-  urlIsNil: Boolean
-  urlNotNil: Boolean
-  urlEqualFold: String
-  urlContainsFold: String
-  """
-  file_id field predicates
-  """
-  fileID: String
-  fileIDNEQ: String
-  fileIDIn: [String!]
-  fileIDNotIn: [String!]
-  fileIDContains: String
-  fileIDHasPrefix: String
-  fileIDHasSuffix: String
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: String
-  fileIDContainsFold: String
-  """
-  external_file_id field predicates
-  """
-  externalFileID: String
-  externalFileIDNEQ: String
-  externalFileIDIn: [String!]
-  externalFileIDNotIn: [String!]
-  externalFileIDContains: String
-  externalFileIDHasPrefix: String
-  externalFileIDHasSuffix: String
-  externalFileIDIsNil: Boolean
-  externalFileIDNotNil: Boolean
-  externalFileIDEqualFold: String
-  externalFileIDContainsFold: String
-  """
-  external_contents field predicates
-  """
-  externalContents: String
-  externalContentsNEQ: String
-  externalContentsIn: [String!]
-  externalContentsNotIn: [String!]
-  externalContentsContains: String
-  externalContentsHasPrefix: String
-  externalContentsHasSuffix: String
-  externalContentsIsNil: Boolean
-  externalContentsNotNil: Boolean
-  externalContentsEqualFold: String
-  externalContentsContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  procedure_kind_name field predicates
-  """
-  procedureKindName: String
-  procedureKindNameNEQ: String
-  procedureKindNameIn: [String!]
-  procedureKindNameNotIn: [String!]
-  procedureKindNameContains: String
-  procedureKindNameHasPrefix: String
-  procedureKindNameHasSuffix: String
-  procedureKindNameIsNil: Boolean
-  procedureKindNameNotNil: Boolean
-  procedureKindNameEqualFold: String
-  procedureKindNameContainsFold: String
-  """
-  procedure_kind_id field predicates
-  """
-  procedureKindID: String
-  procedureKindIDNEQ: String
-  procedureKindIDIn: [String!]
-  procedureKindIDNotIn: [String!]
-  procedureKindIDContains: String
-  procedureKindIDHasPrefix: String
-  procedureKindIDHasSuffix: String
-  procedureKindIDIsNil: Boolean
-  procedureKindIDNotNil: Boolean
-  procedureKindIDEqualFold: String
-  procedureKindIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
 }
 type ProgramHistory implements Node {
   id: ID!
@@ -41695,6 +32304,10 @@ type ProgramHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -41973,102 +32586,6 @@ input ProgramHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -42082,226 +32599,6 @@ input ProgramHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  program_kind_name field predicates
-  """
-  programKindName: String
-  programKindNameNEQ: String
-  programKindNameIn: [String!]
-  programKindNameNotIn: [String!]
-  programKindNameContains: String
-  programKindNameHasPrefix: String
-  programKindNameHasSuffix: String
-  programKindNameIsNil: Boolean
-  programKindNameNotNil: Boolean
-  programKindNameEqualFold: String
-  programKindNameContainsFold: String
-  """
-  program_kind_id field predicates
-  """
-  programKindID: String
-  programKindIDNEQ: String
-  programKindIDIn: [String!]
-  programKindIDNotIn: [String!]
-  programKindIDContains: String
-  programKindIDHasPrefix: String
-  programKindIDHasSuffix: String
-  programKindIDIsNil: Boolean
-  programKindIDNotNil: Boolean
-  programKindIDEqualFold: String
-  programKindIDContainsFold: String
-  """
-  external_uuid field predicates
-  """
-  externalUUID: String
-  externalUUIDNEQ: String
-  externalUUIDIn: [String!]
-  externalUUIDNotIn: [String!]
-  externalUUIDContains: String
-  externalUUIDHasPrefix: String
-  externalUUIDHasSuffix: String
-  externalUUIDIsNil: Boolean
-  externalUUIDNotNil: Boolean
-  externalUUIDEqualFold: String
-  externalUUIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  status field predicates
-  """
-  status: ProgramHistoryProgramStatus
-  statusNEQ: ProgramHistoryProgramStatus
-  statusIn: [ProgramHistoryProgramStatus!]
-  statusNotIn: [ProgramHistoryProgramStatus!]
-  """
-  framework_name field predicates
-  """
-  frameworkName: String
-  frameworkNameNEQ: String
-  frameworkNameIn: [String!]
-  frameworkNameNotIn: [String!]
-  frameworkNameContains: String
-  frameworkNameHasPrefix: String
-  frameworkNameHasSuffix: String
-  frameworkNameIsNil: Boolean
-  frameworkNameNotNil: Boolean
-  frameworkNameEqualFold: String
-  frameworkNameContainsFold: String
-  """
-  start_date field predicates
-  """
-  startDate: Time
-  startDateGT: Time
-  startDateGTE: Time
-  startDateLT: Time
-  startDateLTE: Time
-  startDateIsNil: Boolean
-  startDateNotNil: Boolean
-  """
-  end_date field predicates
-  """
-  endDate: Time
-  endDateGT: Time
-  endDateGTE: Time
-  endDateLT: Time
-  endDateLTE: Time
-  endDateIsNil: Boolean
-  endDateNotNil: Boolean
-  """
-  observation_period_start_date field predicates
-  """
-  observationPeriodStartDate: Time
-  observationPeriodStartDateGT: Time
-  observationPeriodStartDateGTE: Time
-  observationPeriodStartDateLT: Time
-  observationPeriodStartDateLTE: Time
-  observationPeriodStartDateIsNil: Boolean
-  observationPeriodStartDateNotNil: Boolean
-  """
-  observation_period_end_date field predicates
-  """
-  observationPeriodEndDate: Time
-  observationPeriodEndDateGT: Time
-  observationPeriodEndDateGTE: Time
-  observationPeriodEndDateLT: Time
-  observationPeriodEndDateLTE: Time
-  observationPeriodEndDateIsNil: Boolean
-  observationPeriodEndDateNotNil: Boolean
-  """
-  fieldwork_start_date field predicates
-  """
-  fieldworkStartDate: Time
-  fieldworkStartDateGT: Time
-  fieldworkStartDateGTE: Time
-  fieldworkStartDateLT: Time
-  fieldworkStartDateLTE: Time
-  fieldworkStartDateIsNil: Boolean
-  fieldworkStartDateNotNil: Boolean
-  """
-  fieldwork_end_date field predicates
-  """
-  fieldworkEndDate: Time
-  fieldworkEndDateGT: Time
-  fieldworkEndDateGTE: Time
-  fieldworkEndDateLT: Time
-  fieldworkEndDateLTE: Time
-  fieldworkEndDateIsNil: Boolean
-  fieldworkEndDateNotNil: Boolean
-  """
-  auditor_ready field predicates
-  """
-  auditorReady: Boolean
-  auditorReadyNEQ: Boolean
-  """
-  auditor_write_comments field predicates
-  """
-  auditorWriteComments: Boolean
-  auditorWriteCommentsNEQ: Boolean
-  """
-  auditor_read_comments field predicates
-  """
-  auditorReadComments: Boolean
-  auditorReadCommentsNEQ: Boolean
-  """
-  audit_firm field predicates
-  """
-  auditFirm: String
-  auditFirmNEQ: String
-  auditFirmIn: [String!]
-  auditFirmNotIn: [String!]
-  auditFirmContains: String
-  auditFirmHasPrefix: String
-  auditFirmHasSuffix: String
-  auditFirmIsNil: Boolean
-  auditFirmNotNil: Boolean
-  auditFirmEqualFold: String
-  auditFirmContainsFold: String
-  """
-  auditor field predicates
-  """
-  auditor: String
-  auditorNEQ: String
-  auditorIn: [String!]
-  auditorNotIn: [String!]
-  auditorContains: String
-  auditorHasPrefix: String
-  auditorHasSuffix: String
-  auditorIsNil: Boolean
-  auditorNotNil: Boolean
-  auditorEqualFold: String
-  auditorContainsFold: String
-  """
-  auditor_email field predicates
-  """
-  auditorEmail: String
-  auditorEmailNEQ: String
-  auditorEmailIn: [String!]
-  auditorEmailNotIn: [String!]
-  auditorEmailContains: String
-  auditorEmailHasPrefix: String
-  auditorEmailHasSuffix: String
-  auditorEmailIsNil: Boolean
-  auditorEmailNotNil: Boolean
-  auditorEmailEqualFold: String
-  auditorEmailContainsFold: String
-  """
-  program_owner_id field predicates
-  """
-  programOwnerID: String
-  programOwnerIDNEQ: String
-  programOwnerIDIn: [String!]
-  programOwnerIDNotIn: [String!]
-  programOwnerIDContains: String
-  programOwnerIDHasPrefix: String
-  programOwnerIDHasSuffix: String
-  programOwnerIDIsNil: Boolean
-  programOwnerIDNotNil: Boolean
-  programOwnerIDEqualFold: String
-  programOwnerIDContainsFold: String
 }
 type ProgramMembershipHistory implements Node {
   id: ID!
@@ -42496,37 +32793,6 @@ input ProgramMembershipHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  role field predicates
-  """
-  role: ProgramMembershipHistoryRole
-  roleNEQ: ProgramMembershipHistoryRole
-  roleIn: [ProgramMembershipHistoryRole!]
-  roleNotIn: [ProgramMembershipHistoryRole!]
-  """
-  program_id field predicates
-  """
-  programID: String
-  programIDNEQ: String
-  programIDIn: [String!]
-  programIDNotIn: [String!]
-  programIDContains: String
-  programIDHasPrefix: String
-  programIDHasSuffix: String
-  programIDEqualFold: String
-  programIDContainsFold: String
-  """
-  user_id field predicates
-  """
-  userID: String
-  userIDNEQ: String
-  userIDIn: [String!]
-  userIDNotIn: [String!]
-  userIDContains: String
-  userIDHasPrefix: String
-  userIDHasSuffix: String
-  userIDEqualFold: String
-  userIDContainsFold: String
 }
 type Query {
   """
@@ -44760,6 +35026,10 @@ type RemediationHistory implements Node {
   """
   integrationRunID: String
   """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
   identifier of the record in an external system
   """
   externalID: String
@@ -45059,102 +35329,6 @@ input RemediationHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -45168,339 +35342,6 @@ input RemediationHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  external_owner_id field predicates
-  """
-  externalOwnerID: String
-  externalOwnerIDNEQ: String
-  externalOwnerIDIn: [String!]
-  externalOwnerIDNotIn: [String!]
-  externalOwnerIDContains: String
-  externalOwnerIDHasPrefix: String
-  externalOwnerIDHasSuffix: String
-  externalOwnerIDIsNil: Boolean
-  externalOwnerIDNotNil: Boolean
-  externalOwnerIDEqualFold: String
-  externalOwnerIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleIsNil: Boolean
-  titleNotNil: Boolean
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  status field predicates
-  """
-  status: RemediationHistoryRemediationStatus
-  statusNEQ: RemediationHistoryRemediationStatus
-  statusIn: [RemediationHistoryRemediationStatus!]
-  statusNotIn: [RemediationHistoryRemediationStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  state field predicates
-  """
-  state: String
-  stateNEQ: String
-  stateIn: [String!]
-  stateNotIn: [String!]
-  stateContains: String
-  stateHasPrefix: String
-  stateHasSuffix: String
-  stateIsNil: Boolean
-  stateNotNil: Boolean
-  stateEqualFold: String
-  stateContainsFold: String
-  """
-  intent field predicates
-  """
-  intent: String
-  intentNEQ: String
-  intentIn: [String!]
-  intentNotIn: [String!]
-  intentContains: String
-  intentHasPrefix: String
-  intentHasSuffix: String
-  intentIsNil: Boolean
-  intentNotNil: Boolean
-  intentEqualFold: String
-  intentContainsFold: String
-  """
-  summary field predicates
-  """
-  summary: String
-  summaryNEQ: String
-  summaryIn: [String!]
-  summaryNotIn: [String!]
-  summaryContains: String
-  summaryHasPrefix: String
-  summaryHasSuffix: String
-  summaryIsNil: Boolean
-  summaryNotNil: Boolean
-  summaryEqualFold: String
-  summaryContainsFold: String
-  """
-  explanation field predicates
-  """
-  explanation: String
-  explanationNEQ: String
-  explanationIn: [String!]
-  explanationNotIn: [String!]
-  explanationContains: String
-  explanationHasPrefix: String
-  explanationHasSuffix: String
-  explanationIsNil: Boolean
-  explanationNotNil: Boolean
-  explanationEqualFold: String
-  explanationContainsFold: String
-  """
-  instructions field predicates
-  """
-  instructions: String
-  instructionsNEQ: String
-  instructionsIn: [String!]
-  instructionsNotIn: [String!]
-  instructionsContains: String
-  instructionsHasPrefix: String
-  instructionsHasSuffix: String
-  instructionsIsNil: Boolean
-  instructionsNotNil: Boolean
-  instructionsEqualFold: String
-  instructionsContainsFold: String
-  """
-  owner_reference field predicates
-  """
-  ownerReference: String
-  ownerReferenceNEQ: String
-  ownerReferenceIn: [String!]
-  ownerReferenceNotIn: [String!]
-  ownerReferenceContains: String
-  ownerReferenceHasPrefix: String
-  ownerReferenceHasSuffix: String
-  ownerReferenceIsNil: Boolean
-  ownerReferenceNotNil: Boolean
-  ownerReferenceEqualFold: String
-  ownerReferenceContainsFold: String
-  """
-  repository_uri field predicates
-  """
-  repositoryURI: String
-  repositoryURINEQ: String
-  repositoryURIIn: [String!]
-  repositoryURINotIn: [String!]
-  repositoryURIContains: String
-  repositoryURIHasPrefix: String
-  repositoryURIHasSuffix: String
-  repositoryURIIsNil: Boolean
-  repositoryURINotNil: Boolean
-  repositoryURIEqualFold: String
-  repositoryURIContainsFold: String
-  """
-  pull_request_uri field predicates
-  """
-  pullRequestURI: String
-  pullRequestURINEQ: String
-  pullRequestURIIn: [String!]
-  pullRequestURINotIn: [String!]
-  pullRequestURIContains: String
-  pullRequestURIHasPrefix: String
-  pullRequestURIHasSuffix: String
-  pullRequestURIIsNil: Boolean
-  pullRequestURINotNil: Boolean
-  pullRequestURIEqualFold: String
-  pullRequestURIContainsFold: String
-  """
-  ticket_reference field predicates
-  """
-  ticketReference: String
-  ticketReferenceNEQ: String
-  ticketReferenceIn: [String!]
-  ticketReferenceNotIn: [String!]
-  ticketReferenceContains: String
-  ticketReferenceHasPrefix: String
-  ticketReferenceHasSuffix: String
-  ticketReferenceIsNil: Boolean
-  ticketReferenceNotNil: Boolean
-  ticketReferenceEqualFold: String
-  ticketReferenceContainsFold: String
-  """
-  due_at field predicates
-  """
-  dueAt: DateTime
-  dueAtGT: DateTime
-  dueAtGTE: DateTime
-  dueAtLT: DateTime
-  dueAtLTE: DateTime
-  dueAtIsNil: Boolean
-  dueAtNotNil: Boolean
-  """
-  completed_at field predicates
-  """
-  completedAt: DateTime
-  completedAtGT: DateTime
-  completedAtGTE: DateTime
-  completedAtLT: DateTime
-  completedAtLTE: DateTime
-  completedAtIsNil: Boolean
-  completedAtNotNil: Boolean
-  """
-  pr_generated_at field predicates
-  """
-  prGeneratedAt: DateTime
-  prGeneratedAtGT: DateTime
-  prGeneratedAtGTE: DateTime
-  prGeneratedAtLT: DateTime
-  prGeneratedAtLTE: DateTime
-  prGeneratedAtIsNil: Boolean
-  prGeneratedAtNotNil: Boolean
-  """
-  error field predicates
-  """
-  error: String
-  errorNEQ: String
-  errorIn: [String!]
-  errorNotIn: [String!]
-  errorContains: String
-  errorHasPrefix: String
-  errorHasSuffix: String
-  errorIsNil: Boolean
-  errorNotNil: Boolean
-  errorEqualFold: String
-  errorContainsFold: String
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
-  """
-  external_uri field predicates
-  """
-  externalURI: String
-  externalURINEQ: String
-  externalURIIn: [String!]
-  externalURINotIn: [String!]
-  externalURIContains: String
-  externalURIHasPrefix: String
-  externalURIHasSuffix: String
-  externalURIIsNil: Boolean
-  externalURINotNil: Boolean
-  externalURIEqualFold: String
-  externalURIContainsFold: String
 }
 type ReportHistory implements Node {
   id: ID!
@@ -45744,32 +35585,6 @@ input ReportHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  requestor_id field predicates
-  """
-  requestorID: String
-  requestorIDNEQ: String
-  requestorIDIn: [String!]
-  requestorIDNotIn: [String!]
-  requestorIDContains: String
-  requestorIDHasPrefix: String
-  requestorIDHasSuffix: String
-  requestorIDIsNil: Boolean
-  requestorIDNotNil: Boolean
-  requestorIDEqualFold: String
-  requestorIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -45783,88 +35598,6 @@ input ReportHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  report_kind_name field predicates
-  """
-  reportKindName: String
-  reportKindNameNEQ: String
-  reportKindNameIn: [String!]
-  reportKindNameNotIn: [String!]
-  reportKindNameContains: String
-  reportKindNameHasPrefix: String
-  reportKindNameHasSuffix: String
-  reportKindNameIsNil: Boolean
-  reportKindNameNotNil: Boolean
-  reportKindNameEqualFold: String
-  reportKindNameContainsFold: String
-  """
-  report_kind_id field predicates
-  """
-  reportKindID: String
-  reportKindIDNEQ: String
-  reportKindIDIn: [String!]
-  reportKindIDNotIn: [String!]
-  reportKindIDContains: String
-  reportKindIDHasPrefix: String
-  reportKindIDHasSuffix: String
-  reportKindIDIsNil: Boolean
-  reportKindIDNotNil: Boolean
-  reportKindIDEqualFold: String
-  reportKindIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  query field predicates
-  """
-  query: String
-  queryNEQ: String
-  queryIn: [String!]
-  queryNotIn: [String!]
-  queryContains: String
-  queryHasPrefix: String
-  queryHasSuffix: String
-  queryEqualFold: String
-  queryContainsFold: String
-  """
-  status field predicates
-  """
-  status: ReportHistoryReportStatus
-  statusNEQ: ReportHistoryReportStatus
-  statusIn: [ReportHistoryReportStatus!]
-  statusNotIn: [ReportHistoryReportStatus!]
-  """
-  visibility field predicates
-  """
-  visibility: ReportHistoryReportVisibility
-  visibilityNEQ: ReportHistoryReportVisibility
-  visibilityIn: [ReportHistoryReportVisibility!]
-  visibilityNotIn: [ReportHistoryReportVisibility!]
-  visibilityIsNil: Boolean
-  visibilityNotNil: Boolean
-  """
-  report_owner_id field predicates
-  """
-  reportOwnerID: String
-  reportOwnerIDNEQ: String
-  reportOwnerIDIn: [String!]
-  reportOwnerIDNotIn: [String!]
-  reportOwnerIDContains: String
-  reportOwnerIDHasPrefix: String
-  reportOwnerIDHasSuffix: String
-  reportOwnerIDIsNil: Boolean
-  reportOwnerIDNotNil: Boolean
-  reportOwnerIDEqualFold: String
-  reportOwnerIDContainsFold: String
 }
 type ReportMembershipHistory implements Node {
   id: ID!
@@ -46059,37 +35792,6 @@ input ReportMembershipHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  role field predicates
-  """
-  role: ReportMembershipHistoryRole
-  roleNEQ: ReportMembershipHistoryRole
-  roleIn: [ReportMembershipHistoryRole!]
-  roleNotIn: [ReportMembershipHistoryRole!]
-  """
-  report_id field predicates
-  """
-  reportID: String
-  reportIDNEQ: String
-  reportIDIn: [String!]
-  reportIDNotIn: [String!]
-  reportIDContains: String
-  reportIDHasPrefix: String
-  reportIDHasSuffix: String
-  reportIDEqualFold: String
-  reportIDContainsFold: String
-  """
-  user_id field predicates
-  """
-  userID: String
-  userIDNEQ: String
-  userIDIn: [String!]
-  userIDNotIn: [String!]
-  userIDContains: String
-  userIDHasPrefix: String
-  userIDHasSuffix: String
-  userIDEqualFold: String
-  userIDContainsFold: String
 }
 type ReviewHistory implements Node {
   id: ID!
@@ -46128,6 +35830,10 @@ type ReviewHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -46419,90 +36125,6 @@ input ReviewHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -46516,295 +36138,6 @@ input ReviewHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  external_owner_id field predicates
-  """
-  externalOwnerID: String
-  externalOwnerIDNEQ: String
-  externalOwnerIDIn: [String!]
-  externalOwnerIDNotIn: [String!]
-  externalOwnerIDContains: String
-  externalOwnerIDHasPrefix: String
-  externalOwnerIDHasSuffix: String
-  externalOwnerIDIsNil: Boolean
-  externalOwnerIDNotNil: Boolean
-  externalOwnerIDEqualFold: String
-  externalOwnerIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  state field predicates
-  """
-  state: String
-  stateNEQ: String
-  stateIn: [String!]
-  stateNotIn: [String!]
-  stateContains: String
-  stateHasPrefix: String
-  stateHasSuffix: String
-  stateIsNil: Boolean
-  stateNotNil: Boolean
-  stateEqualFold: String
-  stateContainsFold: String
-  """
-  status field predicates
-  """
-  status: ReviewHistoryReviewStatus
-  statusNEQ: ReviewHistoryReviewStatus
-  statusIn: [ReviewHistoryReviewStatus!]
-  statusNotIn: [ReviewHistoryReviewStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
-  """
-  classification field predicates
-  """
-  classification: String
-  classificationNEQ: String
-  classificationIn: [String!]
-  classificationNotIn: [String!]
-  classificationContains: String
-  classificationHasPrefix: String
-  classificationHasSuffix: String
-  classificationIsNil: Boolean
-  classificationNotNil: Boolean
-  classificationEqualFold: String
-  classificationContainsFold: String
-  """
-  summary field predicates
-  """
-  summary: String
-  summaryNEQ: String
-  summaryIn: [String!]
-  summaryNotIn: [String!]
-  summaryContains: String
-  summaryHasPrefix: String
-  summaryHasSuffix: String
-  summaryIsNil: Boolean
-  summaryNotNil: Boolean
-  summaryEqualFold: String
-  summaryContainsFold: String
-  """
-  details field predicates
-  """
-  details: String
-  detailsNEQ: String
-  detailsIn: [String!]
-  detailsNotIn: [String!]
-  detailsContains: String
-  detailsHasPrefix: String
-  detailsHasSuffix: String
-  detailsIsNil: Boolean
-  detailsNotNil: Boolean
-  detailsEqualFold: String
-  detailsContainsFold: String
-  """
-  reporter field predicates
-  """
-  reporter: String
-  reporterNEQ: String
-  reporterIn: [String!]
-  reporterNotIn: [String!]
-  reporterContains: String
-  reporterHasPrefix: String
-  reporterHasSuffix: String
-  reporterIsNil: Boolean
-  reporterNotNil: Boolean
-  reporterEqualFold: String
-  reporterContainsFold: String
-  """
-  approved field predicates
-  """
-  approved: Boolean
-  approvedNEQ: Boolean
-  approvedIsNil: Boolean
-  approvedNotNil: Boolean
-  """
-  reviewed_at field predicates
-  """
-  reviewedAt: DateTime
-  reviewedAtGT: DateTime
-  reviewedAtGTE: DateTime
-  reviewedAtLT: DateTime
-  reviewedAtLTE: DateTime
-  reviewedAtIsNil: Boolean
-  reviewedAtNotNil: Boolean
-  """
-  reported_at field predicates
-  """
-  reportedAt: DateTime
-  reportedAtGT: DateTime
-  reportedAtGTE: DateTime
-  reportedAtLT: DateTime
-  reportedAtLTE: DateTime
-  reportedAtIsNil: Boolean
-  reportedAtNotNil: Boolean
-  """
-  approved_at field predicates
-  """
-  approvedAt: DateTime
-  approvedAtGT: DateTime
-  approvedAtGTE: DateTime
-  approvedAtLT: DateTime
-  approvedAtLTE: DateTime
-  approvedAtIsNil: Boolean
-  approvedAtNotNil: Boolean
-  """
-  reviewer_id field predicates
-  """
-  reviewerID: String
-  reviewerIDNEQ: String
-  reviewerIDIn: [String!]
-  reviewerIDNotIn: [String!]
-  reviewerIDContains: String
-  reviewerIDHasPrefix: String
-  reviewerIDHasSuffix: String
-  reviewerIDIsNil: Boolean
-  reviewerIDNotNil: Boolean
-  reviewerIDEqualFold: String
-  reviewerIDContainsFold: String
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
-  """
-  external_uri field predicates
-  """
-  externalURI: String
-  externalURINEQ: String
-  externalURIIn: [String!]
-  externalURINotIn: [String!]
-  externalURIContains: String
-  externalURIHasPrefix: String
-  externalURIHasSuffix: String
-  externalURIIsNil: Boolean
-  externalURINotNil: Boolean
-  externalURIEqualFold: String
-  externalURIContainsFold: String
 }
 type RiskHistory implements Node {
   id: ID!
@@ -46847,6 +36180,10 @@ type RiskHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -47256,102 +36593,6 @@ input RiskHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -47365,471 +36606,6 @@ input RiskHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  stakeholder_name field predicates
-  """
-  stakeholderName: String
-  stakeholderNameNEQ: String
-  stakeholderNameIn: [String!]
-  stakeholderNameNotIn: [String!]
-  stakeholderNameContains: String
-  stakeholderNameHasPrefix: String
-  stakeholderNameHasSuffix: String
-  stakeholderNameIsNil: Boolean
-  stakeholderNameNotNil: Boolean
-  stakeholderNameEqualFold: String
-  stakeholderNameContainsFold: String
-  """
-  stakeholder_user_id field predicates
-  """
-  stakeholderUserID: String
-  stakeholderUserIDNEQ: String
-  stakeholderUserIDIn: [String!]
-  stakeholderUserIDNotIn: [String!]
-  stakeholderUserIDContains: String
-  stakeholderUserIDHasPrefix: String
-  stakeholderUserIDHasSuffix: String
-  stakeholderUserIDIsNil: Boolean
-  stakeholderUserIDNotNil: Boolean
-  stakeholderUserIDEqualFold: String
-  stakeholderUserIDContainsFold: String
-  """
-  stakeholder_group_id field predicates
-  """
-  stakeholderGroupID: String
-  stakeholderGroupIDNEQ: String
-  stakeholderGroupIDIn: [String!]
-  stakeholderGroupIDNotIn: [String!]
-  stakeholderGroupIDContains: String
-  stakeholderGroupIDHasPrefix: String
-  stakeholderGroupIDHasSuffix: String
-  stakeholderGroupIDIsNil: Boolean
-  stakeholderGroupIDNotNil: Boolean
-  stakeholderGroupIDEqualFold: String
-  stakeholderGroupIDContainsFold: String
-  """
-  stakeholder_identity_holder_id field predicates
-  """
-  stakeholderIdentityHolderID: String
-  stakeholderIdentityHolderIDNEQ: String
-  stakeholderIdentityHolderIDIn: [String!]
-  stakeholderIdentityHolderIDNotIn: [String!]
-  stakeholderIdentityHolderIDContains: String
-  stakeholderIdentityHolderIDHasPrefix: String
-  stakeholderIdentityHolderIDHasSuffix: String
-  stakeholderIdentityHolderIDIsNil: Boolean
-  stakeholderIdentityHolderIDNotNil: Boolean
-  stakeholderIdentityHolderIDEqualFold: String
-  stakeholderIdentityHolderIDContainsFold: String
-  """
-  delegate_name field predicates
-  """
-  delegateName: String
-  delegateNameNEQ: String
-  delegateNameIn: [String!]
-  delegateNameNotIn: [String!]
-  delegateNameContains: String
-  delegateNameHasPrefix: String
-  delegateNameHasSuffix: String
-  delegateNameIsNil: Boolean
-  delegateNameNotNil: Boolean
-  delegateNameEqualFold: String
-  delegateNameContainsFold: String
-  """
-  delegate_user_id field predicates
-  """
-  delegateUserID: String
-  delegateUserIDNEQ: String
-  delegateUserIDIn: [String!]
-  delegateUserIDNotIn: [String!]
-  delegateUserIDContains: String
-  delegateUserIDHasPrefix: String
-  delegateUserIDHasSuffix: String
-  delegateUserIDIsNil: Boolean
-  delegateUserIDNotNil: Boolean
-  delegateUserIDEqualFold: String
-  delegateUserIDContainsFold: String
-  """
-  delegate_group_id field predicates
-  """
-  delegateGroupID: String
-  delegateGroupIDNEQ: String
-  delegateGroupIDIn: [String!]
-  delegateGroupIDNotIn: [String!]
-  delegateGroupIDContains: String
-  delegateGroupIDHasPrefix: String
-  delegateGroupIDHasSuffix: String
-  delegateGroupIDIsNil: Boolean
-  delegateGroupIDNotNil: Boolean
-  delegateGroupIDEqualFold: String
-  delegateGroupIDContainsFold: String
-  """
-  delegate_identity_holder_id field predicates
-  """
-  delegateIdentityHolderID: String
-  delegateIdentityHolderIDNEQ: String
-  delegateIdentityHolderIDIn: [String!]
-  delegateIdentityHolderIDNotIn: [String!]
-  delegateIdentityHolderIDContains: String
-  delegateIdentityHolderIDHasPrefix: String
-  delegateIdentityHolderIDHasSuffix: String
-  delegateIdentityHolderIDIsNil: Boolean
-  delegateIdentityHolderIDNotNil: Boolean
-  delegateIdentityHolderIDEqualFold: String
-  delegateIdentityHolderIDContainsFold: String
-  """
-  risk_kind_name field predicates
-  """
-  riskKindName: String
-  riskKindNameNEQ: String
-  riskKindNameIn: [String!]
-  riskKindNameNotIn: [String!]
-  riskKindNameContains: String
-  riskKindNameHasPrefix: String
-  riskKindNameHasSuffix: String
-  riskKindNameIsNil: Boolean
-  riskKindNameNotNil: Boolean
-  riskKindNameEqualFold: String
-  riskKindNameContainsFold: String
-  """
-  risk_kind_id field predicates
-  """
-  riskKindID: String
-  riskKindIDNEQ: String
-  riskKindIDIn: [String!]
-  riskKindIDNotIn: [String!]
-  riskKindIDContains: String
-  riskKindIDHasPrefix: String
-  riskKindIDHasSuffix: String
-  riskKindIDIsNil: Boolean
-  riskKindIDNotNil: Boolean
-  riskKindIDEqualFold: String
-  riskKindIDContainsFold: String
-  """
-  risk_category_name field predicates
-  """
-  riskCategoryName: String
-  riskCategoryNameNEQ: String
-  riskCategoryNameIn: [String!]
-  riskCategoryNameNotIn: [String!]
-  riskCategoryNameContains: String
-  riskCategoryNameHasPrefix: String
-  riskCategoryNameHasSuffix: String
-  riskCategoryNameIsNil: Boolean
-  riskCategoryNameNotNil: Boolean
-  riskCategoryNameEqualFold: String
-  riskCategoryNameContainsFold: String
-  """
-  risk_category_id field predicates
-  """
-  riskCategoryID: String
-  riskCategoryIDNEQ: String
-  riskCategoryIDIn: [String!]
-  riskCategoryIDNotIn: [String!]
-  riskCategoryIDContains: String
-  riskCategoryIDHasPrefix: String
-  riskCategoryIDHasSuffix: String
-  riskCategoryIDIsNil: Boolean
-  riskCategoryIDNotNil: Boolean
-  riskCategoryIDEqualFold: String
-  riskCategoryIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  integration_id field predicates
-  """
-  integrationID: String
-  integrationIDNEQ: String
-  integrationIDIn: [String!]
-  integrationIDNotIn: [String!]
-  integrationIDContains: String
-  integrationIDHasPrefix: String
-  integrationIDHasSuffix: String
-  integrationIDIsNil: Boolean
-  integrationIDNotNil: Boolean
-  integrationIDEqualFold: String
-  integrationIDContainsFold: String
-  """
-  observed_at field predicates
-  """
-  observedAt: DateTime
-  observedAtGT: DateTime
-  observedAtGTE: DateTime
-  observedAtLT: DateTime
-  observedAtLTE: DateTime
-  observedAtIsNil: Boolean
-  observedAtNotNil: Boolean
-  """
-  external_uuid field predicates
-  """
-  externalUUID: String
-  externalUUIDNEQ: String
-  externalUUIDIn: [String!]
-  externalUUIDNotIn: [String!]
-  externalUUIDContains: String
-  externalUUIDHasPrefix: String
-  externalUUIDHasSuffix: String
-  externalUUIDIsNil: Boolean
-  externalUUIDNotNil: Boolean
-  externalUUIDEqualFold: String
-  externalUUIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  status field predicates
-  """
-  status: RiskHistoryRiskStatus
-  statusNEQ: RiskHistoryRiskStatus
-  statusIn: [RiskHistoryRiskStatus!]
-  statusNotIn: [RiskHistoryRiskStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  impact field predicates
-  """
-  impact: RiskHistoryRiskImpact
-  impactNEQ: RiskHistoryRiskImpact
-  impactIn: [RiskHistoryRiskImpact!]
-  impactNotIn: [RiskHistoryRiskImpact!]
-  impactIsNil: Boolean
-  impactNotNil: Boolean
-  """
-  likelihood field predicates
-  """
-  likelihood: RiskHistoryRiskLikelihood
-  likelihoodNEQ: RiskHistoryRiskLikelihood
-  likelihoodIn: [RiskHistoryRiskLikelihood!]
-  likelihoodNotIn: [RiskHistoryRiskLikelihood!]
-  likelihoodIsNil: Boolean
-  likelihoodNotNil: Boolean
-  """
-  score field predicates
-  """
-  score: Int
-  scoreNEQ: Int
-  scoreGT: Int
-  scoreGTE: Int
-  scoreLT: Int
-  scoreLTE: Int
-  scoreIsNil: Boolean
-  scoreNotNil: Boolean
-  """
-  mitigation field predicates
-  """
-  mitigation: String
-  mitigationNEQ: String
-  mitigationIn: [String!]
-  mitigationNotIn: [String!]
-  mitigationContains: String
-  mitigationHasPrefix: String
-  mitigationHasSuffix: String
-  mitigationIsNil: Boolean
-  mitigationNotNil: Boolean
-  mitigationEqualFold: String
-  mitigationContainsFold: String
-  """
-  details field predicates
-  """
-  details: String
-  detailsNEQ: String
-  detailsIn: [String!]
-  detailsNotIn: [String!]
-  detailsContains: String
-  detailsHasPrefix: String
-  detailsHasSuffix: String
-  detailsIsNil: Boolean
-  detailsNotNil: Boolean
-  detailsEqualFold: String
-  detailsContainsFold: String
-  """
-  business_costs field predicates
-  """
-  businessCosts: String
-  businessCostsNEQ: String
-  businessCostsIn: [String!]
-  businessCostsNotIn: [String!]
-  businessCostsContains: String
-  businessCostsHasPrefix: String
-  businessCostsHasSuffix: String
-  businessCostsIsNil: Boolean
-  businessCostsNotNil: Boolean
-  businessCostsEqualFold: String
-  businessCostsContainsFold: String
-  """
-  stakeholder_id field predicates
-  """
-  stakeholderID: String
-  stakeholderIDNEQ: String
-  stakeholderIDIn: [String!]
-  stakeholderIDNotIn: [String!]
-  stakeholderIDContains: String
-  stakeholderIDHasPrefix: String
-  stakeholderIDHasSuffix: String
-  stakeholderIDIsNil: Boolean
-  stakeholderIDNotNil: Boolean
-  stakeholderIDEqualFold: String
-  stakeholderIDContainsFold: String
-  """
-  delegate_id field predicates
-  """
-  delegateID: String
-  delegateIDNEQ: String
-  delegateIDIn: [String!]
-  delegateIDNotIn: [String!]
-  delegateIDContains: String
-  delegateIDHasPrefix: String
-  delegateIDHasSuffix: String
-  delegateIDIsNil: Boolean
-  delegateIDNotNil: Boolean
-  delegateIDEqualFold: String
-  delegateIDContainsFold: String
-  """
-  mitigated_at field predicates
-  """
-  mitigatedAt: DateTime
-  mitigatedAtGT: DateTime
-  mitigatedAtGTE: DateTime
-  mitigatedAtLT: DateTime
-  mitigatedAtLTE: DateTime
-  mitigatedAtIsNil: Boolean
-  mitigatedAtNotNil: Boolean
-  """
-  review_required field predicates
-  """
-  reviewRequired: Boolean
-  reviewRequiredNEQ: Boolean
-  reviewRequiredIsNil: Boolean
-  reviewRequiredNotNil: Boolean
-  """
-  last_reviewed_at field predicates
-  """
-  lastReviewedAt: DateTime
-  lastReviewedAtGT: DateTime
-  lastReviewedAtGTE: DateTime
-  lastReviewedAtLT: DateTime
-  lastReviewedAtLTE: DateTime
-  lastReviewedAtIsNil: Boolean
-  lastReviewedAtNotNil: Boolean
-  """
-  review_frequency field predicates
-  """
-  reviewFrequency: RiskHistoryFrequency
-  reviewFrequencyNEQ: RiskHistoryFrequency
-  reviewFrequencyIn: [RiskHistoryFrequency!]
-  reviewFrequencyNotIn: [RiskHistoryFrequency!]
-  reviewFrequencyIsNil: Boolean
-  reviewFrequencyNotNil: Boolean
-  """
-  due_date field predicates
-  """
-  dueDate: DateTime
-  dueDateGT: DateTime
-  dueDateGTE: DateTime
-  dueDateLT: DateTime
-  dueDateLTE: DateTime
-  dueDateIsNil: Boolean
-  dueDateNotNil: Boolean
-  """
-  next_review_due_at field predicates
-  """
-  nextReviewDueAt: DateTime
-  nextReviewDueAtGT: DateTime
-  nextReviewDueAtGTE: DateTime
-  nextReviewDueAtLT: DateTime
-  nextReviewDueAtLTE: DateTime
-  nextReviewDueAtIsNil: Boolean
-  nextReviewDueAtNotNil: Boolean
-  """
-  residual_score field predicates
-  """
-  residualScore: Int
-  residualScoreNEQ: Int
-  residualScoreGT: Int
-  residualScoreGTE: Int
-  residualScoreLT: Int
-  residualScoreLTE: Int
-  residualScoreIsNil: Boolean
-  residualScoreNotNil: Boolean
-  """
-  risk_decision field predicates
-  """
-  riskDecision: RiskHistoryRiskDecision
-  riskDecisionNEQ: RiskHistoryRiskDecision
-  riskDecisionIn: [RiskHistoryRiskDecision!]
-  riskDecisionNotIn: [RiskHistoryRiskDecision!]
-  riskDecisionIsNil: Boolean
-  riskDecisionNotNil: Boolean
 }
 type SLADefinitionHistory implements Node {
   id: ID!
@@ -48045,18 +36821,6 @@ input SLADefinitionHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -48070,22 +36834,6 @@ input SLADefinitionHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  sla_days field predicates
-  """
-  slaDays: Int
-  slaDaysNEQ: Int
-  slaDaysGT: Int
-  slaDaysGTE: Int
-  slaDaysLT: Int
-  slaDaysLTE: Int
-  """
-  security_level field predicates
-  """
-  securityLevel: SLADefinitionHistorySecurityLevel
-  securityLevelNEQ: SLADefinitionHistorySecurityLevel
-  securityLevelIn: [SLADefinitionHistorySecurityLevel!]
-  securityLevelNotIn: [SLADefinitionHistorySecurityLevel!]
 }
 type StandardHistory implements Node {
   id: ID!
@@ -48391,202 +37139,6 @@ input StandardHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  short_name field predicates
-  """
-  shortName: String
-  shortNameNEQ: String
-  shortNameIn: [String!]
-  shortNameNotIn: [String!]
-  shortNameContains: String
-  shortNameHasPrefix: String
-  shortNameHasSuffix: String
-  shortNameIsNil: Boolean
-  shortNameNotNil: Boolean
-  shortNameEqualFold: String
-  shortNameContainsFold: String
-  """
-  framework field predicates
-  """
-  framework: String
-  frameworkNEQ: String
-  frameworkIn: [String!]
-  frameworkNotIn: [String!]
-  frameworkContains: String
-  frameworkHasPrefix: String
-  frameworkHasSuffix: String
-  frameworkIsNil: Boolean
-  frameworkNotNil: Boolean
-  frameworkEqualFold: String
-  frameworkContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  governing_body_logo_url field predicates
-  """
-  governingBodyLogoURL: String
-  governingBodyLogoURLNEQ: String
-  governingBodyLogoURLIn: [String!]
-  governingBodyLogoURLNotIn: [String!]
-  governingBodyLogoURLContains: String
-  governingBodyLogoURLHasPrefix: String
-  governingBodyLogoURLHasSuffix: String
-  governingBodyLogoURLIsNil: Boolean
-  governingBodyLogoURLNotNil: Boolean
-  governingBodyLogoURLEqualFold: String
-  governingBodyLogoURLContainsFold: String
-  """
-  governing_body field predicates
-  """
-  governingBody: String
-  governingBodyNEQ: String
-  governingBodyIn: [String!]
-  governingBodyNotIn: [String!]
-  governingBodyContains: String
-  governingBodyHasPrefix: String
-  governingBodyHasSuffix: String
-  governingBodyIsNil: Boolean
-  governingBodyNotNil: Boolean
-  governingBodyEqualFold: String
-  governingBodyContainsFold: String
-  """
-  link field predicates
-  """
-  link: String
-  linkNEQ: String
-  linkIn: [String!]
-  linkNotIn: [String!]
-  linkContains: String
-  linkHasPrefix: String
-  linkHasSuffix: String
-  linkIsNil: Boolean
-  linkNotNil: Boolean
-  linkEqualFold: String
-  linkContainsFold: String
-  """
-  status field predicates
-  """
-  status: StandardHistoryStandardStatus
-  statusNEQ: StandardHistoryStandardStatus
-  statusIn: [StandardHistoryStandardStatus!]
-  statusNotIn: [StandardHistoryStandardStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  is_public field predicates
-  """
-  isPublic: Boolean
-  isPublicNEQ: Boolean
-  isPublicIsNil: Boolean
-  isPublicNotNil: Boolean
-  """
-  free_to_use field predicates
-  """
-  freeToUse: Boolean
-  freeToUseNEQ: Boolean
-  freeToUseIsNil: Boolean
-  freeToUseNotNil: Boolean
-  """
-  standard_type field predicates
-  """
-  standardType: String
-  standardTypeNEQ: String
-  standardTypeIn: [String!]
-  standardTypeNotIn: [String!]
-  standardTypeContains: String
-  standardTypeHasPrefix: String
-  standardTypeHasSuffix: String
-  standardTypeIsNil: Boolean
-  standardTypeNotNil: Boolean
-  standardTypeEqualFold: String
-  standardTypeContainsFold: String
-  """
-  version field predicates
-  """
-  version: String
-  versionNEQ: String
-  versionIn: [String!]
-  versionNotIn: [String!]
-  versionContains: String
-  versionHasPrefix: String
-  versionHasSuffix: String
-  versionIsNil: Boolean
-  versionNotNil: Boolean
-  versionEqualFold: String
-  versionContainsFold: String
-  """
-  logo_file_id field predicates
-  """
-  logoFileID: String
-  logoFileIDNEQ: String
-  logoFileIDIn: [String!]
-  logoFileIDNotIn: [String!]
-  logoFileIDContains: String
-  logoFileIDHasPrefix: String
-  logoFileIDHasSuffix: String
-  logoFileIDIsNil: Boolean
-  logoFileIDNotNil: Boolean
-  logoFileIDEqualFold: String
-  logoFileIDContainsFold: String
 }
 type SubcontrolHistory implements Node {
   id: ID!
@@ -48629,6 +37181,10 @@ type SubcontrolHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -48998,353 +37554,6 @@ input SubcontrolHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
-  external_uuid field predicates
-  """
-  externalUUID: String
-  externalUUIDNEQ: String
-  externalUUIDIn: [String!]
-  externalUUIDNotIn: [String!]
-  externalUUIDContains: String
-  externalUUIDHasPrefix: String
-  externalUUIDHasSuffix: String
-  externalUUIDIsNil: Boolean
-  externalUUIDNotNil: Boolean
-  externalUUIDEqualFold: String
-  externalUUIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleIsNil: Boolean
-  titleNotNil: Boolean
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  reference_id field predicates
-  """
-  referenceID: String
-  referenceIDNEQ: String
-  referenceIDIn: [String!]
-  referenceIDNotIn: [String!]
-  referenceIDContains: String
-  referenceIDHasPrefix: String
-  referenceIDHasSuffix: String
-  referenceIDIsNil: Boolean
-  referenceIDNotNil: Boolean
-  referenceIDEqualFold: String
-  referenceIDContainsFold: String
-  """
-  auditor_reference_id field predicates
-  """
-  auditorReferenceID: String
-  auditorReferenceIDNEQ: String
-  auditorReferenceIDIn: [String!]
-  auditorReferenceIDNotIn: [String!]
-  auditorReferenceIDContains: String
-  auditorReferenceIDHasPrefix: String
-  auditorReferenceIDHasSuffix: String
-  auditorReferenceIDIsNil: Boolean
-  auditorReferenceIDNotNil: Boolean
-  auditorReferenceIDEqualFold: String
-  auditorReferenceIDContainsFold: String
-  """
-  responsible_party_id field predicates
-  """
-  responsiblePartyID: String
-  responsiblePartyIDNEQ: String
-  responsiblePartyIDIn: [String!]
-  responsiblePartyIDNotIn: [String!]
-  responsiblePartyIDContains: String
-  responsiblePartyIDHasPrefix: String
-  responsiblePartyIDHasSuffix: String
-  responsiblePartyIDIsNil: Boolean
-  responsiblePartyIDNotNil: Boolean
-  responsiblePartyIDEqualFold: String
-  responsiblePartyIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: SubcontrolHistoryControlStatus
-  statusNEQ: SubcontrolHistoryControlStatus
-  statusIn: [SubcontrolHistoryControlStatus!]
-  statusNotIn: [SubcontrolHistoryControlStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  implementation_status field predicates
-  """
-  implementationStatus: SubcontrolHistoryControlImplementationStatus
-  implementationStatusNEQ: SubcontrolHistoryControlImplementationStatus
-  implementationStatusIn: [SubcontrolHistoryControlImplementationStatus!]
-  implementationStatusNotIn: [SubcontrolHistoryControlImplementationStatus!]
-  implementationStatusIsNil: Boolean
-  implementationStatusNotNil: Boolean
-  """
-  implementation_description field predicates
-  """
-  implementationDescription: String
-  implementationDescriptionNEQ: String
-  implementationDescriptionIn: [String!]
-  implementationDescriptionNotIn: [String!]
-  implementationDescriptionContains: String
-  implementationDescriptionHasPrefix: String
-  implementationDescriptionHasSuffix: String
-  implementationDescriptionIsNil: Boolean
-  implementationDescriptionNotNil: Boolean
-  implementationDescriptionEqualFold: String
-  implementationDescriptionContainsFold: String
-  """
-  public_representation field predicates
-  """
-  publicRepresentation: String
-  publicRepresentationNEQ: String
-  publicRepresentationIn: [String!]
-  publicRepresentationNotIn: [String!]
-  publicRepresentationContains: String
-  publicRepresentationHasPrefix: String
-  publicRepresentationHasSuffix: String
-  publicRepresentationIsNil: Boolean
-  publicRepresentationNotNil: Boolean
-  publicRepresentationEqualFold: String
-  publicRepresentationContainsFold: String
-  """
-  source field predicates
-  """
-  source: SubcontrolHistoryControlSource
-  sourceNEQ: SubcontrolHistoryControlSource
-  sourceIn: [SubcontrolHistoryControlSource!]
-  sourceNotIn: [SubcontrolHistoryControlSource!]
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  """
-  source_name field predicates
-  """
-  sourceName: String
-  sourceNameNEQ: String
-  sourceNameIn: [String!]
-  sourceNameNotIn: [String!]
-  sourceNameContains: String
-  sourceNameHasPrefix: String
-  sourceNameHasSuffix: String
-  sourceNameIsNil: Boolean
-  sourceNameNotNil: Boolean
-  sourceNameEqualFold: String
-  sourceNameContainsFold: String
-  """
-  reference_framework field predicates
-  """
-  referenceFramework: String
-  referenceFrameworkNEQ: String
-  referenceFrameworkIn: [String!]
-  referenceFrameworkNotIn: [String!]
-  referenceFrameworkContains: String
-  referenceFrameworkHasPrefix: String
-  referenceFrameworkHasSuffix: String
-  referenceFrameworkIsNil: Boolean
-  referenceFrameworkNotNil: Boolean
-  referenceFrameworkEqualFold: String
-  referenceFrameworkContainsFold: String
-  """
-  reference_framework_revision field predicates
-  """
-  referenceFrameworkRevision: String
-  referenceFrameworkRevisionNEQ: String
-  referenceFrameworkRevisionIn: [String!]
-  referenceFrameworkRevisionNotIn: [String!]
-  referenceFrameworkRevisionContains: String
-  referenceFrameworkRevisionHasPrefix: String
-  referenceFrameworkRevisionHasSuffix: String
-  referenceFrameworkRevisionIsNil: Boolean
-  referenceFrameworkRevisionNotNil: Boolean
-  referenceFrameworkRevisionEqualFold: String
-  referenceFrameworkRevisionContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
-  """
-  category_id field predicates
-  """
-  categoryID: String
-  categoryIDNEQ: String
-  categoryIDIn: [String!]
-  categoryIDNotIn: [String!]
-  categoryIDContains: String
-  categoryIDHasPrefix: String
-  categoryIDHasSuffix: String
-  categoryIDIsNil: Boolean
-  categoryIDNotNil: Boolean
-  categoryIDEqualFold: String
-  categoryIDContainsFold: String
-  """
-  subcategory field predicates
-  """
-  subcategory: String
-  subcategoryNEQ: String
-  subcategoryIn: [String!]
-  subcategoryNotIn: [String!]
-  subcategoryContains: String
-  subcategoryHasPrefix: String
-  subcategoryHasSuffix: String
-  subcategoryIsNil: Boolean
-  subcategoryNotNil: Boolean
-  subcategoryEqualFold: String
-  subcategoryContainsFold: String
-  """
-  control_owner_id field predicates
-  """
-  controlOwnerID: String
-  controlOwnerIDNEQ: String
-  controlOwnerIDIn: [String!]
-  controlOwnerIDNotIn: [String!]
-  controlOwnerIDContains: String
-  controlOwnerIDHasPrefix: String
-  controlOwnerIDHasSuffix: String
-  controlOwnerIDIsNil: Boolean
-  controlOwnerIDNotNil: Boolean
-  controlOwnerIDEqualFold: String
-  controlOwnerIDContainsFold: String
-  """
-  delegate_id field predicates
-  """
-  delegateID: String
-  delegateIDNEQ: String
-  delegateIDIn: [String!]
-  delegateIDNotIn: [String!]
-  delegateIDContains: String
-  delegateIDHasPrefix: String
-  delegateIDHasSuffix: String
-  delegateIDIsNil: Boolean
-  delegateIDNotNil: Boolean
-  delegateIDEqualFold: String
-  delegateIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -49358,100 +37567,6 @@ input SubcontrolHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  subcontrol_kind_name field predicates
-  """
-  subcontrolKindName: String
-  subcontrolKindNameNEQ: String
-  subcontrolKindNameIn: [String!]
-  subcontrolKindNameNotIn: [String!]
-  subcontrolKindNameContains: String
-  subcontrolKindNameHasPrefix: String
-  subcontrolKindNameHasSuffix: String
-  subcontrolKindNameIsNil: Boolean
-  subcontrolKindNameNotNil: Boolean
-  subcontrolKindNameEqualFold: String
-  subcontrolKindNameContainsFold: String
-  """
-  subcontrol_kind_id field predicates
-  """
-  subcontrolKindID: String
-  subcontrolKindIDNEQ: String
-  subcontrolKindIDIn: [String!]
-  subcontrolKindIDNotIn: [String!]
-  subcontrolKindIDContains: String
-  subcontrolKindIDHasPrefix: String
-  subcontrolKindIDHasSuffix: String
-  subcontrolKindIDIsNil: Boolean
-  subcontrolKindIDNotNil: Boolean
-  subcontrolKindIDEqualFold: String
-  subcontrolKindIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  ref_code field predicates
-  """
-  refCode: String
-  refCodeNEQ: String
-  refCodeIn: [String!]
-  refCodeNotIn: [String!]
-  refCodeContains: String
-  refCodeHasPrefix: String
-  refCodeHasSuffix: String
-  refCodeEqualFold: String
-  refCodeContainsFold: String
-  """
-  control_id field predicates
-  """
-  controlID: String
-  controlIDNEQ: String
-  controlIDIn: [String!]
-  controlIDNotIn: [String!]
-  controlIDContains: String
-  controlIDHasPrefix: String
-  controlIDHasSuffix: String
-  controlIDEqualFold: String
-  controlIDContainsFold: String
 }
 type SubprocessorHistory implements Node {
   id: ID!
@@ -49685,95 +37800,6 @@ input SubprocessorHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  logo_remote_url field predicates
-  """
-  logoRemoteURL: String
-  logoRemoteURLNEQ: String
-  logoRemoteURLIn: [String!]
-  logoRemoteURLNotIn: [String!]
-  logoRemoteURLContains: String
-  logoRemoteURLHasPrefix: String
-  logoRemoteURLHasSuffix: String
-  logoRemoteURLIsNil: Boolean
-  logoRemoteURLNotNil: Boolean
-  logoRemoteURLEqualFold: String
-  logoRemoteURLContainsFold: String
-  """
-  logo_file_id field predicates
-  """
-  logoFileID: String
-  logoFileIDNEQ: String
-  logoFileIDIn: [String!]
-  logoFileIDNotIn: [String!]
-  logoFileIDContains: String
-  logoFileIDHasPrefix: String
-  logoFileIDHasSuffix: String
-  logoFileIDIsNil: Boolean
-  logoFileIDNotNil: Boolean
-  logoFileIDEqualFold: String
-  logoFileIDContainsFold: String
 }
 type SystemDetailHistory implements Node {
   id: ID!
@@ -49816,6 +37842,10 @@ type SystemDetailHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -50036,102 +38066,6 @@ input SystemDetailHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -50145,79 +38079,6 @@ input SystemDetailHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_name field predicates
-  """
-  systemName: String
-  systemNameNEQ: String
-  systemNameIn: [String!]
-  systemNameNotIn: [String!]
-  systemNameContains: String
-  systemNameHasPrefix: String
-  systemNameHasSuffix: String
-  systemNameEqualFold: String
-  systemNameContainsFold: String
-  """
-  version field predicates
-  """
-  version: String
-  versionNEQ: String
-  versionIn: [String!]
-  versionNotIn: [String!]
-  versionContains: String
-  versionHasPrefix: String
-  versionHasSuffix: String
-  versionIsNil: Boolean
-  versionNotNil: Boolean
-  versionEqualFold: String
-  versionContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  authorization_boundary field predicates
-  """
-  authorizationBoundary: String
-  authorizationBoundaryNEQ: String
-  authorizationBoundaryIn: [String!]
-  authorizationBoundaryNotIn: [String!]
-  authorizationBoundaryContains: String
-  authorizationBoundaryHasPrefix: String
-  authorizationBoundaryHasSuffix: String
-  authorizationBoundaryIsNil: Boolean
-  authorizationBoundaryNotNil: Boolean
-  authorizationBoundaryEqualFold: String
-  authorizationBoundaryContainsFold: String
-  """
-  sensitivity_level field predicates
-  """
-  sensitivityLevel: SystemDetailHistorySystemSensitivityLevel
-  sensitivityLevelNEQ: SystemDetailHistorySystemSensitivityLevel
-  sensitivityLevelIn: [SystemDetailHistorySystemSensitivityLevel!]
-  sensitivityLevelNotIn: [SystemDetailHistorySystemSensitivityLevel!]
-  sensitivityLevelIsNil: Boolean
-  sensitivityLevelNotNil: Boolean
-  """
-  last_reviewed field predicates
-  """
-  lastReviewed: DateTime
-  lastReviewedGT: DateTime
-  lastReviewedGTE: DateTime
-  lastReviewedLT: DateTime
-  lastReviewedLTE: DateTime
-  lastReviewedIsNil: Boolean
-  lastReviewedNotNil: Boolean
 }
 type TaskHistory implements Node {
   id: ID!
@@ -50260,6 +38121,10 @@ type TaskHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -50356,10 +38221,6 @@ type TaskHistory implements Node {
   the system or workflow that created or suggested the task
   """
   source: String
-  """
-  stable source-specific key for the task
-  """
-  sourceKey: String
   """
   key to prevent duplicates for auto-generated task based on rules
   """
@@ -50559,102 +38420,6 @@ input TaskHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -50668,272 +38433,6 @@ input TaskHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  task_kind_name field predicates
-  """
-  taskKindName: String
-  taskKindNameNEQ: String
-  taskKindNameIn: [String!]
-  taskKindNameNotIn: [String!]
-  taskKindNameContains: String
-  taskKindNameHasPrefix: String
-  taskKindNameHasSuffix: String
-  taskKindNameIsNil: Boolean
-  taskKindNameNotNil: Boolean
-  taskKindNameEqualFold: String
-  taskKindNameContainsFold: String
-  """
-  task_kind_id field predicates
-  """
-  taskKindID: String
-  taskKindIDNEQ: String
-  taskKindIDIn: [String!]
-  taskKindIDNotIn: [String!]
-  taskKindIDContains: String
-  taskKindIDHasPrefix: String
-  taskKindIDHasSuffix: String
-  taskKindIDIsNil: Boolean
-  taskKindIDNotNil: Boolean
-  taskKindIDEqualFold: String
-  taskKindIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  external_uuid field predicates
-  """
-  externalUUID: String
-  externalUUIDNEQ: String
-  externalUUIDIn: [String!]
-  externalUUIDNotIn: [String!]
-  externalUUIDContains: String
-  externalUUIDHasPrefix: String
-  externalUUIDHasSuffix: String
-  externalUUIDIsNil: Boolean
-  externalUUIDNotNil: Boolean
-  externalUUIDEqualFold: String
-  externalUUIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  details field predicates
-  """
-  details: String
-  detailsNEQ: String
-  detailsIn: [String!]
-  detailsNotIn: [String!]
-  detailsContains: String
-  detailsHasPrefix: String
-  detailsHasSuffix: String
-  detailsIsNil: Boolean
-  detailsNotNil: Boolean
-  detailsEqualFold: String
-  detailsContainsFold: String
-  """
-  status field predicates
-  """
-  status: TaskHistoryTaskStatus
-  statusNEQ: TaskHistoryTaskStatus
-  statusIn: [TaskHistoryTaskStatus!]
-  statusNotIn: [TaskHistoryTaskStatus!]
-  """
-  due field predicates
-  """
-  due: DateTime
-  dueGT: DateTime
-  dueGTE: DateTime
-  dueLT: DateTime
-  dueLTE: DateTime
-  dueIsNil: Boolean
-  dueNotNil: Boolean
-  """
-  completed field predicates
-  """
-  completed: DateTime
-  completedGT: DateTime
-  completedGTE: DateTime
-  completedLT: DateTime
-  completedLTE: DateTime
-  completedIsNil: Boolean
-  completedNotNil: Boolean
-  """
-  assignee_id field predicates
-  """
-  assigneeID: String
-  assigneeIDNEQ: String
-  assigneeIDIn: [String!]
-  assigneeIDNotIn: [String!]
-  assigneeIDContains: String
-  assigneeIDHasPrefix: String
-  assigneeIDHasSuffix: String
-  assigneeIDIsNil: Boolean
-  assigneeIDNotNil: Boolean
-  assigneeIDEqualFold: String
-  assigneeIDContainsFold: String
-  """
-  assigner_id field predicates
-  """
-  assignerID: String
-  assignerIDNEQ: String
-  assignerIDIn: [String!]
-  assignerIDNotIn: [String!]
-  assignerIDContains: String
-  assignerIDHasPrefix: String
-  assignerIDHasSuffix: String
-  assignerIDIsNil: Boolean
-  assignerIDNotNil: Boolean
-  assignerIDEqualFold: String
-  assignerIDContainsFold: String
-  """
-  system_generated field predicates
-  """
-  systemGenerated: Boolean
-  systemGeneratedNEQ: Boolean
-  """
-  is_template field predicates
-  """
-  isTemplate: Boolean
-  isTemplateNEQ: Boolean
-  """
-  is_suggested field predicates
-  """
-  isSuggested: Boolean
-  isSuggestedNEQ: Boolean
-  """
-  priority field predicates
-  """
-  priority: Int
-  priorityNEQ: Int
-  priorityGT: Int
-  priorityGTE: Int
-  priorityLT: Int
-  priorityLTE: Int
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
-  """
-  source_key field predicates
-  """
-  sourceKey: String
-  sourceKeyNEQ: String
-  sourceKeyIn: [String!]
-  sourceKeyNotIn: [String!]
-  sourceKeyContains: String
-  sourceKeyHasPrefix: String
-  sourceKeyHasSuffix: String
-  sourceKeyIsNil: Boolean
-  sourceKeyNotNil: Boolean
-  sourceKeyEqualFold: String
-  sourceKeyContainsFold: String
-  """
-  idempotency_key field predicates
-  """
-  idempotencyKey: String
-  idempotencyKeyNEQ: String
-  idempotencyKeyIn: [String!]
-  idempotencyKeyNotIn: [String!]
-  idempotencyKeyContains: String
-  idempotencyKeyHasPrefix: String
-  idempotencyKeyHasSuffix: String
-  idempotencyKeyIsNil: Boolean
-  idempotencyKeyNotNil: Boolean
-  idempotencyKeyEqualFold: String
-  idempotencyKeyContainsFold: String
-  """
-  parent_task_id field predicates
-  """
-  parentTaskID: String
-  parentTaskIDNEQ: String
-  parentTaskIDIn: [String!]
-  parentTaskIDNotIn: [String!]
-  parentTaskIDContains: String
-  parentTaskIDHasPrefix: String
-  parentTaskIDHasSuffix: String
-  parentTaskIDIsNil: Boolean
-  parentTaskIDNotNil: Boolean
-  parentTaskIDEqualFold: String
-  parentTaskIDContainsFold: String
 }
 type TemplateHistory implements Node {
   id: ID!
@@ -50972,6 +38471,10 @@ type TemplateHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -51228,90 +38731,6 @@ input TemplateHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -51325,153 +38744,6 @@ input TemplateHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  template_type field predicates
-  """
-  templateType: TemplateHistoryDocumentType
-  templateTypeNEQ: TemplateHistoryDocumentType
-  templateTypeIn: [TemplateHistoryDocumentType!]
-  templateTypeNotIn: [TemplateHistoryDocumentType!]
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  kind field predicates
-  """
-  kind: TemplateHistoryTemplateKind
-  kindNEQ: TemplateHistoryTemplateKind
-  kindIn: [TemplateHistoryTemplateKind!]
-  kindNotIn: [TemplateHistoryTemplateKind!]
-  kindIsNil: Boolean
-  kindNotNil: Boolean
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
 }
 """
 The builtin Time type
@@ -51670,32 +38942,6 @@ input TrustCenterComplianceHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  standard_id field predicates
-  """
-  standardID: String
-  standardIDNEQ: String
-  standardIDIn: [String!]
-  standardIDNotIn: [String!]
-  standardIDContains: String
-  standardIDHasPrefix: String
-  standardIDHasSuffix: String
-  standardIDEqualFold: String
-  standardIDContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
 }
 type TrustCenterDocHistory implements Node {
   id: ID!
@@ -51940,127 +39186,6 @@ input TrustCenterDocHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  trust_center_doc_kind_name field predicates
-  """
-  trustCenterDocKindName: String
-  trustCenterDocKindNameNEQ: String
-  trustCenterDocKindNameIn: [String!]
-  trustCenterDocKindNameNotIn: [String!]
-  trustCenterDocKindNameContains: String
-  trustCenterDocKindNameHasPrefix: String
-  trustCenterDocKindNameHasSuffix: String
-  trustCenterDocKindNameIsNil: Boolean
-  trustCenterDocKindNameNotNil: Boolean
-  trustCenterDocKindNameEqualFold: String
-  trustCenterDocKindNameContainsFold: String
-  """
-  trust_center_doc_kind_id field predicates
-  """
-  trustCenterDocKindID: String
-  trustCenterDocKindIDNEQ: String
-  trustCenterDocKindIDIn: [String!]
-  trustCenterDocKindIDNotIn: [String!]
-  trustCenterDocKindIDContains: String
-  trustCenterDocKindIDHasPrefix: String
-  trustCenterDocKindIDHasSuffix: String
-  trustCenterDocKindIDIsNil: Boolean
-  trustCenterDocKindIDNotNil: Boolean
-  trustCenterDocKindIDEqualFold: String
-  trustCenterDocKindIDContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  file_id field predicates
-  """
-  fileID: String
-  fileIDNEQ: String
-  fileIDIn: [String!]
-  fileIDNotIn: [String!]
-  fileIDContains: String
-  fileIDHasPrefix: String
-  fileIDHasSuffix: String
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: String
-  fileIDContainsFold: String
-  """
-  original_file_id field predicates
-  """
-  originalFileID: String
-  originalFileIDNEQ: String
-  originalFileIDIn: [String!]
-  originalFileIDNotIn: [String!]
-  originalFileIDContains: String
-  originalFileIDHasPrefix: String
-  originalFileIDHasSuffix: String
-  originalFileIDIsNil: Boolean
-  originalFileIDNotNil: Boolean
-  originalFileIDEqualFold: String
-  originalFileIDContainsFold: String
-  """
-  watermarking_enabled field predicates
-  """
-  watermarkingEnabled: Boolean
-  watermarkingEnabledNEQ: Boolean
-  watermarkingEnabledIsNil: Boolean
-  watermarkingEnabledNotNil: Boolean
-  """
-  watermark_status field predicates
-  """
-  watermarkStatus: TrustCenterDocHistoryWatermarkStatus
-  watermarkStatusNEQ: TrustCenterDocHistoryWatermarkStatus
-  watermarkStatusIn: [TrustCenterDocHistoryWatermarkStatus!]
-  watermarkStatusNotIn: [TrustCenterDocHistoryWatermarkStatus!]
-  watermarkStatusIsNil: Boolean
-  watermarkStatusNotNil: Boolean
-  """
-  visibility field predicates
-  """
-  visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
-  visibilityNEQ: TrustCenterDocHistoryTrustCenterDocumentVisibility
-  visibilityIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
-  visibilityNotIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
-  visibilityIsNil: Boolean
-  visibilityNotNil: Boolean
-  """
-  standard_id field predicates
-  """
-  standardID: String
-  standardIDNEQ: String
-  standardIDIn: [String!]
-  standardIDNotIn: [String!]
-  standardIDContains: String
-  standardIDHasPrefix: String
-  standardIDHasSuffix: String
-  standardIDIsNil: Boolean
-  standardIDNotNil: Boolean
-  standardIDEqualFold: String
-  standardIDContainsFold: String
 }
 type TrustCenterEntityHistory implements Node {
   id: ID!
@@ -52264,60 +39389,6 @@ input TrustCenterEntityHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  logo_file_id field predicates
-  """
-  logoFileID: String
-  logoFileIDNEQ: String
-  logoFileIDIn: [String!]
-  logoFileIDNotIn: [String!]
-  logoFileIDContains: String
-  logoFileIDHasPrefix: String
-  logoFileIDHasSuffix: String
-  logoFileIDIsNil: Boolean
-  logoFileIDNotNil: Boolean
-  logoFileIDEqualFold: String
-  logoFileIDContainsFold: String
-  """
-  url field predicates
-  """
-  url: String
-  urlNEQ: String
-  urlIn: [String!]
-  urlNotIn: [String!]
-  urlContains: String
-  urlHasPrefix: String
-  urlHasSuffix: String
-  urlIsNil: Boolean
-  urlNotNil: Boolean
-  urlEqualFold: String
-  urlContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
 }
 type TrustCenterFAQHistory implements Node {
   id: ID!
@@ -52525,85 +39596,6 @@ input TrustCenterFAQHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  trust_center_faq_kind_name field predicates
-  """
-  trustCenterFaqKindName: String
-  trustCenterFaqKindNameNEQ: String
-  trustCenterFaqKindNameIn: [String!]
-  trustCenterFaqKindNameNotIn: [String!]
-  trustCenterFaqKindNameContains: String
-  trustCenterFaqKindNameHasPrefix: String
-  trustCenterFaqKindNameHasSuffix: String
-  trustCenterFaqKindNameIsNil: Boolean
-  trustCenterFaqKindNameNotNil: Boolean
-  trustCenterFaqKindNameEqualFold: String
-  trustCenterFaqKindNameContainsFold: String
-  """
-  trust_center_faq_kind_id field predicates
-  """
-  trustCenterFaqKindID: String
-  trustCenterFaqKindIDNEQ: String
-  trustCenterFaqKindIDIn: [String!]
-  trustCenterFaqKindIDNotIn: [String!]
-  trustCenterFaqKindIDContains: String
-  trustCenterFaqKindIDHasPrefix: String
-  trustCenterFaqKindIDHasSuffix: String
-  trustCenterFaqKindIDIsNil: Boolean
-  trustCenterFaqKindIDNotNil: Boolean
-  trustCenterFaqKindIDEqualFold: String
-  trustCenterFaqKindIDContainsFold: String
-  """
-  note_id field predicates
-  """
-  noteID: String
-  noteIDNEQ: String
-  noteIDIn: [String!]
-  noteIDNotIn: [String!]
-  noteIDContains: String
-  noteIDHasPrefix: String
-  noteIDHasSuffix: String
-  noteIDEqualFold: String
-  noteIDContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
-  """
-  reference_link field predicates
-  """
-  referenceLink: String
-  referenceLinkNEQ: String
-  referenceLinkIn: [String!]
-  referenceLinkNotIn: [String!]
-  referenceLinkContains: String
-  referenceLinkHasPrefix: String
-  referenceLinkHasSuffix: String
-  referenceLinkIsNil: Boolean
-  referenceLinkNotNil: Boolean
-  referenceLinkEqualFold: String
-  referenceLinkContainsFold: String
-  """
-  display_order field predicates
-  """
-  displayOrder: Int
-  displayOrderNEQ: Int
-  displayOrderGT: Int
-  displayOrderGTE: Int
-  displayOrderLT: Int
-  displayOrderLTE: Int
-  displayOrderIsNil: Boolean
-  displayOrderNotNil: Boolean
 }
 type TrustCenterHistory implements Node {
   id: ID!
@@ -52850,113 +39842,6 @@ input TrustCenterHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  slug field predicates
-  """
-  slug: String
-  slugNEQ: String
-  slugIn: [String!]
-  slugNotIn: [String!]
-  slugContains: String
-  slugHasPrefix: String
-  slugHasSuffix: String
-  slugIsNil: Boolean
-  slugNotNil: Boolean
-  slugEqualFold: String
-  slugContainsFold: String
-  """
-  custom_domain_id field predicates
-  """
-  customDomainID: String
-  customDomainIDNEQ: String
-  customDomainIDIn: [String!]
-  customDomainIDNotIn: [String!]
-  customDomainIDContains: String
-  customDomainIDHasPrefix: String
-  customDomainIDHasSuffix: String
-  customDomainIDIsNil: Boolean
-  customDomainIDNotNil: Boolean
-  customDomainIDEqualFold: String
-  customDomainIDContainsFold: String
-  """
-  preview_domain_id field predicates
-  """
-  previewDomainID: String
-  previewDomainIDNEQ: String
-  previewDomainIDIn: [String!]
-  previewDomainIDNotIn: [String!]
-  previewDomainIDContains: String
-  previewDomainIDHasPrefix: String
-  previewDomainIDHasSuffix: String
-  previewDomainIDIsNil: Boolean
-  previewDomainIDNotNil: Boolean
-  previewDomainIDEqualFold: String
-  previewDomainIDContainsFold: String
-  """
-  pirsch_domain_id field predicates
-  """
-  pirschDomainID: String
-  pirschDomainIDNEQ: String
-  pirschDomainIDIn: [String!]
-  pirschDomainIDNotIn: [String!]
-  pirschDomainIDContains: String
-  pirschDomainIDHasPrefix: String
-  pirschDomainIDHasSuffix: String
-  pirschDomainIDIsNil: Boolean
-  pirschDomainIDNotNil: Boolean
-  pirschDomainIDEqualFold: String
-  pirschDomainIDContainsFold: String
-  """
-  pirsch_identification_code field predicates
-  """
-  pirschIdentificationCode: String
-  pirschIdentificationCodeNEQ: String
-  pirschIdentificationCodeIn: [String!]
-  pirschIdentificationCodeNotIn: [String!]
-  pirschIdentificationCodeContains: String
-  pirschIdentificationCodeHasPrefix: String
-  pirschIdentificationCodeHasSuffix: String
-  pirschIdentificationCodeIsNil: Boolean
-  pirschIdentificationCodeNotNil: Boolean
-  pirschIdentificationCodeEqualFold: String
-  pirschIdentificationCodeContainsFold: String
-  """
-  pirsch_access_link field predicates
-  """
-  pirschAccessLink: String
-  pirschAccessLinkNEQ: String
-  pirschAccessLinkIn: [String!]
-  pirschAccessLinkNotIn: [String!]
-  pirschAccessLinkContains: String
-  pirschAccessLinkHasPrefix: String
-  pirschAccessLinkHasSuffix: String
-  pirschAccessLinkIsNil: Boolean
-  pirschAccessLinkNotNil: Boolean
-  pirschAccessLinkEqualFold: String
-  pirschAccessLinkContainsFold: String
-  """
-  preview_status field predicates
-  """
-  previewStatus: TrustCenterHistoryTrustCenterPreviewStatus
-  previewStatusNEQ: TrustCenterHistoryTrustCenterPreviewStatus
-  previewStatusIn: [TrustCenterHistoryTrustCenterPreviewStatus!]
-  previewStatusNotIn: [TrustCenterHistoryTrustCenterPreviewStatus!]
-  previewStatusIsNil: Boolean
-  previewStatusNotNil: Boolean
-  """
-  subprocessor_url field predicates
-  """
-  subprocessorURL: String
-  subprocessorURLNEQ: String
-  subprocessorURLIn: [String!]
-  subprocessorURLNotIn: [String!]
-  subprocessorURLContains: String
-  subprocessorURLHasPrefix: String
-  subprocessorURLHasSuffix: String
-  subprocessorURLIsNil: Boolean
-  subprocessorURLNotNil: Boolean
-  subprocessorURLEqualFold: String
-  subprocessorURLContainsFold: String
 }
 type TrustCenterNDARequestHistory implements Node {
   id: ID!
@@ -53213,171 +40098,6 @@ input TrustCenterNDARequestHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
-  """
-  first_name field predicates
-  """
-  firstName: String
-  firstNameNEQ: String
-  firstNameIn: [String!]
-  firstNameNotIn: [String!]
-  firstNameContains: String
-  firstNameHasPrefix: String
-  firstNameHasSuffix: String
-  firstNameEqualFold: String
-  firstNameContainsFold: String
-  """
-  last_name field predicates
-  """
-  lastName: String
-  lastNameNEQ: String
-  lastNameIn: [String!]
-  lastNameNotIn: [String!]
-  lastNameContains: String
-  lastNameHasPrefix: String
-  lastNameHasSuffix: String
-  lastNameEqualFold: String
-  lastNameContainsFold: String
-  """
-  email field predicates
-  """
-  email: String
-  emailNEQ: String
-  emailIn: [String!]
-  emailNotIn: [String!]
-  emailContains: String
-  emailHasPrefix: String
-  emailHasSuffix: String
-  emailEqualFold: String
-  emailContainsFold: String
-  """
-  company_name field predicates
-  """
-  companyName: String
-  companyNameNEQ: String
-  companyNameIn: [String!]
-  companyNameNotIn: [String!]
-  companyNameContains: String
-  companyNameHasPrefix: String
-  companyNameHasSuffix: String
-  companyNameIsNil: Boolean
-  companyNameNotNil: Boolean
-  companyNameEqualFold: String
-  companyNameContainsFold: String
-  """
-  reason field predicates
-  """
-  reason: String
-  reasonNEQ: String
-  reasonIn: [String!]
-  reasonNotIn: [String!]
-  reasonContains: String
-  reasonHasPrefix: String
-  reasonHasSuffix: String
-  reasonIsNil: Boolean
-  reasonNotNil: Boolean
-  reasonEqualFold: String
-  reasonContainsFold: String
-  """
-  access_level field predicates
-  """
-  accessLevel: TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel
-  accessLevelNEQ: TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel
-  accessLevelIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel!]
-  accessLevelNotIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel!]
-  accessLevelIsNil: Boolean
-  accessLevelNotNil: Boolean
-  """
-  status field predicates
-  """
-  status: TrustCenterNDARequestHistoryTrustCenterNDARequestStatus
-  statusNEQ: TrustCenterNDARequestHistoryTrustCenterNDARequestStatus
-  statusIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestStatus!]
-  statusNotIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestStatus!]
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  """
-  approved_at field predicates
-  """
-  approvedAt: DateTime
-  approvedAtGT: DateTime
-  approvedAtGTE: DateTime
-  approvedAtLT: DateTime
-  approvedAtLTE: DateTime
-  approvedAtIsNil: Boolean
-  approvedAtNotNil: Boolean
-  """
-  approved_by_user_id field predicates
-  """
-  approvedByUserID: String
-  approvedByUserIDNEQ: String
-  approvedByUserIDIn: [String!]
-  approvedByUserIDNotIn: [String!]
-  approvedByUserIDContains: String
-  approvedByUserIDHasPrefix: String
-  approvedByUserIDHasSuffix: String
-  approvedByUserIDIsNil: Boolean
-  approvedByUserIDNotNil: Boolean
-  approvedByUserIDEqualFold: String
-  approvedByUserIDContainsFold: String
-  """
-  auto_approved field predicates
-  """
-  autoApproved: Boolean
-  autoApprovedNEQ: Boolean
-  autoApprovedIsNil: Boolean
-  autoApprovedNotNil: Boolean
-  """
-  signed_at field predicates
-  """
-  signedAt: DateTime
-  signedAtGT: DateTime
-  signedAtGTE: DateTime
-  signedAtLT: DateTime
-  signedAtLTE: DateTime
-  signedAtIsNil: Boolean
-  signedAtNotNil: Boolean
-  """
-  document_data_id field predicates
-  """
-  documentDataID: String
-  documentDataIDNEQ: String
-  documentDataIDIn: [String!]
-  documentDataIDNotIn: [String!]
-  documentDataIDContains: String
-  documentDataIDHasPrefix: String
-  documentDataIDHasSuffix: String
-  documentDataIDIsNil: Boolean
-  documentDataIDNotNil: Boolean
-  documentDataIDEqualFold: String
-  documentDataIDContainsFold: String
-  """
-  file_id field predicates
-  """
-  fileID: String
-  fileIDNEQ: String
-  fileIDIn: [String!]
-  fileIDNotIn: [String!]
-  fileIDContains: String
-  fileIDHasPrefix: String
-  fileIDHasSuffix: String
-  fileIDIsNil: Boolean
-  fileIDNotNil: Boolean
-  fileIDEqualFold: String
-  fileIDContainsFold: String
 }
 type TrustCenterSettingHistory implements Node {
   id: ID!
@@ -53516,6 +40236,10 @@ type TrustCenterSettingHistory implements Node {
   rules for approving trust center NDA requests
   """
   autoApprovalRules: TrustCenterNDARequestSetting
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
 }
 """
 A connection to a list of items.
@@ -53698,370 +40422,6 @@ input TrustCenterSettingHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleIsNil: Boolean
-  titleNotNil: Boolean
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  company_name field predicates
-  """
-  companyName: String
-  companyNameNEQ: String
-  companyNameIn: [String!]
-  companyNameNotIn: [String!]
-  companyNameContains: String
-  companyNameHasPrefix: String
-  companyNameHasSuffix: String
-  companyNameIsNil: Boolean
-  companyNameNotNil: Boolean
-  companyNameEqualFold: String
-  companyNameContainsFold: String
-  """
-  company_description field predicates
-  """
-  companyDescription: String
-  companyDescriptionNEQ: String
-  companyDescriptionIn: [String!]
-  companyDescriptionNotIn: [String!]
-  companyDescriptionContains: String
-  companyDescriptionHasPrefix: String
-  companyDescriptionHasSuffix: String
-  companyDescriptionIsNil: Boolean
-  companyDescriptionNotNil: Boolean
-  companyDescriptionEqualFold: String
-  companyDescriptionContainsFold: String
-  """
-  overview field predicates
-  """
-  overview: String
-  overviewNEQ: String
-  overviewIn: [String!]
-  overviewNotIn: [String!]
-  overviewContains: String
-  overviewHasPrefix: String
-  overviewHasSuffix: String
-  overviewIsNil: Boolean
-  overviewNotNil: Boolean
-  overviewEqualFold: String
-  overviewContainsFold: String
-  """
-  logo_remote_url field predicates
-  """
-  logoRemoteURL: String
-  logoRemoteURLNEQ: String
-  logoRemoteURLIn: [String!]
-  logoRemoteURLNotIn: [String!]
-  logoRemoteURLContains: String
-  logoRemoteURLHasPrefix: String
-  logoRemoteURLHasSuffix: String
-  logoRemoteURLIsNil: Boolean
-  logoRemoteURLNotNil: Boolean
-  logoRemoteURLEqualFold: String
-  logoRemoteURLContainsFold: String
-  """
-  logo_local_file_id field predicates
-  """
-  logoLocalFileID: String
-  logoLocalFileIDNEQ: String
-  logoLocalFileIDIn: [String!]
-  logoLocalFileIDNotIn: [String!]
-  logoLocalFileIDContains: String
-  logoLocalFileIDHasPrefix: String
-  logoLocalFileIDHasSuffix: String
-  logoLocalFileIDIsNil: Boolean
-  logoLocalFileIDNotNil: Boolean
-  logoLocalFileIDEqualFold: String
-  logoLocalFileIDContainsFold: String
-  """
-  favicon_remote_url field predicates
-  """
-  faviconRemoteURL: String
-  faviconRemoteURLNEQ: String
-  faviconRemoteURLIn: [String!]
-  faviconRemoteURLNotIn: [String!]
-  faviconRemoteURLContains: String
-  faviconRemoteURLHasPrefix: String
-  faviconRemoteURLHasSuffix: String
-  faviconRemoteURLIsNil: Boolean
-  faviconRemoteURLNotNil: Boolean
-  faviconRemoteURLEqualFold: String
-  faviconRemoteURLContainsFold: String
-  """
-  favicon_local_file_id field predicates
-  """
-  faviconLocalFileID: String
-  faviconLocalFileIDNEQ: String
-  faviconLocalFileIDIn: [String!]
-  faviconLocalFileIDNotIn: [String!]
-  faviconLocalFileIDContains: String
-  faviconLocalFileIDHasPrefix: String
-  faviconLocalFileIDHasSuffix: String
-  faviconLocalFileIDIsNil: Boolean
-  faviconLocalFileIDNotNil: Boolean
-  faviconLocalFileIDEqualFold: String
-  faviconLocalFileIDContainsFold: String
-  """
-  hero_image_local_file_id field predicates
-  """
-  heroImageLocalFileID: String
-  heroImageLocalFileIDNEQ: String
-  heroImageLocalFileIDIn: [String!]
-  heroImageLocalFileIDNotIn: [String!]
-  heroImageLocalFileIDContains: String
-  heroImageLocalFileIDHasPrefix: String
-  heroImageLocalFileIDHasSuffix: String
-  heroImageLocalFileIDIsNil: Boolean
-  heroImageLocalFileIDNotNil: Boolean
-  heroImageLocalFileIDEqualFold: String
-  heroImageLocalFileIDContainsFold: String
-  """
-  theme_mode field predicates
-  """
-  themeMode: TrustCenterSettingHistoryTrustCenterThemeMode
-  themeModeNEQ: TrustCenterSettingHistoryTrustCenterThemeMode
-  themeModeIn: [TrustCenterSettingHistoryTrustCenterThemeMode!]
-  themeModeNotIn: [TrustCenterSettingHistoryTrustCenterThemeMode!]
-  themeModeIsNil: Boolean
-  themeModeNotNil: Boolean
-  """
-  primary_color field predicates
-  """
-  primaryColor: String
-  primaryColorNEQ: String
-  primaryColorIn: [String!]
-  primaryColorNotIn: [String!]
-  primaryColorContains: String
-  primaryColorHasPrefix: String
-  primaryColorHasSuffix: String
-  primaryColorIsNil: Boolean
-  primaryColorNotNil: Boolean
-  primaryColorEqualFold: String
-  primaryColorContainsFold: String
-  """
-  font field predicates
-  """
-  font: String
-  fontNEQ: String
-  fontIn: [String!]
-  fontNotIn: [String!]
-  fontContains: String
-  fontHasPrefix: String
-  fontHasSuffix: String
-  fontIsNil: Boolean
-  fontNotNil: Boolean
-  fontEqualFold: String
-  fontContainsFold: String
-  """
-  foreground_color field predicates
-  """
-  foregroundColor: String
-  foregroundColorNEQ: String
-  foregroundColorIn: [String!]
-  foregroundColorNotIn: [String!]
-  foregroundColorContains: String
-  foregroundColorHasPrefix: String
-  foregroundColorHasSuffix: String
-  foregroundColorIsNil: Boolean
-  foregroundColorNotNil: Boolean
-  foregroundColorEqualFold: String
-  foregroundColorContainsFold: String
-  """
-  background_color field predicates
-  """
-  backgroundColor: String
-  backgroundColorNEQ: String
-  backgroundColorIn: [String!]
-  backgroundColorNotIn: [String!]
-  backgroundColorContains: String
-  backgroundColorHasPrefix: String
-  backgroundColorHasSuffix: String
-  backgroundColorIsNil: Boolean
-  backgroundColorNotNil: Boolean
-  backgroundColorEqualFold: String
-  backgroundColorContainsFold: String
-  """
-  accent_color field predicates
-  """
-  accentColor: String
-  accentColorNEQ: String
-  accentColorIn: [String!]
-  accentColorNotIn: [String!]
-  accentColorContains: String
-  accentColorHasPrefix: String
-  accentColorHasSuffix: String
-  accentColorIsNil: Boolean
-  accentColorNotNil: Boolean
-  accentColorEqualFold: String
-  accentColorContainsFold: String
-  """
-  secondary_background_color field predicates
-  """
-  secondaryBackgroundColor: String
-  secondaryBackgroundColorNEQ: String
-  secondaryBackgroundColorIn: [String!]
-  secondaryBackgroundColorNotIn: [String!]
-  secondaryBackgroundColorContains: String
-  secondaryBackgroundColorHasPrefix: String
-  secondaryBackgroundColorHasSuffix: String
-  secondaryBackgroundColorIsNil: Boolean
-  secondaryBackgroundColorNotNil: Boolean
-  secondaryBackgroundColorEqualFold: String
-  secondaryBackgroundColorContainsFold: String
-  """
-  secondary_foreground_color field predicates
-  """
-  secondaryForegroundColor: String
-  secondaryForegroundColorNEQ: String
-  secondaryForegroundColorIn: [String!]
-  secondaryForegroundColorNotIn: [String!]
-  secondaryForegroundColorContains: String
-  secondaryForegroundColorHasPrefix: String
-  secondaryForegroundColorHasSuffix: String
-  secondaryForegroundColorIsNil: Boolean
-  secondaryForegroundColorNotNil: Boolean
-  secondaryForegroundColorEqualFold: String
-  secondaryForegroundColorContainsFold: String
-  """
-  environment field predicates
-  """
-  environment: TrustCenterSettingHistoryTrustCenterEnvironment
-  environmentNEQ: TrustCenterSettingHistoryTrustCenterEnvironment
-  environmentIn: [TrustCenterSettingHistoryTrustCenterEnvironment!]
-  environmentNotIn: [TrustCenterSettingHistoryTrustCenterEnvironment!]
-  environmentIsNil: Boolean
-  environmentNotNil: Boolean
-  """
-  remove_branding field predicates
-  """
-  removeBranding: Boolean
-  removeBrandingNEQ: Boolean
-  removeBrandingIsNil: Boolean
-  removeBrandingNotNil: Boolean
-  """
-  company_domain field predicates
-  """
-  companyDomain: String
-  companyDomainNEQ: String
-  companyDomainIn: [String!]
-  companyDomainNotIn: [String!]
-  companyDomainContains: String
-  companyDomainHasPrefix: String
-  companyDomainHasSuffix: String
-  companyDomainIsNil: Boolean
-  companyDomainNotNil: Boolean
-  companyDomainEqualFold: String
-  companyDomainContainsFold: String
-  """
-  security_contact field predicates
-  """
-  securityContact: String
-  securityContactNEQ: String
-  securityContactIn: [String!]
-  securityContactNotIn: [String!]
-  securityContactContains: String
-  securityContactHasPrefix: String
-  securityContactHasSuffix: String
-  securityContactIsNil: Boolean
-  securityContactNotNil: Boolean
-  securityContactEqualFold: String
-  securityContactContainsFold: String
-  """
-  nda_approval_required field predicates
-  """
-  ndaApprovalRequired: Boolean
-  ndaApprovalRequiredNEQ: Boolean
-  ndaApprovalRequiredIsNil: Boolean
-  ndaApprovalRequiredNotNil: Boolean
-  """
-  allow_subscribers field predicates
-  """
-  allowSubscribers: Boolean
-  allowSubscribersNEQ: Boolean
-  allowSubscribersIsNil: Boolean
-  allowSubscribersNotNil: Boolean
-  """
-  notify_subscribers_on_subprocessor_change field predicates
-  """
-  notifySubscribersOnSubprocessorChange: Boolean
-  notifySubscribersOnSubprocessorChangeNEQ: Boolean
-  notifySubscribersOnSubprocessorChangeIsNil: Boolean
-  notifySubscribersOnSubprocessorChangeNotNil: Boolean
-  """
-  subprocessors_notified_at field predicates
-  """
-  subprocessorsNotifiedAt: Time
-  subprocessorsNotifiedAtGT: Time
-  subprocessorsNotifiedAtGTE: Time
-  subprocessorsNotifiedAtLT: Time
-  subprocessorsNotifiedAtLTE: Time
-  subprocessorsNotifiedAtIsNil: Boolean
-  subprocessorsNotifiedAtNotNil: Boolean
-  """
-  nda_approver_group_id field predicates
-  """
-  ndaApproverGroupID: String
-  ndaApproverGroupIDNEQ: String
-  ndaApproverGroupIDIn: [String!]
-  ndaApproverGroupIDNotIn: [String!]
-  ndaApproverGroupIDContains: String
-  ndaApproverGroupIDHasPrefix: String
-  ndaApproverGroupIDHasSuffix: String
-  ndaApproverGroupIDIsNil: Boolean
-  ndaApproverGroupIDNotNil: Boolean
-  ndaApproverGroupIDEqualFold: String
-  ndaApproverGroupIDContainsFold: String
-  """
-  status_page_url field predicates
-  """
-  statusPageURL: String
-  statusPageURLNEQ: String
-  statusPageURLIn: [String!]
-  statusPageURLNotIn: [String!]
-  statusPageURLContains: String
-  statusPageURLHasPrefix: String
-  statusPageURLHasSuffix: String
-  statusPageURLIsNil: Boolean
-  statusPageURLNotNil: Boolean
-  statusPageURLEqualFold: String
-  statusPageURLContainsFold: String
-  """
-  noindex_default_domain field predicates
-  """
-  noindexDefaultDomain: Boolean
-  noindexDefaultDomainNEQ: Boolean
-  noindexDefaultDomainIsNil: Boolean
-  noindexDefaultDomainNotNil: Boolean
-  """
-  enable_auto_approval field predicates
-  """
-  enableAutoApproval: Boolean
-  enableAutoApprovalNEQ: Boolean
-  enableAutoApprovalIsNil: Boolean
-  enableAutoApprovalNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!
@@ -54264,60 +40624,6 @@ input TrustCenterSubprocessorHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  trust_center_subprocessor_kind_name field predicates
-  """
-  trustCenterSubprocessorKindName: String
-  trustCenterSubprocessorKindNameNEQ: String
-  trustCenterSubprocessorKindNameIn: [String!]
-  trustCenterSubprocessorKindNameNotIn: [String!]
-  trustCenterSubprocessorKindNameContains: String
-  trustCenterSubprocessorKindNameHasPrefix: String
-  trustCenterSubprocessorKindNameHasSuffix: String
-  trustCenterSubprocessorKindNameIsNil: Boolean
-  trustCenterSubprocessorKindNameNotNil: Boolean
-  trustCenterSubprocessorKindNameEqualFold: String
-  trustCenterSubprocessorKindNameContainsFold: String
-  """
-  trust_center_subprocessor_kind_id field predicates
-  """
-  trustCenterSubprocessorKindID: String
-  trustCenterSubprocessorKindIDNEQ: String
-  trustCenterSubprocessorKindIDIn: [String!]
-  trustCenterSubprocessorKindIDNotIn: [String!]
-  trustCenterSubprocessorKindIDContains: String
-  trustCenterSubprocessorKindIDHasPrefix: String
-  trustCenterSubprocessorKindIDHasSuffix: String
-  trustCenterSubprocessorKindIDIsNil: Boolean
-  trustCenterSubprocessorKindIDNotNil: Boolean
-  trustCenterSubprocessorKindIDEqualFold: String
-  trustCenterSubprocessorKindIDContainsFold: String
-  """
-  subprocessor_id field predicates
-  """
-  subprocessorID: String
-  subprocessorIDNEQ: String
-  subprocessorIDIn: [String!]
-  subprocessorIDNotIn: [String!]
-  subprocessorIDContains: String
-  subprocessorIDHasPrefix: String
-  subprocessorIDHasSuffix: String
-  subprocessorIDEqualFold: String
-  subprocessorIDContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
 }
 type TrustCenterWatermarkConfigHistory implements Node {
   id: ID!
@@ -54572,117 +40878,6 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
-  """
-  is_enabled field predicates
-  """
-  isEnabled: Boolean
-  isEnabledNEQ: Boolean
-  isEnabledIsNil: Boolean
-  isEnabledNotNil: Boolean
-  """
-  logo_id field predicates
-  """
-  logoID: String
-  logoIDNEQ: String
-  logoIDIn: [String!]
-  logoIDNotIn: [String!]
-  logoIDContains: String
-  logoIDHasPrefix: String
-  logoIDHasSuffix: String
-  logoIDIsNil: Boolean
-  logoIDNotNil: Boolean
-  logoIDEqualFold: String
-  logoIDContainsFold: String
-  """
-  text field predicates
-  """
-  text: String
-  textNEQ: String
-  textIn: [String!]
-  textNotIn: [String!]
-  textContains: String
-  textHasPrefix: String
-  textHasSuffix: String
-  textIsNil: Boolean
-  textNotNil: Boolean
-  textEqualFold: String
-  textContainsFold: String
-  """
-  font_size field predicates
-  """
-  fontSize: Float
-  fontSizeNEQ: Float
-  fontSizeIn: [Float!]
-  fontSizeNotIn: [Float!]
-  fontSizeGT: Float
-  fontSizeGTE: Float
-  fontSizeLT: Float
-  fontSizeLTE: Float
-  fontSizeIsNil: Boolean
-  fontSizeNotNil: Boolean
-  """
-  opacity field predicates
-  """
-  opacity: Float
-  opacityNEQ: Float
-  opacityIn: [Float!]
-  opacityNotIn: [Float!]
-  opacityGT: Float
-  opacityGTE: Float
-  opacityLT: Float
-  opacityLTE: Float
-  opacityIsNil: Boolean
-  opacityNotNil: Boolean
-  """
-  rotation field predicates
-  """
-  rotation: Float
-  rotationNEQ: Float
-  rotationIn: [Float!]
-  rotationNotIn: [Float!]
-  rotationGT: Float
-  rotationGTE: Float
-  rotationLT: Float
-  rotationLTE: Float
-  rotationIsNil: Boolean
-  rotationNotNil: Boolean
-  """
-  color field predicates
-  """
-  color: String
-  colorNEQ: String
-  colorIn: [String!]
-  colorNotIn: [String!]
-  colorContains: String
-  colorHasPrefix: String
-  colorHasSuffix: String
-  colorIsNil: Boolean
-  colorNotNil: Boolean
-  colorEqualFold: String
-  colorContainsFold: String
-  """
-  font field predicates
-  """
-  font: TrustCenterWatermarkConfigHistoryFont
-  fontNEQ: TrustCenterWatermarkConfigHistoryFont
-  fontIn: [TrustCenterWatermarkConfigHistoryFont!]
-  fontNotIn: [TrustCenterWatermarkConfigHistoryFont!]
-  fontIsNil: Boolean
-  fontNotNil: Boolean
 }
 type UserHistory implements Node {
   id: ID!
@@ -54935,220 +41130,6 @@ input UserHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  email field predicates
-  """
-  email: String
-  emailNEQ: String
-  emailIn: [String!]
-  emailNotIn: [String!]
-  emailContains: String
-  emailHasPrefix: String
-  emailHasSuffix: String
-  emailEqualFold: String
-  emailContainsFold: String
-  """
-  first_name field predicates
-  """
-  firstName: String
-  firstNameNEQ: String
-  firstNameIn: [String!]
-  firstNameNotIn: [String!]
-  firstNameContains: String
-  firstNameHasPrefix: String
-  firstNameHasSuffix: String
-  firstNameIsNil: Boolean
-  firstNameNotNil: Boolean
-  firstNameEqualFold: String
-  firstNameContainsFold: String
-  """
-  last_name field predicates
-  """
-  lastName: String
-  lastNameNEQ: String
-  lastNameIn: [String!]
-  lastNameNotIn: [String!]
-  lastNameContains: String
-  lastNameHasPrefix: String
-  lastNameHasSuffix: String
-  lastNameIsNil: Boolean
-  lastNameNotNil: Boolean
-  lastNameEqualFold: String
-  lastNameContainsFold: String
-  """
-  display_name field predicates
-  """
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """
-  avatar_remote_url field predicates
-  """
-  avatarRemoteURL: String
-  avatarRemoteURLNEQ: String
-  avatarRemoteURLIn: [String!]
-  avatarRemoteURLNotIn: [String!]
-  avatarRemoteURLContains: String
-  avatarRemoteURLHasPrefix: String
-  avatarRemoteURLHasSuffix: String
-  avatarRemoteURLIsNil: Boolean
-  avatarRemoteURLNotNil: Boolean
-  avatarRemoteURLEqualFold: String
-  avatarRemoteURLContainsFold: String
-  """
-  avatar_local_file_id field predicates
-  """
-  avatarLocalFileID: String
-  avatarLocalFileIDNEQ: String
-  avatarLocalFileIDIn: [String!]
-  avatarLocalFileIDNotIn: [String!]
-  avatarLocalFileIDContains: String
-  avatarLocalFileIDHasPrefix: String
-  avatarLocalFileIDHasSuffix: String
-  avatarLocalFileIDIsNil: Boolean
-  avatarLocalFileIDNotNil: Boolean
-  avatarLocalFileIDEqualFold: String
-  avatarLocalFileIDContainsFold: String
-  """
-  avatar_updated_at field predicates
-  """
-  avatarUpdatedAt: Time
-  avatarUpdatedAtGT: Time
-  avatarUpdatedAtGTE: Time
-  avatarUpdatedAtLT: Time
-  avatarUpdatedAtLTE: Time
-  avatarUpdatedAtIsNil: Boolean
-  avatarUpdatedAtNotNil: Boolean
-  """
-  last_seen field predicates
-  """
-  lastSeen: Time
-  lastSeenGT: Time
-  lastSeenGTE: Time
-  lastSeenLT: Time
-  lastSeenLTE: Time
-  lastSeenIsNil: Boolean
-  lastSeenNotNil: Boolean
-  """
-  last_login_provider field predicates
-  """
-  lastLoginProvider: UserHistoryAuthProvider
-  lastLoginProviderNEQ: UserHistoryAuthProvider
-  lastLoginProviderIn: [UserHistoryAuthProvider!]
-  lastLoginProviderNotIn: [UserHistoryAuthProvider!]
-  lastLoginProviderIsNil: Boolean
-  lastLoginProviderNotNil: Boolean
-  """
-  sub field predicates
-  """
-  sub: String
-  subNEQ: String
-  subIn: [String!]
-  subNotIn: [String!]
-  subContains: String
-  subHasPrefix: String
-  subHasSuffix: String
-  subIsNil: Boolean
-  subNotNil: Boolean
-  subEqualFold: String
-  subContainsFold: String
-  """
-  auth_provider field predicates
-  """
-  authProvider: UserHistoryAuthProvider
-  authProviderNEQ: UserHistoryAuthProvider
-  authProviderIn: [UserHistoryAuthProvider!]
-  authProviderNotIn: [UserHistoryAuthProvider!]
-  """
-  role field predicates
-  """
-  role: UserHistoryRole
-  roleNEQ: UserHistoryRole
-  roleIn: [UserHistoryRole!]
-  roleNotIn: [UserHistoryRole!]
-  roleIsNil: Boolean
-  roleNotNil: Boolean
-  """
-  scim_external_id field predicates
-  """
-  scimExternalID: String
-  scimExternalIDNEQ: String
-  scimExternalIDIn: [String!]
-  scimExternalIDNotIn: [String!]
-  scimExternalIDContains: String
-  scimExternalIDHasPrefix: String
-  scimExternalIDHasSuffix: String
-  scimExternalIDIsNil: Boolean
-  scimExternalIDNotNil: Boolean
-  scimExternalIDEqualFold: String
-  scimExternalIDContainsFold: String
-  """
-  scim_username field predicates
-  """
-  scimUsername: String
-  scimUsernameNEQ: String
-  scimUsernameIn: [String!]
-  scimUsernameNotIn: [String!]
-  scimUsernameContains: String
-  scimUsernameHasPrefix: String
-  scimUsernameHasSuffix: String
-  scimUsernameIsNil: Boolean
-  scimUsernameNotNil: Boolean
-  scimUsernameEqualFold: String
-  scimUsernameContainsFold: String
-  """
-  scim_active field predicates
-  """
-  scimActive: Boolean
-  scimActiveNEQ: Boolean
-  scimActiveIsNil: Boolean
-  scimActiveNotNil: Boolean
-  """
-  scim_preferred_language field predicates
-  """
-  scimPreferredLanguage: String
-  scimPreferredLanguageNEQ: String
-  scimPreferredLanguageIn: [String!]
-  scimPreferredLanguageNotIn: [String!]
-  scimPreferredLanguageContains: String
-  scimPreferredLanguageHasPrefix: String
-  scimPreferredLanguageHasSuffix: String
-  scimPreferredLanguageIsNil: Boolean
-  scimPreferredLanguageNotNil: Boolean
-  scimPreferredLanguageEqualFold: String
-  scimPreferredLanguageContainsFold: String
-  """
-  scim_locale field predicates
-  """
-  scimLocale: String
-  scimLocaleNEQ: String
-  scimLocaleIn: [String!]
-  scimLocaleNotIn: [String!]
-  scimLocaleContains: String
-  scimLocaleHasPrefix: String
-  scimLocaleHasSuffix: String
-  scimLocaleIsNil: Boolean
-  scimLocaleNotNil: Boolean
-  scimLocaleEqualFold: String
-  scimLocaleContainsFold: String
 }
 type UserSettingHistory implements Node {
   id: ID!
@@ -55387,98 +41368,6 @@ input UserSettingHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
-  """
-  user_id field predicates
-  """
-  userID: String
-  userIDNEQ: String
-  userIDIn: [String!]
-  userIDNotIn: [String!]
-  userIDContains: String
-  userIDHasPrefix: String
-  userIDHasSuffix: String
-  userIDIsNil: Boolean
-  userIDNotNil: Boolean
-  userIDEqualFold: String
-  userIDContainsFold: String
-  """
-  delegate_user_id field predicates
-  """
-  delegateUserID: String
-  delegateUserIDNEQ: String
-  delegateUserIDIn: [String!]
-  delegateUserIDNotIn: [String!]
-  delegateUserIDContains: String
-  delegateUserIDHasPrefix: String
-  delegateUserIDHasSuffix: String
-  delegateUserIDIsNil: Boolean
-  delegateUserIDNotNil: Boolean
-  delegateUserIDEqualFold: String
-  delegateUserIDContainsFold: String
-  """
-  delegate_start_at field predicates
-  """
-  delegateStartAt: Time
-  delegateStartAtGT: Time
-  delegateStartAtGTE: Time
-  delegateStartAtLT: Time
-  delegateStartAtLTE: Time
-  delegateStartAtIsNil: Boolean
-  delegateStartAtNotNil: Boolean
-  """
-  delegate_end_at field predicates
-  """
-  delegateEndAt: Time
-  delegateEndAtGT: Time
-  delegateEndAtGTE: Time
-  delegateEndAtLT: Time
-  delegateEndAtLTE: Time
-  delegateEndAtIsNil: Boolean
-  delegateEndAtNotNil: Boolean
-  """
-  locked field predicates
-  """
-  locked: Boolean
-  lockedNEQ: Boolean
-  """
-  silenced_at field predicates
-  """
-  silencedAt: Time
-  silencedAtGT: Time
-  silencedAtGTE: Time
-  silencedAtLT: Time
-  silencedAtLTE: Time
-  silencedAtIsNil: Boolean
-  silencedAtNotNil: Boolean
-  """
-  suspended_at field predicates
-  """
-  suspendedAt: Time
-  suspendedAtGT: Time
-  suspendedAtGTE: Time
-  suspendedAtLT: Time
-  suspendedAtLTE: Time
-  suspendedAtIsNil: Boolean
-  suspendedAtNotNil: Boolean
-  """
-  status field predicates
-  """
-  status: UserSettingHistoryUserStatus
-  statusNEQ: UserSettingHistoryUserStatus
-  statusIn: [UserSettingHistoryUserStatus!]
-  statusNotIn: [UserSettingHistoryUserStatus!]
-  """
-  email_confirmed field predicates
-  """
-  emailConfirmed: Boolean
-  emailConfirmedNEQ: Boolean
-  """
-  is_tfa_enabled field predicates
-  """
-  isTfaEnabled: Boolean
-  isTfaEnabledNEQ: Boolean
-  isTfaEnabledIsNil: Boolean
-  isTfaEnabledNotNil: Boolean
 }
 type VendorRiskScoreHistory implements Node {
   id: ID!
@@ -55501,6 +41390,34 @@ type VendorRiskScoreHistory implements Node {
   the ID of the organization owner of the object
   """
   ownerID: String
+  """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
   """
   stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
   """
@@ -55612,6 +41529,7 @@ enum VendorRiskScoreHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   question_key
   question_category
   impact
@@ -55783,151 +41701,6 @@ input VendorRiskScoreHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  question_key field predicates
-  """
-  questionKey: String
-  questionKeyNEQ: String
-  questionKeyIn: [String!]
-  questionKeyNotIn: [String!]
-  questionKeyContains: String
-  questionKeyHasPrefix: String
-  questionKeyHasSuffix: String
-  questionKeyEqualFold: String
-  questionKeyContainsFold: String
-  """
-  question_name field predicates
-  """
-  questionName: String
-  questionNameNEQ: String
-  questionNameIn: [String!]
-  questionNameNotIn: [String!]
-  questionNameContains: String
-  questionNameHasPrefix: String
-  questionNameHasSuffix: String
-  questionNameEqualFold: String
-  questionNameContainsFold: String
-  """
-  question_description field predicates
-  """
-  questionDescription: String
-  questionDescriptionNEQ: String
-  questionDescriptionIn: [String!]
-  questionDescriptionNotIn: [String!]
-  questionDescriptionContains: String
-  questionDescriptionHasPrefix: String
-  questionDescriptionHasSuffix: String
-  questionDescriptionIsNil: Boolean
-  questionDescriptionNotNil: Boolean
-  questionDescriptionEqualFold: String
-  questionDescriptionContainsFold: String
-  """
-  question_category field predicates
-  """
-  questionCategory: VendorRiskScoreHistoryVendorScoringCategory
-  questionCategoryNEQ: VendorRiskScoreHistoryVendorScoringCategory
-  questionCategoryIn: [VendorRiskScoreHistoryVendorScoringCategory!]
-  questionCategoryNotIn: [VendorRiskScoreHistoryVendorScoringCategory!]
-  """
-  answer_type field predicates
-  """
-  answerType: VendorRiskScoreHistoryVendorScoringAnswerType
-  answerTypeNEQ: VendorRiskScoreHistoryVendorScoringAnswerType
-  answerTypeIn: [VendorRiskScoreHistoryVendorScoringAnswerType!]
-  answerTypeNotIn: [VendorRiskScoreHistoryVendorScoringAnswerType!]
-  """
-  impact field predicates
-  """
-  impact: VendorRiskScoreHistoryVendorRiskImpact
-  impactNEQ: VendorRiskScoreHistoryVendorRiskImpact
-  impactIn: [VendorRiskScoreHistoryVendorRiskImpact!]
-  impactNotIn: [VendorRiskScoreHistoryVendorRiskImpact!]
-  """
-  likelihood field predicates
-  """
-  likelihood: VendorRiskScoreHistoryVendorRiskLikelihood
-  likelihoodNEQ: VendorRiskScoreHistoryVendorRiskLikelihood
-  likelihoodIn: [VendorRiskScoreHistoryVendorRiskLikelihood!]
-  likelihoodNotIn: [VendorRiskScoreHistoryVendorRiskLikelihood!]
-  """
-  score field predicates
-  """
-  score: Float
-  scoreNEQ: Float
-  scoreIn: [Float!]
-  scoreNotIn: [Float!]
-  scoreGT: Float
-  scoreGTE: Float
-  scoreLT: Float
-  scoreLTE: Float
-  """
-  answer field predicates
-  """
-  answer: String
-  answerNEQ: String
-  answerIn: [String!]
-  answerNotIn: [String!]
-  answerContains: String
-  answerHasPrefix: String
-  answerHasSuffix: String
-  answerIsNil: Boolean
-  answerNotNil: Boolean
-  answerEqualFold: String
-  answerContainsFold: String
-  """
-  notes field predicates
-  """
-  notes: String
-  notesNEQ: String
-  notesIn: [String!]
-  notesNotIn: [String!]
-  notesContains: String
-  notesHasPrefix: String
-  notesHasSuffix: String
-  notesIsNil: Boolean
-  notesNotNil: Boolean
-  notesEqualFold: String
-  notesContainsFold: String
-  """
-  vendor_scoring_config_id field predicates
-  """
-  vendorScoringConfigID: String
-  vendorScoringConfigIDNEQ: String
-  vendorScoringConfigIDIn: [String!]
-  vendorScoringConfigIDNotIn: [String!]
-  vendorScoringConfigIDContains: String
-  vendorScoringConfigIDHasPrefix: String
-  vendorScoringConfigIDHasSuffix: String
-  vendorScoringConfigIDIsNil: Boolean
-  vendorScoringConfigIDNotNil: Boolean
-  vendorScoringConfigIDEqualFold: String
-  vendorScoringConfigIDContainsFold: String
-  """
-  entity_id field predicates
-  """
-  entityID: String
-  entityIDNEQ: String
-  entityIDIn: [String!]
-  entityIDNotIn: [String!]
-  entityIDContains: String
-  entityIDHasPrefix: String
-  entityIDHasSuffix: String
-  entityIDEqualFold: String
-  entityIDContainsFold: String
-  """
-  assessment_response_id field predicates
-  """
-  assessmentResponseID: String
-  assessmentResponseIDNEQ: String
-  assessmentResponseIDIn: [String!]
-  assessmentResponseIDNotIn: [String!]
-  assessmentResponseIDContains: String
-  assessmentResponseIDHasPrefix: String
-  assessmentResponseIDHasSuffix: String
-  assessmentResponseIDIsNil: Boolean
-  assessmentResponseIDNotNil: Boolean
-  assessmentResponseIDEqualFold: String
-  assessmentResponseIDContainsFold: String
 }
 type VendorScoringConfigHistory implements Node {
   id: ID!
@@ -56153,13 +41926,6 @@ input VendorScoringConfigHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  scoring_mode field predicates
-  """
-  scoringMode: VendorScoringConfigHistoryVendorScoringMode
-  scoringModeNEQ: VendorScoringConfigHistoryVendorScoringMode
-  scoringModeIn: [VendorScoringConfigHistoryVendorScoringMode!]
-  scoringModeNotIn: [VendorScoringConfigHistoryVendorScoringMode!]
 }
 type VulnerabilityHistory implements Node {
   id: ID!
@@ -56202,6 +41968,10 @@ type VulnerabilityHistory implements Node {
   id of the integration run that last wrote this record
   """
   integrationRunID: String
+  """
+  key grouping the records runtime ingest wrote from one named source
+  """
+  sourceKey: String
   """
   identifier of the record in an external system
   """
@@ -56649,100 +42419,6 @@ input VulnerabilityHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  source_definition_id field predicates
-  """
-  sourceDefinitionID: String
-  sourceDefinitionIDNEQ: String
-  sourceDefinitionIDIn: [String!]
-  sourceDefinitionIDNotIn: [String!]
-  sourceDefinitionIDContains: String
-  sourceDefinitionIDHasPrefix: String
-  sourceDefinitionIDHasSuffix: String
-  sourceDefinitionIDIsNil: Boolean
-  sourceDefinitionIDNotNil: Boolean
-  sourceDefinitionIDEqualFold: String
-  sourceDefinitionIDContainsFold: String
-  """
-  source_definition_version field predicates
-  """
-  sourceDefinitionVersion: String
-  sourceDefinitionVersionNEQ: String
-  sourceDefinitionVersionIn: [String!]
-  sourceDefinitionVersionNotIn: [String!]
-  sourceDefinitionVersionContains: String
-  sourceDefinitionVersionHasPrefix: String
-  sourceDefinitionVersionHasSuffix: String
-  sourceDefinitionVersionIsNil: Boolean
-  sourceDefinitionVersionNotNil: Boolean
-  sourceDefinitionVersionEqualFold: String
-  sourceDefinitionVersionContainsFold: String
-  """
-  source_instance_id field predicates
-  """
-  sourceInstanceID: String
-  sourceInstanceIDNEQ: String
-  sourceInstanceIDIn: [String!]
-  sourceInstanceIDNotIn: [String!]
-  sourceInstanceIDContains: String
-  sourceInstanceIDHasPrefix: String
-  sourceInstanceIDHasSuffix: String
-  sourceInstanceIDIsNil: Boolean
-  sourceInstanceIDNotNil: Boolean
-  sourceInstanceIDEqualFold: String
-  sourceInstanceIDContainsFold: String
-  """
-  managed_by field predicates
-  """
-  managedBy: String
-  managedByNEQ: String
-  managedByIn: [String!]
-  managedByNotIn: [String!]
-  managedByContains: String
-  managedByHasPrefix: String
-  managedByHasSuffix: String
-  managedByIsNil: Boolean
-  managedByNotNil: Boolean
-  managedByEqualFold: String
-  managedByContainsFold: String
-  """
-  integration_run_id field predicates
-  """
-  integrationRunID: String
-  integrationRunIDNEQ: String
-  integrationRunIDIn: [String!]
-  integrationRunIDNotIn: [String!]
-  integrationRunIDContains: String
-  integrationRunIDHasPrefix: String
-  integrationRunIDHasSuffix: String
-  integrationRunIDIsNil: Boolean
-  integrationRunIDNotNil: Boolean
-  integrationRunIDEqualFold: String
-  integrationRunIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -56756,727 +42432,6 @@ input VulnerabilityHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  internal_owner field predicates
-  """
-  internalOwner: String
-  internalOwnerNEQ: String
-  internalOwnerIn: [String!]
-  internalOwnerNotIn: [String!]
-  internalOwnerContains: String
-  internalOwnerHasPrefix: String
-  internalOwnerHasSuffix: String
-  internalOwnerIsNil: Boolean
-  internalOwnerNotNil: Boolean
-  internalOwnerEqualFold: String
-  internalOwnerContainsFold: String
-  """
-  internal_owner_user_id field predicates
-  """
-  internalOwnerUserID: String
-  internalOwnerUserIDNEQ: String
-  internalOwnerUserIDIn: [String!]
-  internalOwnerUserIDNotIn: [String!]
-  internalOwnerUserIDContains: String
-  internalOwnerUserIDHasPrefix: String
-  internalOwnerUserIDHasSuffix: String
-  internalOwnerUserIDIsNil: Boolean
-  internalOwnerUserIDNotNil: Boolean
-  internalOwnerUserIDEqualFold: String
-  internalOwnerUserIDContainsFold: String
-  """
-  internal_owner_group_id field predicates
-  """
-  internalOwnerGroupID: String
-  internalOwnerGroupIDNEQ: String
-  internalOwnerGroupIDIn: [String!]
-  internalOwnerGroupIDNotIn: [String!]
-  internalOwnerGroupIDContains: String
-  internalOwnerGroupIDHasPrefix: String
-  internalOwnerGroupIDHasSuffix: String
-  internalOwnerGroupIDIsNil: Boolean
-  internalOwnerGroupIDNotNil: Boolean
-  internalOwnerGroupIDEqualFold: String
-  internalOwnerGroupIDContainsFold: String
-  """
-  internal_owner_identity_holder_id field predicates
-  """
-  internalOwnerIdentityHolderID: String
-  internalOwnerIdentityHolderIDNEQ: String
-  internalOwnerIdentityHolderIDIn: [String!]
-  internalOwnerIdentityHolderIDNotIn: [String!]
-  internalOwnerIdentityHolderIDContains: String
-  internalOwnerIdentityHolderIDHasPrefix: String
-  internalOwnerIdentityHolderIDHasSuffix: String
-  internalOwnerIdentityHolderIDIsNil: Boolean
-  internalOwnerIdentityHolderIDNotNil: Boolean
-  internalOwnerIdentityHolderIDEqualFold: String
-  internalOwnerIdentityHolderIDContainsFold: String
-  """
-  reviewed_by field predicates
-  """
-  reviewedBy: String
-  reviewedByNEQ: String
-  reviewedByIn: [String!]
-  reviewedByNotIn: [String!]
-  reviewedByContains: String
-  reviewedByHasPrefix: String
-  reviewedByHasSuffix: String
-  reviewedByIsNil: Boolean
-  reviewedByNotNil: Boolean
-  reviewedByEqualFold: String
-  reviewedByContainsFold: String
-  """
-  reviewed_by_user_id field predicates
-  """
-  reviewedByUserID: String
-  reviewedByUserIDNEQ: String
-  reviewedByUserIDIn: [String!]
-  reviewedByUserIDNotIn: [String!]
-  reviewedByUserIDContains: String
-  reviewedByUserIDHasPrefix: String
-  reviewedByUserIDHasSuffix: String
-  reviewedByUserIDIsNil: Boolean
-  reviewedByUserIDNotNil: Boolean
-  reviewedByUserIDEqualFold: String
-  reviewedByUserIDContainsFold: String
-  """
-  reviewed_by_group_id field predicates
-  """
-  reviewedByGroupID: String
-  reviewedByGroupIDNEQ: String
-  reviewedByGroupIDIn: [String!]
-  reviewedByGroupIDNotIn: [String!]
-  reviewedByGroupIDContains: String
-  reviewedByGroupIDHasPrefix: String
-  reviewedByGroupIDHasSuffix: String
-  reviewedByGroupIDIsNil: Boolean
-  reviewedByGroupIDNotNil: Boolean
-  reviewedByGroupIDEqualFold: String
-  reviewedByGroupIDContainsFold: String
-  """
-  reviewed_by_identity_holder_id field predicates
-  """
-  reviewedByIdentityHolderID: String
-  reviewedByIdentityHolderIDNEQ: String
-  reviewedByIdentityHolderIDIn: [String!]
-  reviewedByIdentityHolderIDNotIn: [String!]
-  reviewedByIdentityHolderIDContains: String
-  reviewedByIdentityHolderIDHasPrefix: String
-  reviewedByIdentityHolderIDHasSuffix: String
-  reviewedByIdentityHolderIDIsNil: Boolean
-  reviewedByIdentityHolderIDNotNil: Boolean
-  reviewedByIdentityHolderIDEqualFold: String
-  reviewedByIdentityHolderIDContainsFold: String
-  """
-  assigned_to field predicates
-  """
-  assignedTo: String
-  assignedToNEQ: String
-  assignedToIn: [String!]
-  assignedToNotIn: [String!]
-  assignedToContains: String
-  assignedToHasPrefix: String
-  assignedToHasSuffix: String
-  assignedToIsNil: Boolean
-  assignedToNotNil: Boolean
-  assignedToEqualFold: String
-  assignedToContainsFold: String
-  """
-  assigned_to_user_id field predicates
-  """
-  assignedToUserID: String
-  assignedToUserIDNEQ: String
-  assignedToUserIDIn: [String!]
-  assignedToUserIDNotIn: [String!]
-  assignedToUserIDContains: String
-  assignedToUserIDHasPrefix: String
-  assignedToUserIDHasSuffix: String
-  assignedToUserIDIsNil: Boolean
-  assignedToUserIDNotNil: Boolean
-  assignedToUserIDEqualFold: String
-  assignedToUserIDContainsFold: String
-  """
-  assigned_to_group_id field predicates
-  """
-  assignedToGroupID: String
-  assignedToGroupIDNEQ: String
-  assignedToGroupIDIn: [String!]
-  assignedToGroupIDNotIn: [String!]
-  assignedToGroupIDContains: String
-  assignedToGroupIDHasPrefix: String
-  assignedToGroupIDHasSuffix: String
-  assignedToGroupIDIsNil: Boolean
-  assignedToGroupIDNotNil: Boolean
-  assignedToGroupIDEqualFold: String
-  assignedToGroupIDContainsFold: String
-  """
-  assigned_to_identity_holder_id field predicates
-  """
-  assignedToIdentityHolderID: String
-  assignedToIdentityHolderIDNEQ: String
-  assignedToIdentityHolderIDIn: [String!]
-  assignedToIdentityHolderIDNotIn: [String!]
-  assignedToIdentityHolderIDContains: String
-  assignedToIdentityHolderIDHasPrefix: String
-  assignedToIdentityHolderIDHasSuffix: String
-  assignedToIdentityHolderIDIsNil: Boolean
-  assignedToIdentityHolderIDNotNil: Boolean
-  assignedToIdentityHolderIDEqualFold: String
-  assignedToIdentityHolderIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: String
-  environmentIDNEQ: String
-  environmentIDIn: [String!]
-  environmentIDNotIn: [String!]
-  environmentIDContains: String
-  environmentIDHasPrefix: String
-  environmentIDHasSuffix: String
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: String
-  environmentIDContainsFold: String
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: String
-  scopeIDNEQ: String
-  scopeIDIn: [String!]
-  scopeIDNotIn: [String!]
-  scopeIDContains: String
-  scopeIDHasPrefix: String
-  scopeIDHasSuffix: String
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: String
-  scopeIDContainsFold: String
-  """
-  vulnerability_status_name field predicates
-  """
-  vulnerabilityStatusName: String
-  vulnerabilityStatusNameNEQ: String
-  vulnerabilityStatusNameIn: [String!]
-  vulnerabilityStatusNameNotIn: [String!]
-  vulnerabilityStatusNameContains: String
-  vulnerabilityStatusNameHasPrefix: String
-  vulnerabilityStatusNameHasSuffix: String
-  vulnerabilityStatusNameIsNil: Boolean
-  vulnerabilityStatusNameNotNil: Boolean
-  vulnerabilityStatusNameEqualFold: String
-  vulnerabilityStatusNameContainsFold: String
-  """
-  vulnerability_status_id field predicates
-  """
-  vulnerabilityStatusID: String
-  vulnerabilityStatusIDNEQ: String
-  vulnerabilityStatusIDIn: [String!]
-  vulnerabilityStatusIDNotIn: [String!]
-  vulnerabilityStatusIDContains: String
-  vulnerabilityStatusIDHasPrefix: String
-  vulnerabilityStatusIDHasSuffix: String
-  vulnerabilityStatusIDIsNil: Boolean
-  vulnerabilityStatusIDNotNil: Boolean
-  vulnerabilityStatusIDEqualFold: String
-  vulnerabilityStatusIDContainsFold: String
-  """
-  workflow_eligible_marker field predicates
-  """
-  workflowEligibleMarker: Boolean
-  workflowEligibleMarkerNEQ: Boolean
-  workflowEligibleMarkerIsNil: Boolean
-  workflowEligibleMarkerNotNil: Boolean
-  """
-  external_owner_id field predicates
-  """
-  externalOwnerID: String
-  externalOwnerIDNEQ: String
-  externalOwnerIDIn: [String!]
-  externalOwnerIDNotIn: [String!]
-  externalOwnerIDContains: String
-  externalOwnerIDHasPrefix: String
-  externalOwnerIDHasSuffix: String
-  externalOwnerIDIsNil: Boolean
-  externalOwnerIDNotNil: Boolean
-  externalOwnerIDEqualFold: String
-  externalOwnerIDContainsFold: String
-  """
-  security_level field predicates
-  """
-  securityLevel: VulnerabilityHistorySecurityLevel
-  securityLevelNEQ: VulnerabilityHistorySecurityLevel
-  securityLevelIn: [VulnerabilityHistorySecurityLevel!]
-  securityLevelNotIn: [VulnerabilityHistorySecurityLevel!]
-  securityLevelIsNil: Boolean
-  securityLevelNotNil: Boolean
-  """
-  cve_id field predicates
-  """
-  cveID: String
-  cveIDNEQ: String
-  cveIDIn: [String!]
-  cveIDNotIn: [String!]
-  cveIDContains: String
-  cveIDHasPrefix: String
-  cveIDHasSuffix: String
-  cveIDIsNil: Boolean
-  cveIDNotNil: Boolean
-  cveIDEqualFold: String
-  cveIDContainsFold: String
-  """
-  source field predicates
-  """
-  source: String
-  sourceNEQ: String
-  sourceIn: [String!]
-  sourceNotIn: [String!]
-  sourceContains: String
-  sourceHasPrefix: String
-  sourceHasSuffix: String
-  sourceIsNil: Boolean
-  sourceNotNil: Boolean
-  sourceEqualFold: String
-  sourceContainsFold: String
-  """
-  display_name field predicates
-  """
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameIsNil: Boolean
-  displayNameNotNil: Boolean
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
-  """
-  severity field predicates
-  """
-  severity: String
-  severityNEQ: String
-  severityIn: [String!]
-  severityNotIn: [String!]
-  severityContains: String
-  severityHasPrefix: String
-  severityHasSuffix: String
-  severityIsNil: Boolean
-  severityNotNil: Boolean
-  severityEqualFold: String
-  severityContainsFold: String
-  """
-  score field predicates
-  """
-  score: Float
-  scoreNEQ: Float
-  scoreIn: [Float!]
-  scoreNotIn: [Float!]
-  scoreGT: Float
-  scoreGTE: Float
-  scoreLT: Float
-  scoreLTE: Float
-  scoreIsNil: Boolean
-  scoreNotNil: Boolean
-  """
-  impact field predicates
-  """
-  impact: Float
-  impactNEQ: Float
-  impactIn: [Float!]
-  impactNotIn: [Float!]
-  impactGT: Float
-  impactGTE: Float
-  impactLT: Float
-  impactLTE: Float
-  impactIsNil: Boolean
-  impactNotNil: Boolean
-  """
-  exploitability field predicates
-  """
-  exploitability: Float
-  exploitabilityNEQ: Float
-  exploitabilityIn: [Float!]
-  exploitabilityNotIn: [Float!]
-  exploitabilityGT: Float
-  exploitabilityGTE: Float
-  exploitabilityLT: Float
-  exploitabilityLTE: Float
-  exploitabilityIsNil: Boolean
-  exploitabilityNotNil: Boolean
-  """
-  priority field predicates
-  """
-  priority: String
-  priorityNEQ: String
-  priorityIn: [String!]
-  priorityNotIn: [String!]
-  priorityContains: String
-  priorityHasPrefix: String
-  priorityHasSuffix: String
-  priorityIsNil: Boolean
-  priorityNotNil: Boolean
-  priorityEqualFold: String
-  priorityContainsFold: String
-  """
-  summary field predicates
-  """
-  summary: String
-  summaryNEQ: String
-  summaryIn: [String!]
-  summaryNotIn: [String!]
-  summaryContains: String
-  summaryHasPrefix: String
-  summaryHasSuffix: String
-  summaryIsNil: Boolean
-  summaryNotNil: Boolean
-  summaryEqualFold: String
-  summaryContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  vector field predicates
-  """
-  vector: String
-  vectorNEQ: String
-  vectorIn: [String!]
-  vectorNotIn: [String!]
-  vectorContains: String
-  vectorHasPrefix: String
-  vectorHasSuffix: String
-  vectorIsNil: Boolean
-  vectorNotNil: Boolean
-  vectorEqualFold: String
-  vectorContainsFold: String
-  """
-  remediation_sla field predicates
-  """
-  remediationSLA: Int
-  remediationSLANEQ: Int
-  remediationSLAGT: Int
-  remediationSLAGTE: Int
-  remediationSLALT: Int
-  remediationSLALTE: Int
-  remediationSLAIsNil: Boolean
-  remediationSLANotNil: Boolean
-  """
-  open field predicates
-  """
-  open: Boolean
-  openNEQ: Boolean
-  openIsNil: Boolean
-  openNotNil: Boolean
-  """
-  blocking field predicates
-  """
-  blocking: Boolean
-  blockingNEQ: Boolean
-  blockingIsNil: Boolean
-  blockingNotNil: Boolean
-  """
-  production field predicates
-  """
-  production: Boolean
-  productionNEQ: Boolean
-  productionIsNil: Boolean
-  productionNotNil: Boolean
-  """
-  public field predicates
-  """
-  public: Boolean
-  publicNEQ: Boolean
-  publicIsNil: Boolean
-  publicNotNil: Boolean
-  """
-  validated field predicates
-  """
-  validated: Boolean
-  validatedNEQ: Boolean
-  validatedIsNil: Boolean
-  validatedNotNil: Boolean
-  """
-  vulnerable_version_range field predicates
-  """
-  vulnerableVersionRange: String
-  vulnerableVersionRangeNEQ: String
-  vulnerableVersionRangeIn: [String!]
-  vulnerableVersionRangeNotIn: [String!]
-  vulnerableVersionRangeContains: String
-  vulnerableVersionRangeHasPrefix: String
-  vulnerableVersionRangeHasSuffix: String
-  vulnerableVersionRangeIsNil: Boolean
-  vulnerableVersionRangeNotNil: Boolean
-  vulnerableVersionRangeEqualFold: String
-  vulnerableVersionRangeContainsFold: String
-  """
-  first_patched_version field predicates
-  """
-  firstPatchedVersion: String
-  firstPatchedVersionNEQ: String
-  firstPatchedVersionIn: [String!]
-  firstPatchedVersionNotIn: [String!]
-  firstPatchedVersionContains: String
-  firstPatchedVersionHasPrefix: String
-  firstPatchedVersionHasSuffix: String
-  firstPatchedVersionIsNil: Boolean
-  firstPatchedVersionNotNil: Boolean
-  firstPatchedVersionEqualFold: String
-  firstPatchedVersionContainsFold: String
-  """
-  fix_available field predicates
-  """
-  fixAvailable: Boolean
-  fixAvailableNEQ: Boolean
-  fixAvailableIsNil: Boolean
-  fixAvailableNotNil: Boolean
-  """
-  package_name field predicates
-  """
-  packageName: String
-  packageNameNEQ: String
-  packageNameIn: [String!]
-  packageNameNotIn: [String!]
-  packageNameContains: String
-  packageNameHasPrefix: String
-  packageNameHasSuffix: String
-  packageNameIsNil: Boolean
-  packageNameNotNil: Boolean
-  packageNameEqualFold: String
-  packageNameContainsFold: String
-  """
-  package_ecosystem field predicates
-  """
-  packageEcosystem: String
-  packageEcosystemNEQ: String
-  packageEcosystemIn: [String!]
-  packageEcosystemNotIn: [String!]
-  packageEcosystemContains: String
-  packageEcosystemHasPrefix: String
-  packageEcosystemHasSuffix: String
-  packageEcosystemIsNil: Boolean
-  packageEcosystemNotNil: Boolean
-  packageEcosystemEqualFold: String
-  packageEcosystemContainsFold: String
-  """
-  manifest_path field predicates
-  """
-  manifestPath: String
-  manifestPathNEQ: String
-  manifestPathIn: [String!]
-  manifestPathNotIn: [String!]
-  manifestPathContains: String
-  manifestPathHasPrefix: String
-  manifestPathHasSuffix: String
-  manifestPathIsNil: Boolean
-  manifestPathNotNil: Boolean
-  manifestPathEqualFold: String
-  manifestPathContainsFold: String
-  """
-  dependency_scope field predicates
-  """
-  dependencyScope: String
-  dependencyScopeNEQ: String
-  dependencyScopeIn: [String!]
-  dependencyScopeNotIn: [String!]
-  dependencyScopeContains: String
-  dependencyScopeHasPrefix: String
-  dependencyScopeHasSuffix: String
-  dependencyScopeIsNil: Boolean
-  dependencyScopeNotNil: Boolean
-  dependencyScopeEqualFold: String
-  dependencyScopeContainsFold: String
-  """
-  published_at field predicates
-  """
-  publishedAt: DateTime
-  publishedAtGT: DateTime
-  publishedAtGTE: DateTime
-  publishedAtLT: DateTime
-  publishedAtLTE: DateTime
-  publishedAtIsNil: Boolean
-  publishedAtNotNil: Boolean
-  """
-  discovered_at field predicates
-  """
-  discoveredAt: DateTime
-  discoveredAtGT: DateTime
-  discoveredAtGTE: DateTime
-  discoveredAtLT: DateTime
-  discoveredAtLTE: DateTime
-  discoveredAtIsNil: Boolean
-  discoveredAtNotNil: Boolean
-  """
-  source_updated_at field predicates
-  """
-  sourceUpdatedAt: DateTime
-  sourceUpdatedAtGT: DateTime
-  sourceUpdatedAtGTE: DateTime
-  sourceUpdatedAtLT: DateTime
-  sourceUpdatedAtLTE: DateTime
-  sourceUpdatedAtIsNil: Boolean
-  sourceUpdatedAtNotNil: Boolean
-  """
-  dismissed_at field predicates
-  """
-  dismissedAt: DateTime
-  dismissedAtGT: DateTime
-  dismissedAtGTE: DateTime
-  dismissedAtLT: DateTime
-  dismissedAtLTE: DateTime
-  dismissedAtIsNil: Boolean
-  dismissedAtNotNil: Boolean
-  """
-  dismissed_reason field predicates
-  """
-  dismissedReason: String
-  dismissedReasonNEQ: String
-  dismissedReasonIn: [String!]
-  dismissedReasonNotIn: [String!]
-  dismissedReasonContains: String
-  dismissedReasonHasPrefix: String
-  dismissedReasonHasSuffix: String
-  dismissedReasonIsNil: Boolean
-  dismissedReasonNotNil: Boolean
-  dismissedReasonEqualFold: String
-  dismissedReasonContainsFold: String
-  """
-  dismissed_comment field predicates
-  """
-  dismissedComment: String
-  dismissedCommentNEQ: String
-  dismissedCommentIn: [String!]
-  dismissedCommentNotIn: [String!]
-  dismissedCommentContains: String
-  dismissedCommentHasPrefix: String
-  dismissedCommentHasSuffix: String
-  dismissedCommentIsNil: Boolean
-  dismissedCommentNotNil: Boolean
-  dismissedCommentEqualFold: String
-  dismissedCommentContainsFold: String
-  """
-  fixed_at field predicates
-  """
-  fixedAt: DateTime
-  fixedAtGT: DateTime
-  fixedAtGTE: DateTime
-  fixedAtLT: DateTime
-  fixedAtLTE: DateTime
-  fixedAtIsNil: Boolean
-  fixedAtNotNil: Boolean
-  """
-  auto_dismissed_at field predicates
-  """
-  autoDismissedAt: DateTime
-  autoDismissedAtGT: DateTime
-  autoDismissedAtGTE: DateTime
-  autoDismissedAtLT: DateTime
-  autoDismissedAtLTE: DateTime
-  autoDismissedAtIsNil: Boolean
-  autoDismissedAtNotNil: Boolean
-  """
-  external_uri field predicates
-  """
-  externalURI: String
-  externalURINEQ: String
-  externalURIIn: [String!]
-  externalURINotIn: [String!]
-  externalURIContains: String
-  externalURIHasPrefix: String
-  externalURIHasSuffix: String
-  externalURIIsNil: Boolean
-  externalURINotNil: Boolean
-  externalURIEqualFold: String
-  externalURIContainsFold: String
 }
 type WorkflowAssignmentHistory implements Node {
   id: ID!
@@ -57736,18 +42691,6 @@ input WorkflowAssignmentHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -57761,130 +42704,6 @@ input WorkflowAssignmentHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  workflow_instance_id field predicates
-  """
-  workflowInstanceID: String
-  workflowInstanceIDNEQ: String
-  workflowInstanceIDIn: [String!]
-  workflowInstanceIDNotIn: [String!]
-  workflowInstanceIDContains: String
-  workflowInstanceIDHasPrefix: String
-  workflowInstanceIDHasSuffix: String
-  workflowInstanceIDEqualFold: String
-  workflowInstanceIDContainsFold: String
-  """
-  assignment_key field predicates
-  """
-  assignmentKey: String
-  assignmentKeyNEQ: String
-  assignmentKeyIn: [String!]
-  assignmentKeyNotIn: [String!]
-  assignmentKeyContains: String
-  assignmentKeyHasPrefix: String
-  assignmentKeyHasSuffix: String
-  assignmentKeyEqualFold: String
-  assignmentKeyContainsFold: String
-  """
-  role field predicates
-  """
-  role: String
-  roleNEQ: String
-  roleIn: [String!]
-  roleNotIn: [String!]
-  roleContains: String
-  roleHasPrefix: String
-  roleHasSuffix: String
-  roleEqualFold: String
-  roleContainsFold: String
-  """
-  label field predicates
-  """
-  label: String
-  labelNEQ: String
-  labelIn: [String!]
-  labelNotIn: [String!]
-  labelContains: String
-  labelHasPrefix: String
-  labelHasSuffix: String
-  labelIsNil: Boolean
-  labelNotNil: Boolean
-  labelEqualFold: String
-  labelContainsFold: String
-  """
-  required field predicates
-  """
-  required: Boolean
-  requiredNEQ: Boolean
-  """
-  status field predicates
-  """
-  status: WorkflowAssignmentHistoryWorkflowAssignmentStatus
-  statusNEQ: WorkflowAssignmentHistoryWorkflowAssignmentStatus
-  statusIn: [WorkflowAssignmentHistoryWorkflowAssignmentStatus!]
-  statusNotIn: [WorkflowAssignmentHistoryWorkflowAssignmentStatus!]
-  """
-  decided_at field predicates
-  """
-  decidedAt: Time
-  decidedAtGT: Time
-  decidedAtGTE: Time
-  decidedAtLT: Time
-  decidedAtLTE: Time
-  decidedAtIsNil: Boolean
-  decidedAtNotNil: Boolean
-  """
-  actor_user_id field predicates
-  """
-  actorUserID: String
-  actorUserIDNEQ: String
-  actorUserIDIn: [String!]
-  actorUserIDNotIn: [String!]
-  actorUserIDContains: String
-  actorUserIDHasPrefix: String
-  actorUserIDHasSuffix: String
-  actorUserIDIsNil: Boolean
-  actorUserIDNotNil: Boolean
-  actorUserIDEqualFold: String
-  actorUserIDContainsFold: String
-  """
-  actor_group_id field predicates
-  """
-  actorGroupID: String
-  actorGroupIDNEQ: String
-  actorGroupIDIn: [String!]
-  actorGroupIDNotIn: [String!]
-  actorGroupIDContains: String
-  actorGroupIDHasPrefix: String
-  actorGroupIDHasSuffix: String
-  actorGroupIDIsNil: Boolean
-  actorGroupIDNotNil: Boolean
-  actorGroupIDEqualFold: String
-  actorGroupIDContainsFold: String
-  """
-  notes field predicates
-  """
-  notes: String
-  notesNEQ: String
-  notesIn: [String!]
-  notesNotIn: [String!]
-  notesContains: String
-  notesHasPrefix: String
-  notesHasSuffix: String
-  notesIsNil: Boolean
-  notesNotNil: Boolean
-  notesEqualFold: String
-  notesContainsFold: String
-  """
-  due_at field predicates
-  """
-  dueAt: Time
-  dueAtGT: Time
-  dueAtGTE: Time
-  dueAtLT: Time
-  dueAtLTE: Time
-  dueAtIsNil: Boolean
-  dueAtNotNil: Boolean
 }
 """
 WorkflowAssignmentHistoryWorkflowAssignmentStatus is enum for the field status
@@ -58109,18 +42928,6 @@ input WorkflowAssignmentTargetHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -58134,67 +42941,6 @@ input WorkflowAssignmentTargetHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  workflow_assignment_id field predicates
-  """
-  workflowAssignmentID: String
-  workflowAssignmentIDNEQ: String
-  workflowAssignmentIDIn: [String!]
-  workflowAssignmentIDNotIn: [String!]
-  workflowAssignmentIDContains: String
-  workflowAssignmentIDHasPrefix: String
-  workflowAssignmentIDHasSuffix: String
-  workflowAssignmentIDEqualFold: String
-  workflowAssignmentIDContainsFold: String
-  """
-  target_type field predicates
-  """
-  targetType: WorkflowAssignmentTargetHistoryWorkflowTargetType
-  targetTypeNEQ: WorkflowAssignmentTargetHistoryWorkflowTargetType
-  targetTypeIn: [WorkflowAssignmentTargetHistoryWorkflowTargetType!]
-  targetTypeNotIn: [WorkflowAssignmentTargetHistoryWorkflowTargetType!]
-  """
-  target_user_id field predicates
-  """
-  targetUserID: String
-  targetUserIDNEQ: String
-  targetUserIDIn: [String!]
-  targetUserIDNotIn: [String!]
-  targetUserIDContains: String
-  targetUserIDHasPrefix: String
-  targetUserIDHasSuffix: String
-  targetUserIDIsNil: Boolean
-  targetUserIDNotNil: Boolean
-  targetUserIDEqualFold: String
-  targetUserIDContainsFold: String
-  """
-  target_group_id field predicates
-  """
-  targetGroupID: String
-  targetGroupIDNEQ: String
-  targetGroupIDIn: [String!]
-  targetGroupIDNotIn: [String!]
-  targetGroupIDContains: String
-  targetGroupIDHasPrefix: String
-  targetGroupIDHasSuffix: String
-  targetGroupIDIsNil: Boolean
-  targetGroupIDNotNil: Boolean
-  targetGroupIDEqualFold: String
-  targetGroupIDContainsFold: String
-  """
-  resolver_key field predicates
-  """
-  resolverKey: String
-  resolverKeyNEQ: String
-  resolverKeyIn: [String!]
-  resolverKeyNotIn: [String!]
-  resolverKeyContains: String
-  resolverKeyHasPrefix: String
-  resolverKeyHasSuffix: String
-  resolverKeyIsNil: Boolean
-  resolverKeyNotNil: Boolean
-  resolverKeyEqualFold: String
-  resolverKeyContainsFold: String
 }
 """
 WorkflowAssignmentTargetHistoryWorkflowTargetType is enum for the field target_type
@@ -58460,18 +43206,6 @@ input WorkflowDefinitionHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -58486,86 +43220,6 @@ input WorkflowDefinitionHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  workflow_kind field predicates
-  """
-  workflowKind: WorkflowDefinitionHistoryWorkflowKind
-  workflowKindNEQ: WorkflowDefinitionHistoryWorkflowKind
-  workflowKindIn: [WorkflowDefinitionHistoryWorkflowKind!]
-  workflowKindNotIn: [WorkflowDefinitionHistoryWorkflowKind!]
-  """
-  schema_type field predicates
-  """
-  schemaType: String
-  schemaTypeNEQ: String
-  schemaTypeIn: [String!]
-  schemaTypeNotIn: [String!]
-  schemaTypeContains: String
-  schemaTypeHasPrefix: String
-  schemaTypeHasSuffix: String
-  schemaTypeEqualFold: String
-  schemaTypeContainsFold: String
-  """
   revision field predicates
   """
   revision: Int
@@ -58574,40 +43228,6 @@ input WorkflowDefinitionHistoryWhereInput {
   revisionGTE: Int
   revisionLT: Int
   revisionLTE: Int
-  """
-  draft field predicates
-  """
-  draft: Boolean
-  draftNEQ: Boolean
-  """
-  published_at field predicates
-  """
-  publishedAt: Time
-  publishedAtGT: Time
-  publishedAtGTE: Time
-  publishedAtLT: Time
-  publishedAtLTE: Time
-  publishedAtIsNil: Boolean
-  publishedAtNotNil: Boolean
-  """
-  cooldown_seconds field predicates
-  """
-  cooldownSeconds: Int
-  cooldownSecondsNEQ: Int
-  cooldownSecondsGT: Int
-  cooldownSecondsGTE: Int
-  cooldownSecondsLT: Int
-  cooldownSecondsLTE: Int
-  """
-  is_default field predicates
-  """
-  isDefault: Boolean
-  isDefaultNEQ: Boolean
-  """
-  active field predicates
-  """
-  active: Boolean
-  activeNEQ: Boolean
 }
 """
 WorkflowDefinitionHistoryWorkflowKind is enum for the field workflow_kind
@@ -58668,6 +43288,8 @@ func (ec *executionContext) childFields_ActionPlanHistory(ctx context.Context, f
 		return ec.fieldContext_ActionPlanHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ActionPlanHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ActionPlanHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ActionPlanHistory_externalID(ctx, field)
 	case "name":
@@ -58814,6 +43436,8 @@ func (ec *executionContext) childFields_AssessmentHistory(ctx context.Context, f
 		return ec.fieldContext_AssessmentHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_AssessmentHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_AssessmentHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_AssessmentHistory_externalID(ctx, field)
 	case "ownerID":
@@ -58894,6 +43518,8 @@ func (ec *executionContext) childFields_AssessmentPolicyHistory(ctx context.Cont
 		return ec.fieldContext_AssessmentPolicyHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_AssessmentPolicyHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_AssessmentPolicyHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_AssessmentPolicyHistory_externalID(ctx, field)
 	case "ownerID":
@@ -59056,6 +43682,8 @@ func (ec *executionContext) childFields_AssetHistory(ctx context.Context, field 
 		return ec.fieldContext_AssetHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_AssetHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_AssetHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_AssetHistory_externalID(ctx, field)
 	case "ownerID":
@@ -59204,6 +43832,8 @@ func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, fie
 		return ec.fieldContext_CampaignHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_CampaignHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_CampaignHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_CampaignHistory_externalID(ctx, field)
 	case "ownerID":
@@ -59404,6 +44034,8 @@ func (ec *executionContext) childFields_ContactHistory(ctx context.Context, fiel
 		return ec.fieldContext_ContactHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ContactHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ContactHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ContactHistory_externalID(ctx, field)
 	case "ownerID":
@@ -59486,6 +44118,8 @@ func (ec *executionContext) childFields_ControlHistory(ctx context.Context, fiel
 		return ec.fieldContext_ControlHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ControlHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ControlHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ControlHistory_externalID(ctx, field)
 	case "externalUUID":
@@ -59636,6 +44270,8 @@ func (ec *executionContext) childFields_ControlImplementationHistory(ctx context
 		return ec.fieldContext_ControlImplementationHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ControlImplementationHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ControlImplementationHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ControlImplementationHistory_externalID(ctx, field)
 	case "ownerID":
@@ -59720,6 +44356,8 @@ func (ec *executionContext) childFields_ControlObjectiveHistory(ctx context.Cont
 		return ec.fieldContext_ControlObjectiveHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ControlObjectiveHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ControlObjectiveHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ControlObjectiveHistory_externalID(ctx, field)
 	case "ownerID":
@@ -59986,6 +44624,8 @@ func (ec *executionContext) childFields_EmailTemplateHistory(ctx context.Context
 		return ec.fieldContext_EmailTemplateHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_EmailTemplateHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_EmailTemplateHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_EmailTemplateHistory_externalID(ctx, field)
 	case "ownerID":
@@ -60082,6 +44722,8 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_EntityHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_EntityHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_EntityHistory_externalID(ctx, field)
 	case "ownerID":
@@ -60328,6 +44970,8 @@ func (ec *executionContext) childFields_EvidenceHistory(ctx context.Context, fie
 		return ec.fieldContext_EvidenceHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_EvidenceHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_EvidenceHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_EvidenceHistory_externalID(ctx, field)
 	case "ownerID":
@@ -60592,6 +45236,8 @@ func (ec *executionContext) childFields_FindingHistory(ctx context.Context, fiel
 		return ec.fieldContext_FindingHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_FindingHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_FindingHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_FindingHistory_externalID(ctx, field)
 	case "ownerID":
@@ -60772,6 +45418,8 @@ func (ec *executionContext) childFields_GroupHistory(ctx context.Context, field 
 		return ec.fieldContext_GroupHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_GroupHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_GroupHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_GroupHistory_externalID(ctx, field)
 	case "ownerID":
@@ -61040,6 +45688,8 @@ func (ec *executionContext) childFields_IdentityHolderHistory(ctx context.Contex
 		return ec.fieldContext_IdentityHolderHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_IdentityHolderHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_IdentityHolderHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_IdentityHolderHistory_externalID(ctx, field)
 	case "ownerID":
@@ -61166,6 +45816,8 @@ func (ec *executionContext) childFields_InternalPolicyHistory(ctx context.Contex
 		return ec.fieldContext_InternalPolicyHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_InternalPolicyHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_InternalPolicyHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_InternalPolicyHistory_externalID(ctx, field)
 	case "ownerID":
@@ -61344,6 +45996,8 @@ func (ec *executionContext) childFields_MappedControlHistory(ctx context.Context
 		return ec.fieldContext_MappedControlHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_MappedControlHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_MappedControlHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_MappedControlHistory_externalID(ctx, field)
 	case "systemOwned":
@@ -61422,6 +46076,8 @@ func (ec *executionContext) childFields_NarrativeHistory(ctx context.Context, fi
 		return ec.fieldContext_NarrativeHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_NarrativeHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_NarrativeHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_NarrativeHistory_externalID(ctx, field)
 	case "ownerID":
@@ -62070,6 +46726,8 @@ func (ec *executionContext) childFields_PlatformHistory(ctx context.Context, fie
 		return ec.fieldContext_PlatformHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_PlatformHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_PlatformHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_PlatformHistory_externalID(ctx, field)
 	case "ownerID":
@@ -62240,6 +46898,8 @@ func (ec *executionContext) childFields_ProcedureHistory(ctx context.Context, fi
 		return ec.fieldContext_ProcedureHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ProcedureHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ProcedureHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ProcedureHistory_externalID(ctx, field)
 	case "ownerID":
@@ -62366,6 +47026,8 @@ func (ec *executionContext) childFields_ProgramHistory(ctx context.Context, fiel
 		return ec.fieldContext_ProgramHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ProgramHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ProgramHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ProgramHistory_externalID(ctx, field)
 	case "ownerID":
@@ -62522,6 +47184,8 @@ func (ec *executionContext) childFields_RemediationHistory(ctx context.Context, 
 		return ec.fieldContext_RemediationHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_RemediationHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_RemediationHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_RemediationHistory_externalID(ctx, field)
 	case "ownerID":
@@ -62760,6 +47424,8 @@ func (ec *executionContext) childFields_ReviewHistory(ctx context.Context, field
 		return ec.fieldContext_ReviewHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ReviewHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_ReviewHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_ReviewHistory_externalID(ctx, field)
 	case "ownerID":
@@ -62874,6 +47540,8 @@ func (ec *executionContext) childFields_RiskHistory(ctx context.Context, field g
 		return ec.fieldContext_RiskHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_RiskHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_RiskHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_RiskHistory_externalID(ctx, field)
 	case "ownerID":
@@ -63162,6 +47830,8 @@ func (ec *executionContext) childFields_SubcontrolHistory(ctx context.Context, f
 		return ec.fieldContext_SubcontrolHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_SubcontrolHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_SubcontrolHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_SubcontrolHistory_externalID(ctx, field)
 	case "externalUUID":
@@ -63366,6 +48036,8 @@ func (ec *executionContext) childFields_SystemDetailHistory(ctx context.Context,
 		return ec.fieldContext_SystemDetailHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_SystemDetailHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_SystemDetailHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_SystemDetailHistory_externalID(ctx, field)
 	case "ownerID":
@@ -63446,6 +48118,8 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_TaskHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_TaskHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_TaskHistory_externalID(ctx, field)
 	case "ownerID":
@@ -63494,8 +48168,6 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_priority(ctx, field)
 	case "source":
 		return ec.fieldContext_TaskHistory_source(ctx, field)
-	case "sourceKey":
-		return ec.fieldContext_TaskHistory_sourceKey(ctx, field)
 	case "idempotencyKey":
 		return ec.fieldContext_TaskHistory_idempotencyKey(ctx, field)
 	case "externalReferenceURL":
@@ -63560,6 +48232,8 @@ func (ec *executionContext) childFields_TemplateHistory(ctx context.Context, fie
 		return ec.fieldContext_TemplateHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_TemplateHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_TemplateHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_TemplateHistory_externalID(ctx, field)
 	case "ownerID":
@@ -64078,6 +48752,8 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_enableAutoApproval(ctx, field)
 	case "autoApprovalRules":
 		return ec.fieldContext_TrustCenterSettingHistory_autoApprovalRules(ctx, field)
+	case "disableDefaultDomain":
+		return ec.fieldContext_TrustCenterSettingHistory_disableDefaultDomain(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistory", field.Name)
 }
@@ -64402,6 +49078,20 @@ func (ec *executionContext) childFields_VendorRiskScoreHistory(ctx context.Conte
 		return ec.fieldContext_VendorRiskScoreHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_VendorRiskScoreHistory_ownerID(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_VendorRiskScoreHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_VendorRiskScoreHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_VendorRiskScoreHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_VendorRiskScoreHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_VendorRiskScoreHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_VendorRiskScoreHistory_sourceKey(ctx, field)
+	case "externalID":
+		return ec.fieldContext_VendorRiskScoreHistory_externalID(ctx, field)
 	case "questionKey":
 		return ec.fieldContext_VendorRiskScoreHistory_questionKey(ctx, field)
 	case "questionName":
@@ -64544,6 +49234,8 @@ func (ec *executionContext) childFields_VulnerabilityHistory(ctx context.Context
 		return ec.fieldContext_VulnerabilityHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_VulnerabilityHistory_integrationRunID(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_VulnerabilityHistory_sourceKey(ctx, field)
 	case "externalID":
 		return ec.fieldContext_VulnerabilityHistory_externalID(ctx, field)
 	case "ownerID":

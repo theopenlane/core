@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"github.com/samber/do/v2"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/utils/contextx"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 type testService struct {
@@ -24,7 +24,7 @@ func TestInjectorCodecKey(t *testing.T) {
 	injector := do.New()
 	codec := newInjectorCodec("test_service", injector, testServiceSetter)
 
-	assert.Equal(t, ContextKey("test_service"), codec.id)
+	assert.Check(t, is.Equal(ContextKey("test_service"), codec.id))
 }
 
 func TestInjectorCodecCaptureReturnsSentinel(t *testing.T) {
@@ -33,9 +33,9 @@ func TestInjectorCodecCaptureReturnsSentinel(t *testing.T) {
 
 	raw, present, err := codec.capture(context.Background())
 
-	require.NoError(t, err)
-	assert.True(t, present)
-	assert.Equal(t, `true`, string(raw))
+	assert.NilError(t, err)
+	assert.Check(t, present)
+	assert.Check(t, is.Equal(`true`, string(raw)))
 }
 
 func TestInjectorCodecRestoreResolvesFromInjector(t *testing.T) {
@@ -47,11 +47,11 @@ func TestInjectorCodecRestoreResolvesFromInjector(t *testing.T) {
 
 	ctx, err := codec.restore(context.Background(), nil)
 
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	restored, ok := testServiceKey.Get(ctx)
-	require.True(t, ok)
-	assert.Equal(t, "resolved", restored.Name)
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal("resolved", restored.Name))
 }
 
 func TestInjectorCodecRestoreFailsWhenNotProvided(t *testing.T) {
@@ -61,10 +61,10 @@ func TestInjectorCodecRestoreFailsWhenNotProvided(t *testing.T) {
 	ctx := context.Background()
 	restored, err := codec.restore(ctx, nil)
 
-	require.ErrorIs(t, err, ErrContextSnapshotRestoreFailed)
+	assert.ErrorIs(t, err, ErrContextSnapshotRestoreFailed)
 
 	_, ok := testServiceKey.Get(restored)
-	assert.False(t, ok)
+	assert.Check(t, !ok)
 }
 
 func TestInjectorCodecRoundTripViaContextManager(t *testing.T) {
@@ -75,15 +75,15 @@ func TestInjectorCodecRoundTripViaContextManager(t *testing.T) {
 	codec := newInjectorCodec("test_service", injector, testServiceSetter)
 
 	manager, err := newContextManager(codec)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	snapshot, err := manager.Capture(context.Background())
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	restored, err := manager.Restore(context.Background(), snapshot)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	val, ok := testServiceKey.Get(restored)
-	require.True(t, ok)
-	assert.Equal(t, "round-tripped", val.Name)
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal("round-tripped", val.Name))
 }

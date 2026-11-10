@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/authzgenerated"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
@@ -130,6 +131,31 @@ func CanEditObjectUnderParents(parents []string, fetch func(ctx context.Context,
 
 		return privacy.Skip
 	})
+}
+
+// ParentIDFromMutation returns the stored value of a parent id field on the object being mutated
+func ParentIDFromMutation(ctx context.Context, m generated.Mutation, field string) (string, error) {
+	gm, ok := m.(utils.GenericMutation)
+	if !ok {
+		return "", nil
+	}
+
+	objectID, ok := gm.ID()
+	if !ok {
+		return "", nil
+	}
+
+	schema, ok := entityops.LookupSchema(gm.Type())
+	if !ok || schema.Load == nil {
+		return "", nil
+	}
+
+	row, err := schema.Load(ctx, gm.Client(), objectID)
+	if err != nil {
+		return "", err
+	}
+
+	return entityops.FieldValue(row, field), nil
 }
 
 // CheckOrgReadAccess checks if the requestor has access to read the organization
@@ -360,7 +386,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 				SubjectType: actor.SubjectType(),
 			}
 
-			if allow, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac); err != nil || !allow {
+			if allow, err := utils.CheckAccess(ctx, utils.AuthzClient(ctx, m), ac); err != nil || !allow {
 				logx.FromContext(ctx).Error().Err(err).Str("edge", edge).Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Str("object_type", edgeMap.ObjectType).Msg("user does not have access to the object for edge permissions")
 
 				if confirmedInOrganization {

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"encoding/json"
 	"slices"
 
 	models "github.com/theopenlane/core/common/openapi"
@@ -9,12 +10,21 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // ValidateTOTP validates a user's TOTP code
 // this currently only supports TOTP and not OTP codes via email and SMS
 func (h *Handler) ValidateTOTP(ctx echo.Context) error {
+	subjectID, err := auth.GetSubjectIDFromContext(ctx.Request().Context())
+	if err != nil {
+		return h.BadRequest(ctx, auth.ErrNoAuthUser)
+	}
+
+	return h.validateTOTP(ctx, subjectID, "")
+}
+
+// validateTOTP checks the submitted TOTP or recovery code for the subject
+func (h *Handler) validateTOTP(ctx echo.Context, subjectID, state string) error {
 	in, err := BindAndValidate[models.TFARequest](ctx)
 	if err != nil {
 		return h.InvalidInput(ctx, err)
@@ -22,19 +32,22 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	subjectID, err := auth.GetSubjectIDFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
-
-		return h.BadRequest(ctx, auth.ErrNoAuthUser)
+	lookupCtx := reqCtx
+	if state != "" {
+		lookupCtx = auth.WithInternalReadContext(reqCtx)
 	}
 
 	// get user from database by subject
-	user, err := h.getUserTFASettings(reqCtx, subjectID)
+	user, err := h.getUserTFASettings(lookupCtx, subjectID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user")
 
 		return h.BadRequest(ctx, err)
+	}
+
+	if state != "" {
+		// user not authenticated here
+		reqCtx = setAuthenticatedContext(reqCtx, user)
 	}
 
 	if user.Edges.TfaSettings == nil || len(user.Edges.TfaSettings) != 1 || user.Edges.TfaSettings[0].TfaSecret == nil {
@@ -45,41 +58,56 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 
 	tfasetting := user.Edges.TfaSettings[0]
 
-	if in.TOTPCode == "" {
-		// validate recovery code instead
-		recoveryCodeIndex := slices.Index(tfasetting.RecoveryCodes, in.RecoveryCode)
-		if recoveryCodeIndex > -1 {
-			// remove the recovery code from the list
-			tfasetting.RecoveryCodes = append(tfasetting.RecoveryCodes[:recoveryCodeIndex], tfasetting.RecoveryCodes[recoveryCodeIndex+1:]...)
+	recoveryCodeIndex := -1
 
-			if err := h.updateRecoveryCodes(reqCtx, tfasetting.ID, tfasetting.RecoveryCodes); err != nil {
-				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update recovery codes")
-
-				return h.BadRequest(ctx, err)
-			}
-
-			return h.Success(ctx, models.TFAResponse{
-				Reply: rout.Reply{Success: true},
-			})
+	switch {
+	case in.TOTPCode != "":
+		totpUser := totp.User{
+			ID:            subjectID,
+			TFASecret:     *tfasetting.TfaSecret,
+			IsTOTPAllowed: tfasetting.TotpAllowed,
+			Email:         sql.NullString{String: user.Email, Valid: true},
 		}
 
-		return h.BadRequest(ctx, ErrInvalidRecoveryCode)
+		if err := h.OTPManager.Manager.ValidateTOTP(reqCtx, &totpUser, in.TOTPCode); err != nil {
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to validate TOTP code")
+
+			return h.BadRequest(ctx, err)
+		}
+	default:
+		// validate recovery code instead
+		recoveryCodeIndex = slices.Index(tfasetting.RecoveryCodes, in.RecoveryCode)
+		if recoveryCodeIndex < 0 {
+			return h.BadRequest(ctx, ErrInvalidRecoveryCode)
+		}
 	}
 
-	totpUser := totp.User{
-		ID:            subjectID,
-		TFASecret:     *tfasetting.TfaSecret,
-		IsTOTPAllowed: tfasetting.TotpAllowed,
-		Email:         sql.NullString{String: user.Email, Valid: true},
+	var pendingAuthRequest tfaAuthenticationRequest
+
+	// the pending state is taken before a recovery code is spent so a replayed cookie cannot burn one
+	if state != "" {
+		data, err := h.SessionConfig.RedisStore.TakeSession(reqCtx, tfaPendingKeyPrefix+state)
+		if err != nil {
+			return h.Unauthorized(ctx, ErrAuthenticationRequired)
+		}
+
+		if err := json.Unmarshal([]byte(data), &pendingAuthRequest); err != nil || pendingAuthRequest.UserID != subjectID {
+			return h.Unauthorized(ctx, ErrAuthenticationRequired)
+		}
+
+		h.clearAuthFlowCookies(ctx.Response().Writer, tfaPendingCookieName)
 	}
 
-	if err := h.OTPManager.Manager.ValidateTOTP(reqCtx, &totpUser, in.TOTPCode); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to validate TOTP code")
+	if recoveryCodeIndex >= 0 {
+		// remove the recovery code from the list
+		tfasetting.RecoveryCodes = append(tfasetting.RecoveryCodes[:recoveryCodeIndex], tfasetting.RecoveryCodes[recoveryCodeIndex+1:]...)
 
-		return h.BadRequest(ctx, err)
+		if err := h.updateRecoveryCodes(reqCtx, tfasetting.ID, tfasetting.RecoveryCodes); err != nil {
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update recovery codes")
+
+			return h.BadRequest(ctx, err)
+		}
 	}
 
-	return h.Success(ctx, models.TFAResponse{
-		Reply: rout.Reply{Success: true},
-	})
+	return h.completeTFALogin(ctx, state, subjectID, pendingAuthRequest.OrganizationID)
 }

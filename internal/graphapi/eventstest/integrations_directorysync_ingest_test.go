@@ -46,11 +46,9 @@ func directorySyncTestDefinition(defID string) integrationtypes.Definition {
 	}
 
 	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          defID,
-			DisplayName: "Directory Sync Test",
-			Active:      true,
-		},
+		ID:          defID,
+		DisplayName: "Directory Sync Test",
+		Active:      true,
 		Operations: []integrationtypes.OperationRegistration{
 			{
 				Name:   directorySyncTestOperation,

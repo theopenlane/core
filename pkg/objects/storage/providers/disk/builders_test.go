@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -13,7 +14,7 @@ import (
 
 func TestNewDiskBuilder(t *testing.T) {
 	builder := diskprovider.NewDiskBuilder()
-	assert.NotNil(t, builder)
+	assert.Check(t, builder != nil)
 }
 
 func TestDiskBuilderBuild(t *testing.T) {
@@ -40,11 +41,11 @@ func TestDiskBuilderBuild(t *testing.T) {
 			provider, err := builder.Build(context.Background(), tt.credentials, tt.options)
 
 			if tt.expectError {
-				assert.Error(t, err)
-				assert.Nil(t, provider)
+				assert.Check(t, err != nil)
+				assert.Check(t, is.Nil(provider))
 			} else {
-				assert.NoError(t, err)
-				assert.NotNil(t, provider)
+				assert.Check(t, err)
+				assert.Check(t, provider != nil)
 			}
 		})
 	}
@@ -52,5 +53,5 @@ func TestDiskBuilderBuild(t *testing.T) {
 
 func TestDiskBuilderProviderType(t *testing.T) {
 	builder := diskprovider.NewDiskBuilder()
-	assert.Equal(t, string(storagetypes.DiskProvider), builder.ProviderType())
+	assert.Check(t, is.Equal(string(storagetypes.DiskProvider), builder.ProviderType()))
 }

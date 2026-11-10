@@ -9,7 +9,6 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -148,8 +147,8 @@ func TestMutationCreateCustomTypeEnum(t *testing.T) {
 			request: testclient.CreateCustomTypeEnumInput{
 				Name:        "detective",
 				ObjectType:  "control",
-				Description: lo.ToPtr("A detective control is designed to detect threats instead of proactively preventing them."),
-				Color:       lo.ToPtr("#00ff00"),
+				Description: new("A detective control is designed to detect threats instead of proactively preventing them."),
+				Color:       new("#00ff00"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -258,7 +257,7 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateCustomTypeEnumInput{
-				Description: lo.ToPtr("Updated description"),
+				Description: new("Updated description"),
 			},
 			requestID: customTypeEnum.ID,
 			client:    suite.Client.API,
@@ -267,7 +266,7 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 		{
 			name: "not authorized, update system owned enum",
 			request: testclient.UpdateCustomTypeEnumInput{
-				Description: lo.ToPtr("Updated description"),
+				Description: new("Updated description"),
 			},
 			requestID:   systemTypeEnum.ID,
 			client:      suite.Client.API,
@@ -277,8 +276,8 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateCustomTypeEnumInput{
-				Color:       lo.ToPtr("#ffffff"),
-				Description: lo.ToPtr("a description of a custom type enum"),
+				Color:       new("#ffffff"),
+				Description: new("a description of a custom type enum"),
 			},
 			requestID: customTypeEnum.ID,
 			client:    suite.Client.APIWithPAT,
@@ -287,7 +286,7 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 		{
 			name: "update not allowed, not enough permissions",
 			request: testclient.UpdateCustomTypeEnumInput{
-				Description: lo.ToPtr("Updated description"),
+				Description: new("Updated description"),
 			},
 			requestID:   customTypeEnum.ID,
 			client:      suite.Client.API,
@@ -297,7 +296,7 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateCustomTypeEnumInput{
-				Description: lo.ToPtr("Updated description"),
+				Description: new("Updated description"),
 			},
 			requestID:   customTypeEnum.ID,
 			client:      suite.Client.API,
@@ -427,14 +426,14 @@ func TestMutationDeleteCustomTypeEnumInUse(t *testing.T) {
 
 	controlResp, err := suite.Client.API.CreateControl(th.SharedTestUser1.UserCtx, testclient.CreateControlInput{
 		RefCode:         "TEST-1",
-		ControlKindName: lo.ToPtr(controlEnum.Name),
+		ControlKindName: new(controlEnum.Name),
 	})
 	assert.NilError(t, err)
 	controlID := controlResp.CreateControl.Control.ID
 
 	taskResp, err := suite.Client.API.CreateTask(th.SharedTestUser1.UserCtx, testclient.CreateTaskInput{
 		Title:        "Test Task",
-		TaskKindName: lo.ToPtr(taskEnum.Name),
+		TaskKindName: new(taskEnum.Name),
 	})
 	assert.NilError(t, err)
 	taskID := taskResp.CreateTask.Task.ID
@@ -442,7 +441,7 @@ func TestMutationDeleteCustomTypeEnumInUse(t *testing.T) {
 	subcontrolResp, err := suite.Client.API.CreateSubcontrol(th.SharedTestUser1.UserCtx, testclient.CreateSubcontrolInput{
 		RefCode:            "SUB-1",
 		ControlID:          controlID,
-		SubcontrolKindName: lo.ToPtr(controlEnum.Name),
+		SubcontrolKindName: new(controlEnum.Name),
 	})
 	assert.NilError(t, err)
 	subcontrolID := subcontrolResp.CreateSubcontrol.Subcontrol.ID
@@ -490,7 +489,7 @@ func TestMutationCreateGlobalCustomTypeEnum(t *testing.T) {
 			request: testclient.CreateCustomTypeEnumInput{
 				Name:       "production",
 				ObjectType: "",
-				Field:      lo.ToPtr("environment"),
+				Field:      new("environment"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -500,8 +499,8 @@ func TestMutationCreateGlobalCustomTypeEnum(t *testing.T) {
 			request: testclient.CreateCustomTypeEnumInput{
 				Name:        "pci dss",
 				ObjectType:  "",
-				Field:       lo.ToPtr("scope"),
-				Description: lo.ToPtr("Payment Card Industry Data Security Standard scope"),
+				Field:       new("scope"),
+				Description: new("Payment Card Industry Data Security Standard scope"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -544,7 +543,7 @@ func TestMutationDeleteGlobalCustomTypeEnumInUse(t *testing.T) {
 	// create a task using the global environment enum
 	taskResp, err := suite.Client.API.CreateTask(th.SharedTestUser1.UserCtx, testclient.CreateTaskInput{
 		Title:           "Test Task with Global Env",
-		EnvironmentName: lo.ToPtr(globalEnvEnum.Name),
+		EnvironmentName: new(globalEnvEnum.Name),
 	})
 	assert.NilError(t, err)
 	taskID := taskResp.CreateTask.Task.ID
@@ -577,7 +576,7 @@ func TestMutationDeleteGlobalEnumInUseByMultipleTables(t *testing.T) {
 	// create a task using the global scope enum
 	taskResp, err := suite.Client.API.CreateTask(th.SharedTestUser1.UserCtx, testclient.CreateTaskInput{
 		Title:     "Task with Scope",
-		ScopeName: lo.ToPtr(globalScopeEnum.Name),
+		ScopeName: new(globalScopeEnum.Name),
 	})
 	assert.NilError(t, err)
 	taskID := taskResp.CreateTask.Task.ID
@@ -585,7 +584,7 @@ func TestMutationDeleteGlobalEnumInUseByMultipleTables(t *testing.T) {
 	// create a control using the same global scope enum
 	controlResp, err := suite.Client.API.CreateControl(th.SharedTestUser1.UserCtx, testclient.CreateControlInput{
 		RefCode:   "SCOPE-TEST-1",
-		ScopeName: lo.ToPtr(globalScopeEnum.Name),
+		ScopeName: new(globalScopeEnum.Name),
 	})
 	assert.NilError(t, err)
 	controlID := controlResp.CreateControl.Control.ID
@@ -626,7 +625,7 @@ func TestGlobalEnumLookup(t *testing.T) {
 	t.Run("task uses global enum", func(t *testing.T) {
 		taskResp, err := suite.Client.API.CreateTask(th.SharedTestUser1.UserCtx, testclient.CreateTaskInput{
 			Title:           "Task Using Global Env",
-			EnvironmentName: lo.ToPtr(globalEnvEnum.Name),
+			EnvironmentName: new(globalEnvEnum.Name),
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, taskResp != nil)
@@ -637,7 +636,7 @@ func TestGlobalEnumLookup(t *testing.T) {
 	t.Run("auto-creates enum for unknown name", func(t *testing.T) {
 		resp, err := suite.Client.API.CreateTask(th.SharedTestUser1.UserCtx, testclient.CreateTaskInput{
 			Title:           "Task With Auto Created Env",
-			EnvironmentName: lo.ToPtr("NonExistentEnvironment"),
+			EnvironmentName: new("NonExistentEnvironment"),
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -662,7 +661,7 @@ func TestGlobalEnumUsedAcrossMultipleSchemas(t *testing.T) {
 	t.Run("task can use global environment enum", func(t *testing.T) {
 		resp, err := suite.Client.API.CreateTask(th.SharedTestUser1.UserCtx, testclient.CreateTaskInput{
 			Title:           "Task in Production",
-			EnvironmentName: lo.ToPtr(globalEnvEnum.Name),
+			EnvironmentName: new(globalEnvEnum.Name),
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -672,7 +671,7 @@ func TestGlobalEnumUsedAcrossMultipleSchemas(t *testing.T) {
 	t.Run("control can use same global environment enum", func(t *testing.T) {
 		resp, err := suite.Client.API.CreateControl(th.SharedTestUser1.UserCtx, testclient.CreateControlInput{
 			RefCode:         "PROD-CTRL-1",
-			EnvironmentName: lo.ToPtr(globalEnvEnum.Name),
+			EnvironmentName: new(globalEnvEnum.Name),
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -682,7 +681,7 @@ func TestGlobalEnumUsedAcrossMultipleSchemas(t *testing.T) {
 	t.Run("risk can use same global environment enum", func(t *testing.T) {
 		resp, err := suite.Client.API.CreateRisk(th.SharedTestUser1.UserCtx, testclient.CreateRiskInput{
 			Name:            "Production Risk",
-			EnvironmentName: lo.ToPtr(globalEnvEnum.Name),
+			EnvironmentName: new(globalEnvEnum.Name),
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -692,7 +691,7 @@ func TestGlobalEnumUsedAcrossMultipleSchemas(t *testing.T) {
 	t.Run("evidence can use same global environment enum", func(t *testing.T) {
 		resp, err := suite.Client.API.CreateEvidence(th.SharedTestUser1.UserCtx, testclient.CreateEvidenceInput{
 			Name:            "Production Evidence",
-			EnvironmentName: lo.ToPtr(globalEnvEnum.Name),
+			EnvironmentName: new(globalEnvEnum.Name),
 		}, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)

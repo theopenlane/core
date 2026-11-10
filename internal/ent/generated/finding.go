@@ -53,6 +53,8 @@ type Finding struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -649,7 +651,7 @@ func (*Finding) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case finding.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldUpdatedByImpersonator, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldSourceDefinitionID, finding.FieldSourceDefinitionVersion, finding.FieldSourceInstanceID, finding.FieldManagedBy, finding.FieldIntegrationRunID, finding.FieldExternalID, finding.FieldOwnerID, finding.FieldInternalOwner, finding.FieldInternalOwnerUserID, finding.FieldInternalOwnerGroupID, finding.FieldInternalOwnerIdentityHolderID, finding.FieldReviewedBy, finding.FieldReviewedByUserID, finding.FieldReviewedByGroupID, finding.FieldReviewedByIdentityHolderID, finding.FieldAssignedTo, finding.FieldAssignedToUserID, finding.FieldAssignedToGroupID, finding.FieldAssignedToIdentityHolderID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldSecurityLevel, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldExternalURI:
+		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldUpdatedByImpersonator, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldSourceDefinitionID, finding.FieldSourceDefinitionVersion, finding.FieldSourceInstanceID, finding.FieldManagedBy, finding.FieldIntegrationRunID, finding.FieldSourceKey, finding.FieldExternalID, finding.FieldOwnerID, finding.FieldInternalOwner, finding.FieldInternalOwnerUserID, finding.FieldInternalOwnerGroupID, finding.FieldInternalOwnerIdentityHolderID, finding.FieldReviewedBy, finding.FieldReviewedByUserID, finding.FieldReviewedByGroupID, finding.FieldReviewedByIdentityHolderID, finding.FieldAssignedTo, finding.FieldAssignedToUserID, finding.FieldAssignedToGroupID, finding.FieldAssignedToIdentityHolderID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldSecurityLevel, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case finding.FieldCreatedAt, finding.FieldUpdatedAt, finding.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -760,6 +762,12 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case finding.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case finding.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1399,6 +1407,9 @@ func (_m *Finding) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

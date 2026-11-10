@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strings"
 
-	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
+	oktagosdk "github.com/okta/okta-sdk-golang/v8/okta"
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"

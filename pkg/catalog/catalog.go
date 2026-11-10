@@ -304,9 +304,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 			existingMetadata := make(map[string]string)
 
 			if prod.Metadata != nil {
-				for k, v := range prod.Metadata {
-					existingMetadata[k] = v
-				}
+				maps.Copy(existingMetadata, prod.Metadata)
 			}
 
 			// Add missing metadata

@@ -6,8 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
@@ -15,12 +13,15 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
-	t := suite.T()
+func TestAddOrDeleteStandardTuple(t *testing.T) {
+	s := suite.setupTest(t)
 
-	user := suite.seedSystemAdmin()
+	user := s.seedSystemAdmin()
 	if len(user.Edges.OrgMemberships) == 0 {
 		t.Fatal("user has no org memberships")
 	}
@@ -28,11 +29,11 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 	orgID := user.Edges.OrgMemberships[0].ID
 
 	ctx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
-	ctx = generated.NewContext(ctx, suite.client)
+	ctx = generated.NewContext(ctx, s.client)
 
 	// soft delete context
 	softDeleteCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
-	softDeleteCtx = generated.NewContext(softDeleteCtx, suite.client)
+	softDeleteCtx = generated.NewContext(softDeleteCtx, s.client)
 	softDeleteCtx = entx.IsSoftDelete(softDeleteCtx, generated.TypeStandard)
 
 	tests := []struct {
@@ -99,13 +100,13 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 		{
 			name: "UpdateOne with isPublic cleared",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std).ClearIsPublic()
+				update := s.client.Standard.UpdateOne(std).ClearIsPublic()
 
 				err = update.Exec(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -117,13 +118,13 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 		{
 			name: "UpdateOne with isPublic cleared, will try to re-delete",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std).ClearIsPublic()
+				update := s.client.Standard.UpdateOne(std).ClearIsPublic()
 
 				err = update.Exec(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -135,13 +136,13 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 		{
 			name: "UpdateOne with is public true, already system owned",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std).SetIsPublic(true)
+				update := s.client.Standard.UpdateOne(std).SetIsPublic(true)
 
 				err = update.Exec(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -153,13 +154,13 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 		{
 			name: "Update with public true",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.Update().SetIsPublic(true).Where(standard.ID(std.ID))
+				update := s.client.Standard.Update().SetIsPublic(true).Where(standard.ID(std.ID))
 
 				err = update.Exec(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -171,13 +172,13 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 		{
 			name: "Update with is public false",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetIsPublic(true).SetSystemOwned(true).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).SetIsPublic(true).SetSystemOwned(true).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.Update().SetIsPublic(false).Where(standard.ID(std.ID))
+				update := s.client.Standard.Update().SetIsPublic(false).Where(standard.ID(std.ID))
 
 				err = update.Exec(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -189,13 +190,13 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 		{
 			name: "Update with public true, already system owned",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.Update().SetIsPublic(true).Where(standard.ID(std.ID))
+				update := s.client.Standard.Update().SetIsPublic(true).Where(standard.ID(std.ID))
 
 				err = update.Exec(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return update.Mutation()
 			}(),
@@ -207,12 +208,12 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 		{
 			name: "UpdateOne with system owned, with soft delete",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std)
+				update := s.client.Standard.UpdateOne(std)
 				err = update.Exec(softDeleteCtx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				m := update.Mutation()
 				return m
@@ -225,12 +226,12 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 		{
 			name: "UpdateOne with soft delete",
 			mutation: func() *generated.StandardMutation {
-				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
-				require.NoError(t, err)
+				std, err := s.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				assert.NilError(t, err)
 
-				update := suite.client.Standard.UpdateOne(std)
+				update := s.client.Standard.UpdateOne(std)
 				err = update.Exec(softDeleteCtx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				m := update.Mutation()
 				return m
@@ -245,17 +246,17 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			add, delete, err := hooks.AddOrDeletePublicStandardTuple(tt.ctx, tt.mutation)
-			assert.Equal(t, tt.expectedAdd, add)
-			assert.Equal(t, tt.expectedDelete, delete)
-			assert.Equal(t, tt.expectedErr, err)
+			assert.Check(t, is.Equal(tt.expectedAdd, add))
+			assert.Check(t, is.Equal(tt.expectedDelete, delete))
+			assert.Check(t, is.Equal(tt.expectedErr, err))
 		})
 	}
 }
 
-func (suite *HookTestSuite) TestHookStandardDelete_InUseByTrustcenter() {
-	t := suite.T()
+func TestHookStandardDelete_InUseByTrustcenter(t *testing.T) {
+	s := suite.setupTest(t)
 
-	user := suite.seedSystemAdmin()
+	user := s.seedSystemAdmin()
 	if len(user.Edges.OrgMemberships) == 0 {
 		t.Fatal("user has no org memberships")
 	}
@@ -263,36 +264,36 @@ func (suite *HookTestSuite) TestHookStandardDelete_InUseByTrustcenter() {
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 
 	ctx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
-	ctx = generated.NewContext(ctx, suite.client)
+	ctx = generated.NewContext(ctx, s.client)
 	internalCtx := auth.WithInternalOperationContext(ctx)
 
-	std, err := suite.client.Standard.Create().
+	std, err := s.client.Standard.Create().
 		SetName(gofakeit.Name()).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	trustCenter, err := suite.client.TrustCenter.Create().
+	trustCenter, err := s.client.TrustCenter.Create().
 		SetOwnerID(orgID).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	_, err = suite.client.TrustCenterCompliance.Create().
+	_, err = s.client.TrustCenterCompliance.Create().
 		SetStandardID(std.ID).
 		SetTrustCenterID(trustCenter.ID).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	softDeleteCtx := entx.IsSoftDelete(ctx, generated.TypeStandard)
 
-	err = suite.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
-	require.Error(t, err)
-	assert.ErrorIs(t, err, hooks.ErrStandardInUseByTrustCenter)
+	err = s.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
+	assert.Assert(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, hooks.ErrStandardInUseByTrustCenter))
 }
 
-func (suite *HookTestSuite) TestHookStandardDelete_InUseByControls() {
-	t := suite.T()
+func TestHookStandardDelete_InUseByControls(t *testing.T) {
+	s := suite.setupTest(t)
 
-	regularUser := suite.seedUser()
+	regularUser := s.seedUser()
 	if len(regularUser.Edges.OrgMemberships) == 0 {
 		t.Fatal("user has no org memberships")
 	}
@@ -300,37 +301,37 @@ func (suite *HookTestSuite) TestHookStandardDelete_InUseByControls() {
 	orgID := regularUser.Edges.OrgMemberships[0].OrganizationID
 
 	regularUserCtx := auth.NewTestContextWithOrgID(regularUser.ID, orgID)
-	regularUserCtx = generated.NewContext(regularUserCtx, suite.client)
+	regularUserCtx = generated.NewContext(regularUserCtx, s.client)
 	internalCtx := auth.WithInternalOperationContext(regularUserCtx)
 
-	std, err := suite.client.Standard.Create().
+	std, err := s.client.Standard.Create().
 		SetName(gofakeit.Name()).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	_, err = suite.client.Control.Create().
+	_, err = s.client.Control.Create().
 		SetRefCode(gofakeit.UUID()).
 		SetTitle(gofakeit.HipsterSentence()).
 		SetStandardID(std.ID).
 		SetSource(enums.ControlSourceFramework).
 		SetOwnerID(orgID).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	systemAdmin := suite.seedSystemAdmin()
+	systemAdmin := s.seedSystemAdmin()
 	adminCtx := auth.NewTestContextForSystemAdmin(systemAdmin.ID, orgID)
-	adminCtx = generated.NewContext(adminCtx, suite.client)
+	adminCtx = generated.NewContext(adminCtx, s.client)
 	softDeleteCtx := entx.IsSoftDelete(adminCtx, generated.TypeStandard)
 
-	err = suite.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
-	require.Error(t, err)
-	assert.ErrorIs(t, err, hooks.ErrStandardInUseByControls)
+	err = s.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
+	assert.Assert(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, hooks.ErrStandardInUseByControls))
 }
 
-func (suite *HookTestSuite) TestHookStandardDelete_AllowsWhenNotInUse() {
-	t := suite.T()
+func TestHookStandardDelete_AllowsWhenNotInUse(t *testing.T) {
+	s := suite.setupTest(t)
 
-	user := suite.seedSystemAdmin()
+	user := s.seedSystemAdmin()
 	if len(user.Edges.OrgMemberships) == 0 {
 		t.Fatal("user has no org memberships")
 	}
@@ -338,30 +339,28 @@ func (suite *HookTestSuite) TestHookStandardDelete_AllowsWhenNotInUse() {
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 
 	ctx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
-	ctx = generated.NewContext(ctx, suite.client)
+	ctx = generated.NewContext(ctx, s.client)
 	internalCtx := auth.WithInternalOperationContext(ctx)
 
-	std, err := suite.client.Standard.Create().
+	std, err := s.client.Standard.Create().
 		SetName(gofakeit.Name()).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	softDeleteCtx := entx.IsSoftDelete(internalCtx, generated.TypeStandard)
+	err = s.client.Standard.DeleteOneID(std.ID).Exec(internalCtx)
+	assert.NilError(t, err)
 
-	err = suite.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
-	require.NoError(t, err)
-
-	deletedStd, err := suite.client.Standard.Query().
+	deletedStd, err := s.client.Standard.Query().
 		Where(standard.ID(std.ID)).
-		Only(internalCtx)
-	require.NoError(t, err)
-	assert.NotNil(t, deletedStd.DeletedAt)
+		Only(entx.SkipSoftDelete(internalCtx))
+	assert.NilError(t, err)
+	assert.Check(t, !deletedStd.DeletedAt.IsZero())
 }
 
-func (suite *HookTestSuite) TestHookStandardDelete_RegularUserCanDeleteNonSystemOwned() {
-	t := suite.T()
+func TestHookStandardDelete_RegularUserCanDeleteNonSystemOwned(t *testing.T) {
+	s := suite.setupTest(t)
 
-	regularUser := suite.seedUser()
+	regularUser := s.seedUser()
 	if len(regularUser.Edges.OrgMemberships) == 0 {
 		t.Fatal("user has no org memberships")
 	}
@@ -369,31 +368,29 @@ func (suite *HookTestSuite) TestHookStandardDelete_RegularUserCanDeleteNonSystem
 	orgID := regularUser.Edges.OrgMemberships[0].OrganizationID
 
 	regularUserCtx := auth.NewTestContextWithOrgID(regularUser.ID, orgID)
-	regularUserCtx = generated.NewContext(regularUserCtx, suite.client)
+	regularUserCtx = generated.NewContext(regularUserCtx, s.client)
 	internalCtx := auth.WithInternalOperationContext(regularUserCtx)
 
-	std, err := suite.client.Standard.Create().
+	std, err := s.client.Standard.Create().
 		SetName(gofakeit.Name()).
 		SetSystemOwned(false).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	softDeleteCtx := entx.IsSoftDelete(internalCtx, generated.TypeStandard)
+	err = s.client.Standard.DeleteOneID(std.ID).Exec(internalCtx)
+	assert.NilError(t, err)
 
-	err = suite.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
-	require.NoError(t, err)
-
-	deletedStd, err := suite.client.Standard.Query().
+	deletedStd, err := s.client.Standard.Query().
 		Where(standard.ID(std.ID)).
-		Only(internalCtx)
-	require.NoError(t, err)
-	assert.NotNil(t, deletedStd.DeletedAt)
+		Only(entx.SkipSoftDelete(internalCtx))
+	assert.NilError(t, err)
+	assert.Check(t, !deletedStd.DeletedAt.IsZero())
 }
 
-func (suite *HookTestSuite) TestHookStandardDelete_BlocksPublicSystemOwned() {
-	t := suite.T()
+func TestHookStandardDelete_BlocksPublicSystemOwned(t *testing.T) {
+	s := suite.setupTest(t)
 
-	systemAdmin := suite.seedSystemAdmin()
+	systemAdmin := s.seedSystemAdmin()
 	if len(systemAdmin.Edges.OrgMemberships) == 0 {
 		t.Fatal("system admin has no org memberships")
 	}
@@ -401,32 +398,32 @@ func (suite *HookTestSuite) TestHookStandardDelete_BlocksPublicSystemOwned() {
 	orgID := systemAdmin.Edges.OrgMemberships[0].OrganizationID
 
 	adminCtx := auth.NewTestContextForSystemAdmin(systemAdmin.ID, orgID)
-	adminCtx = generated.NewContext(adminCtx, suite.client)
+	adminCtx = generated.NewContext(adminCtx, s.client)
 	internalCtx := auth.WithInternalOperationContext(adminCtx)
 
-	std, err := suite.client.Standard.Create().
+	std, err := s.client.Standard.Create().
 		SetName(gofakeit.Name()).
 		SetSystemOwned(true).
 		SetIsPublic(true).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	retrievedStd, err := suite.client.Standard.Get(internalCtx, std.ID)
-	require.NoError(t, err)
-	require.True(t, retrievedStd.SystemOwned, "standard should be system-owned")
-	require.True(t, retrievedStd.IsPublic, "standard should be public")
+	retrievedStd, err := s.client.Standard.Get(internalCtx, std.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, retrievedStd.SystemOwned, "standard should be system-owned")
+	assert.Assert(t, retrievedStd.IsPublic, "standard should be public")
 
 	softDeleteCtx := entx.IsSoftDelete(adminCtx, generated.TypeStandard)
 
-	err = suite.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
-	require.Error(t, err)
-	assert.ErrorIs(t, err, hooks.ErrPublicStandardCannotBeDeleted)
+	err = s.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
+	assert.Assert(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, hooks.ErrPublicStandardCannotBeDeleted))
 }
 
-func (suite *HookTestSuite) TestHookStandardDelete_SystemAdminCascadesSystemOwnedControls() {
-	t := suite.T()
+func TestHookStandardDelete_SystemAdminCascadesSystemOwnedControls(t *testing.T) {
+	s := suite.setupTest(t)
 
-	systemAdmin := suite.seedSystemAdmin()
+	systemAdmin := s.seedSystemAdmin()
 	if len(systemAdmin.Edges.OrgMemberships) == 0 {
 		t.Fatal("user has no org memberships")
 	}
@@ -434,49 +431,47 @@ func (suite *HookTestSuite) TestHookStandardDelete_SystemAdminCascadesSystemOwne
 	orgID := systemAdmin.Edges.OrgMemberships[0].OrganizationID
 
 	adminCtx := auth.NewTestContextForSystemAdmin(systemAdmin.ID, orgID)
-	adminCtx = generated.NewContext(adminCtx, suite.client)
+	adminCtx = generated.NewContext(adminCtx, s.client)
 	internalCtx := auth.WithInternalOperationContext(adminCtx)
 
-	std, err := suite.client.Standard.Create().
+	std, err := s.client.Standard.Create().
 		SetName(gofakeit.Name()).
 		SetSystemOwned(true).
 		SetIsPublic(false).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	systemControl, err := suite.client.Control.Create().
+	systemControl, err := s.client.Control.Create().
 		SetRefCode(gofakeit.UUID()).
 		SetTitle(gofakeit.HipsterSentence()).
 		SetStandardID(std.ID).
 		SetSource(enums.ControlSourceFramework).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	orgControl, err := suite.client.Control.Create().
+	orgControl, err := s.client.Control.Create().
 		SetRefCode(gofakeit.UUID()).
 		SetTitle(gofakeit.HipsterSentence()).
 		SetStandardID(std.ID).
 		SetSource(enums.ControlSourceFramework).
 		SetOwnerID(orgID).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	softDeleteCtx := entx.IsSoftDelete(internalCtx, generated.TypeStandard)
+	err = s.client.Standard.DeleteOneID(std.ID).Exec(internalCtx)
+	assert.NilError(t, err)
 
-	err = suite.client.Standard.UpdateOneID(std.ID).Exec(softDeleteCtx)
-	require.NoError(t, err)
-
-	deletedStd, err := suite.client.Standard.Query().
+	deletedStd, err := s.client.Standard.Query().
 		Where(standard.ID(std.ID)).
-		Only(internalCtx)
-	require.NoError(t, err)
-	assert.NotNil(t, deletedStd.DeletedAt)
+		Only(entx.SkipSoftDelete(internalCtx))
+	assert.NilError(t, err)
+	assert.Check(t, !deletedStd.DeletedAt.IsZero())
 
-	_, err = suite.client.Control.Get(internalCtx, systemControl.ID)
-	require.Error(t, err)
-	assert.True(t, generated.IsNotFound(err))
+	_, err = s.client.Control.Get(internalCtx, systemControl.ID)
+	assert.Assert(t, err != nil)
+	assert.Check(t, generated.IsNotFound(err))
 
-	updatedOrgControl, err := suite.client.Control.Get(internalCtx, orgControl.ID)
-	require.NoError(t, err)
-	assert.Empty(t, updatedOrgControl.StandardID)
+	updatedOrgControl, err := s.client.Control.Get(internalCtx, orgControl.ID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(updatedOrgControl.StandardID, ""))
 }

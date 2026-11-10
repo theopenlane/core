@@ -4,6 +4,7 @@ package hooks_test
 
 import (
 	"strings"
+	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
@@ -15,13 +16,13 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 )
 
-func (suite *HookTestSuite) TestHookTags_SlugCollisionInTransaction() {
-	t := suite.T()
+func TestHookTags_SlugCollisionInTransaction(t *testing.T) {
+	s := suite.setupTest(t)
 
-	user := suite.seedUser()
+	user := s.seedUser()
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 
-	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.client)
+	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, orgID), s.client)
 	ctx = auth.WithInternalOperationContext(ctx)
 
 	suffix := strings.ToLower(gofakeit.LetterN(6))
@@ -29,13 +30,13 @@ func (suite *HookTestSuite) TestHookTags_SlugCollisionInTransaction() {
 	collidingTag := "AWS Marketplace " + suffix
 	newTag := "conditional approval " + suffix
 
-	_, err := suite.client.TagDefinition.Create().
+	_, err := s.client.TagDefinition.Create().
 		SetName(existingTag).
 		SetOwnerID(orgID).
 		Save(ctx)
 	assert.NilError(t, err)
 
-	tx, err := suite.client.Tx(ctx)
+	tx, err := s.client.Tx(ctx)
 	assert.NilError(t, err)
 
 	task, err := tx.Task.Create().
@@ -47,11 +48,11 @@ func (suite *HookTestSuite) TestHookTags_SlugCollisionInTransaction() {
 	assert.NilError(t, tx.Commit())
 
 	t.Cleanup(func() {
-		_ = suite.client.Task.DeleteOneID(task.ID).Exec(ctx)
-		_, _ = suite.client.TagDefinition.Delete().Where(tagdefinition.OwnerID(orgID)).Exec(ctx)
+		_ = s.client.Task.DeleteOneID(task.ID).Exec(ctx)
+		_, _ = s.client.TagDefinition.Delete().Where(tagdefinition.OwnerID(orgID)).Exec(ctx)
 	})
 
-	tags, err := suite.client.TagDefinition.Query().
+	tags, err := s.client.TagDefinition.Query().
 		Where(tagdefinition.OwnerID(orgID)).
 		All(ctx)
 	assert.NilError(t, err)

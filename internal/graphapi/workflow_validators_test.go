@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -111,10 +111,10 @@ func TestValidateWorkflowDefinitionInput(t *testing.T) {
 			err := validateWorkflowDefinitionInput(tt.schemaType, tt.doc, nil)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -124,18 +124,16 @@ func TestValidateReviewActionParams(t *testing.T) {
 	t.Parallel()
 
 	params := workflows.ReviewActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: "user-1"},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: "user-1"},
 		},
 		Label: "Review Required",
 	}
 	raw, err := json.Marshal(params)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	err = validateReviewActionParams(raw)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 }
 
 func TestValidateTrigger(t *testing.T) {
@@ -194,10 +192,10 @@ func TestValidateTrigger(t *testing.T) {
 			err := validateTrigger(tt.schemaType, tt.trigger, 0, nil)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -268,10 +266,10 @@ func TestValidateApprovalActionParams(t *testing.T) {
 			err := validateApprovalActionParams(tt.params, tt.eligibleFields)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -328,13 +326,13 @@ func TestValidateWebhookActionParams(t *testing.T) {
 			err := validateWebhookActionParams(tt.params, nil)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else if tt.wantErrContains != "" {
-				require.Error(t, err)
-				assert.Contains(t, err.Error(), tt.wantErrContains)
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Contains(err.Error(), tt.wantErrContains))
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -370,10 +368,10 @@ func TestValidateFieldUpdateActionParams(t *testing.T) {
 			err := validateFieldUpdateActionParams(tt.params)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -439,10 +437,10 @@ func TestValidateIntegrationActionParams(t *testing.T) {
 			err := validateIntegrationActionParams(tt.params)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -478,10 +476,10 @@ func TestValidateNotificationActionParams(t *testing.T) {
 			err := validateNotificationActionParams(tt.params)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -537,10 +535,10 @@ func TestValidateTarget(t *testing.T) {
 			err := validateTarget(tt.target)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -558,9 +556,9 @@ func TestFilterApprovalActions(t *testing.T) {
 
 	result := filterApprovalActions(actions)
 
-	assert.Len(t, result, 2)
-	assert.Equal(t, "approval1", result[0].Key)
-	assert.Equal(t, "approval2", result[1].Key)
+	assert.Check(t, is.Len(result, 2))
+	assert.Check(t, is.Equal("approval1", result[0].Key))
+	assert.Check(t, is.Equal("approval2", result[1].Key))
 }
 
 func TestExtractFieldSetKey(t *testing.T) {
@@ -596,7 +594,7 @@ func TestExtractFieldSetKey(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := extractFieldSetKey(tt.action)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -631,10 +629,10 @@ func TestValidateApprovalSubmissionMode(t *testing.T) {
 			err := validateApprovalSubmissionMode(tt.mode)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -700,10 +698,10 @@ func TestValidateRequiredField(t *testing.T) {
 			err := validateRequiredField(tt.required)
 
 			if tt.wantErr != nil {
-				require.Error(t, err)
-				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+				assert.Assert(t, err != nil)
+				assert.Check(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}

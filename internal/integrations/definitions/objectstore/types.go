@@ -11,8 +11,10 @@ import (
 const (
 	// defaultContentType is the MIME type used when the write operation does not specify one
 	defaultContentType = "application/json"
-	// vendorEntityTypeName is the entity type the Entity mapping links imported rows to
+	// vendorEntityTypeName is the entity type an imported entity links to when its record names none
 	vendorEntityTypeName = "vendor"
+	// vendorsDirectory is the directory holding the vendor catalog, Entity records under a name that is not a schema
+	vendorsDirectory = "vendors"
 	// jsonObjectSuffix selects the objects under a prefix that hold JSON records
 	jsonObjectSuffix = ".json"
 	// processedDir is the directory under the import prefix that receives objects whose records imported without failure
@@ -171,6 +173,10 @@ type ImportSpec struct {
 	Prefix string `json:"prefix" koanf:"prefix" jsonschema:"required,title=Prefix,description=Object key prefix (directory) whose JSON files hold arrays of records"`
 	// MoveProcessed moves each object under the processed directory of the prefix once its records import without failure
 	MoveProcessed bool `json:"moveProcessed,omitempty" koanf:"moveprocessed" jsonschema:"title=Move Processed,description=Move each object into the processed directory under the prefix once its records import without failure"`
+	// Manifest imports the prefix as a manifest-described dataset into the dispatching organization, never set from runtime config
+	Manifest bool `json:"manifest,omitempty" koanf:"-" jsonschema:"title=Manifest,description=Import the prefix as a dataset described by its manifest.json"`
+	// Profile names the dataset manifest profile whose variables fill the records' placeholders, the defaults when empty
+	Profile string `json:"profile,omitempty" koanf:"-" jsonschema:"title=Profile,description=Dataset manifest profile whose variables fill the records' placeholders"`
 }
 
 // ImportRecordsResult reports the record import across every object under the prefix
@@ -188,6 +194,31 @@ type ImportRecords struct {
 	// ImportSpec selects the prefix to import
 	ImportSpec
 }
+
+// DatasetBuiltinVariables are the variables every dataset's {{NAME}} and {{NAME|default}} placeholders can read, filled
+// at import from the importing organization and the requesting user, each json tag naming the variable
+type DatasetBuiltinVariables struct {
+	// OrgName is the importing organization's display name
+	OrgName string `json:"ORG_NAME" jsonschema:"title=Organization Name,description=Display name of the importing organization"`
+	// OrgSlug is the importing organization's url-safe slug
+	OrgSlug string `json:"ORG_SLUG" jsonschema:"title=Organization Slug,description=Url-safe slug of the importing organization or its kebab-case name when it has none"`
+	// OrgDomain is the importing organization's primary domain
+	OrgDomain string `json:"ORG_DOMAIN" jsonschema:"title=Organization Domain,description=Primary domain of the importing organization or example.com when it has none"`
+	// OwnerUserID is the user id of the owner who requested the import
+	OwnerUserID string `json:"ORG_OWNER_USER_ID" jsonschema:"title=Owner User ID,description=User id of the owner who requested the import"`
+	// OwnerEmail is the email of the owner who requested the import
+	OwnerEmail string `json:"ORG_OWNER_EMAIL" jsonschema:"title=Owner Email,description=Email of the owner who requested the import"`
+	// OwnerName is the name of the owner who requested the import
+	OwnerName string `json:"ORG_OWNER_NAME" jsonschema:"title=Owner Name,description=Name of the owner who requested the import or their email when unnamed"`
+	// Today is the import day in UTC, {{TODAY+N}} and {{TODAY-N}} move it by N days
+	Today string `json:"TODAY" jsonschema:"title=Today,description=Import date as YYYY-MM-DD and {{TODAY+N}} or {{TODAY-N}} move it by N days"`
+}
+
+// DemoDataset is a demo dataset name, a single lowercase directory under the demo prefix of the runtime bucket
+type DemoDataset string
+
+// String returns the dataset name
+func (d DemoDataset) String() string { return string(d) }
 
 // WriteObject writes a document to the bucket under a key
 type WriteObject struct {

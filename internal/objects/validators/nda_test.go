@@ -5,13 +5,14 @@ import (
 	"testing"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/objects"
-	"github.com/theopenlane/core/v2/internal/testutils/pdftest"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/pdftext/pdftest"
 )
 
 func TestNDAValidator(t *testing.T) {
@@ -37,12 +38,12 @@ func TestNDAValidator(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			err := NDAValidator(tc.file)
 			if tc.wantErr != nil {
-				assert.ErrorIs(t, err, tc.wantErr)
+				assert.Check(t, is.ErrorIs(err, tc.wantErr))
 
 				return
 			}
 
-			assert.NoError(t, err)
+			assert.Check(t, err)
 		})
 	}
 }

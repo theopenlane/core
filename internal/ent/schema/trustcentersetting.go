@@ -211,6 +211,10 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			}).
 			Optional().
 			Annotations(entgql.Skip(entgql.SkipWhereInput, entgql.SkipOrderField)),
+		field.Bool("disable_default_domain").
+			Default(true).
+			Comment("if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing").
+			Optional(),
 	}
 }
 
@@ -282,8 +286,8 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 		hooks.HookSingleFile("logoFile", "logo_local_file_id"),
 		hooks.HookSingleFile("faviconFile", "favicon_local_file_id"),
 		hooks.HookSingleFile("heroImageFile", "hero_image_local_file_id"),
+		hooks.HookTrustCenterSettingSanitize(),
 		hooks.HookTrustCenterSetting(),
-		hooks.HookTrustCenterSettingCreatePreview(),
 	}
 }
 

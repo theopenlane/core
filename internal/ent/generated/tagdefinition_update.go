@@ -224,6 +224,26 @@ func (_u *TagDefinitionUpdate) ClearIntegrationRunID() *TagDefinitionUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *TagDefinitionUpdate) SetSourceKey(v string) *TagDefinitionUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *TagDefinitionUpdate) SetNillableSourceKey(v *string) *TagDefinitionUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *TagDefinitionUpdate) ClearSourceKey() *TagDefinitionUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *TagDefinitionUpdate) SetExternalID(v string) *TagDefinitionUpdate {
 	_u.mutation.SetExternalID(v)
@@ -575,6 +595,12 @@ func (_u *TagDefinitionUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(tagdefinition.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(tagdefinition.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(tagdefinition.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(tagdefinition.FieldExternalID, field.TypeString, value)
 	}
@@ -910,6 +936,26 @@ func (_u *TagDefinitionUpdateOne) SetNillableIntegrationRunID(v *string) *TagDef
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *TagDefinitionUpdateOne) ClearIntegrationRunID() *TagDefinitionUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *TagDefinitionUpdateOne) SetSourceKey(v string) *TagDefinitionUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *TagDefinitionUpdateOne) SetNillableSourceKey(v *string) *TagDefinitionUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *TagDefinitionUpdateOne) ClearSourceKey() *TagDefinitionUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -1293,6 +1339,12 @@ func (_u *TagDefinitionUpdateOne) sqlSave(ctx context.Context) (_node *TagDefini
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(tagdefinition.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(tagdefinition.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(tagdefinition.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(tagdefinition.FieldExternalID, field.TypeString, value)

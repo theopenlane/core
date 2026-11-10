@@ -41,6 +41,7 @@ mutation CreateBulkCSVCampaign ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			templateID
@@ -95,6 +96,7 @@ mutation CreateBulkCampaign ($input: [CreateCampaignInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			templateID
@@ -149,6 +151,7 @@ mutation CreateCampaign ($input: CreateCampaignInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			templateID
@@ -216,6 +219,7 @@ query GetAllCampaigns ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				tags
 				templateID
@@ -283,6 +287,7 @@ query GetCampaignByID ($campaignId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		tags
 		templateID
@@ -357,6 +362,7 @@ query GetCampaigns ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				sourceKey
 				status
 				tags
 				templateID
@@ -425,6 +431,7 @@ mutation UpdateCampaign ($updateCampaignId: ID!, $input: UpdateCampaignInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			tags
 			templateID

@@ -177,6 +177,11 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldIntegrationRunID)
 				fieldSeen[actionplanhistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[actionplanhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldSourceKey)
+				fieldSeen[actionplanhistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[actionplanhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldExternalID)
@@ -551,6 +556,11 @@ func (_q *AssessmentHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, assessmenthistory.FieldIntegrationRunID)
 				fieldSeen[assessmenthistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[assessmenthistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldSourceKey)
+				fieldSeen[assessmenthistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[assessmenthistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, assessmenthistory.FieldExternalID)
@@ -759,6 +769,11 @@ func (_q *AssessmentPolicyHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[assessmentpolicyhistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldIntegrationRunID)
 				fieldSeen[assessmentpolicyhistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[assessmentpolicyhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, assessmentpolicyhistory.FieldSourceKey)
+				fieldSeen[assessmentpolicyhistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[assessmentpolicyhistory.FieldExternalID]; !ok {
@@ -1183,6 +1198,11 @@ func (_q *AssetHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, assethistory.FieldIntegrationRunID)
 				fieldSeen[assethistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[assethistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldSourceKey)
+				fieldSeen[assethistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[assethistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, assethistory.FieldExternalID)
@@ -1561,6 +1581,11 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[campaignhistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, campaignhistory.FieldIntegrationRunID)
 				fieldSeen[campaignhistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[campaignhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldSourceKey)
+				fieldSeen[campaignhistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[campaignhistory.FieldExternalID]; !ok {
@@ -2080,6 +2105,11 @@ func (_q *ContactHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, contacthistory.FieldIntegrationRunID)
 				fieldSeen[contacthistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[contacthistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldSourceKey)
+				fieldSeen[contacthistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[contacthistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, contacthistory.FieldExternalID)
@@ -2293,6 +2323,11 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldIntegrationRunID)
 				fieldSeen[controlhistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[controlhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldSourceKey)
+				fieldSeen[controlhistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[controlhistory.FieldExternalID]; !ok {
@@ -2678,6 +2713,11 @@ func (_q *ControlImplementationHistoryQuery) collectField(ctx context.Context, o
 				selectedFields = append(selectedFields, controlimplementationhistory.FieldIntegrationRunID)
 				fieldSeen[controlimplementationhistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldSourceKey)
+				fieldSeen[controlimplementationhistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[controlimplementationhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, controlimplementationhistory.FieldExternalID)
@@ -2896,6 +2936,11 @@ func (_q *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[controlobjectivehistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldIntegrationRunID)
 				fieldSeen[controlobjectivehistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldSourceKey)
+				fieldSeen[controlobjectivehistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldExternalID]; !ok {
@@ -3598,6 +3643,11 @@ func (_q *EmailTemplateHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldIntegrationRunID)
 				fieldSeen[emailtemplatehistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[emailtemplatehistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, emailtemplatehistory.FieldSourceKey)
+				fieldSeen[emailtemplatehistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[emailtemplatehistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldExternalID)
@@ -3846,6 +3896,11 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[entityhistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldIntegrationRunID)
 				fieldSeen[entityhistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[entityhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldSourceKey)
+				fieldSeen[entityhistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[entityhistory.FieldExternalID]; !ok {
@@ -4479,6 +4534,11 @@ func (_q *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[evidencehistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, evidencehistory.FieldIntegrationRunID)
 				fieldSeen[evidencehistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[evidencehistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldSourceKey)
+				fieldSeen[evidencehistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[evidencehistory.FieldExternalID]; !ok {
@@ -5167,6 +5227,11 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, findinghistory.FieldIntegrationRunID)
 				fieldSeen[findinghistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[findinghistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldSourceKey)
+				fieldSeen[findinghistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[findinghistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldExternalID)
@@ -5625,6 +5690,11 @@ func (_q *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[grouphistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, grouphistory.FieldIntegrationRunID)
 				fieldSeen[grouphistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[grouphistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldSourceKey)
+				fieldSeen[grouphistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[grouphistory.FieldExternalID]; !ok {
@@ -6332,6 +6402,11 @@ func (_q *IdentityHolderHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, identityholderhistory.FieldIntegrationRunID)
 				fieldSeen[identityholderhistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[identityholderhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, identityholderhistory.FieldSourceKey)
+				fieldSeen[identityholderhistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[identityholderhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, identityholderhistory.FieldExternalID)
@@ -6655,6 +6730,11 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[internalpolicyhistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldIntegrationRunID)
 				fieldSeen[internalpolicyhistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldSourceKey)
+				fieldSeen[internalpolicyhistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldExternalID]; !ok {
@@ -7119,6 +7199,11 @@ func (_q *MappedControlHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldIntegrationRunID)
 				fieldSeen[mappedcontrolhistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[mappedcontrolhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, mappedcontrolhistory.FieldSourceKey)
+				fieldSeen[mappedcontrolhistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[mappedcontrolhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, mappedcontrolhistory.FieldExternalID)
@@ -7322,6 +7407,11 @@ func (_q *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[narrativehistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, narrativehistory.FieldIntegrationRunID)
 				fieldSeen[narrativehistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[narrativehistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldSourceKey)
+				fieldSeen[narrativehistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[narrativehistory.FieldExternalID]; !ok {
@@ -8980,6 +9070,11 @@ func (_q *PlatformHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, platformhistory.FieldIntegrationRunID)
 				fieldSeen[platformhistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[platformhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, platformhistory.FieldSourceKey)
+				fieldSeen[platformhistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[platformhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, platformhistory.FieldExternalID)
@@ -9414,6 +9509,11 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, procedurehistory.FieldIntegrationRunID)
 				fieldSeen[procedurehistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[procedurehistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldSourceKey)
+				fieldSeen[procedurehistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[procedurehistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldExternalID)
@@ -9737,6 +9837,11 @@ func (_q *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[programhistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldIntegrationRunID)
 				fieldSeen[programhistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[programhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldSourceKey)
+				fieldSeen[programhistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[programhistory.FieldExternalID]; !ok {
@@ -10145,6 +10250,11 @@ func (_q *RemediationHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[remediationhistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, remediationhistory.FieldIntegrationRunID)
 				fieldSeen[remediationhistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[remediationhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, remediationhistory.FieldSourceKey)
+				fieldSeen[remediationhistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[remediationhistory.FieldExternalID]; !ok {
@@ -10768,6 +10878,11 @@ func (_q *ReviewHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, reviewhistory.FieldIntegrationRunID)
 				fieldSeen[reviewhistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[reviewhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldSourceKey)
+				fieldSeen[reviewhistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[reviewhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, reviewhistory.FieldExternalID)
@@ -11061,6 +11176,11 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldIntegrationRunID)
 				fieldSeen[riskhistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[riskhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldSourceKey)
+				fieldSeen[riskhistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[riskhistory.FieldExternalID]; !ok {
@@ -11809,6 +11929,11 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldIntegrationRunID)
 				fieldSeen[subcontrolhistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[subcontrolhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldSourceKey)
+				fieldSeen[subcontrolhistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[subcontrolhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldExternalID)
@@ -12337,6 +12462,11 @@ func (_q *SystemDetailHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, systemdetailhistory.FieldIntegrationRunID)
 				fieldSeen[systemdetailhistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[systemdetailhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldSourceKey)
+				fieldSeen[systemdetailhistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[systemdetailhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, systemdetailhistory.FieldExternalID)
@@ -12546,6 +12676,11 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, taskhistory.FieldIntegrationRunID)
 				fieldSeen[taskhistory.FieldIntegrationRunID] = struct{}{}
 			}
+		case "sourceKey":
+			if _, ok := fieldSeen[taskhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldSourceKey)
+				fieldSeen[taskhistory.FieldSourceKey] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[taskhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldExternalID)
@@ -12665,11 +12800,6 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldSource]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldSource)
 				fieldSeen[taskhistory.FieldSource] = struct{}{}
-			}
-		case "sourceKey":
-			if _, ok := fieldSeen[taskhistory.FieldSourceKey]; !ok {
-				selectedFields = append(selectedFields, taskhistory.FieldSourceKey)
-				fieldSeen[taskhistory.FieldSourceKey] = struct{}{}
 			}
 		case "idempotencyKey":
 			if _, ok := fieldSeen[taskhistory.FieldIdempotencyKey]; !ok {
@@ -12839,6 +12969,11 @@ func (_q *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[templatehistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldIntegrationRunID)
 				fieldSeen[templatehistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[templatehistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldSourceKey)
+				fieldSeen[templatehistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[templatehistory.FieldExternalID]; !ok {
@@ -14198,6 +14333,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldAutoApprovalRules)
 				fieldSeen[trustcentersettinghistory.FieldAutoApprovalRules] = struct{}{}
 			}
+		case "disableDefaultDomain":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldDisableDefaultDomain]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldDisableDefaultDomain)
+				fieldSeen[trustcentersettinghistory.FieldDisableDefaultDomain] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -15053,6 +15193,41 @@ func (_q *VendorRiskScoreHistoryQuery) collectField(ctx context.Context, oneNode
 				selectedFields = append(selectedFields, vendorriskscorehistory.FieldOwnerID)
 				fieldSeen[vendorriskscorehistory.FieldOwnerID] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldSourceDefinitionID)
+				fieldSeen[vendorriskscorehistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldSourceDefinitionVersion)
+				fieldSeen[vendorriskscorehistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldSourceInstanceID)
+				fieldSeen[vendorriskscorehistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldManagedBy)
+				fieldSeen[vendorriskscorehistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldIntegrationRunID)
+				fieldSeen[vendorriskscorehistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldSourceKey)
+				fieldSeen[vendorriskscorehistory.FieldSourceKey] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[vendorriskscorehistory.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, vendorriskscorehistory.FieldExternalID)
+				fieldSeen[vendorriskscorehistory.FieldExternalID] = struct{}{}
+			}
 		case "questionKey":
 			if _, ok := fieldSeen[vendorriskscorehistory.FieldQuestionKey]; !ok {
 				selectedFields = append(selectedFields, vendorriskscorehistory.FieldQuestionKey)
@@ -15425,6 +15600,11 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldIntegrationRunID]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldIntegrationRunID)
 				fieldSeen[vulnerabilityhistory.FieldIntegrationRunID] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldSourceKey)
+				fieldSeen[vulnerabilityhistory.FieldSourceKey] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldExternalID]; !ok {

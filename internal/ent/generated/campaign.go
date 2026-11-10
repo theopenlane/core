@@ -58,6 +58,8 @@ type Campaign struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -433,7 +435,7 @@ func (*Campaign) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case campaign.FieldRecurrenceInterval, campaign.FieldRecipientCount, campaign.FieldResendCount:
 			values[i] = new(sql.NullInt64)
-		case campaign.FieldID, campaign.FieldCreatedBy, campaign.FieldUpdatedBy, campaign.FieldUpdatedByImpersonator, campaign.FieldDeletedBy, campaign.FieldDisplayID, campaign.FieldSourceDefinitionID, campaign.FieldSourceDefinitionVersion, campaign.FieldSourceInstanceID, campaign.FieldManagedBy, campaign.FieldIntegrationRunID, campaign.FieldExternalID, campaign.FieldOwnerID, campaign.FieldInternalOwner, campaign.FieldInternalOwnerUserID, campaign.FieldInternalOwnerGroupID, campaign.FieldInternalOwnerIdentityHolderID, campaign.FieldName, campaign.FieldDescription, campaign.FieldCampaignType, campaign.FieldStatus, campaign.FieldRecurrenceFrequency, campaign.FieldRecurrenceTimezone, campaign.FieldEntityID, campaign.FieldTemplateID, campaign.FieldAssessmentID, campaign.FieldEmailTemplateID, campaign.FieldIntegrationID, campaign.FieldEmailBrandingID, campaign.FieldTrustCenterID:
+		case campaign.FieldID, campaign.FieldCreatedBy, campaign.FieldUpdatedBy, campaign.FieldUpdatedByImpersonator, campaign.FieldDeletedBy, campaign.FieldDisplayID, campaign.FieldSourceDefinitionID, campaign.FieldSourceDefinitionVersion, campaign.FieldSourceInstanceID, campaign.FieldManagedBy, campaign.FieldIntegrationRunID, campaign.FieldSourceKey, campaign.FieldExternalID, campaign.FieldOwnerID, campaign.FieldInternalOwner, campaign.FieldInternalOwnerUserID, campaign.FieldInternalOwnerGroupID, campaign.FieldInternalOwnerIdentityHolderID, campaign.FieldName, campaign.FieldDescription, campaign.FieldCampaignType, campaign.FieldStatus, campaign.FieldRecurrenceFrequency, campaign.FieldRecurrenceTimezone, campaign.FieldEntityID, campaign.FieldTemplateID, campaign.FieldAssessmentID, campaign.FieldEmailTemplateID, campaign.FieldIntegrationID, campaign.FieldEmailBrandingID, campaign.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case campaign.FieldCreatedAt, campaign.FieldUpdatedAt, campaign.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -544,6 +546,12 @@ func (_m *Campaign) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case campaign.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case campaign.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -956,6 +964,9 @@ func (_m *Campaign) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

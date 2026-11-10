@@ -9,8 +9,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/providers/github"
 	"github.com/theopenlane/iam/providers/google"
@@ -71,6 +69,13 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 		}
 	}
 
+	switch {
+	case user.Edges.Setting.IsTfaEnabled:
+		return h.startTFAAuthentication(ctx, user.ID, "")
+	case orgStatus != nil && orgStatus.OrgTFAEnforced:
+		return h.startTFAEnrollment(ctx, user, "")
+	}
+
 	// create claims for verified user, with the user as the caller so the org access check runs
 	authData, err := h.AuthManager.GenerateOauthAuthSession(setAuthenticatedContext(ctxWithToken, user), ctx.Response().Writer, user, *in)
 	if err != nil {
@@ -80,7 +85,7 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 	}
 
 	out := models.LoginResponse{
-		Reply:      rout.Reply{Success: true},
+		Success:    true,
 		TFAEnabled: user.Edges.Setting.IsTfaEnabled,
 		Message:    "success",
 		AuthData:   *authData,

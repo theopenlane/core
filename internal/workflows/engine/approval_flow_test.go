@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"testing"
 	"time"
 
 	"github.com/oklog/ulid/v2"
@@ -23,6 +24,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 type actionCompletionSummary struct {
@@ -68,7 +71,8 @@ func hasSkippedAction(events []*generated.WorkflowEvent) bool {
 //
 //	Ensures the quorum mechanism prevents premature application of changes and only
 //	applies them when the required number of approvals is reached.
-func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
+func TestApprovalFlowQuorumAppliesProposal(t *testing.T) {
+	s := suite.setupTest(t)
 
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -77,19 +81,17 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 2,
 		Label:         "Reference ID Approval",
 		Fields:        []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -107,15 +109,15 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 		SetOwnerID(orgID).
 		SetReferenceID(oldRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Trigger workflow by updating control reference ID - the hook intercepts and creates proposal
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 	// Reference ID should remain unchanged since it was routed to proposal
-	s.Require().NotNil(updated)
+	assert.Assert(t, updated != nil)
 
 	// Wait for async event processing
 	s.WaitForEvents()
@@ -128,18 +130,18 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Require().Len(assignments, 2)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(assignments, 2))
 
 	assignmentsByUser := map[string]*generated.WorkflowAssignment{}
 	for _, assignment := range assignments {
@@ -150,39 +152,39 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 			assignmentsByUser[approver2ID] = assignment
 		}
 	}
-	s.Require().NotNil(assignmentsByUser[approver1ID])
-	s.Require().NotNil(assignmentsByUser[approver2ID])
+	assert.Assert(t, assignmentsByUser[approver1ID] != nil)
+	assert.Assert(t, assignmentsByUser[approver2ID] != nil)
 
 	err = wfEngine.CompleteAssignment(userCtx, assignmentsByUser[approver1ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	proposal, err = s.client.WorkflowProposal.Get(userCtx, proposal.ID)
-	s.Require().NoError(err)
-	s.NotEqual(enums.WorkflowProposalStateApplied, proposal.State)
+	assert.NilError(t, err)
+	assert.Check(t, enums.WorkflowProposalStateApplied != proposal.State)
 
 	updatedControl, err := s.client.Control.Get(userCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal(oldRef, updatedControl.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(oldRef, updatedControl.ReferenceID))
 
 	err = wfEngine.CompleteAssignment(approver2Ctx, assignmentsByUser[approver2ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	proposal, err = s.client.WorkflowProposal.Get(userCtx, proposal.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
-	s.NotEmpty(proposal.ApprovedHash)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateApplied, proposal.State))
+	assert.Check(t, len(proposal.ApprovedHash) > 0)
 
 	updatedControl, err = s.client.Control.Get(userCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal(newRef, updatedControl.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(newRef, updatedControl.ReferenceID))
 
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 }
 
 // TestProposalApplyDoesNotCreateRecursiveWorkflow verifies that applying an approved proposal
@@ -203,24 +205,23 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowQuorumAppliesProposal() {
 //
 //	When applying proposals, the engine uses bypass context to avoid re-entering
 //	approval routing. This test guards against recursive proposal creation.
-func (s *WorkflowEngineTestSuite) TestProposalApplyDoesNotCreateRecursiveWorkflow() {
+func TestProposalApplyDoesNotCreateRecursiveWorkflow(t *testing.T) {
+	s := suite.setupTest(t)
 	approverID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(approverID, orgID)
 
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approverID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -238,13 +239,13 @@ func (s *WorkflowEngineTestSuite) TestProposalApplyDoesNotCreateRecursiveWorkflo
 		SetOwnerID(orgID).
 		SetReferenceID(oldRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(oldRef, updated.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(oldRef, updated.ReferenceID))
 
 	s.WaitForEvents()
 
@@ -256,27 +257,27 @@ func (s *WorkflowEngineTestSuite) TestProposalApplyDoesNotCreateRecursiveWorkflo
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 1)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 1))
 
 	err = wfEngine.CompleteAssignment(userCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	appliedControl, err := s.client.Control.Get(seedCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal(newRef, appliedControl.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(newRef, appliedControl.ReferenceID))
 
 	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateApplied, proposal.State))
 
 	instanceCount, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -284,8 +285,8 @@ func (s *WorkflowEngineTestSuite) TestProposalApplyDoesNotCreateRecursiveWorkflo
 			workflowinstance.ControlIDEQ(control.ID),
 		).
 		Count(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(1, instanceCount)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(1, instanceCount))
 
 	proposalCount, err := s.client.WorkflowProposal.Query().
 		Where(
@@ -293,8 +294,8 @@ func (s *WorkflowEngineTestSuite) TestProposalApplyDoesNotCreateRecursiveWorkflo
 			workflowproposal.OwnerIDEQ(orgID),
 		).
 		Count(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(1, proposalCount)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(1, proposalCount))
 }
 
 // TestApprovalFlowOptionalQuorumProceedsEarly verifies that optional (non-required) approval
@@ -317,7 +318,8 @@ func (s *WorkflowEngineTestSuite) TestProposalApplyDoesNotCreateRecursiveWorkflo
 //
 //	Demonstrates that "required=false" workflows provide a "first approval wins" behavior,
 //	useful for notification-style approvals where acknowledgment is sufficient.
-func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() {
+func TestApprovalFlowOptionalQuorumProceedsEarly(t *testing.T) {
+	s := suite.setupTest(t)
 
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
@@ -326,18 +328,16 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required: boolPtr(false),
+		Required: new(false),
 		Label:    "Optional Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -355,14 +355,14 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 		SetOwnerID(orgID).
 		SetReferenceID(oldRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Trigger workflow by updating control reference ID
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(oldRef, updated.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(oldRef, updated.ReferenceID))
 
 	s.WaitForEvents()
 
@@ -374,17 +374,17 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	_, err = s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Require().Len(assignments, 2)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(assignments, 2))
 
 	assignmentsByUser := map[string]*generated.WorkflowAssignment{}
 	for _, assignment := range assignments {
@@ -395,34 +395,34 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 			assignmentsByUser[approver2ID] = assignment
 		}
 	}
-	s.Require().NotNil(assignmentsByUser[approver1ID])
-	s.Require().NotNil(assignmentsByUser[approver2ID])
+	assert.Assert(t, assignmentsByUser[approver1ID] != nil)
+	assert.Assert(t, assignmentsByUser[approver2ID] != nil)
 
 	err = wfEngine.CompleteAssignment(userCtx, assignmentsByUser[approver1ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	updatedControl, err := s.client.Control.Get(userCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal(newRef, updatedControl.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(newRef, updatedControl.ReferenceID))
 
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 
 	assignments, err = s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	statuses := make(map[enums.WorkflowAssignmentStatus]int)
 	for _, assignment := range assignments {
 		statuses[assignment.Status]++
 	}
 
-	s.Equal(1, statuses[enums.WorkflowAssignmentStatusApproved])
-	s.Equal(1, statuses[enums.WorkflowAssignmentStatusPending])
+	assert.Check(t, is.Equal(1, statuses[enums.WorkflowAssignmentStatusApproved]))
+	assert.Check(t, is.Equal(1, statuses[enums.WorkflowAssignmentStatusPending]))
 }
 
 // TestApprovalStagingCapturesClearedField verifies that clearing (nullifying) a field value
@@ -443,23 +443,22 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowOptionalQuorumProceedsEarly() 
 //
 //	Field clearing is a distinct operation from field setting. This ensures the workflow
 //	system correctly handles "clear" mutations and stages them as null values in proposals.
-func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
+func TestApprovalStagingCapturesClearedField(t *testing.T) {
+	s := suite.setupParallelTest(t)
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Create definition with seedCtx (privacy bypass for setup)
 	def, err := s.client.WorkflowDefinition.Create().
@@ -489,7 +488,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 			},
 		}).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Create control with seedCtx (privacy bypass for setup)
 	control, err := s.client.Control.Create().
@@ -497,20 +496,20 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 		SetOwnerID(orgID).
 		SetReferenceID("REF-123").
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Update with seedCtx - the hook should intercept and route to proposal
 	// Using seedCtx since this test is testing workflow hook behavior, not privacy rules
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		ClearReferenceID().
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 	// The hook routes to proposal, so the returned entity should still have the original value
-	s.Equal("REF-123", updated.ReferenceID)
+	assert.Check(t, is.Equal("REF-123", updated.ReferenceID))
 
 	refreshed, err := s.client.Control.Get(seedCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal("REF-123", refreshed.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal("REF-123", refreshed.ReferenceID))
 
 	instance, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -520,22 +519,22 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	proposal, err := s.client.WorkflowProposal.Query().
 		Where(workflowproposal.IDEQ(instance.WorkflowProposalID)).
 		WithWorkflowObjectRef().
 		Only(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotNil(proposal.Edges.WorkflowObjectRef)
-	s.Equal(control.ID, proposal.Edges.WorkflowObjectRef.ControlID)
+	assert.NilError(t, err)
+	assert.Assert(t, proposal.Edges.WorkflowObjectRef != nil)
+	assert.Check(t, is.DeepEqual(control.ID, proposal.Edges.WorkflowObjectRef.ControlID))
 	// Manual submit is not yet supported; proposals are auto-submitted for now.
-	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateSubmitted, proposal.State))
 
 	value, ok := proposal.Changes["reference_id"]
-	s.Require().True(ok)
-	s.Nil(value)
+	assert.Assert(t, ok)
+	assert.Check(t, is.Nil(value))
 }
 
 // TestApprovalTriggerExpressionUsesCurrentObjectState verifies that trigger expressions evaluate
@@ -559,23 +558,22 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 //	Trigger expressions must evaluate against the current object state to determine IF
 //	a workflow should fire. The proposed changes are captured separately in the proposal.
 //	This prevents circular logic where the proposed value would affect trigger evaluation.
-func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObjectState() {
+func TestApprovalTriggerExpressionUsesCurrentObjectState(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	oldRef := "REF-EXPR-OLD-" + ulid.Make().String()
 	newRef := "REF-EXPR-NEW-" + ulid.Make().String()
@@ -608,21 +606,21 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 			},
 		}).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-STATUS-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetReferenceID(oldRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Update reference ID; approval hook intercepts and creates a proposal, so the control remains unchanged.
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(oldRef, updated.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(oldRef, updated.ReferenceID))
 
 	// Wait for async event processing to complete
 	s.WaitForEvents()
@@ -635,19 +633,19 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStatePaused, instance.State))
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateSubmitted, proposal.State))
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 1)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 1))
 }
 
 // TestApprovalNoTargetsAutoApplies verifies that when an approval action resolves to zero
@@ -671,7 +669,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 //
 //	Empty target resolution should not block changes indefinitely. When no one CAN approve,
 //	the system auto-applies to prevent deadlock situations.
-func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
+func TestApprovalNoTargetsAutoApplies(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -680,20 +679,18 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 		SetName("Empty Approval Group " + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeGroup, ID: group.ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeGroup, ID: group.ID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Group Approval",
 		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	def, err := s.client.WorkflowDefinition.Create().
 		SetName("No Target Approval " + ulid.Make().String()).
@@ -719,7 +716,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 			},
 		}).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	oldRef := "REF-NO-TARGET-OLD-" + ulid.Make().String()
 	newRef := "REF-NO-TARGET-NEW-" + ulid.Make().String()
@@ -729,13 +726,13 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 		SetOwnerID(orgID).
 		SetReferenceID(oldRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(oldRef, updated.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(oldRef, updated.ReferenceID))
 
 	// Wait for async event processing to complete
 	s.WaitForEvents()
@@ -748,23 +745,23 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, instance.State)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, instance.State))
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateApplied, proposal.State))
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 0)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 0))
 
 	appliedControl, err := s.client.Control.Get(seedCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal(newRef, appliedControl.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(newRef, appliedControl.ReferenceID))
 }
 
 // TestApprovalHookAppliesIneligibleFields verifies that when a mutation contains both
@@ -787,23 +784,22 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 //
 //	Workflow staging should not block unrelated edits. Ineligible fields should pass through
 //	while eligible fields are staged for approval.
-func (s *WorkflowEngineTestSuite) TestApprovalHookAppliesIneligibleFields() {
+func TestApprovalHookAppliesIneligibleFields(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -820,20 +816,20 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookAppliesIneligibleFields() {
 		SetOwnerID(orgID).
 		SetReferenceID(oldRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	_, err = s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		SetDescription("not eligible").
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	reloaded, err := s.client.Control.Get(seedCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal(oldRef, reloaded.ReferenceID)
-	s.Equal("not eligible", reloaded.Description)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(oldRef, reloaded.ReferenceID))
+	assert.Check(t, is.Equal("not eligible", reloaded.Description))
 
 	instance, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -842,19 +838,20 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookAppliesIneligibleFields() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 	value, ok := proposal.Changes["reference_id"]
-	s.Require().True(ok)
-	s.Equal(newRef, value)
+	assert.Assert(t, ok)
+	assert.Check(t, is.DeepEqual(newRef, value))
 }
 
 // TestApprovalChangesRequestedCreatesRequesterAssignment verifies that when an approval assignment
 // is marked as CHANGES_REQUESTED, a requester assignment is created with the change details.
-func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAssignment() {
+func TestApprovalChangesRequestedCreatesRequesterAssignment(t *testing.T) {
+	s := suite.setupTest(t)
 	submitterID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(submitterID, orgID)
 
@@ -863,17 +860,15 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAs
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approverID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approverID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Status Approval",
 		Fields:   []string{"status"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -888,12 +883,12 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAs
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusPreparing).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	_, err = s.client.Control.UpdateOneID(control.ID).
 		SetStatus(enums.ControlStatusApproved).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
@@ -904,7 +899,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAs
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	assignment, err := s.client.WorkflowAssignment.Query().
 		Where(
@@ -912,7 +907,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAs
 			workflowassignment.AssignmentKeyHasPrefix("approval_"+action.Key+"_"),
 		).
 		Only(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	rejectionMeta := models.WorkflowAssignmentRejection{
 		ActionKey:           action.Key,
@@ -923,7 +918,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAs
 	}
 
 	err = wfEngine.CompleteAssignment(approverCtx, assignment.ID, enums.WorkflowAssignmentStatusChangesRequested, nil, &rejectionMeta)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
@@ -934,18 +929,18 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAs
 			workflowassignment.AssignmentKeyEQ(requesterKey),
 		).
 		Only(seedCtx)
-	s.Require().NoError(err)
-	s.Equal("REQUESTER", requesterAssignment.Role)
-	s.Equal(enums.WorkflowAssignmentStatusPending, requesterAssignment.Status)
-	s.False(requesterAssignment.Required)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal("REQUESTER", requesterAssignment.Role))
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, requesterAssignment.Status))
+	assert.Check(t, !requesterAssignment.Required)
 
 	meta := requesterAssignment.Metadata
-	s.Require().NotNil(meta)
-	s.Equal(action.Key, meta["change_request_action_key"])
-	s.Equal("needs more detail", meta["change_request_reason"])
+	assert.Assert(t, meta != nil)
+	assert.Check(t, is.DeepEqual(action.Key, meta["change_request_action_key"]))
+	assert.Check(t, is.Equal("needs more detail", meta["change_request_reason"]))
 	inputs, ok := meta["change_request_inputs"].(map[string]any)
-	s.Require().True(ok)
-	s.Equal("in_review", inputs["status"])
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal("in_review", inputs["status"]))
 
 	exists, err := s.client.WorkflowAssignmentTarget.Query().
 		Where(
@@ -953,13 +948,14 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedCreatesRequesterAs
 			workflowassignmenttarget.TargetUserIDEQ(submitterID),
 		).
 		Exist(seedCtx)
-	s.Require().NoError(err)
-	s.True(exists)
+	assert.NilError(t, err)
+	assert.Check(t, exists)
 }
 
 // TestApprovalChangesRequestedClosesApprovalsAndResubmitReopens verifies that when changes
 // are requested, outstanding approvals are closed and a re-submission re-opens approvals.
-func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAndResubmitReopens() {
+func TestApprovalChangesRequestedClosesApprovalsAndResubmitReopens(t *testing.T) {
+	s := suite.setupTest(t)
 
 	submitterID, orgID, submitterCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(submitterID, orgID)
@@ -970,19 +966,17 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 	wfEngine := s.Engine()
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: approver1ID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required:      boolPtr(true),
+		Required:      new(true),
 		RequiredCount: 2,
 		Label:         "Status Approval",
 		Fields:        []string{"status"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -997,12 +991,12 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusPreparing).
 		Save(submitterCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	_, err = s.client.Control.UpdateOneID(control.ID).
 		SetStatus(enums.ControlStatusApproved).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
@@ -1013,7 +1007,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	assignment1Key := fmt.Sprintf("approval_%s_%s", action.Key, approver1ID)
 	assignment2Key := fmt.Sprintf("approval_%s_%s", action.Key, approver2ID)
@@ -1024,7 +1018,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 			workflowassignment.AssignmentKeyEQ(assignment1Key),
 		).
 		Only(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	assignment2, err := s.client.WorkflowAssignment.Query().
 		Where(
@@ -1032,7 +1026,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 			workflowassignment.AssignmentKeyEQ(assignment2Key),
 		).
 		Only(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	rejectionMeta := models.WorkflowAssignmentRejection{
 		ActionKey:        action.Key,
@@ -1042,21 +1036,21 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 	}
 
 	err = wfEngine.CompleteAssignment(approver1Ctx, assignment1.ID, enums.WorkflowAssignmentStatusChangesRequested, nil, &rejectionMeta)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	reloaded1, err := s.client.WorkflowAssignment.Get(seedCtx, assignment1.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowAssignmentStatusChangesRequested, reloaded1.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusChangesRequested, reloaded1.Status))
 
 	reloaded2, err := s.client.WorkflowAssignment.Get(seedCtx, assignment2.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowAssignmentStatusRejected, reloaded2.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusRejected, reloaded2.Status))
 
 	reloadedInstance, err := s.client.WorkflowInstance.Get(seedCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStatePaused, reloadedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStatePaused, reloadedInstance.State))
 
 	requesterKey := fmt.Sprintf("change_request_%s_%s", action.Key, submitterID)
 	requesterAssignment, err := s.client.WorkflowAssignment.Query().
@@ -1065,9 +1059,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 			workflowassignment.AssignmentKeyEQ(requesterKey),
 		).
 		Only(seedCtx)
-	s.Require().NoError(err)
-	s.Equal("REQUESTER", requesterAssignment.Role)
-	s.Equal(enums.WorkflowAssignmentStatusPending, requesterAssignment.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal("REQUESTER", requesterAssignment.Role))
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, requesterAssignment.Status))
 
 	requesterTargetExists, err := s.client.WorkflowAssignmentTarget.Query().
 		Where(
@@ -1075,25 +1069,25 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 			workflowassignmenttarget.TargetUserIDEQ(submitterID),
 		).
 		Exist(seedCtx)
-	s.Require().NoError(err)
-	s.True(requesterTargetExists)
+	assert.NilError(t, err)
+	assert.Check(t, requesterTargetExists)
 
 	_, err = s.client.Control.UpdateOneID(control.ID).
 		SetStatus(enums.ControlStatusArchived).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	assignment1Again, err := s.client.WorkflowAssignment.Get(seedCtx, assignment1.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowAssignmentStatusPending, assignment1Again.Status)
-	s.NotEmpty(assignment1Again.InvalidationMetadata.Reason)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, assignment1Again.Status))
+	assert.Check(t, len(assignment1Again.InvalidationMetadata.Reason) > 0)
 
 	assignment2Again, err := s.client.WorkflowAssignment.Get(seedCtx, assignment2.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowAssignmentStatusPending, assignment2Again.Status)
-	s.NotEmpty(assignment2Again.InvalidationMetadata.Reason)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, assignment2Again.Status))
+	assert.Check(t, len(assignment2Again.InvalidationMetadata.Reason) > 0)
 }
 
 // TestApprovalHookCreatesInstancesForAllMatchingDefinitions verifies that when multiple workflow
@@ -1115,23 +1109,22 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 //
 //	Multiple teams or compliance requirements may have overlapping approval workflows.
 //	All matching workflows must execute to ensure complete policy enforcement.
-func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatchingDefinitions() {
+func TestApprovalHookCreatesInstancesForAllMatchingDefinitions(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action1 := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -1155,13 +1148,13 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatching
 		SetOwnerID(orgID).
 		SetReferenceID(oldRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(oldRef, updated.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(oldRef, updated.ReferenceID))
 
 	// Wait for async event processing to complete
 	s.WaitForEvents()
@@ -1173,8 +1166,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatching
 			workflowinstance.ControlIDEQ(control.ID),
 		).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Len(instances, 2)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(instances, 2))
 }
 
 // TestApprovalActionWhenUsesProposedChanges verifies that action-level "when" expressions can
@@ -1199,23 +1192,22 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatching
 //	Action-level "when" clauses provide fine-grained control over when specific actions execute.
 //	Access to proposed_changes allows conditional logic based on the intended change, not just
 //	the current state.
-func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
+func TestApprovalActionWhenUsesProposedChanges(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	oldRef := "REF-PROPOSED-OLD-" + ulid.Make().String()
 	newRef := "REF-PROPOSED-NEW-" + ulid.Make().String()
@@ -1245,20 +1237,20 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 			},
 		}).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-PROPOSED-WHEN-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetReferenceID(oldRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(oldRef, updated.ReferenceID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(oldRef, updated.ReferenceID))
 
 	// Wait for async event processing to complete
 	s.WaitForEvents()
@@ -1271,20 +1263,20 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStatePaused, instance.State))
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateSubmitted, proposal.State))
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 1)
-	s.Equal(enums.WorkflowAssignmentStatusPending, assignments[0].Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 1))
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, assignments[0].Status))
 }
 
 // TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch verifies that actions are skipped
@@ -1308,23 +1300,22 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 //
 //	Demonstrates that "when" expressions can selectively skip approval requirements based on
 //	the actual proposed values, enabling value-based routing of changes.
-func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch() {
+func TestApprovalActionWhenSkipsWhenProposedChangesDoNotMatch(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	oldRef := "REF-SKIP-OLD-" + ulid.Make().String()
 	newRef := "REF-SKIP-NEW-" + ulid.Make().String()
@@ -1355,20 +1346,20 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 			},
 		}).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-PROPOSED-WHEN-SKIP-" + ulids.New().String()).
 		SetOwnerID(orgID).
 		SetReferenceID(oldRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotNil(updated)
+	assert.NilError(t, err)
+	assert.Assert(t, updated != nil)
 
 	// Wait for async event processing to complete
 	s.WaitForEvents()
@@ -1381,19 +1372,19 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, instance.State)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, instance.State))
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateApplied, proposal.State))
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 0)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 0))
 }
 
 // TestSkippedApprovalActionAdvancesWorkflow verifies that when an approval action is skipped
@@ -1417,35 +1408,32 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 //
 //	Skipped approval actions should not block the workflow. The engine must recognize that
 //	a skipped action contributes zero pending work and advance to subsequent actions.
-func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
+func TestSkippedApprovalActionAdvancesWorkflow(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
 
 	approvalParams := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Reference ID Approval",
 		Fields:   []string{"reference_id"},
 	}
 	approvalParamsBytes, err := json.Marshal(approvalParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	notificationParams := workflows.NotificationActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
 		Title: "Skipped approval notification",
 	}
 	notificationParamsBytes, err := json.Marshal(notificationParams)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	def, err := s.client.WorkflowDefinition.Create().
 		SetName("Skipped Approval " + ulid.Make().String()).
@@ -1475,14 +1463,14 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 			},
 		}).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-SKIP-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetReferenceID("REF-SKIP-" + ulid.Make().String()).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -1493,26 +1481,26 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 		EventType:     "UPDATE",
 		ChangedFields: []string{"reference_id"},
 	})
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
 
 	s.WaitForEvents()
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 0)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 0))
 
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 
 	events, err := s.client.WorkflowEvent.Query().
 		Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.True(hasSkippedAction(events))
+	assert.NilError(t, err)
+	assert.Check(t, hasSkippedAction(events))
 }
 
 // TestApprovalFlowEditSubmittedProposalInvalidatesApprovals verifies that editing a SUBMITTED proposal
@@ -1537,7 +1525,8 @@ func (s *WorkflowEngineTestSuite) TestSkippedApprovalActionAdvancesWorkflow() {
 //	Approvers approve a specific set of changes (identified by hash). If those changes are
 //	modified after approval, the previous approval is no longer valid for the new content.
 //	This maintains approval integrity and prevents bait-and-switch scenarios.
-func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidatesApprovals() {
+func TestApprovalFlowEditSubmittedProposalInvalidatesApprovals(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -1548,20 +1537,18 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 
 	// Create approval workflow definition
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-				{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
+			{Type: enums.WorkflowTargetTypeUser, ID: approver2ID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		// Require both approvals so the proposal remains SUBMITTED after the first approval.
 		RequiredCount: 2,
 		Label:         "Reference ID Approval",
 		Fields:        []string{"reference_id"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -1576,7 +1563,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 		SetRefCode("CTL-INVALIDATION-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Trigger workflow by attempting to update control reference ID
 	// The hook will intercept and create proposal + instance
@@ -1588,19 +1575,19 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 		ChangedFields:   []string{"reference_id"},
 		ProposedChanges: map[string]any{"reference_id": proposedRef},
 	})
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	// Get the proposal that was created by TriggerWorkflow
 	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Submit the proposal
 	_, err = s.client.WorkflowProposal.UpdateOneID(proposal.ID).
 		SetState(enums.WorkflowProposalStateSubmitted).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Submitting the proposal resumes the paused instance asynchronously and creates assignments
 	s.WaitForEvents()
@@ -1609,8 +1596,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Require().Len(assignments, 2)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(assignments, 2))
 
 	assignmentsByUser := map[string]*generated.WorkflowAssignment{}
 	for _, assignment := range assignments {
@@ -1621,37 +1608,37 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 			assignmentsByUser[approver2ID] = assignment
 		}
 	}
-	s.Require().NotNil(assignmentsByUser[userID])
-	s.Require().NotNil(assignmentsByUser[approver2ID])
+	assert.Assert(t, assignmentsByUser[userID] != nil)
+	assert.Assert(t, assignmentsByUser[approver2ID] != nil)
 
 	// Approve the assignment
 	err = wfEngine.CompleteAssignment(userCtx, assignmentsByUser[userID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Verify assignment is now APPROVED
 	approvedAssignment, err := s.client.WorkflowAssignment.Get(seedCtx, assignmentsByUser[userID].ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowAssignmentStatusApproved, approvedAssignment.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusApproved, approvedAssignment.Status))
 
 	// Now edit the SUBMITTED proposal - this should invalidate the approval
 	newChanges := map[string]any{"reference_id": "REF-INVALIDATE-EDIT-" + ulid.Make().String()}
 	newHash, err := workflows.ComputeProposalHash(newChanges)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	_, err = s.client.WorkflowProposal.UpdateOneID(proposal.ID).
 		SetChanges(newChanges).
 		SetProposedHash(newHash).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// The approval should be invalidated (set back to PENDING)
 	invalidatedAssignment, err := s.client.WorkflowAssignment.Get(seedCtx, assignmentsByUser[userID].ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowAssignmentStatusPending, invalidatedAssignment.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, invalidatedAssignment.Status))
 
 	// Verify invalidation metadata was recorded
-	s.Require().NotEmpty(invalidatedAssignment.InvalidationMetadata.Reason)
-	s.Equal("proposal changes edited after approval", invalidatedAssignment.InvalidationMetadata.Reason)
+	assert.Assert(t, len(invalidatedAssignment.InvalidationMetadata.Reason) > 0)
+	assert.Check(t, is.Equal("proposal changes edited after approval", invalidatedAssignment.InvalidationMetadata.Reason))
 }
 
 // TestInternalPolicyDetailsApprovalFlow verifies the complete workflow proposal lifecycle
@@ -1678,7 +1665,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 //	Demonstrates that the workflow system is not Control-specific. InternalPolicy (and other
 //	entity types) can have their own approval workflows for sensitive field changes like
 //	policy content modifications.
-func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
+func TestInternalPolicyDetailsApprovalFlow(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -1687,17 +1675,15 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 
 	// Create approval workflow definition for InternalPolicy details field
 	params := workflows.ApprovalActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{
-				{Type: enums.WorkflowTargetTypeUser, ID: userID},
-			},
+		Targets: []workflows.TargetConfig{
+			{Type: enums.WorkflowTargetTypeUser, ID: userID},
 		},
-		Required: boolPtr(true),
+		Required: new(true),
 		Label:    "Policy Content Approval",
 		Fields:   []string{"details"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	def, err := s.client.WorkflowDefinition.Create().
 		SetName("Policy Details Approval " + ulid.Make().String()).
@@ -1722,7 +1708,7 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 			},
 		}).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Create InternalPolicy with initial content
 	initialContent := "This is the initial policy content."
@@ -1731,20 +1717,20 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 		SetOwnerID(orgID).
 		SetDetails(initialContent).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Update the policy details - hook should intercept and create proposal
 	proposedContent := "This is the UPDATED policy content."
 	updated, err := s.client.InternalPolicy.UpdateOneID(policy.ID).
 		SetDetails(proposedContent).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Wait for async event processing to complete
 	s.WaitForEvents()
 
 	// Original content should be unchanged (mutation was intercepted)
-	s.Equal(initialContent, updated.Details)
+	assert.Check(t, is.DeepEqual(initialContent, updated.Details))
 
 	instance, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -1754,20 +1740,20 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
-	s.Require().NotEmpty(instance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStatePaused, instance.State))
+	assert.Assert(t, len(instance.WorkflowProposalID) > 0)
 
 	proposal, err := s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateSubmitted, proposal.State)
-	s.Equal(proposedContent, proposal.Changes["details"])
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateSubmitted, proposal.State))
+	assert.Check(t, is.DeepEqual(proposedContent, proposal.Changes["details"]))
 
 	// Get the workflow definition
 	def, err = s.client.WorkflowDefinition.Query().
 		Where(workflowdefinition.IDEQ(instance.WorkflowDefinitionID)).
 		Only(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Resume the paused instance (simulates what happens when proposal is submitted)
 	obj := &workflows.Object{ID: policy.ID, Type: enums.WorkflowObjectTypeInternalPolicy}
@@ -1775,7 +1761,7 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 		EventType:     "UPDATE",
 		ChangedFields: []string{"details"},
 	})
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
@@ -1783,24 +1769,24 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Require().Len(assignments, 1)
-	s.Equal(enums.WorkflowAssignmentStatusPending, assignments[0].Status)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(assignments, 1))
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, assignments[0].Status))
 
 	// Complete the approval
 	err = wfEngine.CompleteAssignment(seedCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	// Verify proposal is applied and content is updated
 	appliedProposal, err := s.client.WorkflowProposal.Get(seedCtx, proposal.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateApplied, appliedProposal.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateApplied, appliedProposal.State))
 
 	finalPolicy, err := s.client.InternalPolicy.Get(seedCtx, policy.ID)
-	s.Require().NoError(err)
-	s.Equal(proposedContent, finalPolicy.Details)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(proposedContent, finalPolicy.Details))
 }
 
 // TestActionWhenExpressionUsesTriggerContext verifies that action-level "when" expressions
@@ -1827,7 +1813,8 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 //
 //	Actions can be conditionally executed based on trigger context. This enables workflows
 //	that only fire certain actions when specific edges change, providing fine-grained control.
-func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
+func TestActionWhenExpressionUsesTriggerContext(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -1851,16 +1838,17 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 			Actions: []models.WorkflowAction{action},
 		}).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	s.Run("when expression true executes", func() {
+	t.Run("when expression true executes", func(t *testing.T) {
+		s := s.withT(t)
 		// Each subtest uses its own control to avoid duplicate instance guards
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-WHEN-TRUE-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetReferenceID("REF-WHEN-TRUE-" + ulid.Make().String()).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -1873,26 +1861,27 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 			ChangedEdges:  []string{"evidence"},
 			AddedIDs:      map[string][]string{"evidence": {"evidence-1"}},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		s.WaitForEvents()
 
 		events, err := s.client.WorkflowEvent.Query().
 			Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.False(hasSkippedAction(events))
+		assert.NilError(t, err)
+		assert.Check(t, !(hasSkippedAction(events)))
 	})
 
-	s.Run("when expression false skips", func() {
+	t.Run("when expression false skips", func(t *testing.T) {
+		s := s.withT(t)
 		// Each subtest uses its own control to avoid duplicate instance guards
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-WHEN-FALSE-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			SetReferenceID("REF-WHEN-FALSE-" + ulid.Make().String()).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -1905,15 +1894,15 @@ func (s *WorkflowEngineTestSuite) TestActionWhenExpressionUsesTriggerContext() {
 			ChangedEdges:  []string{"other_edge"},
 			AddedIDs:      map[string][]string{"evidence": {"evidence-1"}},
 		})
-		s.Require().NoError(err)
-		s.Require().NotNil(instance)
+		assert.NilError(t, err)
+		assert.Assert(t, instance != nil)
 
 		s.WaitForEvents()
 
 		events, err := s.client.WorkflowEvent.Query().
 			Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.True(hasSkippedAction(events))
+		assert.NilError(t, err)
+		assert.Check(t, hasSkippedAction(events))
 	})
 }

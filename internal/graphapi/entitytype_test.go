@@ -6,7 +6,6 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -225,7 +224,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 		{
 			name: "happy path, update name",
 			request: testclient.UpdateEntityTypeInput{
-				Name: lo.ToPtr("maine coons"),
+				Name: new("maine coons"),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -233,7 +232,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 		{
 			name: "happy path, update name using api token",
 			request: testclient.UpdateEntityTypeInput{
-				Name: lo.ToPtr("sphynx"),
+				Name: new("sphynx"),
 			},
 			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
@@ -241,7 +240,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 		{
 			name: "happy path, update name using personal access token",
 			request: testclient.UpdateEntityTypeInput{
-				Name: lo.ToPtr("persian"),
+				Name: new("persian"),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -249,7 +248,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 		{
 			name: "not allowed to update",
 			request: testclient.UpdateEntityTypeInput{
-				Name: lo.ToPtr("dogs"),
+				Name: new("dogs"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,

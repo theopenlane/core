@@ -27,7 +27,7 @@ type WorkflowDefinitionDocument struct {
 	// Version tracks the definition document version
 	Version string `json:"version,omitempty"`
 	// Targets scopes which objects are eligible for this definition
-	Targets WorkflowSelector `json:"targets,omitempty"`
+	Targets WorkflowSelector `json:"targets"`
 	// Triggers defines which events start workflow evaluation
 	Triggers []WorkflowTrigger `json:"triggers,omitempty"`
 	// Conditions defines CEL predicates that must pass for execution
@@ -51,7 +51,7 @@ type WorkflowTrigger struct {
 	// Edges limits evaluation to changes on specific relationships
 	Edges []string `json:"edges,omitempty"`
 	// Selector further scopes trigger matching using tags groups or object types
-	Selector WorkflowSelector `json:"selector,omitempty"`
+	Selector WorkflowSelector `json:"selector"`
 	// Expression is an optional CEL expression gate for trigger matching
 	Expression string `json:"expression,omitempty"`
 	// Description is a human-readable trigger description

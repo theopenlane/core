@@ -4,8 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/utils/rout"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestOAuthFlowRequest_Validate(t *testing.T) {
@@ -83,14 +84,14 @@ func TestOAuthFlowRequest_Validate(t *testing.T) {
 			err := tt.request.Validate()
 
 			if tt.wantErr {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 				if tt.errMsg != "" {
-					assert.Contains(t, err.Error(), tt.errMsg)
+					assert.Check(t, is.Contains(err.Error(), tt.errMsg))
 				}
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 				// Check that provider is normalized to lowercase
-				assert.Equal(t, tt.request.Provider, strings.ToLower(tt.request.Provider))
+				assert.Check(t, is.Equal(tt.request.Provider, strings.ToLower(tt.request.Provider)))
 			}
 		})
 	}
@@ -100,13 +101,13 @@ func TestOAuthFlowRequest_Validate(t *testing.T) {
 func TestValidationHelpers(t *testing.T) {
 	t.Run("missing required field error", func(t *testing.T) {
 		err := rout.NewMissingRequiredFieldError("provider")
-		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "provider")
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "provider"))
 	})
 
 	t.Run("invalid field error", func(t *testing.T) {
 		err := rout.InvalidField("redirectURI")
-		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "redirectURI")
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "redirectURI"))
 	})
 }

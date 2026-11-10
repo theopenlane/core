@@ -48,6 +48,8 @@ type CheckResult struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// current status of the control
@@ -187,7 +189,7 @@ func (*CheckResult) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case checkresult.FieldTags:
 			values[i] = new([]byte)
-		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldUpdatedByImpersonator, checkresult.FieldDeletedBy, checkresult.FieldSourceDefinitionID, checkresult.FieldSourceDefinitionVersion, checkresult.FieldSourceInstanceID, checkresult.FieldManagedBy, checkresult.FieldIntegrationRunID, checkresult.FieldOwnerID, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
+		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldUpdatedByImpersonator, checkresult.FieldDeletedBy, checkresult.FieldSourceDefinitionID, checkresult.FieldSourceDefinitionVersion, checkresult.FieldSourceInstanceID, checkresult.FieldManagedBy, checkresult.FieldIntegrationRunID, checkresult.FieldSourceKey, checkresult.FieldOwnerID, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case checkresult.FieldCreatedAt, checkresult.FieldUpdatedAt, checkresult.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -292,6 +294,12 @@ func (_m *CheckResult) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case checkresult.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case checkresult.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -459,6 +467,9 @@ func (_m *CheckResult) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

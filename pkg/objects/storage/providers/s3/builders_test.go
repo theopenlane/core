@@ -6,7 +6,8 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -15,7 +16,7 @@ import (
 
 func TestNewS3Builder(t *testing.T) {
 	builder := s3provider.NewS3Builder()
-	assert.NotNil(t, builder)
+	assert.Check(t, builder != nil)
 }
 
 func TestS3BuilderBuild(t *testing.T) {
@@ -53,14 +54,14 @@ func TestS3BuilderBuild(t *testing.T) {
 			provider, err := builder.Build(context.Background(), tt.credentials, tt.options)
 
 			if tt.expectError {
-				assert.Error(t, err)
-				assert.Nil(t, provider)
+				assert.Check(t, err != nil)
+				assert.Check(t, is.Nil(provider))
 			} else {
 				if err != nil {
 					t.Skip("Skipping test due to missing AWS credentials or environment")
 				}
-				assert.NoError(t, err)
-				assert.NotNil(t, provider)
+				assert.Check(t, err)
+				assert.Check(t, provider != nil)
 			}
 		})
 	}
@@ -76,8 +77,8 @@ func TestNewS3ProviderWithAWSConfigCredentials(t *testing.T) {
 		storage.NewProviderOptions(storage.WithBucket("bucket"), storage.WithRegion("us-east-1")),
 		s3provider.WithAWSConfig(cfg),
 	)
-	assert.NoError(t, err)
-	assert.NotNil(t, provider)
+	assert.Check(t, err)
+	assert.Check(t, provider != nil)
 }
 
 func TestS3BuilderBuildWithAWSConfig(t *testing.T) {
@@ -90,11 +91,11 @@ func TestS3BuilderBuildWithAWSConfig(t *testing.T) {
 		storage.WithBucket("bucket"),
 		storage.WithRegion("us-east-1"),
 	))
-	assert.NoError(t, err)
-	assert.NotNil(t, provider)
+	assert.Check(t, err)
+	assert.Check(t, provider != nil)
 }
 
 func TestS3BuilderProviderType(t *testing.T) {
 	builder := s3provider.NewS3Builder()
-	assert.Equal(t, string(storagetypes.S3Provider), builder.ProviderType())
+	assert.Check(t, is.Equal(string(storagetypes.S3Provider), builder.ProviderType()))
 }

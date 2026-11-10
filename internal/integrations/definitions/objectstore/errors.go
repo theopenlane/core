@@ -39,4 +39,24 @@ var (
 	ErrObjectMoveFailed = errors.New("objectstore: object move failed")
 	// ErrProviderCannotCopy indicates the storage provider does not copy objects server side
 	ErrProviderCannotCopy = errors.New("objectstore: storage provider cannot copy objects")
+	// ErrRecordSchemaUnknown indicates a directory under the import prefix does not name an ingestable schema
+	ErrRecordSchemaUnknown = errors.New("objectstore: directory does not name an import schema")
+	// ErrDatasetOwnerRequired indicates the dataset import was dispatched without an organization
+	ErrDatasetOwnerRequired = errors.New("objectstore: dataset import requires an organization")
+	// ErrDemoDatasetInvalid indicates the demo dataset name is not a single lowercase directory name
+	ErrDemoDatasetInvalid = errors.New("objectstore: demo dataset invalid")
+	// ErrDatasetInvalid indicates a dataset path is not lowercase directory segments inside the bucket
+	ErrDatasetInvalid = errors.New("objectstore: dataset invalid")
+	// ErrDatasetProfileUnknown indicates the import named a profile the dataset manifest does not declare
+	ErrDatasetProfileUnknown = errors.New("objectstore: dataset profile unknown")
+	// ErrDatasetManifestInvalid indicates the dataset manifest could not be decoded
+	ErrDatasetManifestInvalid = errors.New("objectstore: dataset manifest invalid")
+	// ErrDatasetSchemaUnknown indicates the dataset manifest orders a schema that does not exist
+	ErrDatasetSchemaUnknown = errors.New("objectstore: dataset manifest schema unknown")
+	// ErrDatasetStandardClone indicates a dataset standard could not be cloned into the organization
+	ErrDatasetStandardClone = errors.New("objectstore: dataset standard clone failed")
+	// ErrDemoProfileUnknown indicates the seed named a profile that does not exist
+	ErrDemoProfileUnknown = errors.New("objectstore: demo profile unknown")
+	// ErrDatasetOrganizationLookup indicates the importing organization's name or domain could not be read
+	ErrDatasetOrganizationLookup = errors.New("objectstore: dataset organization lookup failed")
 )

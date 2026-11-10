@@ -226,6 +226,20 @@ func (_c *RiskCreate) SetNillableIntegrationRunID(v *string) *RiskCreate {
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *RiskCreate) SetSourceKey(v string) *RiskCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableSourceKey(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *RiskCreate) SetExternalID(v string) *RiskCreate {
 	_c.mutation.SetExternalID(v)
@@ -1428,6 +1442,10 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(risk.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(risk.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(risk.FieldExternalID, field.TypeString, value)

@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent"
 	goUpper "github.com/99designs/gqlgen/codegen/templates"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/gertd/go-pluralize"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -264,7 +263,7 @@ func getAddedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, paren
 	// check if the edges were set on the mutation
 	edges := m.AddedEdges()
 	for _, e := range edges {
-		foundEdge := checkForEdge(utils.PluralizerClient(ctx, m), parentField, e)
+		foundEdge := checkForEdge(parentField, e)
 		if foundEdge != "" {
 			// we need to parse the graphql input to get the ids
 			field := goUpper.ToGo(parentField)
@@ -296,7 +295,7 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 	// check if the edges were set on the mutation
 	edges := m.RemovedEdges()
 	for _, e := range edges {
-		foundEdge := checkForEdge(utils.PluralizerClient(ctx, m), parentField, e)
+		foundEdge := checkForEdge(parentField, e)
 
 		if foundEdge != "" {
 			// we need to parse the graphql input to get the ids
@@ -314,9 +313,9 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 
 // checkForEdge checks if the edge field is the parent field or the parent field pluralized
 // or not an set edge at all
-func checkForEdge(pluralizer *pluralize.Client, parentField, edgeField string) string {
+func checkForEdge(parentField, edgeField string) string {
 	parentEdge := strings.ReplaceAll(parentField, "_id", "")
-	pluralEdge := pluralizer.Plural(parentEdge)
+	pluralEdge := utils.Plural(parentEdge)
 	foundEdge := ""
 
 	// determine if the edge is the parent field or the parent field pluralized
@@ -380,7 +379,7 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 		return nil, nil
 	}
 
-	var v map[string]interface{}
+	var v map[string]any
 	if err := jsonx.RoundTrip(input, &v); err != nil {
 		return nil, err
 	}

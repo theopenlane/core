@@ -67,12 +67,6 @@ var backfillRoutines = []backfillRoutine{
 		// 	return backfillX(ctx, deps.Client)
 		// },
 	},
-	{
-		Name:    "backfill-org-branding-setting",
-		Version: "v1",
-		Enabled: true,
-		Run:     backfillOrgBrandingSettings,
-	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run

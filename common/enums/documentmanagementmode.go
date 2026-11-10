@@ -3,6 +3,7 @@ package enums
 import (
 	"fmt"
 	"io"
+	"slices"
 )
 
 // DocumentManagementMode is a custom type representing how a document is managed:
@@ -14,7 +15,7 @@ var (
 	// DocumentManagementModeOpenlaneManaged indicates the document is parsed and edited in Openlane.
 	DocumentManagementModeOpenlaneManaged DocumentManagementMode = "OPENLANE_MANAGED"
 	// DocumentManagementModeExternalReference indicates the document is uploaded as a viewable
-	// reference while being managed in an external editor (such as Microsoft Word).
+	// reference while being managed in an external editor (such as Microsoft Word), or kept as an uploaded PDF.
 	DocumentManagementModeExternalReference DocumentManagementMode = "EXTERNAL_REFERENCE"
 	// DocumentManagementModeIntegration is used when the document is managed by an external system integrated with Openlane.
 	DocumentManagementModeIntegration DocumentManagementMode = "INTEGRATION"
@@ -36,12 +37,7 @@ func (r DocumentManagementMode) String() string { return string(r) }
 
 // IsValid reports whether r is a recognised DocumentManagementMode value.
 func (r DocumentManagementMode) IsValid() bool {
-	for _, v := range documentManagementModeValues {
-		if r == v {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(documentManagementModeValues, r)
 }
 
 // ToDocumentManagementMode converts a string to its corresponding DocumentManagementMode enum value.

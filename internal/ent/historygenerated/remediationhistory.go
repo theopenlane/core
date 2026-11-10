@@ -57,6 +57,8 @@ type RemediationHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -131,7 +133,7 @@ func (*RemediationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case remediationhistory.FieldSystemOwned, remediationhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldUpdatedByImpersonator, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldSourceDefinitionID, remediationhistory.FieldSourceDefinitionVersion, remediationhistory.FieldSourceInstanceID, remediationhistory.FieldManagedBy, remediationhistory.FieldIntegrationRunID, remediationhistory.FieldExternalID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldEnvironmentName, remediationhistory.FieldEnvironmentID, remediationhistory.FieldScopeName, remediationhistory.FieldScopeID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldStatus, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
+		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldUpdatedByImpersonator, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldSourceDefinitionID, remediationhistory.FieldSourceDefinitionVersion, remediationhistory.FieldSourceInstanceID, remediationhistory.FieldManagedBy, remediationhistory.FieldIntegrationRunID, remediationhistory.FieldSourceKey, remediationhistory.FieldExternalID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldEnvironmentName, remediationhistory.FieldEnvironmentID, remediationhistory.FieldScopeName, remediationhistory.FieldScopeID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldStatus, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case remediationhistory.FieldHistoryTime, remediationhistory.FieldCreatedAt, remediationhistory.FieldUpdatedAt, remediationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -260,6 +262,12 @@ func (_m *RemediationHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case remediationhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case remediationhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -530,6 +538,9 @@ func (_m *RemediationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

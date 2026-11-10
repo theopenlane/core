@@ -7,7 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -32,22 +33,20 @@ func TestProvider_GetPresignedURL_Proxy(t *testing.T) {
 	}
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILEDB000000",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket: "test-bucket",
-			Key:    "object.txt",
-		},
+		ID:     "01HZZTESTFILEDB000000",
+		Bucket: "test-bucket",
+		Key:    "object.txt",
 	}
 
 	url, err := provider.GetPresignedURL(context.Background(), file, &storagetypes.PresignedURLOptions{Duration: time.Minute})
-	require.Error(t, err, "database provider with proxy presign enabled requires ent client in context for presigned URLs")
-	require.Empty(t, url)
+	assert.Assert(t, err != nil, "database provider with proxy presign enabled requires ent client in context for presigned URLs")
+	assert.Assert(t, is.Len(url, 0))
 }
 
 func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 	_, key, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	conf := tokens.Config{
 		Audience:        "http://localhost:17608",
@@ -58,6 +57,6 @@ func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	}
 
 	tm, err := tokens.NewWithKey(key, conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	return tm
 }

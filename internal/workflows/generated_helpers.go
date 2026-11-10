@@ -2,6 +2,7 @@ package workflows
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -72,7 +73,12 @@ func ApplyObjectFieldUpdates(ctx context.Context, client *generated.Client, obje
 		return err
 	}
 
-	return schema.ApplyWorkflowFields(ctx, client, objectID, updates)
+	encoded, err := json.Marshal(updates)
+	if err != nil {
+		return err
+	}
+
+	return schema.ApplyWorkflowFields(ctx, client, objectID, encoded)
 }
 
 // EnrichWorkflowPayload adds schema-designated fields to a workflow webhook payload.
@@ -82,7 +88,17 @@ func EnrichWorkflowPayload(ctx context.Context, client *generated.Client, object
 		return err
 	}
 
-	return schema.EnrichWorkflowPayload(ctx, client, objectID, payload)
+	encoded, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	enriched, err := schema.EnrichWorkflowPayload(ctx, client, objectID, encoded)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(enriched, &payload)
 }
 
 // FilterWorkflowInstances restricts a workflow-instance query to one canonical object.

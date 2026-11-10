@@ -56,6 +56,8 @@ type ActionPlanHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the name of the action_plan
@@ -158,7 +160,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case actionplanhistory.FieldApprovalRequired, actionplanhistory.FieldSystemOwned, actionplanhistory.FieldWorkflowEligibleMarker, actionplanhistory.FieldRequiresApproval, actionplanhistory.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldUpdatedByImpersonator, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldSourceDefinitionID, actionplanhistory.FieldSourceDefinitionVersion, actionplanhistory.FieldSourceInstanceID, actionplanhistory.FieldManagedBy, actionplanhistory.FieldIntegrationRunID, actionplanhistory.FieldExternalID, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldManagementMode, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldApproverID, actionplanhistory.FieldDelegateID, actionplanhistory.FieldSummary, actionplanhistory.FieldURL, actionplanhistory.FieldFileID, actionplanhistory.FieldExternalFileID, actionplanhistory.FieldExternalContents, actionplanhistory.FieldOwnerID, actionplanhistory.FieldInternalNotes, actionplanhistory.FieldSystemInternalID, actionplanhistory.FieldActionPlanKindName, actionplanhistory.FieldActionPlanKindID, actionplanhistory.FieldInternalOwner, actionplanhistory.FieldInternalOwnerUserID, actionplanhistory.FieldInternalOwnerGroupID, actionplanhistory.FieldInternalOwnerIdentityHolderID, actionplanhistory.FieldTitle, actionplanhistory.FieldDescription, actionplanhistory.FieldPriority, actionplanhistory.FieldBlockerReason, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldUpdatedByImpersonator, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldSourceDefinitionID, actionplanhistory.FieldSourceDefinitionVersion, actionplanhistory.FieldSourceInstanceID, actionplanhistory.FieldManagedBy, actionplanhistory.FieldIntegrationRunID, actionplanhistory.FieldSourceKey, actionplanhistory.FieldExternalID, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldManagementMode, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldApproverID, actionplanhistory.FieldDelegateID, actionplanhistory.FieldSummary, actionplanhistory.FieldURL, actionplanhistory.FieldFileID, actionplanhistory.FieldExternalFileID, actionplanhistory.FieldExternalContents, actionplanhistory.FieldOwnerID, actionplanhistory.FieldInternalNotes, actionplanhistory.FieldSystemInternalID, actionplanhistory.FieldActionPlanKindName, actionplanhistory.FieldActionPlanKindID, actionplanhistory.FieldInternalOwner, actionplanhistory.FieldInternalOwnerUserID, actionplanhistory.FieldInternalOwnerGroupID, actionplanhistory.FieldInternalOwnerIdentityHolderID, actionplanhistory.FieldTitle, actionplanhistory.FieldDescription, actionplanhistory.FieldPriority, actionplanhistory.FieldBlockerReason, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldReviewDue, actionplanhistory.FieldDueDate, actionplanhistory.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -287,6 +289,12 @@ func (_m *ActionPlanHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case actionplanhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case actionplanhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -665,6 +673,9 @@ func (_m *ActionPlanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

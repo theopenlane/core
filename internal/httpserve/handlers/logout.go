@@ -7,8 +7,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
@@ -72,7 +70,7 @@ func (h *Handler) LogoutHandler(ctx echo.Context) error {
 	auth.ClearAuthCookies(ctx.Response().Writer, *h.SessionConfig.CookieConfig)
 
 	out := &models.LogoutResponse{
-		Reply:   rout.Reply{Success: true},
+		Success: true,
 		Message: "logged out successfully",
 	}
 

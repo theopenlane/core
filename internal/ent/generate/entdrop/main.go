@@ -30,6 +30,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 
@@ -669,7 +670,7 @@ func classify(root, entity string, tracked []string, closure map[string]bool) bu
 		stem := normStem(strings.SplitN(filepath.Base(rel), ".", 2)[0])
 		dedicated := st[stem]
 		if !dedicated {
-			for _, seg := range strings.Split(filepath.Dir(rel), string(filepath.Separator)) {
+			for seg := range strings.SplitSeq(filepath.Dir(rel), string(filepath.Separator)) {
 				if st[normStem(seg)] {
 					dedicated = true
 					break
@@ -738,8 +739,8 @@ func entHandles(rel string, st map[string]bool) bool {
 	}
 
 	tail := strings.TrimPrefix(rel, base)
-	if i := strings.Index(tail, "/"); i >= 0 {
-		return st[normStem(tail[:i])] // the per-type package dir
+	if before, _, ok := strings.Cut(tail, "/"); ok {
+		return st[normStem(before)] // the per-type package dir
 	}
 	for s := range st {
 		for _, pat := range entAutoClean {
@@ -1161,8 +1162,8 @@ func trimGenerated(path string, targets []string) (int, error) {
 	}
 
 	out := src
-	for i := len(merged) - 1; i >= 0; i-- {
-		c := merged[i]
+	for _, c := range slices.Backward(merged) {
+
 		out = append(out[:c.start:c.start], out[c.end:]...)
 	}
 	formatted, err := format.Source(out)
@@ -1283,8 +1284,8 @@ func lineStart(src []byte, off int) int {
 }
 
 func firstLine(b []byte) string {
-	if i := bytes.IndexByte(b, '\n'); i >= 0 {
-		return strings.TrimSpace(string(b[:i]))
+	if before, _, ok := bytes.Cut(b, []byte{'\n'}); ok {
+		return strings.TrimSpace(string(before))
 	}
 	return strings.TrimSpace(string(b))
 }
@@ -1359,7 +1360,7 @@ func entcClosure(root string) map[string]bool {
 	cache := filepath.Join(os.TempDir(), "entdrop-closure.txt")
 	if b, err := os.ReadFile(cache); err == nil && len(b) > 0 {
 		out := map[string]bool{}
-		for _, l := range strings.Split(strings.TrimSpace(string(b)), "\n") {
+		for l := range strings.SplitSeq(strings.TrimSpace(string(b)), "\n") {
 			out[l] = true
 		}
 		return out
@@ -1373,9 +1374,9 @@ func entcClosure(root string) map[string]bool {
 		if err != nil {
 			continue
 		}
-		for _, line := range strings.Split(string(out), "\n") {
-			if strings.HasPrefix(line, mod) {
-				pkgs[strings.TrimPrefix(line, mod)] = true
+		for line := range strings.SplitSeq(string(out), "\n") {
+			if after, ok := strings.CutPrefix(line, mod); ok {
+				pkgs[after] = true
 			}
 		}
 	}

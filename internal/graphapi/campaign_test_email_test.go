@@ -72,9 +72,9 @@ func TestSendCampaignTestEmailAssessmentBackfill(t *testing.T) {
 
 	createResp, err := suite.Client.API.CreateCampaign(th.SharedTestUser1.UserCtx, testclient.CreateCampaignInput{
 		Name:                fmt.Sprintf("questionnaire-backfill-%s", ulids.New().String()),
-		CampaignType:        lo.ToPtr(enums.CampaignTypeQuestionnaire),
-		TemplateID:          lo.ToPtr(template.ID),
-		RecurrenceFrequency: lo.ToPtr(enums.FrequencyNone),
+		CampaignType:        new(enums.CampaignTypeQuestionnaire),
+		TemplateID:          new(template.ID),
+		RecurrenceFrequency: new(enums.FrequencyNone),
 	})
 	assert.NilError(t, err)
 

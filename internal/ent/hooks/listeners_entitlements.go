@@ -162,12 +162,12 @@ func fetchOrganizationCustomer(ctx context.Context, client *entgen.Client, orgSe
 	}
 
 	if address := orgSetting.BillingAddress; address != (models.Address{}) {
-		contact.Line1 = lo.ToPtr(address.Line1)
-		contact.Line2 = lo.ToPtr(address.Line2)
-		contact.City = lo.ToPtr(address.City)
-		contact.State = lo.ToPtr(address.State)
-		contact.Country = lo.ToPtr(address.Country)
-		contact.PostalCode = lo.ToPtr(address.PostalCode)
+		contact.Line1 = new(address.Line1)
+		contact.Line2 = new(address.Line2)
+		contact.City = new(address.City)
+		contact.State = new(address.State)
+		contact.Country = new(address.Country)
+		contact.PostalCode = new(address.PostalCode)
 	}
 
 	return &entitlements.OrganizationCustomer{

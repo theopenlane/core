@@ -8,7 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -22,15 +23,13 @@ func TestGenerateDownloadURLWithSecret_BaseHandling(t *testing.T) {
 
 	secret := make([]byte, 128)
 	_, err := rand.Read(secret)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILE00000000000000",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket:  "test-bucket",
-			Key:     "path/to/object.txt",
-			FullURI: "database://test-bucket/path/to/object.txt",
-		},
+		ID:      "01HZZTESTFILE00000000000000",
+		Bucket:  "test-bucket",
+		Key:     "path/to/object.txt",
+		FullURI: "database://test-bucket/path/to/object.txt",
 	}
 
 	escapedID := url.PathEscape(file.ID)
@@ -54,7 +53,6 @@ func TestGenerateDownloadURLWithSecret_BaseHandling(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Helper()
 
@@ -64,16 +62,16 @@ func TestGenerateDownloadURLWithSecret_BaseHandling(t *testing.T) {
 			)
 
 			downloadURL, err := GenerateDownloadURLWithSecret(file, secret, time.Minute, cfg)
-			require.NoError(t, err)
-			require.NotEmpty(t, downloadURL)
+			assert.NilError(t, err)
+			assert.Assert(t, len(downloadURL) > 0)
 
 			expectedPrefix := tc.base + "/" + escapedID + "/download?token="
-			require.Truef(t, strings.HasPrefix(downloadURL, expectedPrefix), "expected prefix %q, got %q", expectedPrefix, downloadURL)
-			require.Contains(t, downloadURL, "token=")
+			assert.Assert(t, strings.HasPrefix(downloadURL, expectedPrefix), "expected prefix %q, got %q", expectedPrefix, downloadURL)
+			assert.Assert(t, is.Contains(downloadURL, "token="))
 
 			parsed, err := url.Parse(downloadURL)
-			require.NoError(t, err)
-			require.NotEmpty(t, parsed.Query().Get("token"))
+			assert.NilError(t, err)
+			assert.Assert(t, len(parsed.Query().Get("token")) > 0)
 		})
 	}
 }
@@ -90,17 +88,17 @@ func TestNewProxyPresignConfigOptions(t *testing.T) {
 		storage.WithProxyPresignBaseURL("https://api.example.com/v1/files"),
 	)
 
-	require.Equal(t, tm, cfg.TokenManager)
-	require.Equal(t, "https://issuer.example.com/oauth2", cfg.TokenIssuer)
-	require.Equal(t, "https://aud.example.com", cfg.TokenAudience)
-	require.Equal(t, "https://api.example.com/v1/files", cfg.BaseURL)
+	assert.Assert(t, is.Equal(tm, cfg.TokenManager))
+	assert.Assert(t, is.Equal("https://issuer.example.com/oauth2", cfg.TokenIssuer))
+	assert.Assert(t, is.Equal("https://aud.example.com", cfg.TokenAudience))
+	assert.Assert(t, is.Equal("https://api.example.com/v1/files", cfg.BaseURL))
 }
 
 func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 
 	_, key, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	conf := tokens.Config{
 		Audience:        "http://localhost:17608",
@@ -111,7 +109,7 @@ func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	}
 
 	tm, err := tokens.NewWithKey(key, conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return tm
 }

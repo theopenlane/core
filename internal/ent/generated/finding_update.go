@@ -266,6 +266,26 @@ func (_u *FindingUpdate) ClearIntegrationRunID() *FindingUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *FindingUpdate) SetSourceKey(v string) *FindingUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableSourceKey(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *FindingUpdate) ClearSourceKey() *FindingUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingUpdate) SetExternalID(v string) *FindingUpdate {
 	_u.mutation.SetExternalID(v)
@@ -2541,6 +2561,12 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(finding.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(finding.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(finding.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 	}
@@ -4488,6 +4514,26 @@ func (_u *FindingUpdateOne) SetNillableIntegrationRunID(v *string) *FindingUpdat
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *FindingUpdateOne) ClearIntegrationRunID() *FindingUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *FindingUpdateOne) SetSourceKey(v string) *FindingUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableSourceKey(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *FindingUpdateOne) ClearSourceKey() *FindingUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -6795,6 +6841,12 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(finding.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(finding.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(finding.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)

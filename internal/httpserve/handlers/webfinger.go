@@ -6,13 +6,14 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ssoenforcement"
-	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
+
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ssoenforcement"
+	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
+	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
 
 // WebfingerHandler is a simple protocol which allows you to publicly query a well-know
@@ -88,13 +89,15 @@ type nonce string
 // route an exempt user through SSO. Provider and discovery URL are reported from the organization
 // setting. TFA enforcement is reported from the organization setting for org-level lookups
 func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusResponse, error) {
-	in, setting, err := ssoenforcement.LoadEnforcement(ctx, h.DBClient, orgID, userID, "")
+	// since we now check for tfa access, we need to pass in the ctx from the existing transaction so this can find the
+	// newly created user/membership
+	in, setting, err := ssoenforcement.LoadEnforcement(ctx, transaction.FromContext(ctx).Client(), orgID, userID, "")
 	if err != nil {
 		return models.SSOStatusResponse{}, err
 	}
 
 	out := models.SSOStatusResponse{
-		Reply:          rout.Reply{Success: true},
+		Success:        true,
 		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,
 		OrgTFAEnforced: setting.MultifactorAuthEnforced,

@@ -60,6 +60,7 @@ type ActionPlanProjection struct {
 	SourceDefinitionID              string                       `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion         string                       `json:"source_definition_version,omitempty"`
 	SourceInstanceID                string                       `json:"source_instance_id,omitempty"`
+	SourceKey                       string                       `json:"source_key,omitempty"`
 	Status                          enums.DocumentStatus         `json:"status,omitempty"`
 	Summary                         string                       `json:"summary,omitempty"`
 	SystemInternalID                string                       `json:"system_internal_id,omitempty"`
@@ -95,6 +96,7 @@ type AssessmentProjection struct {
 	SourceDefinitionID      string                 `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                 `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                 `json:"source_instance_id,omitempty"`
+	SourceKey               string                 `json:"source_key,omitempty"`
 	SystemInternalID        string                 `json:"system_internal_id,omitempty"`
 	SystemOwned             bool                   `json:"system_owned,omitempty"`
 	Tags                    []string               `json:"tags,omitempty"`
@@ -125,6 +127,7 @@ type AssessmentPolicyProjection struct {
 	SourceDefinitionID      string    `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string    `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string    `json:"source_instance_id,omitempty"`
+	SourceKey               string    `json:"source_key,omitempty"`
 	UpdatedAt               time.Time `json:"updated_at,omitempty"`
 	UpdatedBy               string    `json:"updated_by,omitempty"`
 	UpdatedByImpersonator   string    `json:"updated_by_impersonator,omitempty"`
@@ -221,6 +224,7 @@ type AssetProjection struct {
 	SourceDefinitionVersion       string           `json:"source_definition_version,omitempty"`
 	SourceIdentifier              string           `json:"source_identifier,omitempty"`
 	SourceInstanceID              string           `json:"source_instance_id,omitempty"`
+	SourceKey                     string           `json:"source_key,omitempty"`
 	SourcePlatformID              string           `json:"source_platform_id,omitempty"`
 	SourceType                    enums.SourceType `json:"source_type,omitempty"`
 	SystemInternalID              string           `json:"system_internal_id,omitempty"`
@@ -278,6 +282,7 @@ type CampaignProjection struct {
 	SourceDefinitionID            string                 `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion       string                 `json:"source_definition_version,omitempty"`
 	SourceInstanceID              string                 `json:"source_instance_id,omitempty"`
+	SourceKey                     string                 `json:"source_key,omitempty"`
 	Status                        enums.CampaignStatus   `json:"status,omitempty"`
 	Tags                          []string               `json:"tags,omitempty"`
 	TemplateID                    string                 `json:"template_id,omitempty"`
@@ -336,6 +341,7 @@ type CheckResultProjection struct {
 	SourceDefinitionID      string            `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string            `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string            `json:"source_instance_id,omitempty"`
+	SourceKey               string            `json:"source_key,omitempty"`
 	Status                  enums.CheckStatus `json:"status,omitempty"`
 	Tags                    []string          `json:"tags,omitempty"`
 	UpdatedAt               time.Time         `json:"updated_at,omitempty"`
@@ -366,6 +372,7 @@ type ContactProjection struct {
 	SourceDefinitionID      string           `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string           `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string           `json:"source_instance_id,omitempty"`
+	SourceKey               string           `json:"source_key,omitempty"`
 	Status                  enums.UserStatus `json:"status,omitempty"`
 	Tags                    []string         `json:"tags,omitempty"`
 	Title                   string           `json:"title,omitempty"`
@@ -425,6 +432,7 @@ type ControlProjection struct {
 	SourceDefinitionID         string                             `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion    string                             `json:"source_definition_version,omitempty"`
 	SourceInstanceID           string                             `json:"source_instance_id,omitempty"`
+	SourceKey                  string                             `json:"source_key,omitempty"`
 	SourceName                 string                             `json:"source_name,omitempty"`
 	StandardID                 string                             `json:"standard_id,omitempty"`
 	Status                     enums.ControlStatus                `json:"status,omitempty"`
@@ -461,6 +469,7 @@ type ControlImplementationProjection struct {
 	SourceDefinitionID      string               `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string               `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string               `json:"source_instance_id,omitempty"`
+	SourceKey               string               `json:"source_key,omitempty"`
 	Status                  enums.DocumentStatus `json:"status,omitempty"`
 	SystemInternalID        string               `json:"system_internal_id,omitempty"`
 	SystemOwned             bool                 `json:"system_owned,omitempty"`
@@ -497,6 +506,7 @@ type ControlObjectiveProjection struct {
 	SourceDefinitionID      string                `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                `json:"source_instance_id,omitempty"`
+	SourceKey               string                `json:"source_key,omitempty"`
 	Status                  enums.ObjectiveStatus `json:"status,omitempty"`
 	Subcategory             string                `json:"subcategory,omitempty"`
 	SystemInternalID        string                `json:"system_internal_id,omitempty"`
@@ -530,6 +540,7 @@ type CustomTypeEnumProjection struct {
 	SourceDefinitionID      string    `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string    `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string    `json:"source_instance_id,omitempty"`
+	SourceKey               string    `json:"source_key,omitempty"`
 	SystemInternalID        string    `json:"system_internal_id,omitempty"`
 	SystemOwned             bool      `json:"system_owned,omitempty"`
 	UpdatedAt               time.Time `json:"updated_at,omitempty"`
@@ -585,6 +596,7 @@ type DirectoryAccountProjection struct {
 	SourceDefinitionID      string                         `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                         `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                         `json:"source_instance_id,omitempty"`
+	SourceKey               string                         `json:"source_key,omitempty"`
 	SourceVersion           string                         `json:"source_version,omitempty"`
 	Status                  enums.DirectoryAccountStatus   `json:"status,omitempty"`
 	Tags                    []string                       `json:"tags,omitempty"`
@@ -629,6 +641,7 @@ type DirectoryGroupProjection struct {
 	SourceDefinitionID      string                             `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                             `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                             `json:"source_instance_id,omitempty"`
+	SourceKey               string                             `json:"source_key,omitempty"`
 	SourceVersion           string                             `json:"source_version,omitempty"`
 	Status                  enums.DirectoryGroupStatus         `json:"status,omitempty"`
 	Tags                    []string                           `json:"tags,omitempty"`
@@ -668,6 +681,7 @@ type DirectoryMembershipProjection struct {
 	SourceDefinitionID      string                        `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                        `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                        `json:"source_instance_id,omitempty"`
+	SourceKey               string                        `json:"source_key,omitempty"`
 	UpdatedAt               time.Time                     `json:"updated_at,omitempty"`
 	UpdatedBy               string                        `json:"updated_by,omitempty"`
 	UpdatedByImpersonator   string                        `json:"updated_by_impersonator,omitempty"`
@@ -739,6 +753,7 @@ type EmailTemplateProjection struct {
 	SourceDefinitionID      string                           `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                           `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                           `json:"source_instance_id,omitempty"`
+	SourceKey               string                           `json:"source_key,omitempty"`
 	SystemInternalID        string                           `json:"system_internal_id,omitempty"`
 	SystemOwned             bool                             `json:"system_owned,omitempty"`
 	TemplateContext         enums.TemplateContext            `json:"template_context,omitempty"`
@@ -820,6 +835,7 @@ type EntityProjection struct {
 	SourceDefinitionID                    string                 `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion               string                 `json:"source_definition_version,omitempty"`
 	SourceInstanceID                      string                 `json:"source_instance_id,omitempty"`
+	SourceKey                             string                 `json:"source_key,omitempty"`
 	SpendCurrency                         string                 `json:"spend_currency,omitempty"`
 	SSOEnforced                           bool                   `json:"sso_enforced,omitempty"`
 	Status                                enums.EntityStatus     `json:"status,omitempty"`
@@ -904,6 +920,7 @@ type EvidenceProjection struct {
 	SourceDefinitionID      string               `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string               `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string               `json:"source_instance_id,omitempty"`
+	SourceKey               string               `json:"source_key,omitempty"`
 	Status                  enums.EvidenceStatus `json:"status,omitempty"`
 	Tags                    []string             `json:"tags,omitempty"`
 	UpdatedAt               time.Time            `json:"updated_at,omitempty"`
@@ -1019,6 +1036,7 @@ type FindingProjection struct {
 	SourceDefinitionID            string                 `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion       string                 `json:"source_definition_version,omitempty"`
 	SourceInstanceID              string                 `json:"source_instance_id,omitempty"`
+	SourceKey                     string                 `json:"source_key,omitempty"`
 	SourceUpdatedAt               models.DateTime        `json:"source_updated_at,omitempty"`
 	State                         string                 `json:"state,omitempty"`
 	StepsToReproduce              []string               `json:"steps_to_reproduce,omitempty"`
@@ -1090,6 +1108,7 @@ type GroupProjection struct {
 	SourceDefinitionID      string    `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string    `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string    `json:"source_instance_id,omitempty"`
+	SourceKey               string    `json:"source_key,omitempty"`
 	Tags                    []string  `json:"tags,omitempty"`
 	UpdatedAt               time.Time `json:"updated_at,omitempty"`
 	UpdatedBy               string    `json:"updated_by,omitempty"`
@@ -1173,6 +1192,7 @@ type IdentityHolderProjection struct {
 	SourceDefinitionID            string                   `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion       string                   `json:"source_definition_version,omitempty"`
 	SourceInstanceID              string                   `json:"source_instance_id,omitempty"`
+	SourceKey                     string                   `json:"source_key,omitempty"`
 	StartDate                     models.DateTime          `json:"start_date,omitempty"`
 	Status                        enums.UserStatus         `json:"status,omitempty"`
 	Tags                          []string                 `json:"tags,omitempty"`
@@ -1294,6 +1314,7 @@ type InternalPolicyProjection struct {
 	SourceDefinitionID              string                       `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion         string                       `json:"source_definition_version,omitempty"`
 	SourceInstanceID                string                       `json:"source_instance_id,omitempty"`
+	SourceKey                       string                       `json:"source_key,omitempty"`
 	Status                          enums.DocumentStatus         `json:"status,omitempty"`
 	Summary                         string                       `json:"summary,omitempty"`
 	SystemInternalID                string                       `json:"system_internal_id,omitempty"`
@@ -1351,6 +1372,7 @@ type MappedControlProjection struct {
 	SourceDefinitionID      string              `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string              `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string              `json:"source_instance_id,omitempty"`
+	SourceKey               string              `json:"source_key,omitempty"`
 	SystemInternalID        string              `json:"system_internal_id,omitempty"`
 	SystemOwned             bool                `json:"system_owned,omitempty"`
 	Tags                    []string            `json:"tags,omitempty"`
@@ -1380,6 +1402,7 @@ type NarrativeProjection struct {
 	SourceDefinitionID      string    `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string    `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string    `json:"source_instance_id,omitempty"`
+	SourceKey               string    `json:"source_key,omitempty"`
 	SystemInternalID        string    `json:"system_internal_id,omitempty"`
 	SystemOwned             bool      `json:"system_owned,omitempty"`
 	Tags                    []string  `json:"tags,omitempty"`
@@ -1539,6 +1562,7 @@ type PlatformProjection struct {
 	SourceDefinitionVersion        string                 `json:"source_definition_version,omitempty"`
 	SourceIdentifier               string                 `json:"source_identifier,omitempty"`
 	SourceInstanceID               string                 `json:"source_instance_id,omitempty"`
+	SourceKey                      string                 `json:"source_key,omitempty"`
 	SourceType                     enums.SourceType       `json:"source_type,omitempty"`
 	Status                         enums.PlatformStatus   `json:"status,omitempty"`
 	Tags                           []string               `json:"tags,omitempty"`
@@ -1595,6 +1619,7 @@ type ProcedureProjection struct {
 	SourceDefinitionID              string                       `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion         string                       `json:"source_definition_version,omitempty"`
 	SourceInstanceID                string                       `json:"source_instance_id,omitempty"`
+	SourceKey                       string                       `json:"source_key,omitempty"`
 	Status                          enums.DocumentStatus         `json:"status,omitempty"`
 	Summary                         string                       `json:"summary,omitempty"`
 	SystemInternalID                string                       `json:"system_internal_id,omitempty"`
@@ -1643,6 +1668,7 @@ type ProgramProjection struct {
 	SourceDefinitionID         string              `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion    string              `json:"source_definition_version,omitempty"`
 	SourceInstanceID           string              `json:"source_instance_id,omitempty"`
+	SourceKey                  string              `json:"source_key,omitempty"`
 	StartDate                  time.Time           `json:"start_date,omitempty"`
 	Status                     enums.ProgramStatus `json:"status,omitempty"`
 	Tags                       []string            `json:"tags,omitempty"`
@@ -1704,6 +1730,7 @@ type RemediationProjection struct {
 	SourceDefinitionID      string                  `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                  `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                  `json:"source_instance_id,omitempty"`
+	SourceKey               string                  `json:"source_key,omitempty"`
 	State                   string                  `json:"state,omitempty"`
 	Status                  enums.RemediationStatus `json:"status,omitempty"`
 	Summary                 string                  `json:"summary,omitempty"`
@@ -1779,6 +1806,7 @@ type ReviewProjection struct {
 	SourceDefinitionID      string                 `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                 `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                 `json:"source_instance_id,omitempty"`
+	SourceKey               string                 `json:"source_key,omitempty"`
 	State                   string                 `json:"state,omitempty"`
 	Status                  enums.ReviewStatus     `json:"status,omitempty"`
 	Summary                 string                 `json:"summary,omitempty"`
@@ -1842,6 +1870,7 @@ type RiskProjection struct {
 	SourceDefinitionID          string               `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion     string               `json:"source_definition_version,omitempty"`
 	SourceInstanceID            string               `json:"source_instance_id,omitempty"`
+	SourceKey                   string               `json:"source_key,omitempty"`
 	StakeholderGroupID          string               `json:"stakeholder_group_id,omitempty"`
 	StakeholderID               string               `json:"stakeholder_id,omitempty"`
 	StakeholderIdentityHolderID string               `json:"stakeholder_identity_holder_id,omitempty"`
@@ -1894,6 +1923,7 @@ type ScanProjection struct {
 	SourceDefinitionID         string                 `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion    string                 `json:"source_definition_version,omitempty"`
 	SourceInstanceID           string                 `json:"source_instance_id,omitempty"`
+	SourceKey                  string                 `json:"source_key,omitempty"`
 	Status                     enums.ScanStatus       `json:"status,omitempty"`
 	SystemInternalID           string                 `json:"system_internal_id,omitempty"`
 	SystemOwned                bool                   `json:"system_owned,omitempty"`
@@ -1983,6 +2013,7 @@ type SubcontrolProjection struct {
 	SourceDefinitionID         string                            `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion    string                            `json:"source_definition_version,omitempty"`
 	SourceInstanceID           string                            `json:"source_instance_id,omitempty"`
+	SourceKey                  string                            `json:"source_key,omitempty"`
 	SourceName                 string                            `json:"source_name,omitempty"`
 	Status                     enums.ControlStatus               `json:"status,omitempty"`
 	Subcategory                string                            `json:"subcategory,omitempty"`
@@ -2071,6 +2102,7 @@ type SystemDetailProjection struct {
 	SourceDefinitionID      string                       `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                       `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                       `json:"source_instance_id,omitempty"`
+	SourceKey               string                       `json:"source_key,omitempty"`
 	SystemName              string                       `json:"system_name,omitempty"`
 	Tags                    []string                     `json:"tags,omitempty"`
 	UpdatedAt               time.Time                    `json:"updated_at,omitempty"`
@@ -2101,6 +2133,7 @@ type TagDefinitionProjection struct {
 	SourceDefinitionID      string    `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string    `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string    `json:"source_instance_id,omitempty"`
+	SourceKey               string    `json:"source_key,omitempty"`
 	SystemInternalID        string    `json:"system_internal_id,omitempty"`
 	SystemOwned             bool      `json:"system_owned,omitempty"`
 	UpdatedAt               time.Time `json:"updated_at,omitempty"`
@@ -2182,6 +2215,7 @@ type TemplateProjection struct {
 	SourceDefinitionID      string                          `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion string                          `json:"source_definition_version,omitempty"`
 	SourceInstanceID        string                          `json:"source_instance_id,omitempty"`
+	SourceKey               string                          `json:"source_key,omitempty"`
 	SystemInternalID        string                          `json:"system_internal_id,omitempty"`
 	SystemOwned             bool                            `json:"system_owned,omitempty"`
 	Tags                    []string                        `json:"tags,omitempty"`
@@ -2256,27 +2290,53 @@ type UserProjection struct {
 // the full generated.VendorRiskScore whose edge graph cannot be reflected
 type VendorRiskScoreProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                    string                        `json:"id,omitempty"`
-	Answer                string                        `json:"answer,omitempty"`
-	AnswerType            enums.VendorScoringAnswerType `json:"answer_type,omitempty"`
-	AssessmentResponseID  string                        `json:"assessment_response_id,omitempty"`
-	CreatedAt             time.Time                     `json:"created_at,omitempty"`
-	CreatedBy             string                        `json:"created_by,omitempty"`
-	EntityID              string                        `json:"entity_id,omitempty"`
-	Impact                enums.VendorRiskImpact        `json:"impact,omitempty"`
-	Likelihood            enums.VendorRiskLikelihood    `json:"likelihood,omitempty"`
-	Notes                 string                        `json:"notes,omitempty"`
-	OwnerID               string                        `json:"owner_id,omitempty"`
-	QuestionCategory      enums.VendorScoringCategory   `json:"question_category,omitempty"`
-	QuestionDescription   string                        `json:"question_description,omitempty"`
-	QuestionKey           string                        `json:"question_key,omitempty"`
-	QuestionName          string                        `json:"question_name,omitempty"`
-	Score                 float64                       `json:"score,omitempty"`
-	Tags                  []string                      `json:"tags,omitempty"`
-	UpdatedAt             time.Time                     `json:"updated_at,omitempty"`
-	UpdatedBy             string                        `json:"updated_by,omitempty"`
-	UpdatedByImpersonator string                        `json:"updated_by_impersonator,omitempty"`
-	VendorScoringConfigID string                        `json:"vendor_scoring_config_id,omitempty"`
+	ID                      string                        `json:"id,omitempty"`
+	Answer                  string                        `json:"answer,omitempty"`
+	AnswerType              enums.VendorScoringAnswerType `json:"answer_type,omitempty"`
+	AssessmentResponseID    string                        `json:"assessment_response_id,omitempty"`
+	CreatedAt               time.Time                     `json:"created_at,omitempty"`
+	CreatedBy               string                        `json:"created_by,omitempty"`
+	EntityID                string                        `json:"entity_id,omitempty"`
+	ExternalID              string                        `json:"external_id,omitempty"`
+	Impact                  enums.VendorRiskImpact        `json:"impact,omitempty"`
+	IntegrationRunID        string                        `json:"integration_run_id,omitempty"`
+	Likelihood              enums.VendorRiskLikelihood    `json:"likelihood,omitempty"`
+	ManagedBy               string                        `json:"managed_by,omitempty"`
+	Notes                   string                        `json:"notes,omitempty"`
+	OwnerID                 string                        `json:"owner_id,omitempty"`
+	QuestionCategory        enums.VendorScoringCategory   `json:"question_category,omitempty"`
+	QuestionDescription     string                        `json:"question_description,omitempty"`
+	QuestionKey             string                        `json:"question_key,omitempty"`
+	QuestionName            string                        `json:"question_name,omitempty"`
+	Score                   float64                       `json:"score,omitempty"`
+	SourceDefinitionID      string                        `json:"source_definition_id,omitempty"`
+	SourceDefinitionVersion string                        `json:"source_definition_version,omitempty"`
+	SourceInstanceID        string                        `json:"source_instance_id,omitempty"`
+	SourceKey               string                        `json:"source_key,omitempty"`
+	Tags                    []string                      `json:"tags,omitempty"`
+	UpdatedAt               time.Time                     `json:"updated_at,omitempty"`
+	UpdatedBy               string                        `json:"updated_by,omitempty"`
+	UpdatedByImpersonator   string                        `json:"updated_by_impersonator,omitempty"`
+	VendorScoringConfigID   string                        `json:"vendor_scoring_config_id,omitempty"`
+}
+
+// VendorScoringConfigProjection is the flat, CEL- and jsonschema-facing view of a VendorScoringConfig: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.VendorScoringConfig whose edge graph cannot be reflected
+type VendorScoringConfigProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string                              `json:"id,omitempty"`
+	CreatedAt             time.Time                           `json:"created_at,omitempty"`
+	CreatedBy             string                              `json:"created_by,omitempty"`
+	OwnerID               string                              `json:"owner_id,omitempty"`
+	Questions             models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	RiskThresholds        models.RiskThresholdsConfig         `json:"risk_thresholds,omitempty"`
+	ScoringMode           enums.VendorScoringMode             `json:"scoring_mode,omitempty"`
+	Tags                  []string                            `json:"tags,omitempty"`
+	UpdatedAt             time.Time                           `json:"updated_at,omitempty"`
+	UpdatedBy             string                              `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string                              `json:"updated_by_impersonator,omitempty"`
 }
 
 // VulnerabilityProjection is the flat, CEL- and jsonschema-facing view of a Vulnerability: its
@@ -2349,6 +2409,7 @@ type VulnerabilityProjection struct {
 	SourceDefinitionID            string                 `json:"source_definition_id,omitempty"`
 	SourceDefinitionVersion       string                 `json:"source_definition_version,omitempty"`
 	SourceInstanceID              string                 `json:"source_instance_id,omitempty"`
+	SourceKey                     string                 `json:"source_key,omitempty"`
 	SourceUpdatedAt               models.DateTime        `json:"source_updated_at,omitempty"`
 	Summary                       string                 `json:"summary,omitempty"`
 	SystemInternalID              string                 `json:"system_internal_id,omitempty"`

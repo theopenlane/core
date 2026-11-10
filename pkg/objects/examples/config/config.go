@@ -161,12 +161,12 @@ func SaveOpenlaneConfig(cfg *OpenlaneConfig) error {
 		log.Debug().Err(err).Msg("no existing config file, creating new one")
 	}
 
-	data := make(map[string]interface{})
+	data := make(map[string]any)
 	if err := k.Unmarshal("", &data); err != nil {
-		data = make(map[string]interface{})
+		data = make(map[string]any)
 	}
 
-	openlaneData := map[string]interface{}{
+	openlaneData := map[string]any{
 		"baseurl":        cfg.BaseURL,
 		"email":          cfg.Email,
 		"password":       cfg.Password,

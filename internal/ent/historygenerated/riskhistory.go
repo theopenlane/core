@@ -57,6 +57,8 @@ type RiskHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -161,7 +163,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case riskhistory.FieldScore, riskhistory.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldSourceDefinitionID, riskhistory.FieldSourceDefinitionVersion, riskhistory.FieldSourceInstanceID, riskhistory.FieldManagedBy, riskhistory.FieldIntegrationRunID, riskhistory.FieldExternalID, riskhistory.FieldOwnerID, riskhistory.FieldStakeholderName, riskhistory.FieldStakeholderUserID, riskhistory.FieldStakeholderGroupID, riskhistory.FieldStakeholderIdentityHolderID, riskhistory.FieldDelegateName, riskhistory.FieldDelegateUserID, riskhistory.FieldDelegateGroupID, riskhistory.FieldDelegateIdentityHolderID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldSourceDefinitionID, riskhistory.FieldSourceDefinitionVersion, riskhistory.FieldSourceInstanceID, riskhistory.FieldManagedBy, riskhistory.FieldIntegrationRunID, riskhistory.FieldSourceKey, riskhistory.FieldExternalID, riskhistory.FieldOwnerID, riskhistory.FieldStakeholderName, riskhistory.FieldStakeholderUserID, riskhistory.FieldStakeholderGroupID, riskhistory.FieldStakeholderIdentityHolderID, riskhistory.FieldDelegateName, riskhistory.FieldDelegateUserID, riskhistory.FieldDelegateGroupID, riskhistory.FieldDelegateIdentityHolderID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -290,6 +292,12 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case riskhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case riskhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -649,6 +657,9 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

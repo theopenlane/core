@@ -61,6 +61,9 @@ type trustCenterSettings struct {
 	trustCenterCnameTarget string
 	// defaultTrustCenterDomain is the default domain for trust center
 	defaultTrustCenterDomain string
+	// trustCenterPreviewZoneID is the preview zone id for trustcenters.
+	// needed here because the mutation struct does not have the cfg ( applies to the other properties of this struct too)
+	trustCenterPreviewZoneID string
 }
 
 // subscriptionSettings holds the settings for subscriptions
@@ -86,13 +89,11 @@ type subscriptionSettings struct {
 func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	defaultWorkflows := workflows.NewDefaultConfig()
 	return &Resolver{
-		db:              db,
-		uploader:        u,
-		workflowsConfig: *defaultWorkflows,
-		subscriptionSettings: subscriptionSettings{
-			websocketPingInterval: defaultWebsocketPingInterval,
-			sseKeepAliveInterval:  defaultSSEKeepAliveInterval,
-		},
+		db:                    db,
+		uploader:              u,
+		workflowsConfig:       *defaultWorkflows,
+		websocketPingInterval: defaultWebsocketPingInterval,
+		sseKeepAliveInterval:  defaultSSEKeepAliveInterval,
 	}
 }
 

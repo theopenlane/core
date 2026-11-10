@@ -20,6 +20,7 @@ mutation CreateBulkCSVControlObjective ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			subcategory
 			systemInternalID
@@ -53,6 +54,7 @@ mutation CreateBulkControlObjective ($input: [CreateControlObjectiveInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			subcategory
 			systemInternalID
@@ -86,6 +88,7 @@ mutation CreateControlObjective ($input: CreateControlObjectiveInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			subcategory
 			systemInternalID
@@ -233,6 +236,7 @@ query GetControlObjectiveByID ($controlObjectiveId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		subcategory
 		systemInternalID
@@ -375,6 +379,7 @@ mutation UpdateControlObjective ($updateControlObjectiveId: ID!, $input: UpdateC
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			subcategory
 			systemInternalID

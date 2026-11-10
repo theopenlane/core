@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/logx"
 )
 
@@ -218,7 +219,7 @@ func isTagDefinitionInUse(ctx context.Context, client *generated.Client, tagDefI
 
 				label := config.label
 				if count != 1 {
-					label = client.Pluralizer.Plural(config.label)
+					label = utils.Plural(config.label)
 				}
 
 				*allErrors = append(*allErrors, fmt.Sprintf("the tag definition %s is in use by %d %s and cannot be deleted until those are updated",

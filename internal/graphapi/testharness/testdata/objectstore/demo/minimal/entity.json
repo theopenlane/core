@@ -1,0 +1,12 @@
+[
+  {
+    "external_id": "entity::minimal-vendor",
+    "name": "minimal-vendor",
+    "display_name": "Minimal Vendor",
+    "entity_type_name": "vendor",
+    "domains": [
+      "vendor.{{ORG_DOMAIN}}"
+    ],
+    "status": "ACTIVE"
+  }
+]

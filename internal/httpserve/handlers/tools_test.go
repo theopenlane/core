@@ -6,16 +6,17 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
+	"os"
 	"testing"
 	"time"
 
 	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
-	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
 
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
@@ -83,7 +84,7 @@ const (
 
 // HandlerTestSuite handles the setup and teardown between tests
 type HandlerTestSuite struct {
-	suite.Suite
+	t                    *testing.T
 	e                    *echo.Echo
 	db                   *ent.Client
 	galaDB               *ent.Client
@@ -106,14 +107,34 @@ type HandlerTestSuite struct {
 	sharedSlackRecorder  *slackWebhookRecorder
 	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
+	testUser1            testUserDetails
+	testUser2            testUserDetails
 }
 
-// TestHandlerTestSuite runs all the tests in the HandlerTestSuite
-func TestHandlerTestSuite(t *testing.T) {
-	suite.Run(t, new(HandlerTestSuite))
+// suite is the shared handler test state set up once in TestMain, each test works on its own copy from setupTest
+var suite = &HandlerTestSuite{}
+
+func TestMain(m *testing.M) {
+	flag.Parse()
+
+	// only used for setup and teardown, failures there exit through coreutils.RequireNoError
+	suite.t = &testing.T{}
+
+	suite.setupSuite()
+
+	exitCode := m.Run()
+
+	suite.tearDownSuite()
+
+	os.Exit(exitCode)
 }
 
-func (suite *HandlerTestSuite) SetupSuite() {
+// T returns the test currently using the suite
+func (suite *HandlerTestSuite) T() *testing.T {
+	return suite.t
+}
+
+func (suite *HandlerTestSuite) setupSuite() {
 	if testing.Verbose() {
 		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
 	} else {
@@ -124,7 +145,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	suite.tf = entdb.NewTestFixture()
 
 	version, err := fgaversion.GetVersion()
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
@@ -135,7 +156,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// shared token manager to avoid RSA key generation
 	suite.sharedTokenManager, err = coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
 	// shared redis client to avoid miniredis server startup
 	suite.sharedRedisClient = coreutils.NewRedisClient()
@@ -145,7 +166,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// shared FGA client to avoid repeated container connections
 	suite.sharedFGAClient, err = suite.ofgaTF.NewFgaClient(context.Background())
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
 	// shared OTP manager
 	otpOpts := []totp.ConfigOption{
@@ -167,24 +188,26 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// shared durable gala runtime for integration tests
 	galaInstance, err := gala.NewGala(context.Background(), gala.Config{
-		DispatchMode:      gala.DispatchModeDurable,
-		ConnectionURI:     suite.tf.URI,
-		QueueName:         "handler_integration_test",
-		WorkerCount:       5, //nolint:mnd
-		RunMigrations:     true,
-		FetchCooldown:     time.Millisecond,
-		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
+		DispatchMode:         gala.DispatchModeDurable,
+		ConnectionURI:        suite.tf.URI,
+		QueueName:            "handler_integration_test",
+		WorkerCount:          5, //nolint:mnd
+		RunMigrations:        true,
+		FetchCooldown:        time.Millisecond,
+		FetchPollInterval:    10 * time.Millisecond, //nolint:mnd
+		WaitIdlePollInterval: 10 * time.Millisecond, //nolint:mnd
+		CompleteJobsInline:   true,
 	})
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
-	require.NoError(suite.T(), galaInstance.StartWorkers(context.Background()))
+	coreutils.RequireNoError(suite.T(), galaInstance.StartWorkers(context.Background()))
 
 	suite.galaRuntime = galaInstance
 
 	// suite-scoped ent client for gala listeners — stays open for the entire suite
 	// so durable job handlers never reference a closed connection
 	hc, err := entdb.NewTestHistoryClient(context.Background(), suite.tf)
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
 	galaSessionConfig := sessions.NewSessionConfig(
 		suite.sharedSessionManager,
@@ -206,7 +229,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 			Uploads: galaMockBackend,
 		}),
 	)
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
 	galaOpts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
@@ -223,7 +246,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	galaJobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
 	galaDB, err := entdb.NewTestClient(context.Background(), suite.tf, galaJobOpts, nil, galaOpts)
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
 	suite.galaDB = galaDB
 
@@ -237,11 +260,11 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		SetName(cnameTargetTest).
 		SetZoneID(previewMappableDomainZoneIDTest).
 		Save(previewDomainCtx)
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
 	// single integration runtime for the entire suite — listeners registered once
 	credStore, err := keystore.NewStore(suite.galaDB)
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
 	suite.keystore = credStore
 	suite.sharedSlackRecorder = newSlackWebhookRecorder(suite.T())
@@ -272,25 +295,17 @@ func (suite *HandlerTestSuite) SetupSuite() {
 			userInputOnlyTestDefinitionBuilder("def_01K0TESTUIONLY000000000001"),
 		},
 	})
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 
 	suite.sharedIntegrationsRT = rt
 
 	// provide ent client to gala's injector so ingest listeners can resolve it
-	require.NoError(suite.T(), suite.galaRuntime.Attach(
+	coreutils.RequireNoError(suite.T(), suite.galaRuntime.Attach(
 		gala.WithValue(suite.galaDB),
 		gala.WithRestoredValue("ent_client", ent.NewContext),
 	))
-}
 
-func (suite *HandlerTestSuite) SetupTest() {
-	t := suite.T()
-
-	suite.registeredRoutes = make(map[string]struct{})
-
-	ctx := context.Background()
-
-	// use all shared instances to avoid expensive recreation
+	// suite-scoped test client so schema migrations run once instead of per test
 	sessionConfig := sessions.NewSessionConfig(
 		suite.sharedSessionManager,
 		sessions.WithPersistence(suite.sharedRedisClient),
@@ -298,13 +313,18 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
-	// setup history client
-	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
-	require.NoError(t, err)
-
 	// setup mock entitlements client
-	entitlements, err := suite.mockStripeClient()
-	require.NoError(t, err)
+	entitlementsClient, err := suite.mockStripeClient()
+	coreutils.RequireNoError(suite.T(), err)
+
+	if entitlementsClient.Config.StripeWebhookSecrets == nil {
+		entitlementsClient.Config.StripeWebhookSecrets = map[string]string{}
+	}
+
+	entitlementsClient.Config.StripeWebhookSecrets[stripe.APIVersion] = webhookSecret
+
+	// wire integration runtime so email dispatch works
+	runtime.SetDefault(suite.sharedIntegrationsRT)
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
@@ -320,62 +340,99 @@ func (suite *HandlerTestSuite) SetupTest() {
 		}),
 		ent.TOTP(suite.sharedOTPManager),
 		ent.Pool(suite.sharedPool),
-		ent.EntitlementManager(entitlements),
+		ent.EntitlementManager(entitlementsClient),
 		ent.HistoryClient(hc),
 	}
 
 	// create database connection
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
-	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
-	require.NoError(t, err, "failed opening connection to database")
+	suite.db, err = entdb.NewTestClient(context.Background(), suite.tf, jobOpts, nil, opts)
+	coreutils.RequireNoError(suite.T(), err)
 
-	suite.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
-	require.NoError(t, err)
+	// shared users, tests that change them call withTestUsers for their own
+	suite.setupTestData(context.Background())
+}
+
+// setupTest returns a per-test copy of the suite for tests that assert on shared state
+// (email sender, stripe mock, river jobs, gala), resetting that state first
+func (suite *HandlerTestSuite) setupTest(t *testing.T) *HandlerTestSuite {
+	ts := suite.newTestSuite(t)
+
+	// reset the stripe mock so expectations don't bleed across tests
+	ts.stripeMockBackend.ExpectedCalls = nil
+	ts.stripeMockBackend.Calls = nil
+	ts.orgSubscriptionMocks()
 
 	// truncate river tables
-	err = db.Job.TruncateRiverTables(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, ts.db.Job.TruncateRiverTables(context.Background()))
 
 	// reset mock email sender so messages don't bleed across tests
-	suite.mockEmailSender().Reset()
+	ts.mockEmailSender().Reset()
 
-	// add db to test client and wire integration runtime so email dispatch works
-	runtime.SetDefault(suite.sharedIntegrationsRT)
-	suite.db = db
+	return ts
+}
 
-	// add the client
+// setupParallelTest marks the test parallel and returns a per-test copy of the suite,
+// leaving shared state untouched
+func (suite *HandlerTestSuite) setupParallelTest(t *testing.T) *HandlerTestSuite {
+	t.Parallel()
+
+	return suite.newTestSuite(t)
+}
+
+// withTestUsers replaces the shared testUser1 and testUser2 with fresh users for tests that change them
+func (suite *HandlerTestSuite) withTestUsers() *HandlerTestSuite {
+	suite.setupTestData(context.Background())
+
+	return suite
+}
+
+// withAPIClient adds the graph client for tests that use suite.api
+func (suite *HandlerTestSuite) withAPIClient() *HandlerTestSuite {
+	var err error
+
 	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
-	require.NoError(t, err)
+	assert.NilError(suite.T(), err)
+
+	return suite
+}
+
+// newTestSuite copies the shared suite and builds the per-test router and handler
+func (suite *HandlerTestSuite) newTestSuite(t *testing.T) *HandlerTestSuite {
+	ts := *suite
+	ts.t = t
+	ts.registeredRoutes = make(map[string]struct{})
+
+	var err error
+
+	ts.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
+	assert.NilError(t, err)
 
 	// setup runtime router
-	suite.router = setupRouter()
+	ts.router = setupRouter()
 
 	// setup handler
-	suite.h = handlerSetup(suite.db)
-	suite.configureIntegrationOAuthRuntime()
-	if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
-		suite.h.Entitlements.Config.StripeWebhookSecrets = map[string]string{}
-	}
-	suite.h.Entitlements.Config.StripeWebhookSecrets[stripe.APIVersion] = webhookSecret
+	ts.h = handlerSetup(ts.db)
+	ts.configureIntegrationOAuthRuntime()
 
 	// use shared OTP manager
-	suite.h.OTPManager = suite.sharedOTPManager
+	ts.h.OTPManager = ts.sharedOTPManager
 
 	// setup echo router with transaction middleware
-	suite.e = suite.router.Echo
+	ts.e = ts.router.Echo
 
 	// Add transaction middleware to router's echo instance for tests
 	transactionConfig := transaction.Client{
-		EntDBClient: suite.db,
+		EntDBClient: ts.db,
 	}
-	suite.e.Use(transactionConfig.Middleware)
+	ts.e.Use(transactionConfig.Middleware)
 
 	// shared auth middleware once per test to avoid JWK cache causing
 	// an infinite hanging
-	suite.sharedAuthMiddleware = suite.createAuthMiddleware()
+	ts.sharedAuthMiddleware = ts.createAuthMiddleware()
 
-	suite.setupTestData(ctx)
+	return &ts
 }
 
 // registerAuthenticatedTestHandler registers a handler with authentication middleware for testing authenticated endpoints
@@ -392,7 +449,7 @@ func (suite *HandlerTestSuite) registerQuestionnaireTestHandler(method, path str
 func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
 	// get keys from the token manager
 	keys, err := suite.db.TokenManager.Keys()
-	require.NoError(suite.T(), err)
+	assert.NilError(suite.T(), err)
 
 	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
@@ -422,24 +479,21 @@ func (suite *HandlerTestSuite) registerRouteOnce(method, path string, handlerFun
 	suite.registerTestHandler(method, path, handlerFunc)
 }
 
-func (suite *HandlerTestSuite) TearDownTest() {
-	if suite.db != nil {
-		err := suite.db.CloseAll()
-		require.NoError(suite.T(), err)
-	}
-}
-
 func (suite *HandlerTestSuite) ClearTestData() {
 	err := suite.db.Job.TruncateRiverTables(context.Background())
-	require.NoError(suite.T(), err)
+	assert.NilError(suite.T(), err)
 
 	suite.mockEmailSender().Reset()
 }
 
-func (suite *HandlerTestSuite) TearDownSuite() {
+func (suite *HandlerTestSuite) tearDownSuite() {
 	if suite.galaRuntime != nil {
 		_ = suite.galaRuntime.StopWorkers(context.Background())
 		_ = suite.galaRuntime.Close()
+	}
+
+	if suite.db != nil {
+		_ = suite.db.CloseAll()
 	}
 
 	if suite.galaDB != nil {
@@ -452,16 +506,16 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 
 	// terminate all fga containers
 	err := suite.ofgaTF.TeardownFixture()
-	require.NoError(suite.T(), err)
+	coreutils.RequireNoError(suite.T(), err)
 }
 
 // WaitForEvents blocks until runnable and in-flight Gala jobs complete
 func (suite *HandlerTestSuite) WaitForEvents() {
-	require.NoError(suite.T(), suite.galaRuntime.WaitIdle(suite.T().Context()))
+	assert.NilError(suite.T(), suite.galaRuntime.WaitIdle(suite.T().Context()))
 }
 
 func (suite *HandlerTestSuite) waitForGala(runtime *gala.Gala) {
-	suite.Require().NoError(runtime.WaitIdle(suite.T().Context()))
+	assert.NilError(suite.T(), runtime.WaitIdle(suite.T().Context()))
 }
 
 func setupRouter() *route.Router {
@@ -523,10 +577,10 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
 // mockEmailSender returns the mock email sender from the shared integration runtime
 func (suite *HandlerTestSuite) mockEmailSender() *mockprovider.EmailSender {
 	rc, ok := suite.sharedIntegrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
-	suite.Require().True(ok, "email runtime client not found")
+	assert.Assert(suite.T(), ok, "email runtime client not found")
 
 	ms := emaildef.MockSenderFromClient(rc)
-	suite.Require().NotNil(ms, "mock sender not found")
+	assert.Assert(suite.T(), ms != nil, "mock sender not found")
 
 	return ms
 }
@@ -545,12 +599,10 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 		Disconnects("Remove the persisted test OAuth credential and disconnect this installation.", nil)
 
 	return types.Definition{
-		DefinitionSpec: types.DefinitionSpec{
-			ID:          testAuthDefinitionID,
-			DisplayName: "Test OAuth",
-			Active:      true,
-			Visible:     true,
-		},
+		ID:           testAuthDefinitionID,
+		DisplayName:  "Test OAuth",
+		Active:       true,
+		Visible:      true,
 		Installation: types.InstallationOf[testOAuthInstallation]().Registration(),
 		Connections:  []types.Connector{connection},
 	}, nil

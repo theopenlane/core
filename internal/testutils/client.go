@@ -40,6 +40,7 @@ var (
 	TrustCenterCnameTarget   = "cname.test.net"
 	AssessmentCnameTarget    = "assessment-cname.test.net"
 	TrustCenterDefaultDomain = "trust.test.net"
+	TrustCenterPreviewZoneID = "mappable-domain-zone-id"
 )
 
 // localRoundTripper is an http.RoundTripper that executes HTTP transactions
@@ -127,8 +128,10 @@ func testEchoServer(c *ent.Client, u *objects.Service, includeMiddleware bool) *
 	})
 	e.Logger = loggers.Echo
 
+	// per-request echo context so request-scoped values like the revision bump don't leak across tests
+	e.Use(echocontext.EchoContextToContextMiddleware())
+
 	if includeMiddleware {
-		e.Use(echocontext.EchoContextToContextMiddleware())
 		e.Use(auth.Authenticate(createAuthConfig(c)))
 		e.Use(logx.LoggingMiddleware(logx.Config{
 			Logger:          loggers.Echo,
@@ -177,6 +180,7 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 	r := graphapi.NewResolver(c, u).
 		WithMaxResultLimit(MaxResultLimit).
 		WithTrustCenterCnameTarget(TrustCenterCnameTarget).
+		WithTrustCenterPreviewZoneID(TrustCenterPreviewZoneID).
 		WithAssessmentCnameTarget(AssessmentCnameTarget).
 		WithTrustCenterDefaultDomain(TrustCenterDefaultDomain).
 		WithSubscriptions(true, nil).

@@ -22,7 +22,7 @@ func (a AAGUID) Value() (driver.Value, error) {
 	return []byte(a), nil
 }
 
-func (a *AAGUID) Scan(value interface{}) error {
+func (a *AAGUID) Scan(value any) error {
 	if value == nil {
 		*a = nil
 		return nil

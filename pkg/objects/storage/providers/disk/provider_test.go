@@ -4,12 +4,13 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -57,15 +58,15 @@ func TestNewDiskProvider(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			provider, err := diskprovider.NewDiskProvider(tt.options)
 			if tt.expectError {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 				if tt.errContains != "" {
-					assert.Contains(t, err.Error(), tt.errContains)
+					assert.Check(t, is.Contains(err.Error(), tt.errContains))
 				}
-				assert.Nil(t, provider)
+				assert.Check(t, is.Nil(provider))
 			} else {
-				assert.NoError(t, err)
-				assert.NotNil(t, provider)
-				assert.NoError(t, provider.Close())
+				assert.Check(t, err)
+				assert.Check(t, provider != nil)
+				assert.Check(t, provider.Close())
 			}
 		})
 	}
@@ -73,11 +74,11 @@ func TestNewDiskProvider(t *testing.T) {
 
 func TestDiskProviderUploadDownloadFlow(t *testing.T) {
 	tempDir, err := os.MkdirTemp("", "disk-provider-test-*")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer os.RemoveAll(tempDir)
 
 	provider, err := diskprovider.NewDiskProvider(diskOptions(tempDir, ""))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer provider.Close()
 
 	ctx := context.Background()
@@ -89,52 +90,52 @@ func TestDiskProviderUploadDownloadFlow(t *testing.T) {
 
 	reader := strings.NewReader(content)
 	uploadResult, err := provider.Upload(ctx, reader, uploadOpts)
-	require.NoError(t, err)
-	require.NotNil(t, uploadResult)
-	assert.Equal(t, uploadOpts.FileName, uploadResult.Key)
+	assert.NilError(t, err)
+	assert.Assert(t, uploadResult != nil)
+	assert.Check(t, is.Equal(uploadOpts.FileName, uploadResult.Key))
 
 	fullPath := filepath.Join(tempDir, uploadResult.Key)
 	_, err = os.Stat(fullPath)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
-	downloadResult, err := provider.Download(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: uploadResult.Key}}, &storagetypes.DownloadFileOptions{})
-	require.NoError(t, err)
-	require.NotNil(t, downloadResult)
-	assert.Equal(t, []byte(content), downloadResult.File)
+	downloadResult, err := provider.Download(ctx, &storagetypes.File{Key: uploadResult.Key}, &storagetypes.DownloadFileOptions{})
+	assert.NilError(t, err)
+	assert.Assert(t, downloadResult != nil)
+	assert.Check(t, is.DeepEqual([]byte(content), downloadResult.File))
 
-	exists, err := provider.Exists(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: uploadResult.Key}})
-	assert.NoError(t, err)
-	assert.True(t, exists)
+	exists, err := provider.Exists(ctx, &storagetypes.File{Key: uploadResult.Key})
+	assert.Check(t, err)
+	assert.Check(t, exists)
 
-	err = provider.Delete(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: uploadResult.Key}}, &storagetypes.DeleteFileOptions{})
-	assert.NoError(t, err)
+	err = provider.Delete(ctx, &storagetypes.File{Key: uploadResult.Key}, &storagetypes.DeleteFileOptions{})
+	assert.Check(t, err)
 
 	_, err = os.Stat(fullPath)
-	assert.True(t, os.IsNotExist(err))
+	assert.Check(t, os.IsNotExist(err))
 }
 
 func TestDiskProviderGetPresignedURL(t *testing.T) {
 	tempDir, err := os.MkdirTemp("", "disk-provider-test-*")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer os.RemoveAll(tempDir)
 
 	provider, err := diskprovider.NewDiskProvider(diskOptions(tempDir, "http://localhost:8080/files"))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer provider.Close()
 
-	file := &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "test-file.txt"}}
+	file := &storagetypes.File{Key: "test-file.txt"}
 	url, err := provider.GetPresignedURL(context.Background(), file, &storagetypes.PresignedURLOptions{Duration: time.Hour})
-	require.NoError(t, err)
-	assert.Contains(t, url, "http://localhost:8080/files/test-file.txt")
+	assert.NilError(t, err)
+	assert.Check(t, is.Contains(url, "http://localhost:8080/files/test-file.txt"))
 }
 
 func TestDiskProviderListObjects(t *testing.T) {
 	tempDir, err := os.MkdirTemp("", "disk-provider-test-*")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer os.RemoveAll(tempDir)
 
 	provider, err := diskprovider.NewDiskProvider(diskOptions(tempDir, ""))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer provider.Close()
 
 	ctx := context.Background()
@@ -153,32 +154,32 @@ func TestDiskProviderListObjects(t *testing.T) {
 			FolderDestination: upload.folder,
 			ContentType:       "application/json",
 		})
-		require.NoError(t, err)
+		assert.NilError(t, err)
 	}
 
 	keys, err := provider.ListObjects(ctx, "imports/", 0)
-	require.NoError(t, err)
-	assert.ElementsMatch(t, []string{"imports/a.json", "imports/b.json"}, keys)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual([]string{"imports/a.json", "imports/b.json"}, slices.Sorted(slices.Values(keys))))
 
 	keys, err = provider.ListObjects(ctx, "", 2)
-	require.NoError(t, err)
-	assert.Len(t, keys, 2)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(keys, 2))
 
 	keys, err = provider.ListObjects(ctx, "missing/", 0)
-	require.NoError(t, err)
-	assert.Empty(t, keys)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(keys, 0))
 }
 
 func TestDiskProviderExistsMissingFile(t *testing.T) {
 	tempDir, err := os.MkdirTemp("", "disk-provider-test-*")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer os.RemoveAll(tempDir)
 
 	provider, err := diskprovider.NewDiskProvider(diskOptions(tempDir, ""))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer provider.Close()
 
-	exists, err := provider.Exists(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "missing.txt"}})
-	assert.NoError(t, err)
-	assert.False(t, exists)
+	exists, err := provider.Exists(context.Background(), &storagetypes.File{Key: "missing.txt"})
+	assert.Check(t, err)
+	assert.Check(t, !exists)
 }

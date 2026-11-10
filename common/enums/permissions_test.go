@@ -4,18 +4,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestPermissionValues(t *testing.T) {
 	expected := []string{"EDITOR", "VIEWER", "BLOCKED", "CREATOR"}
 	values := Permission("").Values()
 
-	assert.Equal(t, len(expected), len(values))
+	assert.Check(t, is.Equal(len(expected), len(values)))
 
 	for i, v := range values {
-		assert.Equal(t, expected[i], v)
+		assert.Check(t, is.Equal(expected[i], v))
 	}
 }
 
@@ -31,7 +31,7 @@ func TestPermissionString(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		assert.Equal(t, test.expected, test.permission.String())
+		assert.Check(t, is.Equal(test.expected, test.permission.String()))
 	}
 }
 
@@ -49,7 +49,7 @@ func TestToPermission(t *testing.T) {
 
 	for _, test := range tests {
 		result := ToPermission(test.input)
-		assert.Equal(t, test.expected, result)
+		assert.Check(t, is.DeepEqual(test.expected, result))
 	}
 }
 
@@ -68,13 +68,13 @@ func TestPermissionMarshalGQL(t *testing.T) {
 		var writer strings.Builder
 		test.permission.MarshalGQL(&writer)
 
-		assert.Equal(t, test.expected, writer.String())
+		assert.Check(t, is.Equal(test.expected, writer.String()))
 	}
 }
 
 func TestPermissionUnmarshalGQL(t *testing.T) {
 	tests := []struct {
-		input    interface{}
+		input    any
 		expected Permission
 		hasError bool
 	}{
@@ -89,10 +89,10 @@ func TestPermissionUnmarshalGQL(t *testing.T) {
 		var p Permission
 		err := p.UnmarshalGQL(test.input)
 		if test.hasError {
-			require.Error(t, err)
+			assert.Assert(t, err != nil)
 		} else {
-			require.NoError(t, err)
-			assert.Equal(t, test.expected, p)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(test.expected, p))
 		}
 	}
 }

@@ -7,7 +7,6 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -332,7 +331,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 				TrustCenterID:          &trustCenter.ID,
 				Tags:                   []string{"test", "document"},
 				Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
-				WatermarkingEnabled:    lo.ToPtr(false),
+				WatermarkingEnabled:    new(false),
 			},
 			file:   createPDFUpload(),
 			client: suite.Client.API,
@@ -346,7 +345,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 				TrustCenterID:          &trustCenter.ID,
 				Tags:                   []string{"test", "document"},
 				Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
-				WatermarkingEnabled:    lo.ToPtr(true),
+				WatermarkingEnabled:    new(true),
 			},
 			file:   createPDFUpload(),
 			client: suite.Client.API,
@@ -373,7 +372,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 				TrustCenterID:          &trustCenter.ID,
 				Tags:                   []string{"test", "document"},
 				Visibility:             &enums.TrustCenterDocumentVisibilityProtected,
-				WatermarkingEnabled:    lo.ToPtr(true),
+				WatermarkingEnabled:    new(true),
 			},
 			file:   createPDFUpload(),
 			client: suite.Client.API,
@@ -399,7 +398,7 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 				TrustCenterDocKindName: &docKind.Name,
 				Tags:                   []string{"test", "document"},
 				Visibility:             &enums.TrustCenterDocumentVisibilityNotVisible,
-				WatermarkingEnabled:    lo.ToPtr(true),
+				WatermarkingEnabled:    new(true),
 			},
 			file:   createPDFUpload(),
 			client: suite.Client.API,
@@ -652,7 +651,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 			client: suite.Client.API,
 			ctx:    tcOrg.Owner.UserCtx,
 			where: &testclient.TrustCenterDocWhereInput{
-				Title: lo.ToPtr("non-existent-title"),
+				Title: new("non-existent-title"),
 			},
 			expectedResults: 0,
 		},
@@ -768,7 +767,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			name:             "happy path, update title",
 			trustCenterDocID: trustCenterDoc.ID,
 			request: testclient.UpdateTrustCenterDocInput{
-				Title: lo.ToPtr("Updated Document Title"),
+				Title: new("Updated Document Title"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.Admin.UserCtx,
@@ -787,7 +786,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			name:             "happy path, update category",
 			trustCenterDocID: trustCenterDoc.ID,
 			request: testclient.UpdateTrustCenterDocInput{
-				TrustCenterDocKindName: lo.ToPtr("UpdatedCategory"),
+				TrustCenterDocKindName: new("UpdatedCategory"),
 			},
 			client: suite.Client.API,
 			ctx:    tcOrg.SuperAdmin.UserCtx,
@@ -805,8 +804,8 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			name:             "happy path, update multiple fields",
 			trustCenterDocID: trustCenterDoc.ID,
 			request: testclient.UpdateTrustCenterDocInput{
-				Title:                  lo.ToPtr("Multi-field Update Title"),
-				TrustCenterDocKindName: lo.ToPtr("MultiCategory"),
+				Title:                  new("Multi-field Update Title"),
+				TrustCenterDocKindName: new("MultiCategory"),
 				Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 				Tags:                   []string{"multi", "update"},
 			},
@@ -817,7 +816,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			name:             "happy path, using personal access token",
 			trustCenterDocID: trustCenterDoc.ID,
 			request: testclient.UpdateTrustCenterDocInput{
-				Title: lo.ToPtr("PAT Updated Title"),
+				Title: new("PAT Updated Title"),
 			},
 			client: tcOrg.AdminAPIClient,
 			ctx:    context.Background(),
@@ -826,7 +825,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			name:             "not authorized, view only user",
 			trustCenterDocID: trustCenterDoc.ID,
 			request: testclient.UpdateTrustCenterDocInput{
-				Title: lo.ToPtr("Unauthorized Update"),
+				Title: new("Unauthorized Update"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Member.UserCtx,
@@ -836,7 +835,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			name:             "not authorized, different org user",
 			trustCenterDocID: trustCenterDoc.ID,
 			request: testclient.UpdateTrustCenterDocInput{
-				Title: lo.ToPtr("Unauthorized Update"),
+				Title: new("Unauthorized Update"),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
@@ -846,7 +845,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			name:             "trust center doc not found",
 			trustCenterDocID: "non-existent-id",
 			request: testclient.UpdateTrustCenterDocInput{
-				Title: lo.ToPtr("Update Non-existent"),
+				Title: new("Update Non-existent"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg.Owner.UserCtx,
@@ -983,7 +982,7 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 			Title:                  "Public Watermarked Document",
 			TrustCenterDocKindName: &docKind.Name,
 			TrustCenterID:          &trustCenter.ID,
-			WatermarkingEnabled:    lo.ToPtr(true),
+			WatermarkingEnabled:    new(true),
 			Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 		}
 
@@ -1018,7 +1017,7 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 		th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*watermarkedFile})
 
 		input := testclient.UpdateTrustCenterDocInput{
-			Title: lo.ToPtr("Updated with Watermarked File"),
+			Title: new("Updated with Watermarked File"),
 		}
 
 		resp, err := suite.Client.API.UpdateTrustCenterDoc(tcOrg.Owner.UserCtx, doc.ID, input, nil, watermarkedFile)
@@ -1573,7 +1572,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 	}{
 		{
 			name:                    "watermarkingEnabled explicitly set to false should override global config (true)",
-			watermarkingEnabled:     lo.ToPtr(false),
+			watermarkingEnabled:     new(false),
 			expectedWatermarking:    false,
 			expectedWatermarkStatus: enums.WatermarkStatusDisabled,
 		},
@@ -1585,7 +1584,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 		},
 		{
 			name:                    "watermarkingEnabled explicitly set to true should remain true",
-			watermarkingEnabled:     lo.ToPtr(true),
+			watermarkingEnabled:     new(true),
 			expectedWatermarking:    true,
 			expectedWatermarkStatus: enums.WatermarkStatusPending,
 		},
@@ -1631,7 +1630,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 			Title:                  "Test Document",
 			TrustCenterDocKindName: &docKind.Name,
 			TrustCenterID:          &trustCenter.ID,
-			WatermarkingEnabled:    lo.ToPtr(false),
+			WatermarkingEnabled:    new(false),
 		}
 
 		resp, err := suite.Client.API.CreateTrustCenterDoc(tcOrg.Owner.UserCtx, input, *file)
@@ -1690,13 +1689,13 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 			},
 			{
 				name:                 "doc with watermarking_enabled=true should be enabled",
-				watermarkingEnabled:  lo.ToPtr(true),
+				watermarkingEnabled:  new(true),
 				expectedWatermarking: true,
 				description:          "Explicitly enabled should remain enabled",
 			},
 			{
 				name:                 "doc with watermarking_enabled=false should override global config and be disabled",
-				watermarkingEnabled:  lo.ToPtr(false),
+				watermarkingEnabled:  new(false),
 				expectedWatermarking: false,
 				description:          "Individual doc can override global config to disable watermarking",
 			},
@@ -1750,13 +1749,13 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 			},
 			{
 				name:                 "doc with watermarking_enabled=false should be disabled",
-				watermarkingEnabled:  lo.ToPtr(false),
+				watermarkingEnabled:  new(false),
 				expectedWatermarking: false,
 				description:          "Explicitly disabled should remain disabled",
 			},
 			{
 				name:                 "doc with watermarking_enabled=true should override global config and be enabled",
-				watermarkingEnabled:  lo.ToPtr(true),
+				watermarkingEnabled:  new(true),
 				expectedWatermarking: true,
 				description:          "Individual doc can override global config to enable watermarking",
 			},
@@ -1812,7 +1811,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		Title:                  "Test Document with Watermarking",
 		TrustCenterDocKindName: &docKind.Name,
 		TrustCenterID:          &trustCenter.ID,
-		WatermarkingEnabled:    lo.ToPtr(true),
+		WatermarkingEnabled:    new(true),
 	}
 
 	createResp, err := suite.Client.API.CreateTrustCenterDoc(tcOrg.Owner.UserCtx, createInput, *file)
@@ -1827,7 +1826,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 
 	t.Run("attempting to set watermarkingEnabled to false should be prevented", func(t *testing.T) {
 		updateInput := testclient.UpdateTrustCenterDocInput{
-			WatermarkingEnabled: lo.ToPtr(false),
+			WatermarkingEnabled: new(false),
 		}
 
 		updateResp, err := suite.Client.API.UpdateTrustCenterDoc(tcOrg.Owner.UserCtx, docID, updateInput, nil, nil)
@@ -1841,7 +1840,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 
 	t.Run("updating other fields should not affect watermarkingEnabled", func(t *testing.T) {
 		updateInput := testclient.UpdateTrustCenterDocInput{
-			Title: lo.ToPtr("Updated Title"),
+			Title: new("Updated Title"),
 		}
 
 		updateResp, err := suite.Client.API.UpdateTrustCenterDoc(tcOrg.Owner.UserCtx, docID, updateInput, nil, nil)
@@ -1873,7 +1872,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 			Title:                  "Test Document without Watermarking",
 			TrustCenterDocKindName: &docKind.Name,
 			TrustCenterID:          &trustCenter.ID,
-			WatermarkingEnabled:    lo.ToPtr(false),
+			WatermarkingEnabled:    new(false),
 		}
 
 		createResp2, err := suite.Client.API.CreateTrustCenterDoc(tcOrg.Owner.UserCtx, createInput2, *file2)
@@ -1887,7 +1886,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		assert.Check(t, is.Equal(enums.WatermarkStatusDisabled, dbDoc2.WatermarkStatus))
 
 		updateInput := testclient.UpdateTrustCenterDocInput{
-			WatermarkingEnabled: lo.ToPtr(true),
+			WatermarkingEnabled: new(true),
 		}
 
 		updateResp, err := suite.Client.API.UpdateTrustCenterDoc(tcOrg.Owner.UserCtx, doc2ID, updateInput, nil, nil)
@@ -1900,7 +1899,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		assert.Check(t, is.Equal(enums.WatermarkStatusPending, dbDoc2.WatermarkStatus))
 
 		updateInput2 := testclient.UpdateTrustCenterDocInput{
-			WatermarkingEnabled: lo.ToPtr(false),
+			WatermarkingEnabled: new(false),
 		}
 
 		updateResp2, err := suite.Client.API.UpdateTrustCenterDoc(tcOrg.Owner.UserCtx, doc2ID, updateInput2, nil, nil)

@@ -3,7 +3,11 @@
         "config:recommended"
     ],
     "postUpdateOptions": [
-        "gomodTidy"
+        "gomodTidyAll",
+        "gomodUpdateImportPaths"
+    ],
+    "gitIgnoredAuthors": [
+        "*bender*"
     ],
     "labels": [
         "dependencies"

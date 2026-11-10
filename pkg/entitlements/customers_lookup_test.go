@@ -4,9 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/entitlements/mocks"
@@ -34,27 +35,27 @@ func TestGetCustomerByStripeID(t *testing.T) {
 	sc, _ := setupCustomerClient(expected, nil)
 
 	cust, err := sc.GetCustomerByStripeID(ctx, "cus_123")
-	assert.NoError(t, err)
-	assert.Equal(t, expected, cust)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expected, cust))
 }
 
 func TestGetCustomerByStripeIDMissingID(t *testing.T) {
 	sc, _ := setupCustomerClient(nil, nil)
 	cust, err := sc.GetCustomerByStripeID(context.Background(), "")
-	assert.ErrorIs(t, err, entitlements.ErrCustomerIDRequired)
-	assert.Nil(t, cust)
+	assert.Check(t, is.ErrorIs(err, entitlements.ErrCustomerIDRequired))
+	assert.Check(t, is.Nil(cust))
 }
 
 func TestGetCustomerByStripeIDNotFound(t *testing.T) {
 	sc, _ := setupCustomerClient(nil, &stripe.Error{Code: stripe.ErrorCodeMissing})
 	cust, err := sc.GetCustomerByStripeID(context.Background(), "cus_404")
-	assert.ErrorIs(t, err, entitlements.ErrCustomerNotFound)
-	assert.Nil(t, cust)
+	assert.Check(t, is.ErrorIs(err, entitlements.ErrCustomerNotFound))
+	assert.Check(t, is.Nil(cust))
 }
 
 func TestGetCustomerByStripeIDLookupErr(t *testing.T) {
-	sc, _ := setupCustomerClient(nil, assert.AnError)
+	sc, _ := setupCustomerClient(nil, errMock)
 	cust, err := sc.GetCustomerByStripeID(context.Background(), "cus_1")
-	assert.ErrorIs(t, err, entitlements.ErrCustomerLookupFailed)
-	assert.Nil(t, cust)
+	assert.Check(t, is.ErrorIs(err, entitlements.ErrCustomerLookupFailed))
+	assert.Check(t, is.Nil(cust))
 }

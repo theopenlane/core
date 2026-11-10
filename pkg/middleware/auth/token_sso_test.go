@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -35,14 +36,14 @@ func TestAPITokenSSOAuthorization(t *testing.T) {
 	}
 
 	_, _, err := isValidAPIToken(context.Background(), (*generated.Client)(nil), tok.Token)
-	assert.ErrorIs(t, err, ErrTokenSSORequired)
+	assert.Check(t, is.ErrorIs(err, ErrTokenSSORequired))
 
 	tok.SSOAuthorizations = models.SSOAuthorizationMap{"org": time.Now()}
 
 	au, id, err := isValidAPIToken(context.Background(), (*generated.Client)(nil), tok.Token)
-	assert.NoError(t, err)
-	assert.Equal(t, tok.ID, id)
-	assert.Equal(t, []string{tok.OwnerID}, au.OrganizationIDs)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(tok.ID, id))
+	assert.Check(t, is.DeepEqual([]string{tok.OwnerID}, au.OrganizationIDs))
 }
 
 func TestPATTokenSSOAuthorization(t *testing.T) {
@@ -95,22 +96,22 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 	}
 
 	_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
-	assert.ErrorIs(t, err, ErrTokenSSORequired)
+	assert.Check(t, is.ErrorIs(err, ErrTokenSSORequired))
 
 	pat.SSOAuthorizations = models.SSOAuthorizationMap{org.ID: time.Now()}
 
 	au, id, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
-	assert.NoError(t, err)
-	assert.Equal(t, pat.ID, id)
-	assert.Equal(t, user.ID, au.SubjectID)
-	assert.Equal(t, []string{org.ID}, au.OrganizationIDs)
-	assert.Empty(t, au.OrganizationID)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(pat.ID, id))
+	assert.Check(t, is.Equal(user.ID, au.SubjectID))
+	assert.Check(t, is.DeepEqual([]string{org.ID}, au.OrganizationIDs))
+	assert.Check(t, is.Len(au.OrganizationID, 0))
 
 	userDefaultOrg := org.ID
 
 	au, id, err = isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, userDefaultOrg)
-	assert.NoError(t, err)
-	assert.Equal(t, org.ID, au.OrganizationID)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(org.ID, au.OrganizationID))
 }
 
 // TestPATTokenSSOExemptOwner verifies that when the token owner is SSO-exempt for the organization
@@ -161,8 +162,8 @@ func TestPATTokenSSOExemptOwner(t *testing.T) {
 	}
 
 	au, id, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
-	assert.NoError(t, err)
-	assert.Equal(t, pat.ID, id)
-	assert.Equal(t, user.ID, au.SubjectID)
-	assert.Equal(t, []string{org.ID}, au.OrganizationIDs)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(pat.ID, id))
+	assert.Check(t, is.Equal(user.ID, au.SubjectID))
+	assert.Check(t, is.DeepEqual([]string{org.ID}, au.OrganizationIDs))
 }

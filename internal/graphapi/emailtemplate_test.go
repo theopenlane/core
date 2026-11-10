@@ -10,8 +10,6 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -200,9 +198,9 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 				Key:             emaildef.BrandedMessageOp.Name(),
 				Name:            "Email Template Name " + ulids.New().String(),
 				TemplateContext: &enums.TemplateContextTransactional,
-				Description:     lo.ToPtr("This is a description for the email template"),
-				Active:          lo.ToPtr(false),
-				Version:         lo.ToPtr(int64(1)),
+				Description:     new("This is a description for the email template"),
+				Active:          new(false),
+				Version:         new(int64(1)),
 				Defaults: map[string]any{
 					"subject":    "{{ .companyName }} — Welcome",
 					"title":      "Welcome to {{ .companyName }}",
@@ -324,7 +322,7 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateEmailTemplateInput{
-				Name: lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
+				Name: new("Updated Email Template Name " + ulids.New().String()),
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -332,9 +330,9 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 		{
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateEmailTemplateInput{
-				Name:        lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
-				Description: lo.ToPtr("Updated description for the email template"),
-				Active:      lo.ToPtr(false),
+				Name:        new("Updated Email Template Name " + ulids.New().String()),
+				Description: new("Updated description for the email template"),
+				Active:      new(false),
 			},
 			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
@@ -342,7 +340,7 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 		{
 			name: "update not allowed, not enough permissions",
 			request: testclient.UpdateEmailTemplateInput{
-				Name: lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
+				Name: new("Updated Email Template Name " + ulids.New().String()),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -351,7 +349,7 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateEmailTemplateInput{
-				Name: lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
+				Name: new("Updated Email Template Name " + ulids.New().String()),
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,

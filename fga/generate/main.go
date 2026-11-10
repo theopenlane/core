@@ -14,7 +14,7 @@ import (
 
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/v2/fga/generate/modelparse"
-	"github.com/theopenlane/core/v2/fga/generate/schemaparse"
+	"github.com/theopenlane/core/v2/fga/generate/schemainfo"
 )
 
 const (
@@ -37,15 +37,15 @@ const (
 // this generator looks at all the ent schemas and their policy functions to determine the organization-level CRUD access for each schema and generates a crud.fga file that defines the appropriate relations for each schema based on that access. This allows us to have a consistent set of permissions for each schema in FGA that are automatically generated based on the presence of certain rules in the ent policies, which reduces the likelihood of human error in defining permissions and ensures that all schemas have a consistent permission structure in FGA.
 func main() {
 	var (
-		schemaDir = flag.String("schema-dir", "./internal/ent/schema", "path to ent schema directory")
-		rolesFile = flag.String("roles-file", "fga/model/roles/roles.fga", "path to FGA roles file for parsing additional CRUD access annotations")
-		outFile   = flag.String("out", "fga/model/generated/crud.fga", "output FGA file")
+		schemasFile = flag.String("schemas", "fga/generate/schemas.json", "path to the schema snapshot written by ent generation")
+		rolesFile   = flag.String("roles-file", "fga/model/roles/roles.fga", "path to FGA roles file for parsing additional CRUD access annotations")
+		outFile     = flag.String("out", "fga/model/generated/crud.fga", "output FGA file")
 	)
 	flag.Parse()
 
-	schemas, err := schemaparse.GetSchemas(*schemaDir)
+	schemas, err := schemainfo.Read(*schemasFile)
 	if err != nil {
-		log.Fatalf("error finding schemas: %v", err)
+		log.Fatalf("error reading schemas: %v", err)
 	}
 
 	roles, err := modelparse.ParseRoleAnnotations(*rolesFile)
@@ -177,7 +177,7 @@ func getCrudRelation(relation, object string) string {
 	return fmt.Sprintf("%s%s", relation, object)
 }
 
-func getEntry(relation string, si schemaparse.SchemaInfo, additionalRelations ...string) string {
+func getEntry(relation string, si schemainfo.SchemaInfo, additionalRelations ...string) string {
 	relForType := defaultRelations
 	if !si.HasGroupCreator {
 		relForType = defaultRelationsNoGroup

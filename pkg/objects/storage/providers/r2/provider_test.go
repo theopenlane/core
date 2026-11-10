@@ -16,10 +16,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	awss3 "github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -69,14 +69,14 @@ func TestNewR2Provider(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			provider, err := r2provider.NewR2Provider(tt.options)
 			if tt.expectError {
-				assert.Error(t, err)
-				assert.Nil(t, provider)
+				assert.Check(t, err != nil)
+				assert.Check(t, is.Nil(provider))
 			} else {
 				if err != nil {
 					t.Skip("Skipping test due to missing R2-compatible environment")
 				}
-				assert.NotNil(t, provider)
-				assert.NoError(t, provider.Close())
+				assert.Check(t, provider != nil)
+				assert.Check(t, provider.Close())
 			}
 		})
 	}
@@ -90,13 +90,13 @@ func TestR2ProviderMethods(t *testing.T) {
 	defer provider.Close()
 
 	t.Run("ProviderType", func(t *testing.T) {
-		assert.Equal(t, storagetypes.R2Provider, provider.ProviderType())
+		assert.Check(t, is.Equal(storagetypes.R2Provider, provider.ProviderType()))
 	})
 
 	t.Run("GetScheme", func(t *testing.T) {
 		scheme := provider.GetScheme()
-		assert.NotNil(t, scheme)
-		assert.Equal(t, "r2://", *scheme)
+		assert.Check(t, scheme != nil)
+		assert.Check(t, is.Equal("r2://", *scheme))
 	})
 }
 
@@ -107,12 +107,12 @@ func TestR2ProviderPresignedURL(t *testing.T) {
 	}
 	defer provider.Close()
 
-	file := &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "test-file.txt"}}
+	file := &storagetypes.File{Key: "test-file.txt"}
 	url, err := provider.GetPresignedURL(context.Background(), file, &storagetypes.PresignedURLOptions{Duration: time.Minute})
 	if err != nil {
 		t.Skip("Skipping presigned URL test without R2 environment")
 	}
-	assert.True(t, strings.Contains(url, "test-file.txt"))
+	assert.Check(t, strings.Contains(url, "test-file.txt"))
 }
 
 func TestNewR2ProviderFromCredentials(t *testing.T) {
@@ -124,7 +124,7 @@ func TestNewR2ProviderFromCredentials(t *testing.T) {
 		t.Skip("Skipping test due to missing R2-compatible environment")
 	}
 
-	assert.NotNil(t, result.MustGet())
+	assert.Check(t, result.MustGet() != nil)
 }
 
 func TestR2Provider_Upload_Errors(t *testing.T) {
@@ -140,7 +140,7 @@ func TestR2Provider_Upload_Errors(t *testing.T) {
 			FileName: "",
 		}
 		_, err = provider.Upload(context.Background(), reader, uploadOpts)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -153,15 +153,13 @@ func TestR2Provider_Download_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		downloadOpts := &storagetypes.DownloadFileOptions{
 			FileName: "test.txt",
 		}
 		_, err = provider.Download(context.Background(), file, downloadOpts)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -174,12 +172,10 @@ func TestR2Provider_Delete_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		err = provider.Delete(context.Background(), file, nil)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -192,12 +188,10 @@ func TestR2Provider_Exists_Errors(t *testing.T) {
 		}
 
 		file := &storagetypes.File{
-			FileMetadata: storagetypes.FileMetadata{
-				Key: "",
-			},
+			Key: "",
 		}
 		_, err = provider.Exists(context.Background(), file)
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -210,7 +204,7 @@ func TestR2Provider_ListBuckets(t *testing.T) {
 		}
 
 		_, err = provider.ListBuckets()
-		assert.Error(t, err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -247,7 +241,7 @@ func TestR2ProviderPresignURLProxyDisabled(t *testing.T) {
 		AccessKeyID:     minioUser,
 		SecretAccessKey: minioSecret,
 	}, options)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	provider := providerInterface
 	t.Cleanup(func() { _ = provider.Close() })
 
@@ -256,28 +250,26 @@ func TestR2ProviderPresignURLProxyDisabled(t *testing.T) {
 		FileName:    "folder/object.txt",
 		ContentType: "text/plain",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	url, err := provider.GetPresignedURL(ctx, &storagetypes.File{
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket: minioBucket,
-			Key:    "folder/object.txt",
-		},
+		Bucket: minioBucket,
+		Key:    "folder/object.txt",
 	}, &storagetypes.PresignedURLOptions{Duration: time.Minute})
-	require.NoError(t, err)
-	require.True(t, strings.HasPrefix(url, "http://"), "expected upstream R2/S3 URL, got %q", url)
-	require.Contains(t, url, "X-Amz-Algorithm=AWS4-HMAC-SHA256", "URL should contain AWS signature")
-	require.Contains(t, url, "X-Amz-Credential=", "URL should contain AWS credentials")
-	require.Contains(t, url, "X-Amz-Signature=", "URL should contain AWS signature")
-	require.Contains(t, url, "folder/object.txt", "URL should contain object key")
+	assert.NilError(t, err)
+	assert.Assert(t, strings.HasPrefix(url, "http://"), "expected upstream R2/S3 URL, got %q", url)
+	assert.Assert(t, is.Contains(url, "X-Amz-Algorithm=AWS4-HMAC-SHA256"), "URL should contain AWS signature")
+	assert.Assert(t, is.Contains(url, "X-Amz-Credential="), "URL should contain AWS credentials")
+	assert.Assert(t, is.Contains(url, "X-Amz-Signature="), "URL should contain AWS signature")
+	assert.Assert(t, is.Contains(url, "folder/object.txt"), "URL should contain object key")
 
 	resp, err := http.Get(url)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
-	require.NoError(t, err)
-	require.Equal(t, http.StatusOK, resp.StatusCode)
-	require.Equal(t, string(content), string(body))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(http.StatusOK, resp.StatusCode))
+	assert.Assert(t, is.Equal(string(content), string(body)))
 }
 
 func TestR2ProviderPresignURLProxyEnabled(t *testing.T) {
@@ -312,7 +304,7 @@ func TestR2ProviderPresignURLProxyEnabled(t *testing.T) {
 		AccessKeyID:     minioUser,
 		SecretAccessKey: minioSecret,
 	}, options)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	provider := providerInterface
 	t.Cleanup(func() { _ = provider.Close() })
 
@@ -321,31 +313,29 @@ func TestR2ProviderPresignURLProxyEnabled(t *testing.T) {
 		FileName:    "folder/object.txt",
 		ContentType: "text/plain",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILER2BBBBBB",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket:  minioBucket,
-			Key:     "folder/object.txt",
-			FullURI: "r2://" + minioBucket + "/folder/object.txt",
-		},
+		ID:      "01HZZTESTFILER2BBBBBB",
+		Bucket:  minioBucket,
+		Key:     "folder/object.txt",
+		FullURI: "r2://" + minioBucket + "/folder/object.txt",
 	}
 
 	secret := make([]byte, 128)
 	_, err = rand.Read(secret)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	url, err := proxy.GenerateDownloadURLWithSecret(file, secret, time.Minute, &storage.ProxyPresignConfig{
 		TokenManager: tm,
 		BaseURL:      baseURL,
 	})
-	require.NoError(t, err, "with proxy presign enabled, should generate proxy URL")
-	require.NotEmpty(t, url)
-	require.True(t, strings.HasPrefix(url, baseURL), "URL should start with BaseURL, got %q", url)
-	require.Contains(t, url, file.ID, "URL should contain file ID")
-	require.Contains(t, url, "token=", "URL should contain token parameter")
-	require.NotContains(t, url, "X-Amz-Algorithm", "proxy URL should not contain AWS signature parameters")
+	assert.NilError(t, err, "with proxy presign enabled, should generate proxy URL")
+	assert.Assert(t, len(url) > 0)
+	assert.Assert(t, strings.HasPrefix(url, baseURL), "URL should start with BaseURL, got %q", url)
+	assert.Assert(t, is.Contains(url, file.ID), "URL should contain file ID")
+	assert.Assert(t, is.Contains(url, "token="), "URL should contain token parameter")
+	assert.Assert(t, !strings.Contains(url, "X-Amz-Algorithm"), "proxy URL should not contain AWS signature parameters")
 }
 
 func startMinio(t *testing.T, ctx context.Context) (string, func(context.Context, ...testcontainers.TerminateOption) error) {
@@ -363,12 +353,12 @@ func startMinio(t *testing.T, ctx context.Context) (string, func(context.Context
 	}
 
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{ContainerRequest: req, Started: true})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	host, err := container.Host(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	port, err := container.MappedPort(ctx, "9000/tcp")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	endpoint := "http://" + host + ":" + port.Port()
 	return endpoint, container.Terminate
@@ -389,22 +379,21 @@ func createBucket(t *testing.T, ctx context.Context, endpoint, bucket string) {
 
 	_, err := client.CreateBucket(ctx, &awss3.CreateBucketInput{Bucket: aws.String(bucket)})
 	if err != nil {
-		var existsErr *types.BucketAlreadyOwnedByYou
-		if !errors.As(err, &existsErr) {
-			require.NoError(t, err)
+		if _, ok := errors.AsType[*types.BucketAlreadyOwnedByYou](err); !ok {
+			assert.NilError(t, err)
 		}
 	}
 
 	waitCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	waiter := awss3.NewBucketExistsWaiter(client)
-	require.NoError(t, waiter.Wait(waitCtx, &awss3.HeadBucketInput{Bucket: aws.String(bucket)}, 1*time.Second))
+	assert.NilError(t, waiter.Wait(waitCtx, &awss3.HeadBucketInput{Bucket: aws.String(bucket)}, 1*time.Second))
 }
 
 func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 	_, key, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	conf := tokens.Config{
 		Audience:        "http://localhost:17608",
 		Issuer:          "http://localhost:17608",
@@ -413,6 +402,6 @@ func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 		RefreshOverlap:  -15 * time.Minute,
 	}
 	tm, err := tokens.NewWithKey(key, conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	return tm
 }

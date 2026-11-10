@@ -3,9 +3,11 @@ package celx
 import (
 	"context"
 	"testing"
+	"time"
 
-	"github.com/google/cel-go/cel"
-	"github.com/stretchr/testify/assert"
+	"cel.dev/cel-go/cel"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestParagraphs(t *testing.T) {
@@ -57,26 +59,43 @@ func TestParagraphs(t *testing.T) {
 	}
 
 	env, err := NewEnv(EnvConfig{}, cel.Variable("s", cel.StringType))
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	eval := NewEvaluator(env, EvalConfig{})
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			out, _, err := eval.Evaluate(context.Background(), "paragraphs(s)", map[string]any{"s": tt.input})
-			assert.NoError(t, err)
-			assert.Equal(t, tt.want, out.Value())
+			assert.Check(t, err)
+			assert.Check(t, is.Equal(tt.want, out.Value()))
 		})
 	}
 }
 
 func TestParagraphsNull(t *testing.T) {
 	env, err := NewEnv(EnvConfig{}, cel.Variable("s", cel.DynType))
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	eval := NewEvaluator(env, EvalConfig{})
 
 	out, _, err := eval.Evaluate(context.Background(), "paragraphs(s)", map[string]any{"s": nil})
-	assert.NoError(t, err)
-	assert.Equal(t, "", out.Value())
+	assert.Check(t, err)
+	assert.Check(t, is.Equal("", out.Value()))
+}
+
+func TestMerge(t *testing.T) {
+	env, err := NewEnv(EnvConfig{}, cel.Variable("payload", cel.DynType))
+	assert.NilError(t, err)
+
+	eval := NewEvaluator(env, EvalConfig{Timeout: time.Second})
+
+	out, err := eval.EvaluateJSONMap(context.Background(), `merge(payload, {"status": "DRAFT", "approver_group_name": "Admins"})`, map[string]any{
+		"payload": map[string]any{"name": "policy", "status": "PUBLISHED"},
+	})
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(map[string]any{"name": "policy", "status": "DRAFT", "approver_group_name": "Admins"}, out))
+
+	out, err = eval.EvaluateJSONMap(context.Background(), `merge(payload, {"status": "DRAFT"})`, map[string]any{"payload": nil})
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(map[string]any{"status": "DRAFT"}, out))
 }

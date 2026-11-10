@@ -103,6 +103,11 @@ func IsSelfAccessType(objectType string) bool {
 }
 
 func (q *ActionPlanQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -251,6 +256,11 @@ func (m *ActionPlanMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *AssessmentQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -399,6 +409,11 @@ func (m *AssessmentMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *AssessmentResponseQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -547,6 +562,11 @@ func (m *AssessmentResponseMutation) CheckAccessForDelete(ctx context.Context) e
 }
 
 func (q *AssetQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -695,6 +715,11 @@ func (m *AssetMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *CampaignQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -843,6 +868,11 @@ func (m *CampaignMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *CampaignTargetQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -991,6 +1021,11 @@ func (m *CampaignTargetMutation) CheckAccessForDelete(ctx context.Context) error
 }
 
 func (q *CheckResultQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -1139,6 +1174,11 @@ func (m *CheckResultMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *ControlQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -1287,6 +1327,11 @@ func (m *ControlMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *ControlImplementationQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -1435,6 +1480,11 @@ func (m *ControlImplementationMutation) CheckAccessForDelete(ctx context.Context
 }
 
 func (q *ControlObjectiveQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -1583,6 +1633,11 @@ func (m *ControlObjectiveMutation) CheckAccessForDelete(ctx context.Context) err
 }
 
 func (q *DiscussionQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -1731,6 +1786,11 @@ func (m *DiscussionMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -1879,6 +1939,11 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *EmailTemplateQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -2027,6 +2092,11 @@ func (m *EmailTemplateMutation) CheckAccessForDelete(ctx context.Context) error 
 }
 
 func (q *EntityQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -2175,6 +2245,11 @@ func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *EvidenceQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -2323,6 +2398,11 @@ func (m *EvidenceMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *FileQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -2471,6 +2551,11 @@ func (m *FileMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *FindingQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -2619,6 +2704,11 @@ func (m *FindingMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *GroupQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -2767,6 +2857,11 @@ func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *GroupMembershipQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -2955,6 +3050,11 @@ func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) erro
 }
 
 func (q *GroupSettingQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -3143,6 +3243,11 @@ func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *IdentityHolderQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -3291,6 +3396,11 @@ func (m *IdentityHolderMutation) CheckAccessForDelete(ctx context.Context) error
 }
 
 func (q *InternalPolicyQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -3439,6 +3549,11 @@ func (m *InternalPolicyMutation) CheckAccessForDelete(ctx context.Context) error
 }
 
 func (q *MappedControlQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -3587,6 +3702,11 @@ func (m *MappedControlMutation) CheckAccessForDelete(ctx context.Context) error 
 }
 
 func (q *NarrativeQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -3735,6 +3855,11 @@ func (m *NarrativeMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *NoteQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -3883,6 +4008,11 @@ func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *OrgMembershipQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -4071,6 +4201,11 @@ func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error 
 }
 
 func (q *OrganizationQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -4219,6 +4354,11 @@ func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *OrganizationBrandingSettingQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -4407,6 +4547,11 @@ func (m *OrganizationBrandingSettingMutation) CheckAccessForDelete(ctx context.C
 }
 
 func (q *OrganizationSettingQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -4595,6 +4740,11 @@ func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) 
 }
 
 func (q *PlatformQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -4743,6 +4893,11 @@ func (m *PlatformMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *ProcedureQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -4891,6 +5046,11 @@ func (m *ProcedureMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *ProgramQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -5039,6 +5199,11 @@ func (m *ProgramMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *ProgramMembershipQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -5227,6 +5392,11 @@ func (m *ProgramMembershipMutation) CheckAccessForDelete(ctx context.Context) er
 }
 
 func (q *RemediationQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -5375,6 +5545,11 @@ func (m *RemediationMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *ReportQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -5523,6 +5698,11 @@ func (m *ReportMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *ReportMembershipQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -5711,6 +5891,11 @@ func (m *ReportMembershipMutation) CheckAccessForDelete(ctx context.Context) err
 }
 
 func (q *ReviewQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -5859,6 +6044,11 @@ func (m *ReviewMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *RiskQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -6007,6 +6197,11 @@ func (m *RiskMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *ScanQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -6155,6 +6350,11 @@ func (m *ScanMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *SubcontrolQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -6303,6 +6503,11 @@ func (m *SubcontrolMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *SubprocessorQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -6451,6 +6656,11 @@ func (m *SubprocessorMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *SystemDetailQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -6599,6 +6809,11 @@ func (m *SystemDetailMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *TaskQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -6747,6 +6962,11 @@ func (m *TaskMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *TemplateQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -6895,6 +7115,11 @@ func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *TrustCenterQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -7043,6 +7268,11 @@ func (m *TrustCenterMutation) CheckAccessForDelete(ctx context.Context) error {
 }
 
 func (q *TrustCenterComplianceQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -7231,6 +7461,11 @@ func (m *TrustCenterComplianceMutation) CheckAccessForDelete(ctx context.Context
 }
 
 func (q *TrustCenterDocQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -7419,6 +7654,11 @@ func (m *TrustCenterDocMutation) CheckAccessForDelete(ctx context.Context) error
 }
 
 func (q *TrustCenterEntityQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -7607,6 +7847,11 @@ func (m *TrustCenterEntityMutation) CheckAccessForDelete(ctx context.Context) er
 }
 
 func (q *TrustCenterFAQQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -7795,6 +8040,11 @@ func (m *TrustCenterFAQMutation) CheckAccessForDelete(ctx context.Context) error
 }
 
 func (q *TrustCenterNDARequestQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -7943,6 +8193,11 @@ func (m *TrustCenterNDARequestMutation) CheckAccessForDelete(ctx context.Context
 }
 
 func (q *TrustCenterSettingQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -8131,6 +8386,11 @@ func (m *TrustCenterSettingMutation) CheckAccessForDelete(ctx context.Context) e
 }
 
 func (q *TrustCenterSubprocessorQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -8319,6 +8579,11 @@ func (m *TrustCenterSubprocessorMutation) CheckAccessForDelete(ctx context.Conte
 }
 
 func (q *TrustCenterWatermarkConfigQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -8507,6 +8772,11 @@ func (m *TrustCenterWatermarkConfigMutation) CheckAccessForDelete(ctx context.Co
 }
 
 func (q *VendorRiskScoreQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -8655,6 +8925,11 @@ func (m *VendorRiskScoreMutation) CheckAccessForDelete(ctx context.Context) erro
 }
 
 func (q *VulnerabilityQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -8803,6 +9078,11 @@ func (m *VulnerabilityMutation) CheckAccessForDelete(ctx context.Context) error 
 }
 
 func (q *WorkflowAssignmentQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -8951,6 +9231,11 @@ func (m *WorkflowAssignmentMutation) CheckAccessForDelete(ctx context.Context) e
 }
 
 func (q *WorkflowDefinitionQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -9099,6 +9384,11 @@ func (m *WorkflowDefinitionMutation) CheckAccessForDelete(ctx context.Context) e
 }
 
 func (q *WorkflowEventQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -9247,6 +9537,11 @@ func (m *WorkflowEventMutation) CheckAccessForDelete(ctx context.Context) error 
 }
 
 func (q *WorkflowInstanceQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {
@@ -9395,6 +9690,11 @@ func (m *WorkflowInstanceMutation) CheckAccessForDelete(ctx context.Context) err
 }
 
 func (q *WorkflowObjectRefQuery) CheckAccess(ctx context.Context) error {
+	// internal reads bypass the access check, which also stops the nested lookup below from recursing
+	if auth.IsInternalReadRequest(ctx) {
+		return privacy.Allowf("internal read request, bypassing auth check")
+	}
+
 	gCtx := graphql.GetFieldContext(ctx)
 
 	if gCtx == nil {

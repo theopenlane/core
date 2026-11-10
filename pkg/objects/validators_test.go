@@ -4,8 +4,10 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
+	"github.com/theopenlane/core/v2/pkg/pdftext"
 )
 
 func TestMimeTypeValidator(t *testing.T) {
@@ -38,7 +40,7 @@ func TestMimeTypeValidator(t *testing.T) {
 		},
 		{
 			name:           "valid mime type - multiple types",
-			validMimeTypes: []string{"application/pdf", "image/png", "text/plain"},
+			validMimeTypes: []string{pdftext.ContentType, "image/png", "text/plain"},
 			file: File{
 				FileMetadata: FileMetadata{
 					ContentType: "text/plain",
@@ -51,7 +53,7 @@ func TestMimeTypeValidator(t *testing.T) {
 			validMimeTypes: []string{"image/png", "image/jpeg"},
 			file: File{
 				FileMetadata: FileMetadata{
-					ContentType: "application/pdf",
+					ContentType: pdftext.ContentType,
 				},
 			},
 			expectError:   true,
@@ -97,13 +99,13 @@ func TestMimeTypeValidator(t *testing.T) {
 			err := validator(tt.file)
 
 			if tt.expectError {
-				require.Error(t, err)
-				assert.ErrorIs(t, err, ErrUnsupportedMimeType)
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.ErrorIs(err, ErrUnsupportedMimeType))
 				if tt.errorContains != "" {
-					assert.Contains(t, err.Error(), tt.errorContains)
+					assert.Check(t, is.Contains(err.Error(), tt.errorContains))
 				}
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -112,10 +114,8 @@ func TestMimeTypeValidator(t *testing.T) {
 func TestChainValidators(t *testing.T) {
 	t.Run("all validators pass", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-				Size:        1024,
-			},
+			ContentType: "image/png",
+			Size:        1024,
 		}
 
 		validator1 := MimeTypeValidator("image/png", "image/jpeg")
@@ -129,15 +129,13 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2)
 		err := chainedValidator(file)
 
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("first validator fails", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "application/pdf",
-				Size:        1024,
-			},
+			ContentType: pdftext.ContentType,
+			Size:        1024,
 		}
 
 		validator1 := MimeTypeValidator("image/png", "image/jpeg")
@@ -148,16 +146,14 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2)
 		err := chainedValidator(file)
 
-		require.Error(t, err)
-		assert.ErrorIs(t, err, ErrUnsupportedMimeType)
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, ErrUnsupportedMimeType))
 	})
 
 	t.Run("second validator fails", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-				Size:        3000,
-			},
+			ContentType: "image/png",
+			Size:        3000,
 		}
 
 		validator1 := MimeTypeValidator("image/png", "image/jpeg")
@@ -171,43 +167,37 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2)
 		err := chainedValidator(file)
 
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "file too large")
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "file too large"))
 	})
 
 	t.Run("empty validator chain", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-			},
+			ContentType: "image/png",
 		}
 
 		chainedValidator := ChainValidators()
 		err := chainedValidator(file)
 
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("single validator", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-			},
+			ContentType: "image/png",
 		}
 
 		validator := MimeTypeValidator("image/png")
 		chainedValidator := ChainValidators(validator)
 		err := chainedValidator(file)
 
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("multiple validators with custom logic", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "image/png",
-				Size:        1024,
-			},
+			ContentType:  "image/png",
+			Size:         1024,
 			OriginalName: "test.png",
 		}
 
@@ -228,15 +218,13 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2, validator3)
 		err := chainedValidator(file)
 
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("stops at first error", func(t *testing.T) {
 		file := File{
-			FileMetadata: FileMetadata{
-				ContentType: "application/pdf",
-				Size:        0,
-			},
+			ContentType: pdftext.ContentType,
+			Size:        0,
 		}
 
 		validationOrder := []string{}
@@ -253,8 +241,8 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2)
 		err := chainedValidator(file)
 
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "first error")
-		assert.Equal(t, []string{"validator1"}, validationOrder)
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "first error"))
+		assert.Check(t, is.DeepEqual([]string{"validator1"}, validationOrder))
 	})
 }

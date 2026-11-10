@@ -11,8 +11,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
@@ -22,26 +20,31 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
-	t := suite.T()
+func TestOrgInviteAcceptHandler(t *testing.T) {
+	suite := suite.setupTest(t).withTestUsers().withAPIClient()
 
 	// add handler
 	suite.registerTestHandler("GET", "invite", suite.h.OrganizationInviteAccept)
 
 	// bypass auth
 	ctx := context.Background()
-	ctx = auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx = auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 	group, err := suite.db.Group.Create().
 		SetName("Test Group").
 		SetDescription("This is a test group").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	var groot = "groot@theopenlane.io"
+	var (
+		groot  = "groot@theopenlane.io"
+		mantis = "mantis@theopenlane.io"
+	)
 
 	// recipient test data
 	recipient, err := suite.db.User.Create().
@@ -52,54 +55,85 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		SetLastSeen(time.Now()).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	userSetting, err := recipient.Setting(ctx)
-	require.NoError(t, err)
-
-	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
+	assert.NilError(t, err)
 
 	suite.enableModules(recipient.ID, userSetting.Edges.DefaultOrg.ID,
 		[]models.OrgModule{models.CatalogBaseModule})
 
+	mantisRecipient, err := suite.db.User.Create().
+		SetEmail(mantis).
+		SetFirstName("Mantis").
+		SetLastName("JustMantis").
+		SetAuthProvider(enums.AuthProviderGoogle).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	mantisSetting, err := mantisRecipient.Setting(ctx)
+	assert.NilError(t, err)
+
+	suite.enableModules(mantisRecipient.ID, mantisSetting.Edges.DefaultOrg.ID,
+		[]models.OrgModule{models.CatalogBaseModule})
+
 	testCases := []struct {
-		name     string
-		email    string
-		tokenSet bool
-		apiToken bool
-		wantErr  bool
-		wantCode int
-		errMsg   string
+		name           string
+		email          string
+		recipientID    string
+		recipientOrgID string
+		tokenSet       bool
+		apiToken       bool
+		wantErr        bool
+		wantCode       int
+		errMsg         string
 	}{
 		{
-			name:     "api token cannot accept invite",
-			email:    "rocket@theopenlane.io",
-			tokenSet: true,
-			apiToken: true,
-			wantErr:  true,
-			wantCode: http.StatusUnauthorized,
-			errMsg:   handlers.ErrAuthenticationRequired.Error(),
+			name:           "api token cannot accept invite",
+			email:          "rocket@theopenlane.io",
+			recipientID:    recipient.ID,
+			recipientOrgID: userSetting.Edges.DefaultOrg.ID,
+			tokenSet:       true,
+			apiToken:       true,
+			wantErr:        true,
+			wantCode:       http.StatusUnauthorized,
+			errMsg:         handlers.ErrAuthenticationRequired.Error(),
 		},
 		{
-			name:     "happy path",
-			email:    groot,
-			tokenSet: true,
+			name:           "happy path",
+			email:          groot,
+			recipientID:    recipient.ID,
+			recipientOrgID: userSetting.Edges.DefaultOrg.ID,
+			tokenSet:       true,
 		},
 		{
-			name:     "missing token",
-			email:    groot,
-			tokenSet: false,
-			wantErr:  true,
-			wantCode: http.StatusBadRequest,
-			errMsg:   "token is required",
+			name:           "happy path, invite email case does not match user email",
+			email:          "Mantis@TheOpenLane.io",
+			recipientID:    mantisRecipient.ID,
+			recipientOrgID: mantisSetting.Edges.DefaultOrg.ID,
+			tokenSet:       true,
 		},
 		{
-			name:     "emails do not match token",
-			email:    "drax@theopenlane.io",
-			tokenSet: true,
-			wantErr:  true,
-			wantCode: http.StatusBadRequest,
-			errMsg:   "could not verify email",
+			name:           "missing token",
+			email:          groot,
+			recipientID:    recipient.ID,
+			recipientOrgID: userSetting.Edges.DefaultOrg.ID,
+			tokenSet:       false,
+			wantErr:        true,
+			wantCode:       http.StatusBadRequest,
+			errMsg:         "token is required",
+		},
+		{
+			name:           "emails do not match token",
+			email:          "drax@theopenlane.io",
+			recipientID:    recipient.ID,
+			recipientOrgID: userSetting.Edges.DefaultOrg.ID,
+			tokenSet:       true,
+			wantErr:        true,
+			wantCode:       http.StatusBadRequest,
+			errMsg:         "could not verify email",
 		},
 	}
 
@@ -107,7 +141,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		t.Run(tc.name, func(t *testing.T) {
 			suite.ClearTestData()
 
-			ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+			ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 			target := "/invite"
 			if tc.tokenSet {
@@ -115,7 +149,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 					SetRecipient(tc.email).
 					AddGroupIDs(group.ID).
 					Save(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 				target = fmt.Sprintf("/invite?token=%s", inv.Token)
 			}
 
@@ -124,11 +158,11 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			// Set writer for tests that write on the response
 			recorder := httptest.NewRecorder()
 
-			reqCtx := recipientCtx
+			reqCtx := auth.NewTestContextWithOrgID(tc.recipientID, tc.recipientOrgID)
 			if tc.apiToken {
-				reqCtx = auth.WithCaller(recipientCtx, &auth.Caller{
+				reqCtx = auth.WithCaller(reqCtx, &auth.Caller{
 					SubjectID:          ulids.New().String(),
-					OrganizationID:     userSetting.Edges.DefaultOrg.ID,
+					OrganizationID:     tc.recipientOrgID,
 					AuthenticationType: auth.APITokenAuthentication,
 				})
 			}
@@ -147,47 +181,47 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			}
 
 			if tc.wantErr {
-				assert.Equal(t, tc.wantCode, recorder.Code)
+				assert.Check(t, is.Equal(tc.wantCode, recorder.Code))
 
-				assert.Equal(t, tc.errMsg, out.Error)
+				assert.Check(t, is.DeepEqual(tc.errMsg, out.Error))
 
 				return
 			}
 
-			assert.Equal(t, http.StatusCreated, recorder.Code)
-			assert.Equal(t, testUser1.OrganizationID, out.JoinedOrgID)
-			assert.Equal(t, tc.email, out.Email)
+			assert.Check(t, is.Equal(http.StatusCreated, recorder.Code))
+			assert.Check(t, is.DeepEqual(suite.testUser1.OrganizationID, out.JoinedOrgID))
+			assert.Check(t, is.Equal(strings.ToLower(tc.email), out.Email))
 
 			// update context to reflect the joined org for subsequent queries
-			recipientCtx = auth.NewTestContextWithOrgID(recipient.ID, testUser1.OrganizationID)
+			recipientCtx := auth.NewTestContextWithOrgID(tc.recipientID, suite.testUser1.OrganizationID)
 
 			// Test the default org is updated
-			user, err := suite.api.GetUserByID(recipientCtx, recipient.ID)
-			require.NoError(t, err)
-			require.NotNil(t, user)
-			require.NotNil(t, user.User.Setting.DefaultOrg)
+			user, err := suite.api.GetUserByID(recipientCtx, tc.recipientID)
+			assert.NilError(t, err)
+			assert.Assert(t, user != nil)
+			assert.Assert(t, user.User.Setting.DefaultOrg != nil)
 
-			assert.Equal(t, testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID)
+			assert.Check(t, is.DeepEqual(suite.testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID))
 
 			// test the user was added to the group
 			group, err := suite.api.GetGroupByID(recipientCtx, group.ID)
-			assert.NotNil(t, group)
+			assert.Check(t, group != nil)
 
 			foundMember := false
 			for _, member := range group.Group.Members.Edges {
-				if member.Node.User.ID == recipient.ID {
+				if member.Node.User.ID == tc.recipientID {
 					foundMember = true
 					break
 				}
 			}
 
-			assert.True(t, foundMember, "expected user to be a member of the group")
+			assert.Check(t, foundMember, "expected user to be a member of the group")
 
 			// verify the invite and acceptance emails were sent through the mock sender
 			suite.WaitForEvents()
 
 			msgs := suite.mockEmailSender().Messages()
-			require.Len(t, msgs, 2)
+			assert.Assert(t, is.Len(msgs, 2))
 
 			// check that both expected subject snippets appear across the sent messages
 			expectedSnippets := []string{
@@ -206,17 +240,17 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 				}
 			}
 
-			assert.Len(t, found, 2)
+			assert.Check(t, is.Len(found, 2))
 
 			for _, snippet := range expectedSnippets {
-				assert.True(t, found[snippet], "expected snippet not found: %s", snippet)
+				assert.Check(t, found[snippet], "expected snippet not found: %s", snippet)
 			}
 		})
 	}
 }
 
-func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvitation() {
-	t := suite.T()
+func TestOrgInviteAcceptHandler_ExistingMemberNoReInvitation(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", "invite", suite.h.OrganizationInviteAccept)
 
@@ -237,10 +271,10 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		SetLastSeen(time.Now()).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	userSetting, err := recipient.Setting(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
 
@@ -251,7 +285,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 	inv, err := suite.db.Invite.Create().
 		SetRecipient(groot).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	target := fmt.Sprintf("/invite?token=%s", inv.Token)
 	req := httptest.NewRequest(http.MethodGet, target, nil)
@@ -262,23 +296,23 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_ExistingMemberNoReInvi
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	assert.Equal(t, http.StatusCreated, recorder.Code)
+	assert.Check(t, is.Equal(http.StatusCreated, recorder.Code))
 
 	// create another invite for the same user
 	_, err = suite.db.Invite.Create().
 		SetRecipient(groot).
 		Save(ctx)
 
-	require.Error(t, err)
-	assert.Contains(t, err.Error(), hooks.ErrUserAlreadyOrgMember.Error())
+	assert.Assert(t, err != nil)
+	assert.Check(t, is.Contains(err.Error(), hooks.ErrUserAlreadyOrgMember.Error()))
 }
 
-func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperAdmin() {
-	t := suite.T()
+func TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperAdmin(t *testing.T) {
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	suite.registerTestHandler(http.MethodGet, "invite", suite.h.OrganizationInviteAccept)
 
-	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 	email := "newowner@theopenlane.io"
 
@@ -290,10 +324,10 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperA
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		SetLastSeen(time.Now()).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	setting, err := recipient.Setting(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	ctx := auth.NewTestContextWithOrgID(recipient.ID, setting.Edges.DefaultOrg.ID)
 
@@ -305,7 +339,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperA
 		SetRole(enums.RoleOwner).
 		SetOwnershipTransfer(true).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/invite?token=%s", invite.Token), nil)
 	recorder := httptest.NewRecorder()
@@ -314,23 +348,23 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperA
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	require.Equal(t, http.StatusCreated, recorder.Code)
+	assert.Assert(t, is.Equal(http.StatusCreated, recorder.Code))
 
 	membership, err := suite.db.OrgMembership.Query().
 		Where(
-			orgmembership.OrganizationID(testUser1.OrganizationID),
-			orgmembership.UserID(testUser1.ID),
+			orgmembership.OrganizationID(suite.testUser1.OrganizationID),
+			orgmembership.UserID(suite.testUser1.ID),
 		).
 		Only(internalCtx)
-	require.NoError(t, err)
-	assert.Equal(t, enums.RoleSuperAdmin, membership.Role)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.RoleSuperAdmin, membership.Role))
 
 	newOwner, err := suite.db.OrgMembership.Query().
 		Where(
-			orgmembership.OrganizationID(testUser1.OrganizationID),
+			orgmembership.OrganizationID(suite.testUser1.OrganizationID),
 			orgmembership.UserID(recipient.ID),
 		).
 		Only(internalCtx)
-	require.NoError(t, err)
-	assert.Equal(t, enums.RoleOwner, newOwner.Role)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.RoleOwner, newOwner.Role))
 }

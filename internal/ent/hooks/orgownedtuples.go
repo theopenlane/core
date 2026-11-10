@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/logx"
 )
 
@@ -39,7 +38,7 @@ func hookOrgOwnedTuples() ent.Hook {
 
 			// write the tuples to the authz service
 			if len(addTuples) != 0 {
-				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, nil); err != nil {
+				if err := writeMutationTuples(ctx, m, addTuples, nil); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, ErrInternalServerError

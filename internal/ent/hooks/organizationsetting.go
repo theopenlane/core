@@ -168,7 +168,7 @@ func sendBillingEmailChangeNotifications(ctx context.Context, orgName, previousE
 		}
 
 		if err := sendSystemEmail(ctx, emaildef.BillingEmailChangedOp.Name(), emaildef.BillingEmailChangedEmail{
-			RecipientInfo:   emaildef.RecipientInfo{Email: currentEmail},
+			Email:           currentEmail,
 			OrgName:         orgName,
 			OldBillingEmail: previousEmail,
 			NewBillingEmail: newEmail,

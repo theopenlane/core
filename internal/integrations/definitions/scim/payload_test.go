@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/elimity-com/scim"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestExtractMemberIDsFromValue(t *testing.T) {
@@ -81,7 +81,7 @@ func TestExtractMemberIDsFromValue(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := ExtractMemberIDsFromValue(tt.value)
-			assert.Equal(t, tt.want, got)
+			assert.Check(t, is.DeepEqual(tt.want, got))
 		})
 	}
 }
@@ -151,7 +151,7 @@ func TestDirectoryAccountExternalID(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := DirectoryAccountExternalID(tt.attributes)
-			assert.Equal(t, tt.want, got)
+			assert.Check(t, is.Equal(tt.want, got))
 		})
 	}
 }
@@ -202,7 +202,7 @@ func TestDirectoryGroupExternalID(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := DirectoryGroupExternalID(tt.attributes)
-			assert.Equal(t, tt.want, got)
+			assert.Check(t, is.Equal(tt.want, got))
 		})
 	}
 }
@@ -246,14 +246,14 @@ func TestBuildDirectoryAccountPayloadSet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := BuildDirectoryAccountPayloadSet(tt.attributes, tt.action)
 			if tt.wantErr != nil {
-				require.ErrorIs(t, err, tt.wantErr)
+				assert.ErrorIs(t, err, tt.wantErr)
 				return
 			}
 
-			require.NoError(t, err)
-			assert.NotEmpty(t, got.Envelopes)
-			assert.Equal(t, tt.wantID, got.Envelopes[0].Resource)
-			assert.Equal(t, tt.action, got.Envelopes[0].Action)
+			assert.NilError(t, err)
+			assert.Check(t, len(got.Envelopes) > 0)
+			assert.Check(t, is.Equal(tt.wantID, got.Envelopes[0].Resource))
+			assert.Check(t, is.Equal(tt.action, got.Envelopes[0].Action))
 		})
 	}
 }

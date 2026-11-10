@@ -8,7 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -29,28 +30,26 @@ func TestProvider_GetPresignedURL_Proxy(t *testing.T) {
 	)
 
 	provider, err := NewDiskProvider(opts)
-	require.NoError(t, err)
-	require.NotNil(t, provider)
+	assert.NilError(t, err)
+	assert.Assert(t, provider != nil)
 
 	file := &storagetypes.File{
-		ID: "01HZZTESTFILEDISK0000",
-		FileMetadata: storagetypes.FileMetadata{
-			Bucket: "test-bucket",
-			Key:    "object.txt",
-		},
+		ID:     "01HZZTESTFILEDISK0000",
+		Bucket: "test-bucket",
+		Key:    "object.txt",
 	}
 
 	url, err := provider.GetPresignedURL(context.Background(), file, &storagetypes.PresignedURLOptions{Duration: time.Minute})
-	require.NoError(t, err, "with proxy presign enabled but no ent client, disk provider falls back to LocalURL-based presigning")
-	require.NotEmpty(t, url)
-	require.True(t, strings.HasPrefix(url, "http://localhost:8080/"), "expected LocalURL-based URL, got %q", url)
-	require.Contains(t, url, "object.txt")
+	assert.NilError(t, err, "with proxy presign enabled but no ent client, disk provider falls back to LocalURL-based presigning")
+	assert.Assert(t, len(url) > 0)
+	assert.Assert(t, strings.HasPrefix(url, "http://localhost:8080/"), "expected LocalURL-based URL, got %q", url)
+	assert.Assert(t, is.Contains(url, "object.txt"))
 }
 
 func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 	_, key, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	conf := tokens.Config{
 		Audience:        "http://localhost:17608",
@@ -61,6 +60,6 @@ func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	}
 
 	tm, err := tokens.NewWithKey(key, conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	return tm
 }
