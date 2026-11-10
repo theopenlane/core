@@ -4,10 +4,12 @@ mutation CreateOnboarding ($input: CreateOnboardingInput!) {
 			companyDetails
 			companyName
 			compliance
+			demoDataset
 			demoRequested
 			domains
 			id
 			organizationID
+			seedDemoData
 			userDetails
 		}
 	}

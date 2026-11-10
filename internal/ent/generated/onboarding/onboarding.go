@@ -31,6 +31,10 @@ const (
 	FieldCompliance = "compliance"
 	// FieldDemoRequested holds the string denoting the demo_requested field in the database.
 	FieldDemoRequested = "demo_requested"
+	// FieldSeedDemoData holds the string denoting the seed_demo_data field in the database.
+	FieldSeedDemoData = "seed_demo_data"
+	// FieldDemoDataset holds the string denoting the demo_dataset field in the database.
+	FieldDemoDataset = "demo_dataset"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// Table holds the table name of the onboarding in the database.
@@ -56,6 +60,8 @@ var Columns = []string{
 	FieldUserDetails,
 	FieldCompliance,
 	FieldDemoRequested,
+	FieldSeedDemoData,
+	FieldDemoDataset,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -81,6 +87,8 @@ var (
 	OrganizationIDValidator func(string) error
 	// DefaultDemoRequested holds the default value on creation for the "demo_requested" field.
 	DefaultDemoRequested bool
+	// DefaultDemoDataset holds the default value on creation for the "demo_dataset" field.
+	DefaultDemoDataset string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -116,6 +124,16 @@ func ByCompanyName(opts ...sql.OrderTermOption) OrderOption {
 // ByDemoRequested orders the results by the demo_requested field.
 func ByDemoRequested(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDemoRequested, opts...).ToFunc()
+}
+
+// BySeedDemoData orders the results by the seed_demo_data field.
+func BySeedDemoData(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSeedDemoData, opts...).ToFunc()
+}
+
+// ByDemoDataset orders the results by the demo_dataset field.
+func ByDemoDataset(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDemoDataset, opts...).ToFunc()
 }
 
 // ByOrganizationField orders the results by organization field.

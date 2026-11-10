@@ -185,6 +185,15 @@ rules:
       [Browse Service Providers](https://www.theopenlane.io/alliances/service-providers)
     priority: 40
 
+  add-demo-data-later:
+    title: Explore with demo data
+    taskKindName: Operational
+    details: |
+      Add sample records to see how Openlane works. You can remove them anytime.
+    priority: 20
+    metadata:
+      link: /organization-settings/general-settings#demo-data
+
   demo-requested:
     title: Schedule your onboarding call
     taskKindName: Operational

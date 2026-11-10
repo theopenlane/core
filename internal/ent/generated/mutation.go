@@ -161405,6 +161405,8 @@ type OnboardingMutation struct {
 	user_details        *map[string]interface{}
 	compliance          *map[string]interface{}
 	demo_requested      *bool
+	seed_demo_data      *bool
+	demo_dataset        *string
 	clearedFields       map[string]struct{}
 	organization        *string
 	clearedorganization bool
@@ -161961,6 +161963,104 @@ func (m *OnboardingMutation) ResetDemoRequested() {
 	delete(m.clearedFields, onboarding.FieldDemoRequested)
 }
 
+// SetSeedDemoData sets the "seed_demo_data" field.
+func (m *OnboardingMutation) SetSeedDemoData(b bool) {
+	m.seed_demo_data = &b
+}
+
+// SeedDemoData returns the value of the "seed_demo_data" field in the mutation.
+func (m *OnboardingMutation) SeedDemoData() (r bool, exists bool) {
+	v := m.seed_demo_data
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSeedDemoData returns the old "seed_demo_data" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldSeedDemoData(ctx context.Context) (v *bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSeedDemoData is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSeedDemoData requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSeedDemoData: %w", err)
+	}
+	return oldValue.SeedDemoData, nil
+}
+
+// ClearSeedDemoData clears the value of the "seed_demo_data" field.
+func (m *OnboardingMutation) ClearSeedDemoData() {
+	m.seed_demo_data = nil
+	m.clearedFields[onboarding.FieldSeedDemoData] = struct{}{}
+}
+
+// SeedDemoDataCleared returns if the "seed_demo_data" field was cleared in this mutation.
+func (m *OnboardingMutation) SeedDemoDataCleared() bool {
+	_, ok := m.clearedFields[onboarding.FieldSeedDemoData]
+	return ok
+}
+
+// ResetSeedDemoData resets all changes to the "seed_demo_data" field.
+func (m *OnboardingMutation) ResetSeedDemoData() {
+	m.seed_demo_data = nil
+	delete(m.clearedFields, onboarding.FieldSeedDemoData)
+}
+
+// SetDemoDataset sets the "demo_dataset" field.
+func (m *OnboardingMutation) SetDemoDataset(s string) {
+	m.demo_dataset = &s
+}
+
+// DemoDataset returns the value of the "demo_dataset" field in the mutation.
+func (m *OnboardingMutation) DemoDataset() (r string, exists bool) {
+	v := m.demo_dataset
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDemoDataset returns the old "demo_dataset" field's value of the Onboarding entity.
+// If the Onboarding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OnboardingMutation) OldDemoDataset(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDemoDataset is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDemoDataset requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDemoDataset: %w", err)
+	}
+	return oldValue.DemoDataset, nil
+}
+
+// ClearDemoDataset clears the value of the "demo_dataset" field.
+func (m *OnboardingMutation) ClearDemoDataset() {
+	m.demo_dataset = nil
+	m.clearedFields[onboarding.FieldDemoDataset] = struct{}{}
+}
+
+// DemoDatasetCleared returns if the "demo_dataset" field was cleared in this mutation.
+func (m *OnboardingMutation) DemoDatasetCleared() bool {
+	_, ok := m.clearedFields[onboarding.FieldDemoDataset]
+	return ok
+}
+
+// ResetDemoDataset resets all changes to the "demo_dataset" field.
+func (m *OnboardingMutation) ResetDemoDataset() {
+	m.demo_dataset = nil
+	delete(m.clearedFields, onboarding.FieldDemoDataset)
+}
+
 // ClearOrganization clears the "organization" edge to the Organization entity.
 func (m *OnboardingMutation) ClearOrganization() {
 	m.clearedorganization = true
@@ -162022,7 +162122,7 @@ func (m *OnboardingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OnboardingMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 11)
 	if m.deleted_at != nil {
 		fields = append(fields, onboarding.FieldDeletedAt)
 	}
@@ -162050,6 +162150,12 @@ func (m *OnboardingMutation) Fields() []string {
 	if m.demo_requested != nil {
 		fields = append(fields, onboarding.FieldDemoRequested)
 	}
+	if m.seed_demo_data != nil {
+		fields = append(fields, onboarding.FieldSeedDemoData)
+	}
+	if m.demo_dataset != nil {
+		fields = append(fields, onboarding.FieldDemoDataset)
+	}
 	return fields
 }
 
@@ -162076,6 +162182,10 @@ func (m *OnboardingMutation) Field(name string) (ent.Value, bool) {
 		return m.Compliance()
 	case onboarding.FieldDemoRequested:
 		return m.DemoRequested()
+	case onboarding.FieldSeedDemoData:
+		return m.SeedDemoData()
+	case onboarding.FieldDemoDataset:
+		return m.DemoDataset()
 	}
 	return nil, false
 }
@@ -162103,6 +162213,10 @@ func (m *OnboardingMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldCompliance(ctx)
 	case onboarding.FieldDemoRequested:
 		return m.OldDemoRequested(ctx)
+	case onboarding.FieldSeedDemoData:
+		return m.OldSeedDemoData(ctx)
+	case onboarding.FieldDemoDataset:
+		return m.OldDemoDataset(ctx)
 	}
 	return nil, fmt.Errorf("unknown Onboarding field %s", name)
 }
@@ -162175,6 +162289,20 @@ func (m *OnboardingMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDemoRequested(v)
 		return nil
+	case onboarding.FieldSeedDemoData:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSeedDemoData(v)
+		return nil
+	case onboarding.FieldDemoDataset:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDemoDataset(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Onboarding field %s", name)
 }
@@ -162229,6 +162357,12 @@ func (m *OnboardingMutation) ClearedFields() []string {
 	if m.FieldCleared(onboarding.FieldDemoRequested) {
 		fields = append(fields, onboarding.FieldDemoRequested)
 	}
+	if m.FieldCleared(onboarding.FieldSeedDemoData) {
+		fields = append(fields, onboarding.FieldSeedDemoData)
+	}
+	if m.FieldCleared(onboarding.FieldDemoDataset) {
+		fields = append(fields, onboarding.FieldDemoDataset)
+	}
 	return fields
 }
 
@@ -162267,6 +162401,12 @@ func (m *OnboardingMutation) ClearField(name string) error {
 	case onboarding.FieldDemoRequested:
 		m.ClearDemoRequested()
 		return nil
+	case onboarding.FieldSeedDemoData:
+		m.ClearSeedDemoData()
+		return nil
+	case onboarding.FieldDemoDataset:
+		m.ClearDemoDataset()
+		return nil
 	}
 	return fmt.Errorf("unknown Onboarding nullable field %s", name)
 }
@@ -162301,6 +162441,12 @@ func (m *OnboardingMutation) ResetField(name string) error {
 		return nil
 	case onboarding.FieldDemoRequested:
 		m.ResetDemoRequested()
+		return nil
+	case onboarding.FieldSeedDemoData:
+		m.ResetSeedDemoData()
+		return nil
+	case onboarding.FieldDemoDataset:
+		m.ResetDemoDataset()
 		return nil
 	}
 	return fmt.Errorf("unknown Onboarding field %s", name)

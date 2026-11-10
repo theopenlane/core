@@ -107,6 +107,34 @@ func (_c *OnboardingCreate) SetNillableDemoRequested(v *bool) *OnboardingCreate 
 	return _c
 }
 
+// SetSeedDemoData sets the "seed_demo_data" field.
+func (_c *OnboardingCreate) SetSeedDemoData(v bool) *OnboardingCreate {
+	_c.mutation.SetSeedDemoData(v)
+	return _c
+}
+
+// SetNillableSeedDemoData sets the "seed_demo_data" field if the given value is not nil.
+func (_c *OnboardingCreate) SetNillableSeedDemoData(v *bool) *OnboardingCreate {
+	if v != nil {
+		_c.SetSeedDemoData(*v)
+	}
+	return _c
+}
+
+// SetDemoDataset sets the "demo_dataset" field.
+func (_c *OnboardingCreate) SetDemoDataset(v string) *OnboardingCreate {
+	_c.mutation.SetDemoDataset(v)
+	return _c
+}
+
+// SetNillableDemoDataset sets the "demo_dataset" field if the given value is not nil.
+func (_c *OnboardingCreate) SetNillableDemoDataset(v *string) *OnboardingCreate {
+	if v != nil {
+		_c.SetDemoDataset(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OnboardingCreate) SetID(v string) *OnboardingCreate {
 	_c.mutation.SetID(v)
@@ -166,6 +194,10 @@ func (_c *OnboardingCreate) defaults() error {
 	if _, ok := _c.mutation.DemoRequested(); !ok {
 		v := onboarding.DefaultDemoRequested
 		_c.mutation.SetDemoRequested(v)
+	}
+	if _, ok := _c.mutation.DemoDataset(); !ok {
+		v := onboarding.DefaultDemoDataset
+		_c.mutation.SetDemoDataset(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if onboarding.DefaultID == nil {
@@ -253,6 +285,14 @@ func (_c *OnboardingCreate) createSpec() (*Onboarding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DemoRequested(); ok {
 		_spec.SetField(onboarding.FieldDemoRequested, field.TypeBool, value)
 		_node.DemoRequested = value
+	}
+	if value, ok := _c.mutation.SeedDemoData(); ok {
+		_spec.SetField(onboarding.FieldSeedDemoData, field.TypeBool, value)
+		_node.SeedDemoData = &value
+	}
+	if value, ok := _c.mutation.DemoDataset(); ok {
+		_spec.SetField(onboarding.FieldDemoDataset, field.TypeString, value)
+		_node.DemoDataset = value
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

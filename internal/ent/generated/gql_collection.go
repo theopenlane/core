@@ -50380,6 +50380,16 @@ func (_q *OnboardingQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, onboarding.FieldDemoRequested)
 				fieldSeen[onboarding.FieldDemoRequested] = struct{}{}
 			}
+		case "seedDemoData":
+			if _, ok := fieldSeen[onboarding.FieldSeedDemoData]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldSeedDemoData)
+				fieldSeen[onboarding.FieldSeedDemoData] = struct{}{}
+			}
+		case "demoDataset":
+			if _, ok := fieldSeen[onboarding.FieldDemoDataset]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldDemoDataset)
+				fieldSeen[onboarding.FieldDemoDataset] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

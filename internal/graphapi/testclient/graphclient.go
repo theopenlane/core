@@ -84801,10 +84801,12 @@ type CreateOnboarding_CreateOnboarding_Onboarding struct {
 	CompanyDetails map[string]any "json:\"companyDetails,omitempty\" graphql:\"companyDetails\""
 	CompanyName    string         "json:\"companyName\" graphql:\"companyName\""
 	Compliance     map[string]any "json:\"compliance,omitempty\" graphql:\"compliance\""
+	DemoDataset    *string        "json:\"demoDataset,omitempty\" graphql:\"demoDataset\""
 	DemoRequested  *bool          "json:\"demoRequested,omitempty\" graphql:\"demoRequested\""
 	Domains        []string       "json:\"domains,omitempty\" graphql:\"domains\""
 	ID             string         "json:\"id\" graphql:\"id\""
 	OrganizationID *string        "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	SeedDemoData   *bool          "json:\"seedDemoData,omitempty\" graphql:\"seedDemoData\""
 	UserDetails    map[string]any "json:\"userDetails,omitempty\" graphql:\"userDetails\""
 }
 
@@ -84825,6 +84827,12 @@ func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetCompliance() map[strin
 		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
 	}
 	return t.Compliance
+}
+func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetDemoDataset() *string {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
+	}
+	return t.DemoDataset
 }
 func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetDemoRequested() *bool {
 	if t == nil {
@@ -84849,6 +84857,12 @@ func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetOrganizationID() *stri
 		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
 	}
 	return t.OrganizationID
+}
+func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetSeedDemoData() *bool {
+	if t == nil {
+		t = &CreateOnboarding_CreateOnboarding_Onboarding{}
+	}
+	return t.SeedDemoData
 }
 func (t *CreateOnboarding_CreateOnboarding_Onboarding) GetUserDetails() map[string]any {
 	if t == nil {
@@ -206756,10 +206770,12 @@ const CreateOnboardingDocument = `mutation CreateOnboarding ($input: CreateOnboa
 			companyDetails
 			companyName
 			compliance
+			demoDataset
 			demoRequested
 			domains
 			id
 			organizationID
+			seedDemoData
 			userDetails
 		}
 	}

@@ -90,6 +90,16 @@ func DemoRequested(v bool) predicate.Onboarding {
 	return predicate.Onboarding(sql.FieldEQ(FieldDemoRequested, v))
 }
 
+// SeedDemoData applies equality check predicate on the "seed_demo_data" field. It's identical to SeedDemoDataEQ.
+func SeedDemoData(v bool) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldEQ(FieldSeedDemoData, v))
+}
+
+// DemoDataset applies equality check predicate on the "demo_dataset" field. It's identical to DemoDatasetEQ.
+func DemoDataset(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldEQ(FieldDemoDataset, v))
+}
+
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.Onboarding {
 	return predicate.Onboarding(sql.FieldEQ(FieldDeletedAt, v))
@@ -413,6 +423,101 @@ func DemoRequestedIsNil() predicate.Onboarding {
 // DemoRequestedNotNil applies the NotNil predicate on the "demo_requested" field.
 func DemoRequestedNotNil() predicate.Onboarding {
 	return predicate.Onboarding(sql.FieldNotNull(FieldDemoRequested))
+}
+
+// SeedDemoDataEQ applies the EQ predicate on the "seed_demo_data" field.
+func SeedDemoDataEQ(v bool) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldEQ(FieldSeedDemoData, v))
+}
+
+// SeedDemoDataNEQ applies the NEQ predicate on the "seed_demo_data" field.
+func SeedDemoDataNEQ(v bool) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldNEQ(FieldSeedDemoData, v))
+}
+
+// SeedDemoDataIsNil applies the IsNil predicate on the "seed_demo_data" field.
+func SeedDemoDataIsNil() predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldIsNull(FieldSeedDemoData))
+}
+
+// SeedDemoDataNotNil applies the NotNil predicate on the "seed_demo_data" field.
+func SeedDemoDataNotNil() predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldNotNull(FieldSeedDemoData))
+}
+
+// DemoDatasetEQ applies the EQ predicate on the "demo_dataset" field.
+func DemoDatasetEQ(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldEQ(FieldDemoDataset, v))
+}
+
+// DemoDatasetNEQ applies the NEQ predicate on the "demo_dataset" field.
+func DemoDatasetNEQ(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldNEQ(FieldDemoDataset, v))
+}
+
+// DemoDatasetIn applies the In predicate on the "demo_dataset" field.
+func DemoDatasetIn(vs ...string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldIn(FieldDemoDataset, vs...))
+}
+
+// DemoDatasetNotIn applies the NotIn predicate on the "demo_dataset" field.
+func DemoDatasetNotIn(vs ...string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldNotIn(FieldDemoDataset, vs...))
+}
+
+// DemoDatasetGT applies the GT predicate on the "demo_dataset" field.
+func DemoDatasetGT(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldGT(FieldDemoDataset, v))
+}
+
+// DemoDatasetGTE applies the GTE predicate on the "demo_dataset" field.
+func DemoDatasetGTE(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldGTE(FieldDemoDataset, v))
+}
+
+// DemoDatasetLT applies the LT predicate on the "demo_dataset" field.
+func DemoDatasetLT(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldLT(FieldDemoDataset, v))
+}
+
+// DemoDatasetLTE applies the LTE predicate on the "demo_dataset" field.
+func DemoDatasetLTE(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldLTE(FieldDemoDataset, v))
+}
+
+// DemoDatasetContains applies the Contains predicate on the "demo_dataset" field.
+func DemoDatasetContains(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldContains(FieldDemoDataset, v))
+}
+
+// DemoDatasetHasPrefix applies the HasPrefix predicate on the "demo_dataset" field.
+func DemoDatasetHasPrefix(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldHasPrefix(FieldDemoDataset, v))
+}
+
+// DemoDatasetHasSuffix applies the HasSuffix predicate on the "demo_dataset" field.
+func DemoDatasetHasSuffix(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldHasSuffix(FieldDemoDataset, v))
+}
+
+// DemoDatasetIsNil applies the IsNil predicate on the "demo_dataset" field.
+func DemoDatasetIsNil() predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldIsNull(FieldDemoDataset))
+}
+
+// DemoDatasetNotNil applies the NotNil predicate on the "demo_dataset" field.
+func DemoDatasetNotNil() predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldNotNull(FieldDemoDataset))
+}
+
+// DemoDatasetEqualFold applies the EqualFold predicate on the "demo_dataset" field.
+func DemoDatasetEqualFold(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldEqualFold(FieldDemoDataset, v))
+}
+
+// DemoDatasetContainsFold applies the ContainsFold predicate on the "demo_dataset" field.
+func DemoDatasetContainsFold(v string) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldContainsFold(FieldDemoDataset, v))
 }
 
 // HasOrganization applies the HasEdge predicate on the "organization" edge.

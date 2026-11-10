@@ -14,11 +14,21 @@ import (
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/jsonx"
 )
+
+// onboardingDemoRow is the part of the onboarding row the demo data seed reads
+type onboardingDemoRow struct {
+	// DemoDataset is the demo dataset to seed
+	DemoDataset objectstore.DemoDataset `json:"demo_dataset"`
+}
 
 func init() { registerListeners(OnboardingProgramListeners) }
 
@@ -29,12 +39,22 @@ func OnboardingProgramListeners() []gala.Registration {
 		entityops.MutationListener{
 			Schema:     entityops.SchemaOnboarding,
 			Operations: []string{entityops.OpCreate},
-			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return restored.WithCapabilities(auth.CapInternalOperation)
-			},
-			Handle: handleOnboardingProgram,
+			Caller:     onboardingListenerCaller,
+			Handle:     handleOnboardingProgram,
+		},
+		entityops.MutationListener{
+			Schema:     entityops.SchemaOnboarding,
+			Operations: []string{entityops.OpCreate},
+			RowMatch:   []entityops.FieldMatch{{Field: onboarding.FieldSeedDemoData, In: []string{"true"}}},
+			Caller:     onboardingListenerCaller,
+			Handle:     entityops.RequireDep(handleDemoDataSeed),
 		},
 	}
+}
+
+// onboardingListenerCaller adds the capability needed to load the onboarding record
+func onboardingListenerCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+	return restored.WithCapabilities(auth.CapInternalOperation)
 }
 
 func handleOnboardingProgram(inv entityops.Invocation, _ entityops.MutationPayload) error {
@@ -52,6 +72,29 @@ func handleOnboardingProgram(inv entityops.Invocation, _ entityops.MutationPaylo
 	_, err = workflows.WithTx(inv.Context, inv.Client, nil, func(ctx context.Context, tx *generated.Tx) (struct{}, error) {
 		return struct{}{}, createProgram(ctx, tx.Client(), record.OrganizationID, record.Compliance)
 	})
+
+	return err
+}
+
+// handleDemoDataSeed queues the demo dataset seed for the new organization when the user chose demo data
+func handleDemoDataSeed(inv entityops.Invocation, _ entityops.MutationPayload, rt *intruntime.Runtime) error {
+	if _, ok := rt.Registry().RuntimeClient(objectstore.DefinitionID.ID()); !ok {
+		logx.FromContext(inv.Context).Warn().Str("onboarding_id", inv.EntityID).Msg("objectstore runtime client is not configured, skipping onboarding demo data")
+
+		return nil
+	}
+
+	row, err := jsonx.Decode[onboardingDemoRow](inv.Row)
+	if err != nil {
+		return err
+	}
+
+	req, err := objectstore.SeedDemoRequest(inv.Context, row.DemoDataset, enums.DemoDataProfileDemo)
+	if err != nil {
+		return err
+	}
+
+	_, err = rt.Dispatch(inv.Context, req)
 
 	return err
 }

@@ -36,6 +36,10 @@ const (
 	datasetNotificationSubject = "Dataset"
 	// datasetRetryDetail tells the user how to retry an import that did not fully complete
 	datasetRetryDetail = "remove the imported data and import it again"
+	// datasetRemovalDetail tells the user where a completed import can be removed
+	datasetRemovalDetail = "you can remove this data from your organization settings"
+	// datasetRemovalURL is the console path holding the dataset removal action
+	datasetRemovalURL = "/organization-settings/general-settings#demo-data"
 	// datasetDefaultDomain is the domain variable's value for an organization without a domain
 	datasetDefaultDomain = "example.com"
 )
@@ -88,12 +92,12 @@ func runImportDataset(ctx context.Context, request types.OperationRequest, clien
 
 	logx.FromContext(ctx).Debug().Str("prefix", cfg.Prefix).Int("persisted", result.Persisted).Int("failed", result.Failed).Msg("objectstore: dataset imported")
 
-	detail := ""
+	detail := datasetRemovalDetail
 	if importErr != nil || result.Failed > 0 {
 		detail = datasetRetryDetail
 	}
 
-	notifyErr := operations.NotifyImportOutcome(ctx, lo.CoalesceOrEmpty(name, datasetNotificationSubject), result, importErr, detail)
+	notifyErr := operations.NotifyImportOutcome(ctx, lo.CoalesceOrEmpty(name, datasetNotificationSubject), result, importErr, detail, datasetRemovalURL)
 	if importErr != nil {
 		return nil, errors.Join(importErr, notifyErr)
 	}

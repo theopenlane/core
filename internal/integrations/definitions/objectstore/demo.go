@@ -13,8 +13,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
-// demoPrefix is the bucket directory holding the demo datasets
-const demoPrefix = "demo"
+const (
+	// demoPrefix is the bucket directory holding the demo datasets
+	demoPrefix = "demo"
+	// demoDeleteSubject names the removal in the outcome notification
+	demoDeleteSubject = "Demo data"
+)
 
 // demoDatasetPattern keeps a dataset name to a single directory under the demo prefix
 var demoDatasetPattern = regexp.MustCompile(`^[a-z0-9_]+$`)
@@ -82,7 +86,7 @@ func DeleteDemoRequest(ctx context.Context, dataset DemoDataset, keep []string) 
 	}
 
 	// no unique key, a repeated removal only finds what is left
-	return demoRequest(orgID, operations.DeleteSourceOp.Name(), operations.DeleteSource{SourceKey: prefix, Keep: keep}, "")
+	return demoRequest(orgID, operations.DeleteSourceOp.Name(), operations.DeleteSource{SourceKey: prefix, Keep: keep, Subject: demoDeleteSubject}, "")
 }
 
 // demoRequest builds a manual runtime dispatch of one operation of the definition for the organization

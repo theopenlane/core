@@ -195,8 +195,8 @@ github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWD
 github.com/stretchr/testify v1.12.1/go.mod h1:MDEgiDPPsNp5cuIrHPPCyornHKgEVbtFUmoNlxoYthg=
 github.com/theopenlane/core/common v1.2.2 h1:pRqkFSx0fvQ/T1BLwDlZqWeUy3tO9/2X/t8FUi5qxTA=
 github.com/theopenlane/core/common v1.2.2/go.mod h1:+DD6DtNxS2Pvk23HO0+7yEekVFNLhTaqnv91r7+dX2k=
-github.com/theopenlane/core/v2 v2.13.3 h1:hG8CLNTZ9Qz4p0uQH9hYXsZ3tvXVkFpUu56em5KtMAM=
-github.com/theopenlane/core/v2 v2.13.3/go.mod h1:YovCqty39tVork8XT3vxjB0lpKDW8mO3gmPBOtsL17Q=
+github.com/theopenlane/core/v2 v2.14.0 h1:xzwUvRkz1MIMMl4MW21d1uFVQBzZCQV8Un6xioZZLWM=
+github.com/theopenlane/core/v2 v2.14.0/go.mod h1:7ikKpd4gJbksMDT3A0K3EoKmp8/THJOkgzJqqJIAMi8=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/go-client v0.15.1 h1:1uhfo/5UXtC/AZgMKw2psVEmBqVoQLn8yhPRhBNYvHA=
@@ -244,8 +244,7 @@ go.uber.org/atomic v1.12.0/go.mod h1:I6c4cg+6HCxRjfjSsYtApoFILnpc0CGUdGkXVqbYVNk
 go.uber.org/mock v0.6.0 h1:hyF9dfmbgIX5EfOdasqLsWD6xqpNZlXblLB/Dbnwv3Y=
 go.uber.org/mock v0.6.0/go.mod h1:KiVJ4BqZJaMj4svdfmHM0AUx4NJYO8ZNpPnZn1Z+BBU=
 go.yaml.in/yaml/v3 v3.0.4/go.mod h1:DhzuOOF2ATzADvBadXxruRBLzYTpT36CKvDb3+aBEFg=
-go.yaml.in/yaml/v3 v3.0.5 h1:N6y/pJk8buWs9NY5ERU2HSMfm+IuD/OtfdAnq6kESPw=
-go.yaml.in/yaml/v3 v3.0.5/go.mod h1:HVTZu1O7/Vkt2N+BFy8Zza+lnLsABggaTM2ZpNIGuKg=
+go.yaml.in/yaml/v3 v3.0.6 h1:zcDfvjXEqTQmpjniUBLc91xYJMB2c4QOFxEF/LCEckM=
 golang.org/x/crypto v0.58.0 h1:COkYLr4k7nDI4r6QtMML2AfzeIswWHAJthLS6K/M/54=
 golang.org/x/crypto v0.58.0/go.mod h1:Xh+kl5A+M0gMiWDytH2Hhr5Z7WbNCpv/eB/EFgfSk+w=
 golang.org/x/exp v0.0.0-20261014143641-f0251eb4aa3e h1:HgI6W1OolKK6tcV74is+rl9SMT0njsHlp0TbQiGXI/A=
