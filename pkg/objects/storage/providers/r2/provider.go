@@ -240,6 +240,32 @@ func (p *Provider) Copy(ctx context.Context, file *storagetypes.File, opts *stor
 	return err
 }
 
+// Touch implements storage.Toucher by requesting the first byte of the object and discarding it
+func (p *Provider) Touch(ctx context.Context, file *storagetypes.File) error {
+	out, err := p.client.GetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(p.options.Bucket),
+		Key:    aws.String(file.Key),
+		Range:  aws.String(s3provider.TouchRange),
+	})
+	if err != nil {
+		return err
+	}
+
+	defer out.Body.Close()
+
+	_, err = io.Copy(io.Discard, out.Body)
+
+	return err
+}
+
+// Stat implements storage.Statter through a head request
+func (p *Provider) Stat(ctx context.Context, file *storagetypes.File) (*storagetypes.ObjectInfo, error) {
+	return s3provider.ObjectInfoFromHead(p.client.HeadObject(ctx, &s3.HeadObjectInput{
+		Bucket: aws.String(p.options.Bucket),
+		Key:    aws.String(file.Key),
+	}))
+}
+
 // GetPresignedURL implements storagetypes.Provider
 func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File, opts *storagetypes.PresignedURLOptions) (string, error) {
 	if opts == nil {

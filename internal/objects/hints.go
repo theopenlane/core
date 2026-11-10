@@ -33,7 +33,24 @@ var (
 	sizeBytesHintContextKey         = contextx.NewKey[SizeBytesHint]()
 	templateKindHintContextKey      = contextx.NewKey[TemplateKindHint]()
 	backupSourceHintContextKey      = contextx.NewKey[BackupSourceHint]()
+	skipStorageCleanupContextKey    = contextx.NewKey[SkipStorageCleanup]()
 )
+
+// SkipStorageCleanup marks a context whose file deletions must leave the backing objects in place
+type SkipStorageCleanup bool
+
+// WithSkipStorageCleanup returns a context under which deleting file records does not delete the
+// objects they point at
+func WithSkipStorageCleanup(ctx context.Context) context.Context {
+	return skipStorageCleanupContextKey.Set(ctx, true)
+}
+
+// StorageCleanupSkipped reports whether the context asks file deletions to leave objects in place
+func StorageCleanupSkipped(ctx context.Context) bool {
+	skip, ok := skipStorageCleanupContextKey.Get(ctx)
+
+	return ok && bool(skip)
+}
 
 const TemplateKindMetadataKey = "template_kind"
 

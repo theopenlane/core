@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/v2/internal/objects"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/logx"
 )
@@ -26,7 +27,7 @@ func HookFileDelete() ent.Hook {
 		return hook.FileFunc(
 			func(ctx context.Context, m *generated.FileMutation) (generated.Value, error) {
 
-				if m.ObjectManager == nil || !isDeleteOp(ctx, m) {
+				if m.ObjectManager == nil || !isDeleteOp(ctx, m) || objects.StorageCleanupSkipped(ctx) {
 					return next.Mutate(ctx, m)
 				}
 

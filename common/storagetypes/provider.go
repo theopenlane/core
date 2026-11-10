@@ -234,6 +234,18 @@ type DownloadedFileMetadata struct {
 	FileMetadata
 }
 
+// ObjectInfo is the metadata a provider holds for a stored object, read without fetching its body
+type ObjectInfo struct {
+	// Size is the object size in bytes
+	Size int64 `json:"size"`
+	// ETag is the entity tag of the object with its surrounding quotes removed
+	ETag string `json:"etag"`
+	// ContentType is the content type recorded on the object
+	ContentType string `json:"content_type"`
+	// LastModified is the time the object was last modified
+	LastModified time.Time `json:"last_modified"`
+}
+
 // ProviderHints contains hints for provider selection and configuration
 type ProviderHints struct {
 	// KnownProvider indicates a known provider type
