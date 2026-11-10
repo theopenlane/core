@@ -498,16 +498,20 @@ func init() {
 	controlhistoryDescTags := controlhistoryFields[12].Descriptor()
 	// controlhistory.DefaultTags holds the default value on creation for the tags field.
 	controlhistory.DefaultTags = controlhistoryDescTags.Default.([]string)
+	// controlhistoryDescRefCodeSortKey is the schema descriptor for ref_code_sort_key field.
+	controlhistoryDescRefCodeSortKey := controlhistoryFields[50].Descriptor()
+	// controlhistory.DefaultRefCodeSortKey holds the default value on creation for the ref_code_sort_key field.
+	controlhistory.DefaultRefCodeSortKey = controlhistoryDescRefCodeSortKey.Default.(string)
 	// controlhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	controlhistoryDescSystemOwned := controlhistoryFields[51].Descriptor()
+	controlhistoryDescSystemOwned := controlhistoryFields[52].Descriptor()
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
 	// controlhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[60].Descriptor()
+	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[61].Descriptor()
 	// controlhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	controlhistory.DefaultWorkflowEligibleMarker = controlhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// controlhistoryDescIsTrustCenterControl is the schema descriptor for is_trust_center_control field.
-	controlhistoryDescIsTrustCenterControl := controlhistoryFields[64].Descriptor()
+	controlhistoryDescIsTrustCenterControl := controlhistoryFields[65].Descriptor()
 	// controlhistory.DefaultIsTrustCenterControl holds the default value on creation for the is_trust_center_control field.
 	controlhistory.DefaultIsTrustCenterControl = controlhistoryDescIsTrustCenterControl.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
@@ -2210,12 +2214,16 @@ func init() {
 	subcontrolhistoryDescTags := subcontrolhistoryFields[12].Descriptor()
 	// subcontrolhistory.DefaultTags holds the default value on creation for the tags field.
 	subcontrolhistory.DefaultTags = subcontrolhistoryDescTags.Default.([]string)
+	// subcontrolhistoryDescRefCodeSortKey is the schema descriptor for ref_code_sort_key field.
+	subcontrolhistoryDescRefCodeSortKey := subcontrolhistoryFields[50].Descriptor()
+	// subcontrolhistory.DefaultRefCodeSortKey holds the default value on creation for the ref_code_sort_key field.
+	subcontrolhistory.DefaultRefCodeSortKey = subcontrolhistoryDescRefCodeSortKey.Default.(string)
 	// subcontrolhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[51].Descriptor()
+	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[52].Descriptor()
 	// subcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrolhistory.DefaultSystemOwned = subcontrolhistoryDescSystemOwned.Default.(bool)
 	// subcontrolhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	subcontrolhistoryDescWorkflowEligibleMarker := subcontrolhistoryFields[56].Descriptor()
+	subcontrolhistoryDescWorkflowEligibleMarker := subcontrolhistoryFields[57].Descriptor()
 	// subcontrolhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	subcontrolhistory.DefaultWorkflowEligibleMarker = subcontrolhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// subcontrolhistoryDescID is the schema descriptor for id field.

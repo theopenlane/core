@@ -865,7 +865,7 @@ func TestConvertReportOrderToControlOrderBy(t *testing.T) {
 			name:      "refCode ascending",
 			orderBy:   []*model.ControlReportOrder{{Field: model.ControlReportOrderFieldRefCode, Direction: entgql.OrderDirectionAsc}},
 			wantLen:   1,
-			wantField: generated.ControlOrderFieldRefCode,
+			wantField: generated.ControlOrderFieldRefCodeSortKey,
 			wantDir:   entgql.OrderDirectionAsc,
 		},
 		{
@@ -889,7 +889,7 @@ func TestConvertReportOrderToControlOrderBy(t *testing.T) {
 				{Field: model.ControlReportOrderFieldTitle, Direction: entgql.OrderDirectionDesc},
 			},
 			wantLen:   2,
-			wantField: generated.ControlOrderFieldRefCode,
+			wantField: generated.ControlOrderFieldRefCodeSortKey,
 			wantDir:   entgql.OrderDirectionAsc,
 		},
 	}

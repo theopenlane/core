@@ -5979,17 +5979,17 @@ var (
 			}
 		},
 	}
-	// ControlOrderFieldRefCode orders Control by ref_code.
-	ControlOrderFieldRefCode = &ControlOrderField{
+	// ControlOrderFieldRefCodeSortKey orders Control by ref_code_sort_key.
+	ControlOrderFieldRefCodeSortKey = &ControlOrderField{
 		Value: func(_m *Control) (ent.Value, error) {
-			return _m.RefCode, nil
+			return _m.RefCodeSortKey, nil
 		},
-		column: control.FieldRefCode,
-		toTerm: control.ByRefCode,
+		column: control.FieldRefCodeSortKey,
+		toTerm: control.ByRefCodeSortKey,
 		toCursor: func(_m *Control) Cursor {
 			return Cursor{
 				ID:    _m.ID,
-				Value: _m.RefCode,
+				Value: _m.RefCodeSortKey,
 			}
 		},
 	}
@@ -6077,7 +6077,7 @@ func (f ControlOrderField) String() string {
 		str = "category"
 	case ControlOrderFieldSubcategory.column:
 		str = "subcategory"
-	case ControlOrderFieldRefCode.column:
+	case ControlOrderFieldRefCodeSortKey.column:
 		str = "ref_code"
 	case ControlOrderFieldControlOwnerName.column:
 		str = "CONTROL_OWNER_name"
@@ -6120,7 +6120,7 @@ func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
 	case "subcategory":
 		*f = *ControlOrderFieldSubcategory
 	case "ref_code":
-		*f = *ControlOrderFieldRefCode
+		*f = *ControlOrderFieldRefCodeSortKey
 	case "CONTROL_OWNER_name":
 		*f = *ControlOrderFieldControlOwnerName
 	case "DELEGATE_name":
@@ -30731,17 +30731,17 @@ var (
 			}
 		},
 	}
-	// SubcontrolOrderFieldRefCode orders Subcontrol by ref_code.
-	SubcontrolOrderFieldRefCode = &SubcontrolOrderField{
+	// SubcontrolOrderFieldRefCodeSortKey orders Subcontrol by ref_code_sort_key.
+	SubcontrolOrderFieldRefCodeSortKey = &SubcontrolOrderField{
 		Value: func(_m *Subcontrol) (ent.Value, error) {
-			return _m.RefCode, nil
+			return _m.RefCodeSortKey, nil
 		},
-		column: subcontrol.FieldRefCode,
-		toTerm: subcontrol.ByRefCode,
+		column: subcontrol.FieldRefCodeSortKey,
+		toTerm: subcontrol.ByRefCodeSortKey,
 		toCursor: func(_m *Subcontrol) Cursor {
 			return Cursor{
 				ID:    _m.ID,
-				Value: _m.RefCode,
+				Value: _m.RefCodeSortKey,
 			}
 		},
 	}
@@ -30829,7 +30829,7 @@ func (f SubcontrolOrderField) String() string {
 		str = "category"
 	case SubcontrolOrderFieldSubcategory.column:
 		str = "subcategory"
-	case SubcontrolOrderFieldRefCode.column:
+	case SubcontrolOrderFieldRefCodeSortKey.column:
 		str = "ref_code"
 	case SubcontrolOrderFieldControlOwnerName.column:
 		str = "CONTROL_OWNER_name"
@@ -30872,7 +30872,7 @@ func (f *SubcontrolOrderField) UnmarshalGQL(v interface{}) error {
 	case "subcategory":
 		*f = *SubcontrolOrderFieldSubcategory
 	case "ref_code":
-		*f = *SubcontrolOrderFieldRefCode
+		*f = *SubcontrolOrderFieldRefCodeSortKey
 	case "CONTROL_OWNER_name":
 		*f = *SubcontrolOrderFieldControlOwnerName
 	case "DELEGATE_name":

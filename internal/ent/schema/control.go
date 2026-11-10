@@ -59,7 +59,6 @@ func (Control) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entx.FieldWebhookPayloadField(),
-				entgql.OrderField("ref_code"),
 				directives.ExternalSourceDirectiveAnnotation,
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleControlID,

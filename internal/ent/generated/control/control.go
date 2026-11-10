@@ -110,6 +110,8 @@ const (
 	FieldControlOwnerID = "control_owner_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
 	FieldDelegateID = "delegate_id"
+	// FieldRefCodeSortKey holds the string denoting the ref_code_sort_key field in the database.
+	FieldRefCodeSortKey = "ref_code_sort_key"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -494,6 +496,7 @@ var Columns = []string{
 	FieldEvidenceRequests,
 	FieldControlOwnerID,
 	FieldDelegateID,
+	FieldRefCodeSortKey,
 	FieldOwnerID,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -616,7 +619,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [20]ent.Hook
+	Hooks        [21]ent.Hook
 	Interceptors [6]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -631,6 +634,8 @@ var (
 	DefaultTags []string
 	// ReferenceFrameworkRevisionValidator is a validator for the "reference_framework_revision" field. It is called by the builders before save.
 	ReferenceFrameworkRevisionValidator func(string) error
+	// DefaultRefCodeSortKey holds the default value on creation for the "ref_code_sort_key" field.
+	DefaultRefCodeSortKey string
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
@@ -869,6 +874,11 @@ func ByControlOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByDelegateID orders the results by the delegate_id field.
 func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
+}
+
+// ByRefCodeSortKey orders the results by the ref_code_sort_key field.
+func ByRefCodeSortKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRefCodeSortKey, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

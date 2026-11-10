@@ -67,7 +67,6 @@ func (Subcontrol) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
-				entgql.OrderField("ref_code"),
 				directives.ExternalSourceDirectiveAnnotation,
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleStatementID,

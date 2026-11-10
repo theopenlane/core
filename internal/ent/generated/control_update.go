@@ -891,6 +891,20 @@ func (_u *ControlUpdate) ClearDelegateID() *ControlUpdate {
 	return _u
 }
 
+// SetRefCodeSortKey sets the "ref_code_sort_key" field.
+func (_u *ControlUpdate) SetRefCodeSortKey(v string) *ControlUpdate {
+	_u.mutation.SetRefCodeSortKey(v)
+	return _u
+}
+
+// SetNillableRefCodeSortKey sets the "ref_code_sort_key" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableRefCodeSortKey(v *string) *ControlUpdate {
+	if v != nil {
+		_u.SetRefCodeSortKey(*v)
+	}
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ControlUpdate) SetInternalNotes(v string) *ControlUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -2723,6 +2737,9 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.EvidenceRequestsCleared() {
 		_spec.ClearField(control.FieldEvidenceRequests, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RefCodeSortKey(); ok {
+		_spec.SetField(control.FieldRefCodeSortKey, field.TypeString, value)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(control.FieldSystemOwned, field.TypeBool)
@@ -5244,6 +5261,20 @@ func (_u *ControlUpdateOne) ClearDelegateID() *ControlUpdateOne {
 	return _u
 }
 
+// SetRefCodeSortKey sets the "ref_code_sort_key" field.
+func (_u *ControlUpdateOne) SetRefCodeSortKey(v string) *ControlUpdateOne {
+	_u.mutation.SetRefCodeSortKey(v)
+	return _u
+}
+
+// SetNillableRefCodeSortKey sets the "ref_code_sort_key" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableRefCodeSortKey(v *string) *ControlUpdateOne {
+	if v != nil {
+		_u.SetRefCodeSortKey(*v)
+	}
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ControlUpdateOne) SetInternalNotes(v string) *ControlUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -7106,6 +7137,9 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	}
 	if _u.mutation.EvidenceRequestsCleared() {
 		_spec.ClearField(control.FieldEvidenceRequests, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RefCodeSortKey(); ok {
+		_spec.SetField(control.FieldRefCodeSortKey, field.TypeString, value)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(control.FieldSystemOwned, field.TypeBool)

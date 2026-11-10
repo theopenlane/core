@@ -199,6 +199,7 @@ func (ControlMixin) Hooks() []ent.Hook {
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 		hooks.HookSlateJSON(),
+		hooks.HookRefCodeSortKey(),
 	}
 }
 
@@ -427,6 +428,14 @@ var controlFields = []ent.Field{
 			entx.CSVRef().FromColumn("ControlDelegateGroupName").MatchOn("name"),
 		).
 		Comment("the id of the group that is temporarily delegated to own the control"),
+	field.String("ref_code_sort_key").
+		Default("").
+		Annotations(
+			entsql.Annotation{Collation: "C"},
+			entgql.OrderField("ref_code"),
+			entgql.Skip(entgql.SkipType|entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput|entgql.SkipWhereInput),
+		).
+		Comment("natural-order key derived from ref_code by a hook; backs the ref_code order and must be compared bytewise"),
 }
 
 // Indexes of the Control Mixin

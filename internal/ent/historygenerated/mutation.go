@@ -24729,6 +24729,7 @@ type ControlHistoryMutation struct {
 	appendevidence_requests       []models.EvidenceRequests
 	control_owner_id              *string
 	delegate_id                   *string
+	ref_code_sort_key             *string
 	owner_id                      *string
 	system_owned                  *bool
 	internal_notes                *string
@@ -27408,6 +27409,42 @@ func (m *ControlHistoryMutation) ResetDelegateID() {
 	delete(m.clearedFields, controlhistory.FieldDelegateID)
 }
 
+// SetRefCodeSortKey sets the "ref_code_sort_key" field.
+func (m *ControlHistoryMutation) SetRefCodeSortKey(s string) {
+	m.ref_code_sort_key = &s
+}
+
+// RefCodeSortKey returns the value of the "ref_code_sort_key" field in the mutation.
+func (m *ControlHistoryMutation) RefCodeSortKey() (r string, exists bool) {
+	v := m.ref_code_sort_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRefCodeSortKey returns the old "ref_code_sort_key" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldRefCodeSortKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRefCodeSortKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRefCodeSortKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRefCodeSortKey: %w", err)
+	}
+	return oldValue.RefCodeSortKey, nil
+}
+
+// ResetRefCodeSortKey resets all changes to the "ref_code_sort_key" field.
+func (m *ControlHistoryMutation) ResetRefCodeSortKey() {
+	m.ref_code_sort_key = nil
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *ControlHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -28164,7 +28201,7 @@ func (m *ControlHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 64)
+	fields := make([]string, 0, 65)
 	if m.history_time != nil {
 		fields = append(fields, controlhistory.FieldHistoryTime)
 	}
@@ -28311,6 +28348,9 @@ func (m *ControlHistoryMutation) Fields() []string {
 	}
 	if m.delegate_id != nil {
 		fields = append(fields, controlhistory.FieldDelegateID)
+	}
+	if m.ref_code_sort_key != nil {
+		fields = append(fields, controlhistory.FieldRefCodeSortKey)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, controlhistory.FieldOwnerID)
@@ -28463,6 +28503,8 @@ func (m *ControlHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ControlOwnerID()
 	case controlhistory.FieldDelegateID:
 		return m.DelegateID()
+	case controlhistory.FieldRefCodeSortKey:
+		return m.RefCodeSortKey()
 	case controlhistory.FieldOwnerID:
 		return m.OwnerID()
 	case controlhistory.FieldSystemOwned:
@@ -28600,6 +28642,8 @@ func (m *ControlHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldControlOwnerID(ctx)
 	case controlhistory.FieldDelegateID:
 		return m.OldDelegateID(ctx)
+	case controlhistory.FieldRefCodeSortKey:
+		return m.OldRefCodeSortKey(ctx)
 	case controlhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case controlhistory.FieldSystemOwned:
@@ -28981,6 +29025,13 @@ func (m *ControlHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDelegateID(v)
+		return nil
+	case controlhistory.FieldRefCodeSortKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRefCodeSortKey(v)
 		return nil
 	case controlhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -29645,6 +29696,9 @@ func (m *ControlHistoryMutation) ResetField(name string) error {
 		return nil
 	case controlhistory.FieldDelegateID:
 		m.ResetDelegateID()
+		return nil
+	case controlhistory.FieldRefCodeSortKey:
+		m.ResetRefCodeSortKey()
 		return nil
 	case controlhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -131619,6 +131673,7 @@ type SubcontrolHistoryMutation struct {
 	appendevidence_requests       []models.EvidenceRequests
 	control_owner_id              *string
 	delegate_id                   *string
+	ref_code_sort_key             *string
 	owner_id                      *string
 	system_owned                  *bool
 	internal_notes                *string
@@ -134292,6 +134347,42 @@ func (m *SubcontrolHistoryMutation) ResetDelegateID() {
 	delete(m.clearedFields, subcontrolhistory.FieldDelegateID)
 }
 
+// SetRefCodeSortKey sets the "ref_code_sort_key" field.
+func (m *SubcontrolHistoryMutation) SetRefCodeSortKey(s string) {
+	m.ref_code_sort_key = &s
+}
+
+// RefCodeSortKey returns the value of the "ref_code_sort_key" field in the mutation.
+func (m *SubcontrolHistoryMutation) RefCodeSortKey() (r string, exists bool) {
+	v := m.ref_code_sort_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRefCodeSortKey returns the old "ref_code_sort_key" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldRefCodeSortKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRefCodeSortKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRefCodeSortKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRefCodeSortKey: %w", err)
+	}
+	return oldValue.RefCodeSortKey, nil
+}
+
+// ResetRefCodeSortKey resets all changes to the "ref_code_sort_key" field.
+func (m *SubcontrolHistoryMutation) ResetRefCodeSortKey() {
+	m.ref_code_sort_key = nil
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *SubcontrolHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -134741,7 +134832,7 @@ func (m *SubcontrolHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubcontrolHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 58)
+	fields := make([]string, 0, 59)
 	if m.history_time != nil {
 		fields = append(fields, subcontrolhistory.FieldHistoryTime)
 	}
@@ -134889,6 +134980,9 @@ func (m *SubcontrolHistoryMutation) Fields() []string {
 	if m.delegate_id != nil {
 		fields = append(fields, subcontrolhistory.FieldDelegateID)
 	}
+	if m.ref_code_sort_key != nil {
+		fields = append(fields, subcontrolhistory.FieldRefCodeSortKey)
+	}
 	if m.owner_id != nil {
 		fields = append(fields, subcontrolhistory.FieldOwnerID)
 	}
@@ -135022,6 +135116,8 @@ func (m *SubcontrolHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ControlOwnerID()
 	case subcontrolhistory.FieldDelegateID:
 		return m.DelegateID()
+	case subcontrolhistory.FieldRefCodeSortKey:
+		return m.RefCodeSortKey()
 	case subcontrolhistory.FieldOwnerID:
 		return m.OwnerID()
 	case subcontrolhistory.FieldSystemOwned:
@@ -135147,6 +135243,8 @@ func (m *SubcontrolHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldControlOwnerID(ctx)
 	case subcontrolhistory.FieldDelegateID:
 		return m.OldDelegateID(ctx)
+	case subcontrolhistory.FieldRefCodeSortKey:
+		return m.OldRefCodeSortKey(ctx)
 	case subcontrolhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case subcontrolhistory.FieldSystemOwned:
@@ -135516,6 +135614,13 @@ func (m *SubcontrolHistoryMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDelegateID(v)
+		return nil
+	case subcontrolhistory.FieldRefCodeSortKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRefCodeSortKey(v)
 		return nil
 	case subcontrolhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -136096,6 +136201,9 @@ func (m *SubcontrolHistoryMutation) ResetField(name string) error {
 		return nil
 	case subcontrolhistory.FieldDelegateID:
 		m.ResetDelegateID()
+		return nil
+	case subcontrolhistory.FieldRefCodeSortKey:
+		m.ResetRefCodeSortKey()
 		return nil
 	case subcontrolhistory.FieldOwnerID:
 		m.ResetOwnerID()

@@ -599,6 +599,20 @@ func (_c *SubcontrolHistoryCreate) SetNillableDelegateID(v *string) *SubcontrolH
 	return _c
 }
 
+// SetRefCodeSortKey sets the "ref_code_sort_key" field.
+func (_c *SubcontrolHistoryCreate) SetRefCodeSortKey(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetRefCodeSortKey(v)
+	return _c
+}
+
+// SetNillableRefCodeSortKey sets the "ref_code_sort_key" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableRefCodeSortKey(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetRefCodeSortKey(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *SubcontrolHistoryCreate) SetOwnerID(v string) *SubcontrolHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -797,6 +811,10 @@ func (_c *SubcontrolHistoryCreate) defaults() error {
 		v := subcontrolhistory.DefaultSource
 		_c.mutation.SetSource(v)
 	}
+	if _, ok := _c.mutation.RefCodeSortKey(); !ok {
+		v := subcontrolhistory.DefaultRefCodeSortKey
+		_c.mutation.SetRefCodeSortKey(v)
+	}
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := subcontrolhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
@@ -845,6 +863,9 @@ func (_c *SubcontrolHistoryCreate) check() error {
 		if err := subcontrolhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "SubcontrolHistory.source": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.RefCodeSortKey(); !ok {
+		return &ValidationError{Name: "ref_code_sort_key", err: errors.New(`historygenerated: missing required field "SubcontrolHistory.ref_code_sort_key"`)}
 	}
 	if _, ok := _c.mutation.RefCode(); !ok {
 		return &ValidationError{Name: "ref_code", err: errors.New(`historygenerated: missing required field "SubcontrolHistory.ref_code"`)}
@@ -1082,6 +1103,10 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.DelegateID(); ok {
 		_spec.SetField(subcontrolhistory.FieldDelegateID, field.TypeString, value)
 		_node.DelegateID = value
+	}
+	if value, ok := _c.mutation.RefCodeSortKey(); ok {
+		_spec.SetField(subcontrolhistory.FieldRefCodeSortKey, field.TypeString, value)
+		_node.RefCodeSortKey = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(subcontrolhistory.FieldOwnerID, field.TypeString, value)

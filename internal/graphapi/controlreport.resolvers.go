@@ -41,7 +41,7 @@ func (r *queryResolver) ControlReportsByCategory(ctx context.Context, where *gen
 	q := withTransactionalMutation(ctx).Control.Query()
 
 	if hasSubcontrolsField(ctx) || hasAnySubcontrolAdditionalField(ctx) {
-		q.WithSubcontrols()
+		q.WithSubcontrols(orderSubcontrolsByRefCode)
 	}
 
 	if hasControlOwnerField(ctx) {
@@ -97,7 +97,7 @@ func (r *queryResolver) ControlReports(ctx context.Context, after *entgql.Cursor
 	req := withTransactionalMutation(ctx).Control.Query().Select(controlFields...)
 
 	if hasSubcontrolsField(ctx) || hasAnySubcontrolAdditionalField(ctx) {
-		req.WithSubcontrols()
+		req.WithSubcontrols(orderSubcontrolsByRefCode)
 	}
 
 	if hasControlOwnerField(ctx) {

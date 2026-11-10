@@ -4259,6 +4259,10 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDelegateID(delegateID)
 	}
 
+	if refCodeSortKey, exists := m.RefCodeSortKey(); exists {
+		create = create.SetRefCodeSortKey(refCodeSortKey)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -4629,6 +4633,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDelegateID(control.DelegateID)
 		}
 
+		if refCodeSortKey, exists := m.RefCodeSortKey(); exists {
+			create = create.SetRefCodeSortKey(refCodeSortKey)
+		} else {
+			create = create.SetRefCodeSortKey(control.RefCodeSortKey)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -4803,6 +4813,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEvidenceRequests(control.EvidenceRequests).
 			SetNillableControlOwnerID(control.ControlOwnerID).
 			SetDelegateID(control.DelegateID).
+			SetRefCodeSortKey(control.RefCodeSortKey).
 			SetOwnerID(control.OwnerID).
 			SetSystemOwned(control.SystemOwned).
 			SetNillableInternalNotes(control.InternalNotes).
@@ -21980,6 +21991,10 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDelegateID(delegateID)
 	}
 
+	if refCodeSortKey, exists := m.RefCodeSortKey(); exists {
+		create = create.SetRefCodeSortKey(refCodeSortKey)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -22326,6 +22341,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDelegateID(subcontrol.DelegateID)
 		}
 
+		if refCodeSortKey, exists := m.RefCodeSortKey(); exists {
+			create = create.SetRefCodeSortKey(refCodeSortKey)
+		} else {
+			create = create.SetRefCodeSortKey(subcontrol.RefCodeSortKey)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -22464,6 +22485,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetEvidenceRequests(subcontrol.EvidenceRequests).
 			SetNillableControlOwnerID(subcontrol.ControlOwnerID).
 			SetDelegateID(subcontrol.DelegateID).
+			SetRefCodeSortKey(subcontrol.RefCodeSortKey).
 			SetOwnerID(subcontrol.OwnerID).
 			SetSystemOwned(subcontrol.SystemOwned).
 			SetNillableInternalNotes(subcontrol.InternalNotes).

@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/logx"
 
+	"github.com/theopenlane/core/v2/internal/controls"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -59,13 +60,12 @@ type backfillRoutine struct {
 // backfillRoutines are the registered backfill routines
 var backfillRoutines = []backfillRoutine{
 	{
-		// example registration
-		// Name:    "backfill-x",
-		// Version: "v1",
-		// Enabled: true,
-		// Run: func(ctx context.Context, deps backfillDeps) error {
-		// 	return backfillX(ctx, deps.Client)
-		// },
+		Name:    "ref-code-sort-key",
+		Version: "v1",
+		Enabled: true,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			return controls.BackfillRefCodeSortKeys(ctx, deps.Client)
+		},
 	},
 }
 

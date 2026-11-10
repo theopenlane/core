@@ -628,7 +628,7 @@ func convertReportOrderToControlOrderBy(orderBy []*model.ControlReportOrder) []*
 		case model.ControlReportOrderFieldUpdatedAt:
 			field = generated.ControlOrderFieldUpdatedAt
 		case model.ControlReportOrderFieldRefCode:
-			field = generated.ControlOrderFieldRefCode
+			field = generated.ControlOrderFieldRefCodeSortKey
 		case model.ControlReportOrderFieldTitle:
 			field = generated.ControlOrderFieldTitle
 		case model.ControlReportOrderFieldReferenceFramework:
@@ -1242,4 +1242,9 @@ func groupControlReportsByCategory(controls []*model.ControlReport) []*model.Con
 	}
 
 	return out
+}
+
+// orderSubcontrolsByRefCode loads a control's subcontrols in the natural ref code order the ref_code order field uses
+func orderSubcontrolsByRefCode(q *generated.SubcontrolQuery) {
+	q.Order(subcontrol.ByRefCodeSortKey(), subcontrol.ByID())
 }

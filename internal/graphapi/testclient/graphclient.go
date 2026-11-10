@@ -113,6 +113,7 @@ type TestGraphClient interface {
 	DeleteControl(ctx context.Context, deleteControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControl, error)
 	GetAllControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControls, error)
 	GetControlByID(ctx context.Context, controlID string, interceptors ...clientv2.RequestInterceptor) (*GetControlByID, error)
+	GetControlSubcontrolRefCodes(ctx context.Context, controlID string, first *int64, after *string, orderBy []*SubcontrolOrder, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcontrolRefCodes, error)
 	GetControls(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ControlOrder, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error)
 	GetTrustCenterControlByID(ctx context.Context, controlID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterControlByID, error)
 	GetTrustCenterControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterControls, error)
@@ -554,6 +555,7 @@ type TestGraphClient interface {
 	DeleteSubcontrol(ctx context.Context, deleteSubcontrolID string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubcontrol, error)
 	GetAllSubcontrols(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubcontrols, error)
 	GetSubcontrolByID(ctx context.Context, subcontrolID string, interceptors ...clientv2.RequestInterceptor) (*GetSubcontrolByID, error)
+	GetSubcontrolRefCodes(ctx context.Context, first *int64, after *string, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubcontrolRefCodes, error)
 	GetSubcontrols(ctx context.Context, where *SubcontrolWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubcontrols, error)
 	UpdateSubcontrol(ctx context.Context, updateSubcontrolID string, input UpdateSubcontrolInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubcontrol, error)
 	CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubprocessor, error)
@@ -23462,6 +23464,89 @@ func (t *GetControlByID_Control) GetWorkflowEligibleMarker() *bool {
 		t = &GetControlByID_Control{}
 	}
 	return t.WorkflowEligibleMarker
+}
+
+type GetControlSubcontrolRefCodes_Control_Subcontrols_PageInfo struct {
+	EndCursor   *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+}
+
+func (t *GetControlSubcontrolRefCodes_Control_Subcontrols_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes_Control_Subcontrols_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetControlSubcontrolRefCodes_Control_Subcontrols_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes_Control_Subcontrols_PageInfo{}
+	}
+	return t.HasNextPage
+}
+
+type GetControlSubcontrolRefCodes_Control_Subcontrols_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *GetControlSubcontrolRefCodes_Control_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes_Control_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlSubcontrolRefCodes_Control_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes_Control_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type GetControlSubcontrolRefCodes_Control_Subcontrols_Edges struct {
+	Node *GetControlSubcontrolRefCodes_Control_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlSubcontrolRefCodes_Control_Subcontrols_Edges) GetNode() *GetControlSubcontrolRefCodes_Control_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes_Control_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlSubcontrolRefCodes_Control_Subcontrols struct {
+	Edges    []*GetControlSubcontrolRefCodes_Control_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo GetControlSubcontrolRefCodes_Control_Subcontrols_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+}
+
+func (t *GetControlSubcontrolRefCodes_Control_Subcontrols) GetEdges() []*GetControlSubcontrolRefCodes_Control_Subcontrols_Edges {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes_Control_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *GetControlSubcontrolRefCodes_Control_Subcontrols) GetPageInfo() *GetControlSubcontrolRefCodes_Control_Subcontrols_PageInfo {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes_Control_Subcontrols{}
+	}
+	return &t.PageInfo
+}
+
+type GetControlSubcontrolRefCodes_Control struct {
+	ID          string                                           "json:\"id\" graphql:\"id\""
+	Subcontrols GetControlSubcontrolRefCodes_Control_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+}
+
+func (t *GetControlSubcontrolRefCodes_Control) GetID() string {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes_Control{}
+	}
+	return t.ID
+}
+func (t *GetControlSubcontrolRefCodes_Control) GetSubcontrols() *GetControlSubcontrolRefCodes_Control_Subcontrols {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes_Control{}
+	}
+	return &t.Subcontrols
 }
 
 type GetControls_Controls_PageInfo struct {
@@ -129073,6 +129158,71 @@ func (t *GetSubcontrolByID_Subcontrol) GetWorkflowEligibleMarker() *bool {
 	return t.WorkflowEligibleMarker
 }
 
+type GetSubcontrolRefCodes_Subcontrols_PageInfo struct {
+	EndCursor   *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+}
+
+func (t *GetSubcontrolRefCodes_Subcontrols_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetSubcontrolRefCodes_Subcontrols_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetSubcontrolRefCodes_Subcontrols_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetSubcontrolRefCodes_Subcontrols_PageInfo{}
+	}
+	return t.HasNextPage
+}
+
+type GetSubcontrolRefCodes_Subcontrols_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *GetSubcontrolRefCodes_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetSubcontrolRefCodes_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetSubcontrolRefCodes_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetSubcontrolRefCodes_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type GetSubcontrolRefCodes_Subcontrols_Edges struct {
+	Node *GetSubcontrolRefCodes_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetSubcontrolRefCodes_Subcontrols_Edges) GetNode() *GetSubcontrolRefCodes_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &GetSubcontrolRefCodes_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type GetSubcontrolRefCodes_Subcontrols struct {
+	Edges    []*GetSubcontrolRefCodes_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo GetSubcontrolRefCodes_Subcontrols_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+}
+
+func (t *GetSubcontrolRefCodes_Subcontrols) GetEdges() []*GetSubcontrolRefCodes_Subcontrols_Edges {
+	if t == nil {
+		t = &GetSubcontrolRefCodes_Subcontrols{}
+	}
+	return t.Edges
+}
+func (t *GetSubcontrolRefCodes_Subcontrols) GetPageInfo() *GetSubcontrolRefCodes_Subcontrols_PageInfo {
+	if t == nil {
+		t = &GetSubcontrolRefCodes_Subcontrols{}
+	}
+	return &t.PageInfo
+}
+
 type GetSubcontrols_Subcontrols_Edges_Node_Control struct {
 	Description *string "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID   string  "json:\"displayID\" graphql:\"displayID\""
@@ -178035,6 +178185,17 @@ func (t *GetControlByID) GetControl() *GetControlByID_Control {
 	return &t.Control
 }
 
+type GetControlSubcontrolRefCodes struct {
+	Control GetControlSubcontrolRefCodes_Control "json:\"control\" graphql:\"control\""
+}
+
+func (t *GetControlSubcontrolRefCodes) GetControl() *GetControlSubcontrolRefCodes_Control {
+	if t == nil {
+		t = &GetControlSubcontrolRefCodes{}
+	}
+	return &t.Control
+}
+
 type GetControls struct {
 	Controls GetControls_Controls "json:\"controls\" graphql:\"controls\""
 }
@@ -182884,6 +183045,17 @@ func (t *GetSubcontrolByID) GetSubcontrol() *GetSubcontrolByID_Subcontrol {
 		t = &GetSubcontrolByID{}
 	}
 	return &t.Subcontrol
+}
+
+type GetSubcontrolRefCodes struct {
+	Subcontrols GetSubcontrolRefCodes_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
+}
+
+func (t *GetSubcontrolRefCodes) GetSubcontrols() *GetSubcontrolRefCodes_Subcontrols {
+	if t == nil {
+		t = &GetSubcontrolRefCodes{}
+	}
+	return &t.Subcontrols
 }
 
 type GetSubcontrols struct {
@@ -191180,6 +191352,45 @@ func (c *Client) GetControlByID(ctx context.Context, controlID string, intercept
 
 	var res GetControlByID
 	if err := c.Client.Post(ctx, "GetControlByID", GetControlByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlSubcontrolRefCodesDocument = `query GetControlSubcontrolRefCodes ($controlId: ID!, $first: Int, $after: Cursor, $orderBy: [SubcontrolOrder!]) {
+	control(id: $controlId) {
+		id
+		subcontrols(first: $first, after: $after, orderBy: $orderBy) {
+			pageInfo {
+				endCursor
+				hasNextPage
+			}
+			edges {
+				node {
+					id
+					refCode
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetControlSubcontrolRefCodes(ctx context.Context, controlID string, first *int64, after *string, orderBy []*SubcontrolOrder, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcontrolRefCodes, error) {
+	vars := map[string]any{
+		"controlId": controlID,
+		"first":     first,
+		"after":     after,
+		"orderBy":   orderBy,
+	}
+
+	var res GetControlSubcontrolRefCodes
+	if err := c.Client.Post(ctx, "GetControlSubcontrolRefCodes", GetControlSubcontrolRefCodesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -217196,6 +217407,42 @@ func (c *Client) GetSubcontrolByID(ctx context.Context, subcontrolID string, int
 	return &res, nil
 }
 
+const GetSubcontrolRefCodesDocument = `query GetSubcontrolRefCodes ($first: Int, $after: Cursor, $orderBy: [SubcontrolOrder!], $where: SubcontrolWhereInput) {
+	subcontrols(first: $first, after: $after, orderBy: $orderBy, where: $where) {
+		pageInfo {
+			endCursor
+			hasNextPage
+		}
+		edges {
+			node {
+				id
+				refCode
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetSubcontrolRefCodes(ctx context.Context, first *int64, after *string, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubcontrolRefCodes, error) {
+	vars := map[string]any{
+		"first":   first,
+		"after":   after,
+		"orderBy": orderBy,
+		"where":   where,
+	}
+
+	var res GetSubcontrolRefCodes
+	if err := c.Client.Post(ctx, "GetSubcontrolRefCodes", GetSubcontrolRefCodesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetSubcontrolsDocument = `query GetSubcontrols ($where: SubcontrolWhereInput) {
 	subcontrols(where: $where) {
 		edges {
@@ -230138,6 +230385,7 @@ var DocumentOperationNames = map[string]string{
 	DeleteControlDocument:                               "DeleteControl",
 	GetAllControlsDocument:                              "GetAllControls",
 	GetControlByIDDocument:                              "GetControlByID",
+	GetControlSubcontrolRefCodesDocument:                "GetControlSubcontrolRefCodes",
 	GetControlsDocument:                                 "GetControls",
 	GetTrustCenterControlByIDDocument:                   "GetTrustCenterControlByID",
 	GetTrustCenterControlsDocument:                      "GetTrustCenterControls",
@@ -230579,6 +230827,7 @@ var DocumentOperationNames = map[string]string{
 	DeleteSubcontrolDocument:                            "DeleteSubcontrol",
 	GetAllSubcontrolsDocument:                           "GetAllSubcontrols",
 	GetSubcontrolByIDDocument:                           "GetSubcontrolByID",
+	GetSubcontrolRefCodesDocument:                       "GetSubcontrolRefCodes",
 	GetSubcontrolsDocument:                              "GetSubcontrols",
 	UpdateSubcontrolDocument:                            "UpdateSubcontrol",
 	CreateBulkCSVSubprocessorDocument:                   "CreateBulkCSVSubprocessor",

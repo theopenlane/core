@@ -1163,27 +1163,29 @@ func init() {
 
 	control.Hooks[8] = controlMixinHooks8[2]
 
-	control.Hooks[9] = controlMixinHooks9[0]
+	control.Hooks[9] = controlMixinHooks8[3]
 
-	control.Hooks[10] = controlMixinHooks9[1]
+	control.Hooks[10] = controlMixinHooks9[0]
 
-	control.Hooks[11] = controlMixinHooks10[0]
+	control.Hooks[11] = controlMixinHooks9[1]
 
-	control.Hooks[12] = controlMixinHooks11[0]
+	control.Hooks[12] = controlMixinHooks10[0]
 
-	control.Hooks[13] = controlMixinHooks11[1]
+	control.Hooks[13] = controlMixinHooks11[0]
 
-	control.Hooks[14] = controlMixinHooks12[0]
+	control.Hooks[14] = controlMixinHooks11[1]
 
-	control.Hooks[15] = controlMixinHooks13[0]
+	control.Hooks[15] = controlMixinHooks12[0]
 
-	control.Hooks[16] = controlMixinHooks14[0]
+	control.Hooks[16] = controlMixinHooks13[0]
 
-	control.Hooks[17] = controlMixinHooks15[0]
+	control.Hooks[17] = controlMixinHooks14[0]
 
-	control.Hooks[18] = controlHooks[0]
+	control.Hooks[18] = controlMixinHooks15[0]
 
-	control.Hooks[19] = controlHooks[1]
+	control.Hooks[19] = controlHooks[0]
+
+	control.Hooks[20] = controlHooks[1]
 	controlMixinInters3 := controlMixin[3].Interceptors()
 	controlMixinInters8 := controlMixin[8].Interceptors()
 	controlMixinInters9 := controlMixin[9].Interceptors()
@@ -1233,6 +1235,10 @@ func init() {
 	controlDescReferenceFrameworkRevision := controlMixinFields8[15].Descriptor()
 	// control.ReferenceFrameworkRevisionValidator is a validator for the "reference_framework_revision" field. It is called by the builders before save.
 	control.ReferenceFrameworkRevisionValidator = controlDescReferenceFrameworkRevision.Validators[0].(func(string) error)
+	// controlDescRefCodeSortKey is the schema descriptor for ref_code_sort_key field.
+	controlDescRefCodeSortKey := controlMixinFields8[30].Descriptor()
+	// control.DefaultRefCodeSortKey holds the default value on creation for the ref_code_sort_key field.
+	control.DefaultRefCodeSortKey = controlDescRefCodeSortKey.Default.(string)
 	// controlDescOwnerID is the schema descriptor for owner_id field.
 	controlDescOwnerID := controlMixinFields9[0].Descriptor()
 	// control.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
@@ -6910,19 +6916,21 @@ func init() {
 
 	subcontrol.Hooks[8] = subcontrolMixinHooks8[2]
 
-	subcontrol.Hooks[9] = subcontrolMixinHooks9[0]
+	subcontrol.Hooks[9] = subcontrolMixinHooks8[3]
 
-	subcontrol.Hooks[10] = subcontrolMixinHooks9[1]
+	subcontrol.Hooks[10] = subcontrolMixinHooks9[0]
 
-	subcontrol.Hooks[11] = subcontrolMixinHooks10[0]
+	subcontrol.Hooks[11] = subcontrolMixinHooks9[1]
 
-	subcontrol.Hooks[12] = subcontrolMixinHooks11[0]
+	subcontrol.Hooks[12] = subcontrolMixinHooks10[0]
 
-	subcontrol.Hooks[13] = subcontrolMixinHooks12[0]
+	subcontrol.Hooks[13] = subcontrolMixinHooks11[0]
 
-	subcontrol.Hooks[14] = subcontrolHooks[0]
+	subcontrol.Hooks[14] = subcontrolMixinHooks12[0]
 
-	subcontrol.Hooks[15] = subcontrolHooks[1]
+	subcontrol.Hooks[15] = subcontrolHooks[0]
+
+	subcontrol.Hooks[16] = subcontrolHooks[1]
 	subcontrolMixinInters3 := subcontrolMixin[3].Interceptors()
 	subcontrolMixinInters8 := subcontrolMixin[8].Interceptors()
 	subcontrolMixinInters9 := subcontrolMixin[9].Interceptors()
@@ -6970,6 +6978,10 @@ func init() {
 	subcontrolDescReferenceFrameworkRevision := subcontrolMixinFields8[15].Descriptor()
 	// subcontrol.ReferenceFrameworkRevisionValidator is a validator for the "reference_framework_revision" field. It is called by the builders before save.
 	subcontrol.ReferenceFrameworkRevisionValidator = subcontrolDescReferenceFrameworkRevision.Validators[0].(func(string) error)
+	// subcontrolDescRefCodeSortKey is the schema descriptor for ref_code_sort_key field.
+	subcontrolDescRefCodeSortKey := subcontrolMixinFields8[30].Descriptor()
+	// subcontrol.DefaultRefCodeSortKey holds the default value on creation for the ref_code_sort_key field.
+	subcontrol.DefaultRefCodeSortKey = subcontrolDescRefCodeSortKey.Default.(string)
 	// subcontrolDescOwnerID is the schema descriptor for owner_id field.
 	subcontrolDescOwnerID := subcontrolMixinFields9[0].Descriptor()
 	// subcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.

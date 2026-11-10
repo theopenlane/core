@@ -588,6 +588,20 @@ func (_c *SubcontrolCreate) SetNillableDelegateID(v *string) *SubcontrolCreate {
 	return _c
 }
 
+// SetRefCodeSortKey sets the "ref_code_sort_key" field.
+func (_c *SubcontrolCreate) SetRefCodeSortKey(v string) *SubcontrolCreate {
+	_c.mutation.SetRefCodeSortKey(v)
+	return _c
+}
+
+// SetNillableRefCodeSortKey sets the "ref_code_sort_key" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableRefCodeSortKey(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetRefCodeSortKey(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *SubcontrolCreate) SetOwnerID(v string) *SubcontrolCreate {
 	_c.mutation.SetOwnerID(v)
@@ -1154,6 +1168,10 @@ func (_c *SubcontrolCreate) defaults() error {
 		v := subcontrol.DefaultSource
 		_c.mutation.SetSource(v)
 	}
+	if _, ok := _c.mutation.RefCodeSortKey(); !ok {
+		v := subcontrol.DefaultRefCodeSortKey
+		_c.mutation.SetRefCodeSortKey(v)
+	}
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := subcontrol.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
@@ -1201,6 +1219,9 @@ func (_c *SubcontrolCreate) check() error {
 		if err := subcontrol.ReferenceFrameworkRevisionValidator(v); err != nil {
 			return &ValidationError{Name: "reference_framework_revision", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.reference_framework_revision": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.RefCodeSortKey(); !ok {
+		return &ValidationError{Name: "ref_code_sort_key", err: errors.New(`generated: missing required field "Subcontrol.ref_code_sort_key"`)}
 	}
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := subcontrol.OwnerIDValidator(v); err != nil {
@@ -1432,6 +1453,10 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.EvidenceRequests(); ok {
 		_spec.SetField(subcontrol.FieldEvidenceRequests, field.TypeJSON, value)
 		_node.EvidenceRequests = value
+	}
+	if value, ok := _c.mutation.RefCodeSortKey(); ok {
+		_spec.SetField(subcontrol.FieldRefCodeSortKey, field.TypeString, value)
+		_node.RefCodeSortKey = value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(subcontrol.FieldSystemOwned, field.TypeBool, value)

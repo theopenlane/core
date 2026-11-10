@@ -326,6 +326,20 @@ query GetSubcontrolByID ($subcontrolId: ID!) {
 		}
 	}
 }
+query GetSubcontrolRefCodes ($first: Int, $after: Cursor, $orderBy: [SubcontrolOrder!], $where: SubcontrolWhereInput) {
+	subcontrols(first: $first, after: $after, orderBy: $orderBy, where: $where) {
+		pageInfo {
+			endCursor
+			hasNextPage
+		}
+		edges {
+			node {
+				id
+				refCode
+			}
+		}
+	}
+}
 query GetSubcontrols ($where: SubcontrolWhereInput) {
 	subcontrols(where: $where) {
 		edges {

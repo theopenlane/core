@@ -121,6 +121,8 @@ type SubcontrolHistory struct {
 	ControlOwnerID *string `json:"control_owner_id,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
 	DelegateID string `json:"delegate_id,omitempty"`
+	// natural-order key derived from ref_code by a hook; backs the ref_code order and must be compared bytewise
+	RefCodeSortKey string `json:"ref_code_sort_key,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -153,7 +155,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case subcontrolhistory.FieldSystemOwned, subcontrolhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldUpdatedByImpersonator, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldSourceDefinitionID, subcontrolhistory.FieldSourceDefinitionVersion, subcontrolhistory.FieldSourceInstanceID, subcontrolhistory.FieldManagedBy, subcontrolhistory.FieldIntegrationRunID, subcontrolhistory.FieldSourceKey, subcontrolhistory.FieldExternalID, subcontrolhistory.FieldExternalUUID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationDescription, subcontrolhistory.FieldPublicRepresentation, subcontrolhistory.FieldSource, subcontrolhistory.FieldSourceName, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldReferenceFrameworkRevision, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldSubcontrolKindName, subcontrolhistory.FieldSubcontrolKindID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldUpdatedByImpersonator, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldSourceDefinitionID, subcontrolhistory.FieldSourceDefinitionVersion, subcontrolhistory.FieldSourceInstanceID, subcontrolhistory.FieldManagedBy, subcontrolhistory.FieldIntegrationRunID, subcontrolhistory.FieldSourceKey, subcontrolhistory.FieldExternalID, subcontrolhistory.FieldExternalUUID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationDescription, subcontrolhistory.FieldPublicRepresentation, subcontrolhistory.FieldSource, subcontrolhistory.FieldSourceName, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldReferenceFrameworkRevision, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldRefCodeSortKey, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldSubcontrolKindName, subcontrolhistory.FieldSubcontrolKindID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -502,6 +504,12 @@ func (_m *SubcontrolHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.DelegateID = value.String
 			}
+		case subcontrolhistory.FieldRefCodeSortKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ref_code_sort_key", values[i])
+			} else if value.Valid {
+				_m.RefCodeSortKey = value.String
+			}
 		case subcontrolhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -752,6 +760,9 @@ func (_m *SubcontrolHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(_m.DelegateID)
+	builder.WriteString(", ")
+	builder.WriteString("ref_code_sort_key=")
+	builder.WriteString(_m.RefCodeSortKey)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

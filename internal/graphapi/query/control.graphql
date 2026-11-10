@@ -481,6 +481,23 @@ query GetControlByID ($controlId: ID!) {
 		}
 	}
 }
+query GetControlSubcontrolRefCodes ($controlId: ID!, $first: Int, $after: Cursor, $orderBy: [SubcontrolOrder!]) {
+	control(id: $controlId) {
+		id
+		subcontrols(first: $first, after: $after, orderBy: $orderBy) {
+			pageInfo {
+				endCursor
+				hasNextPage
+			}
+			edges {
+				node {
+					id
+					refCode
+				}
+			}
+		}
+	}
+}
 query GetControls ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ControlOrder!], $where: ControlWhereInput) {
 	controls(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
 		totalCount

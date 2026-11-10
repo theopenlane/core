@@ -117,6 +117,8 @@ type Control struct {
 	ControlOwnerID *string `json:"control_owner_id,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
 	DelegateID string `json:"delegate_id,omitempty"`
+	// natural-order key derived from ref_code by a hook; backs the ref_code order and must be compared bytewise
+	RefCodeSortKey string `json:"ref_code_sort_key,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -649,7 +651,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case control.FieldSystemOwned, control.FieldWorkflowEligibleMarker, control.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldUpdatedByImpersonator, control.FieldDeletedBy, control.FieldDisplayID, control.FieldSourceDefinitionID, control.FieldSourceDefinitionVersion, control.FieldSourceInstanceID, control.FieldManagedBy, control.FieldIntegrationRunID, control.FieldSourceKey, control.FieldExternalID, control.FieldExternalUUID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldImplementationStatus, control.FieldImplementationDescription, control.FieldPublicRepresentation, control.FieldSource, control.FieldSourceName, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID, control.FieldTrustCenterVisibility:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldUpdatedByImpersonator, control.FieldDeletedBy, control.FieldDisplayID, control.FieldSourceDefinitionID, control.FieldSourceDefinitionVersion, control.FieldSourceInstanceID, control.FieldManagedBy, control.FieldIntegrationRunID, control.FieldSourceKey, control.FieldExternalID, control.FieldExternalUUID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldImplementationStatus, control.FieldImplementationDescription, control.FieldPublicRepresentation, control.FieldSource, control.FieldSourceName, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldRefCodeSortKey, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID, control.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -981,6 +983,12 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field delegate_id", values[i])
 			} else if value.Valid {
 				_m.DelegateID = value.String
+			}
+		case control.FieldRefCodeSortKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ref_code_sort_key", values[i])
+			} else if value.Valid {
+				_m.RefCodeSortKey = value.String
 			}
 		case control.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1461,6 +1469,9 @@ func (_m *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(_m.DelegateID)
+	builder.WriteString(", ")
+	builder.WriteString("ref_code_sort_key=")
+	builder.WriteString(_m.RefCodeSortKey)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

@@ -631,6 +631,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldEvidenceRequests:           {Type: field.TypeJSON, Column: control.FieldEvidenceRequests},
 			control.FieldControlOwnerID:             {Type: field.TypeString, Column: control.FieldControlOwnerID},
 			control.FieldDelegateID:                 {Type: field.TypeString, Column: control.FieldDelegateID},
+			control.FieldRefCodeSortKey:             {Type: field.TypeString, Column: control.FieldRefCodeSortKey},
 			control.FieldOwnerID:                    {Type: field.TypeString, Column: control.FieldOwnerID},
 			control.FieldSystemOwned:                {Type: field.TypeBool, Column: control.FieldSystemOwned},
 			control.FieldInternalNotes:              {Type: field.TypeString, Column: control.FieldInternalNotes},
@@ -3145,6 +3146,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldEvidenceRequests:           {Type: field.TypeJSON, Column: subcontrol.FieldEvidenceRequests},
 			subcontrol.FieldControlOwnerID:             {Type: field.TypeString, Column: subcontrol.FieldControlOwnerID},
 			subcontrol.FieldDelegateID:                 {Type: field.TypeString, Column: subcontrol.FieldDelegateID},
+			subcontrol.FieldRefCodeSortKey:             {Type: field.TypeString, Column: subcontrol.FieldRefCodeSortKey},
 			subcontrol.FieldOwnerID:                    {Type: field.TypeString, Column: subcontrol.FieldOwnerID},
 			subcontrol.FieldSystemOwned:                {Type: field.TypeBool, Column: subcontrol.FieldSystemOwned},
 			subcontrol.FieldInternalNotes:              {Type: field.TypeString, Column: subcontrol.FieldInternalNotes},
@@ -24201,6 +24203,11 @@ func (f *ControlFilter) WhereControlOwnerID(p entql.StringP) {
 // WhereDelegateID applies the entql string predicate on the delegate_id field.
 func (f *ControlFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(control.FieldDelegateID))
+}
+
+// WhereRefCodeSortKey applies the entql string predicate on the ref_code_sort_key field.
+func (f *ControlFilter) WhereRefCodeSortKey(p entql.StringP) {
+	f.Where(p.Field(control.FieldRefCodeSortKey))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -47894,6 +47901,11 @@ func (f *SubcontrolFilter) WhereControlOwnerID(p entql.StringP) {
 // WhereDelegateID applies the entql string predicate on the delegate_id field.
 func (f *SubcontrolFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldDelegateID))
+}
+
+// WhereRefCodeSortKey applies the entql string predicate on the ref_code_sort_key field.
+func (f *SubcontrolFilter) WhereRefCodeSortKey(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldRefCodeSortKey))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.

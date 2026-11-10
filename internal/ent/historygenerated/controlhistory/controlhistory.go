@@ -118,6 +118,8 @@ const (
 	FieldControlOwnerID = "control_owner_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
 	FieldDelegateID = "delegate_id"
+	// FieldRefCodeSortKey holds the string denoting the ref_code_sort_key field in the database.
+	FieldRefCodeSortKey = "ref_code_sort_key"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -204,6 +206,7 @@ var Columns = []string{
 	FieldEvidenceRequests,
 	FieldControlOwnerID,
 	FieldDelegateID,
+	FieldRefCodeSortKey,
 	FieldOwnerID,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -248,6 +251,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultRefCodeSortKey holds the default value on creation for the "ref_code_sort_key" field.
+	DefaultRefCodeSortKey string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
@@ -507,6 +512,11 @@ func ByControlOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByDelegateID orders the results by the delegate_id field.
 func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
+}
+
+// ByRefCodeSortKey orders the results by the ref_code_sort_key field.
+func ByRefCodeSortKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRefCodeSortKey, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

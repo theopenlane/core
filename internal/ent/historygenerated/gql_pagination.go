@@ -4889,17 +4889,17 @@ var (
 			}
 		},
 	}
-	// ControlHistoryOrderFieldRefCode orders ControlHistory by ref_code.
-	ControlHistoryOrderFieldRefCode = &ControlHistoryOrderField{
+	// ControlHistoryOrderFieldRefCodeSortKey orders ControlHistory by ref_code_sort_key.
+	ControlHistoryOrderFieldRefCodeSortKey = &ControlHistoryOrderField{
 		Value: func(_m *ControlHistory) (ent.Value, error) {
-			return _m.RefCode, nil
+			return _m.RefCodeSortKey, nil
 		},
-		column: controlhistory.FieldRefCode,
-		toTerm: controlhistory.ByRefCode,
+		column: controlhistory.FieldRefCodeSortKey,
+		toTerm: controlhistory.ByRefCodeSortKey,
 		toCursor: func(_m *ControlHistory) Cursor {
 			return Cursor{
 				ID:    _m.ID,
-				Value: _m.RefCode,
+				Value: _m.RefCodeSortKey,
 			}
 		},
 	}
@@ -4929,7 +4929,7 @@ func (f ControlHistoryOrderField) String() string {
 		str = "category"
 	case ControlHistoryOrderFieldSubcategory.column:
 		str = "subcategory"
-	case ControlHistoryOrderFieldRefCode.column:
+	case ControlHistoryOrderFieldRefCodeSortKey.column:
 		str = "ref_code"
 	}
 	return str
@@ -4968,7 +4968,7 @@ func (f *ControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
 	case "subcategory":
 		*f = *ControlHistoryOrderFieldSubcategory
 	case "ref_code":
-		*f = *ControlHistoryOrderFieldRefCode
+		*f = *ControlHistoryOrderFieldRefCodeSortKey
 	default:
 		return fmt.Errorf("%s is not a valid ControlHistoryOrderField", str)
 	}
@@ -22656,17 +22656,17 @@ var (
 			}
 		},
 	}
-	// SubcontrolHistoryOrderFieldRefCode orders SubcontrolHistory by ref_code.
-	SubcontrolHistoryOrderFieldRefCode = &SubcontrolHistoryOrderField{
+	// SubcontrolHistoryOrderFieldRefCodeSortKey orders SubcontrolHistory by ref_code_sort_key.
+	SubcontrolHistoryOrderFieldRefCodeSortKey = &SubcontrolHistoryOrderField{
 		Value: func(_m *SubcontrolHistory) (ent.Value, error) {
-			return _m.RefCode, nil
+			return _m.RefCodeSortKey, nil
 		},
-		column: subcontrolhistory.FieldRefCode,
-		toTerm: subcontrolhistory.ByRefCode,
+		column: subcontrolhistory.FieldRefCodeSortKey,
+		toTerm: subcontrolhistory.ByRefCodeSortKey,
 		toCursor: func(_m *SubcontrolHistory) Cursor {
 			return Cursor{
 				ID:    _m.ID,
-				Value: _m.RefCode,
+				Value: _m.RefCodeSortKey,
 			}
 		},
 	}
@@ -22696,7 +22696,7 @@ func (f SubcontrolHistoryOrderField) String() string {
 		str = "category"
 	case SubcontrolHistoryOrderFieldSubcategory.column:
 		str = "subcategory"
-	case SubcontrolHistoryOrderFieldRefCode.column:
+	case SubcontrolHistoryOrderFieldRefCodeSortKey.column:
 		str = "ref_code"
 	}
 	return str
@@ -22735,7 +22735,7 @@ func (f *SubcontrolHistoryOrderField) UnmarshalGQL(v interface{}) error {
 	case "subcategory":
 		*f = *SubcontrolHistoryOrderFieldSubcategory
 	case "ref_code":
-		*f = *SubcontrolHistoryOrderFieldRefCode
+		*f = *SubcontrolHistoryOrderFieldRefCodeSortKey
 	default:
 		return fmt.Errorf("%s is not a valid SubcontrolHistoryOrderField", str)
 	}

@@ -594,6 +594,20 @@ func (_c *ControlCreate) SetNillableDelegateID(v *string) *ControlCreate {
 	return _c
 }
 
+// SetRefCodeSortKey sets the "ref_code_sort_key" field.
+func (_c *ControlCreate) SetRefCodeSortKey(v string) *ControlCreate {
+	_c.mutation.SetRefCodeSortKey(v)
+	return _c
+}
+
+// SetNillableRefCodeSortKey sets the "ref_code_sort_key" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableRefCodeSortKey(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetRefCodeSortKey(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ControlCreate) SetOwnerID(v string) *ControlCreate {
 	_c.mutation.SetOwnerID(v)
@@ -1382,6 +1396,10 @@ func (_c *ControlCreate) defaults() error {
 		v := control.DefaultSource
 		_c.mutation.SetSource(v)
 	}
+	if _, ok := _c.mutation.RefCodeSortKey(); !ok {
+		v := control.DefaultRefCodeSortKey
+		_c.mutation.SetRefCodeSortKey(v)
+	}
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := control.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
@@ -1437,6 +1455,9 @@ func (_c *ControlCreate) check() error {
 		if err := control.ReferenceFrameworkRevisionValidator(v); err != nil {
 			return &ValidationError{Name: "reference_framework_revision", err: fmt.Errorf(`generated: validator failed for field "Control.reference_framework_revision": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.RefCodeSortKey(); !ok {
+		return &ValidationError{Name: "ref_code_sort_key", err: errors.New(`generated: missing required field "Control.ref_code_sort_key"`)}
 	}
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := control.OwnerIDValidator(v); err != nil {
@@ -1662,6 +1683,10 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.EvidenceRequests(); ok {
 		_spec.SetField(control.FieldEvidenceRequests, field.TypeJSON, value)
 		_node.EvidenceRequests = value
+	}
+	if value, ok := _c.mutation.RefCodeSortKey(); ok {
+		_spec.SetField(control.FieldRefCodeSortKey, field.TypeString, value)
+		_node.RefCodeSortKey = value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(control.FieldSystemOwned, field.TypeBool, value)

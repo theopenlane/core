@@ -221,6 +221,11 @@ func DelegateID(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldDelegateID, v))
 }
 
+// RefCodeSortKey applies equality check predicate on the "ref_code_sort_key" field. It's identical to RefCodeSortKeyEQ.
+func RefCodeSortKey(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldRefCodeSortKey, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldOwnerID, v))
@@ -2769,6 +2774,71 @@ func DelegateIDEqualFold(v string) predicate.Control {
 // DelegateIDContainsFold applies the ContainsFold predicate on the "delegate_id" field.
 func DelegateIDContainsFold(v string) predicate.Control {
 	return predicate.Control(sql.FieldContainsFold(FieldDelegateID, v))
+}
+
+// RefCodeSortKeyEQ applies the EQ predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyNEQ applies the NEQ predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyNEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldNEQ(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyIn applies the In predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldIn(FieldRefCodeSortKey, vs...))
+}
+
+// RefCodeSortKeyNotIn applies the NotIn predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyNotIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldNotIn(FieldRefCodeSortKey, vs...))
+}
+
+// RefCodeSortKeyGT applies the GT predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyGT(v string) predicate.Control {
+	return predicate.Control(sql.FieldGT(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyGTE applies the GTE predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyGTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldGTE(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyLT applies the LT predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyLT(v string) predicate.Control {
+	return predicate.Control(sql.FieldLT(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyLTE applies the LTE predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyLTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldLTE(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyContains applies the Contains predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyContains(v string) predicate.Control {
+	return predicate.Control(sql.FieldContains(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyHasPrefix applies the HasPrefix predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyHasPrefix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasPrefix(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyHasSuffix applies the HasSuffix predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyHasSuffix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasSuffix(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyEqualFold applies the EqualFold predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyEqualFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldEqualFold(FieldRefCodeSortKey, v))
+}
+
+// RefCodeSortKeyContainsFold applies the ContainsFold predicate on the "ref_code_sort_key" field.
+func RefCodeSortKeyContainsFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldContainsFold(FieldRefCodeSortKey, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
