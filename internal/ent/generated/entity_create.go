@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
@@ -1485,6 +1486,21 @@ func (_c *EntityCreate) AddFindings(v ...*Finding) *EntityCreate {
 	return _c.AddFindingIDs(ids...)
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (_c *EntityCreate) AddRiskIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddRiskIDs(ids...)
+	return _c
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (_c *EntityCreate) AddRisks(v ...*Risk) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRiskIDs(ids...)
+}
+
 // AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
 func (_c *EntityCreate) AddVulnerabilityIDs(ids ...string) *EntityCreate {
 	_c.mutation.AddVulnerabilityIDs(ids...)
@@ -2630,6 +2646,22 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RisksTable,
+			Columns: entity.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

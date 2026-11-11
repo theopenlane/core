@@ -43862,6 +43862,13 @@ func (_q *EntityQuery) clonePage() *EntityQuery {
 			c.withNamedFindings[name] = q.clonePage()
 		}
 	}
+	c.withRisks = _q.withRisks.clonePage()
+	if _q.withNamedRisks != nil {
+		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))
+		for name, q := range _q.withNamedRisks {
+			c.withNamedRisks[name] = q.clonePage()
+		}
+	}
 	c.withVulnerabilities = _q.withVulnerabilities.clonePage()
 	if _q.withNamedVulnerabilities != nil {
 		c.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery, len(_q.withNamedVulnerabilities))
@@ -48173,6 +48180,13 @@ func (_q *RiskQuery) clonePage() *RiskQuery {
 		c.withNamedEntities = make(map[string]*EntityQuery, len(_q.withNamedEntities))
 		for name, q := range _q.withNamedEntities {
 			c.withNamedEntities[name] = q.clonePage()
+		}
+	}
+	c.withLegacyEntities = _q.withLegacyEntities.clonePage()
+	if _q.withNamedLegacyEntities != nil {
+		c.withNamedLegacyEntities = make(map[string]*EntityQuery, len(_q.withNamedLegacyEntities))
+		for name, q := range _q.withNamedLegacyEntities {
+			c.withNamedLegacyEntities[name] = q.clonePage()
 		}
 	}
 	c.withScans = _q.withScans.clonePage()

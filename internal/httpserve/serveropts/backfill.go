@@ -67,6 +67,14 @@ var backfillRoutines = []backfillRoutine{
 		// 	return backfillX(ctx, deps.Client)
 		// },
 	},
+	{
+		Name:    "backfill-entities-risk",
+		Version: "v1",
+		Enabled: true,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			return backfillRiskEntities(ctx, deps.Client)
+		},
+	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run

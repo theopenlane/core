@@ -7766,6 +7766,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Finding",
 	)
 	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RisksTable,
+			Columns: entity.RisksPrimaryKey,
+			Bidi:    false,
+		},
+		"Entity",
+		"Risk",
+	)
+	graph.MustAddE(
 		"vulnerabilities",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -16048,10 +16060,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"entities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   risk.EntitiesTable,
-			Columns: []string{risk.EntitiesColumn},
+			Columns: risk.EntitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Entity",
+	)
+	graph.MustAddE(
+		"legacy_entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.LegacyEntitiesTable,
+			Columns: []string{risk.LegacyEntitiesColumn},
 			Bidi:    false,
 		},
 		"Risk",
@@ -29067,6 +29091,20 @@ func (f *EntityFilter) WhereHasFindings() {
 // WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
 func (f *EntityFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
 	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *EntityFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -46446,6 +46484,20 @@ func (f *RiskFilter) WhereHasEntities() {
 // WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
 func (f *RiskFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
 	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasLegacyEntities applies a predicate to check if query has an edge legacy_entities.
+func (f *RiskFilter) WhereHasLegacyEntities() {
+	f.Where(entql.HasEdge("legacy_entities"))
+}
+
+// WhereHasLegacyEntitiesWith applies a predicate to check if query has an edge legacy_entities with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasLegacyEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("legacy_entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

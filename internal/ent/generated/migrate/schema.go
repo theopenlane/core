@@ -16216,6 +16216,31 @@ var (
 			},
 		},
 	}
+	// RiskEntitiesColumns holds the columns for the "risk_entities" table.
+	RiskEntitiesColumns = []*schema.Column{
+		{Name: "risk_id", Type: field.TypeString},
+		{Name: "entity_id", Type: field.TypeString},
+	}
+	// RiskEntitiesTable holds the schema information for the "risk_entities" table.
+	RiskEntitiesTable = &schema.Table{
+		Name:       "risk_entities",
+		Columns:    RiskEntitiesColumns,
+		PrimaryKey: []*schema.Column{RiskEntitiesColumns[0], RiskEntitiesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "risk_entities_risk_id",
+				Columns:    []*schema.Column{RiskEntitiesColumns[0]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "risk_entities_entity_id",
+				Columns:    []*schema.Column{RiskEntitiesColumns[1]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ScanBlockedGroupsColumns holds the columns for the "scan_blocked_groups" table.
 	ScanBlockedGroupsColumns = []*schema.Column{
 		{Name: "scan_id", Type: field.TypeString},
@@ -17344,6 +17369,7 @@ var (
 		RiskViewersTable,
 		RiskActionPlansTable,
 		RiskTasksTable,
+		RiskEntitiesTable,
 		ScanBlockedGroupsTable,
 		ScanEditorsTable,
 		ScanAssetsTable,
@@ -18424,6 +18450,8 @@ func init() {
 	RiskActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	RiskTasksTable.ForeignKeys[0].RefTable = RisksTable
 	RiskTasksTable.ForeignKeys[1].RefTable = TasksTable
+	RiskEntitiesTable.ForeignKeys[0].RefTable = RisksTable
+	RiskEntitiesTable.ForeignKeys[1].RefTable = EntitiesTable
 	ScanBlockedGroupsTable.ForeignKeys[0].RefTable = ScansTable
 	ScanBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	ScanEditorsTable.ForeignKeys[0].RefTable = ScansTable

@@ -13535,6 +13535,14 @@ func init() {
 			AddField:    "add_review_ids",
 		},
 		{
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+		},
+		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
@@ -19397,6 +19405,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+		},
+		{
+			Name:        "legacy_entities",
+			Label:       "LegacyEntities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "legacy_entity_ids",
+			AddField:    "add_legacy_entity_ids",
 		},
 		{
 			Name:        "owner",

@@ -74910,6 +74910,9 @@ type EntityMutation struct {
 	findings                                    map[string]struct{}
 	removedfindings                             map[string]struct{}
 	clearedfindings                             bool
+	risks                                       map[string]struct{}
+	removedrisks                                map[string]struct{}
+	clearedrisks                                bool
 	vulnerabilities                             map[string]struct{}
 	removedvulnerabilities                      map[string]struct{}
 	clearedvulnerabilities                      bool
@@ -80585,6 +80588,60 @@ func (m *EntityMutation) ResetFindings() {
 	m.removedfindings = nil
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by ids.
+func (m *EntityMutation) AddRiskIDs(ids ...string) {
+	if m.risks == nil {
+		m.risks = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.risks[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRisks clears the "risks" edge to the Risk entity.
+func (m *EntityMutation) ClearRisks() {
+	m.clearedrisks = true
+}
+
+// RisksCleared reports if the "risks" edge to the Risk entity was cleared.
+func (m *EntityMutation) RisksCleared() bool {
+	return m.clearedrisks
+}
+
+// RemoveRiskIDs removes the "risks" edge to the Risk entity by IDs.
+func (m *EntityMutation) RemoveRiskIDs(ids ...string) {
+	if m.removedrisks == nil {
+		m.removedrisks = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.risks, ids[i])
+		m.removedrisks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRisks returns the removed IDs of the "risks" edge to the Risk entity.
+func (m *EntityMutation) RemovedRisksIDs() (ids []string) {
+	for id := range m.removedrisks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RisksIDs returns the "risks" edge IDs in the mutation.
+func (m *EntityMutation) RisksIDs() (ids []string) {
+	for id := range m.risks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRisks resets all changes to the "risks" edge.
+func (m *EntityMutation) ResetRisks() {
+	m.risks = nil
+	m.clearedrisks = false
+	m.removedrisks = nil
+}
+
 // AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by ids.
 func (m *EntityMutation) AddVulnerabilityIDs(ids ...string) {
 	if m.vulnerabilities == nil {
@@ -82981,7 +83038,7 @@ func (m *EntityMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *EntityMutation) AddedEdges() []string {
-	edges := make([]string, 0, 44)
+	edges := make([]string, 0, 45)
 	if m.integration_runs != nil {
 		edges = append(edges, entity.EdgeIntegrationRuns)
 	}
@@ -83086,6 +83143,9 @@ func (m *EntityMutation) AddedEdges() []string {
 	}
 	if m.findings != nil {
 		edges = append(edges, entity.EdgeFindings)
+	}
+	if m.risks != nil {
+		edges = append(edges, entity.EdgeRisks)
 	}
 	if m.vulnerabilities != nil {
 		edges = append(edges, entity.EdgeVulnerabilities)
@@ -83305,6 +83365,12 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case entity.EdgeRisks:
+		ids := make([]ent.Value, 0, len(m.risks))
+		for id := range m.risks {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgeVulnerabilities:
 		ids := make([]ent.Value, 0, len(m.vulnerabilities))
 		for id := range m.vulnerabilities {
@@ -83361,7 +83427,7 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *EntityMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 44)
+	edges := make([]string, 0, 45)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, entity.EdgeIntegrationRuns)
 	}
@@ -83427,6 +83493,9 @@ func (m *EntityMutation) RemovedEdges() []string {
 	}
 	if m.removedfindings != nil {
 		edges = append(edges, entity.EdgeFindings)
+	}
+	if m.removedrisks != nil {
+		edges = append(edges, entity.EdgeRisks)
 	}
 	if m.removedvulnerabilities != nil {
 		edges = append(edges, entity.EdgeVulnerabilities)
@@ -83588,6 +83657,12 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case entity.EdgeRisks:
+		ids := make([]ent.Value, 0, len(m.removedrisks))
+		for id := range m.removedrisks {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgeVulnerabilities:
 		ids := make([]ent.Value, 0, len(m.removedvulnerabilities))
 		for id := range m.removedvulnerabilities {
@@ -83636,7 +83711,7 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *EntityMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 44)
+	edges := make([]string, 0, 45)
 	if m.clearedintegration_runs {
 		edges = append(edges, entity.EdgeIntegrationRuns)
 	}
@@ -83742,6 +83817,9 @@ func (m *EntityMutation) ClearedEdges() []string {
 	if m.clearedfindings {
 		edges = append(edges, entity.EdgeFindings)
 	}
+	if m.clearedrisks {
+		edges = append(edges, entity.EdgeRisks)
+	}
 	if m.clearedvulnerabilities {
 		edges = append(edges, entity.EdgeVulnerabilities)
 	}
@@ -83846,6 +83924,8 @@ func (m *EntityMutation) EdgeCleared(name string) bool {
 		return m.clearedsubcontrols
 	case entity.EdgeFindings:
 		return m.clearedfindings
+	case entity.EdgeRisks:
+		return m.clearedrisks
 	case entity.EdgeVulnerabilities:
 		return m.clearedvulnerabilities
 	case entity.EdgeReviews:
@@ -84029,6 +84109,9 @@ func (m *EntityMutation) ResetEdge(name string) error {
 		return nil
 	case entity.EdgeFindings:
 		m.ResetFindings()
+		return nil
+	case entity.EdgeRisks:
+		m.ResetRisks()
 		return nil
 	case entity.EdgeVulnerabilities:
 		m.ResetVulnerabilities()
@@ -227007,6 +227090,9 @@ type RiskMutation struct {
 	entities                           map[string]struct{}
 	removedentities                    map[string]struct{}
 	clearedentities                    bool
+	legacy_entities                    map[string]struct{}
+	removedlegacy_entities             map[string]struct{}
+	clearedlegacy_entities             bool
 	scans                              map[string]struct{}
 	removedscans                       map[string]struct{}
 	clearedscans                       bool
@@ -231119,6 +231205,60 @@ func (m *RiskMutation) ResetEntities() {
 	m.removedentities = nil
 }
 
+// AddLegacyEntityIDs adds the "legacy_entities" edge to the Entity entity by ids.
+func (m *RiskMutation) AddLegacyEntityIDs(ids ...string) {
+	if m.legacy_entities == nil {
+		m.legacy_entities = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.legacy_entities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearLegacyEntities clears the "legacy_entities" edge to the Entity entity.
+func (m *RiskMutation) ClearLegacyEntities() {
+	m.clearedlegacy_entities = true
+}
+
+// LegacyEntitiesCleared reports if the "legacy_entities" edge to the Entity entity was cleared.
+func (m *RiskMutation) LegacyEntitiesCleared() bool {
+	return m.clearedlegacy_entities
+}
+
+// RemoveLegacyEntityIDs removes the "legacy_entities" edge to the Entity entity by IDs.
+func (m *RiskMutation) RemoveLegacyEntityIDs(ids ...string) {
+	if m.removedlegacy_entities == nil {
+		m.removedlegacy_entities = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.legacy_entities, ids[i])
+		m.removedlegacy_entities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedLegacyEntities returns the removed IDs of the "legacy_entities" edge to the Entity entity.
+func (m *RiskMutation) RemovedLegacyEntitiesIDs() (ids []string) {
+	for id := range m.removedlegacy_entities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// LegacyEntitiesIDs returns the "legacy_entities" edge IDs in the mutation.
+func (m *RiskMutation) LegacyEntitiesIDs() (ids []string) {
+	for id := range m.legacy_entities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetLegacyEntities resets all changes to the "legacy_entities" edge.
+func (m *RiskMutation) ResetLegacyEntities() {
+	m.legacy_entities = nil
+	m.clearedlegacy_entities = false
+	m.removedlegacy_entities = nil
+}
+
 // AddScanIDs adds the "scans" edge to the Scan entity by ids.
 func (m *RiskMutation) AddScanIDs(ids ...string) {
 	if m.scans == nil {
@@ -233073,7 +233213,7 @@ func (m *RiskMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *RiskMutation) AddedEdges() []string {
-	edges := make([]string, 0, 35)
+	edges := make([]string, 0, 36)
 	if m.integration_runs != nil {
 		edges = append(edges, risk.EdgeIntegrationRuns)
 	}
@@ -233148,6 +233288,9 @@ func (m *RiskMutation) AddedEdges() []string {
 	}
 	if m.entities != nil {
 		edges = append(edges, risk.EdgeEntities)
+	}
+	if m.legacy_entities != nil {
+		edges = append(edges, risk.EdgeLegacyEntities)
 	}
 	if m.scans != nil {
 		edges = append(edges, risk.EdgeScans)
@@ -233314,6 +233457,12 @@ func (m *RiskMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case risk.EdgeLegacyEntities:
+		ids := make([]ent.Value, 0, len(m.legacy_entities))
+		for id := range m.legacy_entities {
+			ids = append(ids, id)
+		}
+		return ids
 	case risk.EdgeScans:
 		ids := make([]ent.Value, 0, len(m.scans))
 		for id := range m.scans {
@@ -233376,7 +233525,7 @@ func (m *RiskMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RiskMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 35)
+	edges := make([]string, 0, 36)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, risk.EdgeIntegrationRuns)
 	}
@@ -233418,6 +233567,9 @@ func (m *RiskMutation) RemovedEdges() []string {
 	}
 	if m.removedentities != nil {
 		edges = append(edges, risk.EdgeEntities)
+	}
+	if m.removedlegacy_entities != nil {
+		edges = append(edges, risk.EdgeLegacyEntities)
 	}
 	if m.removedscans != nil {
 		edges = append(edges, risk.EdgeScans)
@@ -233534,6 +233686,12 @@ func (m *RiskMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case risk.EdgeLegacyEntities:
+		ids := make([]ent.Value, 0, len(m.removedlegacy_entities))
+		for id := range m.removedlegacy_entities {
+			ids = append(ids, id)
+		}
+		return ids
 	case risk.EdgeScans:
 		ids := make([]ent.Value, 0, len(m.removedscans))
 		for id := range m.removedscans {
@@ -233588,7 +233746,7 @@ func (m *RiskMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *RiskMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 35)
+	edges := make([]string, 0, 36)
 	if m.clearedintegration_runs {
 		edges = append(edges, risk.EdgeIntegrationRuns)
 	}
@@ -233663,6 +233821,9 @@ func (m *RiskMutation) ClearedEdges() []string {
 	}
 	if m.clearedentities {
 		edges = append(edges, risk.EdgeEntities)
+	}
+	if m.clearedlegacy_entities {
+		edges = append(edges, risk.EdgeLegacyEntities)
 	}
 	if m.clearedscans {
 		edges = append(edges, risk.EdgeScans)
@@ -233751,6 +233912,8 @@ func (m *RiskMutation) EdgeCleared(name string) bool {
 		return m.clearedassets
 	case risk.EdgeEntities:
 		return m.clearedentities
+	case risk.EdgeLegacyEntities:
+		return m.clearedlegacy_entities
 	case risk.EdgeScans:
 		return m.clearedscans
 	case risk.EdgeStakeholder:
@@ -233900,6 +234063,9 @@ func (m *RiskMutation) ResetEdge(name string) error {
 		return nil
 	case risk.EdgeEntities:
 		m.ResetEntities()
+		return nil
+	case risk.EdgeLegacyEntities:
+		m.ResetLegacyEntities()
 		return nil
 	case risk.EdgeScans:
 		m.ResetScans()

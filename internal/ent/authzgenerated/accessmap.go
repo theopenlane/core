@@ -1515,6 +1515,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "risks": {
+	ObjectType:          "risk",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "vulnerabilities": {
 	ObjectType:          "vulnerability",
 	SkipEditCheck:       false,
@@ -5012,6 +5017,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "entities": {
+	ObjectType:          "entity",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "legacy_entities": {
 	ObjectType:          "entity",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,

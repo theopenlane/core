@@ -244,6 +244,8 @@ const (
 	EdgeSubcontrols = "subcontrols"
 	// EdgeFindings holds the string denoting the findings edge name in mutations.
 	EdgeFindings = "findings"
+	// EdgeRisks holds the string denoting the risks edge name in mutations.
+	EdgeRisks = "risks"
 	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
 	EdgeVulnerabilities = "vulnerabilities"
 	// EdgeReviews holds the string denoting the reviews edge name in mutations.
@@ -473,6 +475,11 @@ const (
 	// FindingsInverseTable is the table name for the Finding entity.
 	// It exists in this package in order to avoid circular dependency with the "finding" package.
 	FindingsInverseTable = "findings"
+	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
+	RisksTable = "risk_entities"
+	// RisksInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RisksInverseTable = "risks"
 	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
 	VulnerabilitiesTable = "vulnerability_entities"
 	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
@@ -660,6 +667,9 @@ var (
 	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
 	// primary key for the findings relation (M2M).
 	FindingsPrimaryKey = []string{"finding_id", "entity_id"}
+	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
+	// primary key for the risks relation (M2M).
+	RisksPrimaryKey = []string{"risk_id", "entity_id"}
 	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
 	// primary key for the vulnerabilities relation (M2M).
 	VulnerabilitiesPrimaryKey = []string{"vulnerability_id", "entity_id"}
@@ -1550,6 +1560,20 @@ func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByRisksCount orders the results by risks count.
+func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRisksStep(), opts...)
+	}
+}
+
+// ByRisks orders the results by risks terms.
+func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRisksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByVulnerabilitiesCount orders the results by vulnerabilities count.
 func ByVulnerabilitiesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1904,6 +1928,13 @@ func newFindingsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FindingsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+	)
+}
+func newRisksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RisksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RisksTable, RisksPrimaryKey...),
 	)
 }
 func newVulnerabilitiesStep() *sqlgraph.Step {
