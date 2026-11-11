@@ -181,8 +181,10 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 
 // Download implements storagetypes.Provider
 func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
+	bucket := p.options.BucketFor(file.StoredBucket())
+
 	head, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
-		Bucket: aws.String(p.options.Bucket),
+		Bucket: aws.String(bucket),
 		Key:    aws.String(file.Key),
 	})
 	if err != nil {
@@ -193,7 +195,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *sto
 	w := manager.NewWriteAtBuffer(buf)
 
 	_, err = p.downloader.DownloadObject(ctx, &transfermanager.DownloadObjectInput{
-		Bucket:   aws.String(p.options.Bucket),
+		Bucket:   aws.String(bucket),
 		Key:      aws.String(file.Key),
 		WriterAt: w,
 	})
@@ -212,7 +214,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *sto
 
 // Delete implements storagetypes.Provider
 func (p *Provider) Delete(ctx context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
-	bucket := p.options.BucketFor(file.Bucket)
+	bucket := p.options.BucketFor(file.StoredBucket())
 
 	_, err := p.client.DeleteObject(ctx, &s3.DeleteObjectInput{
 		Bucket: aws.String(bucket),
@@ -232,7 +234,7 @@ func (p *Provider) Copy(ctx context.Context, file *storagetypes.File, opts *stor
 	_, err := p.client.CopyObject(ctx, &s3.CopyObjectInput{
 		Bucket:     aws.String(p.options.BucketFor(opts.Bucket)),
 		Key:        aws.String(opts.Key),
-		CopySource: aws.String(s3provider.CopySource(p.options.BucketFor(file.Bucket), file.Key)),
+		CopySource: aws.String(s3provider.CopySource(p.options.BucketFor(file.StoredBucket()), file.Key)),
 	})
 
 	return err
@@ -260,7 +262,7 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 	}
 
 	presignURL, err := p.presignClient.PresignGetObject(ctx, &s3.GetObjectInput{
-		Bucket:                     aws.String(p.options.Bucket),
+		Bucket:                     aws.String(p.options.BucketFor(file.StoredBucket())),
 		Key:                        aws.String(file.Key),
 		ResponseContentType:        aws.String(file.ContentType),
 		ResponseContentDisposition: aws.String(storage.DispositionFor(file.ContentType)),
@@ -284,7 +286,7 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 // Exists checks if an object exists in R2
 func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, error) {
 	_, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
-		Bucket: aws.String(p.options.Bucket),
+		Bucket: aws.String(p.options.BucketFor(file.StoredBucket())),
 		Key:    aws.String(file.Key),
 	})
 	if err != nil {

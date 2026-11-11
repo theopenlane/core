@@ -295,6 +295,11 @@ func (Organization) Indexes() []ent.Index {
 			Unique().Annotations(
 			entsql.IndexWhere("deleted_at is NULL"),
 		),
+		// sso slugs must be unique among live organizations that have one
+		index.Fields("slug_name").
+			Unique().Annotations(
+			entsql.IndexWhere("deleted_at is NULL AND slug_name <> ''"),
+		),
 	}
 }
 

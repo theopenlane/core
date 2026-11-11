@@ -3,6 +3,7 @@ package storagetypes
 import (
 	"context"
 	"io"
+	"strings"
 	"time"
 )
 
@@ -182,6 +183,28 @@ type FileMetadata struct {
 	Name string `json:"name,omitempty"`
 	// ProviderHints contains hints for provider selection
 	ProviderHints *ProviderHints `json:"provider_hints,omitempty"`
+}
+
+// StoredBucket returns the bucket the file was written to, taken from Bucket or parsed out of FullURI (e.g. s3://bucket/key)
+func (m FileMetadata) StoredBucket() string {
+	if m.Bucket != "" {
+		return m.Bucket
+	}
+
+	_, path, ok := strings.Cut(m.FullURI, "://")
+	if !ok {
+		return ""
+	}
+
+	if m.Key != "" {
+		if bucket, ok := strings.CutSuffix(path, "/"+m.Key); ok {
+			return bucket
+		}
+	}
+
+	bucket, _, _ := strings.Cut(path, "/")
+
+	return bucket
 }
 
 // DownloadFileOptions contains options for downloading files

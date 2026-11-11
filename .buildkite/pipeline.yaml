@@ -46,7 +46,6 @@ secrets:
   - SLACK_WEBHOOK_URL
   - ANALYTICS_KEY
   - SONAR_TOKEN
-  - ATLAS_CLOUD_TOKEN
   - APOLLO_KEY
   - SECRET_GHCR_PUBLISH_TOKEN
 
@@ -711,26 +710,6 @@ steps:
   - group: ":database: schema lint"
     key: "database"
     steps:
-      - label: ":postgres: atlas lint"
-        retry: *disk-full-retry
-        key: "atlas_lint"
-        if: build.branch !~ /^renovate\//
-        agents: *small-runner
-        if_changed:
-          - db/**
-          - internal/ent/schema/**
-        soft_fail:
-          - exit_status: 1
-        plugins:
-          - sparse-checkout#v1.11.0:
-              paths:
-                - db
-          - theopenlane/atlas#v1.2.1:
-              project: core
-              atlas-env: dev
-              config: "file://db/atlas.hcl"
-              dir: "file://db/migrations"
-              step: lint
       - label: ":graphql: lint graphql schema"
         retry: *disk-full-retry
         key: "apollo-lint-schema"
@@ -891,21 +870,6 @@ steps:
               !!merge <<: *build-image
               environment:
                 - "APOLLO_KEY"
-      - label: ":rocket: atlas push"
-        retry: *disk-full-retry
-        if: *if-main-untagged
-        key: "atlas_migrate"
-        agents: *small-runner
-        plugins:
-          - sparse-checkout#v1.11.0:
-              paths:
-                - db
-          - theopenlane/atlas#v1.2.1:
-              project: core
-              dir: "file://db/migrations"
-              step: migrate
-              atlas-env: dev
-              config: "file://db/atlas.hcl"
       - label: ":test_tube: Trigger UI E2E pipeline tests for ${BUILDKITE_TAG}"
         trigger: openlane-ui-e2e
         depends_on: "docker-build-and-tag"

@@ -67,6 +67,12 @@ var backfillRoutines = []backfillRoutine{
 		// 	return backfillX(ctx, deps.Client)
 		// },
 	},
+	{
+		Name:    "normalize-slugs",
+		Version: "v1",
+		Enabled: true,
+		Run:     backfillSlugs,
+	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run
