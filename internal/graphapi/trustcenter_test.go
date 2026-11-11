@@ -12,7 +12,6 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
-	"github.com/stoewer/go-strcase"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -24,6 +23,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 func TestQueryTrustCenterByID(t *testing.T) {
@@ -313,14 +313,13 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 				assert.Check(t, resp.CreateTrustCenter.TrustCenter.CustomDomainID == nil)
 			}
 
-			// Verify slug is the lowercased, alphanumeric version of the org name
+			// Verify slug is the [a-z0-9-] reduction of the org name
 			// Get the organization to check its name using a context that allows database access
 			dbCtx := th.SetInternalContext(tc.ctx, suite.Client.DB)
 			org, err := suite.Client.DB.Organization.Get(dbCtx, *resp.CreateTrustCenter.TrustCenter.OwnerID)
 			assert.NilError(t, err)
 
-			// Generate expected slug: remove non-alphanumeric chars and lowercase
-			expectedSlug := strcase.KebabCase(org.Name)
+			expectedSlug := urlx.Slug(org.Name)
 			assert.Assert(t, resp.CreateTrustCenter.TrustCenter.Slug != nil)
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)
 			setting := resp.CreateTrustCenter.TrustCenter.GetSetting()
