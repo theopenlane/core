@@ -10,17 +10,18 @@ env:
   GRAPHQL_SCHEMA_NAME: "Openlane-0dedz@current"
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
 
-  # build settings
-  BK_HOME: /var/lib/buildkite-agent
-  GOCACHE: $BK_HOME/.cache/go-build
-  GOMODCACHE: $BK_HOME/.cache/go/pkg/mod
-  GOLANGCI_LINT_CACHE: $BK_HOME/.cache/golangci-lint
-  GIT_MIRRORS_PATH: $BK_HOME/git-mirrors
-  HOME: /tmp
-  GIT_CONFIG_GLOBAL: $HOME/.gitconfig
-  APOLLO_CONFIG_HOME: $HOME
-  SONAR_USER_HOME: $HOME/.sonar
-  SCANNER_WORKDIR_PATH: $HOME/sonar-scanner-work
+  # build settings, default to what is in buildkite
+  BK_HOME: ${BK_HOME:-/var/lib/buildkite-agent}
+  CACHE_HOME: ${CACHE_HOME:-$BK_HOME/.cache}
+  GOCACHE: ${GOCACHE:-$CACHE_HOME/go-build}
+  GOMODCACHE: ${GOMODCACHE:-$CACHE_HOME/go/pkg/mod}
+  GOLANGCI_LINT_CACHE: ${GOLANGCI_LINT_CACHE:-$CACHE_HOME/golangci-lint}
+  GIT_MIRRORS_PATH: ${GIT_MIRRORS_PATH:-$BK_HOME/git-mirrors}
+  CONFIG_HOME: ${CONFIG_HOME:-/tmp}
+  GIT_CONFIG_GLOBAL: ${GIT_CONFIG_GLOBAL:-$CONFIG_HOME/.gitconfig}
+  APOLLO_CONFIG_HOME: ${APOLLO_CONFIG_HOME:-$CONFIG_HOME}
+  SONAR_USER_HOME: ${SONAR_USER_HOME:-$CONFIG_HOME/.sonar}
+  SCANNER_WORKDIR_PATH: ${SCANNER_WORKDIR_PATH:-$CONFIG_HOME/sonar-scanner-work}
 
   # helm settings
   HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
@@ -247,7 +248,7 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-                - GIT_CONFIG_GLOBAL=/tmp/.gitconfig
+                - "GIT_CONFIG_GLOBAL"
       - label: ":link: link PRs"
         retry: *disk-full-retry
         key: "link_pr_automation"
