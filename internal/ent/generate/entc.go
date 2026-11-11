@@ -11,7 +11,6 @@ import (
 	"sync"
 	"text/template"
 
-	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
 
 	"entgo.io/contrib/entgql"
@@ -513,10 +512,6 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 		entc.Dependency(
 			entc.DependencyName("ObjectManager"),
 			entc.DependencyType(&objects.Service{}),
-		),
-		entc.Dependency(
-			entc.DependencyName("Pluralizer"),
-			entc.DependencyType(pluralize.NewClient()),
 		),
 		entc.Dependency(
 			entc.DependencyName("Summarizer"),

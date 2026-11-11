@@ -18,7 +18,6 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
@@ -499,7 +498,6 @@ type (
 		TOTP               *totp.Client
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Service
-		Pluralizer         *pluralize.Client
 		Summarizer         *summarizer.Client
 		Shortlinks         *shortlinks.Client
 		Pool               *gala.Pool
@@ -609,13 +607,6 @@ func EntitlementManager(v *entitlements.StripeClient) Option {
 func ObjectManager(v *objects.Service) Option {
 	return func(c *config) {
 		c.ObjectManager = v
-	}
-}
-
-// Pluralizer configures the Pluralizer.
-func Pluralizer(v *pluralize.Client) Option {
-	return func(c *config) {
-		c.Pluralizer = v
 	}
 }
 

@@ -273,7 +273,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(entCfg),
 		ent.Summarizer(summarizerClient),
-		ent.Pluralizer(pluralize.NewClient()),
 		ent.Pool(pool),
 		ent.EntitlementManager(entitlements),
 		ent.EmailVerifier(ev),

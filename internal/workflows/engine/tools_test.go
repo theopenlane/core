@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
 	"github.com/stripe/stripe-go/v86"
@@ -27,6 +26,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -54,9 +54,10 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
 
+	"gotest.tools/v3/assert"
+
 	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 	_ "github.com/theopenlane/core/v2/internal/ent/historygenerated/runtime"
-	"gotest.tools/v3/assert"
 )
 
 const (
@@ -205,7 +206,6 @@ func (s *WorkflowEngineTestSuite) setupSuite() {
 		generated.EntitlementManager(entitlements),
 		generated.Pool(pool),
 		generated.Summarizer(summarizerClient),
-		generated.Pluralizer(pluralize.NewClient()),
 	}
 
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(s.tf.URI)}

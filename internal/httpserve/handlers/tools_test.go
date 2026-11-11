@@ -12,7 +12,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
 	"github.com/stripe/stripe-go/v86"
@@ -29,6 +28,9 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/iam/auth"
+	mockprovider "github.com/theopenlane/newman/providers/mock"
+
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -39,8 +41,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/httpserve/route"
 	"github.com/theopenlane/core/v2/internal/httpserve/server"
-	"github.com/theopenlane/iam/auth"
-	mockprovider "github.com/theopenlane/newman/providers/mock"
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/catalog"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
@@ -233,7 +233,6 @@ func (suite *HandlerTestSuite) setupSuite() {
 
 	galaOpts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
-		ent.Pluralizer(pluralize.NewClient()),
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&galaSessionConfig),
 		ent.EntConfig(&entconfig.Config{Modules: entconfig.Modules{Enabled: true, UseSandbox: true}}),
@@ -328,7 +327,6 @@ func (suite *HandlerTestSuite) setupSuite() {
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
-		ent.Pluralizer(pluralize.NewClient()),
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{
