@@ -78,12 +78,7 @@ func (r *mutationResolver) CreateBulkCSVOrgMembership(ctx context.Context, input
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateOrgMembershipInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateOrgMembership(ctx, inputs)
+	return r.bulkCreateCSVOrgMembership(ctx, data)
 }
 
 // UpdateOrgMembership is the resolver for the updateOrgMembership field.

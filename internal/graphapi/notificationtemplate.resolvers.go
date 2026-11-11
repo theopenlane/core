@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVNotificationTemplate(ctx context.Context
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateNotificationTemplateInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateNotificationTemplate(ctx, inputs)
+	return r.bulkCreateCSVNotificationTemplate(ctx, data)
 }
 
 // UpdateBulkNotificationTemplate is the resolver for the updateBulkNotificationTemplate field.

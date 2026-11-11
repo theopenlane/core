@@ -81,12 +81,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterFaq(ctx context.Context, inpu
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateTrustCenterFAQInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateTrustCenterFAQ(ctx, inputs)
+	return r.bulkCreateCSVTrustCenterFAQ(ctx, data)
 }
 
 // UpdateTrustCenterFaq is the resolver for the updateTrustCenterFAQ field.

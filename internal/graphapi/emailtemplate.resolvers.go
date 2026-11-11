@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVEmailTemplate(ctx context.Context, input
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateEmailTemplateInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateEmailTemplate(ctx, inputs)
+	return r.bulkCreateCSVEmailTemplate(ctx, data)
 }
 
 // UpdateBulkEmailTemplate is the resolver for the updateBulkEmailTemplate field.

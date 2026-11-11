@@ -56,12 +56,7 @@ func (r *mutationResolver) CreateBulkCSVOrganizationBrandingSetting(ctx context.
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateOrganizationBrandingSettingInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateOrganizationBrandingSetting(ctx, inputs)
+	return r.bulkCreateCSVOrganizationBrandingSetting(ctx, data)
 }
 
 // UpdateOrganizationBrandingSetting is the resolver for the updateOrganizationBrandingSetting field.

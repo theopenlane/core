@@ -132,16 +132,13 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 		entityTypeID = etID
 	}
 
-	inputs := make([]*generated.CreateEntityInput, 0, len(data))
 	for i := range data {
 		if entityTypeID != "" {
 			data[i].Input.EntityTypeID = &entityTypeID
 		}
-
-		inputs = append(inputs, &data[i].Input)
 	}
 
-	return r.bulkCreateEntity(ctx, inputs)
+	return r.bulkCreateCSVEntity(ctx, data)
 }
 
 // UpdateEntity is the resolver for the updateEntity field.

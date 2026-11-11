@@ -117,12 +117,7 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateProcedureInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateProcedure(ctx, inputs)
+	return r.bulkCreateCSVProcedure(ctx, data)
 }
 
 // UpdateBulkProcedure is the resolver for the updateBulkProcedure field.

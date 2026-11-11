@@ -87,12 +87,7 @@ func (r *mutationResolver) CreateBulkCSVReview(ctx context.Context, input graphq
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateReviewInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateReview(ctx, inputs)
+	return r.bulkCreateCSVReview(ctx, data)
 }
 
 // UpdateReview is the resolver for the updateReview field.

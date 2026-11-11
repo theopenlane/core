@@ -26,6 +26,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	controlgen "github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/testutils"
@@ -1174,15 +1175,15 @@ func bulkControlInputs(rows int, controlOwnerID *string) []*testclient.CreateCon
 	return inputs
 }
 
-func controlCSVUpload(rows int) graphql.Upload {
+func controlCSVUpload(rows int, comment string) graphql.Upload {
 	refCodePrefix := "BULK-" + ulids.New().String()
 
 	var csv strings.Builder
 
-	csv.WriteString("RefCode,Title,Description\n")
+	csv.WriteString("RefCode,Title,Description,Comment\n")
 
 	for row := range rows {
-		fmt.Fprintf(&csv, "%s-%d,Control %d,Description for control %d\n", refCodePrefix, row, row, row)
+		fmt.Fprintf(&csv, "%s-%d,Control %d,Description for control %d,%s\n", refCodePrefix, row, row, row, comment)
 	}
 
 	data := csv.String()
@@ -1280,6 +1281,7 @@ func TestMutationCreateBulkCSVControl(t *testing.T) {
 	testCases := []struct {
 		name        string
 		rows        int
+		comment     string
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -1294,8 +1296,15 @@ func TestMutationCreateBulkCSVControl(t *testing.T) {
 			ctx:  th.SharedTestUser1.UserCtx,
 		},
 		{
+			name:    "happy path, comment column creates a comment per control",
+			rows:    3,
+			comment: "imported from csv",
+			ctx:     th.SharedTestUser1.UserCtx,
+		},
+		{
 			name:        "view only user cannot create",
 			rows:        3,
+			comment:     "imported from csv",
 			ctx:         th.SharedViewOnlyUser.UserCtx,
 			expectedErr: th.NotAuthorizedErrorMsg,
 		},
@@ -1303,7 +1312,7 @@ func TestMutationCreateBulkCSVControl(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			resp, err := suite.Client.API.CreateBulkCSVControl(tc.ctx, controlCSVUpload(tc.rows))
+			resp, err := suite.Client.API.CreateBulkCSVControl(tc.ctx, controlCSVUpload(tc.rows, tc.comment))
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -1324,7 +1333,29 @@ func TestMutationCreateBulkCSVControl(t *testing.T) {
 			})
 
 			assertCanEdit(t, th.SharedTestUser1.ID, generated.TypeControl, controlIDs)
+			assertControlComments(t, controlIDs, tc.comment)
 		})
+	}
+}
+
+func assertControlComments(t *testing.T, controlIDs []string, comment string) {
+	t.Helper()
+
+	for _, id := range controlIDs {
+		comments, err := suite.Client.DB.Note.Query().Where(note.HasControlWith(controlgen.ID(id))).All(th.SharedTestUser1.UserCtx)
+		assert.NilError(t, err)
+
+		if comment == "" {
+			assert.Check(t, is.Len(comments, 0))
+
+			continue
+		}
+
+		assert.Check(t, is.Len(comments, 1))
+
+		for _, c := range comments {
+			assert.Check(t, is.Equal(comment, c.Text))
+		}
 	}
 }
 

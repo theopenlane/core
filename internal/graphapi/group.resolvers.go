@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateGroupInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateGroup(ctx, inputs)
+	return r.bulkCreateCSVGroup(ctx, data)
 }
 
 // UpdateGroup is the resolver for the updateGroup field.

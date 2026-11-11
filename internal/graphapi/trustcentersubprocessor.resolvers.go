@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterSubprocessor(ctx context.Cont
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateTrustCenterSubprocessorInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateTrustCenterSubprocessor(ctx, inputs)
+	return r.bulkCreateCSVTrustCenterSubprocessor(ctx, data)
 }
 
 // UpdateTrustCenterSubprocessor is the resolver for the updateTrustCenterSubprocessor field.

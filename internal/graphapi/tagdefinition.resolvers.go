@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVTagDefinition(ctx context.Context, input
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateTagDefinitionInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateTagDefinition(ctx, inputs)
+	return r.bulkCreateCSVTagDefinition(ctx, data)
 }
 
 // UpdateTagDefinition is the resolver for the updateTagDefinition field.

@@ -56,12 +56,7 @@ func (r *mutationResolver) CreateBulkCSVFindingControl(ctx context.Context, inpu
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateFindingControlInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateFindingControl(ctx, inputs)
+	return r.bulkCreateCSVFindingControl(ctx, data)
 }
 
 // UpdateFindingControl is the resolver for the updateFindingControl field.

@@ -57,12 +57,7 @@ func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, i
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateProgramMembershipInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateProgramMembership(ctx, inputs)
+	return r.bulkCreateCSVProgramMembership(ctx, data)
 }
 
 // UpdateProgramMembership is the resolver for the updateProgramMembership field.
