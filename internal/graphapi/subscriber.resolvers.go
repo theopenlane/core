@@ -103,12 +103,7 @@ func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input gr
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateSubscriberInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateSubscriber(ctx, inputs)
+	return r.bulkCreateCSVSubscriber(ctx, data)
 }
 
 // UpdateSubscriber is the resolver for the updateSubscriber field.

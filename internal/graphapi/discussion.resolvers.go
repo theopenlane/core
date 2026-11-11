@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVDiscussion(ctx context.Context, input gr
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateDiscussionInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateDiscussion(ctx, inputs)
+	return r.bulkCreateCSVDiscussion(ctx, data)
 }
 
 // UpdateDiscussion is the resolver for the updateDiscussion field.

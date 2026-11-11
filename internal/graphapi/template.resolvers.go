@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input grap
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateTemplateInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateTemplate(ctx, inputs)
+	return r.bulkCreateCSVTemplate(ctx, data)
 }
 
 // UpdateTemplate is the resolver for the updateTemplate field.

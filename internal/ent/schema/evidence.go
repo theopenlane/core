@@ -247,6 +247,7 @@ func (e Evidence) Edges() []ent.Edge {
 			comment:    "conversations related to the evidence",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.CSVRef().FromColumn("Comment").CreateChild("text"),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{

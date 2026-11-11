@@ -64,12 +64,7 @@ func (r *mutationResolver) CreateBulkCSVGroupMembership(ctx context.Context, inp
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateGroupMembershipInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateGroupMembership(ctx, inputs)
+	return r.bulkCreateCSVGroupMembership(ctx, data)
 }
 
 // UpdateGroupMembership is the resolver for the updateGroupMembership field.

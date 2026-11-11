@@ -107,12 +107,7 @@ func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graph
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateControlInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateControl(ctx, inputs)
+	return r.bulkCreateCSVControl(ctx, data)
 }
 
 // UpdateBulkControl is the resolver for the updateBulkControl field.

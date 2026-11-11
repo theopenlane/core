@@ -103,8 +103,6 @@ func (r *mutationResolver) CreateBulkCSVCustomDomain(ctx context.Context, input 
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateCustomDomainInput, 0, len(data))
-
 	for i := range data {
 		normalizedCname, err := urlx.NormalizeHostname(data[i].Input.CnameRecord)
 		if err != nil {
@@ -112,11 +110,9 @@ func (r *mutationResolver) CreateBulkCSVCustomDomain(ctx context.Context, input 
 		}
 
 		data[i].Input.CnameRecord = normalizedCname
-
-		inputs = append(inputs, &data[i].Input)
 	}
 
-	return r.bulkCreateCustomDomain(ctx, inputs)
+	return r.bulkCreateCSVCustomDomain(ctx, data)
 }
 
 // UpdateCustomDomain is the resolver for the updateCustomDomain field.

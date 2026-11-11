@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/core/v2/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/utils/jsonx"
 )
@@ -65,6 +66,16 @@ func resolveCSVReferencesForSchema[T any](ctx context.Context, schemaName string
 	}
 
 	return resolveCSVReferenceRules(ctx, inputs, rules...)
+}
+
+// createCSVChildrenForRow creates the child records named by a CSV row's child columns, linked to parentID
+func createCSVChildrenForRow(ctx context.Context, row any, parentID string) error {
+	creator, ok := row.(csvgenerated.CSVChildCreator)
+	if !ok {
+		return nil
+	}
+
+	return creator.CreateCSVChildren(ctx, withTransactionalMutation(ctx), parentID)
 }
 
 // csvRuleLookupCache caches resolved values keyed by lookup function pointers.

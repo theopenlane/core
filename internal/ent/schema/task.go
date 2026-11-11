@@ -244,6 +244,7 @@ func (t Task) Edges() []ent.Edge {
 			comment:    "conversations related to the task",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.CSVRef().FromColumn("Comment").CreateChild("text"),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
