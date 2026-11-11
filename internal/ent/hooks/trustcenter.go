@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -19,7 +18,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/logx"
 )
 
@@ -50,7 +51,18 @@ func HookTrustCenter() ent.Hook {
 				return nil, err
 			}
 
-			m.SetSlug(strcase.KebabCase(org.Name))
+			// the slug is unique across every org's trust center, so the collision check reads
+			// cross-org; a taken slug gets the random suffix rather than failing the create
+			slug, err := urlx.UniqueSlug(urlx.Slug(org.Name), func(candidate string) (bool, error) {
+				return m.Client().TrustCenter.Query().
+					Where(trustcenter.Slug(candidate)).
+					Exist(auth.WithInternalReadCrossOrgContext(ctx))
+			})
+			if err != nil {
+				return nil, err
+			}
+
+			m.SetSlug(slug)
 
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {

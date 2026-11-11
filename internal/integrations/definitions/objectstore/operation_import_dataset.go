@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -25,6 +24,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/core/v2/pkg/placeholder"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/jsonx"
 )
@@ -295,7 +295,7 @@ func datasetBuiltinVariables(ctx context.Context, db *generated.Client) (placeho
 
 	return DatasetBuiltinVariables{
 		OrgName:     lo.CoalesceOrEmpty(org.DisplayName, org.Name),
-		OrgSlug:     lo.CoalesceOrEmpty(org.SlugName, strcase.KebabCase(org.Name)),
+		OrgSlug:     lo.CoalesceOrEmpty(org.SlugName, urlx.Slug(org.Name)),
 		OrgDomain:   domain,
 		OwnerUserID: caller.SubjectID,
 		OwnerEmail:  caller.SubjectEmail,

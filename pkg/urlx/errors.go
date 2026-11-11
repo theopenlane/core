@@ -17,4 +17,6 @@ var (
 	ErrSizeLimitExceeded = errors.New("urlx: response size limit exceeded")
 	// ErrNonPublicDestination indicates the URL or resolved address is not on the public internet
 	ErrNonPublicDestination = errors.New("urlx: destination is not a public address")
+	// ErrSlugExhausted indicates every slug candidate, bare and suffixed, was already taken
+	ErrSlugExhausted = errors.New("urlx: no free slug found")
 )
