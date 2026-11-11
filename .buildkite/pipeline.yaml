@@ -1,5 +1,5 @@
 env:
-  APP_NAME: ${BUILDKITE_PIPELINE_SLUG}
+  APP_NAME: ${APP_NAME:-core}
   IMAGE_REPO: ghcr.io/theopenlane/${APP_NAME}
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
@@ -32,6 +32,9 @@ env:
   SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-self-hosted-garage-vms}
   RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
   RUNNER_WORKLOAD_STANDARD: "standard"
+  LARGE_RUNNER_SHAPE: ${LARGE_RUNNER_SHAPE:-}
+  MEDIUM_RUNNER_SHAPE: ${MEDIUM_RUNNER_SHAPE:-}
+  SMALL_RUNNER_SHAPE: ${SMALL_RUNNER_SHAPE:-}
 
 # cache for hosted runners
 cache:
@@ -63,9 +66,15 @@ common:
   large-runner: &large-runner
     queue: $LARGE_RUNNER_QUEUE
     workload: $RUNNER_WORKLOAD_STANDARD
+    nsc-shape: $LARGE_RUNNER_SHAPE
+  medium-runner: &medium-runner
+    queue: $LARGE_RUNNER_QUEUE
+    workload: $RUNNER_WORKLOAD_STANDARD
+    nsc-shape: $MEDIUM_RUNNER_SHAPE
   small-runner: &small-runner
     queue: $SMALL_RUNNER_QUEUE
     workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+    nsc-shape: $SMALL_RUNNER_SHAPE
 
   # docker plugin options for the build image, merged into a step with <<: *build-image
   build-image: &build-image
@@ -198,7 +207,7 @@ steps:
       - label: ":auth0: fga generate"
         retry: *disk-full-retry
         key: "generate_fga"
-        agents: *large-runner
+        agents: *medium-runner
         cancel_on_build_failing: true
         if_changed:
           - fga/**
@@ -213,7 +222,7 @@ steps:
       - label: ":yaml: generate config"
         retry: *disk-full-retry
         key: "generate_config"
-        agents: *large-runner
+        agents: *medium-runner
         cancel_on_build_failing: true
         if_changed:
           - go.{mod,sum}
@@ -321,7 +330,7 @@ steps:
           - "docker-build-and-tag"
           - "go_tests"
         if: *if-release-tag
-        agents: *large-runner
+        agents: *small-runner
         plugins:
           - docker#v5.14.0:
               !!merge <<: *build-image
@@ -338,7 +347,7 @@ steps:
           - .golangci.yaml
           - .custom-gcl.yml
           - go.{mod,sum}
-        agents: *large-runner
+        agents: *medium-runner
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_graphapi"
@@ -355,7 +364,7 @@ steps:
           - .golangci.yaml
           - .custom-gcl.yml
           - go.{mod,sum}
-        agents: *large-runner
+        agents: *medium-runner
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_handlers"
@@ -376,7 +385,7 @@ steps:
           exclude:
             - internal/graphapi/**
             - internal/httpserve/handlers/**
-        agents: *large-runner
+        agents: *medium-runner
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_non_api"
@@ -412,7 +421,7 @@ steps:
         artifact_paths: ["coverage-graph-*.out", "junit-graph-*.xml"]
       - label: ":golang: go test - events only"
         retry: *disk-full-retry
-        agents: *large-runner
+        agents: *medium-runner
         key: "go_test_events"
         cancel_on_build_failing: true
         if_changed: # only run when event driven code changes
@@ -474,7 +483,7 @@ steps:
             - go.{mod,sum}
           exclude: # do not run tests if only cli files changed
             - cli/**
-        agents: *large-runner
+        agents: *medium-runner
         key: "go_test_no_api"
         cancel_on_build_failing: true
         env:
@@ -664,7 +673,7 @@ steps:
             - docker/Dockerfile
           exclude:
             - cli/**
-        agents: *large-runner
+        agents: *medium-runner
         plugins:
           - docker#v5.14.0:
               !!merge <<: *build-image
@@ -675,7 +684,7 @@ steps:
       - label: ":terminal: build cli"
         retry: *disk-full-retry
         key: "gobuild-cli"
-        agents: *large-runner
+        agents: *medium-runner
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         if_changed:
@@ -691,7 +700,7 @@ steps:
         if: *if-release-tag
         cancel_on_build_failing: true
         artifact_paths: "bin/${APP_NAME}"
-        agents: *large-runner
+        agents: *medium-runner
         plugins:
           - docker#v5.14.0:
               !!merge <<: *build-image
@@ -703,7 +712,7 @@ steps:
         retry: *disk-full-retry
         if: build.tag != null && build.tag =~ /cli\//
         key: "gobuild-cli-release"
-        agents: *large-runner
+        agents: *medium-runner
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         plugins:
@@ -764,7 +773,7 @@ steps:
       - label: ":docker: docker pr build"
         retry: *disk-full-retry
         key: "docker-pr-build"
-        agents: *large-runner
+        agents: *medium-runner
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         if_changed:
@@ -806,7 +815,7 @@ steps:
       - label: ":docker: docker build and publish"
         retry: *disk-full-retry
         key: "docker-build-and-tag"
-        agents: *large-runner
+        agents: *medium-runner
         cancel_on_build_failing: true
         if: *if-release-tag
         commands: |
