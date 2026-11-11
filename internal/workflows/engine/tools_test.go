@@ -26,6 +26,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -53,9 +54,10 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
 
+	"gotest.tools/v3/assert"
+
 	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 	_ "github.com/theopenlane/core/v2/internal/ent/historygenerated/runtime"
-	"gotest.tools/v3/assert"
 )
 
 const (

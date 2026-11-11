@@ -28,6 +28,9 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/iam/auth"
+	mockprovider "github.com/theopenlane/newman/providers/mock"
+
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -38,8 +41,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/httpserve/route"
 	"github.com/theopenlane/core/v2/internal/httpserve/server"
-	"github.com/theopenlane/iam/auth"
-	mockprovider "github.com/theopenlane/newman/providers/mock"
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/catalog"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"

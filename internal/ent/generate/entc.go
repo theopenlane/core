@@ -20,6 +20,18 @@ import (
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/common/enums/exportenums"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/entityops"
+	"github.com/theopenlane/entx/genhooks"
+	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/entx/oscalgen"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/iam/totp"
+
 	"github.com/theopenlane/core/v2/fga/generate/schemainfo"
 	"github.com/theopenlane/core/v2/fga/generate/schemaparse"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
@@ -34,17 +46,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/entx/entityops"
-	"github.com/theopenlane/entx/genhooks"
-	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/entx/oscalgen"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/iam/totp"
 )
 
 var (

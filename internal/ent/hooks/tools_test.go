@@ -14,6 +14,13 @@ import (
 	"entgo.io/ent/dialect/sql/schema"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	fgatest "github.com/theopenlane/iam/fgax/testutils"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/utils/testutils"
+	"gotest.tools/v3/assert"
+
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -26,12 +33,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-	fgatest "github.com/theopenlane/iam/fgax/testutils"
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/utils/testutils"
-	"gotest.tools/v3/assert"
 )
 
 const (

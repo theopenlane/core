@@ -38,6 +38,16 @@ type Cloner struct {
 // FromStandard clones all controls from a standard into an organization
 // if the controls already exist in the organization, they will not be cloned again
 func (c Cloner) FromStandard(ctx context.Context, filters CloneFilterOptions, programID *string) ([]*generated.Control, error) {
+	sourceControls, err := c.SourceControlsFromStandard(ctx, filters)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.Controls(ctx, sourceControls, programID)
+}
+
+// SourceControlsFromStandard loads the controls and subcontrols from the accessible standard selected by the filters.
+func (c Cloner) SourceControlsFromStandard(ctx context.Context, filters CloneFilterOptions) ([]*generated.Control, error) {
 	// first check if the standard exists
 	std, err := findStandard(ctx, c.DB, filters)
 	if err != nil {
@@ -65,7 +75,7 @@ func (c Cloner) FromStandard(ctx context.Context, filters CloneFilterOptions, pr
 		return nil, err
 	}
 
-	return c.Controls(ctx, sourceControls, programID)
+	return sourceControls, nil
 }
 
 // Controls clones the given controls into the organization in the context
