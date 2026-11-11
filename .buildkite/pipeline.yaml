@@ -30,6 +30,7 @@ env:
   # runner vars
   LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-self-hosted-garage-vms}
   SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-self-hosted-garage-vms}
+  GARAGE_RUNNER_QUEUE: ${GARAGE_RUNNER_QUEUE:-self-hosted-garage-vms}
   RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
   RUNNER_WORKLOAD_STANDARD: "standard"
   LARGE_RUNNER_SHAPE: ${LARGE_RUNNER_SHAPE:-}
@@ -75,6 +76,10 @@ common:
     queue: $SMALL_RUNNER_QUEUE
     workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
     nsc-shape: $SMALL_RUNNER_SHAPE
+  # docker image builds stay on garage, they rely on agent v4 post-command hook order
+  garage-runner: &garage-runner
+    queue: $GARAGE_RUNNER_QUEUE
+    workload: $RUNNER_WORKLOAD_STANDARD
 
   # docker plugin options for the build image, merged into a step with <<: *build-image
   build-image: &build-image
@@ -207,7 +212,7 @@ steps:
       - label: ":auth0: fga generate"
         retry: *disk-full-retry
         key: "generate_fga"
-        agents: *medium-runner
+        agents: *small-runner
         cancel_on_build_failing: true
         if_changed:
           - fga/**
@@ -347,7 +352,7 @@ steps:
           - .golangci.yaml
           - .custom-gcl.yml
           - go.{mod,sum}
-        agents: *medium-runner
+        agents: *large-runner
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_graphapi"
@@ -364,7 +369,7 @@ steps:
           - .golangci.yaml
           - .custom-gcl.yml
           - go.{mod,sum}
-        agents: *medium-runner
+        agents: *large-runner
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_handlers"
@@ -385,7 +390,7 @@ steps:
           exclude:
             - internal/graphapi/**
             - internal/httpserve/handlers/**
-        agents: *medium-runner
+        agents: *large-runner
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_non_api"
@@ -421,7 +426,7 @@ steps:
         artifact_paths: ["coverage-graph-*.out", "junit-graph-*.xml"]
       - label: ":golang: go test - events only"
         retry: *disk-full-retry
-        agents: *medium-runner
+        agents: *large-runner
         key: "go_test_events"
         cancel_on_build_failing: true
         if_changed: # only run when event driven code changes
@@ -483,7 +488,7 @@ steps:
             - go.{mod,sum}
           exclude: # do not run tests if only cli files changed
             - cli/**
-        agents: *medium-runner
+        agents: *large-runner
         key: "go_test_no_api"
         cancel_on_build_failing: true
         env:
@@ -773,7 +778,7 @@ steps:
       - label: ":docker: docker pr build"
         retry: *disk-full-retry
         key: "docker-pr-build"
-        agents: *medium-runner
+        agents: *garage-runner
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         if_changed:
@@ -815,7 +820,7 @@ steps:
       - label: ":docker: docker build and publish"
         retry: *disk-full-retry
         key: "docker-build-and-tag"
-        agents: *medium-runner
+        agents: *garage-runner
         cancel_on_build_failing: true
         if: *if-release-tag
         commands: |
