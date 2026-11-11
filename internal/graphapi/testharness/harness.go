@@ -14,7 +14,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/gertd/go-pluralize"
 	"github.com/mcuadros/go-defaults"
 	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog"
@@ -33,6 +32,8 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/storagetypes"
+
+	"github.com/theopenlane/logx"
 
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
@@ -63,7 +64,6 @@ import (
 	mock_shared "github.com/theopenlane/core/v2/pkg/objects/mocks"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
-	"github.com/theopenlane/logx"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
