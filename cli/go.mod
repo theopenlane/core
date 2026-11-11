@@ -79,7 +79,7 @@ require (
 	github.com/openfga/api/proto v0.0.0-20260928071936-c0650ce2169b // indirect
 	github.com/openfga/go-sdk v0.8.3 // indirect
 	github.com/openfga/language/pkg/go v0.3.2 // indirect
-	github.com/pdfcpu/pdfcpu v0.16.3 // indirect
+	github.com/pdfcpu/pdfcpu v0.16.4 // indirect
 	github.com/philhofer/fwd v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/redis/go-redis/v9 v9.23.0 // indirect

@@ -160,8 +160,7 @@ github.com/openfga/go-sdk v0.8.3/go.mod h1:4EwBqOVHnIfCsQZ6e7LTbgr+jKfngu3YibPPV
 github.com/openfga/language/pkg/go v0.3.2 h1:QN/cBYzL50RzEh46e+7ILvFeBs0exge7Sia0B6uXjms=
 github.com/openfga/language/pkg/go v0.3.2/go.mod h1:Ia3Luc0WcZdLogjjnFFKbce8+427wwlDaUG3dREZVCY=
 github.com/pborman/getopt v0.0.0-20170112200414-7148bc3a4c30/go.mod h1:85jBQOZwpVEaDAr341tbn15RS4fCAsIst0qp7i8ex1o=
-github.com/pdfcpu/pdfcpu v0.16.3 h1:hOY/BelGn+/VnZtlLXOx7XeTqsF8atbaxzVkZsKBR1s=
-github.com/pdfcpu/pdfcpu v0.16.3/go.mod h1:zMjQF5nYZ6A0yaG2d4GAj1QrzM5U8BZYDFHpuRwPuxQ=
+github.com/pdfcpu/pdfcpu v0.16.4 h1:XW7q98xu3vNAimTSX93fIWnTDA2F0zz8mu88wiXoMjU=
 github.com/philhofer/fwd v1.2.1 h1:UtpS73q8bFgy/yH3gCq8LSNvj5gv/FowNOiWZa7uKwQ=
 github.com/philhofer/fwd v1.2.1/go.mod h1:RqIHx9QI14HlwKwm98g9Re5prTQ6LdeRQn+gXJFxsJM=
 github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c h1:+mdjkGKdHQG3305AYmdv1U2eRNDiU2ErMBj1gwrq8eQ=
