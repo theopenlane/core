@@ -37,7 +37,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.6
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.85.4
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.6
-	github.com/brianvoe/gofakeit/v7 v7.18.1
+	github.com/brianvoe/gofakeit/v7 v7.18.2
 	github.com/cenkalti/backoff/v7 v7.0.3
 	github.com/cloudflare/cloudflare-go/v7 v7.13.1
 	github.com/coder/websocket v1.8.15
@@ -117,9 +117,9 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.38.3-0.20261110213000-5926fee7c475
+	github.com/theopenlane/entx v0.38.3
 	github.com/theopenlane/go-client v0.15.1
-	github.com/theopenlane/gqlgen-plugins v0.19.4-0.20261110225651-f3fcca56efe2
+	github.com/theopenlane/gqlgen-plugins v0.19.4
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.42.0
 	github.com/theopenlane/logx v0.1.1
@@ -141,7 +141,7 @@ require (
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/sync v0.25.0
 	golang.org/x/term v0.47.0
-	golang.org/x/text v0.43.0
+	golang.org/x/text v0.44.0
 	golang.org/x/tools v0.52.0
 	google.golang.org/api v0.310.0
 	google.golang.org/grpc v1.85.0
