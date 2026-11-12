@@ -81,6 +81,12 @@ var backfillRoutines = []backfillRoutine{
 		Enabled: true,
 		Run:     backfillSlugs,
 	},
+	{
+		Name:    "cleanup-integration-parent-tuples",
+		Version: "v1",
+		Enabled: true,
+		Run:     cleanupIntegrationParentTuples,
+	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run

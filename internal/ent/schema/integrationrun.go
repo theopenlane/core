@@ -164,9 +164,8 @@ func (r IntegrationRun) Mixin() []ent.Mixin {
 		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.IntegrationRun](r,
-				withOrganizationOwner(),
-				withParents(Integration{}),
-				withSkipperFunc(skipInterceptorForOrgMembers),
+				withOrganizationOwnerFieldOnly(),
+				withSkipperFunc(skipInterceptorForIntegrationManagers),
 			),
 		},
 	}.getMixins(r)

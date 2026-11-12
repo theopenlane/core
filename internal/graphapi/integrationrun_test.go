@@ -48,10 +48,10 @@ func TestQueryAllIntegrationRuns(t *testing.T) {
 			expectedResults: 2,
 		},
 		{
-			name:            "happy path, using read only user of the same org",
+			name:            "read only member of the same org cannot see runs",
 			client:          suite.Client.API,
 			ctx:             th.SharedViewOnlyUser.UserCtx,
-			expectedResults: 2,
+			expectedResults: 0,
 		},
 		{
 			name:            "happy path, using api token",

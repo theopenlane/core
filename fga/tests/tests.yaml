@@ -2572,7 +2572,7 @@ tests:
           sla_definition_viewer: false
           can_view_sla_definition: false
   - name: integration_run
-    description: integration runs are service-driven and visible to org members via parent context
+    description: integration runs are service-driven and only visible to integration managers
     tuple_file: tuples/integration_runs.yaml
     check:
       - user: user:ulid-of-owner
@@ -2590,6 +2590,12 @@ tests:
       - user: user:ulid-of-member
         object: integration_run:run-1
         assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-integrations-manager
+        object: integration_run:run-1
+        assertions:
           can_view: true
           can_edit: false
           can_delete: false
@@ -2601,6 +2607,40 @@ tests:
           can_delete: true
       - user: user:ulid-of-owner-foobar # user of another org has no access
         object: integration_run:run-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+  - name: integration_webhook
+    description: integration webhooks are only visible to integration managers
+    tuple_file: tuples/integration_webhooks.yaml
+    check:
+      - user: user:ulid-of-owner
+        object: integration_webhook:webhook-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-admin
+        object: integration_webhook:webhook-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-integrations-manager
+        object: integration_webhook:webhook-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member
+        object: integration_webhook:webhook-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: integration_webhook:webhook-1
         assertions:
           can_view: false
           can_edit: false

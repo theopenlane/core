@@ -493,6 +493,11 @@ func skipInterceptorForOrgMembers(ctx context.Context) bool {
 	return false
 }
 
+// skipInterceptorForIntegrationManagers skips the filter interceptor for callers who can manage integrations in the org
+func skipInterceptorForIntegrationManagers(ctx context.Context) bool {
+	return access.Allow(rule.CheckCurrentOrgAccess(ctx, nil, rule.CanManageIntegrationsRelation))
+}
+
 // skipInterceptorForSystemAdmins skips the filter interceptor for system admins
 func skipInterceptorForSystemAdmins(ctx context.Context) bool {
 	return auth.IsSystemAdminFromContext(ctx)

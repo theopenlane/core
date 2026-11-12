@@ -7,12 +7,9 @@
   relation: parent_context
   object: integration:integration-1
 
-# run-1 is associated with the org and the integration
+# run-1 is associated with the org
 - user: organization:openlane
   relation: parent_context
-  object: integration_run:run-1
-- user: integration:integration-1
-  relation: parent
   object: integration_run:run-1
 
 # service is the editor of the run

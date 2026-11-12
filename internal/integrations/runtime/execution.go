@@ -408,7 +408,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 func (r *Runtime) resumeTrackedRun(ctx context.Context, oc *gala.OperationContext, src *types.IntegrationSource) (context.Context, error) {
 	db := r.DB()
 
-	run, err := db.IntegrationRun.Get(ctx, src.RunID)
+	run, err := db.IntegrationRun.Get(auth.WithInternalReadContext(ctx), src.RunID)
 	if err != nil {
 		return ctx, err
 	}
@@ -484,7 +484,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	if db := r.DB(); db != nil && db.IntegrationRun != nil && integration != nil {
 		var lastRunErr error
 
-		lastRunAt, lastRunErr = operations.LastSuccessfulRunAt(ctx, db, integration.ID, operation.Name)
+		lastRunAt, lastRunErr = operations.LastSuccessfulRunAt(auth.WithInternalReadContext(ctx), db, integration.ID, operation.Name)
 		if lastRunErr != nil {
 			logx.FromContext(ctx).Warn().Err(lastRunErr).Msg("could not resolve last successful run time, proceeding without incremental filter")
 		}
