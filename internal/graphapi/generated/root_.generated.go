@@ -4675,6 +4675,7 @@ type ComplexityRoot struct {
 		HushCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                                 func(childComplexity int) int
 		IdentityHolderCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		IntegrationsManager                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		InternalPolicyCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		InviteCreators                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Invites                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
@@ -34248,6 +34249,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.IdentityHolderCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.integrationsManager":
+		if e.ComplexityRoot.Organization.IntegrationsManager == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_integrationsManager_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.IntegrationsManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.internalPolicyCreators":
 		if e.ComplexityRoot.Organization.InternalPolicyCreators == nil {
 			break
@@ -74523,6 +74535,7 @@ input CreateOrganizationInput {
   campaignsManagerIDs: [ID!]
   complianceManagerIDs: [ID!]
   groupManagerIDs: [ID!]
+  integrationsManagerIDs: [ID!]
   policiesManagerIDs: [ID!]
   registryManagerIDs: [ID!]
   riskManagerIDs: [ID!]
@@ -106058,6 +106071,37 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  integrationsManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   policiesManager(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -107868,6 +107912,11 @@ input OrganizationWhereInput {
   """
   hasGroupManager: Boolean
   hasGroupManagerWith: [GroupWhereInput!]
+  """
+  integrations_manager edge predicates
+  """
+  hasIntegrationsManager: Boolean
+  hasIntegrationsManagerWith: [GroupWhereInput!]
   """
   policies_manager edge predicates
   """
@@ -139073,6 +139122,9 @@ input UpdateOrganizationInput {
   addGroupManagerIDs: [ID!]
   removeGroupManagerIDs: [ID!]
   clearGroupManager: Boolean
+  addIntegrationsManagerIDs: [ID!]
+  removeIntegrationsManagerIDs: [ID!]
+  clearIntegrationsManager: Boolean
   addPoliciesManagerIDs: [ID!]
   removePoliciesManagerIDs: [ID!]
   clearPoliciesManager: Boolean
@@ -171413,6 +171465,8 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_complianceManager(ctx, field)
 	case "groupManager":
 		return ec.fieldContext_Organization_groupManager(ctx, field)
+	case "integrationsManager":
+		return ec.fieldContext_Organization_integrationsManager(ctx, field)
 	case "policiesManager":
 		return ec.fieldContext_Organization_policiesManager(ctx, field)
 	case "registryManager":

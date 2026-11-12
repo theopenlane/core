@@ -1433,6 +1433,21 @@ func (_c *OrganizationCreate) AddGroupManager(v ...*Group) *OrganizationCreate {
 	return _c.AddGroupManagerIDs(ids...)
 }
 
+// AddIntegrationsManagerIDs adds the "integrations_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddIntegrationsManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddIntegrationsManagerIDs(ids...)
+	return _c
+}
+
+// AddIntegrationsManager adds the "integrations_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddIntegrationsManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationsManagerIDs(ids...)
+}
+
 // AddPoliciesManagerIDs adds the "policies_manager" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddPoliciesManagerIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddPoliciesManagerIDs(ids...)
@@ -4163,6 +4178,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.GroupManagerTable,
 			Columns: []string{organization.GroupManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationsManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationsManagerTable,
+			Columns: []string{organization.IntegrationsManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

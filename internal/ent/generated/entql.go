@@ -12734,6 +12734,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"integrations_manager",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationsManagerTable,
+			Columns: []string{organization.IntegrationsManagerColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
 		"policies_manager",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -39992,6 +40004,20 @@ func (f *OrganizationFilter) WhereHasGroupManager() {
 // WhereHasGroupManagerWith applies a predicate to check if query has an edge group_manager with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasGroupManagerWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("group_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIntegrationsManager applies a predicate to check if query has an edge integrations_manager.
+func (f *OrganizationFilter) WhereHasIntegrationsManager() {
+	f.Where(entql.HasEdge("integrations_manager"))
+}
+
+// WhereHasIntegrationsManagerWith applies a predicate to check if query has an edge integrations_manager with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasIntegrationsManagerWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("integrations_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

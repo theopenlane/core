@@ -195,6 +195,8 @@ const (
 	EdgeComplianceManager = "compliance_manager"
 	// EdgeGroupManager holds the string denoting the group_manager edge name in mutations.
 	EdgeGroupManager = "group_manager"
+	// EdgeIntegrationsManager holds the string denoting the integrations_manager edge name in mutations.
+	EdgeIntegrationsManager = "integrations_manager"
 	// EdgePoliciesManager holds the string denoting the policies_manager edge name in mutations.
 	EdgePoliciesManager = "policies_manager"
 	// EdgeRegistryManager holds the string denoting the registry_manager edge name in mutations.
@@ -883,6 +885,13 @@ const (
 	GroupManagerInverseTable = "groups"
 	// GroupManagerColumn is the table column denoting the group_manager relation/edge.
 	GroupManagerColumn = "organization_group_manager"
+	// IntegrationsManagerTable is the table that holds the integrations_manager relation/edge.
+	IntegrationsManagerTable = "groups"
+	// IntegrationsManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	IntegrationsManagerInverseTable = "groups"
+	// IntegrationsManagerColumn is the table column denoting the integrations_manager relation/edge.
+	IntegrationsManagerColumn = "organization_integrations_manager"
 	// PoliciesManagerTable is the table that holds the policies_manager relation/edge.
 	PoliciesManagerTable = "groups"
 	// PoliciesManagerInverseTable is the table name for the Group entity.
@@ -1562,7 +1571,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [85]ent.Hook
+	Hooks        [86]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -2689,6 +2698,20 @@ func ByGroupManagerCount(opts ...sql.OrderTermOption) OrderOption {
 func ByGroupManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newGroupManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIntegrationsManagerCount orders the results by integrations_manager count.
+func ByIntegrationsManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationsManagerStep(), opts...)
+	}
+}
+
+// ByIntegrationsManager orders the results by integrations_manager terms.
+func ByIntegrationsManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationsManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -4439,6 +4462,13 @@ func newGroupManagerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(GroupManagerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, GroupManagerTable, GroupManagerColumn),
+	)
+}
+func newIntegrationsManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationsManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsManagerTable, IntegrationsManagerColumn),
 	)
 }
 func newPoliciesManagerStep() *sqlgraph.Step {

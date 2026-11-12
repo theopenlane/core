@@ -46508,6 +46508,13 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 			c.withNamedGroupManager[name] = q.clonePage()
 		}
 	}
+	c.withIntegrationsManager = _q.withIntegrationsManager.clonePage()
+	if _q.withNamedIntegrationsManager != nil {
+		c.withNamedIntegrationsManager = make(map[string]*GroupQuery, len(_q.withNamedIntegrationsManager))
+		for name, q := range _q.withNamedIntegrationsManager {
+			c.withNamedIntegrationsManager[name] = q.clonePage()
+		}
+	}
 	c.withPoliciesManager = _q.withPoliciesManager.clonePage()
 	if _q.withNamedPoliciesManager != nil {
 		c.withNamedPoliciesManager = make(map[string]*GroupQuery, len(_q.withNamedPoliciesManager))

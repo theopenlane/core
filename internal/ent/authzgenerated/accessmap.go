@@ -3618,6 +3618,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "integrations_manager": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "policies_manager": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,

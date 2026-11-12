@@ -171334,6 +171334,9 @@ type OrganizationMutation struct {
 	group_manager                                 map[string]struct{}
 	removedgroup_manager                          map[string]struct{}
 	clearedgroup_manager                          bool
+	integrations_manager                          map[string]struct{}
+	removedintegrations_manager                   map[string]struct{}
+	clearedintegrations_manager                   bool
 	policies_manager                              map[string]struct{}
 	removedpolicies_manager                       map[string]struct{}
 	clearedpolicies_manager                       bool
@@ -176470,6 +176473,60 @@ func (m *OrganizationMutation) ResetGroupManager() {
 	m.group_manager = nil
 	m.clearedgroup_manager = false
 	m.removedgroup_manager = nil
+}
+
+// AddIntegrationsManagerIDs adds the "integrations_manager" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddIntegrationsManagerIDs(ids ...string) {
+	if m.integrations_manager == nil {
+		m.integrations_manager = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integrations_manager[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationsManager clears the "integrations_manager" edge to the Group entity.
+func (m *OrganizationMutation) ClearIntegrationsManager() {
+	m.clearedintegrations_manager = true
+}
+
+// IntegrationsManagerCleared reports if the "integrations_manager" edge to the Group entity was cleared.
+func (m *OrganizationMutation) IntegrationsManagerCleared() bool {
+	return m.clearedintegrations_manager
+}
+
+// RemoveIntegrationsManagerIDs removes the "integrations_manager" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemoveIntegrationsManagerIDs(ids ...string) {
+	if m.removedintegrations_manager == nil {
+		m.removedintegrations_manager = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integrations_manager, ids[i])
+		m.removedintegrations_manager[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationsManager returns the removed IDs of the "integrations_manager" edge to the Group entity.
+func (m *OrganizationMutation) RemovedIntegrationsManagerIDs() (ids []string) {
+	for id := range m.removedintegrations_manager {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationsManagerIDs returns the "integrations_manager" edge IDs in the mutation.
+func (m *OrganizationMutation) IntegrationsManagerIDs() (ids []string) {
+	for id := range m.integrations_manager {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationsManager resets all changes to the "integrations_manager" edge.
+func (m *OrganizationMutation) ResetIntegrationsManager() {
+	m.integrations_manager = nil
+	m.clearedintegrations_manager = false
+	m.removedintegrations_manager = nil
 }
 
 // AddPoliciesManagerIDs adds the "policies_manager" edge to the Group entity by ids.
@@ -181849,7 +181906,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 163)
+	edges := make([]string, 0, 164)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -182065,6 +182122,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.group_manager != nil {
 		edges = append(edges, organization.EdgeGroupManager)
+	}
+	if m.integrations_manager != nil {
+		edges = append(edges, organization.EdgeIntegrationsManager)
 	}
 	if m.policies_manager != nil {
 		edges = append(edges, organization.EdgePoliciesManager)
@@ -182778,6 +182838,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeIntegrationsManager:
+		ids := make([]ent.Value, 0, len(m.integrations_manager))
+		for id := range m.integrations_manager {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgePoliciesManager:
 		ids := make([]ent.Value, 0, len(m.policies_manager))
 		for id := range m.policies_manager {
@@ -183322,7 +183388,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 163)
+	edges := make([]string, 0, 164)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -183538,6 +183604,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedgroup_manager != nil {
 		edges = append(edges, organization.EdgeGroupManager)
+	}
+	if m.removedintegrations_manager != nil {
+		edges = append(edges, organization.EdgeIntegrationsManager)
 	}
 	if m.removedpolicies_manager != nil {
 		edges = append(edges, organization.EdgePoliciesManager)
@@ -184239,6 +184308,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeIntegrationsManager:
+		ids := make([]ent.Value, 0, len(m.removedintegrations_manager))
+		for id := range m.removedintegrations_manager {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgePoliciesManager:
 		ids := make([]ent.Value, 0, len(m.removedpolicies_manager))
 		for id := range m.removedpolicies_manager {
@@ -184767,7 +184842,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 163)
+	edges := make([]string, 0, 164)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -184983,6 +185058,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	}
 	if m.clearedgroup_manager {
 		edges = append(edges, organization.EdgeGroupManager)
+	}
+	if m.clearedintegrations_manager {
+		edges = append(edges, organization.EdgeIntegrationsManager)
 	}
 	if m.clearedpolicies_manager {
 		edges = append(edges, organization.EdgePoliciesManager)
@@ -185408,6 +185486,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedcompliance_manager
 	case organization.EdgeGroupManager:
 		return m.clearedgroup_manager
+	case organization.EdgeIntegrationsManager:
+		return m.clearedintegrations_manager
 	case organization.EdgePoliciesManager:
 		return m.clearedpolicies_manager
 	case organization.EdgeRegistryManager:
@@ -185833,6 +185913,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeGroupManager:
 		m.ResetGroupManager()
+		return nil
+	case organization.EdgeIntegrationsManager:
+		m.ResetIntegrationsManager()
 		return nil
 	case organization.EdgePoliciesManager:
 		m.ResetPoliciesManager()

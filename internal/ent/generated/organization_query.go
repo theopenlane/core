@@ -181,6 +181,7 @@ type OrganizationQuery struct {
 	withCampaignsManager                        *GroupQuery
 	withComplianceManager                       *GroupQuery
 	withGroupManager                            *GroupQuery
+	withIntegrationsManager                     *GroupQuery
 	withPoliciesManager                         *GroupQuery
 	withRegistryManager                         *GroupQuery
 	withRiskManager                             *GroupQuery
@@ -346,6 +347,7 @@ type OrganizationQuery struct {
 	withNamedCampaignsManager                   map[string]*GroupQuery
 	withNamedComplianceManager                  map[string]*GroupQuery
 	withNamedGroupManager                       map[string]*GroupQuery
+	withNamedIntegrationsManager                map[string]*GroupQuery
 	withNamedPoliciesManager                    map[string]*GroupQuery
 	withNamedRegistryManager                    map[string]*GroupQuery
 	withNamedRiskManager                        map[string]*GroupQuery
@@ -2046,6 +2048,28 @@ func (_q *OrganizationQuery) QueryGroupManager() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupManagerTable, organization.GroupManagerColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegrationsManager chains the current query on the "integrations_manager" edge.
+func (_q *OrganizationQuery) QueryIntegrationsManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationsManagerTable, organization.IntegrationsManagerColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -4319,6 +4343,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withCampaignsManager:                   _q.withCampaignsManager.Clone(),
 		withComplianceManager:                  _q.withComplianceManager.Clone(),
 		withGroupManager:                       _q.withGroupManager.Clone(),
+		withIntegrationsManager:                _q.withIntegrationsManager.Clone(),
 		withPoliciesManager:                    _q.withPoliciesManager.Clone(),
 		withRegistryManager:                    _q.withRegistryManager.Clone(),
 		withRiskManager:                        _q.withRiskManager.Clone(),
@@ -5206,6 +5231,17 @@ func (_q *OrganizationQuery) WithGroupManager(opts ...func(*GroupQuery)) *Organi
 		opt(query)
 	}
 	_q.withGroupManager = query
+	return _q
+}
+
+// WithIntegrationsManager tells the query-builder to eager-load the nodes that are connected to
+// the "integrations_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithIntegrationsManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationsManager = query
 	return _q
 }
 
@@ -6294,7 +6330,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [163]bool{
+		loadedTypes = [164]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6367,6 +6403,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withCampaignsManager != nil,
 			_q.withComplianceManager != nil,
 			_q.withGroupManager != nil,
+			_q.withIntegrationsManager != nil,
 			_q.withPoliciesManager != nil,
 			_q.withRegistryManager != nil,
 			_q.withRiskManager != nil,
@@ -7054,6 +7091,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadGroupManager(ctx, query, nodes,
 			func(n *Organization) { n.Edges.GroupManager = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.GroupManager = append(n.Edges.GroupManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegrationsManager; query != nil {
+		if err := _q.loadIntegrationsManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.IntegrationsManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.IntegrationsManager = append(n.Edges.IntegrationsManager, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8237,6 +8281,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadGroupManager(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedGroupManager(name) },
 			func(n *Organization, e *Group) { n.appendNamedGroupManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationsManager {
+		if err := _q.loadIntegrationsManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedIntegrationsManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedIntegrationsManager(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -11086,6 +11137,37 @@ func (_q *OrganizationQuery) loadGroupManager(ctx context.Context, query *GroupQ
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_group_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadIntegrationsManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.IntegrationsManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_integrations_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_integrations_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_integrations_manager" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -15081,6 +15163,20 @@ func (_q *OrganizationQuery) WithNamedGroupManager(name string, opts ...func(*Gr
 		_q.withNamedGroupManager = make(map[string]*GroupQuery)
 	}
 	_q.withNamedGroupManager[name] = query
+	return _q
+}
+
+// WithNamedIntegrationsManager tells the query-builder to eager-load the nodes that are connected to the "integrations_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedIntegrationsManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationsManager == nil {
+		_q.withNamedIntegrationsManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedIntegrationsManager[name] = query
 	return _q
 }
 

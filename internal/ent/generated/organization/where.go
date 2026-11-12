@@ -2916,6 +2916,29 @@ func HasGroupManagerWith(preds ...predicate.Group) predicate.Organization {
 	})
 }
 
+// HasIntegrationsManager applies the HasEdge predicate on the "integrations_manager" edge.
+func HasIntegrationsManager() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsManagerTable, IntegrationsManagerColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationsManagerWith applies the HasEdge predicate on the "integrations_manager" edge with a given conditions (other predicates).
+func HasIntegrationsManagerWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newIntegrationsManagerStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPoliciesManager applies the HasEdge predicate on the "policies_manager" edge.
 func HasPoliciesManager() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

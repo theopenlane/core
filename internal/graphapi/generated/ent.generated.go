@@ -24773,6 +24773,60 @@ func (ec *executionContext) field_Organization_identityHolderCreators_args(ctx c
 	return args, nil
 }
 
+func (ec *executionContext) field_Organization_integrationsManager_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.GroupOrder, error) {
+			return ec.unmarshalOGroupOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
+			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Organization_internalPolicyCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -120501,6 +120555,50 @@ func (ec *executionContext) fieldContext_Organization_groupManager(ctx context.C
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Organization_groupManager_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Organization_integrationsManager(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Organization_integrationsManager(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.IntegrationsManager(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.GroupOrder), fc.Args["where"].(*generated.GroupWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
+			return ec.marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Organization_integrationsManager(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_GroupConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Organization_integrationsManager_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -226577,7 +226675,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "name", "displayName", "description", "personalOrg", "avatarRemoteURL", "avatarUpdatedAt", "actionPlanCreatorIDs", "apiTokenCreatorIDs", "assessmentCreatorIDs", "assessmentPolicyCreatorIDs", "assetCreatorIDs", "campaignCreatorIDs", "campaignTargetCreatorIDs", "checkResultCreatorIDs", "contactCreatorIDs", "controlCreatorIDs", "controlImplementationCreatorIDs", "controlObjectiveCreatorIDs", "customDomainCreatorIDs", "customTypeEnumCreatorIDs", "directoryAccountCreatorIDs", "directoryGroupCreatorIDs", "directoryMembershipCreatorIDs", "discussionCreatorIDs", "documentDataCreatorIDs", "emailTemplateCreatorIDs", "entityCreatorIDs", "entityTypeCreatorIDs", "evidenceCreatorIDs", "fileCreatorIDs", "findingCreatorIDs", "findingControlCreatorIDs", "groupCreatorIDs", "groupMembershipCreatorIDs", "groupSettingCreatorIDs", "hushCreatorIDs", "identityHolderCreatorIDs", "internalPolicyCreatorIDs", "inviteCreatorIDs", "mappedControlCreatorIDs", "narrativeCreatorIDs", "noteCreatorIDs", "notificationTemplateCreatorIDs", "orgMembershipCreatorIDs", "platformCreatorIDs", "procedureCreatorIDs", "programCreatorIDs", "programMembershipCreatorIDs", "remediationCreatorIDs", "reportCreatorIDs", "reportMembershipCreatorIDs", "reviewCreatorIDs", "riskCreatorIDs", "scanCreatorIDs", "slaDefinitionCreatorIDs", "standardCreatorIDs", "subcontrolCreatorIDs", "subprocessorCreatorIDs", "subscriberCreatorIDs", "systemDetailCreatorIDs", "tagDefinitionCreatorIDs", "taskCreatorIDs", "templateCreatorIDs", "trustCenterCreatorIDs", "trustCenterComplianceCreatorIDs", "trustCenterDocCreatorIDs", "trustCenterEntityCreatorIDs", "trustCenterFaqCreatorIDs", "trustCenterNdaRequestCreatorIDs", "trustCenterSubprocessorCreatorIDs", "trustCenterWatermarkConfigCreatorIDs", "vendorRiskScoreCreatorIDs", "vendorScoringConfigCreatorIDs", "vulnerabilityCreatorIDs", "workflowDefinitionCreatorIDs", "campaignsManagerIDs", "complianceManagerIDs", "groupManagerIDs", "policiesManagerIDs", "registryManagerIDs", "riskManagerIDs", "trustCenterManagerIDs", "workflowsManagerIDs", "parentID", "settingID", "personalAccessTokenIDs", "brandingSettingID", "fileIDs", "eventIDs", "avatarFileID", "orgSubscriptionIDs", "inviteIDs", "impersonationEventIDs", "createOrgSettings"}
+	fieldsInOrder := [...]string{"tags", "name", "displayName", "description", "personalOrg", "avatarRemoteURL", "avatarUpdatedAt", "actionPlanCreatorIDs", "apiTokenCreatorIDs", "assessmentCreatorIDs", "assessmentPolicyCreatorIDs", "assetCreatorIDs", "campaignCreatorIDs", "campaignTargetCreatorIDs", "checkResultCreatorIDs", "contactCreatorIDs", "controlCreatorIDs", "controlImplementationCreatorIDs", "controlObjectiveCreatorIDs", "customDomainCreatorIDs", "customTypeEnumCreatorIDs", "directoryAccountCreatorIDs", "directoryGroupCreatorIDs", "directoryMembershipCreatorIDs", "discussionCreatorIDs", "documentDataCreatorIDs", "emailTemplateCreatorIDs", "entityCreatorIDs", "entityTypeCreatorIDs", "evidenceCreatorIDs", "fileCreatorIDs", "findingCreatorIDs", "findingControlCreatorIDs", "groupCreatorIDs", "groupMembershipCreatorIDs", "groupSettingCreatorIDs", "hushCreatorIDs", "identityHolderCreatorIDs", "internalPolicyCreatorIDs", "inviteCreatorIDs", "mappedControlCreatorIDs", "narrativeCreatorIDs", "noteCreatorIDs", "notificationTemplateCreatorIDs", "orgMembershipCreatorIDs", "platformCreatorIDs", "procedureCreatorIDs", "programCreatorIDs", "programMembershipCreatorIDs", "remediationCreatorIDs", "reportCreatorIDs", "reportMembershipCreatorIDs", "reviewCreatorIDs", "riskCreatorIDs", "scanCreatorIDs", "slaDefinitionCreatorIDs", "standardCreatorIDs", "subcontrolCreatorIDs", "subprocessorCreatorIDs", "subscriberCreatorIDs", "systemDetailCreatorIDs", "tagDefinitionCreatorIDs", "taskCreatorIDs", "templateCreatorIDs", "trustCenterCreatorIDs", "trustCenterComplianceCreatorIDs", "trustCenterDocCreatorIDs", "trustCenterEntityCreatorIDs", "trustCenterFaqCreatorIDs", "trustCenterNdaRequestCreatorIDs", "trustCenterSubprocessorCreatorIDs", "trustCenterWatermarkConfigCreatorIDs", "vendorRiskScoreCreatorIDs", "vendorScoringConfigCreatorIDs", "vulnerabilityCreatorIDs", "workflowDefinitionCreatorIDs", "campaignsManagerIDs", "complianceManagerIDs", "groupManagerIDs", "integrationsManagerIDs", "policiesManagerIDs", "registryManagerIDs", "riskManagerIDs", "trustCenterManagerIDs", "workflowsManagerIDs", "parentID", "settingID", "personalAccessTokenIDs", "brandingSettingID", "fileIDs", "eventIDs", "avatarFileID", "orgSubscriptionIDs", "inviteIDs", "impersonationEventIDs", "createOrgSettings"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -227137,6 +227235,13 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.GroupManagerIDs = data
+		case "integrationsManagerIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationsManagerIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationsManagerIDs = data
 		case "policiesManagerIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policiesManagerIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -299748,7 +299853,7 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "parentOrganizationID", "parentOrganizationIDNEQ", "parentOrganizationIDIn", "parentOrganizationIDNotIn", "parentOrganizationIDContains", "parentOrganizationIDHasPrefix", "parentOrganizationIDHasSuffix", "parentOrganizationIDIsNil", "parentOrganizationIDNotNil", "parentOrganizationIDEqualFold", "parentOrganizationIDContainsFold", "personalOrg", "personalOrgNEQ", "personalOrgIsNil", "personalOrgNotNil", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "slugName", "slugNameNEQ", "slugNameIn", "slugNameNotIn", "slugNameContains", "slugNameHasPrefix", "slugNameHasSuffix", "slugNameIsNil", "slugNameNotNil", "slugNameEqualFold", "slugNameContainsFold", "hasActionPlanCreators", "hasActionPlanCreatorsWith", "hasAPITokenCreators", "hasAPITokenCreatorsWith", "hasAssessmentCreators", "hasAssessmentCreatorsWith", "hasAssessmentPolicyCreators", "hasAssessmentPolicyCreatorsWith", "hasAssetCreators", "hasAssetCreatorsWith", "hasCampaignCreators", "hasCampaignCreatorsWith", "hasCampaignTargetCreators", "hasCampaignTargetCreatorsWith", "hasCheckResultCreators", "hasCheckResultCreatorsWith", "hasContactCreators", "hasContactCreatorsWith", "hasControlCreators", "hasControlCreatorsWith", "hasControlImplementationCreators", "hasControlImplementationCreatorsWith", "hasControlObjectiveCreators", "hasControlObjectiveCreatorsWith", "hasCustomDomainCreators", "hasCustomDomainCreatorsWith", "hasCustomTypeEnumCreators", "hasCustomTypeEnumCreatorsWith", "hasDirectoryAccountCreators", "hasDirectoryAccountCreatorsWith", "hasDirectoryGroupCreators", "hasDirectoryGroupCreatorsWith", "hasDirectoryMembershipCreators", "hasDirectoryMembershipCreatorsWith", "hasDiscussionCreators", "hasDiscussionCreatorsWith", "hasDocumentDataCreators", "hasDocumentDataCreatorsWith", "hasEmailTemplateCreators", "hasEmailTemplateCreatorsWith", "hasEntityCreators", "hasEntityCreatorsWith", "hasEntityTypeCreators", "hasEntityTypeCreatorsWith", "hasEvidenceCreators", "hasEvidenceCreatorsWith", "hasFileCreators", "hasFileCreatorsWith", "hasFindingCreators", "hasFindingCreatorsWith", "hasFindingControlCreators", "hasFindingControlCreatorsWith", "hasGroupCreators", "hasGroupCreatorsWith", "hasGroupMembershipCreators", "hasGroupMembershipCreatorsWith", "hasGroupSettingCreators", "hasGroupSettingCreatorsWith", "hasHushCreators", "hasHushCreatorsWith", "hasIdentityHolderCreators", "hasIdentityHolderCreatorsWith", "hasInternalPolicyCreators", "hasInternalPolicyCreatorsWith", "hasInviteCreators", "hasInviteCreatorsWith", "hasMappedControlCreators", "hasMappedControlCreatorsWith", "hasNarrativeCreators", "hasNarrativeCreatorsWith", "hasNoteCreators", "hasNoteCreatorsWith", "hasNotificationTemplateCreators", "hasNotificationTemplateCreatorsWith", "hasOrgMembershipCreators", "hasOrgMembershipCreatorsWith", "hasPlatformCreators", "hasPlatformCreatorsWith", "hasProcedureCreators", "hasProcedureCreatorsWith", "hasProgramCreators", "hasProgramCreatorsWith", "hasProgramMembershipCreators", "hasProgramMembershipCreatorsWith", "hasRemediationCreators", "hasRemediationCreatorsWith", "hasReportCreators", "hasReportCreatorsWith", "hasReportMembershipCreators", "hasReportMembershipCreatorsWith", "hasReviewCreators", "hasReviewCreatorsWith", "hasRiskCreators", "hasRiskCreatorsWith", "hasScanCreators", "hasScanCreatorsWith", "hasSLADefinitionCreators", "hasSLADefinitionCreatorsWith", "hasStandardCreators", "hasStandardCreatorsWith", "hasSubcontrolCreators", "hasSubcontrolCreatorsWith", "hasSubprocessorCreators", "hasSubprocessorCreatorsWith", "hasSubscriberCreators", "hasSubscriberCreatorsWith", "hasSystemDetailCreators", "hasSystemDetailCreatorsWith", "hasTagDefinitionCreators", "hasTagDefinitionCreatorsWith", "hasTaskCreators", "hasTaskCreatorsWith", "hasTemplateCreators", "hasTemplateCreatorsWith", "hasTrustCenterCreators", "hasTrustCenterCreatorsWith", "hasTrustCenterComplianceCreators", "hasTrustCenterComplianceCreatorsWith", "hasTrustCenterDocCreators", "hasTrustCenterDocCreatorsWith", "hasTrustCenterEntityCreators", "hasTrustCenterEntityCreatorsWith", "hasTrustCenterFaqCreators", "hasTrustCenterFaqCreatorsWith", "hasTrustCenterNdaRequestCreators", "hasTrustCenterNdaRequestCreatorsWith", "hasTrustCenterSubprocessorCreators", "hasTrustCenterSubprocessorCreatorsWith", "hasTrustCenterWatermarkConfigCreators", "hasTrustCenterWatermarkConfigCreatorsWith", "hasVendorRiskScoreCreators", "hasVendorRiskScoreCreatorsWith", "hasVendorScoringConfigCreators", "hasVendorScoringConfigCreatorsWith", "hasVulnerabilityCreators", "hasVulnerabilityCreatorsWith", "hasWorkflowDefinitionCreators", "hasWorkflowDefinitionCreatorsWith", "hasCampaignsManager", "hasCampaignsManagerWith", "hasComplianceManager", "hasComplianceManagerWith", "hasGroupManager", "hasGroupManagerWith", "hasPoliciesManager", "hasPoliciesManagerWith", "hasRegistryManager", "hasRegistryManagerWith", "hasRiskManager", "hasRiskManagerWith", "hasTrustCenterManager", "hasTrustCenterManagerWith", "hasWorkflowsManager", "hasWorkflowsManagerWith", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith", "hasSetting", "hasSettingWith", "hasPersonalAccessTokens", "hasPersonalAccessTokensWith", "hasBrandingSetting", "hasBrandingSettingWith", "hasUsers", "hasUsersWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasAvatarFile", "hasAvatarFileWith", "hasOrgSubscriptions", "hasOrgSubscriptionsWith", "hasInvites", "hasInvitesWith", "hasMembers", "hasMembersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "parentOrganizationID", "parentOrganizationIDNEQ", "parentOrganizationIDIn", "parentOrganizationIDNotIn", "parentOrganizationIDContains", "parentOrganizationIDHasPrefix", "parentOrganizationIDHasSuffix", "parentOrganizationIDIsNil", "parentOrganizationIDNotNil", "parentOrganizationIDEqualFold", "parentOrganizationIDContainsFold", "personalOrg", "personalOrgNEQ", "personalOrgIsNil", "personalOrgNotNil", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "slugName", "slugNameNEQ", "slugNameIn", "slugNameNotIn", "slugNameContains", "slugNameHasPrefix", "slugNameHasSuffix", "slugNameIsNil", "slugNameNotNil", "slugNameEqualFold", "slugNameContainsFold", "hasActionPlanCreators", "hasActionPlanCreatorsWith", "hasAPITokenCreators", "hasAPITokenCreatorsWith", "hasAssessmentCreators", "hasAssessmentCreatorsWith", "hasAssessmentPolicyCreators", "hasAssessmentPolicyCreatorsWith", "hasAssetCreators", "hasAssetCreatorsWith", "hasCampaignCreators", "hasCampaignCreatorsWith", "hasCampaignTargetCreators", "hasCampaignTargetCreatorsWith", "hasCheckResultCreators", "hasCheckResultCreatorsWith", "hasContactCreators", "hasContactCreatorsWith", "hasControlCreators", "hasControlCreatorsWith", "hasControlImplementationCreators", "hasControlImplementationCreatorsWith", "hasControlObjectiveCreators", "hasControlObjectiveCreatorsWith", "hasCustomDomainCreators", "hasCustomDomainCreatorsWith", "hasCustomTypeEnumCreators", "hasCustomTypeEnumCreatorsWith", "hasDirectoryAccountCreators", "hasDirectoryAccountCreatorsWith", "hasDirectoryGroupCreators", "hasDirectoryGroupCreatorsWith", "hasDirectoryMembershipCreators", "hasDirectoryMembershipCreatorsWith", "hasDiscussionCreators", "hasDiscussionCreatorsWith", "hasDocumentDataCreators", "hasDocumentDataCreatorsWith", "hasEmailTemplateCreators", "hasEmailTemplateCreatorsWith", "hasEntityCreators", "hasEntityCreatorsWith", "hasEntityTypeCreators", "hasEntityTypeCreatorsWith", "hasEvidenceCreators", "hasEvidenceCreatorsWith", "hasFileCreators", "hasFileCreatorsWith", "hasFindingCreators", "hasFindingCreatorsWith", "hasFindingControlCreators", "hasFindingControlCreatorsWith", "hasGroupCreators", "hasGroupCreatorsWith", "hasGroupMembershipCreators", "hasGroupMembershipCreatorsWith", "hasGroupSettingCreators", "hasGroupSettingCreatorsWith", "hasHushCreators", "hasHushCreatorsWith", "hasIdentityHolderCreators", "hasIdentityHolderCreatorsWith", "hasInternalPolicyCreators", "hasInternalPolicyCreatorsWith", "hasInviteCreators", "hasInviteCreatorsWith", "hasMappedControlCreators", "hasMappedControlCreatorsWith", "hasNarrativeCreators", "hasNarrativeCreatorsWith", "hasNoteCreators", "hasNoteCreatorsWith", "hasNotificationTemplateCreators", "hasNotificationTemplateCreatorsWith", "hasOrgMembershipCreators", "hasOrgMembershipCreatorsWith", "hasPlatformCreators", "hasPlatformCreatorsWith", "hasProcedureCreators", "hasProcedureCreatorsWith", "hasProgramCreators", "hasProgramCreatorsWith", "hasProgramMembershipCreators", "hasProgramMembershipCreatorsWith", "hasRemediationCreators", "hasRemediationCreatorsWith", "hasReportCreators", "hasReportCreatorsWith", "hasReportMembershipCreators", "hasReportMembershipCreatorsWith", "hasReviewCreators", "hasReviewCreatorsWith", "hasRiskCreators", "hasRiskCreatorsWith", "hasScanCreators", "hasScanCreatorsWith", "hasSLADefinitionCreators", "hasSLADefinitionCreatorsWith", "hasStandardCreators", "hasStandardCreatorsWith", "hasSubcontrolCreators", "hasSubcontrolCreatorsWith", "hasSubprocessorCreators", "hasSubprocessorCreatorsWith", "hasSubscriberCreators", "hasSubscriberCreatorsWith", "hasSystemDetailCreators", "hasSystemDetailCreatorsWith", "hasTagDefinitionCreators", "hasTagDefinitionCreatorsWith", "hasTaskCreators", "hasTaskCreatorsWith", "hasTemplateCreators", "hasTemplateCreatorsWith", "hasTrustCenterCreators", "hasTrustCenterCreatorsWith", "hasTrustCenterComplianceCreators", "hasTrustCenterComplianceCreatorsWith", "hasTrustCenterDocCreators", "hasTrustCenterDocCreatorsWith", "hasTrustCenterEntityCreators", "hasTrustCenterEntityCreatorsWith", "hasTrustCenterFaqCreators", "hasTrustCenterFaqCreatorsWith", "hasTrustCenterNdaRequestCreators", "hasTrustCenterNdaRequestCreatorsWith", "hasTrustCenterSubprocessorCreators", "hasTrustCenterSubprocessorCreatorsWith", "hasTrustCenterWatermarkConfigCreators", "hasTrustCenterWatermarkConfigCreatorsWith", "hasVendorRiskScoreCreators", "hasVendorRiskScoreCreatorsWith", "hasVendorScoringConfigCreators", "hasVendorScoringConfigCreatorsWith", "hasVulnerabilityCreators", "hasVulnerabilityCreatorsWith", "hasWorkflowDefinitionCreators", "hasWorkflowDefinitionCreatorsWith", "hasCampaignsManager", "hasCampaignsManagerWith", "hasComplianceManager", "hasComplianceManagerWith", "hasGroupManager", "hasGroupManagerWith", "hasIntegrationsManager", "hasIntegrationsManagerWith", "hasPoliciesManager", "hasPoliciesManagerWith", "hasRegistryManager", "hasRegistryManagerWith", "hasRiskManager", "hasRiskManagerWith", "hasTrustCenterManager", "hasTrustCenterManagerWith", "hasWorkflowsManager", "hasWorkflowsManagerWith", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith", "hasSetting", "hasSettingWith", "hasPersonalAccessTokens", "hasPersonalAccessTokensWith", "hasBrandingSetting", "hasBrandingSettingWith", "hasUsers", "hasUsersWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasAvatarFile", "hasAvatarFileWith", "hasOrgSubscriptions", "hasOrgSubscriptionsWith", "hasInvites", "hasInvitesWith", "hasMembers", "hasMembersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -301603,6 +301708,20 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasGroupManagerWith = data
+		case "hasIntegrationsManager":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasIntegrationsManager"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasIntegrationsManager = data
+		case "hasIntegrationsManagerWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasIntegrationsManagerWith"))
+			data, err := ec.unmarshalOGroupWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasIntegrationsManagerWith = data
 		case "hasPoliciesManager":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPoliciesManager"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -378446,7 +378565,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "displayName", "description", "clearDescription", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "addActionPlanCreatorIDs", "removeActionPlanCreatorIDs", "clearActionPlanCreators", "addAPITokenCreatorIDs", "removeAPITokenCreatorIDs", "clearAPITokenCreators", "addAssessmentCreatorIDs", "removeAssessmentCreatorIDs", "clearAssessmentCreators", "addAssessmentPolicyCreatorIDs", "removeAssessmentPolicyCreatorIDs", "clearAssessmentPolicyCreators", "addAssetCreatorIDs", "removeAssetCreatorIDs", "clearAssetCreators", "addCampaignCreatorIDs", "removeCampaignCreatorIDs", "clearCampaignCreators", "addCampaignTargetCreatorIDs", "removeCampaignTargetCreatorIDs", "clearCampaignTargetCreators", "addCheckResultCreatorIDs", "removeCheckResultCreatorIDs", "clearCheckResultCreators", "addContactCreatorIDs", "removeContactCreatorIDs", "clearContactCreators", "addControlCreatorIDs", "removeControlCreatorIDs", "clearControlCreators", "addControlImplementationCreatorIDs", "removeControlImplementationCreatorIDs", "clearControlImplementationCreators", "addControlObjectiveCreatorIDs", "removeControlObjectiveCreatorIDs", "clearControlObjectiveCreators", "addCustomDomainCreatorIDs", "removeCustomDomainCreatorIDs", "clearCustomDomainCreators", "addCustomTypeEnumCreatorIDs", "removeCustomTypeEnumCreatorIDs", "clearCustomTypeEnumCreators", "addDirectoryAccountCreatorIDs", "removeDirectoryAccountCreatorIDs", "clearDirectoryAccountCreators", "addDirectoryGroupCreatorIDs", "removeDirectoryGroupCreatorIDs", "clearDirectoryGroupCreators", "addDirectoryMembershipCreatorIDs", "removeDirectoryMembershipCreatorIDs", "clearDirectoryMembershipCreators", "addDiscussionCreatorIDs", "removeDiscussionCreatorIDs", "clearDiscussionCreators", "addDocumentDataCreatorIDs", "removeDocumentDataCreatorIDs", "clearDocumentDataCreators", "addEmailTemplateCreatorIDs", "removeEmailTemplateCreatorIDs", "clearEmailTemplateCreators", "addEntityCreatorIDs", "removeEntityCreatorIDs", "clearEntityCreators", "addEntityTypeCreatorIDs", "removeEntityTypeCreatorIDs", "clearEntityTypeCreators", "addEvidenceCreatorIDs", "removeEvidenceCreatorIDs", "clearEvidenceCreators", "addFileCreatorIDs", "removeFileCreatorIDs", "clearFileCreators", "addFindingCreatorIDs", "removeFindingCreatorIDs", "clearFindingCreators", "addFindingControlCreatorIDs", "removeFindingControlCreatorIDs", "clearFindingControlCreators", "addGroupCreatorIDs", "removeGroupCreatorIDs", "clearGroupCreators", "addGroupMembershipCreatorIDs", "removeGroupMembershipCreatorIDs", "clearGroupMembershipCreators", "addGroupSettingCreatorIDs", "removeGroupSettingCreatorIDs", "clearGroupSettingCreators", "addHushCreatorIDs", "removeHushCreatorIDs", "clearHushCreators", "addIdentityHolderCreatorIDs", "removeIdentityHolderCreatorIDs", "clearIdentityHolderCreators", "addInternalPolicyCreatorIDs", "removeInternalPolicyCreatorIDs", "clearInternalPolicyCreators", "addInviteCreatorIDs", "removeInviteCreatorIDs", "clearInviteCreators", "addMappedControlCreatorIDs", "removeMappedControlCreatorIDs", "clearMappedControlCreators", "addNarrativeCreatorIDs", "removeNarrativeCreatorIDs", "clearNarrativeCreators", "addNoteCreatorIDs", "removeNoteCreatorIDs", "clearNoteCreators", "addNotificationTemplateCreatorIDs", "removeNotificationTemplateCreatorIDs", "clearNotificationTemplateCreators", "addOrgMembershipCreatorIDs", "removeOrgMembershipCreatorIDs", "clearOrgMembershipCreators", "addPlatformCreatorIDs", "removePlatformCreatorIDs", "clearPlatformCreators", "addProcedureCreatorIDs", "removeProcedureCreatorIDs", "clearProcedureCreators", "addProgramCreatorIDs", "removeProgramCreatorIDs", "clearProgramCreators", "addProgramMembershipCreatorIDs", "removeProgramMembershipCreatorIDs", "clearProgramMembershipCreators", "addRemediationCreatorIDs", "removeRemediationCreatorIDs", "clearRemediationCreators", "addReportCreatorIDs", "removeReportCreatorIDs", "clearReportCreators", "addReportMembershipCreatorIDs", "removeReportMembershipCreatorIDs", "clearReportMembershipCreators", "addReviewCreatorIDs", "removeReviewCreatorIDs", "clearReviewCreators", "addRiskCreatorIDs", "removeRiskCreatorIDs", "clearRiskCreators", "addScanCreatorIDs", "removeScanCreatorIDs", "clearScanCreators", "addSLADefinitionCreatorIDs", "removeSLADefinitionCreatorIDs", "clearSLADefinitionCreators", "addStandardCreatorIDs", "removeStandardCreatorIDs", "clearStandardCreators", "addSubcontrolCreatorIDs", "removeSubcontrolCreatorIDs", "clearSubcontrolCreators", "addSubprocessorCreatorIDs", "removeSubprocessorCreatorIDs", "clearSubprocessorCreators", "addSubscriberCreatorIDs", "removeSubscriberCreatorIDs", "clearSubscriberCreators", "addSystemDetailCreatorIDs", "removeSystemDetailCreatorIDs", "clearSystemDetailCreators", "addTagDefinitionCreatorIDs", "removeTagDefinitionCreatorIDs", "clearTagDefinitionCreators", "addTaskCreatorIDs", "removeTaskCreatorIDs", "clearTaskCreators", "addTemplateCreatorIDs", "removeTemplateCreatorIDs", "clearTemplateCreators", "addTrustCenterCreatorIDs", "removeTrustCenterCreatorIDs", "clearTrustCenterCreators", "addTrustCenterComplianceCreatorIDs", "removeTrustCenterComplianceCreatorIDs", "clearTrustCenterComplianceCreators", "addTrustCenterDocCreatorIDs", "removeTrustCenterDocCreatorIDs", "clearTrustCenterDocCreators", "addTrustCenterEntityCreatorIDs", "removeTrustCenterEntityCreatorIDs", "clearTrustCenterEntityCreators", "addTrustCenterFaqCreatorIDs", "removeTrustCenterFaqCreatorIDs", "clearTrustCenterFaqCreators", "addTrustCenterNdaRequestCreatorIDs", "removeTrustCenterNdaRequestCreatorIDs", "clearTrustCenterNdaRequestCreators", "addTrustCenterSubprocessorCreatorIDs", "removeTrustCenterSubprocessorCreatorIDs", "clearTrustCenterSubprocessorCreators", "addTrustCenterWatermarkConfigCreatorIDs", "removeTrustCenterWatermarkConfigCreatorIDs", "clearTrustCenterWatermarkConfigCreators", "addVendorRiskScoreCreatorIDs", "removeVendorRiskScoreCreatorIDs", "clearVendorRiskScoreCreators", "addVendorScoringConfigCreatorIDs", "removeVendorScoringConfigCreatorIDs", "clearVendorScoringConfigCreators", "addVulnerabilityCreatorIDs", "removeVulnerabilityCreatorIDs", "clearVulnerabilityCreators", "addWorkflowDefinitionCreatorIDs", "removeWorkflowDefinitionCreatorIDs", "clearWorkflowDefinitionCreators", "addCampaignsManagerIDs", "removeCampaignsManagerIDs", "clearCampaignsManager", "addComplianceManagerIDs", "removeComplianceManagerIDs", "clearComplianceManager", "addGroupManagerIDs", "removeGroupManagerIDs", "clearGroupManager", "addPoliciesManagerIDs", "removePoliciesManagerIDs", "clearPoliciesManager", "addRegistryManagerIDs", "removeRegistryManagerIDs", "clearRegistryManager", "addRiskManagerIDs", "removeRiskManagerIDs", "clearRiskManager", "addTrustCenterManagerIDs", "removeTrustCenterManagerIDs", "clearTrustCenterManager", "addWorkflowsManagerIDs", "removeWorkflowsManagerIDs", "clearWorkflowsManager", "settingID", "clearSetting", "addPersonalAccessTokenIDs", "removePersonalAccessTokenIDs", "clearPersonalAccessTokens", "brandingSettingID", "clearBrandingSetting", "addFileIDs", "removeFileIDs", "clearFiles", "addEventIDs", "removeEventIDs", "clearEvents", "avatarFileID", "clearAvatarFile", "addOrgSubscriptionIDs", "removeOrgSubscriptionIDs", "clearOrgSubscriptions", "addInviteIDs", "removeInviteIDs", "clearInvites", "addImpersonationEventIDs", "removeImpersonationEventIDs", "clearImpersonationEvents", "addOrgMembers", "removeOrgMembers", "updateOrgSettings"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "displayName", "description", "clearDescription", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "addActionPlanCreatorIDs", "removeActionPlanCreatorIDs", "clearActionPlanCreators", "addAPITokenCreatorIDs", "removeAPITokenCreatorIDs", "clearAPITokenCreators", "addAssessmentCreatorIDs", "removeAssessmentCreatorIDs", "clearAssessmentCreators", "addAssessmentPolicyCreatorIDs", "removeAssessmentPolicyCreatorIDs", "clearAssessmentPolicyCreators", "addAssetCreatorIDs", "removeAssetCreatorIDs", "clearAssetCreators", "addCampaignCreatorIDs", "removeCampaignCreatorIDs", "clearCampaignCreators", "addCampaignTargetCreatorIDs", "removeCampaignTargetCreatorIDs", "clearCampaignTargetCreators", "addCheckResultCreatorIDs", "removeCheckResultCreatorIDs", "clearCheckResultCreators", "addContactCreatorIDs", "removeContactCreatorIDs", "clearContactCreators", "addControlCreatorIDs", "removeControlCreatorIDs", "clearControlCreators", "addControlImplementationCreatorIDs", "removeControlImplementationCreatorIDs", "clearControlImplementationCreators", "addControlObjectiveCreatorIDs", "removeControlObjectiveCreatorIDs", "clearControlObjectiveCreators", "addCustomDomainCreatorIDs", "removeCustomDomainCreatorIDs", "clearCustomDomainCreators", "addCustomTypeEnumCreatorIDs", "removeCustomTypeEnumCreatorIDs", "clearCustomTypeEnumCreators", "addDirectoryAccountCreatorIDs", "removeDirectoryAccountCreatorIDs", "clearDirectoryAccountCreators", "addDirectoryGroupCreatorIDs", "removeDirectoryGroupCreatorIDs", "clearDirectoryGroupCreators", "addDirectoryMembershipCreatorIDs", "removeDirectoryMembershipCreatorIDs", "clearDirectoryMembershipCreators", "addDiscussionCreatorIDs", "removeDiscussionCreatorIDs", "clearDiscussionCreators", "addDocumentDataCreatorIDs", "removeDocumentDataCreatorIDs", "clearDocumentDataCreators", "addEmailTemplateCreatorIDs", "removeEmailTemplateCreatorIDs", "clearEmailTemplateCreators", "addEntityCreatorIDs", "removeEntityCreatorIDs", "clearEntityCreators", "addEntityTypeCreatorIDs", "removeEntityTypeCreatorIDs", "clearEntityTypeCreators", "addEvidenceCreatorIDs", "removeEvidenceCreatorIDs", "clearEvidenceCreators", "addFileCreatorIDs", "removeFileCreatorIDs", "clearFileCreators", "addFindingCreatorIDs", "removeFindingCreatorIDs", "clearFindingCreators", "addFindingControlCreatorIDs", "removeFindingControlCreatorIDs", "clearFindingControlCreators", "addGroupCreatorIDs", "removeGroupCreatorIDs", "clearGroupCreators", "addGroupMembershipCreatorIDs", "removeGroupMembershipCreatorIDs", "clearGroupMembershipCreators", "addGroupSettingCreatorIDs", "removeGroupSettingCreatorIDs", "clearGroupSettingCreators", "addHushCreatorIDs", "removeHushCreatorIDs", "clearHushCreators", "addIdentityHolderCreatorIDs", "removeIdentityHolderCreatorIDs", "clearIdentityHolderCreators", "addInternalPolicyCreatorIDs", "removeInternalPolicyCreatorIDs", "clearInternalPolicyCreators", "addInviteCreatorIDs", "removeInviteCreatorIDs", "clearInviteCreators", "addMappedControlCreatorIDs", "removeMappedControlCreatorIDs", "clearMappedControlCreators", "addNarrativeCreatorIDs", "removeNarrativeCreatorIDs", "clearNarrativeCreators", "addNoteCreatorIDs", "removeNoteCreatorIDs", "clearNoteCreators", "addNotificationTemplateCreatorIDs", "removeNotificationTemplateCreatorIDs", "clearNotificationTemplateCreators", "addOrgMembershipCreatorIDs", "removeOrgMembershipCreatorIDs", "clearOrgMembershipCreators", "addPlatformCreatorIDs", "removePlatformCreatorIDs", "clearPlatformCreators", "addProcedureCreatorIDs", "removeProcedureCreatorIDs", "clearProcedureCreators", "addProgramCreatorIDs", "removeProgramCreatorIDs", "clearProgramCreators", "addProgramMembershipCreatorIDs", "removeProgramMembershipCreatorIDs", "clearProgramMembershipCreators", "addRemediationCreatorIDs", "removeRemediationCreatorIDs", "clearRemediationCreators", "addReportCreatorIDs", "removeReportCreatorIDs", "clearReportCreators", "addReportMembershipCreatorIDs", "removeReportMembershipCreatorIDs", "clearReportMembershipCreators", "addReviewCreatorIDs", "removeReviewCreatorIDs", "clearReviewCreators", "addRiskCreatorIDs", "removeRiskCreatorIDs", "clearRiskCreators", "addScanCreatorIDs", "removeScanCreatorIDs", "clearScanCreators", "addSLADefinitionCreatorIDs", "removeSLADefinitionCreatorIDs", "clearSLADefinitionCreators", "addStandardCreatorIDs", "removeStandardCreatorIDs", "clearStandardCreators", "addSubcontrolCreatorIDs", "removeSubcontrolCreatorIDs", "clearSubcontrolCreators", "addSubprocessorCreatorIDs", "removeSubprocessorCreatorIDs", "clearSubprocessorCreators", "addSubscriberCreatorIDs", "removeSubscriberCreatorIDs", "clearSubscriberCreators", "addSystemDetailCreatorIDs", "removeSystemDetailCreatorIDs", "clearSystemDetailCreators", "addTagDefinitionCreatorIDs", "removeTagDefinitionCreatorIDs", "clearTagDefinitionCreators", "addTaskCreatorIDs", "removeTaskCreatorIDs", "clearTaskCreators", "addTemplateCreatorIDs", "removeTemplateCreatorIDs", "clearTemplateCreators", "addTrustCenterCreatorIDs", "removeTrustCenterCreatorIDs", "clearTrustCenterCreators", "addTrustCenterComplianceCreatorIDs", "removeTrustCenterComplianceCreatorIDs", "clearTrustCenterComplianceCreators", "addTrustCenterDocCreatorIDs", "removeTrustCenterDocCreatorIDs", "clearTrustCenterDocCreators", "addTrustCenterEntityCreatorIDs", "removeTrustCenterEntityCreatorIDs", "clearTrustCenterEntityCreators", "addTrustCenterFaqCreatorIDs", "removeTrustCenterFaqCreatorIDs", "clearTrustCenterFaqCreators", "addTrustCenterNdaRequestCreatorIDs", "removeTrustCenterNdaRequestCreatorIDs", "clearTrustCenterNdaRequestCreators", "addTrustCenterSubprocessorCreatorIDs", "removeTrustCenterSubprocessorCreatorIDs", "clearTrustCenterSubprocessorCreators", "addTrustCenterWatermarkConfigCreatorIDs", "removeTrustCenterWatermarkConfigCreatorIDs", "clearTrustCenterWatermarkConfigCreators", "addVendorRiskScoreCreatorIDs", "removeVendorRiskScoreCreatorIDs", "clearVendorRiskScoreCreators", "addVendorScoringConfigCreatorIDs", "removeVendorScoringConfigCreatorIDs", "clearVendorScoringConfigCreators", "addVulnerabilityCreatorIDs", "removeVulnerabilityCreatorIDs", "clearVulnerabilityCreators", "addWorkflowDefinitionCreatorIDs", "removeWorkflowDefinitionCreatorIDs", "clearWorkflowDefinitionCreators", "addCampaignsManagerIDs", "removeCampaignsManagerIDs", "clearCampaignsManager", "addComplianceManagerIDs", "removeComplianceManagerIDs", "clearComplianceManager", "addGroupManagerIDs", "removeGroupManagerIDs", "clearGroupManager", "addIntegrationsManagerIDs", "removeIntegrationsManagerIDs", "clearIntegrationsManager", "addPoliciesManagerIDs", "removePoliciesManagerIDs", "clearPoliciesManager", "addRegistryManagerIDs", "removeRegistryManagerIDs", "clearRegistryManager", "addRiskManagerIDs", "removeRiskManagerIDs", "clearRiskManager", "addTrustCenterManagerIDs", "removeTrustCenterManagerIDs", "clearTrustCenterManager", "addWorkflowsManagerIDs", "removeWorkflowsManagerIDs", "clearWorkflowsManager", "settingID", "clearSetting", "addPersonalAccessTokenIDs", "removePersonalAccessTokenIDs", "clearPersonalAccessTokens", "brandingSettingID", "clearBrandingSetting", "addFileIDs", "removeFileIDs", "clearFiles", "addEventIDs", "removeEventIDs", "clearEvents", "avatarFileID", "clearAvatarFile", "addOrgSubscriptionIDs", "removeOrgSubscriptionIDs", "clearOrgSubscriptions", "addInviteIDs", "removeInviteIDs", "clearInvites", "addImpersonationEventIDs", "removeImpersonationEventIDs", "clearImpersonationEvents", "addOrgMembers", "removeOrgMembers", "updateOrgSettings"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -380035,6 +380154,27 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearGroupManager = data
+		case "addIntegrationsManagerIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addIntegrationsManagerIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddIntegrationsManagerIDs = data
+		case "removeIntegrationsManagerIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeIntegrationsManagerIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveIntegrationsManagerIDs = data
+		case "clearIntegrationsManager":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationsManager"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearIntegrationsManager = data
 		case "addPoliciesManagerIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addPoliciesManagerIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -435408,6 +435548,12 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 				true, true,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Organization_groupManager(ctx, field, obj)
+				})
+		case "integrationsManager":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Organization_integrationsManager(ctx, field, obj)
 				})
 		case "policiesManager":
 			out.ResolveConcurrently(ec.OperationContext, &deferred, i,

@@ -9124,6 +9124,7 @@ type CreateOrganizationInput struct {
 	CampaignsManagerIDs                  []string                        `json:"campaignsManagerIDs,omitempty"`
 	ComplianceManagerIDs                 []string                        `json:"complianceManagerIDs,omitempty"`
 	GroupManagerIDs                      []string                        `json:"groupManagerIDs,omitempty"`
+	IntegrationsManagerIDs               []string                        `json:"integrationsManagerIDs,omitempty"`
 	PoliciesManagerIDs                   []string                        `json:"policiesManagerIDs,omitempty"`
 	RegistryManagerIDs                   []string                        `json:"registryManagerIDs,omitempty"`
 	RiskManagerIDs                       []string                        `json:"riskManagerIDs,omitempty"`
@@ -25335,6 +25336,7 @@ type Organization struct {
 	CampaignsManager                   *GroupConnection               `json:"campaignsManager"`
 	ComplianceManager                  *GroupConnection               `json:"complianceManager"`
 	GroupManager                       *GroupConnection               `json:"groupManager"`
+	IntegrationsManager                *GroupConnection               `json:"integrationsManager"`
 	PoliciesManager                    *GroupConnection               `json:"policiesManager"`
 	RegistryManager                    *GroupConnection               `json:"registryManager"`
 	RiskManager                        *GroupConnection               `json:"riskManager"`
@@ -26411,6 +26413,9 @@ type OrganizationWhereInput struct {
 	// group_manager edge predicates
 	HasGroupManager     *bool              `json:"hasGroupManager,omitempty"`
 	HasGroupManagerWith []*GroupWhereInput `json:"hasGroupManagerWith,omitempty"`
+	// integrations_manager edge predicates
+	HasIntegrationsManager     *bool              `json:"hasIntegrationsManager,omitempty"`
+	HasIntegrationsManagerWith []*GroupWhereInput `json:"hasIntegrationsManagerWith,omitempty"`
 	// policies_manager edge predicates
 	HasPoliciesManager     *bool              `json:"hasPoliciesManager,omitempty"`
 	HasPoliciesManagerWith []*GroupWhereInput `json:"hasPoliciesManagerWith,omitempty"`
@@ -43101,6 +43106,9 @@ type UpdateOrganizationInput struct {
 	AddGroupManagerIDs                         []string                        `json:"addGroupManagerIDs,omitempty"`
 	RemoveGroupManagerIDs                      []string                        `json:"removeGroupManagerIDs,omitempty"`
 	ClearGroupManager                          *bool                           `json:"clearGroupManager,omitempty"`
+	AddIntegrationsManagerIDs                  []string                        `json:"addIntegrationsManagerIDs,omitempty"`
+	RemoveIntegrationsManagerIDs               []string                        `json:"removeIntegrationsManagerIDs,omitempty"`
+	ClearIntegrationsManager                   *bool                           `json:"clearIntegrationsManager,omitempty"`
 	AddPoliciesManagerIDs                      []string                        `json:"addPoliciesManagerIDs,omitempty"`
 	RemovePoliciesManagerIDs                   []string                        `json:"removePoliciesManagerIDs,omitempty"`
 	ClearPoliciesManager                       *bool                           `json:"clearPoliciesManager,omitempty"`

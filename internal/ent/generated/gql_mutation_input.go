@@ -16484,6 +16484,7 @@ type CreateOrganizationInput struct {
 	CampaignsManagerIDs                  []string   `json:"campaigns_manager_ids,omitempty"`
 	ComplianceManagerIDs                 []string   `json:"compliance_manager_ids,omitempty"`
 	GroupManagerIDs                      []string   `json:"group_manager_ids,omitempty"`
+	IntegrationsManagerIDs               []string   `json:"integrations_manager_ids,omitempty"`
 	PoliciesManagerIDs                   []string   `json:"policies_manager_ids,omitempty"`
 	RegistryManagerIDs                   []string   `json:"registry_manager_ids,omitempty"`
 	RiskManagerIDs                       []string   `json:"risk_manager_ids,omitempty"`
@@ -16737,6 +16738,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.GroupManagerIDs; len(v) > 0 {
 		m.AddGroupManagerIDs(v...)
+	}
+	if v := i.IntegrationsManagerIDs; len(v) > 0 {
+		m.AddIntegrationsManagerIDs(v...)
 	}
 	if v := i.PoliciesManagerIDs; len(v) > 0 {
 		m.AddPoliciesManagerIDs(v...)
@@ -17019,6 +17023,9 @@ type UpdateOrganizationInput struct {
 	ClearGroupManager                          bool
 	AddGroupManagerIDs                         []string `json:"add_group_manager_ids,omitempty"`
 	RemoveGroupManagerIDs                      []string `json:"remove_group_manager_ids,omitempty"`
+	ClearIntegrationsManager                   bool
+	AddIntegrationsManagerIDs                  []string `json:"add_integrations_manager_ids,omitempty"`
+	RemoveIntegrationsManagerIDs               []string `json:"remove_integrations_manager_ids,omitempty"`
 	ClearPoliciesManager                       bool
 	AddPoliciesManagerIDs                      []string `json:"add_policies_manager_ids,omitempty"`
 	RemovePoliciesManagerIDs                   []string `json:"remove_policies_manager_ids,omitempty"`
@@ -17739,6 +17746,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveGroupManagerIDs; len(v) > 0 {
 		m.RemoveGroupManagerIDs(v...)
+	}
+	if i.ClearIntegrationsManager {
+		m.ClearIntegrationsManager()
+	}
+	if v := i.AddIntegrationsManagerIDs; len(v) > 0 {
+		m.AddIntegrationsManagerIDs(v...)
+	}
+	if v := i.RemoveIntegrationsManagerIDs; len(v) > 0 {
+		m.RemoveIntegrationsManagerIDs(v...)
 	}
 	if i.ClearPoliciesManager {
 		m.ClearPoliciesManager()

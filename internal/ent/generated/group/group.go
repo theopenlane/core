@@ -627,6 +627,7 @@ var ForeignKeys = []string{
 	"organization_campaigns_manager",
 	"organization_compliance_manager",
 	"organization_group_manager",
+	"organization_integrations_manager",
 	"organization_policies_manager",
 	"organization_registry_manager",
 	"organization_risk_manager",

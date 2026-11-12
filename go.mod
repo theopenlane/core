@@ -95,7 +95,7 @@ require (
 	github.com/pressly/goose/v3 v3.30.1
 	github.com/prometheus/client_golang v1.25.0
 	github.com/redis/go-redis/v9 v9.23.0
-	github.com/resend/resend-go/v4 v4.12.0
+	github.com/resend/resend-go/v4 v4.12.1
 	github.com/riverqueue/river v0.51.2
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.51.2
 	github.com/riverqueue/river/rivertype v0.51.2
@@ -118,19 +118,19 @@ require (
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
 	github.com/theopenlane/entx v0.38.3
-	github.com/theopenlane/go-client v0.16.1-0.20261112182253-9323ccd42529
+	github.com/theopenlane/go-client v0.17.0
 	github.com/theopenlane/gqlgen-plugins v0.19.4
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.42.0
 	github.com/theopenlane/logx v0.1.1
-	github.com/theopenlane/newman v0.6.0
+	github.com/theopenlane/newman v0.7.0
 	github.com/theopenlane/riverboat v0.14.8
 	github.com/theopenlane/utils v0.7.4
 	github.com/tmc/langchaingo v0.1.15
 	github.com/urfave/cli/v3 v3.14.0
 	github.com/vektah/gqlparser/v2 v2.5.64
 	github.com/vmihailenco/msgpack/v5 v5.4.1
-	github.com/yuin/goldmark v1.8.7
+	github.com/yuin/goldmark/v2 v2.1.16
 	github.com/zitadel/oidc/v3 v3.52.0
 	github.com/zitadel/zitadel-go/v3 v3.30.0
 	goauthentik.io/api/v3 v3.2026080.5

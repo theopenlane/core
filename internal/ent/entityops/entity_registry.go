@@ -17091,6 +17091,14 @@ func init() {
 			AddField:    "add_integration_ids",
 		},
 		{
+			Name:        "integrations_manager",
+			Label:       "IntegrationsManager",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "integrations_manager_ids",
+			AddField:    "add_integrations_manager_ids",
+		},
+		{
 			Name:        "internal_policies",
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
