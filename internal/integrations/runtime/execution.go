@@ -88,7 +88,8 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, operations.ErrOperationDisabled
 	}
 
-	runRecord, err := operations.CreatePendingRun(ctx, db, installation, operation, enums.IntegrationRunTypeReconcile, nil)
+	// scheduled cycles were authorized when the loop was seeded, so the run record is an internal write
+	runRecord, err := operations.CreatePendingRun(auth.WithInternalOperationContext(ctx), db, installation, operation, enums.IntegrationRunTypeReconcile, nil)
 	if err != nil {
 		return 0, err
 	}
@@ -413,7 +414,8 @@ func (r *Runtime) resumeTrackedRun(ctx context.Context, oc *gala.OperationContex
 	}
 
 	if run.Status != enums.IntegrationRunStatusPending {
-		retry, err := operations.RetryRun(ctx, db, run)
+		// retries continue an already authorized run, so the new run record is an internal write
+		retry, err := operations.RetryRun(auth.WithInternalOperationContext(ctx), db, run)
 		if err != nil {
 			return ctx, err
 		}
