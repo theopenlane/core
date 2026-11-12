@@ -187,7 +187,7 @@ func (f File) Mixin() []ent.Mixin {
 
 func (File) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 
