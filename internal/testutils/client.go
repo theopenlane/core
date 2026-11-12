@@ -292,14 +292,12 @@ func MockStorageServiceWithBackup(t *testing.T, source storage.ProviderType, rea
 // MockStorageServiceWithValidationAndProvider creates a new storage service for testing with custom validation
 // and returns both the StorageService and the mock provider for setting up expectations
 func MockStorageServiceWithValidationAndProvider(t *testing.T, uploader storage.UploaderFunc, validationFunc storage.ValidationFunc) (*objects.Service, *mock_shared.MockProvider, error) {
-	return newMockStorageService(t, validationFunc, asProvider)
+	return newMockStorageService(t, validationFunc, asProvider, nil, nil)
 }
 
-// MockStorageServiceWithBucket creates a storage service whose mock provider resolves with the
-// given bucket configured, returning the service and the mock provider; the service resolves to
-// the value wrap returns for the mock, which lets a test add provider capabilities to it
-func MockStorageServiceWithBucket(t *testing.T, bucket string, wrap func(*mock_shared.MockProvider) storage.Provider) (*objects.Service, *mock_shared.MockProvider, error) {
-	return newMockStorageService(t, nil, wrap, storage.WithBucket(bucket))
+// MockStorageServiceWithBuckets creates a storage service resolving the bucket and region configured for the hinted provider, with the mock wrapped by wrap
+func MockStorageServiceWithBuckets(t *testing.T, buckets, regions map[storage.ProviderType]string, wrap func(*mock_shared.MockProvider) storage.Provider) (*objects.Service, *mock_shared.MockProvider, error) {
+	return newMockStorageService(t, nil, wrap, buckets, regions)
 }
 
 // asProvider returns the mock provider unchanged
@@ -307,8 +305,8 @@ func asProvider(p *mock_shared.MockProvider) storage.Provider {
 	return p
 }
 
-// newMockStorageService builds the mock-backed storage service with the provider options applied
-func newMockStorageService(t *testing.T, validationFunc storage.ValidationFunc, wrap func(*mock_shared.MockProvider) storage.Provider, opts ...storage.ProviderOption) (*objects.Service, *mock_shared.MockProvider, error) {
+// newMockStorageService builds the mock-backed storage service
+func newMockStorageService(t *testing.T, validationFunc storage.ValidationFunc, wrap func(*mock_shared.MockProvider) storage.Provider, buckets, regions map[storage.ProviderType]string) (*objects.Service, *mock_shared.MockProvider, error) {
 	// Create mock provider - handle nil testing.T gracefully
 	var mockProvider *mock_shared.MockProvider
 	if t != nil {
@@ -342,11 +340,23 @@ func newMockStorageService(t *testing.T, validationFunc storage.ValidationFunc, 
 		Predicate: func(_ context.Context) bool {
 			return true
 		},
-		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
+		Resolver: func(ctx context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
+			opts := []storage.ProviderOption{storage.WithExtra("validation", validationFunc != nil)}
+
+			if known, ok := objects.KnownProviderHintFromContext(ctx); ok {
+				if bucket, ok := buckets[storage.ProviderType(known)]; ok {
+					opts = append(opts, storage.WithBucket(bucket))
+				}
+
+				if region, ok := regions[storage.ProviderType(known)]; ok {
+					opts = append(opts, storage.WithRegion(region))
+				}
+			}
+
 			return &eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
 				Builder: mockBuilder,
 				Output:  storage.ProviderCredentials{},
-				Config:  storage.NewProviderOptions(append(opts, storage.WithExtra("validation", validationFunc != nil))...),
+				Config:  storage.NewProviderOptions(opts...),
 			}, nil
 		},
 	}

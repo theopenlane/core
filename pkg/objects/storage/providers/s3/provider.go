@@ -335,7 +335,7 @@ const TouchRange = "bytes=0-0"
 // Touch implements storage.Toucher by requesting the first byte of the object and discarding it
 func (p *Provider) Touch(ctx context.Context, file *storagetypes.File) error {
 	out, err := p.client.GetObject(ctx, &s3.GetObjectInput{
-		Bucket: aws.String(p.options.BucketFor(file.Bucket)),
+		Bucket: aws.String(p.options.BucketFor(file.StoredBucket())),
 		Key:    aws.String(file.Key),
 		Range:  aws.String(TouchRange),
 	})
@@ -352,7 +352,10 @@ func (p *Provider) Touch(ctx context.Context, file *storagetypes.File) error {
 
 // Stat implements storage.Statter through a head request
 func (p *Provider) Stat(ctx context.Context, file *storagetypes.File) (*storagetypes.ObjectInfo, error) {
-	return ObjectInfoFromHead(p.HeadObj(ctx, file.Key))
+	return ObjectInfoFromHead(p.client.HeadObject(ctx, &s3.HeadObjectInput{
+		Bucket: aws.String(p.options.BucketFor(file.StoredBucket())),
+		Key:    aws.String(file.Key),
+	}))
 }
 
 // ObjectInfoFromHead converts the result of a head request into object info, mapping a missing

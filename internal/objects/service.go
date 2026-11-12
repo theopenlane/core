@@ -326,19 +326,18 @@ func (s *Service) resolveDownloadProvider(ctx context.Context, file *storagetype
 	return provider, err
 }
 
-// ResolveProvider returns the provider a file's reads resolve to and the bucket that provider is
-// configured with, using the same resolution as Download
-func (s *Service) ResolveProvider(ctx context.Context, file *storagetypes.File) (storage.Provider, string, error) {
+// ResolveProvider returns the provider a file's reads resolve to and its configured options, using the same resolution as Download
+func (s *Service) ResolveProvider(ctx context.Context, file *storagetypes.File) (storage.Provider, *storage.ProviderOptions, error) {
 	provider, options, err := s.resolveFileProvider(ctx, file)
 	if err != nil {
-		return nil, "", err
+		return nil, nil, err
 	}
 
 	if provider == nil {
-		return nil, "", ErrProviderResolutionFailed
+		return nil, nil, ErrProviderResolutionFailed
 	}
 
-	return provider, options.Bucket, nil
+	return provider, options, nil
 }
 
 // resolveFileProvider resolves the storage provider and its options for a file

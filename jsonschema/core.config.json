@@ -224,6 +224,9 @@
         },
         "integrationlifecycle": {
           "$ref": "#/$defs/system.IntegrationLifecycleConfig"
+        },
+        "fileorphan": {
+          "$ref": "#/$defs/system.FileOrphanConfig"
         }
       },
       "additionalProperties": false,
@@ -2248,6 +2251,27 @@
       "additionalProperties": false,
       "type": "object",
       "description": "OpenAIConfig contains OpenAI specific configuration"
+    },
+    "system.FileOrphanConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the file orphan sweep is enabled",
+          "default": false
+        },
+        "dryrun": {
+          "type": "boolean",
+          "description": "If true only log file IDs that would be deleted",
+          "default": true
+        },
+        "maxperrun": {
+          "type": "integer",
+          "description": "Maximum orphaned files to delete per run",
+          "default": 500
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "system.IntegrationLifecycleConfig": {
       "properties": {

@@ -44,6 +44,11 @@ func InterceptorFile() ent.Interceptor {
 			return nil
 		}
 
+		// sweeps and backfills have no organizations, so the filter would hide every file
+		if auth.HasCrossOrgCapabilities(ctx) {
+			return nil
+		}
+
 		orgs := caller.OrgIDs()
 
 		// if this is a request for avatar file, add all org ids the user is a part of

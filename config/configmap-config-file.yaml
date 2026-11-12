@@ -1596,6 +1596,18 @@ data:
         maxperrun: {{ .Values.openlane.coreConfiguration.integrations.integrationlifecycle.maxperrun }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.fileorphan }}
+      fileorphan:
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.fileorphan.enabled) }}
+        enabled: {{ .Values.openlane.coreConfiguration.integrations.fileorphan.enabled }}
+        {{- end }}
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.integrations.fileorphan.dryrun) }}
+        dryrun: {{ .Values.openlane.coreConfiguration.integrations.fileorphan.dryrun }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.fileorphan.maxperrun }}
+        maxperrun: {{ .Values.openlane.coreConfiguration.integrations.fileorphan.maxperrun }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:

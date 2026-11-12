@@ -5,8 +5,12 @@ import "errors"
 var (
 	// ErrMissingStorageKey is returned when a file record has no storage key to relocate
 	ErrMissingStorageKey = errors.New("file has no storage key")
-	// ErrTouchUnsupported is returned when the resolved provider cannot read a single byte of an object
+	// ErrUnknownProvider is returned when a record names no provider and its URI has no scheme
+	ErrUnknownProvider = errors.New("file records no storage provider")
+	// ErrTouchUnsupported is returned when the target provider cannot touch objects
 	ErrTouchUnsupported = errors.New("storage provider does not support touching objects")
-	// ErrStatUnsupported is returned when the resolved provider cannot report object metadata
-	ErrStatUnsupported = errors.New("storage provider does not support reading object metadata")
+	// ErrCopyUnsupported is returned when the target provider cannot copy objects between buckets
+	ErrCopyUnsupported = errors.New("storage provider does not support copying objects")
+	// ErrKeyChanged is returned when the target stored a transferred object under another key
+	ErrKeyChanged = errors.New("storage provider changed the object key")
 )
