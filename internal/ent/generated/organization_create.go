@@ -1388,19 +1388,19 @@ func (_c *OrganizationCreate) AddWorkflowDefinitionCreators(v ...*Group) *Organi
 	return _c.AddWorkflowDefinitionCreatorIDs(ids...)
 }
 
-// AddCampaignsManagerIDs adds the "campaigns_manager" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddCampaignsManagerIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddCampaignsManagerIDs(ids...)
+// AddCampaignManagerIDs adds the "campaign_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddCampaignManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCampaignManagerIDs(ids...)
 	return _c
 }
 
-// AddCampaignsManager adds the "campaigns_manager" edges to the Group entity.
-func (_c *OrganizationCreate) AddCampaignsManager(v ...*Group) *OrganizationCreate {
+// AddCampaignManager adds the "campaign_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddCampaignManager(v ...*Group) *OrganizationCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddCampaignsManagerIDs(ids...)
+	return _c.AddCampaignManagerIDs(ids...)
 }
 
 // AddComplianceManagerIDs adds the "compliance_manager" edge to the Group entity by IDs.
@@ -1433,34 +1433,34 @@ func (_c *OrganizationCreate) AddGroupManager(v ...*Group) *OrganizationCreate {
 	return _c.AddGroupManagerIDs(ids...)
 }
 
-// AddIntegrationsManagerIDs adds the "integrations_manager" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddIntegrationsManagerIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddIntegrationsManagerIDs(ids...)
+// AddIntegrationManagerIDs adds the "integration_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddIntegrationManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddIntegrationManagerIDs(ids...)
 	return _c
 }
 
-// AddIntegrationsManager adds the "integrations_manager" edges to the Group entity.
-func (_c *OrganizationCreate) AddIntegrationsManager(v ...*Group) *OrganizationCreate {
+// AddIntegrationManager adds the "integration_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddIntegrationManager(v ...*Group) *OrganizationCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddIntegrationsManagerIDs(ids...)
+	return _c.AddIntegrationManagerIDs(ids...)
 }
 
-// AddPoliciesManagerIDs adds the "policies_manager" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddPoliciesManagerIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddPoliciesManagerIDs(ids...)
+// AddPolicyManagerIDs adds the "policy_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddPolicyManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddPolicyManagerIDs(ids...)
 	return _c
 }
 
-// AddPoliciesManager adds the "policies_manager" edges to the Group entity.
-func (_c *OrganizationCreate) AddPoliciesManager(v ...*Group) *OrganizationCreate {
+// AddPolicyManager adds the "policy_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddPolicyManager(v ...*Group) *OrganizationCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddPoliciesManagerIDs(ids...)
+	return _c.AddPolicyManagerIDs(ids...)
 }
 
 // AddRegistryManagerIDs adds the "registry_manager" edge to the Group entity by IDs.
@@ -1508,19 +1508,19 @@ func (_c *OrganizationCreate) AddTrustCenterManager(v ...*Group) *OrganizationCr
 	return _c.AddTrustCenterManagerIDs(ids...)
 }
 
-// AddWorkflowsManagerIDs adds the "workflows_manager" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddWorkflowsManagerIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddWorkflowsManagerIDs(ids...)
+// AddWorkflowManagerIDs adds the "workflow_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddWorkflowManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddWorkflowManagerIDs(ids...)
 	return _c
 }
 
-// AddWorkflowsManager adds the "workflows_manager" edges to the Group entity.
-func (_c *OrganizationCreate) AddWorkflowsManager(v ...*Group) *OrganizationCreate {
+// AddWorkflowManager adds the "workflow_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddWorkflowManager(v ...*Group) *OrganizationCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddWorkflowsManagerIDs(ids...)
+	return _c.AddWorkflowManagerIDs(ids...)
 }
 
 // SetParentID sets the "parent" edge to the Organization entity by ID.
@@ -4140,12 +4140,12 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.CampaignsManagerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CampaignManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.CampaignsManagerTable,
-			Columns: []string{organization.CampaignsManagerColumn},
+			Table:   organization.CampaignManagerTable,
+			Columns: []string{organization.CampaignManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -4188,12 +4188,12 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.IntegrationsManagerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.IntegrationManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.IntegrationsManagerTable,
-			Columns: []string{organization.IntegrationsManagerColumn},
+			Table:   organization.IntegrationManagerTable,
+			Columns: []string{organization.IntegrationManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -4204,12 +4204,12 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.PoliciesManagerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PolicyManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.PoliciesManagerTable,
-			Columns: []string{organization.PoliciesManagerColumn},
+			Table:   organization.PolicyManagerTable,
+			Columns: []string{organization.PolicyManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -4268,12 +4268,12 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.WorkflowsManagerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.WorkflowManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.WorkflowsManagerTable,
-			Columns: []string{organization.WorkflowsManagerColumn},
+			Table:   organization.WorkflowManagerTable,
+			Columns: []string{organization.WorkflowManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

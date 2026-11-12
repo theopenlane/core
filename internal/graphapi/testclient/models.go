@@ -9121,15 +9121,15 @@ type CreateOrganizationInput struct {
 	VendorScoringConfigCreatorIDs        []string                        `json:"vendorScoringConfigCreatorIDs,omitempty"`
 	VulnerabilityCreatorIDs              []string                        `json:"vulnerabilityCreatorIDs,omitempty"`
 	WorkflowDefinitionCreatorIDs         []string                        `json:"workflowDefinitionCreatorIDs,omitempty"`
-	CampaignsManagerIDs                  []string                        `json:"campaignsManagerIDs,omitempty"`
+	CampaignManagerIDs                   []string                        `json:"campaignManagerIDs,omitempty"`
 	ComplianceManagerIDs                 []string                        `json:"complianceManagerIDs,omitempty"`
 	GroupManagerIDs                      []string                        `json:"groupManagerIDs,omitempty"`
-	IntegrationsManagerIDs               []string                        `json:"integrationsManagerIDs,omitempty"`
-	PoliciesManagerIDs                   []string                        `json:"policiesManagerIDs,omitempty"`
+	IntegrationManagerIDs                []string                        `json:"integrationManagerIDs,omitempty"`
+	PolicyManagerIDs                     []string                        `json:"policyManagerIDs,omitempty"`
 	RegistryManagerIDs                   []string                        `json:"registryManagerIDs,omitempty"`
 	RiskManagerIDs                       []string                        `json:"riskManagerIDs,omitempty"`
 	TrustCenterManagerIDs                []string                        `json:"trustCenterManagerIDs,omitempty"`
-	WorkflowsManagerIDs                  []string                        `json:"workflowsManagerIDs,omitempty"`
+	WorkflowManagerIDs                   []string                        `json:"workflowManagerIDs,omitempty"`
 	ParentID                             *string                         `json:"parentID,omitempty"`
 	SettingID                            *string                         `json:"settingID,omitempty"`
 	PersonalAccessTokenIDs               []string                        `json:"personalAccessTokenIDs,omitempty"`
@@ -25333,15 +25333,15 @@ type Organization struct {
 	VendorScoringConfigCreators        *GroupConnection               `json:"vendorScoringConfigCreators"`
 	VulnerabilityCreators              *GroupConnection               `json:"vulnerabilityCreators"`
 	WorkflowDefinitionCreators         *GroupConnection               `json:"workflowDefinitionCreators"`
-	CampaignsManager                   *GroupConnection               `json:"campaignsManager"`
+	CampaignManager                    *GroupConnection               `json:"campaignManager"`
 	ComplianceManager                  *GroupConnection               `json:"complianceManager"`
 	GroupManager                       *GroupConnection               `json:"groupManager"`
-	IntegrationsManager                *GroupConnection               `json:"integrationsManager"`
-	PoliciesManager                    *GroupConnection               `json:"policiesManager"`
+	IntegrationManager                 *GroupConnection               `json:"integrationManager"`
+	PolicyManager                      *GroupConnection               `json:"policyManager"`
 	RegistryManager                    *GroupConnection               `json:"registryManager"`
 	RiskManager                        *GroupConnection               `json:"riskManager"`
 	TrustCenterManager                 *GroupConnection               `json:"trustCenterManager"`
-	WorkflowsManager                   *GroupConnection               `json:"workflowsManager"`
+	WorkflowManager                    *GroupConnection               `json:"workflowManager"`
 	Parent                             *Organization                  `json:"parent,omitempty"`
 	Children                           *OrganizationConnection        `json:"children"`
 	Setting                            *OrganizationSetting           `json:"setting,omitempty"`
@@ -26404,21 +26404,21 @@ type OrganizationWhereInput struct {
 	// workflow_definition_creators edge predicates
 	HasWorkflowDefinitionCreators     *bool              `json:"hasWorkflowDefinitionCreators,omitempty"`
 	HasWorkflowDefinitionCreatorsWith []*GroupWhereInput `json:"hasWorkflowDefinitionCreatorsWith,omitempty"`
-	// campaigns_manager edge predicates
-	HasCampaignsManager     *bool              `json:"hasCampaignsManager,omitempty"`
-	HasCampaignsManagerWith []*GroupWhereInput `json:"hasCampaignsManagerWith,omitempty"`
+	// campaign_manager edge predicates
+	HasCampaignManager     *bool              `json:"hasCampaignManager,omitempty"`
+	HasCampaignManagerWith []*GroupWhereInput `json:"hasCampaignManagerWith,omitempty"`
 	// compliance_manager edge predicates
 	HasComplianceManager     *bool              `json:"hasComplianceManager,omitempty"`
 	HasComplianceManagerWith []*GroupWhereInput `json:"hasComplianceManagerWith,omitempty"`
 	// group_manager edge predicates
 	HasGroupManager     *bool              `json:"hasGroupManager,omitempty"`
 	HasGroupManagerWith []*GroupWhereInput `json:"hasGroupManagerWith,omitempty"`
-	// integrations_manager edge predicates
-	HasIntegrationsManager     *bool              `json:"hasIntegrationsManager,omitempty"`
-	HasIntegrationsManagerWith []*GroupWhereInput `json:"hasIntegrationsManagerWith,omitempty"`
-	// policies_manager edge predicates
-	HasPoliciesManager     *bool              `json:"hasPoliciesManager,omitempty"`
-	HasPoliciesManagerWith []*GroupWhereInput `json:"hasPoliciesManagerWith,omitempty"`
+	// integration_manager edge predicates
+	HasIntegrationManager     *bool              `json:"hasIntegrationManager,omitempty"`
+	HasIntegrationManagerWith []*GroupWhereInput `json:"hasIntegrationManagerWith,omitempty"`
+	// policy_manager edge predicates
+	HasPolicyManager     *bool              `json:"hasPolicyManager,omitempty"`
+	HasPolicyManagerWith []*GroupWhereInput `json:"hasPolicyManagerWith,omitempty"`
 	// registry_manager edge predicates
 	HasRegistryManager     *bool              `json:"hasRegistryManager,omitempty"`
 	HasRegistryManagerWith []*GroupWhereInput `json:"hasRegistryManagerWith,omitempty"`
@@ -26428,9 +26428,9 @@ type OrganizationWhereInput struct {
 	// trust_center_manager edge predicates
 	HasTrustCenterManager     *bool              `json:"hasTrustCenterManager,omitempty"`
 	HasTrustCenterManagerWith []*GroupWhereInput `json:"hasTrustCenterManagerWith,omitempty"`
-	// workflows_manager edge predicates
-	HasWorkflowsManager     *bool              `json:"hasWorkflowsManager,omitempty"`
-	HasWorkflowsManagerWith []*GroupWhereInput `json:"hasWorkflowsManagerWith,omitempty"`
+	// workflow_manager edge predicates
+	HasWorkflowManager     *bool              `json:"hasWorkflowManager,omitempty"`
+	HasWorkflowManagerWith []*GroupWhereInput `json:"hasWorkflowManagerWith,omitempty"`
 	// parent edge predicates
 	HasParent     *bool                     `json:"hasParent,omitempty"`
 	HasParentWith []*OrganizationWhereInput `json:"hasParentWith,omitempty"`
@@ -43097,21 +43097,21 @@ type UpdateOrganizationInput struct {
 	AddWorkflowDefinitionCreatorIDs            []string                        `json:"addWorkflowDefinitionCreatorIDs,omitempty"`
 	RemoveWorkflowDefinitionCreatorIDs         []string                        `json:"removeWorkflowDefinitionCreatorIDs,omitempty"`
 	ClearWorkflowDefinitionCreators            *bool                           `json:"clearWorkflowDefinitionCreators,omitempty"`
-	AddCampaignsManagerIDs                     []string                        `json:"addCampaignsManagerIDs,omitempty"`
-	RemoveCampaignsManagerIDs                  []string                        `json:"removeCampaignsManagerIDs,omitempty"`
-	ClearCampaignsManager                      *bool                           `json:"clearCampaignsManager,omitempty"`
+	AddCampaignManagerIDs                      []string                        `json:"addCampaignManagerIDs,omitempty"`
+	RemoveCampaignManagerIDs                   []string                        `json:"removeCampaignManagerIDs,omitempty"`
+	ClearCampaignManager                       *bool                           `json:"clearCampaignManager,omitempty"`
 	AddComplianceManagerIDs                    []string                        `json:"addComplianceManagerIDs,omitempty"`
 	RemoveComplianceManagerIDs                 []string                        `json:"removeComplianceManagerIDs,omitempty"`
 	ClearComplianceManager                     *bool                           `json:"clearComplianceManager,omitempty"`
 	AddGroupManagerIDs                         []string                        `json:"addGroupManagerIDs,omitempty"`
 	RemoveGroupManagerIDs                      []string                        `json:"removeGroupManagerIDs,omitempty"`
 	ClearGroupManager                          *bool                           `json:"clearGroupManager,omitempty"`
-	AddIntegrationsManagerIDs                  []string                        `json:"addIntegrationsManagerIDs,omitempty"`
-	RemoveIntegrationsManagerIDs               []string                        `json:"removeIntegrationsManagerIDs,omitempty"`
-	ClearIntegrationsManager                   *bool                           `json:"clearIntegrationsManager,omitempty"`
-	AddPoliciesManagerIDs                      []string                        `json:"addPoliciesManagerIDs,omitempty"`
-	RemovePoliciesManagerIDs                   []string                        `json:"removePoliciesManagerIDs,omitempty"`
-	ClearPoliciesManager                       *bool                           `json:"clearPoliciesManager,omitempty"`
+	AddIntegrationManagerIDs                   []string                        `json:"addIntegrationManagerIDs,omitempty"`
+	RemoveIntegrationManagerIDs                []string                        `json:"removeIntegrationManagerIDs,omitempty"`
+	ClearIntegrationManager                    *bool                           `json:"clearIntegrationManager,omitempty"`
+	AddPolicyManagerIDs                        []string                        `json:"addPolicyManagerIDs,omitempty"`
+	RemovePolicyManagerIDs                     []string                        `json:"removePolicyManagerIDs,omitempty"`
+	ClearPolicyManager                         *bool                           `json:"clearPolicyManager,omitempty"`
 	AddRegistryManagerIDs                      []string                        `json:"addRegistryManagerIDs,omitempty"`
 	RemoveRegistryManagerIDs                   []string                        `json:"removeRegistryManagerIDs,omitempty"`
 	ClearRegistryManager                       *bool                           `json:"clearRegistryManager,omitempty"`
@@ -43121,9 +43121,9 @@ type UpdateOrganizationInput struct {
 	AddTrustCenterManagerIDs                   []string                        `json:"addTrustCenterManagerIDs,omitempty"`
 	RemoveTrustCenterManagerIDs                []string                        `json:"removeTrustCenterManagerIDs,omitempty"`
 	ClearTrustCenterManager                    *bool                           `json:"clearTrustCenterManager,omitempty"`
-	AddWorkflowsManagerIDs                     []string                        `json:"addWorkflowsManagerIDs,omitempty"`
-	RemoveWorkflowsManagerIDs                  []string                        `json:"removeWorkflowsManagerIDs,omitempty"`
-	ClearWorkflowsManager                      *bool                           `json:"clearWorkflowsManager,omitempty"`
+	AddWorkflowManagerIDs                      []string                        `json:"addWorkflowManagerIDs,omitempty"`
+	RemoveWorkflowManagerIDs                   []string                        `json:"removeWorkflowManagerIDs,omitempty"`
+	ClearWorkflowManager                       *bool                           `json:"clearWorkflowManager,omitempty"`
 	SettingID                                  *string                         `json:"settingID,omitempty"`
 	ClearSetting                               *bool                           `json:"clearSetting,omitempty"`
 	AddPersonalAccessTokenIDs                  []string                        `json:"addPersonalAccessTokenIDs,omitempty"`

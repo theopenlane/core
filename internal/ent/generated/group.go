@@ -170,15 +170,15 @@ type Group struct {
 	organization_vendor_scoring_config_creators         *string
 	organization_vulnerability_creators                 *string
 	organization_workflow_definition_creators           *string
-	organization_campaigns_manager                      *string
+	organization_campaign_manager                       *string
 	organization_compliance_manager                     *string
 	organization_group_manager                          *string
-	organization_integrations_manager                   *string
-	organization_policies_manager                       *string
+	organization_integration_manager                    *string
+	organization_policy_manager                         *string
 	organization_registry_manager                       *string
 	organization_risk_manager                           *string
 	organization_trust_center_manager                   *string
-	organization_workflows_manager                      *string
+	organization_workflow_manager                       *string
 	sla_definition_blocked_groups                       *string
 	sla_definition_editors                              *string
 	trust_center_blocked_groups                         *string
@@ -1099,15 +1099,15 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[83]: // organization_workflow_definition_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[84]: // organization_campaigns_manager
+		case group.ForeignKeys[84]: // organization_campaign_manager
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[85]: // organization_compliance_manager
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[86]: // organization_group_manager
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[87]: // organization_integrations_manager
+		case group.ForeignKeys[87]: // organization_integration_manager
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[88]: // organization_policies_manager
+		case group.ForeignKeys[88]: // organization_policy_manager
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[89]: // organization_registry_manager
 			values[i] = new(sql.NullString)
@@ -1115,7 +1115,7 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[91]: // organization_trust_center_manager
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[92]: // organization_workflows_manager
+		case group.ForeignKeys[92]: // organization_workflow_manager
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[93]: // sla_definition_blocked_groups
 			values[i] = new(sql.NullString)
@@ -1979,10 +1979,10 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 			}
 		case group.ForeignKeys[84]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field organization_campaigns_manager", values[i])
+				return fmt.Errorf("unexpected type %T for field organization_campaign_manager", values[i])
 			} else if value.Valid {
-				_m.organization_campaigns_manager = new(string)
-				*_m.organization_campaigns_manager = value.String
+				_m.organization_campaign_manager = new(string)
+				*_m.organization_campaign_manager = value.String
 			}
 		case group.ForeignKeys[85]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -2000,17 +2000,17 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 			}
 		case group.ForeignKeys[87]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field organization_integrations_manager", values[i])
+				return fmt.Errorf("unexpected type %T for field organization_integration_manager", values[i])
 			} else if value.Valid {
-				_m.organization_integrations_manager = new(string)
-				*_m.organization_integrations_manager = value.String
+				_m.organization_integration_manager = new(string)
+				*_m.organization_integration_manager = value.String
 			}
 		case group.ForeignKeys[88]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field organization_policies_manager", values[i])
+				return fmt.Errorf("unexpected type %T for field organization_policy_manager", values[i])
 			} else if value.Valid {
-				_m.organization_policies_manager = new(string)
-				*_m.organization_policies_manager = value.String
+				_m.organization_policy_manager = new(string)
+				*_m.organization_policy_manager = value.String
 			}
 		case group.ForeignKeys[89]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -2035,10 +2035,10 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 			}
 		case group.ForeignKeys[92]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field organization_workflows_manager", values[i])
+				return fmt.Errorf("unexpected type %T for field organization_workflow_manager", values[i])
 			} else if value.Valid {
-				_m.organization_workflows_manager = new(string)
-				*_m.organization_workflows_manager = value.String
+				_m.organization_workflow_manager = new(string)
+				*_m.organization_workflow_manager = value.String
 			}
 		case group.ForeignKeys[93]:
 			if value, ok := values[i].(*sql.NullString); !ok {

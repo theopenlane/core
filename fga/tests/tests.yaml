@@ -617,6 +617,17 @@ tests:
           can_create_asset: false
           can_create_workflow_definition: true
           can_manage_integrations: true
+      - user: user:ulid-integrations-manager
+        object: organization:openlane
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_edit: false
+          can_view: true
+          can_manage_workflows: false
+          can_create_workflow_definition: false
+          can_manage_integrations: true
     list_objects:
       - user: user:ulid-of-owner
         type: organization

@@ -16481,15 +16481,15 @@ type CreateOrganizationInput struct {
 	VendorScoringConfigCreatorIDs        []string   `json:"vendor_scoring_config_creator_ids,omitempty"`
 	VulnerabilityCreatorIDs              []string   `json:"vulnerability_creator_ids,omitempty"`
 	WorkflowDefinitionCreatorIDs         []string   `json:"workflow_definition_creator_ids,omitempty"`
-	CampaignsManagerIDs                  []string   `json:"campaigns_manager_ids,omitempty"`
+	CampaignManagerIDs                   []string   `json:"campaign_manager_ids,omitempty"`
 	ComplianceManagerIDs                 []string   `json:"compliance_manager_ids,omitempty"`
 	GroupManagerIDs                      []string   `json:"group_manager_ids,omitempty"`
-	IntegrationsManagerIDs               []string   `json:"integrations_manager_ids,omitempty"`
-	PoliciesManagerIDs                   []string   `json:"policies_manager_ids,omitempty"`
+	IntegrationManagerIDs                []string   `json:"integration_manager_ids,omitempty"`
+	PolicyManagerIDs                     []string   `json:"policy_manager_ids,omitempty"`
 	RegistryManagerIDs                   []string   `json:"registry_manager_ids,omitempty"`
 	RiskManagerIDs                       []string   `json:"risk_manager_ids,omitempty"`
 	TrustCenterManagerIDs                []string   `json:"trust_center_manager_ids,omitempty"`
-	WorkflowsManagerIDs                  []string   `json:"workflows_manager_ids,omitempty"`
+	WorkflowManagerIDs                   []string   `json:"workflow_manager_ids,omitempty"`
 	ParentID                             *string    `json:"parent_id,omitempty"`
 	SettingID                            *string    `json:"setting_id,omitempty"`
 	PersonalAccessTokenIDs               []string   `json:"personal_access_token_ids,omitempty"`
@@ -16730,8 +16730,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.WorkflowDefinitionCreatorIDs; len(v) > 0 {
 		m.AddWorkflowDefinitionCreatorIDs(v...)
 	}
-	if v := i.CampaignsManagerIDs; len(v) > 0 {
-		m.AddCampaignsManagerIDs(v...)
+	if v := i.CampaignManagerIDs; len(v) > 0 {
+		m.AddCampaignManagerIDs(v...)
 	}
 	if v := i.ComplianceManagerIDs; len(v) > 0 {
 		m.AddComplianceManagerIDs(v...)
@@ -16739,11 +16739,11 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.GroupManagerIDs; len(v) > 0 {
 		m.AddGroupManagerIDs(v...)
 	}
-	if v := i.IntegrationsManagerIDs; len(v) > 0 {
-		m.AddIntegrationsManagerIDs(v...)
+	if v := i.IntegrationManagerIDs; len(v) > 0 {
+		m.AddIntegrationManagerIDs(v...)
 	}
-	if v := i.PoliciesManagerIDs; len(v) > 0 {
-		m.AddPoliciesManagerIDs(v...)
+	if v := i.PolicyManagerIDs; len(v) > 0 {
+		m.AddPolicyManagerIDs(v...)
 	}
 	if v := i.RegistryManagerIDs; len(v) > 0 {
 		m.AddRegistryManagerIDs(v...)
@@ -16754,8 +16754,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.TrustCenterManagerIDs; len(v) > 0 {
 		m.AddTrustCenterManagerIDs(v...)
 	}
-	if v := i.WorkflowsManagerIDs; len(v) > 0 {
-		m.AddWorkflowsManagerIDs(v...)
+	if v := i.WorkflowManagerIDs; len(v) > 0 {
+		m.AddWorkflowManagerIDs(v...)
 	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
@@ -17014,21 +17014,21 @@ type UpdateOrganizationInput struct {
 	ClearWorkflowDefinitionCreators            bool
 	AddWorkflowDefinitionCreatorIDs            []string `json:"add_workflow_definition_creator_ids,omitempty"`
 	RemoveWorkflowDefinitionCreatorIDs         []string `json:"remove_workflow_definition_creator_ids,omitempty"`
-	ClearCampaignsManager                      bool
-	AddCampaignsManagerIDs                     []string `json:"add_campaigns_manager_ids,omitempty"`
-	RemoveCampaignsManagerIDs                  []string `json:"remove_campaigns_manager_ids,omitempty"`
+	ClearCampaignManager                       bool
+	AddCampaignManagerIDs                      []string `json:"add_campaign_manager_ids,omitempty"`
+	RemoveCampaignManagerIDs                   []string `json:"remove_campaign_manager_ids,omitempty"`
 	ClearComplianceManager                     bool
 	AddComplianceManagerIDs                    []string `json:"add_compliance_manager_ids,omitempty"`
 	RemoveComplianceManagerIDs                 []string `json:"remove_compliance_manager_ids,omitempty"`
 	ClearGroupManager                          bool
 	AddGroupManagerIDs                         []string `json:"add_group_manager_ids,omitempty"`
 	RemoveGroupManagerIDs                      []string `json:"remove_group_manager_ids,omitempty"`
-	ClearIntegrationsManager                   bool
-	AddIntegrationsManagerIDs                  []string `json:"add_integrations_manager_ids,omitempty"`
-	RemoveIntegrationsManagerIDs               []string `json:"remove_integrations_manager_ids,omitempty"`
-	ClearPoliciesManager                       bool
-	AddPoliciesManagerIDs                      []string `json:"add_policies_manager_ids,omitempty"`
-	RemovePoliciesManagerIDs                   []string `json:"remove_policies_manager_ids,omitempty"`
+	ClearIntegrationManager                    bool
+	AddIntegrationManagerIDs                   []string `json:"add_integration_manager_ids,omitempty"`
+	RemoveIntegrationManagerIDs                []string `json:"remove_integration_manager_ids,omitempty"`
+	ClearPolicyManager                         bool
+	AddPolicyManagerIDs                        []string `json:"add_policy_manager_ids,omitempty"`
+	RemovePolicyManagerIDs                     []string `json:"remove_policy_manager_ids,omitempty"`
 	ClearRegistryManager                       bool
 	AddRegistryManagerIDs                      []string `json:"add_registry_manager_ids,omitempty"`
 	RemoveRegistryManagerIDs                   []string `json:"remove_registry_manager_ids,omitempty"`
@@ -17038,9 +17038,9 @@ type UpdateOrganizationInput struct {
 	ClearTrustCenterManager                    bool
 	AddTrustCenterManagerIDs                   []string `json:"add_trust_center_manager_ids,omitempty"`
 	RemoveTrustCenterManagerIDs                []string `json:"remove_trust_center_manager_ids,omitempty"`
-	ClearWorkflowsManager                      bool
-	AddWorkflowsManagerIDs                     []string `json:"add_workflows_manager_ids,omitempty"`
-	RemoveWorkflowsManagerIDs                  []string `json:"remove_workflows_manager_ids,omitempty"`
+	ClearWorkflowManager                       bool
+	AddWorkflowManagerIDs                      []string `json:"add_workflow_manager_ids,omitempty"`
+	RemoveWorkflowManagerIDs                   []string `json:"remove_workflow_manager_ids,omitempty"`
 	ClearSetting                               bool
 	SettingID                                  *string `json:"setting_id,omitempty"`
 	ClearPersonalAccessTokens                  bool
@@ -17720,14 +17720,14 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveWorkflowDefinitionCreatorIDs; len(v) > 0 {
 		m.RemoveWorkflowDefinitionCreatorIDs(v...)
 	}
-	if i.ClearCampaignsManager {
-		m.ClearCampaignsManager()
+	if i.ClearCampaignManager {
+		m.ClearCampaignManager()
 	}
-	if v := i.AddCampaignsManagerIDs; len(v) > 0 {
-		m.AddCampaignsManagerIDs(v...)
+	if v := i.AddCampaignManagerIDs; len(v) > 0 {
+		m.AddCampaignManagerIDs(v...)
 	}
-	if v := i.RemoveCampaignsManagerIDs; len(v) > 0 {
-		m.RemoveCampaignsManagerIDs(v...)
+	if v := i.RemoveCampaignManagerIDs; len(v) > 0 {
+		m.RemoveCampaignManagerIDs(v...)
 	}
 	if i.ClearComplianceManager {
 		m.ClearComplianceManager()
@@ -17747,23 +17747,23 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveGroupManagerIDs; len(v) > 0 {
 		m.RemoveGroupManagerIDs(v...)
 	}
-	if i.ClearIntegrationsManager {
-		m.ClearIntegrationsManager()
+	if i.ClearIntegrationManager {
+		m.ClearIntegrationManager()
 	}
-	if v := i.AddIntegrationsManagerIDs; len(v) > 0 {
-		m.AddIntegrationsManagerIDs(v...)
+	if v := i.AddIntegrationManagerIDs; len(v) > 0 {
+		m.AddIntegrationManagerIDs(v...)
 	}
-	if v := i.RemoveIntegrationsManagerIDs; len(v) > 0 {
-		m.RemoveIntegrationsManagerIDs(v...)
+	if v := i.RemoveIntegrationManagerIDs; len(v) > 0 {
+		m.RemoveIntegrationManagerIDs(v...)
 	}
-	if i.ClearPoliciesManager {
-		m.ClearPoliciesManager()
+	if i.ClearPolicyManager {
+		m.ClearPolicyManager()
 	}
-	if v := i.AddPoliciesManagerIDs; len(v) > 0 {
-		m.AddPoliciesManagerIDs(v...)
+	if v := i.AddPolicyManagerIDs; len(v) > 0 {
+		m.AddPolicyManagerIDs(v...)
 	}
-	if v := i.RemovePoliciesManagerIDs; len(v) > 0 {
-		m.RemovePoliciesManagerIDs(v...)
+	if v := i.RemovePolicyManagerIDs; len(v) > 0 {
+		m.RemovePolicyManagerIDs(v...)
 	}
 	if i.ClearRegistryManager {
 		m.ClearRegistryManager()
@@ -17792,14 +17792,14 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveTrustCenterManagerIDs; len(v) > 0 {
 		m.RemoveTrustCenterManagerIDs(v...)
 	}
-	if i.ClearWorkflowsManager {
-		m.ClearWorkflowsManager()
+	if i.ClearWorkflowManager {
+		m.ClearWorkflowManager()
 	}
-	if v := i.AddWorkflowsManagerIDs; len(v) > 0 {
-		m.AddWorkflowsManagerIDs(v...)
+	if v := i.AddWorkflowManagerIDs; len(v) > 0 {
+		m.AddWorkflowManagerIDs(v...)
 	}
-	if v := i.RemoveWorkflowsManagerIDs; len(v) > 0 {
-		m.RemoveWorkflowsManagerIDs(v...)
+	if v := i.RemoveWorkflowManagerIDs; len(v) > 0 {
+		m.RemoveWorkflowManagerIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()

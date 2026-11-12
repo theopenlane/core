@@ -57309,7 +57309,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				*wq = *query
 			})
 
-		case "campaignsManager":
+		case "campaignManager":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -57338,13 +57338,13 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"organization_campaigns_manager"`
+							NodeID string `sql:"organization_campaign_manager"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(organization.CampaignsManagerColumn), ids...))
+							s.Where(sql.InValues(s.C(organization.CampaignManagerColumn), ids...))
 						})
-						if err := query.GroupBy(organization.CampaignsManagerColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(organization.CampaignManagerColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -57363,7 +57363,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				} else {
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.CampaignsManager)
+							n := len(nodes[i].Edges.CampaignManager)
 							if nodes[i].Edges.totalCount[69] == nil {
 								nodes[i].Edges.totalCount[69] = make(map[string]int)
 							}
@@ -57389,13 +57389,13 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(organization.CampaignsManagerColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(organization.CampaignManagerColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			_q.WithNamedCampaignsManager(alias, func(wq *GroupQuery) {
+			_q.WithNamedCampaignManager(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -57579,7 +57579,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				*wq = *query
 			})
 
-		case "integrationsManager":
+		case "integrationManager":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -57608,13 +57608,13 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"organization_integrations_manager"`
+							NodeID string `sql:"organization_integration_manager"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(organization.IntegrationsManagerColumn), ids...))
+							s.Where(sql.InValues(s.C(organization.IntegrationManagerColumn), ids...))
 						})
-						if err := query.GroupBy(organization.IntegrationsManagerColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(organization.IntegrationManagerColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -57633,7 +57633,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				} else {
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.IntegrationsManager)
+							n := len(nodes[i].Edges.IntegrationManager)
 							if nodes[i].Edges.totalCount[72] == nil {
 								nodes[i].Edges.totalCount[72] = make(map[string]int)
 							}
@@ -57659,17 +57659,17 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(organization.IntegrationsManagerColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(organization.IntegrationManagerColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			_q.WithNamedIntegrationsManager(alias, func(wq *GroupQuery) {
+			_q.WithNamedIntegrationManager(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
-		case "policiesManager":
+		case "policyManager":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -57698,13 +57698,13 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"organization_policies_manager"`
+							NodeID string `sql:"organization_policy_manager"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(organization.PoliciesManagerColumn), ids...))
+							s.Where(sql.InValues(s.C(organization.PolicyManagerColumn), ids...))
 						})
-						if err := query.GroupBy(organization.PoliciesManagerColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(organization.PolicyManagerColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -57723,7 +57723,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				} else {
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.PoliciesManager)
+							n := len(nodes[i].Edges.PolicyManager)
 							if nodes[i].Edges.totalCount[73] == nil {
 								nodes[i].Edges.totalCount[73] = make(map[string]int)
 							}
@@ -57749,13 +57749,13 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(organization.PoliciesManagerColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(organization.PolicyManagerColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			_q.WithNamedPoliciesManager(alias, func(wq *GroupQuery) {
+			_q.WithNamedPolicyManager(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -58029,7 +58029,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				*wq = *query
 			})
 
-		case "workflowsManager":
+		case "workflowManager":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -58058,13 +58058,13 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"organization_workflows_manager"`
+							NodeID string `sql:"organization_workflow_manager"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(organization.WorkflowsManagerColumn), ids...))
+							s.Where(sql.InValues(s.C(organization.WorkflowManagerColumn), ids...))
 						})
-						if err := query.GroupBy(organization.WorkflowsManagerColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(organization.WorkflowManagerColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -58083,7 +58083,7 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				} else {
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.WorkflowsManager)
+							n := len(nodes[i].Edges.WorkflowManager)
 							if nodes[i].Edges.totalCount[77] == nil {
 								nodes[i].Edges.totalCount[77] = make(map[string]int)
 							}
@@ -58109,13 +58109,13 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(organization.WorkflowsManagerColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(organization.WorkflowManagerColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			_q.WithNamedWorkflowsManager(alias, func(wq *GroupQuery) {
+			_q.WithNamedWorkflowManager(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 

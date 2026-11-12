@@ -203,24 +203,24 @@ type OrganizationEdges struct {
 	VulnerabilityCreators []*Group `json:"vulnerability_creators,omitempty"`
 	// groups that are allowed to create workflow_definitions
 	WorkflowDefinitionCreators []*Group `json:"workflow_definition_creators,omitempty"`
-	// groups that are allowed to manage campaigns features
-	CampaignsManager []*Group `json:"campaigns_manager,omitempty"`
-	// groups that are allowed to manage compliance features
+	// groups that are assigned the campaign_manager role
+	CampaignManager []*Group `json:"campaign_manager,omitempty"`
+	// groups that are assigned the compliance_manager role
 	ComplianceManager []*Group `json:"compliance_manager,omitempty"`
-	// groups that are allowed to manage group features
+	// groups that are assigned the group_manager role
 	GroupManager []*Group `json:"group_manager,omitempty"`
-	// groups that are allowed to manage integrations features
-	IntegrationsManager []*Group `json:"integrations_manager,omitempty"`
-	// groups that are allowed to manage policies features
-	PoliciesManager []*Group `json:"policies_manager,omitempty"`
-	// groups that are allowed to manage registry features
+	// groups that are assigned the integration_manager role
+	IntegrationManager []*Group `json:"integration_manager,omitempty"`
+	// groups that are assigned the policy_manager role
+	PolicyManager []*Group `json:"policy_manager,omitempty"`
+	// groups that are assigned the registry_manager role
 	RegistryManager []*Group `json:"registry_manager,omitempty"`
-	// groups that are allowed to manage risk features
+	// groups that are assigned the risk_manager role
 	RiskManager []*Group `json:"risk_manager,omitempty"`
-	// groups that are allowed to manage trust_center features
+	// groups that are assigned the trust_center_manager role
 	TrustCenterManager []*Group `json:"trust_center_manager,omitempty"`
-	// groups that are allowed to manage workflows features
-	WorkflowsManager []*Group `json:"workflows_manager,omitempty"`
+	// groups that are assigned the workflow_manager role
+	WorkflowManager []*Group `json:"workflow_manager,omitempty"`
 	// Parent holds the value of the parent edge.
 	Parent *Organization `json:"parent,omitempty"`
 	// Children holds the value of the children edge.
@@ -468,15 +468,15 @@ type OrganizationEdges struct {
 	namedVendorScoringConfigCreators        map[string][]*Group
 	namedVulnerabilityCreators              map[string][]*Group
 	namedWorkflowDefinitionCreators         map[string][]*Group
-	namedCampaignsManager                   map[string][]*Group
+	namedCampaignManager                    map[string][]*Group
 	namedComplianceManager                  map[string][]*Group
 	namedGroupManager                       map[string][]*Group
-	namedIntegrationsManager                map[string][]*Group
-	namedPoliciesManager                    map[string][]*Group
+	namedIntegrationManager                 map[string][]*Group
+	namedPolicyManager                      map[string][]*Group
 	namedRegistryManager                    map[string][]*Group
 	namedRiskManager                        map[string][]*Group
 	namedTrustCenterManager                 map[string][]*Group
-	namedWorkflowsManager                   map[string][]*Group
+	namedWorkflowManager                    map[string][]*Group
 	namedChildren                           map[string][]*Organization
 	namedPersonalAccessTokens               map[string][]*PersonalAccessToken
 	namedAPITokens                          map[string][]*APIToken
@@ -1182,13 +1182,13 @@ func (e OrganizationEdges) WorkflowDefinitionCreatorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "workflow_definition_creators"}
 }
 
-// CampaignsManagerOrErr returns the CampaignsManager value or an error if the edge
+// CampaignManagerOrErr returns the CampaignManager value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) CampaignsManagerOrErr() ([]*Group, error) {
+func (e OrganizationEdges) CampaignManagerOrErr() ([]*Group, error) {
 	if e.loadedTypes[69] {
-		return e.CampaignsManager, nil
+		return e.CampaignManager, nil
 	}
-	return nil, &NotLoadedError{edge: "campaigns_manager"}
+	return nil, &NotLoadedError{edge: "campaign_manager"}
 }
 
 // ComplianceManagerOrErr returns the ComplianceManager value or an error if the edge
@@ -1209,22 +1209,22 @@ func (e OrganizationEdges) GroupManagerOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "group_manager"}
 }
 
-// IntegrationsManagerOrErr returns the IntegrationsManager value or an error if the edge
+// IntegrationManagerOrErr returns the IntegrationManager value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) IntegrationsManagerOrErr() ([]*Group, error) {
+func (e OrganizationEdges) IntegrationManagerOrErr() ([]*Group, error) {
 	if e.loadedTypes[72] {
-		return e.IntegrationsManager, nil
+		return e.IntegrationManager, nil
 	}
-	return nil, &NotLoadedError{edge: "integrations_manager"}
+	return nil, &NotLoadedError{edge: "integration_manager"}
 }
 
-// PoliciesManagerOrErr returns the PoliciesManager value or an error if the edge
+// PolicyManagerOrErr returns the PolicyManager value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) PoliciesManagerOrErr() ([]*Group, error) {
+func (e OrganizationEdges) PolicyManagerOrErr() ([]*Group, error) {
 	if e.loadedTypes[73] {
-		return e.PoliciesManager, nil
+		return e.PolicyManager, nil
 	}
-	return nil, &NotLoadedError{edge: "policies_manager"}
+	return nil, &NotLoadedError{edge: "policy_manager"}
 }
 
 // RegistryManagerOrErr returns the RegistryManager value or an error if the edge
@@ -1254,13 +1254,13 @@ func (e OrganizationEdges) TrustCenterManagerOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "trust_center_manager"}
 }
 
-// WorkflowsManagerOrErr returns the WorkflowsManager value or an error if the edge
+// WorkflowManagerOrErr returns the WorkflowManager value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) WorkflowsManagerOrErr() ([]*Group, error) {
+func (e OrganizationEdges) WorkflowManagerOrErr() ([]*Group, error) {
 	if e.loadedTypes[77] {
-		return e.WorkflowsManager, nil
+		return e.WorkflowManager, nil
 	}
-	return nil, &NotLoadedError{edge: "workflows_manager"}
+	return nil, &NotLoadedError{edge: "workflow_manager"}
 }
 
 // ParentOrErr returns the Parent value or an error if the edge
@@ -2552,9 +2552,9 @@ func (_m *Organization) QueryWorkflowDefinitionCreators() *GroupQuery {
 	return NewOrganizationClient(_m.config).QueryWorkflowDefinitionCreators(_m)
 }
 
-// QueryCampaignsManager queries the "campaigns_manager" edge of the Organization entity.
-func (_m *Organization) QueryCampaignsManager() *GroupQuery {
-	return NewOrganizationClient(_m.config).QueryCampaignsManager(_m)
+// QueryCampaignManager queries the "campaign_manager" edge of the Organization entity.
+func (_m *Organization) QueryCampaignManager() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryCampaignManager(_m)
 }
 
 // QueryComplianceManager queries the "compliance_manager" edge of the Organization entity.
@@ -2567,14 +2567,14 @@ func (_m *Organization) QueryGroupManager() *GroupQuery {
 	return NewOrganizationClient(_m.config).QueryGroupManager(_m)
 }
 
-// QueryIntegrationsManager queries the "integrations_manager" edge of the Organization entity.
-func (_m *Organization) QueryIntegrationsManager() *GroupQuery {
-	return NewOrganizationClient(_m.config).QueryIntegrationsManager(_m)
+// QueryIntegrationManager queries the "integration_manager" edge of the Organization entity.
+func (_m *Organization) QueryIntegrationManager() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryIntegrationManager(_m)
 }
 
-// QueryPoliciesManager queries the "policies_manager" edge of the Organization entity.
-func (_m *Organization) QueryPoliciesManager() *GroupQuery {
-	return NewOrganizationClient(_m.config).QueryPoliciesManager(_m)
+// QueryPolicyManager queries the "policy_manager" edge of the Organization entity.
+func (_m *Organization) QueryPolicyManager() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryPolicyManager(_m)
 }
 
 // QueryRegistryManager queries the "registry_manager" edge of the Organization entity.
@@ -2592,9 +2592,9 @@ func (_m *Organization) QueryTrustCenterManager() *GroupQuery {
 	return NewOrganizationClient(_m.config).QueryTrustCenterManager(_m)
 }
 
-// QueryWorkflowsManager queries the "workflows_manager" edge of the Organization entity.
-func (_m *Organization) QueryWorkflowsManager() *GroupQuery {
-	return NewOrganizationClient(_m.config).QueryWorkflowsManager(_m)
+// QueryWorkflowManager queries the "workflow_manager" edge of the Organization entity.
+func (_m *Organization) QueryWorkflowManager() *GroupQuery {
+	return NewOrganizationClient(_m.config).QueryWorkflowManager(_m)
 }
 
 // QueryParent queries the "parent" edge of the Organization entity.
@@ -4773,27 +4773,27 @@ func (_m *Organization) appendNamedWorkflowDefinitionCreators(name string, edges
 	}
 }
 
-// NamedCampaignsManager returns the CampaignsManager named value or an error if the edge was not
+// NamedCampaignManager returns the CampaignManager named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *Organization) NamedCampaignsManager(name string) ([]*Group, error) {
-	if _m.Edges.namedCampaignsManager == nil {
+func (_m *Organization) NamedCampaignManager(name string) ([]*Group, error) {
+	if _m.Edges.namedCampaignManager == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedCampaignsManager[name]
+	nodes, ok := _m.Edges.namedCampaignManager[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *Organization) appendNamedCampaignsManager(name string, edges ...*Group) {
-	if _m.Edges.namedCampaignsManager == nil {
-		_m.Edges.namedCampaignsManager = make(map[string][]*Group)
+func (_m *Organization) appendNamedCampaignManager(name string, edges ...*Group) {
+	if _m.Edges.namedCampaignManager == nil {
+		_m.Edges.namedCampaignManager = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedCampaignsManager[name] = []*Group{}
+		_m.Edges.namedCampaignManager[name] = []*Group{}
 	} else {
-		_m.Edges.namedCampaignsManager[name] = append(_m.Edges.namedCampaignsManager[name], edges...)
+		_m.Edges.namedCampaignManager[name] = append(_m.Edges.namedCampaignManager[name], edges...)
 	}
 }
 
@@ -4845,51 +4845,51 @@ func (_m *Organization) appendNamedGroupManager(name string, edges ...*Group) {
 	}
 }
 
-// NamedIntegrationsManager returns the IntegrationsManager named value or an error if the edge was not
+// NamedIntegrationManager returns the IntegrationManager named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *Organization) NamedIntegrationsManager(name string) ([]*Group, error) {
-	if _m.Edges.namedIntegrationsManager == nil {
+func (_m *Organization) NamedIntegrationManager(name string) ([]*Group, error) {
+	if _m.Edges.namedIntegrationManager == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedIntegrationsManager[name]
+	nodes, ok := _m.Edges.namedIntegrationManager[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *Organization) appendNamedIntegrationsManager(name string, edges ...*Group) {
-	if _m.Edges.namedIntegrationsManager == nil {
-		_m.Edges.namedIntegrationsManager = make(map[string][]*Group)
+func (_m *Organization) appendNamedIntegrationManager(name string, edges ...*Group) {
+	if _m.Edges.namedIntegrationManager == nil {
+		_m.Edges.namedIntegrationManager = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedIntegrationsManager[name] = []*Group{}
+		_m.Edges.namedIntegrationManager[name] = []*Group{}
 	} else {
-		_m.Edges.namedIntegrationsManager[name] = append(_m.Edges.namedIntegrationsManager[name], edges...)
+		_m.Edges.namedIntegrationManager[name] = append(_m.Edges.namedIntegrationManager[name], edges...)
 	}
 }
 
-// NamedPoliciesManager returns the PoliciesManager named value or an error if the edge was not
+// NamedPolicyManager returns the PolicyManager named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *Organization) NamedPoliciesManager(name string) ([]*Group, error) {
-	if _m.Edges.namedPoliciesManager == nil {
+func (_m *Organization) NamedPolicyManager(name string) ([]*Group, error) {
+	if _m.Edges.namedPolicyManager == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedPoliciesManager[name]
+	nodes, ok := _m.Edges.namedPolicyManager[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *Organization) appendNamedPoliciesManager(name string, edges ...*Group) {
-	if _m.Edges.namedPoliciesManager == nil {
-		_m.Edges.namedPoliciesManager = make(map[string][]*Group)
+func (_m *Organization) appendNamedPolicyManager(name string, edges ...*Group) {
+	if _m.Edges.namedPolicyManager == nil {
+		_m.Edges.namedPolicyManager = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedPoliciesManager[name] = []*Group{}
+		_m.Edges.namedPolicyManager[name] = []*Group{}
 	} else {
-		_m.Edges.namedPoliciesManager[name] = append(_m.Edges.namedPoliciesManager[name], edges...)
+		_m.Edges.namedPolicyManager[name] = append(_m.Edges.namedPolicyManager[name], edges...)
 	}
 }
 
@@ -4965,27 +4965,27 @@ func (_m *Organization) appendNamedTrustCenterManager(name string, edges ...*Gro
 	}
 }
 
-// NamedWorkflowsManager returns the WorkflowsManager named value or an error if the edge was not
+// NamedWorkflowManager returns the WorkflowManager named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *Organization) NamedWorkflowsManager(name string) ([]*Group, error) {
-	if _m.Edges.namedWorkflowsManager == nil {
+func (_m *Organization) NamedWorkflowManager(name string) ([]*Group, error) {
+	if _m.Edges.namedWorkflowManager == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedWorkflowsManager[name]
+	nodes, ok := _m.Edges.namedWorkflowManager[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *Organization) appendNamedWorkflowsManager(name string, edges ...*Group) {
-	if _m.Edges.namedWorkflowsManager == nil {
-		_m.Edges.namedWorkflowsManager = make(map[string][]*Group)
+func (_m *Organization) appendNamedWorkflowManager(name string, edges ...*Group) {
+	if _m.Edges.namedWorkflowManager == nil {
+		_m.Edges.namedWorkflowManager = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedWorkflowsManager[name] = []*Group{}
+		_m.Edges.namedWorkflowManager[name] = []*Group{}
 	} else {
-		_m.Edges.namedWorkflowsManager[name] = append(_m.Edges.namedWorkflowsManager[name], edges...)
+		_m.Edges.namedWorkflowManager[name] = append(_m.Edges.namedWorkflowManager[name], edges...)
 	}
 }
 

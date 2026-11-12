@@ -46487,11 +46487,11 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 			c.withNamedWorkflowDefinitionCreators[name] = q.clonePage()
 		}
 	}
-	c.withCampaignsManager = _q.withCampaignsManager.clonePage()
-	if _q.withNamedCampaignsManager != nil {
-		c.withNamedCampaignsManager = make(map[string]*GroupQuery, len(_q.withNamedCampaignsManager))
-		for name, q := range _q.withNamedCampaignsManager {
-			c.withNamedCampaignsManager[name] = q.clonePage()
+	c.withCampaignManager = _q.withCampaignManager.clonePage()
+	if _q.withNamedCampaignManager != nil {
+		c.withNamedCampaignManager = make(map[string]*GroupQuery, len(_q.withNamedCampaignManager))
+		for name, q := range _q.withNamedCampaignManager {
+			c.withNamedCampaignManager[name] = q.clonePage()
 		}
 	}
 	c.withComplianceManager = _q.withComplianceManager.clonePage()
@@ -46508,18 +46508,18 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 			c.withNamedGroupManager[name] = q.clonePage()
 		}
 	}
-	c.withIntegrationsManager = _q.withIntegrationsManager.clonePage()
-	if _q.withNamedIntegrationsManager != nil {
-		c.withNamedIntegrationsManager = make(map[string]*GroupQuery, len(_q.withNamedIntegrationsManager))
-		for name, q := range _q.withNamedIntegrationsManager {
-			c.withNamedIntegrationsManager[name] = q.clonePage()
+	c.withIntegrationManager = _q.withIntegrationManager.clonePage()
+	if _q.withNamedIntegrationManager != nil {
+		c.withNamedIntegrationManager = make(map[string]*GroupQuery, len(_q.withNamedIntegrationManager))
+		for name, q := range _q.withNamedIntegrationManager {
+			c.withNamedIntegrationManager[name] = q.clonePage()
 		}
 	}
-	c.withPoliciesManager = _q.withPoliciesManager.clonePage()
-	if _q.withNamedPoliciesManager != nil {
-		c.withNamedPoliciesManager = make(map[string]*GroupQuery, len(_q.withNamedPoliciesManager))
-		for name, q := range _q.withNamedPoliciesManager {
-			c.withNamedPoliciesManager[name] = q.clonePage()
+	c.withPolicyManager = _q.withPolicyManager.clonePage()
+	if _q.withNamedPolicyManager != nil {
+		c.withNamedPolicyManager = make(map[string]*GroupQuery, len(_q.withNamedPolicyManager))
+		for name, q := range _q.withNamedPolicyManager {
+			c.withNamedPolicyManager[name] = q.clonePage()
 		}
 	}
 	c.withRegistryManager = _q.withRegistryManager.clonePage()
@@ -46543,11 +46543,11 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 			c.withNamedTrustCenterManager[name] = q.clonePage()
 		}
 	}
-	c.withWorkflowsManager = _q.withWorkflowsManager.clonePage()
-	if _q.withNamedWorkflowsManager != nil {
-		c.withNamedWorkflowsManager = make(map[string]*GroupQuery, len(_q.withNamedWorkflowsManager))
-		for name, q := range _q.withNamedWorkflowsManager {
-			c.withNamedWorkflowsManager[name] = q.clonePage()
+	c.withWorkflowManager = _q.withWorkflowManager.clonePage()
+	if _q.withNamedWorkflowManager != nil {
+		c.withNamedWorkflowManager = make(map[string]*GroupQuery, len(_q.withNamedWorkflowManager))
+		for name, q := range _q.withNamedWorkflowManager {
+			c.withNamedWorkflowManager[name] = q.clonePage()
 		}
 	}
 	c.withParent = _q.withParent.clonePage()

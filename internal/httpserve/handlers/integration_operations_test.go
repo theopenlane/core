@@ -78,6 +78,7 @@ func TestRunIntegrationOperationInlinePolicy(t *testing.T) {
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 	admin := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleAdmin)
 	workflowManager := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember, "workflow_manager")
+	integrationsManager := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember, "integration_manager")
 	member := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember)
 
 	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestInlineDefinitionID)
@@ -90,6 +91,7 @@ func TestRunIntegrationOperationInlinePolicy(t *testing.T) {
 		{name: "owner can run inline operation", ctx: testUser.UserCtx, expectedStatus: http.StatusOK},
 		{name: "admin can run inline operation", ctx: admin.UserCtx, expectedStatus: http.StatusOK},
 		{name: "workflow manager can run inline operation", ctx: workflowManager.UserCtx, expectedStatus: http.StatusOK},
+		{name: "integration manager can run inline operation", ctx: integrationsManager.UserCtx, expectedStatus: http.StatusOK},
 		{name: "member cannot run inline operation", ctx: member.UserCtx, expectedStatus: http.StatusForbidden},
 	}
 
@@ -137,6 +139,7 @@ func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 	admin := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleAdmin)
 	workflowManager := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember, "workflow_manager")
+	integrationsManager := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember, "integration_manager")
 	member := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember)
 
 	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
@@ -150,6 +153,7 @@ func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
 		{name: "owner can queue operation", user: testUser, expectedStatus: http.StatusOK, expectedRunCount: 1},
 		{name: "admin can queue operation", user: admin, expectedStatus: http.StatusOK, expectedRunCount: 1},
 		{name: "workflow manager can queue operation", user: workflowManager, expectedStatus: http.StatusOK, expectedRunCount: 1},
+		{name: "integration manager can queue operation", user: integrationsManager, expectedStatus: http.StatusOK, expectedRunCount: 1},
 		{name: "member cannot queue operation", user: member, expectedStatus: http.StatusForbidden},
 	}
 

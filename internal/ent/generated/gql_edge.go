@@ -11583,7 +11583,7 @@ func (_m *Organization) WorkflowDefinitionCreators(
 	return _m.QueryWorkflowDefinitionCreators().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (_m *Organization) CampaignsManager(
+func (_m *Organization) CampaignManager(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {
 	opts := []GroupPaginateOption{
@@ -11592,7 +11592,7 @@ func (_m *Organization) CampaignsManager(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := _m.Edges.totalCount[69][alias]
-	if nodes, err := _m.NamedCampaignsManager(alias); err == nil || hasTotalCount {
+	if nodes, err := _m.NamedCampaignManager(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -11601,7 +11601,7 @@ func (_m *Organization) CampaignsManager(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return _m.QueryCampaignsManager().Paginate(ctx, after, first, before, last, opts...)
+	return _m.QueryCampaignManager().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Organization) ComplianceManager(
@@ -11646,7 +11646,7 @@ func (_m *Organization) GroupManager(
 	return _m.QueryGroupManager().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (_m *Organization) IntegrationsManager(
+func (_m *Organization) IntegrationManager(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {
 	opts := []GroupPaginateOption{
@@ -11655,7 +11655,7 @@ func (_m *Organization) IntegrationsManager(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := _m.Edges.totalCount[72][alias]
-	if nodes, err := _m.NamedIntegrationsManager(alias); err == nil || hasTotalCount {
+	if nodes, err := _m.NamedIntegrationManager(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -11664,10 +11664,10 @@ func (_m *Organization) IntegrationsManager(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return _m.QueryIntegrationsManager().Paginate(ctx, after, first, before, last, opts...)
+	return _m.QueryIntegrationManager().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (_m *Organization) PoliciesManager(
+func (_m *Organization) PolicyManager(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {
 	opts := []GroupPaginateOption{
@@ -11676,7 +11676,7 @@ func (_m *Organization) PoliciesManager(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := _m.Edges.totalCount[73][alias]
-	if nodes, err := _m.NamedPoliciesManager(alias); err == nil || hasTotalCount {
+	if nodes, err := _m.NamedPolicyManager(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -11685,7 +11685,7 @@ func (_m *Organization) PoliciesManager(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return _m.QueryPoliciesManager().Paginate(ctx, after, first, before, last, opts...)
+	return _m.QueryPolicyManager().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Organization) RegistryManager(
@@ -11751,7 +11751,7 @@ func (_m *Organization) TrustCenterManager(
 	return _m.QueryTrustCenterManager().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (_m *Organization) WorkflowsManager(
+func (_m *Organization) WorkflowManager(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {
 	opts := []GroupPaginateOption{
@@ -11760,7 +11760,7 @@ func (_m *Organization) WorkflowsManager(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := _m.Edges.totalCount[77][alias]
-	if nodes, err := _m.NamedWorkflowsManager(alias); err == nil || hasTotalCount {
+	if nodes, err := _m.NamedWorkflowManager(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -11769,7 +11769,7 @@ func (_m *Organization) WorkflowsManager(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return _m.QueryWorkflowsManager().Paginate(ctx, after, first, before, last, opts...)
+	return _m.QueryWorkflowManager().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Organization) Parent(ctx context.Context) (*Organization, error) {

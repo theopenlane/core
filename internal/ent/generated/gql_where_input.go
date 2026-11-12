@@ -66108,9 +66108,9 @@ type OrganizationWhereInput struct {
 	HasWorkflowDefinitionCreators     *bool              `json:"hasWorkflowDefinitionCreators,omitempty"`
 	HasWorkflowDefinitionCreatorsWith []*GroupWhereInput `json:"hasWorkflowDefinitionCreatorsWith,omitempty"`
 
-	// "campaigns_manager" edge predicates.
-	HasCampaignsManager     *bool              `json:"hasCampaignsManager,omitempty"`
-	HasCampaignsManagerWith []*GroupWhereInput `json:"hasCampaignsManagerWith,omitempty"`
+	// "campaign_manager" edge predicates.
+	HasCampaignManager     *bool              `json:"hasCampaignManager,omitempty"`
+	HasCampaignManagerWith []*GroupWhereInput `json:"hasCampaignManagerWith,omitempty"`
 
 	// "compliance_manager" edge predicates.
 	HasComplianceManager     *bool              `json:"hasComplianceManager,omitempty"`
@@ -66120,13 +66120,13 @@ type OrganizationWhereInput struct {
 	HasGroupManager     *bool              `json:"hasGroupManager,omitempty"`
 	HasGroupManagerWith []*GroupWhereInput `json:"hasGroupManagerWith,omitempty"`
 
-	// "integrations_manager" edge predicates.
-	HasIntegrationsManager     *bool              `json:"hasIntegrationsManager,omitempty"`
-	HasIntegrationsManagerWith []*GroupWhereInput `json:"hasIntegrationsManagerWith,omitempty"`
+	// "integration_manager" edge predicates.
+	HasIntegrationManager     *bool              `json:"hasIntegrationManager,omitempty"`
+	HasIntegrationManagerWith []*GroupWhereInput `json:"hasIntegrationManagerWith,omitempty"`
 
-	// "policies_manager" edge predicates.
-	HasPoliciesManager     *bool              `json:"hasPoliciesManager,omitempty"`
-	HasPoliciesManagerWith []*GroupWhereInput `json:"hasPoliciesManagerWith,omitempty"`
+	// "policy_manager" edge predicates.
+	HasPolicyManager     *bool              `json:"hasPolicyManager,omitempty"`
+	HasPolicyManagerWith []*GroupWhereInput `json:"hasPolicyManagerWith,omitempty"`
 
 	// "registry_manager" edge predicates.
 	HasRegistryManager     *bool              `json:"hasRegistryManager,omitempty"`
@@ -66140,9 +66140,9 @@ type OrganizationWhereInput struct {
 	HasTrustCenterManager     *bool              `json:"hasTrustCenterManager,omitempty"`
 	HasTrustCenterManagerWith []*GroupWhereInput `json:"hasTrustCenterManagerWith,omitempty"`
 
-	// "workflows_manager" edge predicates.
-	HasWorkflowsManager     *bool              `json:"hasWorkflowsManager,omitempty"`
-	HasWorkflowsManagerWith []*GroupWhereInput `json:"hasWorkflowsManagerWith,omitempty"`
+	// "workflow_manager" edge predicates.
+	HasWorkflowManager     *bool              `json:"hasWorkflowManager,omitempty"`
+	HasWorkflowManagerWith []*GroupWhereInput `json:"hasWorkflowManagerWith,omitempty"`
 
 	// "parent" edge predicates.
 	HasParent     *bool                     `json:"hasParent,omitempty"`
@@ -67934,24 +67934,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasWorkflowDefinitionCreatorsWith(with...))
 	}
-	if i.HasCampaignsManager != nil {
-		p := organization.HasCampaignsManager()
-		if !*i.HasCampaignsManager {
+	if i.HasCampaignManager != nil {
+		p := organization.HasCampaignManager()
+		if !*i.HasCampaignManager {
 			p = organization.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasCampaignsManagerWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasCampaignsManagerWith))
+	if len(i.HasCampaignManagerWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasCampaignManagerWith))
 		with = append(with, group.DeletedAtIsNil())
-		for _, w := range i.HasCampaignsManagerWith {
+		for _, w := range i.HasCampaignManagerWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasCampaignsManagerWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasCampaignManagerWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, organization.HasCampaignsManagerWith(with...))
+		predicates = append(predicates, organization.HasCampaignManagerWith(with...))
 	}
 	if i.HasComplianceManager != nil {
 		p := organization.HasComplianceManager()
@@ -67991,43 +67991,43 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasGroupManagerWith(with...))
 	}
-	if i.HasIntegrationsManager != nil {
-		p := organization.HasIntegrationsManager()
-		if !*i.HasIntegrationsManager {
+	if i.HasIntegrationManager != nil {
+		p := organization.HasIntegrationManager()
+		if !*i.HasIntegrationManager {
 			p = organization.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasIntegrationsManagerWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasIntegrationsManagerWith))
+	if len(i.HasIntegrationManagerWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasIntegrationManagerWith))
 		with = append(with, group.DeletedAtIsNil())
-		for _, w := range i.HasIntegrationsManagerWith {
+		for _, w := range i.HasIntegrationManagerWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasIntegrationsManagerWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasIntegrationManagerWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, organization.HasIntegrationsManagerWith(with...))
+		predicates = append(predicates, organization.HasIntegrationManagerWith(with...))
 	}
-	if i.HasPoliciesManager != nil {
-		p := organization.HasPoliciesManager()
-		if !*i.HasPoliciesManager {
+	if i.HasPolicyManager != nil {
+		p := organization.HasPolicyManager()
+		if !*i.HasPolicyManager {
 			p = organization.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasPoliciesManagerWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasPoliciesManagerWith))
+	if len(i.HasPolicyManagerWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasPolicyManagerWith))
 		with = append(with, group.DeletedAtIsNil())
-		for _, w := range i.HasPoliciesManagerWith {
+		for _, w := range i.HasPolicyManagerWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPoliciesManagerWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasPolicyManagerWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, organization.HasPoliciesManagerWith(with...))
+		predicates = append(predicates, organization.HasPolicyManagerWith(with...))
 	}
 	if i.HasRegistryManager != nil {
 		p := organization.HasRegistryManager()
@@ -68086,24 +68086,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasTrustCenterManagerWith(with...))
 	}
-	if i.HasWorkflowsManager != nil {
-		p := organization.HasWorkflowsManager()
-		if !*i.HasWorkflowsManager {
+	if i.HasWorkflowManager != nil {
+		p := organization.HasWorkflowManager()
+		if !*i.HasWorkflowManager {
 			p = organization.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasWorkflowsManagerWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasWorkflowsManagerWith))
+	if len(i.HasWorkflowManagerWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasWorkflowManagerWith))
 		with = append(with, group.DeletedAtIsNil())
-		for _, w := range i.HasWorkflowsManagerWith {
+		for _, w := range i.HasWorkflowManagerWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasWorkflowsManagerWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasWorkflowManagerWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, organization.HasWorkflowsManagerWith(with...))
+		predicates = append(predicates, organization.HasWorkflowManagerWith(with...))
 	}
 	if i.HasParent != nil {
 		p := organization.HasParent()

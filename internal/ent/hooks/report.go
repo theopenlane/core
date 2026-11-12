@@ -12,9 +12,6 @@ import (
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/logx"
-	"github.com/vektah/gqlparser/v2"
-	"github.com/vektah/gqlparser/v2/ast"
-	"github.com/vektah/gqlparser/v2/validator"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
@@ -23,32 +20,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
 )
 
 var (
-	gqlSchema = gqlgenerated.NewExecutableSchema(gqlgenerated.Config{}).Schema()
-
 	// ErrReportIsPrivate is returned when adding members to a private report
 	ErrReportIsPrivate = errors.New("you cannot add or update membership of a private report. change visibility to restricted first")
 )
-
-// isQueryValid checks if the provided query string is valid against the server. it also validates
-// the variables too
-func isQueryValid(query string, variables map[string]any) error {
-	document, documentErr := gqlparser.LoadQueryWithRules(gqlSchema, query, nil)
-	if len(documentErr) > 0 {
-		return documentErr
-	}
-
-	// only queries should ever be allowed + one query per report
-	if len(document.Operations) != 1 || document.Operations[0].Operation != ast.Query {
-		return errors.New("reporting must contain exactly one query operation") //nolint:err113
-	}
-
-	_, err := validator.VariableValues(gqlSchema, document.Operations[0], variables)
-	return err
-}
 
 // HookValidateReportQuery makes sure to validate the provided query and variables that they can be executed
 // against the server
