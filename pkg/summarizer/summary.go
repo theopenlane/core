@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
-	goldmarkparser "github.com/yuin/goldmark/parser"
-	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark/v2"
+	"github.com/yuin/goldmark/v2/extension"
+	goldmarkparser "github.com/yuin/goldmark/v2/parser"
+	goldmarkhtml "github.com/yuin/goldmark/v2/renderer/html"
 )
 
 type summarizer interface {
