@@ -5,8 +5,10 @@ set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/cleanup.sh"
 
 OPENLANE_BUILDKITE_JOB_PRIORITY=0
+build_type=other
 if [[ -n "${BUILDKITE_TAG:-}" ]]; then
   OPENLANE_BUILDKITE_JOB_PRIORITY=100
+  build_type=tag
 elif [[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" ]]; then
   renovate=false
   [[ "${BUILDKITE_BRANCH:-}" =~ ^renovate/ ]] && renovate=true
@@ -16,14 +18,58 @@ elif [[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "fals
     OPENLANE_BUILDKITE_JOB_PRIORITY=-10
   else
     OPENLANE_BUILDKITE_JOB_PRIORITY=80
+    build_type=pr
   fi
 elif [[ "${BUILDKITE_BRANCH:-}" == "main" ]]; then
   OPENLANE_BUILDKITE_JOB_PRIORITY=50
+  build_type=main
 elif [[ "${BUILDKITE_BRANCH:-}" =~ ^renovate/ ]]; then
   OPENLANE_BUILDKITE_JOB_PRIORITY=-10
 fi
 
+# a pipeline or build can force the build type, to test priority and limits without a real pr or tag
+case "${OPENLANE_BUILD_TYPE:-}" in
+  tag) build_type=tag OPENLANE_BUILDKITE_JOB_PRIORITY=100 ;;
+  pr) build_type=pr OPENLANE_BUILDKITE_JOB_PRIORITY=80 ;;
+  main) build_type=main OPENLANE_BUILDKITE_JOB_PRIORITY=50 ;;
+  other) build_type=other ;;
+esac
+
 export OPENLANE_BUILDKITE_JOB_PRIORITY
+
+# namespace shares one instance limit across every build, so each build type gets its own concurrency groups
+# lower types are capped so they cannot crowd out tags and pull requests, values are large medium small
+limits=()
+if [[ "${LARGE_RUNNER_QUEUE:-}" == "namespace" ]]; then
+  pool=namespace
+  case "$build_type" in
+    tag) limits=(100 100 100) ;;
+    pr) limits=(3 4 2) ;;
+    main) limits=(1 2 1) ;;
+    *) limits=(1 1 1) ;;
+  esac
+else
+  pool=garage
+  # garage agents already pick waiting jobs by priority, only cap the lowest type so it cannot hold every agent
+  case "$build_type" in
+    other) limits=(2 2 2) ;;
+  esac
+fi
+
+if [[ ${#limits[@]} -eq 3 ]]; then
+  export LARGE_CONCURRENCY_GROUP="${pool}/${build_type}/large"
+  export LARGE_CONCURRENCY="${limits[0]}"
+  export MEDIUM_CONCURRENCY_GROUP="${pool}/${build_type}/medium"
+  export MEDIUM_CONCURRENCY="${limits[1]}"
+  export SMALL_CONCURRENCY_GROUP="${pool}/${build_type}/small"
+  export SMALL_CONCURRENCY="${limits[2]}"
+fi
+
+# step tiers within a build, generate first then lint and tests, kept below the gaps between build types
+export OPENLANE_BUILDKITE_PRIORITY_TOP=$((OPENLANE_BUILDKITE_JOB_PRIORITY + 4))
+export OPENLANE_BUILDKITE_PRIORITY_HIGH=$((OPENLANE_BUILDKITE_JOB_PRIORITY + 3))
+export OPENLANE_BUILDKITE_PRIORITY_MEDIUM=$((OPENLANE_BUILDKITE_JOB_PRIORITY + 2))
+export OPENLANE_BUILDKITE_PRIORITY_LOW=$((OPENLANE_BUILDKITE_JOB_PRIORITY + 1))
 
 echo "🔧 Setting up build environment..."
 

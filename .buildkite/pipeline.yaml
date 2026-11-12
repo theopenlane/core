@@ -1,5 +1,5 @@
 env:
-  APP_NAME: ${BUILDKITE_PIPELINE_SLUG}
+  APP_NAME: ${APP_NAME:-core}
   IMAGE_REPO: ghcr.io/theopenlane/${APP_NAME}
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
@@ -10,36 +10,54 @@ env:
   GRAPHQL_SCHEMA_NAME: "Openlane-0dedz@current"
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
 
-  # build settings
-  BK_HOME: /var/lib/buildkite-agent
-  GOCACHE: $BK_HOME/.cache/go-build
-  GOMODCACHE: $BK_HOME/.cache/go/pkg/mod
-  GOLANGCI_LINT_CACHE: $BK_HOME/.cache/golangci-lint
-  GIT_MIRRORS_PATH: $BK_HOME/git-mirrors
-  HOME: /tmp
-  GIT_CONFIG_GLOBAL: $HOME/.gitconfig
-  APOLLO_CONFIG_HOME: $HOME
-  SONAR_USER_HOME: $HOME/.sonar
-  SCANNER_WORKDIR_PATH: $HOME/sonar-scanner-work
+  # build settings, default to what is in buildkite
+  BK_HOME: ${BK_HOME:-/var/lib/buildkite-agent}
+  CACHE_HOME: ${CACHE_HOME:-$BK_HOME/.cache}
+  GOCACHE: ${GOCACHE:-$CACHE_HOME/go-build}
+  GOMODCACHE: ${GOMODCACHE:-$CACHE_HOME/go/pkg/mod}
+  GOLANGCI_LINT_CACHE: ${GOLANGCI_LINT_CACHE:-$CACHE_HOME/golangci-lint}
+  GIT_MIRRORS_PATH: ${GIT_MIRRORS_PATH:-$BK_HOME/git-mirrors}
+  CONFIG_HOME: ${CONFIG_HOME:-/tmp}
+  GIT_CONFIG_GLOBAL: ${GIT_CONFIG_GLOBAL:-$CONFIG_HOME/.gitconfig}
+  APOLLO_CONFIG_HOME: ${APOLLO_CONFIG_HOME:-$CONFIG_HOME}
+  SONAR_USER_HOME: ${SONAR_USER_HOME:-$CONFIG_HOME/.sonar}
+  SCANNER_WORKDIR_PATH: ${SCANNER_WORKDIR_PATH:-$CONFIG_HOME/sonar-scanner-work}
 
   # helm settings
   HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
+  # test settings
+  TEST_DB_URL: "docker://postgres:18-alpine"
+
   # runner vars
   LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-self-hosted-garage-vms}
   SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-self-hosted-garage-vms}
+  GARAGE_RUNNER_QUEUE: ${GARAGE_RUNNER_QUEUE:-self-hosted-garage-vms}
   RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
   RUNNER_WORKLOAD_STANDARD: "standard"
-
-# cache for hosted runners
-cache:
-  name: go-cache
-  size: 100g
-  paths:
-    - $GOCACHE
-    - $GOMODCACHE
-    - $GOLANGCI_LINT_CACHE
+  LARGE_RUNNER_SHAPE: ${LARGE_RUNNER_SHAPE:-}
+  MEDIUM_RUNNER_SHAPE: ${MEDIUM_RUNNER_SHAPE:-}
+  SMALL_RUNNER_SHAPE: ${SMALL_RUNNER_SHAPE:-}
+  XSMALL_RUNNER_SHAPE: ${XSMALL_RUNNER_SHAPE:-}
+  NSC_ARM_ARCH: ${NSC_ARM_ARCH:-}
+  # concurrency limits for the medium and small steps, unlimited unless the pipeline sets them
+  LARGE_CONCURRENCY_GROUP: ${LARGE_CONCURRENCY_GROUP:-core/unlimited-large}
+  LARGE_CONCURRENCY: ${LARGE_CONCURRENCY:-100}
+  MEDIUM_CONCURRENCY_GROUP: ${MEDIUM_CONCURRENCY_GROUP:-core/unlimited-medium}
+  MEDIUM_CONCURRENCY: ${MEDIUM_CONCURRENCY:-100}
+  SMALL_CONCURRENCY_GROUP: ${SMALL_CONCURRENCY_GROUP:-core/unlimited-small}
+  SMALL_CONCURRENCY: ${SMALL_CONCURRENCY:-100}
+  NSC_CACHE_TAG_BUILD: ${NSC_CACHE_TAG_BUILD:-}
+  NSC_CACHE_TAG_LINT: ${NSC_CACHE_TAG_LINT:-}
+  NSC_CACHE_TAG_TEST: ${NSC_CACHE_TAG_TEST:-}
+  NSC_CACHE_TAG_TEST_GRAPH: ${NSC_CACHE_TAG_TEST_GRAPH:-}
+  NSC_CACHE_TAG_LIGHT: ${NSC_CACHE_TAG_LIGHT:-}
+  NSC_CACHE_SIZE: ${NSC_CACHE_SIZE:-}
+  NSC_CACHE_SIZE_LIGHT: ${NSC_CACHE_SIZE_LIGHT:-}
+  NSC_CACHE_PATH: ${NSC_CACHE_PATH:-}
+  NSC_GIT_MIRROR: ${NSC_GIT_MIRROR:-}
+  NSC_CONTAINERD_CACHE_RELATIVE_PATH: ${NSC_CONTAINERD_CACHE_RELATIVE_PATH:-}
 
 secrets:
   - GITHUB_TOKEN
@@ -59,16 +77,95 @@ common:
       - exit_status: 75
         limit: 2
 
-  large-runner: &large-runner
+  # namespace instance settings, empty unless set by the pipeline
+  nsc-tags: &nsc-tags
+    nsc-cache-path: $NSC_CACHE_PATH
+    nsc-git-mirror: $NSC_GIT_MIRROR
+    nsc-containerd-cache-relative-path: $NSC_CONTAINERD_CACHE_RELATIVE_PATH
+  # each runner group has its own cache tag so jobs do not overwrite each other's cache
+  large-lint-runner: &large-lint-runner
+    !!merge <<: *nsc-tags
     queue: $LARGE_RUNNER_QUEUE
     workload: $RUNNER_WORKLOAD_STANDARD
-  small-runner: &small-runner
+    nsc-shape: $LARGE_RUNNER_SHAPE
+    nsc-arch: $NSC_ARM_ARCH
+    nsc-cache-tag: $NSC_CACHE_TAG_LINT
+    nsc-cache-size: $NSC_CACHE_SIZE
+  large-test-runner: &large-test-runner
+    !!merge <<: *nsc-tags
+    queue: $LARGE_RUNNER_QUEUE
+    workload: $RUNNER_WORKLOAD_STANDARD
+    nsc-shape: $LARGE_RUNNER_SHAPE
+    nsc-arch: $NSC_ARM_ARCH
+    nsc-cache-tag: $NSC_CACHE_TAG_TEST_GRAPH
+    nsc-cache-size: $NSC_CACHE_SIZE
+  medium-test-runner: &medium-test-runner
+    !!merge <<: *nsc-tags
+    queue: $LARGE_RUNNER_QUEUE
+    workload: $RUNNER_WORKLOAD_STANDARD
+    nsc-shape: $MEDIUM_RUNNER_SHAPE
+    nsc-arch: $NSC_ARM_ARCH
+    nsc-cache-tag: $NSC_CACHE_TAG_TEST
+    nsc-cache-size: $NSC_CACHE_SIZE
+  small-test-runner: &small-test-runner
+    !!merge <<: *nsc-tags
     queue: $SMALL_RUNNER_QUEUE
     workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+    nsc-shape: $SMALL_RUNNER_SHAPE
+    nsc-arch: $NSC_ARM_ARCH
+    nsc-cache-tag: $NSC_CACHE_TAG_TEST
+    nsc-cache-size: $NSC_CACHE_SIZE
+  medium-runner: &medium-runner
+    !!merge <<: *nsc-tags
+    queue: $LARGE_RUNNER_QUEUE
+    workload: $RUNNER_WORKLOAD_STANDARD
+    nsc-shape: $MEDIUM_RUNNER_SHAPE
+    nsc-cache-tag: $NSC_CACHE_TAG_BUILD
+    nsc-cache-size: $NSC_CACHE_SIZE
+  small-runner: &small-runner
+    !!merge <<: *nsc-tags
+    queue: $SMALL_RUNNER_QUEUE
+    workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+    nsc-shape: $SMALL_RUNNER_SHAPE
+    nsc-cache-tag: $NSC_CACHE_TAG_BUILD
+    nsc-cache-size: $NSC_CACHE_SIZE
+  # shell scripts and single cli calls, only the image cache
+  xsmall-runner: &xsmall-runner
+    !!merge <<: *nsc-tags
+    queue: $SMALL_RUNNER_QUEUE
+    workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+    nsc-shape: $XSMALL_RUNNER_SHAPE
+    nsc-cache-tag: $NSC_CACHE_TAG_LIGHT
+    nsc-cache-size: $NSC_CACHE_SIZE_LIGHT
+  # merged into steps so they queue in buildkite, not in the namespace instance limit
+  large-concurrency: &large-concurrency
+    concurrency_group: $LARGE_CONCURRENCY_GROUP
+    concurrency: $LARGE_CONCURRENCY
+  medium-concurrency: &medium-concurrency
+    concurrency_group: $MEDIUM_CONCURRENCY_GROUP
+    concurrency: $MEDIUM_CONCURRENCY
+  small-concurrency: &small-concurrency
+    concurrency_group: $SMALL_CONCURRENCY_GROUP
+    concurrency: $SMALL_CONCURRENCY
+  # docker image builds stay on garage, they rely on agent v4 post-command hook order
+  garage-runner: &garage-runner
+    queue: $GARAGE_RUNNER_QUEUE
+    workload: $RUNNER_WORKLOAD_STANDARD
 
   # docker plugin options for the build image, merged into a step with <<: *build-image
   build-image: &build-image
     image: "ghcr.io/theopenlane/build-image:latest"
+    always-pull: true
+    propagate-environment: true
+    propagate-uid-gid: true
+  # multi-arch images for lint and tests, task comes from the go.mod tool block
+  go-image: &go-image
+    image: "golang:1.27.3-alpine"
+    always-pull: true
+    propagate-environment: true
+    propagate-uid-gid: true
+  golangci-lint-image: &golangci-lint-image
+    image: "golangci/golangci-lint:v2.13.2-alpine"
     always-pull: true
     propagate-environment: true
     propagate-uid-gid: true
@@ -130,6 +227,8 @@ common:
   # step conditions used by more than one step
   if-release-tag: &if-release-tag build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
   if-any-tag: &if-any-tag build.tag != null
+  if-not-module-tag: &if-not-module-tag build.tag == null || (build.tag !~ /cli\// && build.tag !~ /common\//)
+  if-not-cli-tag: &if-not-cli-tag build.tag == null || build.tag !~ /cli\//
   if-pull-request: &if-pull-request build.pull_request.id != null
   if-main: &if-main build.branch == "main"
   if-main-untagged: &if-main-untagged build.branch == "main" && build.tag == null
@@ -138,6 +237,7 @@ steps:
   - label: ":renovate: go work sync"
     retry: *disk-full-retry
     key: "renovate_go_work_sync"
+    !!merge <<: *small-concurrency
     if: build.branch =~ /^renovate\//
     agents: *small-runner
     if_changed:
@@ -158,13 +258,39 @@ steps:
   # a pushed sync commit supersedes this build, so nothing else should start
   - wait: ~
     if: build.branch =~ /^renovate\//
-  - group: ":knife: Pre-check"
-    key: "precheck"
+  - group: ":golangci-lint: Linter"
+    key: "linter"
+    steps:
+      - label: ":golangci-lint: lint :lint-roller:"
+        retry: *disk-full-retry
+        if_changed:
+          - "**.go"
+          - .golangci.yaml
+          - .custom-gcl.yml
+          - go.{mod,sum}
+        agents: *large-lint-runner
+        cancel_on_build_failing: true
+        timeout_in_minutes: 30
+        key: "lint"
+        !!merge <<: *large-concurrency
+        if: *if-not-module-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_TOP:-4}
+        plugins:
+          - docker#v5.14.0:
+              !!merge <<: *golangci-lint-image
+              command: ["go", "tool", "task", "go:lint:ci"]
+              volumes: *go-lint-volumes
+              environment: *go-env
+  - group: ":knife: validation" # validate genenrate was clean
+    key: "validate_generate"
     steps:
       - label: ":golang: go generate"
         retry: *disk-full-retry
         key: "generate"
-        agents: *large-runner
+        !!merge <<: *medium-concurrency
+        if: *if-not-cli-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_HIGH:-3}
+        agents: *medium-runner
         cancel_on_build_failing: true
         if_changed:
           - go.{mod,sum}
@@ -181,6 +307,9 @@ steps:
       - label: ":golang: go generate - catalog + onboarding"
         retry: *disk-full-retry
         key: "generate_other"
+        !!merge <<: *small-concurrency
+        if: *if-not-cli-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_LOW:-1}
         agents: *small-runner
         cancel_on_build_failing: true
         if_changed:
@@ -197,7 +326,10 @@ steps:
       - label: ":auth0: fga generate"
         retry: *disk-full-retry
         key: "generate_fga"
-        agents: *large-runner
+        !!merge <<: *small-concurrency
+        if: *if-not-module-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_LOW:-1}
+        agents: *small-runner
         cancel_on_build_failing: true
         if_changed:
           - fga/**
@@ -212,7 +344,10 @@ steps:
       - label: ":yaml: generate config"
         retry: *disk-full-retry
         key: "generate_config"
-        agents: *large-runner
+        !!merge <<: *medium-concurrency
+        if: *if-not-cli-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_HIGH:-3}
+        agents: *medium-runner
         cancel_on_build_failing: true
         if_changed:
           - go.{mod,sum}
@@ -230,7 +365,7 @@ steps:
       - label: ":construction: create draft config PR"
         retry: *disk-full-retry
         key: "draft_pr_automation"
-        agents: *small-runner
+        agents: *xsmall-runner
         depends_on: "generate_config"
         if: *if-pull-request
         if_changed:
@@ -247,11 +382,11 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-                - GIT_CONFIG_GLOBAL=/tmp/.gitconfig
+                - "GIT_CONFIG_GLOBAL"
       - label: ":link: link PRs"
         retry: *disk-full-retry
         key: "link_pr_automation"
-        agents: *small-runner
+        agents: *xsmall-runner
         depends_on: "draft_pr_automation"
         if: *if-pull-request
         if_changed:
@@ -272,7 +407,7 @@ steps:
       - label: ":helm: update helm chart"
         retry: *disk-full-retry
         key: "helm_automation"
-        agents: *small-runner
+        agents: *xsmall-runner
         depends_on: "generate_config"
         if: *if-main
         plugins:
@@ -288,7 +423,7 @@ steps:
       - label: ":arrows_counterclockwise: close draft config PRs"
         retry: *disk-full-retry
         key: "post_merge_automation"
-        agents: *small-runner
+        agents: *xsmall-runner
         depends_on: "helm_automation"
         if: *if-main
         plugins:
@@ -303,7 +438,7 @@ steps:
       - label: ":broom: cleanup draft PRs"
         retry: *disk-full-retry
         key: "cleanup_draft_prs"
-        agents: *small-runner
+        agents: *xsmall-runner
         depends_on: "post_merge_automation"
         if: *if-main
         plugins:
@@ -313,86 +448,17 @@ steps:
               environment:
                 - "GITHUB_TOKEN"
                 - "HELM_CHART_REPO"
-      - label: ":rocket: update image tag for release"
-        retry: *disk-full-retry
-        key: "image_tag_automation"
-        depends_on:
-          - "docker-build-and-tag"
-          - "go_tests"
-        if: *if-release-tag
-        agents: *large-runner
-        plugins:
-          - docker#v5.14.0:
-              !!merge <<: *build-image
-              command: ["bash", ".buildkite/image-tag-automation.sh"]
-              volumes: *go-cache-volumes
-              environment: *automation-env
-  - group: ":golangci-lint: Linter"
-    key: "linter"
-    steps:
-      - label: ":golangci-lint: lint graphapi package :lint-roller:"
-        retry: *disk-full-retry
-        if_changed:
-          - "internal/graphapi/**.go"
-          - .golangci.yaml
-          - .custom-gcl.yml
-          - go.{mod,sum}
-        agents: *large-runner
-        cancel_on_build_failing: true
-        timeout_in_minutes: 30
-        key: "lint_graphapi"
-        plugins:
-          - docker#v5.14.0:
-              !!merge <<: *build-image
-              command: ["task", "go:lint:ci:graphapi"]
-              volumes: *go-lint-volumes
-              environment: *go-env
-      - label: ":golangci-lint: lint handlers package :lint-roller:"
-        retry: *disk-full-retry
-        if_changed:
-          - "internal/httpserve/handlers/**.go"
-          - .golangci.yaml
-          - .custom-gcl.yml
-          - go.{mod,sum}
-        agents: *large-runner
-        cancel_on_build_failing: true
-        timeout_in_minutes: 30
-        key: "lint_handlers"
-        plugins:
-          - docker#v5.14.0:
-              !!merge <<: *build-image
-              command: ["task", "go:lint:ci:handlers"]
-              volumes: *go-lint-volumes
-              environment: *go-env
-      - label: ":golangci-lint: lint - non-api packages :lint-roller:"
-        retry: *disk-full-retry
-        if_changed:
-          include:
-            - "**.go"
-            - .golangci.yaml
-            - .custom-gcl.yml
-            - go.{mod,sum}
-          exclude:
-            - internal/graphapi/**
-            - internal/httpserve/handlers/**
-        agents: *large-runner
-        cancel_on_build_failing: true
-        timeout_in_minutes: 30
-        key: "lint_non_api"
-        plugins:
-          - docker#v5.14.0:
-              !!merge <<: *build-image
-              command: ["task", "go:lint:ci:no-api"]
-              volumes: *go-lint-volumes
-              environment: *go-env
   - group: ":test_tube: Tests"
     key: "go_tests"
     steps:
       - label: ":golang: go test - graphapi only %n/%t"
         retry: *disk-full-retry
-        agents: *large-runner
+        agents: *large-test-runner
         key: "go_test_graph"
-        parallelism: 4
+        !!merge <<: *large-concurrency
+        if: *if-not-module-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_HIGH:-3}
+        parallelism: 2
         cancel_on_build_failing: true
         if_changed:
           include:
@@ -400,19 +466,20 @@ steps:
             - go.{mod,sum}
           exclude: # do not run tests if only cli files changed
             - cli/**
-        env:
-          TEST_DB_URL: "docker://postgres:18-alpine"
         plugins:
           - docker#v5.14.0:
-              !!merge <<: *build-image
-              command: ["task", "go:testsum:ci:graph"]
+              !!merge <<: *go-image
+              command: ["go", "tool", "task", "go:testsum:ci:graph"]
               volumes: *go-test-volumes
               environment: *go-test-parallel-env
         artifact_paths: ["coverage-graph-*.out", "junit-graph-*.xml"]
       - label: ":golang: go test - events only"
         retry: *disk-full-retry
-        agents: *large-runner
+        !!merge <<: *medium-concurrency
+        agents: *medium-test-runner
         key: "go_test_events"
+        if: *if-not-module-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_MEDIUM:-2}
         cancel_on_build_failing: true
         if_changed: # only run when event driven code changes
           # the suite itself and the harness it shares with the graphapi suite
@@ -431,24 +498,20 @@ steps:
           - internal/graphapi/integration*.go
           - internal/graphapi/listener_helpers.go
           - go.{mod,sum}
-        env:
-          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
-        matrix:
-          setup:
-            version:
-              - 18-alpine
         plugins:
           - docker#v5.14.0:
-              !!merge <<: *build-image
-              command: ["task", "go:testsum:ci:events"]
+              !!merge <<: *go-image
+              command: ["go", "tool", "task", "go:testsum:ci:events"]
               volumes: *go-test-volumes
               environment: *go-test-env
         artifact_paths: ["coverage-events.out", "junit-events.xml"]
-      - label: ":golang: go test - handlers only %n/%t"
+      - label: ":golang: go test - handlers only"
         retry: *disk-full-retry
-        agents: *large-runner
+        !!merge <<: *medium-concurrency
+        agents: *medium-test-runner
         key: "go_test_handlers"
-        parallelism: 2
+        if: *if-not-module-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_MEDIUM:-2}
         cancel_on_build_failing: true
         if_changed:
           include:
@@ -456,45 +519,63 @@ steps:
             - go.{mod,sum}
           exclude: # do not run tests if only cli files changed
             - cli/**
-        env:
-          TEST_DB_URL: "docker://postgres:18-alpine"
         plugins:
           - docker#v5.14.0:
-              !!merge <<: *build-image
-              command: ["task", "go:testsum:ci:handlers"]
+              !!merge <<: *go-image
+              command: ["go", "tool", "task", "go:testsum:ci:handlers"]
               volumes: *go-test-volumes
               environment: *go-test-parallel-env
         artifact_paths: ["coverage-handlers-*.out", "junit-handlers-*.xml"]
       - label: ":golang: go test - all except api"
         retry: *disk-full-retry
+        !!merge <<: *medium-concurrency
         if_changed:
           include:
             - "**.go"
             - go.{mod,sum}
           exclude: # do not run tests if only cli files changed
             - cli/**
-        agents: *large-runner
+        agents: *medium-test-runner
         key: "go_test_no_api"
+        if: *if-not-module-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_MEDIUM:-2}
         cancel_on_build_failing: true
-        env:
-          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
-        matrix:
-          setup:
-            version:
-              - 18-alpine
         plugins:
           - docker#v5.14.0:
-              !!merge <<: *build-image
-              command: ["task", "go:testsum:ci:no-graph"]
+              !!merge <<: *go-image
+              command: ["go", "tool", "task", "go:testsum:ci:no-graph"]
               volumes: *go-test-volumes
               environment: *go-test-env
         artifact_paths: ["coverage-no-api.out", "junit-no-api.xml"]
+      - label: ":golang: lint + test common"
+        retry: *disk-full-retry
+        !!merge <<: *small-concurrency
+        if_changed:
+          - common/**
+          - go.{mod,sum}
+          - go.work
+          - .golangci.yaml
+          - .custom-gcl.yml
+        agents: *small-test-runner
+        key: "go_test_common"
+        if: *if-not-cli-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_MEDIUM:-2}
+        cancel_on_build_failing: true
+        plugins:
+          - docker#v5.14.0:
+              !!merge <<: *golangci-lint-image
+              command: ["go", "tool", "task", "go:lint:ci:common", "go:testsum:ci:common"]
+              volumes: *go-test-volumes
+              environment: *go-test-env
+        artifact_paths: ["coverage-common.out", "junit-common.xml"]
       - label: ":auth0: fga model test"
         retry: *disk-full-retry
         if_changed:
           - "fga/**"
-        agents: *small-runner
+        agents: *xsmall-runner
         key: "fga_test"
+        if: *if-not-module-tag
+        priority: ${OPENLANE_BUILDKITE_PRIORITY_LOW:-1}
         depends_on: "generate_fga"
         plugins:
           - sparse-checkout#v1.11.0:
@@ -511,7 +592,8 @@ steps:
       - label: ":buildkite: upload test analytics report"
         retry: *disk-full-retry
         key: "test-analytics"
-        agents: *small-runner
+        if: *if-not-module-tag
+        agents: *xsmall-runner
         skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
         if_changed:
@@ -558,6 +640,7 @@ steps:
       - label: ":github: upload PR reports"
         retry: *disk-full-retry
         key: "scan-upload-pr"
+        !!merge <<: *small-concurrency
         cancel_on_build_failing: true
         agents: *small-runner
         if_changed:
@@ -605,6 +688,7 @@ steps:
       - label: ":github: upload reports"
         retry: *disk-full-retry
         key: "scan-upload"
+        !!merge <<: *small-concurrency
         agents: *small-runner
         if_changed:
           include:
@@ -652,6 +736,8 @@ steps:
       - label: ":golang: build"
         retry: *disk-full-retry
         key: "gobuild-server"
+        !!merge <<: *medium-concurrency
+        depends_on: "generate"
         cancel_on_build_failing: true
         if: build.tag == null
         artifact_paths: "bin/${APP_NAME}"
@@ -663,7 +749,7 @@ steps:
             - docker/Dockerfile
           exclude:
             - cli/**
-        agents: *large-runner
+        agents: *medium-runner
         plugins:
           - docker#v5.14.0:
               !!merge <<: *build-image
@@ -674,7 +760,10 @@ steps:
       - label: ":terminal: build cli"
         retry: *disk-full-retry
         key: "gobuild-cli"
-        agents: *large-runner
+        !!merge <<: *small-concurrency
+        if: build.tag == null
+        depends_on: "generate"
+        agents: *small-runner
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         if_changed:
@@ -687,10 +776,11 @@ steps:
       - label: ":golang: build release"
         retry: *disk-full-retry
         key: "gobuild-server-release"
+        !!merge <<: *medium-concurrency
         if: *if-release-tag
         cancel_on_build_failing: true
         artifact_paths: "bin/${APP_NAME}"
-        agents: *large-runner
+        agents: *medium-runner
         plugins:
           - docker#v5.14.0:
               !!merge <<: *build-image
@@ -702,7 +792,8 @@ steps:
         retry: *disk-full-retry
         if: build.tag != null && build.tag =~ /cli\//
         key: "gobuild-cli-release"
-        agents: *large-runner
+        !!merge <<: *small-concurrency
+        agents: *small-runner
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         plugins:
@@ -713,8 +804,9 @@ steps:
       - label: ":graphql: lint graphql schema"
         retry: *disk-full-retry
         key: "apollo-lint-schema"
+        if: *if-not-module-tag
         if_changed: "**.graphql"
-        agents: *small-runner
+        agents: *xsmall-runner
         skip: "false"
         soft_fail:
           - exit_status: 1
@@ -763,7 +855,7 @@ steps:
       - label: ":docker: docker pr build"
         retry: *disk-full-retry
         key: "docker-pr-build"
-        agents: *large-runner
+        agents: *garage-runner
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         if_changed:
@@ -805,7 +897,8 @@ steps:
       - label: ":docker: docker build and publish"
         retry: *disk-full-retry
         key: "docker-build-and-tag"
-        agents: *large-runner
+        depends_on: "go_tests"
+        agents: *garage-runner
         cancel_on_build_failing: true
         if: *if-release-tag
         commands: |
@@ -838,7 +931,8 @@ steps:
       - label: ":graphql: publish graphql schema"
         retry: *disk-full-retry
         key: "apollo-publish-schema"
-        agents: *small-runner
+        depends_on: "go_tests"
+        agents: *xsmall-runner
         skip: false
         if: *if-release-tag
         cancel_on_build_failing: true
@@ -854,11 +948,12 @@ steps:
       - label: ":graphql: publish history graphql schema"
         retry: *disk-full-retry
         key: "apollo-publish-history-schema"
+        depends_on: "go_tests"
         skip: false
         if: *if-release-tag
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_HISTORY_SCHEMA_LOCATION $$GRAPHQL_HISTORY_SCHEMA_NAME"
-        agents: *small-runner
+        agents: *xsmall-runner
         plugins:
           - sparse-checkout#v1.11.0:
               paths:
@@ -875,13 +970,26 @@ steps:
         depends_on: "docker-build-and-tag"
         if: *if-release-tag
         async: true
-      - label: ":go: go-client schema update"
-        trigger: go-client
-        depends_on: "apollo-publish-schema"
-        if: *if-any-tag
-        soft_fail: true
-      - label: ":docusaurus: update docs for release"
-        trigger: openlane-docs
-        depends_on: "image_tag_automation"
-        if: *if-any-tag
-        soft_fail: true
+  # everything above must pass before the release is rolled out
+  - wait: ~
+    if: *if-release-tag
+  - label: ":rocket: update image tag for release"
+    retry: *disk-full-retry
+    key: "image_tag_automation"
+    if: *if-release-tag
+    agents: *xsmall-runner
+    plugins:
+      - docker#v5.14.0:
+          !!merge <<: *build-image
+          command: ["bash", ".buildkite/image-tag-automation.sh"]
+          volumes: *go-cache-volumes
+          environment: *automation-env
+  - label: ":go: go-client schema update"
+    trigger: go-client
+    if: *if-release-tag
+    soft_fail: true
+  - label: ":docusaurus: update docs for release"
+    trigger: openlane-docs
+    depends_on: "image_tag_automation"
+    if: *if-release-tag
+    soft_fail: true
