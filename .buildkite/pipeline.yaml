@@ -890,6 +890,8 @@ steps:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
               server: ghcr.io
+              # an isolated DOCKER_CONFIG hides the buildx plugin namespace installs
+              isolate-config: false
           # this needs to be before the container build because post-command hooks are reversed in order
           - equinixmetal-buildkite/trivy#v1.19.0:
               severity: CRITICAL,HIGH
@@ -928,6 +930,7 @@ steps:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
               server: ghcr.io
+              isolate-config: false
           - theopenlane/docker-metadata#v1.0.1:
               images:
                 - "${IMAGE_REPO}"
