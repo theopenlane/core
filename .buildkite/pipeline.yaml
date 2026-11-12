@@ -279,7 +279,7 @@ steps:
               command: ["go", "tool", "task", "go:lint:ci"]
               volumes: *go-lint-volumes
               environment: *go-env
-  - group: ":knife: validation" # validate genenrate was clean
+  - group: ":knife: Generate"
     key: "validate_generate"
     steps:
       - label: ":golang: go generate"
