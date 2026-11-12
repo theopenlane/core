@@ -4,35 +4,33 @@ set -euo pipefail
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/cleanup.sh"
 
-OPENLANE_BUILDKITE_JOB_PRIORITY=0
-build_type=other
-if [[ -n "${BUILDKITE_TAG:-}" ]]; then
-  OPENLANE_BUILDKITE_JOB_PRIORITY=100
-  build_type=tag
-elif [[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" ]]; then
-  renovate=false
-  [[ "${BUILDKITE_BRANCH:-}" =~ ^renovate/ ]] && renovate=true
-  fork=false
-  [[ "${BUILDKITE_BRANCH:-}" =~ : ]] && fork=true
-  if [[ "$renovate" == true || "$fork" == true ]]; then
-    OPENLANE_BUILDKITE_JOB_PRIORITY=-10
-  else
-    OPENLANE_BUILDKITE_JOB_PRIORITY=80
-    build_type=pr
-  fi
-elif [[ "${BUILDKITE_BRANCH:-}" == "main" ]]; then
-  OPENLANE_BUILDKITE_JOB_PRIORITY=50
-  build_type=main
-elif [[ "${BUILDKITE_BRANCH:-}" =~ ^renovate/ ]]; then
-  OPENLANE_BUILDKITE_JOB_PRIORITY=-10
-fi
+renovate_or_fork=false
+[[ "${BUILDKITE_BRANCH:-}" =~ ^renovate/ || "${BUILDKITE_BRANCH:-}" =~ : ]] && renovate_or_fork=true
 
 # a pipeline or build can force the build type, to test priority and limits without a real pr or tag
-case "${OPENLANE_BUILD_TYPE:-}" in
-  tag) build_type=tag OPENLANE_BUILDKITE_JOB_PRIORITY=100 ;;
-  pr) build_type=pr OPENLANE_BUILDKITE_JOB_PRIORITY=80 ;;
-  main) build_type=main OPENLANE_BUILDKITE_JOB_PRIORITY=50 ;;
-  other) build_type=other ;;
+build_type="${OPENLANE_BUILD_TYPE:-}"
+if [[ -z "$build_type" ]]; then
+  if [[ -n "${BUILDKITE_TAG:-}" ]]; then
+    build_type=tag
+  elif [[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" && "$renovate_or_fork" == false ]]; then
+    build_type=pr
+  elif [[ "${BUILDKITE_BRANCH:-}" == "main" ]]; then
+    build_type=main
+  else
+    build_type=other
+  fi
+fi
+
+case "$build_type" in
+  tag) OPENLANE_BUILDKITE_JOB_PRIORITY=100 ;;
+  pr) OPENLANE_BUILDKITE_JOB_PRIORITY=80 ;;
+  main) OPENLANE_BUILDKITE_JOB_PRIORITY=50 ;;
+  *)
+    OPENLANE_BUILDKITE_JOB_PRIORITY=0
+    if [[ "$renovate_or_fork" == true ]]; then
+      OPENLANE_BUILDKITE_JOB_PRIORITY=-10
+    fi
+    ;;
 esac
 
 export OPENLANE_BUILDKITE_JOB_PRIORITY
@@ -49,8 +47,8 @@ if [[ "${LARGE_RUNNER_QUEUE:-}" == "namespace" ]]; then
     *) limits=(1 1 1) ;;
   esac
 else
-  pool=garage
-  # garage agents already pick waiting jobs by priority, only cap the lowest type so it cannot hold every agent
+  pool=self-hosted
+  # self-hosted agents already pick waiting jobs by priority, only cap the lowest type so it cannot hold every agent
   case "$build_type" in
     other) limits=(2 2 2) ;;
   esac
