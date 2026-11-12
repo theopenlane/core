@@ -227,6 +227,9 @@ common:
   if-pull-request: &if-pull-request build.pull_request.id != null
   if-main: &if-main build.branch == "main"
   if-main-untagged: &if-main-untagged build.branch == "main" && build.tag == null
+  # generated changes are committed back to our own branches, never to main, tags or forks
+  if-can-commit-back: &if-can-commit-back build.branch != "main" && build.tag == null && build.pull_request.repository.fork != true
+  generated-patches: &generated-patches ["generated-patches/*.patch"]
 
 steps:
   - label: ":renovate: go work sync"
@@ -286,7 +289,7 @@ steps:
         if: *if-not-cli-tag
         priority: ${OPENLANE_BUILDKITE_PRIORITY_HIGH:-3}
         agents: *medium-runner
-        cancel_on_build_failing: true
+        artifact_paths: *generated-patches
         if_changed:
           - go.{mod,sum}
           - internal/ent/**
@@ -306,7 +309,7 @@ steps:
         if: *if-not-cli-tag
         priority: ${OPENLANE_BUILDKITE_PRIORITY_LOW:-1}
         agents: *small-runner
-        cancel_on_build_failing: true
+        artifact_paths: *generated-patches
         if_changed:
           - go.{mod,sum}
           - pkg/catalog/**
@@ -325,7 +328,7 @@ steps:
         if: *if-not-module-tag
         priority: ${OPENLANE_BUILDKITE_PRIORITY_LOW:-1}
         agents: *small-runner
-        cancel_on_build_failing: true
+        artifact_paths: *generated-patches
         if_changed:
           - fga/**
           - internal/ent/schema/**
@@ -343,7 +346,7 @@ steps:
         if: *if-not-cli-tag
         priority: ${OPENLANE_BUILDKITE_PRIORITY_HIGH:-3}
         agents: *medium-runner
-        cancel_on_build_failing: true
+        artifact_paths: *generated-patches
         if_changed:
           - go.{mod,sum}
           - internal/**
@@ -357,6 +360,20 @@ steps:
               command: ["task", "config:ci"]
               volumes: *go-cache-volumes
               environment: *go-env
+      - label: ":robot_face: commit generated changes"
+        retry: *disk-full-retry
+        key: "commit_generated"
+        agents: *xsmall-runner
+        if: *if-can-commit-back
+        depends_on: ["generate", "generate_other", "generate_fga", "generate_config"]
+        plugins:
+          - docker#v5.14.0:
+              !!merge <<: *build-image
+              command: ["bash", ".buildkite/commit-generated.sh"]
+              mount-buildkite-agent: true
+              environment:
+                - "GITHUB_TOKEN"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":construction: create draft config PR"
         retry: *disk-full-retry
         key: "draft_pr_automation"

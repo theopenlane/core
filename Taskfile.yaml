@@ -124,6 +124,18 @@ tasks:
         if [ -n "$status" ]; then
         echo "detected git diff after running generate; please re-run tasks"
         echo "$status"
+        if [ -n "${BUILDKITE_STEP_KEY:-}" ]; then
+        mkdir -p generated-patches
+        git add -A
+        git diff --cached --binary > "generated-patches/${BUILDKITE_STEP_KEY}.patch"
+        pr_repo=$(echo "${BUILDKITE_PULL_REQUEST_REPO:-}" | sed -E 's#^.*github.com[:/]##; s#\.git$##')
+        repo=$(echo "${BUILDKITE_REPO:-}" | sed -E 's#^.*github.com[:/]##; s#\.git$##')
+        # commit_generated commits the patch on our own branches, forks main and tags still fail
+        if [ "${BUILDKITE_BRANCH:-}" != "main" ] && [ -z "${BUILDKITE_TAG:-}" ] && { [ -z "$pr_repo" ] || [ "$pr_repo" = "$repo" ]; }; then
+        echo "saved patch for commit_generated"
+        exit 0
+        fi
+        fi
         exit 1
         fi
 
