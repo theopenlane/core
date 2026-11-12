@@ -93,7 +93,7 @@ func setPortalURLs(ctx context.Context, orgSub *generated.OrgSubscription, q *ge
 		SubjectID:   caller.SubjectID,
 		SubjectType: caller.SubjectType(),
 		ObjectID:    orgSub.OwnerID,
-		Relation:    fgax.CanEdit,
+		Relation:    "can_edit_org_subscription",
 	})
 	if err != nil {
 		return err
