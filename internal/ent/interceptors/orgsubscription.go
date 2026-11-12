@@ -6,10 +6,13 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/logx"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
-	"github.com/theopenlane/logx"
 )
 
 // InterceptorBillingPortalURLs is an ent interceptor to fetch data from an external source (in this case stripe) and populate the URLs in the graph return response
@@ -79,6 +82,25 @@ func setPortalURLs(ctx context.Context, orgSub *generated.OrgSubscription, q *ge
 	if client == nil {
 		logx.FromContext(ctx).Error().Msg("ent client not found in context")
 		return nil
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok {
+		return auth.ErrNoAuthUser
+	}
+
+	hasAccess, err := client.Authz.CheckOrgAccess(ctx, fgax.AccessCheck{
+		SubjectID:   caller.SubjectID,
+		SubjectType: caller.SubjectType(),
+		ObjectID:    orgSub.OwnerID,
+		Relation:    fgax.CanEdit,
+	})
+	if err != nil {
+		return err
+	}
+
+	if !hasAccess {
+		return generated.ErrPermissionDenied
 	}
 
 	org, err := client.Organization.Get(ctx, orgSub.OwnerID)
