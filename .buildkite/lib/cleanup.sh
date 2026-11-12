@@ -106,10 +106,12 @@ free_disk_to_threshold() {
     prune_docker_unused
 
     # go only reads module zips when extracting, the extracted module trees stay since running builds read them
+    # still being over the threshold is not an error here, the caller decides whether to continue or retry
     prune_docker_until_below ||
         prune_cache_until_below "🔍 Golangci-lint" "$GOLANGCI_LINT_CACHE_DIR" ||
         prune_cache_until_below "📦 Go module download" "$GO_MOD_CACHE/cache/download" "*.zip" ||
-        prune_cache_until_below "🔍 Go build" "$GO_BUILD_CACHE"
+        prune_cache_until_below "🔍 Go build" "$GO_BUILD_CACHE" ||
+        true
 
     if [[ "$locked" == true ]]; then
         flock -u 9
