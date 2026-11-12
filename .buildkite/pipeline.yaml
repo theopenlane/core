@@ -33,7 +33,6 @@ env:
   # runner vars
   LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-self-hosted-garage-vms}
   SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-self-hosted-garage-vms}
-  GARAGE_RUNNER_QUEUE: ${GARAGE_RUNNER_QUEUE:-self-hosted-garage-vms}
   RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
   RUNNER_WORKLOAD_STANDARD: "standard"
   LARGE_RUNNER_SHAPE: ${LARGE_RUNNER_SHAPE:-}
@@ -147,10 +146,6 @@ common:
   small-concurrency: &small-concurrency
     concurrency_group: $SMALL_CONCURRENCY_GROUP
     concurrency: $SMALL_CONCURRENCY
-  # docker image builds stay on garage, they rely on agent v4 post-command hook order
-  garage-runner: &garage-runner
-    queue: $GARAGE_RUNNER_QUEUE
-    workload: $RUNNER_WORKLOAD_STANDARD
 
   # docker plugin options for the build image, merged into a step with <<: *build-image
   build-image: &build-image
@@ -855,7 +850,8 @@ steps:
       - label: ":docker: docker pr build"
         retry: *disk-full-retry
         key: "docker-pr-build"
-        agents: *garage-runner
+        !!merge <<: *medium-concurrency
+        agents: *medium-runner
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         if_changed:
@@ -898,7 +894,8 @@ steps:
         retry: *disk-full-retry
         key: "docker-build-and-tag"
         depends_on: "go_tests"
-        agents: *garage-runner
+        !!merge <<: *medium-concurrency
+        agents: *medium-runner
         cancel_on_build_failing: true
         if: *if-release-tag
         commands: |
