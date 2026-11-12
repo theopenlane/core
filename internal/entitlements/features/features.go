@@ -28,7 +28,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Event":                       {models.CatalogBaseModule},
 	"Evidence":                    {models.CatalogComplianceModule, models.CatalogPolicyManagementAddon},
 	"Export":                      {models.CatalogAnyModule},
-	"File":                        {models.CatalogAnyModule},
+	"File":                        {models.CatalogBaseModule},
 	"Finding":                     {models.CatalogVulnerabilityManagementModule, models.CatalogComplianceModule},
 	"FindingControl":              {models.CatalogVulnerabilityManagementModule, models.CatalogComplianceModule},
 	"Group":                       {models.CatalogBaseModule},
