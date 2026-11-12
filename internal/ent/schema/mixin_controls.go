@@ -191,13 +191,13 @@ func (ControlMixin) Hooks() []ent.Hook {
 			hooks.HookRelationTuples(map[string]string{
 				"control_owner": "group",
 			}, "owner"),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 		hook.On(
 			hooks.HookRelationTuples(map[string]string{
 				"delegate": "group",
 			}, "delegate"),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 		hooks.HookSlateJSON(),
 	}

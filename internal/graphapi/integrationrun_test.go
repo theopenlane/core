@@ -22,17 +22,13 @@ func TestQueryAllIntegrationRuns(t *testing.T) {
 
 	systemCtx := generated.NewContext(auth.NewTestContextWithOrgID(th.SharedTestUser1.ID, "", auth.WithCapabilities(auth.CapSystemAdmin|auth.CapBypassOrgFilter|auth.CapInternalOperation|auth.CapSystemSweep)), suite.Client.DB)
 
-	ownerlessRun, err := suite.Client.DB.IntegrationRun.Create().
+	_, err := suite.Client.DB.IntegrationRun.Create().
 		SetIntegrationID(integration.ID).
 		SetOperationName("DirectorySync").
 		Save(systemCtx)
-	assert.NilError(t, err)
-	assert.Assert(t, is.Len(ownerlessRun.OwnerID, 0))
+	assert.Assert(t, err != nil)
 
 	t.Cleanup(func() {
-		err := suite.Client.DB.IntegrationRun.DeleteOneID(ownerlessRun.ID).Exec(systemCtx)
-		assert.NilError(t, err)
-
 		(&th.Cleanup[*generated.IntegrationRunDeleteOne]{Client: suite.Client.DB.IntegrationRun, IDs: []string{run1.ID, run2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		(&th.Cleanup[*generated.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: integration.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
@@ -87,7 +83,7 @@ func TestQueryAllIntegrationRuns(t *testing.T) {
 			assert.Check(t, is.Equal(int64(tc.expectedResults), resp.IntegrationRuns.TotalCount))
 
 			for _, edge := range resp.IntegrationRuns.Edges {
-				assert.Check(t, edge.Node.ID != ownerlessRun.ID)
+				assert.Check(t, is.Equal(integration.OwnerID, *edge.Node.OwnerID))
 			}
 		})
 	}

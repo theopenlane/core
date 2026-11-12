@@ -416,7 +416,7 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 	return hook.On(
 		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation),
-		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		ent.OpCreate|ent.OpUpdateOne,
 	)
 }
 
@@ -430,7 +430,7 @@ var serviceOnlyTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 	return hook.On(
 		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation),
-		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		ent.OpCreate|ent.OpUpdateOne,
 	)
 }
 

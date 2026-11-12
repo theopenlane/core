@@ -2146,7 +2146,7 @@ func (te *TrustCenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *
 	return trustCenterEntity
 }
 
-// IntegrationBuilder is used to create integrations
+// IntegrationRunBuilder is used to create integration run entires
 type IntegrationRunBuilder struct {
 	Client *Client
 
@@ -2172,6 +2172,7 @@ func (irb *IntegrationRunBuilder) MustNew(ctx context.Context, t *testing.T) *en
 	return run
 }
 
+// IntegrationBuilder is used to create integrations
 type IntegrationBuilder struct {
 	Client *Client
 

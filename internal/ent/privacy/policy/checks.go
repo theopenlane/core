@@ -203,6 +203,13 @@ func CheckOrgEditAccess() privacy.QueryRule {
 	})
 }
 
+// CheckOrgRelationAccess checks if the requestor has the given relation on the current organization
+func CheckOrgRelationAccess(relation string) privacy.QueryMutationRule {
+	return privacy.ContextQueryMutationRule(func(ctx context.Context) error {
+		return rule.CheckCurrentOrgAccess(ctx, nil, relation)
+	})
+}
+
 // CheckOrgWriteAccess checks if the requestor has access to edit the organization
 func CheckOrgWriteAccess() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
@@ -213,10 +220,7 @@ func CheckOrgWriteAccess() privacy.MutationRule {
 
 // CheckOrgAuditorAccess checks if the requestor has auditor access the organization
 func CheckOrgAuditorAccess() privacy.QueryRule {
-	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
-		logx.FromContext(ctx).Debug().Msg("checking org auditor access")
-		return rule.CheckCurrentOrgAccess(ctx, nil, fgax.AuditorRelation)
-	})
+	return CheckOrgRelationAccess(fgax.AuditorRelation)
 }
 
 // CheckOrgAccess checks if the requestor has access to read the organization

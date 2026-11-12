@@ -108,7 +108,7 @@ func (c GroupBasedCreateAccessMixin) Hooks() []ent.Hook {
 			hooks.HookRelationTuples(map[string]string{
 				idField: "group",
 			}, relation),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		)
 
 		h = append(h, hook)
@@ -121,7 +121,7 @@ func (c GroupBasedCreateAccessMixin) Hooks() []ent.Hook {
 			hooks.HookRelationTuples(map[string]string{
 				idField: "group",
 			}, fgax.Relation(relation)),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		)
 
 		h = append(h, hook)

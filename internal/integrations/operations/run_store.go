@@ -57,7 +57,7 @@ func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Int
 		SetRunType(runType).
 		SetStatus(enums.IntegrationRunStatusPending).
 		SetOperationConfig(configMap).
-		Save(auth.WithInternalOperationContext(ctx))
+		Save(ctx)
 }
 
 // metricRetryOf is the metrics key recording the run a re-executed attempt continues from
@@ -75,7 +75,7 @@ func RetryRun(ctx context.Context, db *ent.Client, run *ent.IntegrationRun) (*en
 		SetStatus(enums.IntegrationRunStatusPending).
 		SetOperationConfig(run.OperationConfig).
 		SetMetrics(map[string]any{metricRetryOf: run.ID}).
-		Save(auth.WithInternalOperationContext(ctx))
+		Save(ctx)
 }
 
 // MarkRunRunning transitions one run to running

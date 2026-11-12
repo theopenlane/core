@@ -328,7 +328,7 @@ var groupReadOnlyHooks = []ent.Hook{
 		hooks.HookRelationTuples(map[string]string{
 			"viewer_id": "group",
 		}, fgax.ViewerRelation), // add viewer tuples for associated groups
-		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		ent.OpCreate|ent.OpUpdateOne,
 	),
 }
 
@@ -339,13 +339,13 @@ var groupWriteOnlyHooks = []ent.Hook{
 		hooks.HookRelationTuples(map[string]string{
 			"editor_id": "group",
 		}, fgax.EditorRelation), // add editor tuples for associated groups
-		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		ent.OpCreate|ent.OpUpdateOne,
 	),
 	hook.On(
 		hooks.HookRelationTuples(map[string]string{
 			"blocked_group_id": "group",
 		}, fgax.BlockedRelation), // add block tuples for associated groups
-		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		ent.OpCreate|ent.OpUpdateOne,
 	),
 }
 
@@ -400,7 +400,7 @@ func (g GroupPermissionsEdgesMixin) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
 			hooks.HookGroupPermissionsTuples(),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 	}
 }
