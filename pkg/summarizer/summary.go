@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/yuin/goldmark/v2"
 	"github.com/yuin/goldmark/v2/extension"
 	goldmarkparser "github.com/yuin/goldmark/v2/parser"
 	goldmarkhtml "github.com/yuin/goldmark/v2/renderer/html"
@@ -73,18 +72,17 @@ func (s *Client) Summarize(ctx context.Context, sentence string) (string, error)
 }
 
 func mdToHTML(md []byte) []byte {
-	gm := goldmark.New(
-		goldmark.WithExtensions(extension.Table),
-		goldmark.WithParserOptions(
-			goldmarkparser.WithAutoHeadingID(),
-		),
-		goldmark.WithRendererOptions(
-			goldmarkhtml.WithUnsafe(),
-		),
+	p := goldmarkparser.New(
+		goldmarkparser.WithExtensions(extension.NewTableParser()),
+		goldmarkparser.WithAutoHeadingID(),
+	)
+	r := goldmarkhtml.New(
+		goldmarkhtml.WithExtensions(extension.NewTableHTMLRenderer()),
+		goldmarkhtml.WithUnsafe(),
 	)
 
 	var buf bytes.Buffer
-	if err := gm.Convert(md, &buf); err != nil {
+	if err := r.Render(&buf, md, p.Parse(md)); err != nil {
 		return md
 	}
 

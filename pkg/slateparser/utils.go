@@ -9,8 +9,9 @@ import (
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/samber/lo"
-	"github.com/yuin/goldmark/v2"
 	"github.com/yuin/goldmark/v2/extension"
+	goldmarkparser "github.com/yuin/goldmark/v2/parser"
+	goldmarkhtml "github.com/yuin/goldmark/v2/renderer/html"
 )
 
 // ContainsCommentsInTextJSON checks if the provided slate JSON elements contain any comments
@@ -265,9 +266,12 @@ func DoesMarkdownMatchSlate(markdown string, newText []any) bool {
 		return false
 	}
 
+	source := []byte(markdown)
+	p := goldmarkparser.New(goldmarkparser.WithExtensions(extension.NewTableParser()))
+	r := goldmarkhtml.New(goldmarkhtml.WithExtensions(extension.NewTableHTMLRenderer()))
+
 	var rendered bytes.Buffer
-	converter := goldmark.New(goldmark.WithExtensions(extension.Table))
-	if err := converter.Convert([]byte(markdown), &rendered); err != nil {
+	if err := r.Render(&rendered, source, p.Parse(source)); err != nil {
 		return false
 	}
 

@@ -8,7 +8,6 @@ import (
 	"sync"
 
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/yuin/goldmark/v2"
 	"github.com/yuin/goldmark/v2/extension"
 	goldmarkparser "github.com/yuin/goldmark/v2/parser"
 	goldmarkhtml "github.com/yuin/goldmark/v2/renderer/html"
@@ -22,10 +21,15 @@ const (
 	maxSnippetLength = 100
 )
 
-var snippetMarkdown = goldmark.New(
-	goldmark.WithExtensions(extension.Table),
-	goldmark.WithParserOptions(goldmarkparser.WithAutoHeadingID()),
-	goldmark.WithRendererOptions(goldmarkhtml.WithUnsafe()),
+var (
+	snippetParser = goldmarkparser.New(
+		goldmarkparser.WithExtensions(extension.NewTableParser()),
+		goldmarkparser.WithAutoHeadingID(),
+	)
+	snippetRenderer = goldmarkhtml.New(
+		goldmarkhtml.WithExtensions(extension.NewTableHTMLRenderer()),
+		goldmarkhtml.WithUnsafe(),
+	)
 )
 
 var searchSanitizer = bluemonday.StrictPolicy()
@@ -139,8 +143,10 @@ func sanitizeContent(text string) string {
 		return ""
 	}
 
+	source := []byte(text)
+
 	var b bytes.Buffer
-	if err := snippetMarkdown.Convert([]byte(text), &b); err != nil {
+	if err := snippetRenderer.Render(&b, source, snippetParser.Parse(source)); err != nil {
 		return text
 	}
 
