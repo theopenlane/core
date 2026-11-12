@@ -816,8 +816,8 @@ github.com/tailscale/hujson v0.0.0-20220506213045-af5ed07155e5 h1:erxeiTyq+nw4Cz
 github.com/tailscale/hujson v0.0.0-20220506213045-af5ed07155e5/go.mod h1:DFSS3NAGHthKo1gTlmEcSBiZrRJXi28rLNd/1udP1c8=
 github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7 h1:mNv0N8L5geeR9d4FKecN1WoebLmWx52i30GRh4qKabQ=
 github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7/go.mod h1:i/MSgQ71kdyh1Wdp50XxrIgtsyO4uZ2SZSPd83lGKHM=
-github.com/testcontainers/testcontainers-go v0.44.0 h1:/Fwh6HY1mIikhnm9e7HwoxGycx0lzRAE0f5VQpjFxzI=
-github.com/testcontainers/testcontainers-go v0.44.0/go.mod h1:IcnwQrYTO86xHXu5bvMaBH7ATlbS3Qn1M1QWW3c66rE=
+github.com/testcontainers/testcontainers-go v0.45.0 h1:ss9Stm9KDX6JLgGL4jr2fC5dwpabTbCBsRcGadBPR9k=
+github.com/testcontainers/testcontainers-go v0.45.0/go.mod h1:VMJZ7M+qhgfEHWNbtjm596OyEOraULSTDaus/h0hmJI=
 github.com/testcontainers/testcontainers-go/modules/openfga v0.44.0 h1:ql9bhSEO9muf6BAy7AD2SJm8AHw+VvVe40PCqMsbVXM=
 github.com/testcontainers/testcontainers-go/modules/openfga v0.44.0/go.mod h1:mYazHZ/v9091lsGp2eDj6al/cvQ5LPYQHFn127CReQA=
 github.com/theopenlane/core/common v1.2.2 h1:pRqkFSx0fvQ/T1BLwDlZqWeUy3tO9/2X/t8FUi5qxTA=
