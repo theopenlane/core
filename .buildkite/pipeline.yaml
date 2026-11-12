@@ -880,6 +880,8 @@ steps:
         commands: |
           #!/bin/bash
           chmod +x ${APP_NAME}
+          # build with the local daemon so the image is there for trivy and push
+          docker buildx use default
         plugins:
           - artifacts#v1.11.0:
               download:
@@ -898,7 +900,7 @@ steps:
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev,internal/graphapi/generated/*,internal/ent/generated/*,internal/ent/historygenerated/*"
-              trivy-version: "0.74.0"
+              trivy-version: "0.76.2"
           - theopenlane/docker-metadata#v1.0.1:
               images:
                 - "${IMAGE_REPO}"
@@ -920,6 +922,8 @@ steps:
         commands: |
           #!/bin/bash
           chmod +x ${APP_NAME}
+          # build with the local daemon so the image is there for trivy and push
+          docker buildx use default
         plugins:
           - artifacts#v1.11.0:
               download:
