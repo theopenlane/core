@@ -35,7 +35,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/configservice v1.74.9
 	github.com/aws/aws-sdk-go-v2/service/iam v1.64.7
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.7
-	github.com/aws/aws-sdk-go-v2/service/securityhub v1.85.4
+	github.com/aws/aws-sdk-go-v2/service/securityhub v1.86.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.7
 	github.com/brianvoe/gofakeit/v7 v7.18.2
 	github.com/cenkalti/backoff/v7 v7.0.3
