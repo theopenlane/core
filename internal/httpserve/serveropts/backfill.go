@@ -75,6 +75,12 @@ var backfillRoutines = []backfillRoutine{
 			return backfillRiskEntities(ctx, deps.Client)
 		},
 	},
+	{
+		Name:    "normalize-slugs",
+		Version: "v1",
+		Enabled: true,
+		Run:     backfillSlugs,
+	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run

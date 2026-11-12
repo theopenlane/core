@@ -35,6 +35,27 @@ func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*ge
 	}, nil
 }
 
+// bulkCreateCSVActionPlan creates ActionPlan entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVActionPlan(ctx context.Context, rows []*csvgenerated.ActionPlanCSVInput) (*model.ActionPlanBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateActionPlanInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateActionPlan(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.ActionPlans {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "actionplan"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateActionPlan updates multiple ActionPlan entities
 func (r *mutationResolver) bulkUpdateActionPlan(ctx context.Context, ids []string, input generated.UpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -137,6 +158,11 @@ func (r *mutationResolver) bulkUpdateCSVActionPlan(ctx context.Context, inputs [
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendTagSuggestions(input.Input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.Input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.Input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.Input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.Input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.Input.AppendDismissedImprovementSuggestions).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", input.ID).Msg("failed to update actionplan in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "actionplan"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", input.ID).Msg("failed to create CSV child records for actionplan")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "actionplan"})
 		}
 
@@ -498,6 +524,27 @@ func (r *mutationResolver) bulkCreateAssessmentPolicy(ctx context.Context, input
 	}, nil
 }
 
+// bulkCreateCSVAssessmentPolicy creates AssessmentPolicy entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVAssessmentPolicy(ctx context.Context, rows []*csvgenerated.AssessmentPolicyCSVInput) (*model.AssessmentPolicyBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateAssessmentPolicyInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateAssessmentPolicy(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.AssessmentPolicies {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "assessmentpolicy"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateAssessmentPolicy updates multiple AssessmentPolicy entities
 func (r *mutationResolver) bulkUpdateAssessmentPolicy(ctx context.Context, ids []string, input generated.UpdateAssessmentPolicyInput) (*model.AssessmentPolicyBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -600,6 +647,11 @@ func (r *mutationResolver) bulkUpdateCSVAssessmentPolicy(ctx context.Context, in
 		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("assessmentpolicy_id", input.ID).Msg("failed to update assessmentpolicy in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "assessmentpolicy"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("assessmentpolicy_id", input.ID).Msg("failed to create CSV child records for assessmentpolicy")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "assessmentpolicy"})
 		}
 
@@ -715,6 +767,27 @@ func (r *mutationResolver) bulkCreateAsset(ctx context.Context, input []*generat
 	return &model.AssetBulkCreatePayload{
 		Assets: res,
 	}, nil
+}
+
+// bulkCreateCSVAsset creates Asset entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVAsset(ctx context.Context, rows []*csvgenerated.AssetCSVInput) (*model.AssetBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateAssetInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateAsset(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Assets {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "asset"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteAsset deletes multiple Asset entities by their IDs
@@ -907,6 +980,11 @@ func (r *mutationResolver) bulkUpdateCSVAsset(ctx context.Context, inputs []*csv
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "asset"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("asset_id", input.ID).Msg("failed to create CSV child records for asset")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "asset"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -936,6 +1014,27 @@ func (r *mutationResolver) bulkCreateCampaign(ctx context.Context, input []*gene
 	}, nil
 }
 
+// bulkCreateCSVCampaign creates Campaign entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVCampaign(ctx context.Context, rows []*csvgenerated.CampaignCSVInput) (*model.CampaignBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateCampaignInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateCampaign(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Campaigns {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "campaign"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkCreateCampaignTarget uses the CreateBulk function to create multiple CampaignTarget entities
 func (r *mutationResolver) bulkCreateCampaignTarget(ctx context.Context, input []*generated.CreateCampaignTargetInput) (*model.CampaignTargetBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -955,6 +1054,27 @@ func (r *mutationResolver) bulkCreateCampaignTarget(ctx context.Context, input [
 	}, nil
 }
 
+// bulkCreateCSVCampaignTarget creates CampaignTarget entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVCampaignTarget(ctx context.Context, rows []*csvgenerated.CampaignTargetCSVInput) (*model.CampaignTargetBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateCampaignTargetInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateCampaignTarget(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.CampaignTargets {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "campaigntarget"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkCreateCheckResult uses the CreateBulk function to create multiple CheckResult entities
 func (r *mutationResolver) bulkCreateCheckResult(ctx context.Context, input []*generated.CreateCheckResultInput) (*model.CheckResultBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -972,6 +1092,27 @@ func (r *mutationResolver) bulkCreateCheckResult(ctx context.Context, input []*g
 	return &model.CheckResultBulkCreatePayload{
 		CheckResults: res,
 	}, nil
+}
+
+// bulkCreateCSVCheckResult creates CheckResult entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVCheckResult(ctx context.Context, rows []*csvgenerated.CheckResultCSVInput) (*model.CheckResultBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateCheckResultInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateCheckResult(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.CheckResults {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "checkresult"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateCheckResult updates multiple CheckResult entities
@@ -1076,6 +1217,11 @@ func (r *mutationResolver) bulkUpdateCSVCheckResult(ctx context.Context, inputs 
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("checkresult_id", input.ID).Msg("failed to update checkresult in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "checkresult"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("checkresult_id", input.ID).Msg("failed to create CSV child records for checkresult")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "checkresult"})
 		}
 
@@ -1193,6 +1339,27 @@ func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*gener
 	}, nil
 }
 
+// bulkCreateCSVContact creates Contact entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVContact(ctx context.Context, rows []*csvgenerated.ContactCSVInput) (*model.ContactBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateContactInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateContact(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Contacts {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "contact"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateContact updates multiple Contact entities
 func (r *mutationResolver) bulkUpdateContact(ctx context.Context, ids []string, input generated.UpdateContactInput) (*model.ContactBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -1295,6 +1462,11 @@ func (r *mutationResolver) bulkUpdateCSVContact(ctx context.Context, inputs []*c
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("contact_id", input.ID).Msg("failed to update contact in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "contact"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("contact_id", input.ID).Msg("failed to create CSV child records for contact")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "contact"})
 		}
 
@@ -1412,6 +1584,27 @@ func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*gener
 	}, nil
 }
 
+// bulkCreateCSVControl creates Control entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVControl(ctx context.Context, rows []*csvgenerated.ControlCSVInput) (*model.ControlBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateControlInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateControl(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Controls {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateControl updates multiple Control entities
 func (r *mutationResolver) bulkUpdateControl(ctx context.Context, ids []string, input generated.UpdateControlInput) (*model.ControlBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -1514,6 +1707,11 @@ func (r *mutationResolver) bulkUpdateCSVControl(ctx context.Context, inputs []*c
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDescriptionJSON(input.Input.AppendDescriptionJSON).AppendAliases(input.Input.AppendAliases).AppendMappedCategories(input.Input.AppendMappedCategories).AppendAssessmentObjectives(input.Input.AppendAssessmentObjectives).AppendAssessmentMethods(input.Input.AppendAssessmentMethods).AppendControlQuestions(input.Input.AppendControlQuestions).AppendImplementationGuidance(input.Input.AppendImplementationGuidance).AppendExampleEvidence(input.Input.AppendExampleEvidence).AppendReferences(input.Input.AppendReferences).AppendTestingProcedures(input.Input.AppendTestingProcedures).AppendEvidenceRequests(input.Input.AppendEvidenceRequests).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("control_id", input.ID).Msg("failed to update control in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "control"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("control_id", input.ID).Msg("failed to create CSV child records for control")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "control"})
 		}
 
@@ -1629,6 +1827,27 @@ func (r *mutationResolver) bulkCreateControlImplementation(ctx context.Context, 
 	return &model.ControlImplementationBulkCreatePayload{
 		ControlImplementations: res,
 	}, nil
+}
+
+// bulkCreateCSVControlImplementation creates ControlImplementation entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVControlImplementation(ctx context.Context, rows []*csvgenerated.ControlImplementationCSVInput) (*model.ControlImplementationBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateControlImplementationInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateControlImplementation(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.ControlImplementations {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "controlimplementation"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteControlImplementation deletes multiple ControlImplementation entities by their IDs
@@ -1821,6 +2040,11 @@ func (r *mutationResolver) bulkUpdateCSVControlImplementation(ctx context.Contex
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlimplementation"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("controlimplementation_id", input.ID).Msg("failed to create CSV child records for controlimplementation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlimplementation"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -1848,6 +2072,27 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 	return &model.ControlObjectiveBulkCreatePayload{
 		ControlObjectives: res,
 	}, nil
+}
+
+// bulkCreateCSVControlObjective creates ControlObjective entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVControlObjective(ctx context.Context, rows []*csvgenerated.ControlObjectiveCSVInput) (*model.ControlObjectiveBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateControlObjectiveInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateControlObjective(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.ControlObjectives {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "controlobjective"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteControlObjective deletes multiple ControlObjective entities by their IDs
@@ -2040,6 +2285,11 @@ func (r *mutationResolver) bulkUpdateCSVControlObjective(ctx context.Context, in
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlobjective"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("controlobjective_id", input.ID).Msg("failed to create CSV child records for controlobjective")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlobjective"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -2067,6 +2317,27 @@ func (r *mutationResolver) bulkCreateCustomDomain(ctx context.Context, input []*
 	return &model.CustomDomainBulkCreatePayload{
 		CustomDomains: res,
 	}, nil
+}
+
+// bulkCreateCSVCustomDomain creates CustomDomain entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVCustomDomain(ctx context.Context, rows []*csvgenerated.CustomDomainCSVInput) (*model.CustomDomainBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateCustomDomainInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateCustomDomain(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.CustomDomains {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "customdomain"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteCustomDomain deletes multiple CustomDomain entities by their IDs
@@ -2259,6 +2530,11 @@ func (r *mutationResolver) bulkUpdateCSVCustomDomain(ctx context.Context, inputs
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "customdomain"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("customdomain_id", input.ID).Msg("failed to create CSV child records for customdomain")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "customdomain"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -2288,6 +2564,27 @@ func (r *mutationResolver) bulkCreateCustomTypeEnum(ctx context.Context, input [
 	}, nil
 }
 
+// bulkCreateCSVCustomTypeEnum creates CustomTypeEnum entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVCustomTypeEnum(ctx context.Context, rows []*csvgenerated.CustomTypeEnumCSVInput) (*model.CustomTypeEnumBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateCustomTypeEnumInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateCustomTypeEnum(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.CustomTypeEnums {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "customtypeenum"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkCreateDirectoryAccount uses the CreateBulk function to create multiple DirectoryAccount entities
 func (r *mutationResolver) bulkCreateDirectoryAccount(ctx context.Context, input []*generated.CreateDirectoryAccountInput) (*model.DirectoryAccountBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -2305,6 +2602,27 @@ func (r *mutationResolver) bulkCreateDirectoryAccount(ctx context.Context, input
 	return &model.DirectoryAccountBulkCreatePayload{
 		DirectoryAccounts: res,
 	}, nil
+}
+
+// bulkCreateCSVDirectoryAccount creates DirectoryAccount entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVDirectoryAccount(ctx context.Context, rows []*csvgenerated.DirectoryAccountCSVInput) (*model.DirectoryAccountBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateDirectoryAccountInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateDirectoryAccount(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.DirectoryAccounts {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directoryaccount"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkCreateDirectoryGroup uses the CreateBulk function to create multiple DirectoryGroup entities
@@ -2326,6 +2644,27 @@ func (r *mutationResolver) bulkCreateDirectoryGroup(ctx context.Context, input [
 	}, nil
 }
 
+// bulkCreateCSVDirectoryGroup creates DirectoryGroup entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVDirectoryGroup(ctx context.Context, rows []*csvgenerated.DirectoryGroupCSVInput) (*model.DirectoryGroupBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateDirectoryGroupInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateDirectoryGroup(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.DirectoryGroups {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorygroup"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkCreateDirectoryMembership uses the CreateBulk function to create multiple DirectoryMembership entities
 func (r *mutationResolver) bulkCreateDirectoryMembership(ctx context.Context, input []*generated.CreateDirectoryMembershipInput) (*model.DirectoryMembershipBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -2343,6 +2682,27 @@ func (r *mutationResolver) bulkCreateDirectoryMembership(ctx context.Context, in
 	return &model.DirectoryMembershipBulkCreatePayload{
 		DirectoryMemberships: res,
 	}, nil
+}
+
+// bulkCreateCSVDirectoryMembership creates DirectoryMembership entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVDirectoryMembership(ctx context.Context, rows []*csvgenerated.DirectoryMembershipCSVInput) (*model.DirectoryMembershipBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateDirectoryMembershipInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateDirectoryMembership(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.DirectoryMemberships {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorymembership"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkCreateDiscussion uses the CreateBulk function to create multiple Discussion entities
@@ -2364,6 +2724,27 @@ func (r *mutationResolver) bulkCreateDiscussion(ctx context.Context, input []*ge
 	}, nil
 }
 
+// bulkCreateCSVDiscussion creates Discussion entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVDiscussion(ctx context.Context, rows []*csvgenerated.DiscussionCSVInput) (*model.DiscussionBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateDiscussionInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateDiscussion(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Discussions {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkCreateDocumentData uses the CreateBulk function to create multiple DocumentData entities
 func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -2381,6 +2762,27 @@ func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*
 	return &model.DocumentDataBulkCreatePayload{
 		DocumentData: res,
 	}, nil
+}
+
+// bulkCreateCSVDocumentData creates DocumentData entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVDocumentData(ctx context.Context, rows []*csvgenerated.DocumentDataCSVInput) (*model.DocumentDataBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateDocumentDataInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateDocumentData(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.DocumentData {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "documentdata"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteDocumentData deletes multiple DocumentData entities by their IDs
@@ -2573,6 +2975,11 @@ func (r *mutationResolver) bulkUpdateCSVDocumentData(ctx context.Context, inputs
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "documentdata"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("documentdata_id", input.ID).Msg("failed to create CSV child records for documentdata")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "documentdata"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -2600,6 +3007,27 @@ func (r *mutationResolver) bulkCreateEmailTemplate(ctx context.Context, input []
 	return &model.EmailTemplateBulkCreatePayload{
 		EmailTemplates: res,
 	}, nil
+}
+
+// bulkCreateCSVEmailTemplate creates EmailTemplate entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVEmailTemplate(ctx context.Context, rows []*csvgenerated.EmailTemplateCSVInput) (*model.EmailTemplateBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateEmailTemplateInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateEmailTemplate(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.EmailTemplates {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "emailtemplate"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateEmailTemplate updates multiple EmailTemplate entities
@@ -2704,6 +3132,11 @@ func (r *mutationResolver) bulkUpdateCSVEmailTemplate(ctx context.Context, input
 		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", input.ID).Msg("failed to update emailtemplate in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "emailtemplate"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("emailtemplate_id", input.ID).Msg("failed to create CSV child records for emailtemplate")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "emailtemplate"})
 		}
 
@@ -2819,6 +3252,27 @@ func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*genera
 	return &model.EntityBulkCreatePayload{
 		Entities: res,
 	}, nil
+}
+
+// bulkCreateCSVEntity creates Entity entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVEntity(ctx context.Context, rows []*csvgenerated.EntityCSVInput) (*model.EntityBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateEntityInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateEntity(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Entities {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteEntity deletes multiple Entity entities by their IDs
@@ -3011,6 +3465,11 @@ func (r *mutationResolver) bulkUpdateCSVEntity(ctx context.Context, inputs []*cs
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("entity_id", input.ID).Msg("failed to create CSV child records for entity")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -3038,6 +3497,27 @@ func (r *mutationResolver) bulkCreateEntityType(ctx context.Context, input []*ge
 	return &model.EntityTypeBulkCreatePayload{
 		EntityTypes: res,
 	}, nil
+}
+
+// bulkCreateCSVEntityType creates EntityType entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVEntityType(ctx context.Context, rows []*csvgenerated.EntityTypeCSVInput) (*model.EntityTypeBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateEntityTypeInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateEntityType(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.EntityTypes {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entitytype"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteEntityType deletes multiple EntityType entities by their IDs
@@ -3230,6 +3710,11 @@ func (r *mutationResolver) bulkUpdateCSVEntityType(ctx context.Context, inputs [
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entitytype"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("entitytype_id", input.ID).Msg("failed to create CSV child records for entitytype")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entitytype"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -3257,6 +3742,27 @@ func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generat
 	return &model.EventBulkCreatePayload{
 		Events: res,
 	}, nil
+}
+
+// bulkCreateCSVEvent creates Event entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVEvent(ctx context.Context, rows []*csvgenerated.EventCSVInput) (*model.EventBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateEventInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateEvent(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Events {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "event"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteEvent deletes multiple Event entities by their IDs
@@ -3449,6 +3955,11 @@ func (r *mutationResolver) bulkUpdateCSVEvent(ctx context.Context, inputs []*csv
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "event"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("event_id", input.ID).Msg("failed to create CSV child records for event")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "event"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -3476,6 +3987,27 @@ func (r *mutationResolver) bulkCreateEvidence(ctx context.Context, input []*gene
 	return &model.EvidenceBulkCreatePayload{
 		Evidences: res,
 	}, nil
+}
+
+// bulkCreateCSVEvidence creates Evidence entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVEvidence(ctx context.Context, rows []*csvgenerated.EvidenceCSVInput) (*model.EvidenceBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateEvidenceInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateEvidence(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Evidences {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "evidence"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateEvidence updates multiple Evidence entities
@@ -3580,6 +4112,11 @@ func (r *mutationResolver) bulkUpdateCSVEvidence(ctx context.Context, inputs []*
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("evidence_id", input.ID).Msg("failed to update evidence in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "evidence"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("evidence_id", input.ID).Msg("failed to create CSV child records for evidence")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "evidence"})
 		}
 
@@ -3782,6 +4319,27 @@ func (r *mutationResolver) bulkCreateFinding(ctx context.Context, input []*gener
 	}, nil
 }
 
+// bulkCreateCSVFinding creates Finding entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVFinding(ctx context.Context, rows []*csvgenerated.FindingCSVInput) (*model.FindingBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateFindingInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateFinding(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Findings {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "finding"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateFinding updates multiple Finding entities
 func (r *mutationResolver) bulkUpdateFinding(ctx context.Context, ids []string, input generated.UpdateFindingInput) (*model.FindingBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -3884,6 +4442,11 @@ func (r *mutationResolver) bulkUpdateCSVFinding(ctx context.Context, inputs []*c
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendCategories(input.Input.AppendCategories).AppendReferences(input.Input.AppendReferences).AppendStepsToReproduce(input.Input.AppendStepsToReproduce).AppendTargets(input.Input.AppendTargets).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("finding_id", input.ID).Msg("failed to update finding in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("finding_id", input.ID).Msg("failed to create CSV child records for finding")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})
 		}
 
@@ -4001,6 +4564,27 @@ func (r *mutationResolver) bulkCreateFindingControl(ctx context.Context, input [
 	}, nil
 }
 
+// bulkCreateCSVFindingControl creates FindingControl entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVFindingControl(ctx context.Context, rows []*csvgenerated.FindingControlCSVInput) (*model.FindingControlBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateFindingControlInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateFindingControl(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.FindingControls {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "findingcontrol"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkDeleteFindingControl deletes multiple FindingControl entities by their IDs
 func (r *mutationResolver) bulkDeleteFindingControl(ctx context.Context, ids []string) (*model.FindingControlBulkDeletePayload, error) {
 	if len(ids) == 0 {
@@ -4103,6 +4687,27 @@ func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generat
 	return &model.GroupBulkCreatePayload{
 		Groups: res,
 	}, nil
+}
+
+// bulkCreateCSVGroup creates Group entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVGroup(ctx context.Context, rows []*csvgenerated.GroupCSVInput) (*model.GroupBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateGroupInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateGroup(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Groups {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteGroup deletes multiple Group entities by their IDs
@@ -4295,6 +4900,11 @@ func (r *mutationResolver) bulkUpdateCSVGroup(ctx context.Context, inputs []*csv
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("group_id", input.ID).Msg("failed to create CSV child records for group")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -4322,6 +4932,27 @@ func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input 
 	return &model.GroupMembershipBulkCreatePayload{
 		GroupMemberships: res,
 	}, nil
+}
+
+// bulkCreateCSVGroupMembership creates GroupMembership entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVGroupMembership(ctx context.Context, rows []*csvgenerated.GroupMembershipCSVInput) (*model.GroupMembershipBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateGroupMembershipInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateGroupMembership(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.GroupMemberships {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "groupmembership"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteGroupMembership deletes multiple GroupMembership entities by their IDs
@@ -4514,6 +5145,11 @@ func (r *mutationResolver) bulkUpdateCSVGroupMembership(ctx context.Context, inp
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupmembership"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("groupmembership_id", input.ID).Msg("failed to create CSV child records for groupmembership")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupmembership"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -4541,6 +5177,27 @@ func (r *mutationResolver) bulkCreateGroupSetting(ctx context.Context, input []*
 	return &model.GroupSettingBulkCreatePayload{
 		GroupSettings: res,
 	}, nil
+}
+
+// bulkCreateCSVGroupSetting creates GroupSetting entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVGroupSetting(ctx context.Context, rows []*csvgenerated.GroupSettingCSVInput) (*model.GroupSettingBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateGroupSettingInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateGroupSetting(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.GroupSettings {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "groupsetting"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteGroupSetting deletes multiple GroupSetting entities by their IDs
@@ -4733,6 +5390,11 @@ func (r *mutationResolver) bulkUpdateCSVGroupSetting(ctx context.Context, inputs
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupsetting"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("groupsetting_id", input.ID).Msg("failed to create CSV child records for groupsetting")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupsetting"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -4919,6 +5581,27 @@ func (r *mutationResolver) bulkCreateIdentityHolder(ctx context.Context, input [
 	return &model.IdentityHolderBulkCreatePayload{
 		IdentityHolders: res,
 	}, nil
+}
+
+// bulkCreateCSVIdentityHolder creates IdentityHolder entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVIdentityHolder(ctx context.Context, rows []*csvgenerated.IdentityHolderCSVInput) (*model.IdentityHolderBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateIdentityHolderInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateIdentityHolder(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.IdentityHolders {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "identityholder"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteIdentityHolder deletes multiple IdentityHolder entities by their IDs
@@ -5111,6 +5794,11 @@ func (r *mutationResolver) bulkUpdateCSVIdentityHolder(ctx context.Context, inpu
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "identityholder"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", input.ID).Msg("failed to create CSV child records for identityholder")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "identityholder"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -5138,6 +5826,27 @@ func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input [
 	return &model.InternalPolicyBulkCreatePayload{
 		InternalPolicies: res,
 	}, nil
+}
+
+// bulkCreateCSVInternalPolicy creates InternalPolicy entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVInternalPolicy(ctx context.Context, rows []*csvgenerated.InternalPolicyCSVInput) (*model.InternalPolicyBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateInternalPolicyInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateInternalPolicy(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.InternalPolicies {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "internalpolicy"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateInternalPolicy updates multiple InternalPolicy entities
@@ -5242,6 +5951,11 @@ func (r *mutationResolver) bulkUpdateCSVInternalPolicy(ctx context.Context, inpu
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendTagSuggestions(input.Input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.Input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.Input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.Input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.Input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.Input.AppendDismissedImprovementSuggestions).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", input.ID).Msg("failed to update internalpolicy in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", input.ID).Msg("failed to create CSV child records for internalpolicy")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})
 		}
 
@@ -5357,6 +6071,27 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	return &model.InviteBulkCreatePayload{
 		Invites: res,
 	}, nil
+}
+
+// bulkCreateCSVInvite creates Invite entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVInvite(ctx context.Context, rows []*csvgenerated.InviteCSVInput) (*model.InviteBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateInviteInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateInvite(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Invites {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteInvite deletes multiple Invite entities by their IDs
@@ -5549,6 +6284,11 @@ func (r *mutationResolver) bulkUpdateCSVInvite(ctx context.Context, inputs []*cs
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "invite"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("invite_id", input.ID).Msg("failed to create CSV child records for invite")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "invite"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -5576,6 +6316,27 @@ func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []
 	return &model.MappedControlBulkCreatePayload{
 		MappedControls: res,
 	}, nil
+}
+
+// bulkCreateCSVMappedControl creates MappedControl entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVMappedControl(ctx context.Context, rows []*csvgenerated.MappedControlCSVInput) (*model.MappedControlBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateMappedControlInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateMappedControl(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.MappedControls {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteMappedControl deletes multiple MappedControl entities by their IDs
@@ -5768,6 +6529,11 @@ func (r *mutationResolver) bulkUpdateCSVMappedControl(ctx context.Context, input
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "mappedcontrol"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("mappedcontrol_id", input.ID).Msg("failed to create CSV child records for mappedcontrol")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "mappedcontrol"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -5795,6 +6561,27 @@ func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*gen
 	return &model.NarrativeBulkCreatePayload{
 		Narratives: res,
 	}, nil
+}
+
+// bulkCreateCSVNarrative creates Narrative entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVNarrative(ctx context.Context, rows []*csvgenerated.NarrativeCSVInput) (*model.NarrativeBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateNarrativeInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateNarrative(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Narratives {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "narrative"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteNarrative deletes multiple Narrative entities by their IDs
@@ -5987,6 +6774,11 @@ func (r *mutationResolver) bulkUpdateCSVNarrative(ctx context.Context, inputs []
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "narrative"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("narrative_id", input.ID).Msg("failed to create CSV child records for narrative")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "narrative"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -6014,6 +6806,27 @@ func (r *mutationResolver) bulkCreateNotificationPreference(ctx context.Context,
 	return &model.NotificationPreferenceBulkCreatePayload{
 		NotificationPreferences: res,
 	}, nil
+}
+
+// bulkCreateCSVNotificationPreference creates NotificationPreference entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVNotificationPreference(ctx context.Context, rows []*csvgenerated.NotificationPreferenceCSVInput) (*model.NotificationPreferenceBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateNotificationPreferenceInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateNotificationPreference(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.NotificationPreferences {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "notificationpreference"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateNotificationPreference updates multiple NotificationPreference entities
@@ -6118,6 +6931,11 @@ func (r *mutationResolver) bulkUpdateCSVNotificationPreference(ctx context.Conte
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTopicPatterns(input.Input.AppendTopicPatterns).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", input.ID).Msg("failed to update notificationpreference in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notificationpreference"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationpreference_id", input.ID).Msg("failed to create CSV child records for notificationpreference")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notificationpreference"})
 		}
 
@@ -6235,6 +7053,27 @@ func (r *mutationResolver) bulkCreateNotificationTemplate(ctx context.Context, i
 	}, nil
 }
 
+// bulkCreateCSVNotificationTemplate creates NotificationTemplate entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVNotificationTemplate(ctx context.Context, rows []*csvgenerated.NotificationTemplateCSVInput) (*model.NotificationTemplateBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateNotificationTemplateInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateNotificationTemplate(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.NotificationTemplates {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "notificationtemplate"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateNotificationTemplate updates multiple NotificationTemplate entities
 func (r *mutationResolver) bulkUpdateNotificationTemplate(ctx context.Context, ids []string, input generated.UpdateNotificationTemplateInput) (*model.NotificationTemplateBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -6337,6 +7176,11 @@ func (r *mutationResolver) bulkUpdateCSVNotificationTemplate(ctx context.Context
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendDestinations(input.Input.AppendDestinations).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", input.ID).Msg("failed to update notificationtemplate in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notificationtemplate"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", input.ID).Msg("failed to create CSV child records for notificationtemplate")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notificationtemplate"})
 		}
 
@@ -6452,6 +7296,27 @@ func (r *mutationResolver) bulkCreateOrganizationBrandingSetting(ctx context.Con
 	return &model.OrganizationBrandingSettingBulkCreatePayload{
 		OrganizationBrandingSettings: res,
 	}, nil
+}
+
+// bulkCreateCSVOrganizationBrandingSetting creates OrganizationBrandingSetting entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVOrganizationBrandingSetting(ctx context.Context, rows []*csvgenerated.OrganizationBrandingSettingCSVInput) (*model.OrganizationBrandingSettingBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateOrganizationBrandingSettingInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateOrganizationBrandingSetting(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.OrganizationBrandingSettings {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organizationbrandingsetting"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteOrganizationBrandingSetting deletes multiple OrganizationBrandingSetting entities by their IDs
@@ -6644,6 +7509,11 @@ func (r *mutationResolver) bulkUpdateCSVOrganizationBrandingSetting(ctx context.
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organizationbrandingsetting"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("organizationbrandingsetting_id", input.ID).Msg("failed to create CSV child records for organizationbrandingsetting")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organizationbrandingsetting"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -6671,6 +7541,27 @@ func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []
 	return &model.OrgMembershipBulkCreatePayload{
 		OrgMemberships: res,
 	}, nil
+}
+
+// bulkCreateCSVOrgMembership creates OrgMembership entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVOrgMembership(ctx context.Context, rows []*csvgenerated.OrgMembershipCSVInput) (*model.OrgMembershipBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateOrgMembershipInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateOrgMembership(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.OrgMemberships {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "orgmembership"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteOrgMembership deletes multiple OrgMembership entities by their IDs
@@ -6863,6 +7754,11 @@ func (r *mutationResolver) bulkUpdateCSVOrgMembership(ctx context.Context, input
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "orgmembership"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("orgmembership_id", input.ID).Msg("failed to create CSV child records for orgmembership")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "orgmembership"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -6892,6 +7788,27 @@ func (r *mutationResolver) bulkCreatePlatform(ctx context.Context, input []*gene
 	}, nil
 }
 
+// bulkCreateCSVPlatform creates Platform entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVPlatform(ctx context.Context, rows []*csvgenerated.PlatformCSVInput) (*model.PlatformBulkCreatePayload, error) {
+	inputs := make([]*generated.CreatePlatformInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreatePlatform(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Platforms {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "platform"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkCreateProcedure uses the CreateBulk function to create multiple Procedure entities
 func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -6909,6 +7826,27 @@ func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*gen
 	return &model.ProcedureBulkCreatePayload{
 		Procedures: res,
 	}, nil
+}
+
+// bulkCreateCSVProcedure creates Procedure entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVProcedure(ctx context.Context, rows []*csvgenerated.ProcedureCSVInput) (*model.ProcedureBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateProcedureInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateProcedure(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Procedures {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "procedure"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateProcedure updates multiple Procedure entities
@@ -7013,6 +7951,11 @@ func (r *mutationResolver) bulkUpdateCSVProcedure(ctx context.Context, inputs []
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendTagSuggestions(input.Input.AppendTagSuggestions).AppendDismissedTagSuggestions(input.Input.AppendDismissedTagSuggestions).AppendControlSuggestions(input.Input.AppendControlSuggestions).AppendDismissedControlSuggestions(input.Input.AppendDismissedControlSuggestions).AppendImprovementSuggestions(input.Input.AppendImprovementSuggestions).AppendDismissedImprovementSuggestions(input.Input.AppendDismissedImprovementSuggestions).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("procedure_id", input.ID).Msg("failed to update procedure in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("procedure_id", input.ID).Msg("failed to create CSV child records for procedure")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
 		}
 
@@ -7128,6 +8071,27 @@ func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*gener
 	return &model.ProgramBulkCreatePayload{
 		Programs: res,
 	}, nil
+}
+
+// bulkCreateCSVProgram creates Program entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVProgram(ctx context.Context, rows []*csvgenerated.ProgramCSVInput) (*model.ProgramBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateProgramInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateProgram(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Programs {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "program"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteProgram deletes multiple Program entities by their IDs
@@ -7320,6 +8284,11 @@ func (r *mutationResolver) bulkUpdateCSVProgram(ctx context.Context, inputs []*c
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "program"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("program_id", input.ID).Msg("failed to create CSV child records for program")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "program"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -7347,6 +8316,27 @@ func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, inpu
 	return &model.ProgramMembershipBulkCreatePayload{
 		ProgramMemberships: res,
 	}, nil
+}
+
+// bulkCreateCSVProgramMembership creates ProgramMembership entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVProgramMembership(ctx context.Context, rows []*csvgenerated.ProgramMembershipCSVInput) (*model.ProgramMembershipBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateProgramMembershipInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateProgramMembership(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.ProgramMemberships {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "programmembership"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteProgramMembership deletes multiple ProgramMembership entities by their IDs
@@ -7539,6 +8529,11 @@ func (r *mutationResolver) bulkUpdateCSVProgramMembership(ctx context.Context, i
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "programmembership"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("programmembership_id", input.ID).Msg("failed to create CSV child records for programmembership")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "programmembership"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -7566,6 +8561,27 @@ func (r *mutationResolver) bulkCreateRemediation(ctx context.Context, input []*g
 	return &model.RemediationBulkCreatePayload{
 		Remediations: res,
 	}, nil
+}
+
+// bulkCreateCSVRemediation creates Remediation entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVRemediation(ctx context.Context, rows []*csvgenerated.RemediationCSVInput) (*model.RemediationBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateRemediationInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateRemediation(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Remediations {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "remediation"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateRemediation updates multiple Remediation entities
@@ -7670,6 +8686,11 @@ func (r *mutationResolver) bulkUpdateCSVRemediation(ctx context.Context, inputs 
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("remediation_id", input.ID).Msg("failed to update remediation in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "remediation"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("remediation_id", input.ID).Msg("failed to create CSV child records for remediation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "remediation"})
 		}
 
@@ -7965,6 +8986,27 @@ func (r *mutationResolver) bulkCreateReview(ctx context.Context, input []*genera
 	}, nil
 }
 
+// bulkCreateCSVReview creates Review entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVReview(ctx context.Context, rows []*csvgenerated.ReviewCSVInput) (*model.ReviewBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateReviewInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateReview(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Reviews {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "review"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkDeleteReview deletes multiple Review entities by their IDs
 func (r *mutationResolver) bulkDeleteReview(ctx context.Context, ids []string) (*model.ReviewBulkDeletePayload, error) {
 	if len(ids) == 0 {
@@ -8155,6 +9197,11 @@ func (r *mutationResolver) bulkUpdateCSVReview(ctx context.Context, inputs []*cs
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("review_id", input.ID).Msg("failed to create CSV child records for review")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -8182,6 +9229,27 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 	return &model.RiskBulkCreatePayload{
 		Risks: res,
 	}, nil
+}
+
+// bulkCreateCSVRisk creates Risk entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVRisk(ctx context.Context, rows []*csvgenerated.RiskCSVInput) (*model.RiskBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateRiskInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateRisk(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Risks {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "risk"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateRisk updates multiple Risk entities
@@ -8286,6 +9354,11 @@ func (r *mutationResolver) bulkUpdateCSVRisk(ctx context.Context, inputs []*csvg
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendMitigationJSON(input.Input.AppendMitigationJSON).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendBusinessCostsJSON(input.Input.AppendBusinessCostsJSON).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("risk_id", input.ID).Msg("failed to update risk in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "risk"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("risk_id", input.ID).Msg("failed to create CSV child records for risk")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "risk"})
 		}
 
@@ -8403,6 +9476,27 @@ func (r *mutationResolver) bulkCreateScan(ctx context.Context, input []*generate
 	}, nil
 }
 
+// bulkCreateCSVScan creates Scan entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVScan(ctx context.Context, rows []*csvgenerated.ScanCSVInput) (*model.ScanBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateScanInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateScan(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Scans {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "scan"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateScan updates multiple Scan entities
 func (r *mutationResolver) bulkUpdateScan(ctx context.Context, ids []string, input generated.UpdateScanInput) (*model.ScanBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -8505,6 +9599,11 @@ func (r *mutationResolver) bulkUpdateCSVScan(ctx context.Context, inputs []*csvg
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDiscoveredVulnerabilityIds(input.Input.AppendDiscoveredVulnerabilityIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("scan_id", input.ID).Msg("failed to update scan in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scan"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("scan_id", input.ID).Msg("failed to create CSV child records for scan")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scan"})
 		}
 
@@ -8622,6 +9721,27 @@ func (r *mutationResolver) bulkCreateSLADefinition(ctx context.Context, input []
 	}, nil
 }
 
+// bulkCreateCSVSLADefinition creates SLADefinition entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVSLADefinition(ctx context.Context, rows []*csvgenerated.SLADefinitionCSVInput) (*model.SLADefinitionBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateSLADefinitionInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateSLADefinition(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.SLADefinitions {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "sladefinition"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateSLADefinition updates multiple SLADefinition entities
 func (r *mutationResolver) bulkUpdateSLADefinition(ctx context.Context, ids []string, input generated.UpdateSLADefinitionInput) (*model.SLADefinitionBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -8724,6 +9844,11 @@ func (r *mutationResolver) bulkUpdateCSVSLADefinition(ctx context.Context, input
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("sladefinition_id", input.ID).Msg("failed to update sladefinition in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "sladefinition"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("sladefinition_id", input.ID).Msg("failed to create CSV child records for sladefinition")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "sladefinition"})
 		}
 
@@ -8839,6 +9964,27 @@ func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*ge
 	return &model.SubcontrolBulkCreatePayload{
 		Subcontrols: res,
 	}, nil
+}
+
+// bulkCreateCSVSubcontrol creates Subcontrol entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVSubcontrol(ctx context.Context, rows []*csvgenerated.SubcontrolCSVInput) (*model.SubcontrolBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateSubcontrolInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateSubcontrol(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Subcontrols {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subcontrol"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteSubcontrol deletes multiple Subcontrol entities by their IDs
@@ -9031,6 +10177,11 @@ func (r *mutationResolver) bulkUpdateCSVSubcontrol(ctx context.Context, inputs [
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subcontrol"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("subcontrol_id", input.ID).Msg("failed to create CSV child records for subcontrol")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subcontrol"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -9058,6 +10209,27 @@ func (r *mutationResolver) bulkCreateSubprocessor(ctx context.Context, input []*
 	return &model.SubprocessorBulkCreatePayload{
 		Subprocessors: res,
 	}, nil
+}
+
+// bulkCreateCSVSubprocessor creates Subprocessor entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVSubprocessor(ctx context.Context, rows []*csvgenerated.SubprocessorCSVInput) (*model.SubprocessorBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateSubprocessorInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateSubprocessor(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Subprocessors {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subprocessor"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateSubprocessor updates multiple Subprocessor entities
@@ -9162,6 +10334,11 @@ func (r *mutationResolver) bulkUpdateCSVSubprocessor(ctx context.Context, inputs
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", input.ID).Msg("failed to update subprocessor in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subprocessor"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", input.ID).Msg("failed to create CSV child records for subprocessor")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subprocessor"})
 		}
 
@@ -9279,6 +10456,27 @@ func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*ge
 	}, nil
 }
 
+// bulkCreateCSVSubscriber creates Subscriber entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVSubscriber(ctx context.Context, rows []*csvgenerated.SubscriberCSVInput) (*model.SubscriberBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateSubscriberInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateSubscriber(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Subscribers {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subscriber"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkCreateSystemDetail uses the CreateBulk function to create multiple SystemDetail entities
 func (r *mutationResolver) bulkCreateSystemDetail(ctx context.Context, input []*generated.CreateSystemDetailInput) (*model.SystemDetailBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -9296,6 +10494,27 @@ func (r *mutationResolver) bulkCreateSystemDetail(ctx context.Context, input []*
 	return &model.SystemDetailBulkCreatePayload{
 		SystemDetails: res,
 	}, nil
+}
+
+// bulkCreateCSVSystemDetail creates SystemDetail entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVSystemDetail(ctx context.Context, rows []*csvgenerated.SystemDetailCSVInput) (*model.SystemDetailBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateSystemDetailInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateSystemDetail(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.SystemDetails {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "systemdetail"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateSystemDetail updates multiple SystemDetail entities
@@ -9400,6 +10619,11 @@ func (r *mutationResolver) bulkUpdateCSVSystemDetail(ctx context.Context, inputs
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendRevisionHistory(input.Input.AppendRevisionHistory).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("systemdetail_id", input.ID).Msg("failed to update systemdetail in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "systemdetail"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("systemdetail_id", input.ID).Msg("failed to create CSV child records for systemdetail")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "systemdetail"})
 		}
 
@@ -9517,6 +10741,27 @@ func (r *mutationResolver) bulkCreateTagDefinition(ctx context.Context, input []
 	}, nil
 }
 
+// bulkCreateCSVTagDefinition creates TagDefinition entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVTagDefinition(ctx context.Context, rows []*csvgenerated.TagDefinitionCSVInput) (*model.TagDefinitionBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateTagDefinitionInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateTagDefinition(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.TagDefinitions {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "tagdefinition"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkCreateTask uses the CreateBulk function to create multiple Task entities
 func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generated.CreateTaskInput) (*model.TaskBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -9534,6 +10779,27 @@ func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generate
 	return &model.TaskBulkCreatePayload{
 		Tasks: res,
 	}, nil
+}
+
+// bulkCreateCSVTask creates Task entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVTask(ctx context.Context, rows []*csvgenerated.TaskCSVInput) (*model.TaskBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateTaskInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateTask(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Tasks {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "task"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateTask updates multiple Task entities
@@ -9638,6 +10904,11 @@ func (r *mutationResolver) bulkUpdateCSVTask(ctx context.Context, inputs []*csvg
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendDetailsJSON(input.Input.AppendDetailsJSON).AppendExternalReferenceURL(input.Input.AppendExternalReferenceURL).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("task_id", input.ID).Msg("failed to update task in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "task"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("task_id", input.ID).Msg("failed to create CSV child records for task")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "task"})
 		}
 
@@ -9753,6 +11024,27 @@ func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*gene
 	return &model.TemplateBulkCreatePayload{
 		Templates: res,
 	}, nil
+}
+
+// bulkCreateCSVTemplate creates Template entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVTemplate(ctx context.Context, rows []*csvgenerated.TemplateCSVInput) (*model.TemplateBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateTemplateInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateTemplate(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Templates {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "template"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteTemplate deletes multiple Template entities by their IDs
@@ -9945,6 +11237,11 @@ func (r *mutationResolver) bulkUpdateCSVTemplate(ctx context.Context, inputs []*
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "template"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("template_id", input.ID).Msg("failed to create CSV child records for template")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "template"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -9972,6 +11269,27 @@ func (r *mutationResolver) bulkCreateTrustCenterCompliance(ctx context.Context, 
 	return &model.TrustCenterComplianceBulkCreatePayload{
 		TrustCenterCompliances: res,
 	}, nil
+}
+
+// bulkCreateCSVTrustCenterCompliance creates TrustCenterCompliance entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVTrustCenterCompliance(ctx context.Context, rows []*csvgenerated.TrustCenterComplianceCSVInput) (*model.TrustCenterComplianceBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateTrustCenterComplianceInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateTrustCenterCompliance(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.TrustCenterCompliances {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentercompliance"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteTrustCenterCompliance deletes multiple TrustCenterCompliance entities by their IDs
@@ -10164,6 +11482,11 @@ func (r *mutationResolver) bulkUpdateCSVTrustCenterCompliance(ctx context.Contex
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentercompliance"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcentercompliance_id", input.ID).Msg("failed to create CSV child records for trustcentercompliance")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentercompliance"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -10191,6 +11514,27 @@ func (r *mutationResolver) bulkCreateTrustCenterDoc(ctx context.Context, input [
 	return &model.TrustCenterDocBulkCreatePayload{
 		TrustCenterDocs: res,
 	}, nil
+}
+
+// bulkCreateCSVTrustCenterDoc creates TrustCenterDoc entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVTrustCenterDoc(ctx context.Context, rows []*csvgenerated.TrustCenterDocCSVInput) (*model.TrustCenterDocBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateTrustCenterDocInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateTrustCenterDoc(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.TrustCenterDocs {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterdoc"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkUpdateTrustCenterDoc updates multiple TrustCenterDoc entities
@@ -10295,6 +11639,11 @@ func (r *mutationResolver) bulkUpdateCSVTrustCenterDoc(ctx context.Context, inpu
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", input.ID).Msg("failed to update trustcenterdoc in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterdoc"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", input.ID).Msg("failed to create CSV child records for trustcenterdoc")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterdoc"})
 		}
 
@@ -10412,6 +11761,27 @@ func (r *mutationResolver) bulkCreateTrustCenterEntity(ctx context.Context, inpu
 	}, nil
 }
 
+// bulkCreateCSVTrustCenterEntity creates TrustCenterEntity entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVTrustCenterEntity(ctx context.Context, rows []*csvgenerated.TrustCenterEntityCSVInput) (*model.TrustCenterEntityBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateTrustCenterEntityInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateTrustCenterEntity(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.TrustCenterEntities {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterentity"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkCreateTrustCenterFAQ uses the CreateBulk function to create multiple TrustCenterFAQ entities
 func (r *mutationResolver) bulkCreateTrustCenterFAQ(ctx context.Context, input []*generated.CreateTrustCenterFAQInput) (*model.TrustCenterFAQBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -10429,6 +11799,27 @@ func (r *mutationResolver) bulkCreateTrustCenterFAQ(ctx context.Context, input [
 	return &model.TrustCenterFAQBulkCreatePayload{
 		TrustCenterFAQs: res,
 	}, nil
+}
+
+// bulkCreateCSVTrustCenterFAQ creates TrustCenterFAQ entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVTrustCenterFAQ(ctx context.Context, rows []*csvgenerated.TrustCenterFAQCSVInput) (*model.TrustCenterFAQBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateTrustCenterFAQInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateTrustCenterFAQ(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.TrustCenterFAQs {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterfaq"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteTrustCenterFAQ deletes multiple TrustCenterFAQ entities by their IDs
@@ -10621,6 +12012,11 @@ func (r *mutationResolver) bulkUpdateCSVTrustCenterFAQ(ctx context.Context, inpu
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterfaq"})
 		}
 
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterfaq_id", input.ID).Msg("failed to create CSV child records for trustcenterfaq")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterfaq"})
+		}
+
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)
 	}
@@ -10648,6 +12044,27 @@ func (r *mutationResolver) bulkCreateTrustCenterNDARequest(ctx context.Context, 
 	return &model.TrustCenterNDARequestBulkCreatePayload{
 		TrustCenterNDARequests: res,
 	}, nil
+}
+
+// bulkCreateCSVTrustCenterNDARequest creates TrustCenterNDARequest entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVTrustCenterNDARequest(ctx context.Context, rows []*csvgenerated.TrustCenterNDARequestCSVInput) (*model.TrustCenterNDARequestBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateTrustCenterNDARequestInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateTrustCenterNDARequest(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.TrustCenterNDARequests {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndarequest"})
+		}
+	}
+
+	return res, nil
 }
 
 // bulkDeleteTrustCenterNDARequest deletes multiple TrustCenterNDARequest entities by their IDs
@@ -10754,6 +12171,27 @@ func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context
 	}, nil
 }
 
+// bulkCreateCSVTrustCenterSubprocessor creates TrustCenterSubprocessor entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVTrustCenterSubprocessor(ctx context.Context, rows []*csvgenerated.TrustCenterSubprocessorCSVInput) (*model.TrustCenterSubprocessorBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateTrustCenterSubprocessorInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateTrustCenterSubprocessor(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.TrustCenterSubprocessors {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentersubprocessor"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateTrustCenterSubprocessor updates multiple TrustCenterSubprocessor entities
 func (r *mutationResolver) bulkUpdateTrustCenterSubprocessor(ctx context.Context, ids []string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -10856,6 +12294,11 @@ func (r *mutationResolver) bulkUpdateCSVTrustCenterSubprocessor(ctx context.Cont
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendCountries(input.Input.AppendCountries).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", input.ID).Msg("failed to update trustcentersubprocessor in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersubprocessor"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", input.ID).Msg("failed to create CSV child records for trustcentersubprocessor")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersubprocessor"})
 		}
 
@@ -10973,6 +12416,27 @@ func (r *mutationResolver) bulkCreateVendorRiskScore(ctx context.Context, input 
 	}, nil
 }
 
+// bulkCreateCSVVendorRiskScore creates VendorRiskScore entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVVendorRiskScore(ctx context.Context, rows []*csvgenerated.VendorRiskScoreCSVInput) (*model.VendorRiskScoreBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateVendorRiskScoreInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateVendorRiskScore(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.VendorRiskScores {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "vendorriskscore"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateVendorRiskScore updates multiple VendorRiskScore entities
 func (r *mutationResolver) bulkUpdateVendorRiskScore(ctx context.Context, ids []string, input generated.UpdateVendorRiskScoreInput) (*model.VendorRiskScoreBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -11075,6 +12539,11 @@ func (r *mutationResolver) bulkUpdateCSVVendorRiskScore(ctx context.Context, inp
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", input.ID).Msg("failed to update vendorriskscore in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vendorriskscore"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", input.ID).Msg("failed to create CSV child records for vendorriskscore")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vendorriskscore"})
 		}
 
@@ -11192,6 +12661,27 @@ func (r *mutationResolver) bulkCreateVendorScoringConfig(ctx context.Context, in
 	}, nil
 }
 
+// bulkCreateCSVVendorScoringConfig creates VendorScoringConfig entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVVendorScoringConfig(ctx context.Context, rows []*csvgenerated.VendorScoringConfigCSVInput) (*model.VendorScoringConfigBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateVendorScoringConfigInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateVendorScoringConfig(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.VendorScoringConfigs {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "vendorscoringconfig"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateVendorScoringConfig updates multiple VendorScoringConfig entities
 func (r *mutationResolver) bulkUpdateVendorScoringConfig(ctx context.Context, ids []string, input generated.UpdateVendorScoringConfigInput) (*model.VendorScoringConfigBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -11294,6 +12784,11 @@ func (r *mutationResolver) bulkUpdateCSVVendorScoringConfig(ctx context.Context,
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", input.ID).Msg("failed to update vendorscoringconfig in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vendorscoringconfig"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", input.ID).Msg("failed to create CSV child records for vendorscoringconfig")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vendorscoringconfig"})
 		}
 
@@ -11411,6 +12906,27 @@ func (r *mutationResolver) bulkCreateVulnerability(ctx context.Context, input []
 	}, nil
 }
 
+// bulkCreateCSVVulnerability creates Vulnerability entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVVulnerability(ctx context.Context, rows []*csvgenerated.VulnerabilityCSVInput) (*model.VulnerabilityBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateVulnerabilityInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateVulnerability(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.Vulnerabilities {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "vulnerability"})
+		}
+	}
+
+	return res, nil
+}
+
 // bulkUpdateVulnerability updates multiple Vulnerability entities
 func (r *mutationResolver) bulkUpdateVulnerability(ctx context.Context, ids []string, input generated.UpdateVulnerabilityInput) (*model.VulnerabilityBulkUpdatePayload, error) {
 	if len(ids) == 0 {
@@ -11513,6 +13029,11 @@ func (r *mutationResolver) bulkUpdateCSVVulnerability(ctx context.Context, input
 		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendReferences(input.Input.AppendReferences).AppendImpacts(input.Input.AppendImpacts).AppendCweIds(input.Input.AppendCweIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", input.ID).Msg("failed to update vulnerability in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vulnerability"})
+		}
+
+		if err := createCSVChildrenForRow(ctx, input, updatedEntity.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", input.ID).Msg("failed to create CSV child records for vulnerability")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vulnerability"})
 		}
 
@@ -11628,4 +13149,25 @@ func (r *mutationResolver) bulkCreateWorkflowDefinition(ctx context.Context, inp
 	return &model.WorkflowDefinitionBulkCreatePayload{
 		WorkflowDefinitions: res,
 	}, nil
+}
+
+// bulkCreateCSVWorkflowDefinition creates WorkflowDefinition entities from CSV rows along with any child records each row names
+func (r *mutationResolver) bulkCreateCSVWorkflowDefinition(ctx context.Context, rows []*csvgenerated.WorkflowDefinitionCSVInput) (*model.WorkflowDefinitionBulkCreatePayload, error) {
+	inputs := make([]*generated.CreateWorkflowDefinitionInput, 0, len(rows))
+	for _, row := range rows {
+		inputs = append(inputs, &row.Input)
+	}
+
+	res, err := r.bulkCreateWorkflowDefinition(ctx, inputs)
+	if err != nil {
+		return nil, err
+	}
+
+	for i, entity := range res.WorkflowDefinitions {
+		if err := createCSVChildrenForRow(ctx, rows[i], entity.ID); err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
+		}
+	}
+
+	return res, nil
 }

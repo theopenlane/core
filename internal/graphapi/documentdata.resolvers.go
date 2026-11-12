@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input 
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateDocumentDataInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateDocumentData(ctx, inputs)
+	return r.bulkCreateCSVDocumentData(ctx, data)
 }
 
 // UpdateDocumentData is the resolver for the updateDocumentData field.

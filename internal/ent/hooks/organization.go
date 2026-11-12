@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
-	"github.com/stoewer/go-strcase"
 	"github.com/stripe/stripe-go/v86"
 
 	"github.com/theopenlane/iam/auth"
@@ -28,6 +27,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/entitlements/reconciler"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/logx"
 )
 
@@ -136,11 +136,22 @@ func preOrgCreateMutation(ctx context.Context, m *generated.OrganizationMutation
 		return err
 	}
 
-	// trim trailing whitespace from the name and derive the SSO slug from it
+	// trim trailing whitespace from the name and derive the SSO slug from it; slug_name has no
+	// unique index, so names that reduce to the same slug are kept apart with the random suffix
 	if name, ok := m.Name(); ok {
 		trimmed := strings.TrimSpace(name)
 		m.SetName(trimmed)
-		m.SetSlugName(strcase.KebabCase(trimmed))
+
+		slug, err := urlx.UniqueSlug(urlx.Slug(trimmed), func(candidate string) (bool, error) {
+			return m.Client().Organization.Query().
+				Where(organization.SlugName(candidate)).
+				Exist(auth.WithInternalReadCrossOrgContext(ctx))
+		})
+		if err != nil {
+			return err
+		}
+
+		m.SetSlugName(slug)
 	}
 
 	return nil

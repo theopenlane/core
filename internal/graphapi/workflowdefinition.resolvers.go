@@ -129,12 +129,7 @@ func (r *mutationResolver) CreateBulkCSVWorkflowDefinition(ctx context.Context, 
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateWorkflowDefinitionInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateWorkflowDefinition(ctx, inputs)
+	return r.bulkCreateCSVWorkflowDefinition(ctx, data)
 }
 
 // UpdateWorkflowDefinition is the resolver for the updateWorkflowDefinition field.

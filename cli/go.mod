@@ -17,8 +17,8 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core/common v1.2.2
-	github.com/theopenlane/core/v2 v2.14.0
-	github.com/theopenlane/go-client v0.15.1
+	github.com/theopenlane/core/v2 v2.14.3
+	github.com/theopenlane/go-client v0.15.2
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.42.0
 	github.com/theopenlane/utils v0.7.4
@@ -53,6 +53,7 @@ require (
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/gqlgo/gqlgenc v0.44.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.32.0 // indirect
+	github.com/hhrutter/tiff v1.0.7 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jwx-go/jwkfetch/v4 v4.0.4 // indirect
@@ -78,6 +79,7 @@ require (
 	github.com/openfga/api/proto v0.0.0-20260928071936-c0650ce2169b // indirect
 	github.com/openfga/go-sdk v0.8.3 // indirect
 	github.com/openfga/language/pkg/go v0.3.2 // indirect
+	github.com/pdfcpu/pdfcpu v0.16.4 // indirect
 	github.com/philhofer/fwd v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/redis/go-redis/v9 v9.23.0 // indirect
@@ -95,6 +97,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
+	github.com/xdg-go/stringprep v1.0.4 // indirect
 	github.com/zalando/go-keyring v0.2.8 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/otel v1.47.0 // indirect
@@ -109,7 +112,7 @@ require (
 	golang.org/x/net v0.62.0 // indirect
 	golang.org/x/sync v0.25.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
-	golang.org/x/text v0.43.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
 	golang.org/x/time v0.16.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20261019180522-ce908d29299b // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20261026165753-2ffab32bce7e // indirect

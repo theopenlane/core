@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVAsset(ctx context.Context, input graphql
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateAssetInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateAsset(ctx, inputs)
+	return r.bulkCreateCSVAsset(ctx, data)
 }
 
 // UpdateAsset is the resolver for the updateAsset field.

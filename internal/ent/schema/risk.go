@@ -343,6 +343,7 @@ func (r Risk) Edges() []ent.Edge {
 			comment:    "conversations related to the risk",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.CSVRef().FromColumn("Comment").CreateChild("text"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{

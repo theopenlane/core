@@ -107,12 +107,7 @@ func (r *mutationResolver) CreateBulkCSVIdentityHolder(ctx context.Context, inpu
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateIdentityHolderInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateIdentityHolder(ctx, inputs)
+	return r.bulkCreateCSVIdentityHolder(ctx, data)
 }
 
 // UpdateIdentityHolder is the resolver for the updateIdentityHolder field.

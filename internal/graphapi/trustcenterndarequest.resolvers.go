@@ -85,12 +85,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterNDARequest(ctx context.Contex
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateTrustCenterNDARequestInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateTrustCenterNDARequest(ctx, inputs)
+	return r.bulkCreateCSVTrustCenterNDARequest(ctx, data)
 }
 
 // UpdateTrustCenterNDARequest is the resolver for the updateTrustCenterNDARequest field.

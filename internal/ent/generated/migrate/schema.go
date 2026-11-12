@@ -6453,6 +6453,14 @@ var (
 					Where: "deleted_at is NULL",
 				},
 			},
+			{
+				Name:    "organization_slug_name",
+				Unique:  true,
+				Columns: []*schema.Column{OrganizationsColumns[16]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND slug_name <> ''",
+				},
+			},
 		},
 	}
 	// OrganizationBrandingSettingsColumns holds the columns for the "organization_branding_settings" table.

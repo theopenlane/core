@@ -10,9 +10,9 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
-	github.com/theopenlane/core/v2 v2.14.0
+	github.com/theopenlane/core/v2 v2.14.3
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.38.2
+	github.com/theopenlane/entx v0.38.3
 	github.com/theopenlane/utils v0.7.4
 	github.com/zitadel/oidc/v3 v3.51.17
 	golang.org/x/oauth2 v0.37.0
@@ -86,7 +86,7 @@ require (
 	golang.org/x/net v0.62.0 // indirect
 	golang.org/x/sync v0.25.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
-	golang.org/x/text v0.43.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
 	golang.org/x/tools v0.52.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20261019180522-ce908d29299b // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20261026165753-2ffab32bce7e // indirect

@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVDirectoryAccount(ctx context.Context, in
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateDirectoryAccountInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateDirectoryAccount(ctx, inputs)
+	return r.bulkCreateCSVDirectoryAccount(ctx, data)
 }
 
 // UpdateDirectoryAccount is the resolver for the updateDirectoryAccount field.

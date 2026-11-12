@@ -87,6 +87,11 @@ var CSVLookupRegistry = map[string]CSVLookupEntry{
 	},
 }
 
+// CSVChildCreator is implemented by CSV wrappers with columns that create child records linked to the row.
+type CSVChildCreator interface {
+	CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error
+}
+
 // GetCSVLookupEntry returns the lookup entry for a target entity and match field.
 func GetCSVLookupEntry(targetEntity, matchField string) (CSVLookupEntry, bool) {
 	key := targetEntity + ":" + matchField
@@ -2436,10 +2441,16 @@ type ControlCSVInput struct {
 	ProcedureNames             []string `csv:"ProcedureNames"`
 	ResponsiblePartyEntityName string   `csv:"ResponsiblePartyEntityName"`
 	RiskNames                  []string `csv:"RiskNames"`
+	Comment                    string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ControlCSVInput for CSV header preprocessing.
 func (ControlCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i ControlCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createControlCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // ControlCSVUpdateInput wraps UpdateControlInput with CSV reference columns for bulk updates.
 type ControlCSVUpdateInput struct {
@@ -2454,10 +2465,27 @@ type ControlCSVUpdateInput struct {
 	ProcedureNames             []string `csv:"ProcedureNames"`
 	ResponsiblePartyEntityName string   `csv:"ResponsiblePartyEntityName"`
 	RiskNames                  []string `csv:"RiskNames"`
+	Comment                    string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ControlCSVUpdateInput for CSV header preprocessing.
 func (ControlCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i ControlCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createControlCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createControlCSVChildren creates one linked child record for each non-empty CSV child column on a Control row.
+func createControlCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetControlID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // ControlImplementationCSVInput wraps CreateControlImplementationInput with CSV reference columns.
 type ControlImplementationCSVInput struct {
@@ -2607,21 +2635,44 @@ func (DirectoryMembershipCSVUpdateInput) CSVInputWrapper() {}
 
 // DiscussionCSVInput wraps CreateDiscussionInput with CSV reference columns.
 type DiscussionCSVInput struct {
-	Input generated.CreateDiscussionInput
+	Input   generated.CreateDiscussionInput
+	Comment string `csv:"Comment"`
 }
 
 // CSVInputWrapper marks DiscussionCSVInput for CSV header preprocessing.
 func (DiscussionCSVInput) CSVInputWrapper() {}
 
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i DiscussionCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createDiscussionCSVChildren(ctx, client, parentID, i.Comment)
+}
+
 // DiscussionCSVUpdateInput wraps UpdateDiscussionInput with CSV reference columns for bulk updates.
 type DiscussionCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateDiscussionInput
+	ID      string `csv:"ID"`
+	Input   generated.UpdateDiscussionInput
+	Comment string `csv:"Comment"`
 }
 
 // CSVInputWrapper marks DiscussionCSVUpdateInput for CSV header preprocessing.
 func (DiscussionCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i DiscussionCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createDiscussionCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createDiscussionCSVChildren creates one linked child record for each non-empty CSV child column on a Discussion row.
+func createDiscussionCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetDiscussionID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // DocumentDataCSVInput wraps CreateDocumentDataInput with CSV reference columns.
 type DocumentDataCSVInput struct {
@@ -2729,10 +2780,16 @@ func (EventCSVUpdateInput) CSVInputWrapper() {}
 type EvidenceCSVInput struct {
 	Input           generated.CreateEvidenceInput
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	Comment         string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks EvidenceCSVInput for CSV header preprocessing.
 func (EvidenceCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i EvidenceCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createEvidenceCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // EvidenceCSVUpdateInput wraps UpdateEvidenceInput with CSV reference columns for bulk updates.
 type EvidenceCSVUpdateInput struct {
@@ -2740,10 +2797,27 @@ type EvidenceCSVUpdateInput struct {
 	ID              string `csv:"ID"`
 	Input           generated.UpdateEvidenceInput
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	Comment         string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks EvidenceCSVUpdateInput for CSV header preprocessing.
 func (EvidenceCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i EvidenceCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createEvidenceCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createEvidenceCSVChildren creates one linked child record for each non-empty CSV child column on a Evidence row.
+func createEvidenceCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetEvidenceID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // ExportCSVInput wraps CreateExportInput with CSV reference columns.
 type ExportCSVInput struct {
@@ -2793,10 +2867,16 @@ type FindingCSVInput struct {
 	ReviewedByGroupName              string `csv:"ReviewedByGroupName"`
 	ReviewedByIdentityHolderEmail    string `csv:"ReviewedByIdentityHolderEmail"`
 	ReviewedByUserEmail              string `csv:"ReviewedByUserEmail"`
+	Comment                          string `csv:"Comment"`
 }
 
 // CSVInputWrapper marks FindingCSVInput for CSV header preprocessing.
 func (FindingCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i FindingCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createFindingCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // FindingCSVUpdateInput wraps UpdateFindingInput with CSV reference columns for bulk updates.
 type FindingCSVUpdateInput struct {
@@ -2812,10 +2892,27 @@ type FindingCSVUpdateInput struct {
 	ReviewedByGroupName              string `csv:"ReviewedByGroupName"`
 	ReviewedByIdentityHolderEmail    string `csv:"ReviewedByIdentityHolderEmail"`
 	ReviewedByUserEmail              string `csv:"ReviewedByUserEmail"`
+	Comment                          string `csv:"Comment"`
 }
 
 // CSVInputWrapper marks FindingCSVUpdateInput for CSV header preprocessing.
 func (FindingCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i FindingCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createFindingCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createFindingCSVChildren creates one linked child record for each non-empty CSV child column on a Finding row.
+func createFindingCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetFindingID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // FindingControlCSVInput wraps CreateFindingControlInput with CSV reference columns.
 type FindingControlCSVInput struct {
@@ -2941,10 +3038,16 @@ type InternalPolicyCSVInput struct {
 	ApproverGroupName         string   `csv:"ApproverGroupName"`
 	ControlRefCodes           []string `csv:"ControlRefCodes"`
 	DocumentDelegateGroupName string   `csv:"DocumentDelegateGroupName"`
+	Comment                   string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks InternalPolicyCSVInput for CSV header preprocessing.
 func (InternalPolicyCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i InternalPolicyCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createInternalPolicyCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // InternalPolicyCSVUpdateInput wraps UpdateInternalPolicyInput with CSV reference columns for bulk updates.
 type InternalPolicyCSVUpdateInput struct {
@@ -2954,10 +3057,27 @@ type InternalPolicyCSVUpdateInput struct {
 	ApproverGroupName         string   `csv:"ApproverGroupName"`
 	ControlRefCodes           []string `csv:"ControlRefCodes"`
 	DocumentDelegateGroupName string   `csv:"DocumentDelegateGroupName"`
+	Comment                   string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks InternalPolicyCSVUpdateInput for CSV header preprocessing.
 func (InternalPolicyCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i InternalPolicyCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createInternalPolicyCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createInternalPolicyCSVChildren creates one linked child record for each non-empty CSV child column on a InternalPolicy row.
+func createInternalPolicyCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetInternalPolicyID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // InviteCSVInput wraps CreateInviteInput with CSV reference columns.
 type InviteCSVInput struct {
@@ -3242,10 +3362,16 @@ type ProcedureCSVInput struct {
 	Input                     generated.CreateProcedureInput
 	ApproverGroupName         string `csv:"ApproverGroupName"`
 	DocumentDelegateGroupName string `csv:"DocumentDelegateGroupName"`
+	Comment                   string `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ProcedureCSVInput for CSV header preprocessing.
 func (ProcedureCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i ProcedureCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createProcedureCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // ProcedureCSVUpdateInput wraps UpdateProcedureInput with CSV reference columns for bulk updates.
 type ProcedureCSVUpdateInput struct {
@@ -3254,10 +3380,27 @@ type ProcedureCSVUpdateInput struct {
 	Input                     generated.UpdateProcedureInput
 	ApproverGroupName         string `csv:"ApproverGroupName"`
 	DocumentDelegateGroupName string `csv:"DocumentDelegateGroupName"`
+	Comment                   string `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ProcedureCSVUpdateInput for CSV header preprocessing.
 func (ProcedureCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i ProcedureCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createProcedureCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createProcedureCSVChildren creates one linked child record for each non-empty CSV child column on a Procedure row.
+func createProcedureCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetProcedureID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // ProgramCSVInput wraps CreateProgramInput with CSV reference columns.
 type ProgramCSVInput struct {
@@ -3363,10 +3506,16 @@ func (ReportMembershipCSVUpdateInput) CSVInputWrapper() {}
 type ReviewCSVInput struct {
 	Input           generated.CreateReviewInput
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	Comment         string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ReviewCSVInput for CSV header preprocessing.
 func (ReviewCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i ReviewCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createReviewCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // ReviewCSVUpdateInput wraps UpdateReviewInput with CSV reference columns for bulk updates.
 type ReviewCSVUpdateInput struct {
@@ -3374,10 +3523,27 @@ type ReviewCSVUpdateInput struct {
 	ID              string `csv:"ID"`
 	Input           generated.UpdateReviewInput
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	Comment         string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ReviewCSVUpdateInput for CSV header preprocessing.
 func (ReviewCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i ReviewCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createReviewCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createReviewCSVChildren creates one linked child record for each non-empty CSV child column on a Review row.
+func createReviewCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetReviewID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // RiskCSVInput wraps CreateRiskInput with CSV reference columns.
 type RiskCSVInput struct {
@@ -3395,10 +3561,16 @@ type RiskCSVInput struct {
 	StakeholderIdentityHolderEmail string   `csv:"StakeholderIdentityHolderEmail"`
 	StakeholderUserEmail           string   `csv:"StakeholderUserEmail"`
 	SubcontrolRefCodes             []string `csv:"SubcontrolRefCodes"`
+	Comment                        string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks RiskCSVInput for CSV header preprocessing.
 func (RiskCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i RiskCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createRiskCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // RiskCSVUpdateInput wraps UpdateRiskInput with CSV reference columns for bulk updates.
 type RiskCSVUpdateInput struct {
@@ -3418,10 +3590,27 @@ type RiskCSVUpdateInput struct {
 	StakeholderIdentityHolderEmail string   `csv:"StakeholderIdentityHolderEmail"`
 	StakeholderUserEmail           string   `csv:"StakeholderUserEmail"`
 	SubcontrolRefCodes             []string `csv:"SubcontrolRefCodes"`
+	Comment                        string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks RiskCSVUpdateInput for CSV header preprocessing.
 func (RiskCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i RiskCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createRiskCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createRiskCSVChildren creates one linked child record for each non-empty CSV child column on a Risk row.
+func createRiskCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetRiskID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // SLADefinitionCSVInput wraps CreateSLADefinitionInput with CSV reference columns.
 type SLADefinitionCSVInput struct {
@@ -3506,10 +3695,16 @@ type SubcontrolCSVInput struct {
 	ProcedureNames             []string `csv:"ProcedureNames"`
 	ResponsiblePartyEntityName string   `csv:"ResponsiblePartyEntityName"`
 	RiskNames                  []string `csv:"RiskNames"`
+	Comment                    string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks SubcontrolCSVInput for CSV header preprocessing.
 func (SubcontrolCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i SubcontrolCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createSubcontrolCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // SubcontrolCSVUpdateInput wraps UpdateSubcontrolInput with CSV reference columns for bulk updates.
 type SubcontrolCSVUpdateInput struct {
@@ -3524,10 +3719,27 @@ type SubcontrolCSVUpdateInput struct {
 	ProcedureNames             []string `csv:"ProcedureNames"`
 	ResponsiblePartyEntityName string   `csv:"ResponsiblePartyEntityName"`
 	RiskNames                  []string `csv:"RiskNames"`
+	Comment                    string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks SubcontrolCSVUpdateInput for CSV header preprocessing.
 func (SubcontrolCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i SubcontrolCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createSubcontrolCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createSubcontrolCSVChildren creates one linked child record for each non-empty CSV child column on a Subcontrol row.
+func createSubcontrolCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetSubcontrolID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // SubprocessorCSVInput wraps CreateSubprocessorInput with CSV reference columns.
 type SubprocessorCSVInput struct {
@@ -3625,10 +3837,16 @@ type TaskCSVInput struct {
 	AssigneeEmail   string   `csv:"AssigneeEmail"`
 	AssignerEmail   string   `csv:"AssignerEmail"`
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	Comment         string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks TaskCSVInput for CSV header preprocessing.
 func (TaskCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i TaskCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createTaskCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // TaskCSVUpdateInput wraps UpdateTaskInput with CSV reference columns for bulk updates.
 type TaskCSVUpdateInput struct {
@@ -3638,10 +3856,27 @@ type TaskCSVUpdateInput struct {
 	AssigneeEmail   string   `csv:"AssigneeEmail"`
 	AssignerEmail   string   `csv:"AssignerEmail"`
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	Comment         string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks TaskCSVUpdateInput for CSV header preprocessing.
 func (TaskCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i TaskCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createTaskCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createTaskCSVChildren creates one linked child record for each non-empty CSV child column on a Task row.
+func createTaskCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetTaskID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // TemplateCSVInput wraps CreateTemplateInput with CSV reference columns.
 type TemplateCSVInput struct {
@@ -3910,10 +4145,16 @@ type VulnerabilityCSVInput struct {
 	ReviewedByGroupName              string   `csv:"ReviewedByGroupName"`
 	ReviewedByIdentityHolderEmail    string   `csv:"ReviewedByIdentityHolderEmail"`
 	ReviewedByUserEmail              string   `csv:"ReviewedByUserEmail"`
+	Comment                          string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks VulnerabilityCSVInput for CSV header preprocessing.
 func (VulnerabilityCSVInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i VulnerabilityCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createVulnerabilityCSVChildren(ctx, client, parentID, i.Comment)
+}
 
 // VulnerabilityCSVUpdateInput wraps UpdateVulnerabilityInput with CSV reference columns for bulk updates.
 type VulnerabilityCSVUpdateInput struct {
@@ -3930,10 +4171,27 @@ type VulnerabilityCSVUpdateInput struct {
 	ReviewedByGroupName              string   `csv:"ReviewedByGroupName"`
 	ReviewedByIdentityHolderEmail    string   `csv:"ReviewedByIdentityHolderEmail"`
 	ReviewedByUserEmail              string   `csv:"ReviewedByUserEmail"`
+	Comment                          string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks VulnerabilityCSVUpdateInput for CSV header preprocessing.
 func (VulnerabilityCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i VulnerabilityCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createVulnerabilityCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createVulnerabilityCSVChildren creates one linked child record for each non-empty CSV child column on a Vulnerability row.
+func createVulnerabilityCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetVulnerabilityID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // WorkflowDefinitionCSVInput wraps CreateWorkflowDefinitionInput with CSV reference columns.
 type WorkflowDefinitionCSVInput struct {
