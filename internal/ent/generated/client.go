@@ -9227,6 +9227,22 @@ func (c *EntityClient) QueryFindings(_m *Entity) *FindingQuery {
 	return query
 }
 
+// QueryRisks queries the risks edge of a Entity.
+func (c *EntityClient) QueryRisks(_m *Entity) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.RisksTable, entity.RisksPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryVulnerabilities queries the vulnerabilities edge of a Entity.
 func (c *EntityClient) QueryVulnerabilities(_m *Entity) *VulnerabilityQuery {
 	query := (&VulnerabilityClient{config: c.config}).Query()
@@ -26484,7 +26500,23 @@ func (c *RiskClient) QueryEntities(_m *Risk) *EntityQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(risk.Table, risk.FieldID, id),
 			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, risk.EntitiesTable, risk.EntitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, risk.EntitiesTable, risk.EntitiesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLegacyEntities queries the legacy_entities edge of a Risk.
+func (c *RiskClient) QueryLegacyEntities(_m *Risk) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.LegacyEntitiesTable, risk.LegacyEntitiesColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

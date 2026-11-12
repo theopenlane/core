@@ -32827,6 +32827,10 @@ type EntityWhereInput struct {
 	HasFindings     *bool                `json:"hasFindings,omitempty"`
 	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
 
+	// "risks" edge predicates.
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+
 	// "vulnerabilities" edge predicates.
 	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
 	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
@@ -35553,6 +35557,25 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, entity.HasFindingsWith(with...))
+	}
+	if i.HasRisks != nil {
+		p := entity.HasRisks()
+		if !*i.HasRisks {
+			p = entity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRisksWith) > 0 {
+		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
+		for _, w := range i.HasRisksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRisksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, entity.HasRisksWith(with...))
 	}
 	if i.HasVulnerabilities != nil {
 		p := entity.HasVulnerabilities()
@@ -85834,6 +85857,10 @@ type RiskWhereInput struct {
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
 
+	// "legacy_entities" edge predicates.
+	HasLegacyEntities     *bool               `json:"hasLegacyEntities,omitempty"`
+	HasLegacyEntitiesWith []*EntityWhereInput `json:"hasLegacyEntitiesWith,omitempty"`
+
 	// "scans" edge predicates.
 	HasScans     *bool             `json:"hasScans,omitempty"`
 	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
@@ -87931,6 +87958,25 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, risk.HasEntitiesWith(with...))
+	}
+	if i.HasLegacyEntities != nil {
+		p := risk.HasLegacyEntities()
+		if !*i.HasLegacyEntities {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasLegacyEntitiesWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasLegacyEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
+		for _, w := range i.HasLegacyEntitiesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasLegacyEntitiesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasLegacyEntitiesWith(with...))
 	}
 	if i.HasScans != nil {
 		p := risk.HasScans()

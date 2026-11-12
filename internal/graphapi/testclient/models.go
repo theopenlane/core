@@ -8057,6 +8057,7 @@ type CreateEntityInput struct {
 	ControlIDs                          []string         `json:"controlIDs,omitempty"`
 	SubcontrolIDs                       []string         `json:"subcontrolIDs,omitempty"`
 	FindingIDs                          []string         `json:"findingIDs,omitempty"`
+	RiskIDs                             []string         `json:"riskIDs,omitempty"`
 	VulnerabilityIDs                    []string         `json:"vulnerabilityIDs,omitempty"`
 	ReviewIDs                           []string         `json:"reviewIDs,omitempty"`
 	RemediationIDs                      []string         `json:"remediationIDs,omitempty"`
@@ -9781,6 +9782,7 @@ type CreateRiskInput struct {
 	TaskIDs                     []string            `json:"taskIDs,omitempty"`
 	AssetIDs                    []string            `json:"assetIDs,omitempty"`
 	EntityIDs                   []string            `json:"entityIDs,omitempty"`
+	LegacyEntityIDs             []string            `json:"legacyEntityIDs,omitempty"`
 	ScanIDs                     []string            `json:"scanIDs,omitempty"`
 	StakeholderID               *string             `json:"stakeholderID,omitempty"`
 	DelegateID                  *string             `json:"delegateID,omitempty"`
@@ -14543,6 +14545,7 @@ type Entity struct {
 	Controls                          *ControlConnection            `json:"controls"`
 	Subcontrols                       *SubcontrolConnection         `json:"subcontrols"`
 	Findings                          *FindingConnection            `json:"findings"`
+	Risks                             *RiskConnection               `json:"risks"`
 	Vulnerabilities                   *VulnerabilityConnection      `json:"vulnerabilities"`
 	Reviews                           *ReviewConnection             `json:"reviews"`
 	Remediations                      *RemediationConnection        `json:"remediations"`
@@ -15669,6 +15672,9 @@ type EntityWhereInput struct {
 	// findings edge predicates
 	HasFindings     *bool                `json:"hasFindings,omitempty"`
 	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// risks edge predicates
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
 	// vulnerabilities edge predicates
 	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
 	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
@@ -31286,6 +31292,7 @@ type Risk struct {
 	Tasks                     *TaskConnection           `json:"tasks"`
 	Assets                    *AssetConnection          `json:"assets"`
 	Entities                  *EntityConnection         `json:"entities"`
+	LegacyEntities            *EntityConnection         `json:"legacyEntities"`
 	Scans                     *ScanConnection           `json:"scans"`
 	// the group of users who are responsible for risk oversight
 	Stakeholder *Group `json:"stakeholder,omitempty"`
@@ -32017,6 +32024,9 @@ type RiskWhereInput struct {
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// legacy_entities edge predicates
+	HasLegacyEntities     *bool               `json:"hasLegacyEntities,omitempty"`
+	HasLegacyEntitiesWith []*EntityWhereInput `json:"hasLegacyEntitiesWith,omitempty"`
 	// scans edge predicates
 	HasScans     *bool             `json:"hasScans,omitempty"`
 	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
@@ -41255,6 +41265,9 @@ type UpdateEntityInput struct {
 	AddFindingIDs                          []string         `json:"addFindingIDs,omitempty"`
 	RemoveFindingIDs                       []string         `json:"removeFindingIDs,omitempty"`
 	ClearFindings                          *bool            `json:"clearFindings,omitempty"`
+	AddRiskIDs                             []string         `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs                          []string         `json:"removeRiskIDs,omitempty"`
+	ClearRisks                             *bool            `json:"clearRisks,omitempty"`
 	AddVulnerabilityIDs                    []string         `json:"addVulnerabilityIDs,omitempty"`
 	RemoveVulnerabilityIDs                 []string         `json:"removeVulnerabilityIDs,omitempty"`
 	ClearVulnerabilities                   *bool            `json:"clearVulnerabilities,omitempty"`
@@ -44255,6 +44268,9 @@ type UpdateRiskInput struct {
 	AddEntityIDs                   []string                `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs                []string                `json:"removeEntityIDs,omitempty"`
 	ClearEntities                  *bool                   `json:"clearEntities,omitempty"`
+	AddLegacyEntityIDs             []string                `json:"addLegacyEntityIDs,omitempty"`
+	RemoveLegacyEntityIDs          []string                `json:"removeLegacyEntityIDs,omitempty"`
+	ClearLegacyEntities            *bool                   `json:"clearLegacyEntities,omitempty"`
 	AddScanIDs                     []string                `json:"addScanIDs,omitempty"`
 	RemoveScanIDs                  []string                `json:"removeScanIDs,omitempty"`
 	ClearScans                     *bool                   `json:"clearScans,omitempty"`

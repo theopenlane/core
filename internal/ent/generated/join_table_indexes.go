@@ -213,6 +213,7 @@ var joinTables = map[string]bool{
 	"risk_viewers":                          true,
 	"risk_action_plans":                     true,
 	"risk_tasks":                            true,
+	"risk_entities":                         true,
 	"scan_blocked_groups":                   true,
 	"scan_editors":                          true,
 	"scan_assets":                           true,

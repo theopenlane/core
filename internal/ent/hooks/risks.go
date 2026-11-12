@@ -34,6 +34,10 @@ func HookRisks() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			if len(m.LegacyEntitiesIDs()) > 0 || len(m.RemovedLegacyEntitiesIDs()) > 0 || m.LegacyEntitiesCleared() {
+				return nil, fmt.Errorf("%w: legacy_entities is deprecated; use entities instead", ErrInvalidInput) //nolint:err113
+			}
+
 			// set last reviewed at timestamp if a completed review is added
 			setLastReviewedAt(ctx, m)
 

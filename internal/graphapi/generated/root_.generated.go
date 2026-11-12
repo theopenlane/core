@@ -2096,6 +2096,7 @@ type ComplexityRoot struct {
 		RiskRating                            func(childComplexity int) int
 		RiskScore                             func(childComplexity int) int
 		RiskScoreCoverage                     func(childComplexity int) int
+		Risks                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		SSOEnforced                           func(childComplexity int) int
 		Scans                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Scope                                 func(childComplexity int) int
@@ -6009,6 +6010,7 @@ type ComplexityRoot struct {
 		IntegrationRuns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		InternalPolicies            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		LastReviewedAt              func(childComplexity int) int
+		LegacyEntities              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Likelihood                  func(childComplexity int) int
 		ManagedBy                   func(childComplexity int) int
 		MitigatedAt                 func(childComplexity int) int
@@ -17997,6 +17999,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.RiskScoreCoverage(childComplexity), true
+	case "Entity.risks":
+		if e.ComplexityRoot.Entity.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Entity.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 	case "Entity.ssoEnforced":
 		if e.ComplexityRoot.Entity.SSOEnforced == nil {
 			break
@@ -42523,6 +42536,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.LastReviewedAt(childComplexity), true
+	case "Risk.legacyEntities":
+		if e.ComplexityRoot.Risk.LegacyEntities == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_legacyEntities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Risk.LegacyEntities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Risk.likelihood":
 		if e.ComplexityRoot.Risk.Likelihood == nil {
 			break
@@ -72868,6 +72892,7 @@ input CreateEntityInput {
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   findingIDs: [ID!]
+  riskIDs: [ID!]
   vulnerabilityIDs: [ID!]
   reviewIDs: [ID!]
   remediationIDs: [ID!]
@@ -75539,6 +75564,7 @@ input CreateRiskInput {
   taskIDs: [ID!]
   assetIDs: [ID!]
   entityIDs: [ID!]
+  legacyEntityIDs: [ID!]
   scanIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
@@ -83659,6 +83685,37 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
     """
     where: FindingWhereInput
   ): FindingConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
   vulnerabilities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -85294,6 +85351,11 @@ input EntityWhereInput {
   """
   hasFindings: Boolean
   hasFindingsWith: [FindingWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
   """
   vulnerabilities edge predicates
   """
@@ -120626,6 +120688,37 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
     """
     where: EntityWhereInput
   ): EntityConnection!
+  legacyEntities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection! @deprecated(reason: "use entities instead")
   scans(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -121797,6 +121890,11 @@ input RiskWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  legacy_entities edge predicates
+  """
+  hasLegacyEntities: Boolean
+  hasLegacyEntitiesWith: [EntityWhereInput!]
   """
   scans edge predicates
   """
@@ -136616,6 +136714,9 @@ input UpdateEntityInput {
   addFindingIDs: [ID!]
   removeFindingIDs: [ID!]
   clearFindings: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
   addVulnerabilityIDs: [ID!]
   removeVulnerabilityIDs: [ID!]
   clearVulnerabilities: Boolean
@@ -140527,6 +140628,9 @@ input UpdateRiskInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
+  addLegacyEntityIDs: [ID!]
+  removeLegacyEntityIDs: [ID!]
+  clearLegacyEntities: Boolean
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
@@ -167301,6 +167405,8 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_subcontrols(ctx, field)
 	case "findings":
 		return ec.fieldContext_Entity_findings(ctx, field)
+	case "risks":
+		return ec.fieldContext_Entity_risks(ctx, field)
 	case "vulnerabilities":
 		return ec.fieldContext_Entity_vulnerabilities(ctx, field)
 	case "reviews":
@@ -173447,6 +173553,8 @@ func (ec *executionContext) childFields_Risk(ctx context.Context, field graphql.
 		return ec.fieldContext_Risk_assets(ctx, field)
 	case "entities":
 		return ec.fieldContext_Risk_entities(ctx, field)
+	case "legacyEntities":
+		return ec.fieldContext_Risk_legacyEntities(ctx, field)
 	case "scans":
 		return ec.fieldContext_Risk_scans(ctx, field)
 	case "stakeholder":

@@ -7699,6 +7699,7 @@ type CreateEntityInput struct {
 	ControlIDs                            []string               `json:"control_ids,omitempty"`
 	SubcontrolIDs                         []string               `json:"subcontrol_ids,omitempty"`
 	FindingIDs                            []string               `json:"finding_ids,omitempty"`
+	RiskIDs                               []string               `json:"risk_ids,omitempty"`
 	VulnerabilityIDs                      []string               `json:"vulnerability_ids,omitempty"`
 	ReviewIDs                             []string               `json:"review_ids,omitempty"`
 	RemediationIDs                        []string               `json:"remediation_ids,omitempty"`
@@ -7952,6 +7953,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.FindingIDs; len(v) > 0 {
 		m.AddFindingIDs(v...)
 	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
 	if v := i.VulnerabilityIDs; len(v) > 0 {
 		m.AddVulnerabilityIDs(v...)
 	}
@@ -8174,6 +8178,9 @@ type UpdateEntityInput struct {
 	ClearFindings                              bool
 	AddFindingIDs                              []string `json:"add_finding_ids,omitempty"`
 	RemoveFindingIDs                           []string `json:"remove_finding_ids,omitempty"`
+	ClearRisks                                 bool
+	AddRiskIDs                                 []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                              []string `json:"remove_risk_ids,omitempty"`
 	ClearVulnerabilities                       bool
 	AddVulnerabilityIDs                        []string `json:"add_vulnerability_ids,omitempty"`
 	RemoveVulnerabilityIDs                     []string `json:"remove_vulnerability_ids,omitempty"`
@@ -8757,6 +8764,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveFindingIDs; len(v) > 0 {
 		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
 	}
 	if i.ClearVulnerabilities {
 		m.ClearVulnerabilities()
@@ -22593,6 +22609,7 @@ type CreateRiskInput struct {
 	TaskIDs                     []string              `json:"task_ids,omitempty"`
 	AssetIDs                    []string              `json:"asset_ids,omitempty"`
 	EntityIDs                   []string              `json:"entity_ids,omitempty"`
+	LegacyEntityIDs             []string              `json:"legacy_entity_ids,omitempty"`
 	ScanIDs                     []string              `json:"scan_ids,omitempty"`
 	StakeholderID               *string               `json:"stakeholder_id,omitempty"`
 	DelegateID                  *string               `json:"delegate_id,omitempty"`
@@ -22773,6 +22790,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
+	if v := i.LegacyEntityIDs; len(v) > 0 {
+		m.AddLegacyEntityIDs(v...)
+	}
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
@@ -22940,6 +22960,9 @@ type UpdateRiskInput struct {
 	ClearEntities                  bool
 	AddEntityIDs                   []string `json:"add_entity_ids,omitempty"`
 	RemoveEntityIDs                []string `json:"remove_entity_ids,omitempty"`
+	ClearLegacyEntities            bool
+	AddLegacyEntityIDs             []string `json:"add_legacy_entity_ids,omitempty"`
+	RemoveLegacyEntityIDs          []string `json:"remove_legacy_entity_ids,omitempty"`
 	ClearScans                     bool
 	AddScanIDs                     []string `json:"add_scan_ids,omitempty"`
 	RemoveScanIDs                  []string `json:"remove_scan_ids,omitempty"`
@@ -23352,6 +23375,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearLegacyEntities {
+		m.ClearLegacyEntities()
+	}
+	if v := i.AddLegacyEntityIDs; len(v) > 0 {
+		m.AddLegacyEntityIDs(v...)
+	}
+	if v := i.RemoveLegacyEntityIDs; len(v) > 0 {
+		m.RemoveLegacyEntityIDs(v...)
 	}
 	if i.ClearScans {
 		m.ClearScans()

@@ -68,6 +68,14 @@ var backfillRoutines = []backfillRoutine{
 		// },
 	},
 	{
+		Name:    "backfill-entities-risk",
+		Version: "v1",
+		Enabled: true,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			return backfillRiskEntities(ctx, deps.Client)
+		},
+	},
+	{
 		Name:    "normalize-slugs",
 		Version: "v1",
 		Enabled: true,

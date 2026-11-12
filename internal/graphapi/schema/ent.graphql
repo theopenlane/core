@@ -14040,6 +14040,7 @@ input CreateEntityInput {
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   findingIDs: [ID!]
+  riskIDs: [ID!]
   vulnerabilityIDs: [ID!]
   reviewIDs: [ID!]
   remediationIDs: [ID!]
@@ -16711,6 +16712,7 @@ input CreateRiskInput {
   taskIDs: [ID!]
   assetIDs: [ID!]
   entityIDs: [ID!]
+  legacyEntityIDs: [ID!]
   scanIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
@@ -24831,6 +24833,37 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
     """
     where: FindingWhereInput
   ): FindingConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
   vulnerabilities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -26466,6 +26499,11 @@ input EntityWhereInput {
   """
   hasFindings: Boolean
   hasFindingsWith: [FindingWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
   """
   vulnerabilities edge predicates
   """
@@ -61798,6 +61836,37 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
     """
     where: EntityWhereInput
   ): EntityConnection!
+  legacyEntities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection! @deprecated(reason: "use entities instead")
   scans(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62969,6 +63038,11 @@ input RiskWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  legacy_entities edge predicates
+  """
+  hasLegacyEntities: Boolean
+  hasLegacyEntitiesWith: [EntityWhereInput!]
   """
   scans edge predicates
   """
@@ -77788,6 +77862,9 @@ input UpdateEntityInput {
   addFindingIDs: [ID!]
   removeFindingIDs: [ID!]
   clearFindings: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
   addVulnerabilityIDs: [ID!]
   removeVulnerabilityIDs: [ID!]
   clearVulnerabilities: Boolean
@@ -81699,6 +81776,9 @@ input UpdateRiskInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
+  addLegacyEntityIDs: [ID!]
+  removeLegacyEntityIDs: [ID!]
+  clearLegacyEntities: Boolean
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean

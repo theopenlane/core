@@ -263,6 +263,8 @@ type EntityEdges struct {
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Findings holds the value of the findings edge.
 	Findings []*Finding `json:"findings,omitempty"`
+	// Risks holds the value of the risks edge.
+	Risks []*Risk `json:"risks,omitempty"`
 	// Vulnerabilities holds the value of the vulnerabilities edge.
 	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
 	// Reviews holds the value of the reviews edge.
@@ -283,9 +285,9 @@ type EntityEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [44]bool
+	loadedTypes [45]bool
 	// totalCount holds the count of the edges above.
-	totalCount [44]map[string]int
+	totalCount [45]map[string]int
 
 	namedIntegrationRuns         map[string][]*IntegrationRun
 	namedBlockedGroups           map[string][]*Group
@@ -309,6 +311,7 @@ type EntityEdges struct {
 	namedControls                map[string][]*Control
 	namedSubcontrols             map[string][]*Subcontrol
 	namedFindings                map[string][]*Finding
+	namedRisks                   map[string][]*Risk
 	namedVulnerabilities         map[string][]*Vulnerability
 	namedReviews                 map[string][]*Review
 	namedRemediations            map[string][]*Remediation
@@ -659,10 +662,19 @@ func (e EntityEdges) FindingsOrErr() ([]*Finding, error) {
 	return nil, &NotLoadedError{edge: "findings"}
 }
 
+// RisksOrErr returns the Risks value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) RisksOrErr() ([]*Risk, error) {
+	if e.loadedTypes[35] {
+		return e.Risks, nil
+	}
+	return nil, &NotLoadedError{edge: "risks"}
+}
+
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[36] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -671,7 +683,7 @@ func (e EntityEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[37] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -680,7 +692,7 @@ func (e EntityEdges) ReviewsOrErr() ([]*Review, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[37] {
+	if e.loadedTypes[38] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -689,7 +701,7 @@ func (e EntityEdges) RemediationsOrErr() ([]*Remediation, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[38] {
+	if e.loadedTypes[39] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -698,7 +710,7 @@ func (e EntityEdges) PlatformsOrErr() ([]*Platform, error) {
 // OutOfScopePlatformsOrErr returns the OutOfScopePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[39] {
+	if e.loadedTypes[40] {
 		return e.OutOfScopePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_platforms"}
@@ -707,7 +719,7 @@ func (e EntityEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
 // SourcePlatformsOrErr returns the SourcePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) SourcePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[40] {
+	if e.loadedTypes[41] {
 		return e.SourcePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "source_platforms"}
@@ -718,7 +730,7 @@ func (e EntityEdges) SourcePlatformsOrErr() ([]*Platform, error) {
 func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 	if e.EntityType != nil {
 		return e.EntityType, nil
-	} else if e.loadedTypes[41] {
+	} else if e.loadedTypes[42] {
 		return nil, &NotFoundError{label: entitytype.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_type"}
@@ -729,7 +741,7 @@ func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 func (e EntityEdges) LogoFileOrErr() (*File, error) {
 	if e.LogoFile != nil {
 		return e.LogoFile, nil
-	} else if e.loadedTypes[42] {
+	} else if e.loadedTypes[43] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
@@ -738,7 +750,7 @@ func (e EntityEdges) LogoFileOrErr() (*File, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[43] {
+	if e.loadedTypes[44] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -1484,6 +1496,11 @@ func (_m *Entity) QuerySubcontrols() *SubcontrolQuery {
 // QueryFindings queries the "findings" edge of the Entity entity.
 func (_m *Entity) QueryFindings() *FindingQuery {
 	return NewEntityClient(_m.config).QueryFindings(_m)
+}
+
+// QueryRisks queries the "risks" edge of the Entity entity.
+func (_m *Entity) QueryRisks() *RiskQuery {
+	return NewEntityClient(_m.config).QueryRisks(_m)
 }
 
 // QueryVulnerabilities queries the "vulnerabilities" edge of the Entity entity.
@@ -2340,6 +2357,30 @@ func (_m *Entity) appendNamedFindings(name string, edges ...*Finding) {
 		_m.Edges.namedFindings[name] = []*Finding{}
 	} else {
 		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
+	}
+}
+
+// NamedRisks returns the Risks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Entity) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRisks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Entity) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRisks[name] = []*Risk{}
+	} else {
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
 	}
 }
 
