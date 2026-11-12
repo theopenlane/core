@@ -637,6 +637,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldSystemInternalID:           {Type: field.TypeString, Column: control.FieldSystemInternalID},
 			control.FieldControlKindName:            {Type: field.TypeString, Column: control.FieldControlKindName},
 			control.FieldControlKindID:              {Type: field.TypeString, Column: control.FieldControlKindID},
+			control.FieldControlOriginName:          {Type: field.TypeString, Column: control.FieldControlOriginName},
+			control.FieldControlOriginID:            {Type: field.TypeString, Column: control.FieldControlOriginID},
 			control.FieldEnvironmentName:            {Type: field.TypeString, Column: control.FieldEnvironmentName},
 			control.FieldEnvironmentID:              {Type: field.TypeString, Column: control.FieldEnvironmentID},
 			control.FieldScopeName:                  {Type: field.TypeString, Column: control.FieldScopeName},
@@ -3151,6 +3153,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldSystemInternalID:           {Type: field.TypeString, Column: subcontrol.FieldSystemInternalID},
 			subcontrol.FieldSubcontrolKindName:         {Type: field.TypeString, Column: subcontrol.FieldSubcontrolKindName},
 			subcontrol.FieldSubcontrolKindID:           {Type: field.TypeString, Column: subcontrol.FieldSubcontrolKindID},
+			subcontrol.FieldControlOriginName:          {Type: field.TypeString, Column: subcontrol.FieldControlOriginName},
+			subcontrol.FieldControlOriginID:            {Type: field.TypeString, Column: subcontrol.FieldControlOriginID},
 			subcontrol.FieldWorkflowEligibleMarker:     {Type: field.TypeBool, Column: subcontrol.FieldWorkflowEligibleMarker},
 			subcontrol.FieldRefCode:                    {Type: field.TypeString, Column: subcontrol.FieldRefCode},
 			subcontrol.FieldControlID:                  {Type: field.TypeString, Column: subcontrol.FieldControlID},
@@ -5972,6 +5976,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   control.ControlKindTable,
 			Columns: []string{control.ControlKindColumn},
+			Bidi:    false,
+		},
+		"Control",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
+		"control_origin",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlOriginTable,
+			Columns: []string{control.ControlOriginColumn},
 			Bidi:    false,
 		},
 		"Control",
@@ -16862,6 +16878,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"CustomTypeEnum",
 	)
 	graph.MustAddE(
+		"control_origin",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ControlOriginTable,
+			Columns: []string{subcontrol.ControlOriginColumn},
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
 		"control",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -24257,6 +24285,16 @@ func (f *ControlFilter) WhereControlKindID(p entql.StringP) {
 	f.Where(p.Field(control.FieldControlKindID))
 }
 
+// WhereControlOriginName applies the entql string predicate on the control_origin_name field.
+func (f *ControlFilter) WhereControlOriginName(p entql.StringP) {
+	f.Where(p.Field(control.FieldControlOriginName))
+}
+
+// WhereControlOriginID applies the entql string predicate on the control_origin_id field.
+func (f *ControlFilter) WhereControlOriginID(p entql.StringP) {
+	f.Where(p.Field(control.FieldControlOriginID))
+}
+
 // WhereEnvironmentName applies the entql string predicate on the environment_name field.
 func (f *ControlFilter) WhereEnvironmentName(p entql.StringP) {
 	f.Where(p.Field(control.FieldEnvironmentName))
@@ -24590,6 +24628,20 @@ func (f *ControlFilter) WhereHasControlKind() {
 // WhereHasControlKindWith applies a predicate to check if query has an edge control_kind with a given conditions (other predicates).
 func (f *ControlFilter) WhereHasControlKindWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("control_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControlOrigin applies a predicate to check if query has an edge control_origin.
+func (f *ControlFilter) WhereHasControlOrigin() {
+	f.Where(entql.HasEdge("control_origin"))
+}
+
+// WhereHasControlOriginWith applies a predicate to check if query has an edge control_origin with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasControlOriginWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("control_origin", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -47978,6 +48030,16 @@ func (f *SubcontrolFilter) WhereSubcontrolKindID(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldSubcontrolKindID))
 }
 
+// WhereControlOriginName applies the entql string predicate on the control_origin_name field.
+func (f *SubcontrolFilter) WhereControlOriginName(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldControlOriginName))
+}
+
+// WhereControlOriginID applies the entql string predicate on the control_origin_id field.
+func (f *SubcontrolFilter) WhereControlOriginID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldControlOriginID))
+}
+
 // WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
 func (f *SubcontrolFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(subcontrol.FieldWorkflowEligibleMarker))
@@ -48253,6 +48315,20 @@ func (f *SubcontrolFilter) WhereHasSubcontrolKind() {
 // WhereHasSubcontrolKindWith applies a predicate to check if query has an edge subcontrol_kind with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasSubcontrolKindWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("subcontrol_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControlOrigin applies a predicate to check if query has an edge control_origin.
+func (f *SubcontrolFilter) WhereHasControlOrigin() {
+	f.Where(entql.HasEdge("control_origin"))
+}
+
+// WhereHasControlOriginWith applies a predicate to check if query has an edge control_origin with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasControlOriginWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("control_origin", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

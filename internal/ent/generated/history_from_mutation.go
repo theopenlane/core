@@ -4283,6 +4283,14 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetControlKindID(controlKindID)
 	}
 
+	if controlOriginName, exists := m.ControlOriginName(); exists {
+		create = create.SetControlOriginName(controlOriginName)
+	}
+
+	if controlOriginID, exists := m.ControlOriginID(); exists {
+		create = create.SetControlOriginID(controlOriginID)
+	}
+
 	if environmentName, exists := m.EnvironmentName(); exists {
 		create = create.SetEnvironmentName(environmentName)
 	}
@@ -4665,6 +4673,18 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetControlKindID(control.ControlKindID)
 		}
 
+		if controlOriginName, exists := m.ControlOriginName(); exists {
+			create = create.SetControlOriginName(controlOriginName)
+		} else {
+			create = create.SetControlOriginName(control.ControlOriginName)
+		}
+
+		if controlOriginID, exists := m.ControlOriginID(); exists {
+			create = create.SetControlOriginID(controlOriginID)
+		} else {
+			create = create.SetControlOriginID(control.ControlOriginID)
+		}
+
 		if environmentName, exists := m.EnvironmentName(); exists {
 			create = create.SetEnvironmentName(environmentName)
 		} else {
@@ -4809,6 +4829,8 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableSystemInternalID(control.SystemInternalID).
 			SetControlKindName(control.ControlKindName).
 			SetControlKindID(control.ControlKindID).
+			SetControlOriginName(control.ControlOriginName).
+			SetControlOriginID(control.ControlOriginID).
 			SetEnvironmentName(control.EnvironmentName).
 			SetEnvironmentID(control.EnvironmentID).
 			SetScopeName(control.ScopeName).
@@ -22004,6 +22026,14 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetSubcontrolKindID(subcontrolKindID)
 	}
 
+	if controlOriginName, exists := m.ControlOriginName(); exists {
+		create = create.SetControlOriginName(controlOriginName)
+	}
+
+	if controlOriginID, exists := m.ControlOriginID(); exists {
+		create = create.SetControlOriginID(controlOriginID)
+	}
+
 	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
 		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
@@ -22362,6 +22392,18 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetSubcontrolKindID(subcontrol.SubcontrolKindID)
 		}
 
+		if controlOriginName, exists := m.ControlOriginName(); exists {
+			create = create.SetControlOriginName(controlOriginName)
+		} else {
+			create = create.SetControlOriginName(subcontrol.ControlOriginName)
+		}
+
+		if controlOriginID, exists := m.ControlOriginID(); exists {
+			create = create.SetControlOriginID(controlOriginID)
+		} else {
+			create = create.SetControlOriginID(subcontrol.ControlOriginID)
+		}
+
 		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
 			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 		} else {
@@ -22470,6 +22512,8 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetNillableSystemInternalID(subcontrol.SystemInternalID).
 			SetSubcontrolKindName(subcontrol.SubcontrolKindName).
 			SetSubcontrolKindID(subcontrol.SubcontrolKindID).
+			SetControlOriginName(subcontrol.ControlOriginName).
+			SetControlOriginID(subcontrol.ControlOriginID).
 			SetWorkflowEligibleMarker(subcontrol.WorkflowEligibleMarker).
 			SetRefCode(subcontrol.RefCode).
 			SetControlID(subcontrol.ControlID).

@@ -122,6 +122,10 @@ const (
 	FieldControlKindName = "control_kind_name"
 	// FieldControlKindID holds the string denoting the control_kind_id field in the database.
 	FieldControlKindID = "control_kind_id"
+	// FieldControlOriginName holds the string denoting the control_origin_name field in the database.
+	FieldControlOriginName = "control_origin_name"
+	// FieldControlOriginID holds the string denoting the control_origin_id field in the database.
+	FieldControlOriginID = "control_origin_id"
 	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
 	FieldEnvironmentName = "environment_name"
 	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
@@ -182,6 +186,8 @@ const (
 	EdgeEditors = "editors"
 	// EdgeControlKind holds the string denoting the control_kind edge name in mutations.
 	EdgeControlKind = "control_kind"
+	// EdgeControlOrigin holds the string denoting the control_origin edge name in mutations.
+	EdgeControlOrigin = "control_origin"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
@@ -341,6 +347,13 @@ const (
 	ControlKindInverseTable = "custom_type_enums"
 	// ControlKindColumn is the table column denoting the control_kind relation/edge.
 	ControlKindColumn = "control_kind_id"
+	// ControlOriginTable is the table that holds the control_origin relation/edge.
+	ControlOriginTable = "controls"
+	// ControlOriginInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ControlOriginInverseTable = "custom_type_enums"
+	// ControlOriginColumn is the table column denoting the control_origin relation/edge.
+	ControlOriginColumn = "control_origin_id"
 	// EnvironmentTable is the table that holds the environment relation/edge.
 	EnvironmentTable = "controls"
 	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
@@ -500,6 +513,8 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldControlKindName,
 	FieldControlKindID,
+	FieldControlOriginName,
+	FieldControlOriginID,
 	FieldEnvironmentName,
 	FieldEnvironmentID,
 	FieldScopeName,
@@ -616,7 +631,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [20]ent.Hook
+	Hooks        [21]ent.Hook
 	Interceptors [6]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -899,6 +914,16 @@ func ByControlKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByControlKindID orders the results by the control_kind_id field.
 func ByControlKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldControlKindID, opts...).ToFunc()
+}
+
+// ByControlOriginName orders the results by the control_origin_name field.
+func ByControlOriginName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlOriginName, opts...).ToFunc()
+}
+
+// ByControlOriginID orders the results by the control_origin_id field.
+func ByControlOriginID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlOriginID, opts...).ToFunc()
 }
 
 // ByEnvironmentName orders the results by the environment_name field.
@@ -1202,6 +1227,13 @@ func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 func ByControlKindField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newControlKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByControlOriginField orders the results by control_origin field.
+func ByControlOriginField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlOriginStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1580,6 +1612,13 @@ func newControlKindStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlKindInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ControlKindTable, ControlKindColumn),
+	)
+}
+func newControlOriginStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlOriginInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ControlOriginTable, ControlOriginColumn),
 	)
 }
 func newEnvironmentStep() *sqlgraph.Step {

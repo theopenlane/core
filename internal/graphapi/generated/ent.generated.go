@@ -68117,6 +68117,52 @@ func (ec *executionContext) fieldContext_Control_controlKindID(_ context.Context
 	return graphql.NewScalarFieldContext("Control", field, false, false, "ID")
 }
 
+func (ec *executionContext) _Control_controlOriginName(ctx context.Context, field graphql.CollectedField, obj *generated.Control) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Control_controlOriginName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOriginName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Control_controlOriginName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Control", field, false, false, "String")
+}
+
+func (ec *executionContext) _Control_controlOriginID(ctx context.Context, field graphql.CollectedField, obj *generated.Control) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Control_controlOriginID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOriginID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Control_controlOriginID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Control", field, false, false, "ID")
+}
+
 func (ec *executionContext) _Control_environmentName(ctx context.Context, field graphql.CollectedField, obj *generated.Control) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -69194,6 +69240,38 @@ func (ec *executionContext) _Control_controlKind(ctx context.Context, field grap
 	)
 }
 func (ec *executionContext) fieldContext_Control_controlKind(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Control",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CustomTypeEnum(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Control_controlOrigin(ctx context.Context, field graphql.CollectedField, obj *generated.Control) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Control_controlOrigin(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOrigin(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnum) graphql.Marshaler {
+			return ec.marshalOCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Control_controlOrigin(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Control",
 		Field:      field,
@@ -156480,6 +156558,52 @@ func (ec *executionContext) fieldContext_Subcontrol_subcontrolKindID(_ context.C
 	return graphql.NewScalarFieldContext("Subcontrol", field, false, false, "ID")
 }
 
+func (ec *executionContext) _Subcontrol_controlOriginName(ctx context.Context, field graphql.CollectedField, obj *generated.Subcontrol) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Subcontrol_controlOriginName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOriginName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Subcontrol_controlOriginName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Subcontrol", field, false, false, "String")
+}
+
+func (ec *executionContext) _Subcontrol_controlOriginID(ctx context.Context, field graphql.CollectedField, obj *generated.Subcontrol) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Subcontrol_controlOriginID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOriginID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Subcontrol_controlOriginID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Subcontrol", field, false, false, "ID")
+}
+
 func (ec *executionContext) _Subcontrol_workflowEligibleMarker(ctx context.Context, field graphql.CollectedField, obj *generated.Subcontrol) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -157331,6 +157455,38 @@ func (ec *executionContext) _Subcontrol_subcontrolKind(ctx context.Context, fiel
 	)
 }
 func (ec *executionContext) fieldContext_Subcontrol_subcontrolKind(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subcontrol",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CustomTypeEnum(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Subcontrol_controlOrigin(ctx context.Context, field graphql.CollectedField, obj *generated.Subcontrol) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Subcontrol_controlOrigin(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOrigin(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnum) graphql.Marshaler {
+			return ec.marshalOCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Subcontrol_controlOrigin(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Subcontrol",
 		Field:      field,
@@ -211751,7 +211907,7 @@ func (ec *executionContext) unmarshalInputControlWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "controlKindName", "controlKindNameNEQ", "controlKindNameIn", "controlKindNameNotIn", "controlKindNameContains", "controlKindNameHasPrefix", "controlKindNameHasSuffix", "controlKindNameIsNil", "controlKindNameNotNil", "controlKindNameEqualFold", "controlKindNameContainsFold", "controlKindID", "controlKindIDNEQ", "controlKindIDIn", "controlKindIDNotIn", "controlKindIDContains", "controlKindIDHasPrefix", "controlKindIDHasSuffix", "controlKindIDIsNil", "controlKindIDNotNil", "controlKindIDEqualFold", "controlKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "standardID", "standardIDNEQ", "standardIDIn", "standardIDNotIn", "standardIDContains", "standardIDHasPrefix", "standardIDHasSuffix", "standardIDIsNil", "standardIDNotNil", "standardIDEqualFold", "standardIDContainsFold", "trustCenterVisibility", "trustCenterVisibilityNEQ", "trustCenterVisibilityIn", "trustCenterVisibilityNotIn", "trustCenterVisibilityIsNil", "trustCenterVisibilityNotNil", "isTrustCenterControl", "isTrustCenterControlNEQ", "isTrustCenterControlIsNil", "isTrustCenterControlNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasControlKind", "hasControlKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasStandard", "hasStandardWith", "hasCheckResults", "hasCheckResultsWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasCampaigns", "hasCampaignsWith", "hasFindings", "hasFindingsWith", "hasControlImplementations", "hasControlImplementationsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "controlKindName", "controlKindNameNEQ", "controlKindNameIn", "controlKindNameNotIn", "controlKindNameContains", "controlKindNameHasPrefix", "controlKindNameHasSuffix", "controlKindNameIsNil", "controlKindNameNotNil", "controlKindNameEqualFold", "controlKindNameContainsFold", "controlKindID", "controlKindIDNEQ", "controlKindIDIn", "controlKindIDNotIn", "controlKindIDContains", "controlKindIDHasPrefix", "controlKindIDHasSuffix", "controlKindIDIsNil", "controlKindIDNotNil", "controlKindIDEqualFold", "controlKindIDContainsFold", "controlOriginName", "controlOriginNameNEQ", "controlOriginNameIn", "controlOriginNameNotIn", "controlOriginNameContains", "controlOriginNameHasPrefix", "controlOriginNameHasSuffix", "controlOriginNameIsNil", "controlOriginNameNotNil", "controlOriginNameEqualFold", "controlOriginNameContainsFold", "controlOriginID", "controlOriginIDNEQ", "controlOriginIDIn", "controlOriginIDNotIn", "controlOriginIDContains", "controlOriginIDHasPrefix", "controlOriginIDHasSuffix", "controlOriginIDIsNil", "controlOriginIDNotNil", "controlOriginIDEqualFold", "controlOriginIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "standardID", "standardIDNEQ", "standardIDIn", "standardIDNotIn", "standardIDContains", "standardIDHasPrefix", "standardIDHasSuffix", "standardIDIsNil", "standardIDNotNil", "standardIDEqualFold", "standardIDContainsFold", "trustCenterVisibility", "trustCenterVisibilityNEQ", "trustCenterVisibilityIn", "trustCenterVisibilityNotIn", "trustCenterVisibilityIsNil", "trustCenterVisibilityNotNil", "isTrustCenterControl", "isTrustCenterControlNEQ", "isTrustCenterControlIsNil", "isTrustCenterControlNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasControlKind", "hasControlKindWith", "hasControlOrigin", "hasControlOriginWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasStandard", "hasStandardWith", "hasCheckResults", "hasCheckResultsWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasCampaigns", "hasCampaignsWith", "hasFindings", "hasFindingsWith", "hasControlImplementations", "hasControlImplementationsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -214523,6 +214679,160 @@ func (ec *executionContext) unmarshalInputControlWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.ControlKindIDContainsFold = data
+		case "controlOriginName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginName = data
+		case "controlOriginNameNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameNEQ = data
+		case "controlOriginNameIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameIn = data
+		case "controlOriginNameNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameNotIn = data
+		case "controlOriginNameContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameContains = data
+		case "controlOriginNameHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameHasPrefix = data
+		case "controlOriginNameHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameHasSuffix = data
+		case "controlOriginNameIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameIsNil = data
+		case "controlOriginNameNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameNotNil = data
+		case "controlOriginNameEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameEqualFold = data
+		case "controlOriginNameContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameContainsFold = data
+		case "controlOriginID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginID = data
+		case "controlOriginIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDNEQ = data
+		case "controlOriginIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDIn = data
+		case "controlOriginIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDNotIn = data
+		case "controlOriginIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDContains = data
+		case "controlOriginIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDHasPrefix = data
+		case "controlOriginIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDHasSuffix = data
+		case "controlOriginIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDIsNil = data
+		case "controlOriginIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDNotNil = data
+		case "controlOriginIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDEqualFold = data
+		case "controlOriginIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDContainsFold = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -215363,6 +215673,20 @@ func (ec *executionContext) unmarshalInputControlWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.HasControlKindWith = data
+		case "hasControlOrigin":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControlOrigin"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasControlOrigin = data
+		case "hasControlOriginWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControlOriginWith"))
+			data, err := ec.unmarshalOCustomTypeEnumWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasControlOriginWith = data
 		case "hasEnvironment":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEnvironment"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -218208,7 +218532,7 @@ func (ec *executionContext) unmarshalInputCreateControlInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "externalID", "externalUUID", "title", "description", "descriptionJSON", "aliases", "referenceID", "auditorReferenceID", "status", "implementationStatus", "implementationDescription", "publicRepresentation", "source", "sourceName", "referenceFramework", "referenceFrameworkRevision", "category", "categoryID", "subcategory", "mappedCategories", "assessmentObjectives", "assessmentMethods", "controlQuestions", "implementationGuidance", "exampleEvidence", "references", "testingProcedures", "evidenceRequests", "internalNotes", "systemInternalID", "controlKindName", "environmentName", "scopeName", "workflowEligibleMarker", "refCode", "trustCenterVisibility", "integrationRunIDs", "evidenceIDs", "controlObjectiveIDs", "taskIDs", "narrativeIDs", "riskIDs", "actionPlanIDs", "procedureIDs", "internalPolicyIDs", "commentIDs", "discussionIDs", "controlOwnerID", "delegateID", "responsiblePartyID", "reviewIDs", "remediationIDs", "scanIDs", "ownerID", "blockedGroupIDs", "editorIDs", "controlKindID", "environmentID", "scopeID", "standardID", "checkResultIDs", "programIDs", "platformIDs", "vulnerabilityIDs", "assetIDs", "entityIDs", "identityHolderIDs", "campaignIDs", "controlImplementationIDs", "subcontrolIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "externalID", "externalUUID", "title", "description", "descriptionJSON", "aliases", "referenceID", "auditorReferenceID", "status", "implementationStatus", "implementationDescription", "publicRepresentation", "source", "sourceName", "referenceFramework", "referenceFrameworkRevision", "category", "categoryID", "subcategory", "mappedCategories", "assessmentObjectives", "assessmentMethods", "controlQuestions", "implementationGuidance", "exampleEvidence", "references", "testingProcedures", "evidenceRequests", "internalNotes", "systemInternalID", "controlKindName", "controlOriginName", "environmentName", "scopeName", "workflowEligibleMarker", "refCode", "trustCenterVisibility", "integrationRunIDs", "evidenceIDs", "controlObjectiveIDs", "taskIDs", "narrativeIDs", "riskIDs", "actionPlanIDs", "procedureIDs", "internalPolicyIDs", "commentIDs", "discussionIDs", "controlOwnerID", "delegateID", "responsiblePartyID", "reviewIDs", "remediationIDs", "scanIDs", "ownerID", "blockedGroupIDs", "editorIDs", "controlKindID", "controlOriginID", "environmentID", "scopeID", "standardID", "checkResultIDs", "programIDs", "platformIDs", "vulnerabilityIDs", "assetIDs", "entityIDs", "identityHolderIDs", "campaignIDs", "controlImplementationIDs", "subcontrolIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -218651,6 +218975,13 @@ func (ec *executionContext) unmarshalInputCreateControlInput(ctx context.Context
 				return it, err
 			}
 			it.ControlKindName = data
+		case "controlOriginName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginName = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -218853,6 +219184,13 @@ func (ec *executionContext) unmarshalInputCreateControlInput(ctx context.Context
 				return it, err
 			}
 			it.ControlKindID = data
+		case "controlOriginID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginID = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -231200,7 +231538,7 @@ func (ec *executionContext) unmarshalInputCreateSubcontrolInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "externalID", "externalUUID", "title", "description", "descriptionJSON", "aliases", "referenceID", "auditorReferenceID", "status", "implementationStatus", "implementationDescription", "publicRepresentation", "source", "sourceName", "referenceFramework", "referenceFrameworkRevision", "category", "categoryID", "subcategory", "mappedCategories", "assessmentObjectives", "assessmentMethods", "controlQuestions", "implementationGuidance", "exampleEvidence", "references", "testingProcedures", "evidenceRequests", "internalNotes", "systemInternalID", "subcontrolKindName", "workflowEligibleMarker", "refCode", "integrationRunIDs", "evidenceIDs", "controlObjectiveIDs", "taskIDs", "narrativeIDs", "riskIDs", "actionPlanIDs", "procedureIDs", "internalPolicyIDs", "commentIDs", "discussionIDs", "controlOwnerID", "delegateID", "responsiblePartyID", "reviewIDs", "remediationIDs", "scanIDs", "ownerID", "subcontrolKindID", "controlID", "controlImplementationIDs", "workflowObjectRefIDs", "assetIDs", "entityIDs", "identityHolderIDs", "vulnerabilityIDs", "findingIDs"}
+	fieldsInOrder := [...]string{"tags", "externalID", "externalUUID", "title", "description", "descriptionJSON", "aliases", "referenceID", "auditorReferenceID", "status", "implementationStatus", "implementationDescription", "publicRepresentation", "source", "sourceName", "referenceFramework", "referenceFrameworkRevision", "category", "categoryID", "subcategory", "mappedCategories", "assessmentObjectives", "assessmentMethods", "controlQuestions", "implementationGuidance", "exampleEvidence", "references", "testingProcedures", "evidenceRequests", "internalNotes", "systemInternalID", "subcontrolKindName", "controlOriginName", "workflowEligibleMarker", "refCode", "integrationRunIDs", "evidenceIDs", "controlObjectiveIDs", "taskIDs", "narrativeIDs", "riskIDs", "actionPlanIDs", "procedureIDs", "internalPolicyIDs", "commentIDs", "discussionIDs", "controlOwnerID", "delegateID", "responsiblePartyID", "reviewIDs", "remediationIDs", "scanIDs", "ownerID", "subcontrolKindID", "controlOriginID", "controlID", "controlImplementationIDs", "workflowObjectRefIDs", "assetIDs", "entityIDs", "identityHolderIDs", "vulnerabilityIDs", "findingIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -231643,6 +231981,13 @@ func (ec *executionContext) unmarshalInputCreateSubcontrolInput(ctx context.Cont
 				return it, err
 			}
 			it.SubcontrolKindName = data
+		case "controlOriginName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginName = data
 		case "workflowEligibleMarker":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowEligibleMarker"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -231810,6 +232155,13 @@ func (ec *executionContext) unmarshalInputCreateSubcontrolInput(ctx context.Cont
 				return it, err
 			}
 			it.SubcontrolKindID = data
+		case "controlOriginID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginID = data
 		case "controlID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlID"))
 			data, err := ec.unmarshalNID2string(ctx, v)
@@ -332116,7 +332468,7 @@ func (ec *executionContext) unmarshalInputSubcontrolWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "subcontrolKindName", "subcontrolKindNameNEQ", "subcontrolKindNameIn", "subcontrolKindNameNotIn", "subcontrolKindNameContains", "subcontrolKindNameHasPrefix", "subcontrolKindNameHasSuffix", "subcontrolKindNameIsNil", "subcontrolKindNameNotNil", "subcontrolKindNameEqualFold", "subcontrolKindNameContainsFold", "subcontrolKindID", "subcontrolKindIDNEQ", "subcontrolKindIDIn", "subcontrolKindIDNotIn", "subcontrolKindIDContains", "subcontrolKindIDHasPrefix", "subcontrolKindIDHasSuffix", "subcontrolKindIDIsNil", "subcontrolKindIDNotNil", "subcontrolKindIDEqualFold", "subcontrolKindIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "controlID", "controlIDNEQ", "controlIDIn", "controlIDNotIn", "controlIDContains", "controlIDHasPrefix", "controlIDHasSuffix", "controlIDEqualFold", "controlIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasSubcontrolKind", "hasSubcontrolKindWith", "hasControl", "hasControlWith", "hasControlImplementations", "hasControlImplementationsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "subcontrolKindName", "subcontrolKindNameNEQ", "subcontrolKindNameIn", "subcontrolKindNameNotIn", "subcontrolKindNameContains", "subcontrolKindNameHasPrefix", "subcontrolKindNameHasSuffix", "subcontrolKindNameIsNil", "subcontrolKindNameNotNil", "subcontrolKindNameEqualFold", "subcontrolKindNameContainsFold", "subcontrolKindID", "subcontrolKindIDNEQ", "subcontrolKindIDIn", "subcontrolKindIDNotIn", "subcontrolKindIDContains", "subcontrolKindIDHasPrefix", "subcontrolKindIDHasSuffix", "subcontrolKindIDIsNil", "subcontrolKindIDNotNil", "subcontrolKindIDEqualFold", "subcontrolKindIDContainsFold", "controlOriginName", "controlOriginNameNEQ", "controlOriginNameIn", "controlOriginNameNotIn", "controlOriginNameContains", "controlOriginNameHasPrefix", "controlOriginNameHasSuffix", "controlOriginNameIsNil", "controlOriginNameNotNil", "controlOriginNameEqualFold", "controlOriginNameContainsFold", "controlOriginID", "controlOriginIDNEQ", "controlOriginIDIn", "controlOriginIDNotIn", "controlOriginIDContains", "controlOriginIDHasPrefix", "controlOriginIDHasSuffix", "controlOriginIDIsNil", "controlOriginIDNotNil", "controlOriginIDEqualFold", "controlOriginIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "controlID", "controlIDNEQ", "controlIDIn", "controlIDNotIn", "controlIDContains", "controlIDHasPrefix", "controlIDHasSuffix", "controlIDEqualFold", "controlIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasSubcontrolKind", "hasSubcontrolKindWith", "hasControlOrigin", "hasControlOriginWith", "hasControl", "hasControlWith", "hasControlImplementations", "hasControlImplementationsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -334888,6 +335240,160 @@ func (ec *executionContext) unmarshalInputSubcontrolWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.SubcontrolKindIDContainsFold = data
+		case "controlOriginName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginName = data
+		case "controlOriginNameNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameNEQ = data
+		case "controlOriginNameIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameIn = data
+		case "controlOriginNameNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameNotIn = data
+		case "controlOriginNameContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameContains = data
+		case "controlOriginNameHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameHasPrefix = data
+		case "controlOriginNameHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameHasSuffix = data
+		case "controlOriginNameIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameIsNil = data
+		case "controlOriginNameNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameNotNil = data
+		case "controlOriginNameEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameEqualFold = data
+		case "controlOriginNameContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginNameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginNameContainsFold = data
+		case "controlOriginID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginID = data
+		case "controlOriginIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDNEQ = data
+		case "controlOriginIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDIn = data
+		case "controlOriginIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDNotIn = data
+		case "controlOriginIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDContains = data
+		case "controlOriginIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDHasPrefix = data
+		case "controlOriginIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDHasSuffix = data
+		case "controlOriginIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDIsNil = data
+		case "controlOriginIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDNotNil = data
+		case "controlOriginIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDEqualFold = data
+		case "controlOriginIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginIDContainsFold = data
 		case "workflowEligibleMarker":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowEligibleMarker"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -335308,6 +335814,20 @@ func (ec *executionContext) unmarshalInputSubcontrolWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.HasSubcontrolKindWith = data
+		case "hasControlOrigin":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControlOrigin"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasControlOrigin = data
+		case "hasControlOriginWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControlOriginWith"))
+			data, err := ec.unmarshalOCustomTypeEnumWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasControlOriginWith = data
 		case "hasControl":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasControl"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -362240,7 +362760,7 @@ func (ec *executionContext) unmarshalInputUpdateControlInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalID", "clearExternalID", "externalUUID", "clearExternalUUID", "title", "clearTitle", "description", "clearDescription", "descriptionJSON", "appendDescriptionJSON", "clearDescriptionJSON", "aliases", "appendAliases", "clearAliases", "referenceID", "clearReferenceID", "auditorReferenceID", "clearAuditorReferenceID", "status", "clearStatus", "implementationStatus", "clearImplementationStatus", "implementationDescription", "clearImplementationDescription", "publicRepresentation", "clearPublicRepresentation", "source", "clearSource", "sourceName", "clearSourceName", "referenceFrameworkRevision", "clearReferenceFrameworkRevision", "category", "clearCategory", "categoryID", "clearCategoryID", "subcategory", "clearSubcategory", "mappedCategories", "appendMappedCategories", "clearMappedCategories", "assessmentObjectives", "appendAssessmentObjectives", "clearAssessmentObjectives", "assessmentMethods", "appendAssessmentMethods", "clearAssessmentMethods", "controlQuestions", "appendControlQuestions", "clearControlQuestions", "implementationGuidance", "appendImplementationGuidance", "clearImplementationGuidance", "exampleEvidence", "appendExampleEvidence", "clearExampleEvidence", "references", "appendReferences", "clearReferences", "testingProcedures", "appendTestingProcedures", "clearTestingProcedures", "evidenceRequests", "appendEvidenceRequests", "clearEvidenceRequests", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "controlKindName", "clearControlKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "refCode", "trustCenterVisibility", "clearTrustCenterVisibility", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "controlOwnerID", "clearControlOwner", "delegateID", "clearDelegate", "responsiblePartyID", "clearResponsibleParty", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addScanIDs", "removeScanIDs", "clearScans", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "controlKindID", "clearControlKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "standardID", "clearStandard", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalID", "clearExternalID", "externalUUID", "clearExternalUUID", "title", "clearTitle", "description", "clearDescription", "descriptionJSON", "appendDescriptionJSON", "clearDescriptionJSON", "aliases", "appendAliases", "clearAliases", "referenceID", "clearReferenceID", "auditorReferenceID", "clearAuditorReferenceID", "status", "clearStatus", "implementationStatus", "clearImplementationStatus", "implementationDescription", "clearImplementationDescription", "publicRepresentation", "clearPublicRepresentation", "source", "clearSource", "sourceName", "clearSourceName", "referenceFrameworkRevision", "clearReferenceFrameworkRevision", "category", "clearCategory", "categoryID", "clearCategoryID", "subcategory", "clearSubcategory", "mappedCategories", "appendMappedCategories", "clearMappedCategories", "assessmentObjectives", "appendAssessmentObjectives", "clearAssessmentObjectives", "assessmentMethods", "appendAssessmentMethods", "clearAssessmentMethods", "controlQuestions", "appendControlQuestions", "clearControlQuestions", "implementationGuidance", "appendImplementationGuidance", "clearImplementationGuidance", "exampleEvidence", "appendExampleEvidence", "clearExampleEvidence", "references", "appendReferences", "clearReferences", "testingProcedures", "appendTestingProcedures", "clearTestingProcedures", "evidenceRequests", "appendEvidenceRequests", "clearEvidenceRequests", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "controlKindName", "clearControlKindName", "controlOriginName", "clearControlOriginName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "refCode", "trustCenterVisibility", "clearTrustCenterVisibility", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "controlOwnerID", "clearControlOwner", "delegateID", "clearDelegate", "responsiblePartyID", "clearResponsibleParty", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addScanIDs", "removeScanIDs", "clearScans", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "controlKindID", "clearControlKind", "controlOriginID", "clearControlOrigin", "environmentID", "clearEnvironment", "scopeID", "clearScope", "standardID", "clearStandard", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -363090,6 +363610,20 @@ func (ec *executionContext) unmarshalInputUpdateControlInput(ctx context.Context
 				return it, err
 			}
 			it.ClearControlKindName = data
+		case "controlOriginName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginName = data
+		case "clearControlOriginName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearControlOriginName"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearControlOriginName = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -363567,6 +364101,20 @@ func (ec *executionContext) unmarshalInputUpdateControlInput(ctx context.Context
 				return it, err
 			}
 			it.ClearControlKind = data
+		case "controlOriginID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginID = data
+		case "clearControlOrigin":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearControlOrigin"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearControlOrigin = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -388719,7 +389267,7 @@ func (ec *executionContext) unmarshalInputUpdateSubcontrolInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalID", "clearExternalID", "externalUUID", "clearExternalUUID", "title", "clearTitle", "description", "clearDescription", "descriptionJSON", "appendDescriptionJSON", "clearDescriptionJSON", "aliases", "appendAliases", "clearAliases", "referenceID", "clearReferenceID", "auditorReferenceID", "clearAuditorReferenceID", "status", "clearStatus", "implementationStatus", "clearImplementationStatus", "implementationDescription", "clearImplementationDescription", "publicRepresentation", "clearPublicRepresentation", "source", "clearSource", "sourceName", "clearSourceName", "referenceFrameworkRevision", "clearReferenceFrameworkRevision", "category", "clearCategory", "categoryID", "clearCategoryID", "subcategory", "clearSubcategory", "mappedCategories", "appendMappedCategories", "clearMappedCategories", "assessmentObjectives", "appendAssessmentObjectives", "clearAssessmentObjectives", "assessmentMethods", "appendAssessmentMethods", "clearAssessmentMethods", "controlQuestions", "appendControlQuestions", "clearControlQuestions", "implementationGuidance", "appendImplementationGuidance", "clearImplementationGuidance", "exampleEvidence", "appendExampleEvidence", "clearExampleEvidence", "references", "appendReferences", "clearReferences", "testingProcedures", "appendTestingProcedures", "clearTestingProcedures", "evidenceRequests", "appendEvidenceRequests", "clearEvidenceRequests", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "subcontrolKindName", "clearSubcontrolKindName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "refCode", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "controlOwnerID", "clearControlOwner", "delegateID", "clearDelegate", "responsiblePartyID", "clearResponsibleParty", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addScanIDs", "removeScanIDs", "clearScans", "subcontrolKindID", "clearSubcontrolKind", "controlID", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalID", "clearExternalID", "externalUUID", "clearExternalUUID", "title", "clearTitle", "description", "clearDescription", "descriptionJSON", "appendDescriptionJSON", "clearDescriptionJSON", "aliases", "appendAliases", "clearAliases", "referenceID", "clearReferenceID", "auditorReferenceID", "clearAuditorReferenceID", "status", "clearStatus", "implementationStatus", "clearImplementationStatus", "implementationDescription", "clearImplementationDescription", "publicRepresentation", "clearPublicRepresentation", "source", "clearSource", "sourceName", "clearSourceName", "referenceFrameworkRevision", "clearReferenceFrameworkRevision", "category", "clearCategory", "categoryID", "clearCategoryID", "subcategory", "clearSubcategory", "mappedCategories", "appendMappedCategories", "clearMappedCategories", "assessmentObjectives", "appendAssessmentObjectives", "clearAssessmentObjectives", "assessmentMethods", "appendAssessmentMethods", "clearAssessmentMethods", "controlQuestions", "appendControlQuestions", "clearControlQuestions", "implementationGuidance", "appendImplementationGuidance", "clearImplementationGuidance", "exampleEvidence", "appendExampleEvidence", "clearExampleEvidence", "references", "appendReferences", "clearReferences", "testingProcedures", "appendTestingProcedures", "clearTestingProcedures", "evidenceRequests", "appendEvidenceRequests", "clearEvidenceRequests", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "subcontrolKindName", "clearSubcontrolKindName", "controlOriginName", "clearControlOriginName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "refCode", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "controlOwnerID", "clearControlOwner", "delegateID", "clearDelegate", "responsiblePartyID", "clearResponsibleParty", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addScanIDs", "removeScanIDs", "clearScans", "subcontrolKindID", "clearSubcontrolKind", "controlOriginID", "clearControlOrigin", "controlID", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -389569,6 +390117,20 @@ func (ec *executionContext) unmarshalInputUpdateSubcontrolInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearSubcontrolKindName = data
+		case "controlOriginName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginName = data
+		case "clearControlOriginName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearControlOriginName"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearControlOriginName = data
 		case "workflowEligibleMarker":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowEligibleMarker"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -389962,6 +390524,20 @@ func (ec *executionContext) unmarshalInputUpdateSubcontrolInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearSubcontrolKind = data
+		case "controlOriginID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlOriginID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ControlOriginID = data
+		case "clearControlOrigin":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearControlOrigin"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearControlOrigin = data
 		case "controlID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -422748,6 +423324,16 @@ func (ec *executionContext) _Control(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "controlOriginName":
+			out.Values[i] = ec._Control_controlOriginName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "controlOriginID":
+			out.Values[i] = ec._Control_controlOriginID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "environmentName":
 			out.Values[i] = ec._Control_environmentName(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -422918,6 +423504,12 @@ func (ec *executionContext) _Control(ctx context.Context, sel ast.SelectionSet, 
 				true, false,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Control_controlKind(ctx, field, obj)
+				})
+		case "controlOrigin":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Control_controlOrigin(ctx, field, obj)
 				})
 		case "environment":
 			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
@@ -442924,6 +443516,16 @@ func (ec *executionContext) _Subcontrol(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "controlOriginName":
+			out.Values[i] = ec._Subcontrol_controlOriginName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "controlOriginID":
+			out.Values[i] = ec._Subcontrol_controlOriginID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "workflowEligibleMarker":
 			out.Values[i] = ec._Subcontrol_workflowEligibleMarker(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -443052,6 +443654,12 @@ func (ec *executionContext) _Subcontrol(ctx context.Context, sel ast.SelectionSe
 				true, false,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Subcontrol_subcontrolKind(ctx, field, obj)
+				})
+		case "controlOrigin":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Subcontrol_controlOrigin(ctx, field, obj)
 				})
 		case "control":
 			out.ResolveConcurrently(ec.OperationContext, &deferred, i,

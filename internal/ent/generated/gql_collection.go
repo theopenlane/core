@@ -11698,6 +11698,21 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				fieldSeen[control.FieldControlKindID] = struct{}{}
 			}
 
+		case "controlOrigin":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomTypeEnumClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customtypeenumImplementors)...); err != nil {
+				return err
+			}
+			_q.withControlOrigin = query
+			if _, ok := fieldSeen[control.FieldControlOriginID]; !ok {
+				selectedFields = append(selectedFields, control.FieldControlOriginID)
+				fieldSeen[control.FieldControlOriginID] = struct{}{}
+			}
+
 		case "environment":
 			var (
 				alias = field.Alias
@@ -11791,10 +11806,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[24] == nil {
-								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[24][alias] = n
+							nodes[i].Edges.totalCount[25][alias] = n
 						}
 						return nil
 					})
@@ -11802,10 +11817,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.CheckResults)
-							if nodes[i].Edges.totalCount[24] == nil {
-								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[24][alias] = n
+							nodes[i].Edges.totalCount[25][alias] = n
 						}
 						return nil
 					})
@@ -11885,10 +11900,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[25] == nil {
-								nodes[i].Edges.totalCount[25] = make(map[string]int)
+							if nodes[i].Edges.totalCount[26] == nil {
+								nodes[i].Edges.totalCount[26] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[25][alias] = n
+							nodes[i].Edges.totalCount[26][alias] = n
 						}
 						return nil
 					})
@@ -11896,10 +11911,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
-							if nodes[i].Edges.totalCount[25] == nil {
-								nodes[i].Edges.totalCount[25] = make(map[string]int)
+							if nodes[i].Edges.totalCount[26] == nil {
+								nodes[i].Edges.totalCount[26] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[25][alias] = n
+							nodes[i].Edges.totalCount[26][alias] = n
 						}
 						return nil
 					})
@@ -11979,10 +11994,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[26] == nil {
-								nodes[i].Edges.totalCount[26] = make(map[string]int)
+							if nodes[i].Edges.totalCount[27] == nil {
+								nodes[i].Edges.totalCount[27] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[26][alias] = n
+							nodes[i].Edges.totalCount[27][alias] = n
 						}
 						return nil
 					})
@@ -11990,10 +12005,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Platforms)
-							if nodes[i].Edges.totalCount[26] == nil {
-								nodes[i].Edges.totalCount[26] = make(map[string]int)
+							if nodes[i].Edges.totalCount[27] == nil {
+								nodes[i].Edges.totalCount[27] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[26][alias] = n
+							nodes[i].Edges.totalCount[27][alias] = n
 						}
 						return nil
 					})
@@ -12073,10 +12088,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[27] == nil {
-								nodes[i].Edges.totalCount[27] = make(map[string]int)
+							if nodes[i].Edges.totalCount[28] == nil {
+								nodes[i].Edges.totalCount[28] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[27][alias] = n
+							nodes[i].Edges.totalCount[28][alias] = n
 						}
 						return nil
 					})
@@ -12084,10 +12099,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Vulnerabilities)
-							if nodes[i].Edges.totalCount[27] == nil {
-								nodes[i].Edges.totalCount[27] = make(map[string]int)
+							if nodes[i].Edges.totalCount[28] == nil {
+								nodes[i].Edges.totalCount[28] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[27][alias] = n
+							nodes[i].Edges.totalCount[28][alias] = n
 						}
 						return nil
 					})
@@ -12167,10 +12182,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[28] == nil {
-								nodes[i].Edges.totalCount[28] = make(map[string]int)
+							if nodes[i].Edges.totalCount[29] == nil {
+								nodes[i].Edges.totalCount[29] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[28][alias] = n
+							nodes[i].Edges.totalCount[29][alias] = n
 						}
 						return nil
 					})
@@ -12178,10 +12193,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Assets)
-							if nodes[i].Edges.totalCount[28] == nil {
-								nodes[i].Edges.totalCount[28] = make(map[string]int)
+							if nodes[i].Edges.totalCount[29] == nil {
+								nodes[i].Edges.totalCount[29] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[28][alias] = n
+							nodes[i].Edges.totalCount[29][alias] = n
 						}
 						return nil
 					})
@@ -12261,10 +12276,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[29] == nil {
-								nodes[i].Edges.totalCount[29] = make(map[string]int)
+							if nodes[i].Edges.totalCount[30] == nil {
+								nodes[i].Edges.totalCount[30] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[29][alias] = n
+							nodes[i].Edges.totalCount[30][alias] = n
 						}
 						return nil
 					})
@@ -12272,10 +12287,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
-							if nodes[i].Edges.totalCount[29] == nil {
-								nodes[i].Edges.totalCount[29] = make(map[string]int)
+							if nodes[i].Edges.totalCount[30] == nil {
+								nodes[i].Edges.totalCount[30] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[29][alias] = n
+							nodes[i].Edges.totalCount[30][alias] = n
 						}
 						return nil
 					})
@@ -12355,10 +12370,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[30] == nil {
-								nodes[i].Edges.totalCount[30] = make(map[string]int)
+							if nodes[i].Edges.totalCount[31] == nil {
+								nodes[i].Edges.totalCount[31] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[30][alias] = n
+							nodes[i].Edges.totalCount[31][alias] = n
 						}
 						return nil
 					})
@@ -12366,10 +12381,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.IdentityHolders)
-							if nodes[i].Edges.totalCount[30] == nil {
-								nodes[i].Edges.totalCount[30] = make(map[string]int)
+							if nodes[i].Edges.totalCount[31] == nil {
+								nodes[i].Edges.totalCount[31] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[30][alias] = n
+							nodes[i].Edges.totalCount[31][alias] = n
 						}
 						return nil
 					})
@@ -12449,10 +12464,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[31] == nil {
-								nodes[i].Edges.totalCount[31] = make(map[string]int)
+							if nodes[i].Edges.totalCount[32] == nil {
+								nodes[i].Edges.totalCount[32] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[31][alias] = n
+							nodes[i].Edges.totalCount[32][alias] = n
 						}
 						return nil
 					})
@@ -12460,10 +12475,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Campaigns)
-							if nodes[i].Edges.totalCount[31] == nil {
-								nodes[i].Edges.totalCount[31] = make(map[string]int)
+							if nodes[i].Edges.totalCount[32] == nil {
+								nodes[i].Edges.totalCount[32] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[31][alias] = n
+							nodes[i].Edges.totalCount[32][alias] = n
 						}
 						return nil
 					})
@@ -12543,10 +12558,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[32] == nil {
-								nodes[i].Edges.totalCount[32] = make(map[string]int)
+							if nodes[i].Edges.totalCount[33] == nil {
+								nodes[i].Edges.totalCount[33] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[32][alias] = n
+							nodes[i].Edges.totalCount[33][alias] = n
 						}
 						return nil
 					})
@@ -12554,10 +12569,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Findings)
-							if nodes[i].Edges.totalCount[32] == nil {
-								nodes[i].Edges.totalCount[32] = make(map[string]int)
+							if nodes[i].Edges.totalCount[33] == nil {
+								nodes[i].Edges.totalCount[33] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[32][alias] = n
+							nodes[i].Edges.totalCount[33][alias] = n
 						}
 						return nil
 					})
@@ -12637,10 +12652,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[33] == nil {
-								nodes[i].Edges.totalCount[33] = make(map[string]int)
+							if nodes[i].Edges.totalCount[34] == nil {
+								nodes[i].Edges.totalCount[34] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[33][alias] = n
+							nodes[i].Edges.totalCount[34][alias] = n
 						}
 						return nil
 					})
@@ -12648,10 +12663,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementations)
-							if nodes[i].Edges.totalCount[33] == nil {
-								nodes[i].Edges.totalCount[33] = make(map[string]int)
+							if nodes[i].Edges.totalCount[34] == nil {
+								nodes[i].Edges.totalCount[34] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[33][alias] = n
+							nodes[i].Edges.totalCount[34][alias] = n
 						}
 						return nil
 					})
@@ -12727,10 +12742,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[34] == nil {
-								nodes[i].Edges.totalCount[34] = make(map[string]int)
+							if nodes[i].Edges.totalCount[35] == nil {
+								nodes[i].Edges.totalCount[35] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[34][alias] = n
+							nodes[i].Edges.totalCount[35][alias] = n
 						}
 						return nil
 					})
@@ -12738,10 +12753,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Subcontrols)
-							if nodes[i].Edges.totalCount[34] == nil {
-								nodes[i].Edges.totalCount[34] = make(map[string]int)
+							if nodes[i].Edges.totalCount[35] == nil {
+								nodes[i].Edges.totalCount[35] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[34][alias] = n
+							nodes[i].Edges.totalCount[35][alias] = n
 						}
 						return nil
 					})
@@ -12817,10 +12832,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[35] == nil {
-								nodes[i].Edges.totalCount[35] = make(map[string]int)
+							if nodes[i].Edges.totalCount[36] == nil {
+								nodes[i].Edges.totalCount[36] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[35][alias] = n
+							nodes[i].Edges.totalCount[36][alias] = n
 						}
 						return nil
 					})
@@ -12828,10 +12843,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowObjectRefs)
-							if nodes[i].Edges.totalCount[35] == nil {
-								nodes[i].Edges.totalCount[35] = make(map[string]int)
+							if nodes[i].Edges.totalCount[36] == nil {
+								nodes[i].Edges.totalCount[36] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[35][alias] = n
+							nodes[i].Edges.totalCount[36][alias] = n
 						}
 						return nil
 					})
@@ -12907,10 +12922,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[36] == nil {
-								nodes[i].Edges.totalCount[36] = make(map[string]int)
+							if nodes[i].Edges.totalCount[37] == nil {
+								nodes[i].Edges.totalCount[37] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[36][alias] = n
+							nodes[i].Edges.totalCount[37][alias] = n
 						}
 						return nil
 					})
@@ -12918,10 +12933,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlMappings)
-							if nodes[i].Edges.totalCount[36] == nil {
-								nodes[i].Edges.totalCount[36] = make(map[string]int)
+							if nodes[i].Edges.totalCount[37] == nil {
+								nodes[i].Edges.totalCount[37] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[36][alias] = n
+							nodes[i].Edges.totalCount[37][alias] = n
 						}
 						return nil
 					})
@@ -13201,6 +13216,16 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[control.FieldControlKindID]; !ok {
 				selectedFields = append(selectedFields, control.FieldControlKindID)
 				fieldSeen[control.FieldControlKindID] = struct{}{}
+			}
+		case "controlOriginName":
+			if _, ok := fieldSeen[control.FieldControlOriginName]; !ok {
+				selectedFields = append(selectedFields, control.FieldControlOriginName)
+				fieldSeen[control.FieldControlOriginName] = struct{}{}
+			}
+		case "controlOriginID":
+			if _, ok := fieldSeen[control.FieldControlOriginID]; !ok {
+				selectedFields = append(selectedFields, control.FieldControlOriginID)
+				fieldSeen[control.FieldControlOriginID] = struct{}{}
 			}
 		case "environmentName":
 			if _, ok := fieldSeen[control.FieldEnvironmentName]; !ok {
@@ -79392,6 +79417,21 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				fieldSeen[subcontrol.FieldSubcontrolKindID] = struct{}{}
 			}
 
+		case "controlOrigin":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomTypeEnumClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customtypeenumImplementors)...); err != nil {
+				return err
+			}
+			_q.withControlOrigin = query
+			if _, ok := fieldSeen[subcontrol.FieldControlOriginID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldControlOriginID)
+				fieldSeen[subcontrol.FieldControlOriginID] = struct{}{}
+			}
+
 		case "control":
 			var (
 				alias = field.Alias
@@ -79455,10 +79495,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[20] == nil {
-								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							if nodes[i].Edges.totalCount[21] == nil {
+								nodes[i].Edges.totalCount[21] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[20][alias] = n
+							nodes[i].Edges.totalCount[21][alias] = n
 						}
 						return nil
 					})
@@ -79466,10 +79506,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementations)
-							if nodes[i].Edges.totalCount[20] == nil {
-								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							if nodes[i].Edges.totalCount[21] == nil {
+								nodes[i].Edges.totalCount[21] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[20][alias] = n
+							nodes[i].Edges.totalCount[21][alias] = n
 						}
 						return nil
 					})
@@ -79545,10 +79585,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[21] == nil {
-								nodes[i].Edges.totalCount[21] = make(map[string]int)
+							if nodes[i].Edges.totalCount[22] == nil {
+								nodes[i].Edges.totalCount[22] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[21][alias] = n
+							nodes[i].Edges.totalCount[22][alias] = n
 						}
 						return nil
 					})
@@ -79556,10 +79596,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowObjectRefs)
-							if nodes[i].Edges.totalCount[21] == nil {
-								nodes[i].Edges.totalCount[21] = make(map[string]int)
+							if nodes[i].Edges.totalCount[22] == nil {
+								nodes[i].Edges.totalCount[22] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[21][alias] = n
+							nodes[i].Edges.totalCount[22][alias] = n
 						}
 						return nil
 					})
@@ -79639,10 +79679,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[22] == nil {
-								nodes[i].Edges.totalCount[22] = make(map[string]int)
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[22][alias] = n
+							nodes[i].Edges.totalCount[23][alias] = n
 						}
 						return nil
 					})
@@ -79650,10 +79690,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Assets)
-							if nodes[i].Edges.totalCount[22] == nil {
-								nodes[i].Edges.totalCount[22] = make(map[string]int)
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[22][alias] = n
+							nodes[i].Edges.totalCount[23][alias] = n
 						}
 						return nil
 					})
@@ -79733,10 +79773,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[23] == nil {
-								nodes[i].Edges.totalCount[23] = make(map[string]int)
+							if nodes[i].Edges.totalCount[24] == nil {
+								nodes[i].Edges.totalCount[24] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[23][alias] = n
+							nodes[i].Edges.totalCount[24][alias] = n
 						}
 						return nil
 					})
@@ -79744,10 +79784,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
-							if nodes[i].Edges.totalCount[23] == nil {
-								nodes[i].Edges.totalCount[23] = make(map[string]int)
+							if nodes[i].Edges.totalCount[24] == nil {
+								nodes[i].Edges.totalCount[24] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[23][alias] = n
+							nodes[i].Edges.totalCount[24][alias] = n
 						}
 						return nil
 					})
@@ -79827,10 +79867,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[24] == nil {
-								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[24][alias] = n
+							nodes[i].Edges.totalCount[25][alias] = n
 						}
 						return nil
 					})
@@ -79838,10 +79878,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.IdentityHolders)
-							if nodes[i].Edges.totalCount[24] == nil {
-								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[24][alias] = n
+							nodes[i].Edges.totalCount[25][alias] = n
 						}
 						return nil
 					})
@@ -79921,10 +79961,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[25] == nil {
-								nodes[i].Edges.totalCount[25] = make(map[string]int)
+							if nodes[i].Edges.totalCount[26] == nil {
+								nodes[i].Edges.totalCount[26] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[25][alias] = n
+							nodes[i].Edges.totalCount[26][alias] = n
 						}
 						return nil
 					})
@@ -79932,10 +79972,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Vulnerabilities)
-							if nodes[i].Edges.totalCount[25] == nil {
-								nodes[i].Edges.totalCount[25] = make(map[string]int)
+							if nodes[i].Edges.totalCount[26] == nil {
+								nodes[i].Edges.totalCount[26] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[25][alias] = n
+							nodes[i].Edges.totalCount[26][alias] = n
 						}
 						return nil
 					})
@@ -80015,10 +80055,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[26] == nil {
-								nodes[i].Edges.totalCount[26] = make(map[string]int)
+							if nodes[i].Edges.totalCount[27] == nil {
+								nodes[i].Edges.totalCount[27] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[26][alias] = n
+							nodes[i].Edges.totalCount[27][alias] = n
 						}
 						return nil
 					})
@@ -80026,10 +80066,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Findings)
-							if nodes[i].Edges.totalCount[26] == nil {
-								nodes[i].Edges.totalCount[26] = make(map[string]int)
+							if nodes[i].Edges.totalCount[27] == nil {
+								nodes[i].Edges.totalCount[27] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[26][alias] = n
+							nodes[i].Edges.totalCount[27][alias] = n
 						}
 						return nil
 					})
@@ -80309,6 +80349,16 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			if _, ok := fieldSeen[subcontrol.FieldSubcontrolKindID]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldSubcontrolKindID)
 				fieldSeen[subcontrol.FieldSubcontrolKindID] = struct{}{}
+			}
+		case "controlOriginName":
+			if _, ok := fieldSeen[subcontrol.FieldControlOriginName]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldControlOriginName)
+				fieldSeen[subcontrol.FieldControlOriginName] = struct{}{}
+			}
+		case "controlOriginID":
+			if _, ok := fieldSeen[subcontrol.FieldControlOriginID]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldControlOriginID)
+				fieldSeen[subcontrol.FieldControlOriginID] = struct{}{}
 			}
 		case "workflowEligibleMarker":
 			if _, ok := fieldSeen[subcontrol.FieldWorkflowEligibleMarker]; !ok {

@@ -683,6 +683,34 @@ func (_c *SubcontrolHistoryCreate) SetNillableSubcontrolKindID(v *string) *Subco
 	return _c
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (_c *SubcontrolHistoryCreate) SetControlOriginName(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetControlOriginName(v)
+	return _c
+}
+
+// SetNillableControlOriginName sets the "control_origin_name" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableControlOriginName(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetControlOriginName(*v)
+	}
+	return _c
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (_c *SubcontrolHistoryCreate) SetControlOriginID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetControlOriginID(v)
+	return _c
+}
+
+// SetNillableControlOriginID sets the "control_origin_id" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableControlOriginID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetControlOriginID(*v)
+	}
+	return _c
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_c *SubcontrolHistoryCreate) SetWorkflowEligibleMarker(v bool) *SubcontrolHistoryCreate {
 	_c.mutation.SetWorkflowEligibleMarker(v)
@@ -1106,6 +1134,14 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.SubcontrolKindID(); ok {
 		_spec.SetField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString, value)
 		_node.SubcontrolKindID = value
+	}
+	if value, ok := _c.mutation.ControlOriginName(); ok {
+		_spec.SetField(subcontrolhistory.FieldControlOriginName, field.TypeString, value)
+		_node.ControlOriginName = value
+	}
+	if value, ok := _c.mutation.ControlOriginID(); ok {
+		_spec.SetField(subcontrolhistory.FieldControlOriginID, field.TypeString, value)
+		_node.ControlOriginID = value
 	}
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(subcontrolhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)

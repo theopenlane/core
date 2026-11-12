@@ -122,6 +122,10 @@ const (
 	FieldSubcontrolKindName = "subcontrol_kind_name"
 	// FieldSubcontrolKindID holds the string denoting the subcontrol_kind_id field in the database.
 	FieldSubcontrolKindID = "subcontrol_kind_id"
+	// FieldControlOriginName holds the string denoting the control_origin_name field in the database.
+	FieldControlOriginName = "control_origin_name"
+	// FieldControlOriginID holds the string denoting the control_origin_id field in the database.
+	FieldControlOriginID = "control_origin_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldRefCode holds the string denoting the ref_code field in the database.
@@ -166,6 +170,8 @@ const (
 	EdgeOwner = "owner"
 	// EdgeSubcontrolKind holds the string denoting the subcontrol_kind edge name in mutations.
 	EdgeSubcontrolKind = "subcontrol_kind"
+	// EdgeControlOrigin holds the string denoting the control_origin edge name in mutations.
+	EdgeControlOrigin = "control_origin"
 	// EdgeControl holds the string denoting the control edge name in mutations.
 	EdgeControl = "control"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
@@ -303,6 +309,13 @@ const (
 	SubcontrolKindInverseTable = "custom_type_enums"
 	// SubcontrolKindColumn is the table column denoting the subcontrol_kind relation/edge.
 	SubcontrolKindColumn = "subcontrol_kind_id"
+	// ControlOriginTable is the table that holds the control_origin relation/edge.
+	ControlOriginTable = "subcontrols"
+	// ControlOriginInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ControlOriginInverseTable = "custom_type_enums"
+	// ControlOriginColumn is the table column denoting the control_origin relation/edge.
+	ControlOriginColumn = "control_origin_id"
 	// ControlTable is the table that holds the control relation/edge.
 	ControlTable = "subcontrols"
 	// ControlInverseTable is the table name for the Control entity.
@@ -414,6 +427,8 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldSubcontrolKindName,
 	FieldSubcontrolKindID,
+	FieldControlOriginName,
+	FieldControlOriginID,
 	FieldWorkflowEligibleMarker,
 	FieldRefCode,
 	FieldControlID,
@@ -502,7 +517,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [16]ent.Hook
+	Hooks        [17]ent.Hook
 	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -775,6 +790,16 @@ func BySubcontrolKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubcontrolKindID, opts...).ToFunc()
 }
 
+// ByControlOriginName orders the results by the control_origin_name field.
+func ByControlOriginName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlOriginName, opts...).ToFunc()
+}
+
+// ByControlOriginID orders the results by the control_origin_id field.
+func ByControlOriginID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlOriginID, opts...).ToFunc()
+}
+
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
 func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
@@ -1018,6 +1043,13 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 func BySubcontrolKindField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSubcontrolKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByControlOriginField orders the results by control_origin field.
+func ByControlOriginField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlOriginStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1284,6 +1316,13 @@ func newSubcontrolKindStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolKindInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, SubcontrolKindTable, SubcontrolKindColumn),
+	)
+}
+func newControlOriginStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlOriginInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ControlOriginTable, ControlOriginColumn),
 	)
 }
 func newControlStep() *sqlgraph.Step {

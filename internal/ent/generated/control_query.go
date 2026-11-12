@@ -79,6 +79,7 @@ type ControlQuery struct {
 	withBlockedGroups               *GroupQuery
 	withEditors                     *GroupQuery
 	withControlKind                 *CustomTypeEnumQuery
+	withControlOrigin               *CustomTypeEnumQuery
 	withEnvironment                 *CustomTypeEnumQuery
 	withScope                       *CustomTypeEnumQuery
 	withStandard                    *StandardQuery
@@ -622,6 +623,28 @@ func (_q *ControlQuery) QueryControlKind() *CustomTypeEnumQuery {
 			sqlgraph.From(control.Table, control.FieldID, selector),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, control.ControlKindTable, control.ControlKindColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlOrigin chains the current query on the "control_origin" edge.
+func (_q *ControlQuery) QueryControlOrigin() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ControlOriginTable, control.ControlOriginColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -1238,6 +1261,7 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withBlockedGroups:          _q.withBlockedGroups.Clone(),
 		withEditors:                _q.withEditors.Clone(),
 		withControlKind:            _q.withControlKind.Clone(),
+		withControlOrigin:          _q.withControlOrigin.Clone(),
 		withEnvironment:            _q.withEnvironment.Clone(),
 		withScope:                  _q.withScope.Clone(),
 		withStandard:               _q.withStandard.Clone(),
@@ -1491,6 +1515,17 @@ func (_q *ControlQuery) WithControlKind(opts ...func(*CustomTypeEnumQuery)) *Con
 		opt(query)
 	}
 	_q.withControlKind = query
+	return _q
+}
+
+// WithControlOrigin tells the query-builder to eager-load the nodes that are connected to
+// the "control_origin" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithControlOrigin(opts ...func(*CustomTypeEnumQuery)) *ControlQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControlOrigin = query
 	return _q
 }
 
@@ -1777,7 +1812,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [39]bool{
+		loadedTypes = [40]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
@@ -1799,6 +1834,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withControlKind != nil,
+			_q.withControlOrigin != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withStandard != nil,
@@ -1984,6 +2020,12 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	if query := _q.withControlKind; query != nil {
 		if err := _q.loadControlKind(ctx, query, nodes, nil,
 			func(n *Control, e *CustomTypeEnum) { n.Edges.ControlKind = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withControlOrigin; query != nil {
+		if err := _q.loadControlOrigin(ctx, query, nodes, nil,
+			func(n *Control, e *CustomTypeEnum) { n.Edges.ControlOrigin = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -3373,6 +3415,35 @@ func (_q *ControlQuery) loadControlKind(ctx context.Context, query *CustomTypeEn
 	}
 	return nil
 }
+func (_q *ControlQuery) loadControlOrigin(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Control, init func(*Control), assign func(*Control, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Control)
+	for i := range nodes {
+		fk := nodes[i].ControlOriginID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "control_origin_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *ControlQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Control, init func(*Control), assign func(*Control, *CustomTypeEnum)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Control)
@@ -4327,6 +4398,9 @@ func (_q *ControlQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withControlKind != nil {
 			_spec.Node.AddColumnOnce(control.FieldControlKindID)
+		}
+		if _q.withControlOrigin != nil {
+			_spec.Node.AddColumnOnce(control.FieldControlOriginID)
 		}
 		if _q.withEnvironment != nil {
 			_spec.Node.AddColumnOnce(control.FieldEnvironmentID)

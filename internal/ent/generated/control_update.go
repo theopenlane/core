@@ -971,6 +971,46 @@ func (_u *ControlUpdate) ClearControlKindID() *ControlUpdate {
 	return _u
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (_u *ControlUpdate) SetControlOriginName(v string) *ControlUpdate {
+	_u.mutation.SetControlOriginName(v)
+	return _u
+}
+
+// SetNillableControlOriginName sets the "control_origin_name" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableControlOriginName(v *string) *ControlUpdate {
+	if v != nil {
+		_u.SetControlOriginName(*v)
+	}
+	return _u
+}
+
+// ClearControlOriginName clears the value of the "control_origin_name" field.
+func (_u *ControlUpdate) ClearControlOriginName() *ControlUpdate {
+	_u.mutation.ClearControlOriginName()
+	return _u
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (_u *ControlUpdate) SetControlOriginID(v string) *ControlUpdate {
+	_u.mutation.SetControlOriginID(v)
+	return _u
+}
+
+// SetNillableControlOriginID sets the "control_origin_id" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableControlOriginID(v *string) *ControlUpdate {
+	if v != nil {
+		_u.SetControlOriginID(*v)
+	}
+	return _u
+}
+
+// ClearControlOriginID clears the value of the "control_origin_id" field.
+func (_u *ControlUpdate) ClearControlOriginID() *ControlUpdate {
+	_u.mutation.ClearControlOriginID()
+	return _u
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_u *ControlUpdate) SetEnvironmentName(v string) *ControlUpdate {
 	_u.mutation.SetEnvironmentName(v)
@@ -1383,6 +1423,11 @@ func (_u *ControlUpdate) AddEditors(v ...*Group) *ControlUpdate {
 // SetControlKind sets the "control_kind" edge to the CustomTypeEnum entity.
 func (_u *ControlUpdate) SetControlKind(v *CustomTypeEnum) *ControlUpdate {
 	return _u.SetControlKindID(v.ID)
+}
+
+// SetControlOrigin sets the "control_origin" edge to the CustomTypeEnum entity.
+func (_u *ControlUpdate) SetControlOrigin(v *CustomTypeEnum) *ControlUpdate {
+	return _u.SetControlOriginID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -1987,6 +2032,12 @@ func (_u *ControlUpdate) RemoveEditors(v ...*Group) *ControlUpdate {
 // ClearControlKind clears the "control_kind" edge to the CustomTypeEnum entity.
 func (_u *ControlUpdate) ClearControlKind() *ControlUpdate {
 	_u.mutation.ClearControlKind()
+	return _u
+}
+
+// ClearControlOrigin clears the "control_origin" edge to the CustomTypeEnum entity.
+func (_u *ControlUpdate) ClearControlOrigin() *ControlUpdate {
+	_u.mutation.ClearControlOrigin()
 	return _u
 }
 
@@ -2744,6 +2795,12 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ControlKindNameCleared() {
 		_spec.ClearField(control.FieldControlKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ControlOriginName(); ok {
+		_spec.SetField(control.FieldControlOriginName, field.TypeString, value)
+	}
+	if _u.mutation.ControlOriginNameCleared() {
+		_spec.ClearField(control.FieldControlOriginName, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(control.FieldEnvironmentName, field.TypeString, value)
@@ -3601,6 +3658,35 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Inverse: false,
 			Table:   control.ControlKindTable,
 			Columns: []string{control.ControlKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlOriginCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlOriginTable,
+			Columns: []string{control.ControlOriginColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlOriginIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlOriginTable,
+			Columns: []string{control.ControlOriginColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -5324,6 +5410,46 @@ func (_u *ControlUpdateOne) ClearControlKindID() *ControlUpdateOne {
 	return _u
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (_u *ControlUpdateOne) SetControlOriginName(v string) *ControlUpdateOne {
+	_u.mutation.SetControlOriginName(v)
+	return _u
+}
+
+// SetNillableControlOriginName sets the "control_origin_name" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableControlOriginName(v *string) *ControlUpdateOne {
+	if v != nil {
+		_u.SetControlOriginName(*v)
+	}
+	return _u
+}
+
+// ClearControlOriginName clears the value of the "control_origin_name" field.
+func (_u *ControlUpdateOne) ClearControlOriginName() *ControlUpdateOne {
+	_u.mutation.ClearControlOriginName()
+	return _u
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (_u *ControlUpdateOne) SetControlOriginID(v string) *ControlUpdateOne {
+	_u.mutation.SetControlOriginID(v)
+	return _u
+}
+
+// SetNillableControlOriginID sets the "control_origin_id" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableControlOriginID(v *string) *ControlUpdateOne {
+	if v != nil {
+		_u.SetControlOriginID(*v)
+	}
+	return _u
+}
+
+// ClearControlOriginID clears the value of the "control_origin_id" field.
+func (_u *ControlUpdateOne) ClearControlOriginID() *ControlUpdateOne {
+	_u.mutation.ClearControlOriginID()
+	return _u
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_u *ControlUpdateOne) SetEnvironmentName(v string) *ControlUpdateOne {
 	_u.mutation.SetEnvironmentName(v)
@@ -5736,6 +5862,11 @@ func (_u *ControlUpdateOne) AddEditors(v ...*Group) *ControlUpdateOne {
 // SetControlKind sets the "control_kind" edge to the CustomTypeEnum entity.
 func (_u *ControlUpdateOne) SetControlKind(v *CustomTypeEnum) *ControlUpdateOne {
 	return _u.SetControlKindID(v.ID)
+}
+
+// SetControlOrigin sets the "control_origin" edge to the CustomTypeEnum entity.
+func (_u *ControlUpdateOne) SetControlOrigin(v *CustomTypeEnum) *ControlUpdateOne {
+	return _u.SetControlOriginID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -6340,6 +6471,12 @@ func (_u *ControlUpdateOne) RemoveEditors(v ...*Group) *ControlUpdateOne {
 // ClearControlKind clears the "control_kind" edge to the CustomTypeEnum entity.
 func (_u *ControlUpdateOne) ClearControlKind() *ControlUpdateOne {
 	_u.mutation.ClearControlKind()
+	return _u
+}
+
+// ClearControlOrigin clears the "control_origin" edge to the CustomTypeEnum entity.
+func (_u *ControlUpdateOne) ClearControlOrigin() *ControlUpdateOne {
+	_u.mutation.ClearControlOrigin()
 	return _u
 }
 
@@ -7127,6 +7264,12 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	}
 	if _u.mutation.ControlKindNameCleared() {
 		_spec.ClearField(control.FieldControlKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ControlOriginName(); ok {
+		_spec.SetField(control.FieldControlOriginName, field.TypeString, value)
+	}
+	if _u.mutation.ControlOriginNameCleared() {
+		_spec.ClearField(control.FieldControlOriginName, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(control.FieldEnvironmentName, field.TypeString, value)
@@ -7984,6 +8127,35 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 			Inverse: false,
 			Table:   control.ControlKindTable,
 			Columns: []string{control.ControlKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlOriginCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlOriginTable,
+			Columns: []string{control.ControlOriginColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlOriginIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlOriginTable,
+			Columns: []string{control.ControlOriginColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),

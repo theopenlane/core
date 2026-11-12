@@ -221,6 +221,7 @@ func (c Control) Mixin() []ent.Mixin {
 			// skip view because controls are automatically viewable by all users in the organization
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),
 			newCustomEnumMixin(c, withWorkflowEnumEdges()),
+			newCustomEnumMixin(c, withEnumFieldName("control_origin"), withGlobalEnum()),
 			newCustomEnumMixin(c, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(c, withEnumFieldName("scope"), withGlobalEnum()),
 			WorkflowApprovalMixin{},

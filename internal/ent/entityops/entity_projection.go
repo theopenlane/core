@@ -396,6 +396,8 @@ type ControlProjection struct {
 	CategoryID                 string                             `json:"category_id,omitempty"`
 	ControlKindID              string                             `json:"control_kind_id,omitempty"`
 	ControlKindName            string                             `json:"control_kind_name,omitempty"`
+	ControlOriginID            string                             `json:"control_origin_id,omitempty"`
+	ControlOriginName          string                             `json:"control_origin_name,omitempty"`
 	ControlOwnerID             string                             `json:"control_owner_id,omitempty"`
 	ControlQuestions           []string                           `json:"control_questions,omitempty"`
 	CreatedAt                  time.Time                          `json:"created_at,omitempty"`
@@ -1982,6 +1984,8 @@ type SubcontrolProjection struct {
 	Category                   string                            `json:"category,omitempty"`
 	CategoryID                 string                            `json:"category_id,omitempty"`
 	ControlID                  string                            `json:"control_id,omitempty"`
+	ControlOriginID            string                            `json:"control_origin_id,omitempty"`
+	ControlOriginName          string                            `json:"control_origin_name,omitempty"`
 	ControlOwnerID             string                            `json:"control_owner_id,omitempty"`
 	ControlQuestions           []string                          `json:"control_questions,omitempty"`
 	CreatedAt                  time.Time                         `json:"created_at,omitempty"`
