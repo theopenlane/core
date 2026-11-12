@@ -76,7 +76,7 @@ type IntegrationLifecycleConfig struct {
 // FileOrphanConfig configures the file orphan sweep
 type FileOrphanConfig struct {
 	// Enabled turns the sweep on
-	Enabled bool `json:"enabled" koanf:"enabled" jsonschema:"default=false,description=Whether the file orphan sweep is enabled"`
+	Enabled bool `json:"enabled" koanf:"enabled" default:"true" jsonschema:"default=true,description=Whether the file orphan sweep is enabled"`
 	// DryRun only logs the files that would be deleted
 	DryRun bool `json:"dryrun" koanf:"dryrun" default:"true" jsonschema:"default=true,description=If true only log file IDs that would be deleted"`
 	// MaxPerRun caps deletions per sweep

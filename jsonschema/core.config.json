@@ -2257,7 +2257,7 @@
         "enabled": {
           "type": "boolean",
           "description": "Whether the file orphan sweep is enabled",
-          "default": false
+          "default": true
         },
         "dryrun": {
           "type": "boolean",

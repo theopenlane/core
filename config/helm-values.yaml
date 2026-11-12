@@ -929,7 +929,7 @@ coreConfiguration:
       maxperrun: 100  # @schema type:integer; default:100
     fileorphan:
       # -- Whether the file orphan sweep is enabled
-      enabled: false  # @schema type:boolean
+      enabled: true  # @schema type:boolean; default:true
       # -- If true only log file IDs that would be deleted
       dryrun: true  # @schema type:boolean; default:true
       # -- Maximum orphaned files to delete per run

@@ -228,7 +228,7 @@ integrations:
         testdir: fixtures/email
     fileorphan:
         dryrun: true
-        enabled: false
+        enabled: true
         maxperrun: 500
     githubapp:
         appid: ""

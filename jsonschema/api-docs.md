@@ -203,7 +203,7 @@ Config contains the configuration for the core server
             "maxperrun": 100
         },
         "fileorphan": {
-            "enabled": false,
+            "enabled": true,
             "dryrun": true,
             "maxperrun": 500
         }
@@ -1963,7 +1963,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
         "maxperrun": 100
     },
     "fileorphan": {
-        "enabled": false,
+        "enabled": true,
         "dryrun": true,
         "maxperrun": 500
     }
@@ -2785,7 +2785,7 @@ supplies the region, endpoint, and credentials
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Whether the file orphan sweep is enabled<br/>Default: `false`<br/>||
+|**enabled**|`boolean`|Whether the file orphan sweep is enabled<br/>Default: `true`<br/>||
 |**dryrun**|`boolean`|If true only log file IDs that would be deleted<br/>Default: `true`<br/>||
 |**maxperrun**|`integer`|Maximum orphaned files to delete per run<br/>Default: `500`<br/>||
 
@@ -2794,7 +2794,7 @@ supplies the region, endpoint, and credentials
 
 ```json
 {
-    "enabled": false,
+    "enabled": true,
     "dryrun": true,
     "maxperrun": 500
 }
