@@ -33,7 +33,7 @@ if git diff --cached --quiet; then
   exit 0
 fi
 
-git diff --cached --stat
+git --no-pager diff --cached --stat
 
 commit_staged_to_branch "$HEADLINE"
 
