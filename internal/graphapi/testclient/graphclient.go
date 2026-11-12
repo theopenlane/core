@@ -325,6 +325,7 @@ type TestGraphClient interface {
 	GetIntegrationByID(ctx context.Context, integrationID string, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationByID, error)
 	GetIntegrationByIDWithSecrets(ctx context.Context, integrationID string, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationByIDWithSecrets, error)
 	GetIntegrations(ctx context.Context, where *IntegrationWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetIntegrations, error)
+	GetAllIntegrationRuns(ctx context.Context, where *IntegrationRunWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAllIntegrationRuns, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVInternalPolicy, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
@@ -69524,6 +69525,81 @@ func (t *GetIntegrations_Integrations) GetEdges() []*GetIntegrations_Integration
 		t = &GetIntegrations_Integrations{}
 	}
 	return t.Edges
+}
+
+type GetAllIntegrationRuns_IntegrationRuns_Edges_Node struct {
+	CreatedAt     *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	ID            string                     "json:\"id\" graphql:\"id\""
+	IntegrationID *string                    "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	OperationName *string                    "json:\"operationName,omitempty\" graphql:\"operationName\""
+	OwnerID       *string                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status        enums.IntegrationRunStatus "json:\"status\" graphql:\"status\""
+}
+
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetIntegrationID() *string {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.IntegrationID
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetOperationName() *string {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.OperationName
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetStatus() *enums.IntegrationRunStatus {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return &t.Status
+}
+
+type GetAllIntegrationRuns_IntegrationRuns_Edges struct {
+	Node *GetAllIntegrationRuns_IntegrationRuns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges) GetNode() *GetAllIntegrationRuns_IntegrationRuns_Edges_Node {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllIntegrationRuns_IntegrationRuns struct {
+	Edges      []*GetAllIntegrationRuns_IntegrationRuns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllIntegrationRuns_IntegrationRuns) GetEdges() []*GetAllIntegrationRuns_IntegrationRuns_Edges {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns{}
+	}
+	return t.Edges
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_Approver struct {
@@ -180367,6 +180443,17 @@ func (t *GetIntegrations) GetIntegrations() *GetIntegrations_Integrations {
 	return &t.Integrations
 }
 
+type GetAllIntegrationRuns struct {
+	IntegrationRuns GetAllIntegrationRuns_IntegrationRuns "json:\"integrationRuns\" graphql:\"integrationRuns\""
+}
+
+func (t *GetAllIntegrationRuns) GetIntegrationRuns() *GetAllIntegrationRuns_IntegrationRuns {
+	if t == nil {
+		t = &GetAllIntegrationRuns{}
+	}
+	return &t.IntegrationRuns
+}
+
 type CreateBulkCSVInternalPolicy struct {
 	CreateBulkCSVInternalPolicy CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy "json:\"createBulkCSVInternalPolicy\" graphql:\"createBulkCSVInternalPolicy\""
 }
@@ -202925,6 +203012,40 @@ func (c *Client) GetIntegrations(ctx context.Context, where *IntegrationWhereInp
 
 	var res GetIntegrations
 	if err := c.Client.Post(ctx, "GetIntegrations", GetIntegrationsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllIntegrationRunsDocument = `query GetAllIntegrationRuns ($where: IntegrationRunWhereInput) {
+	integrationRuns(where: $where) {
+		totalCount
+		edges {
+			node {
+				id
+				integrationID
+				ownerID
+				operationName
+				status
+				createdAt
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllIntegrationRuns(ctx context.Context, where *IntegrationRunWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAllIntegrationRuns, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetAllIntegrationRuns
+	if err := c.Client.Post(ctx, "GetAllIntegrationRuns", GetAllIntegrationRunsDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -230350,6 +230471,7 @@ var DocumentOperationNames = map[string]string{
 	GetIntegrationByIDDocument:                          "GetIntegrationByID",
 	GetIntegrationByIDWithSecretsDocument:               "GetIntegrationByIDWithSecrets",
 	GetIntegrationsDocument:                             "GetIntegrations",
+	GetAllIntegrationRunsDocument:                       "GetAllIntegrationRuns",
 	CreateBulkCSVInternalPolicyDocument:                 "CreateBulkCSVInternalPolicy",
 	CreateBulkInternalPolicyDocument:                    "CreateBulkInternalPolicy",
 	CreateInternalPolicyDocument:                        "CreateInternalPolicy",

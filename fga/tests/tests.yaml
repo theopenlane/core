@@ -83,6 +83,7 @@ tests:
           can_create_scan: true
           can_create_platform: true
           can_create_identity_holder: true
+          can_manage_integrations: true
       - user: user:ulid-of-member
         object: organization:openlane
         assertions:
@@ -120,6 +121,7 @@ tests:
           can_create_scan: false
           can_create_platform: false
           can_create_identity_holder: false
+          can_manage_integrations: false
       - user: service:ulid-of-service-editor
         object: organization:openlane # parent org
         assertions:
@@ -229,6 +231,7 @@ tests:
           can_create_scan: true
           can_create_platform: true
           can_create_identity_holder: true
+          can_manage_integrations: true
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
         assertions:
@@ -613,6 +616,7 @@ tests:
           can_create_identity_holder: false
           can_create_asset: false
           can_create_workflow_definition: true
+          can_manage_integrations: true
     list_objects:
       - user: user:ulid-of-owner
         type: organization

@@ -54,6 +54,8 @@ extend type organization
     define can_manage_workflows: workflow_manager or full_access
     # @role: Workflow Manager | Manage workflows, jobs, integrations, and webhook configuration
     define workflow_manager: [service, user, group#member]
+    # org admins and workflow managers can run integration operations
+    define can_manage_integrations: can_edit or can_manage_workflows
 
     # @crud: campaign, assessment, template, email_template, email_branding, notification_template
     # @view: document_data, assessment_response

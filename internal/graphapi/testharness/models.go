@@ -2147,6 +2147,31 @@ func (te *TrustCenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *
 }
 
 // IntegrationBuilder is used to create integrations
+type IntegrationRunBuilder struct {
+	Client *Client
+
+	// Fields
+	IntegrationID string
+	OperationName string
+}
+
+// MustNew integration run builder is used to create, without authz checks, integration runs in the database
+func (irb *IntegrationRunBuilder) MustNew(ctx context.Context, t *testing.T) *ent.IntegrationRun {
+	ctx = SetInternalContext(ctx, irb.Client.DB)
+
+	if irb.OperationName == "" {
+		irb.OperationName = "DirectorySync"
+	}
+
+	run, err := irb.Client.DB.IntegrationRun.Create().
+		SetIntegrationID(irb.IntegrationID).
+		SetOperationName(irb.OperationName).
+		Save(ctx)
+	RequireNoError(t, err)
+
+	return run
+}
+
 type IntegrationBuilder struct {
 	Client *Client
 

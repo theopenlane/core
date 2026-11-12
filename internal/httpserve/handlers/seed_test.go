@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"context"
 	"strings"
+	"testing"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -12,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 )
@@ -138,6 +140,39 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	testUser.UserCtx = ent.NewContext(testUser.UserCtx, suite.db)
 
 	return testUser
+}
+
+// orgMemberBuilder adds a new user to the owner's org with the given role and optional FGA org role relations
+func (suite *HandlerTestSuite) orgMemberBuilder(t *testing.T, ctx context.Context, owner testUserDetails, role enums.Role, orgRoleRelations ...string) testUserDetails {
+	t.Helper()
+
+	member := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
+
+	err := suite.db.OrgMembership.Create().SetInput(ent.CreateOrgMembershipInput{
+		OrganizationID: owner.OrganizationID,
+		UserID:         member.ID,
+		Role:           &role,
+	}).Exec(owner.UserCtx)
+	assert.NilError(t, err)
+
+	tuples := make([]fgax.TupleKey, 0, len(orgRoleRelations))
+	for _, relation := range orgRoleRelations {
+		tuples = append(tuples, fgax.TupleKey{
+			Subject:  fgax.Entity{Kind: fgax.Kind(ent.TypeUser), Identifier: member.ID},
+			Object:   fgax.Entity{Kind: fgax.Kind(ent.TypeOrganization), Identifier: owner.OrganizationID},
+			Relation: fgax.Relation(relation),
+		})
+	}
+
+	if len(tuples) > 0 {
+		_, err = suite.db.Authz.WriteTupleKeys(owner.UserCtx, tuples, nil)
+		assert.NilError(t, err)
+	}
+
+	member.OrganizationID = owner.OrganizationID
+	member.UserCtx = auth.NewTestContextWithOrgID(member.ID, owner.OrganizationID)
+
+	return member
 }
 
 func (suite *HandlerTestSuite) enableModules(userID, orgID string, features []models.OrgModule) {

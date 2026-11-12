@@ -14,7 +14,7 @@ const defaultBrandPageSize = int32(1)
 
 // verify derives the Authentik instance metadata through the admin system call
 func verify(ctx context.Context, req types.ConnectionRequest[CredentialSchema], c *authentikSDK.APIClient) (InstallationMetadata, error) {
-	info, resp, err := c.AdminApi.AdminSystemRetrieve(ctx).Execute()
+	info, resp, err := c.AdminAPI.AdminSystemRetrieve(ctx).Execute()
 	if resp != nil {
 		_ = resp.Body.Close()
 	}
@@ -40,7 +40,7 @@ func verify(ctx context.Context, req types.ConnectionRequest[CredentialSchema], 
 
 // resolveDefaultBrandID fetches the immutable uuid of the instance's default brand
 func resolveDefaultBrandID(ctx context.Context, apiClient *authentikSDK.APIClient) (string, error) {
-	brands, resp, err := apiClient.CoreApi.CoreBrandsList(ctx).Default_(true).PageSize(defaultBrandPageSize).Execute()
+	brands, resp, err := apiClient.CoreAPI.CoreBrandsList(ctx).Default_(true).PageSize(defaultBrandPageSize).Execute()
 	if resp != nil {
 		_ = resp.Body.Close()
 	}

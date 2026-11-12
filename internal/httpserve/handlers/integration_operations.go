@@ -19,6 +19,9 @@ import (
 	"github.com/theopenlane/utils/jsonx"
 )
 
+// canManageIntegrationsRelation is the organization relation required to run integration operations
+const canManageIntegrationsRelation = "can_manage_integrations"
+
 // integrationOperationQueueDetails captures queue response details for integration operation requests
 type integrationOperationQueueDetails struct {
 	// RunID is the queued integration run identifier
@@ -46,6 +49,12 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 	ownerID, err := auth.GetOrganizationIDFromContext(requestCtx)
 	if err != nil {
 		return h.Unauthorized(ctx, err)
+	}
+
+	if err := rule.CheckCurrentOrgAccess(requestCtx, nil, canManageIntegrationsRelation); !errors.Is(err, privacy.Allow) {
+		logx.FromContext(requestCtx).Info().Err(err).Msg("caller cannot run integration operations")
+
+		return h.Forbidden(ctx, ErrUnauthorized)
 	}
 
 	if req.IntegrationID == "" || req.Body.Operation == "" {

@@ -167,6 +167,7 @@ func (r IntegrationRun) Mixin() []ent.Mixin {
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
 				withParents(Integration{}),
+				withSkipperFunc(skipInterceptorForOrgMembers),
 			),
 		},
 	}.getMixins(r)
@@ -198,7 +199,6 @@ func (r IntegrationRun) Annotations() []schema.Annotation {
 func (IntegrationRun) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationIfSystemAdmin(),
 		),
 	)

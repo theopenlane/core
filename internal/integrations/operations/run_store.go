@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -56,7 +57,7 @@ func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Int
 		SetRunType(runType).
 		SetStatus(enums.IntegrationRunStatusPending).
 		SetOperationConfig(configMap).
-		Save(ctx)
+		Save(auth.WithInternalOperationContext(ctx))
 }
 
 // metricRetryOf is the metrics key recording the run a re-executed attempt continues from
@@ -74,7 +75,7 @@ func RetryRun(ctx context.Context, db *ent.Client, run *ent.IntegrationRun) (*en
 		SetStatus(enums.IntegrationRunStatusPending).
 		SetOperationConfig(run.OperationConfig).
 		SetMetrics(map[string]any{metricRetryOf: run.ID}).
-		Save(ctx)
+		Save(auth.WithInternalOperationContext(ctx))
 }
 
 // MarkRunRunning transitions one run to running
@@ -86,7 +87,7 @@ func MarkRunRunning(ctx context.Context, db *ent.Client, runID string) error {
 	return db.IntegrationRun.UpdateOneID(runID).
 		SetStatus(enums.IntegrationRunStatusRunning).
 		SetStartedAt(time.Now()).
-		Exec(ctx)
+		Exec(auth.WithInternalOperationContext(ctx))
 }
 
 // CompleteRun writes the final run outcome
@@ -108,7 +109,7 @@ func CompleteRun(ctx context.Context, db *ent.Client, runID string, startedAt ti
 		SetMetrics(mapx.DeepCloneMapAny(result.Metrics)).
 		SetDurationMs(int(duration.Milliseconds())).
 		SetFinishedAt(time.Now()).
-		Exec(ctx)
+		Exec(auth.WithInternalOperationContext(ctx))
 }
 
 // LastSuccessfulRunAt returns the finish time of the most recent successful run for the given
