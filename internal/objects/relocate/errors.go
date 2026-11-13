@@ -11,6 +11,8 @@ var (
 	ErrTouchUnsupported = errors.New("storage provider does not support touching objects")
 	// ErrCopyUnsupported is returned when the target provider cannot copy objects between buckets
 	ErrCopyUnsupported = errors.New("storage provider does not support copying objects")
+	// ErrOpenUnsupported is returned when the source provider cannot stream objects
+	ErrOpenUnsupported = errors.New("storage provider does not support streaming objects")
 	// ErrKeyChanged is returned when the target stored a transferred object under another key
 	ErrKeyChanged = errors.New("storage provider changed the object key")
 )

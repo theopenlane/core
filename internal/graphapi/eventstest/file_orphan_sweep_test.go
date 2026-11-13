@@ -49,6 +49,11 @@ func TestFileOrphanSweep(t *testing.T) {
 	orphanR2 := seedFile(t, ctx, "orphan-r2.txt", r2, relocateTargetBucket, nil)
 	recent := seedFile(t, ctx, "recent-orphan.txt", r2, relocateTargetBucket, nil)
 
+	// every upload carries the organization edge, which is ownership rather than a reference
+	orphanOwned := seedFile(t, ctx, "orphan-owned.txt", r2, relocateTargetBucket, func(c *generated.FileCreate) {
+		c.AddOrganizationIDs(user.OrganizationID)
+	})
+
 	referenced := seedFile(t, ctx, "referenced.txt", r2, relocateTargetBucket, nil)
 	attachContact(t, ctx, referenced.ID)
 
@@ -70,7 +75,7 @@ func TestFileOrphanSweep(t *testing.T) {
 
 	assert.Check(t, !suite.Client.DeletedStorageKeys.Has(softOrphan.StoragePath), "soft delete keeps the object")
 
-	backdate(t, ctx, orphanS3.ID, orphanR2.ID, referenced.ID, diagram.ID, softParent.ID, softReferenced.ID, softOrphan.ID)
+	backdate(t, ctx, orphanS3.ID, orphanR2.ID, orphanOwned.ID, referenced.ID, diagram.ID, softParent.ID, softReferenced.ID, softOrphan.ID)
 
 	exists := func(id string) bool {
 		ok, err := suite.Client.DB.File.Query().Where(file.ID(id)).Exist(entx.SkipSoftDelete(ctx))
@@ -80,7 +85,7 @@ func TestFileOrphanSweep(t *testing.T) {
 	}
 
 	kept := []*generated.File{recent, referenced, diagram, softParent, softReferenced}
-	swept := []*generated.File{orphanS3, orphanR2, softOrphan}
+	swept := []*generated.File{orphanS3, orphanR2, orphanOwned, softOrphan}
 
 	t.Run("dry run deletes nothing", func(t *testing.T) {
 		processed := runFileOrphanSweep(t, systemdef.FileOrphanSweep{DryRun: true})

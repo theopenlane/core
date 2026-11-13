@@ -1,7 +1,6 @@
 package relocate
 
 import (
-	"bytes"
 	"context"
 	"path/filepath"
 	"strings"
@@ -241,18 +240,31 @@ func (r *relocator) pull(ctx context.Context, f *ent.File) error {
 	return r.land(ctx, f, &r.stats.pulled)
 }
 
-// transfer downloads the object from its provider and uploads it to the target under the same key
+// transfer streams the object from its provider into the target under the same key
 func (r *relocator) transfer(ctx context.Context, f *ent.File, source storage.ProviderType) error {
 	from := interceptors.StorageFileFromEnt(f)
 	from.ProviderType = source
 	from.ProviderHints.KnownProvider = source
 
-	downloaded, err := r.client.ObjectManager.Download(ctx, nil, from, &storage.DownloadOptions{})
+	sourceProvider, _, err := r.client.ObjectManager.ResolveProvider(ctx, from)
 	if err != nil {
 		return err
 	}
 
-	uploaded, err := r.provider.Upload(ctx, bytes.NewReader(downloaded.File), &storage.UploadOptions{FileName: f.StoragePath, ContentType: f.DetectedContentType})
+	opener, ok := sourceProvider.(storage.Opener)
+	if !ok {
+		return ErrOpenUnsupported
+	}
+
+	// the body streams into the upload, which spools anything over objects.MaxInMemorySize to disk
+	body, err := opener.Open(ctx, from)
+	if err != nil {
+		return err
+	}
+
+	defer body.Close()
+
+	uploaded, err := r.provider.Upload(ctx, body, &storage.UploadOptions{FileName: f.StoragePath, ContentType: f.DetectedContentType})
 	if err != nil {
 		return err
 	}

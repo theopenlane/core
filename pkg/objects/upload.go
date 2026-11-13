@@ -1,6 +1,7 @@
 package objects
 
 import (
+	"bytes"
 	"context"
 	"io"
 	"mime/multipart"
@@ -319,19 +320,23 @@ func ReaderToSeeker(r io.Reader) (io.ReadSeeker, error) {
 		return seeker, nil
 	}
 
-	// Try to use in-memory buffering for small files
-	br, err := NewBufferedReaderFromReader(r)
-	if err == nil {
-		return br, nil
+	// read one byte past the in-memory limit to learn whether the rest has to spool to disk
+	head, err := io.ReadAll(io.LimitReader(r, MaxInMemorySize+1))
+	if err != nil {
+		return nil, ErrFailedToReadData
 	}
 
-	// If file is too large or buffering fails, fall back to temp file
+	if int64(len(head)) <= MaxInMemorySize {
+		return NewBufferedReader(head), nil
+	}
+
 	tmpfile, err := os.CreateTemp("", "upload-")
 	if err != nil {
 		return nil, err
 	}
 
-	if _, err = io.Copy(tmpfile, r); err != nil {
+	// the head already left the reader, so it goes to the file first
+	if _, err = io.Copy(tmpfile, io.MultiReader(bytes.NewReader(head), r)); err != nil {
 		_ = tmpfile.Close()
 		_ = os.Remove(tmpfile.Name())
 
@@ -345,6 +350,21 @@ func ReaderToSeeker(r io.Reader) (io.ReadSeeker, error) {
 		return nil, err
 	}
 
-	// Return the file, which implements io.ReadSeeker which you can now pass to the objects uploader
-	return tmpfile, nil
+	return &spoolFile{tmpfile}, nil
+}
+
+// spoolFile is the temporary file ReaderToSeeker spools a large reader into
+type spoolFile struct {
+	*os.File
+}
+
+// ReleaseSeeker removes the temporary file ReaderToSeeker spooled a large reader into; any other seeker belongs to its caller and is left open
+func ReleaseSeeker(seeker io.ReadSeeker) {
+	spool, ok := seeker.(*spoolFile)
+	if !ok {
+		return
+	}
+
+	_ = spool.Close()
+	_ = os.Remove(spool.Name())
 }

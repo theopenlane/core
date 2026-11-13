@@ -9,6 +9,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/mock"
 	"gotest.tools/v3/assert"
 
@@ -44,6 +45,7 @@ const (
 	relocateKeepFileExt  = ".recorded"
 	relocateMissingToken = "missing"
 	relocateMultiToken   = "multipart"
+	relocateKeyPrefix    = "relocate/"
 )
 
 // relocatePlan moves records onto R2, pulling S3 records through Sippy
@@ -79,6 +81,16 @@ func (p *relocateProvider) Stat(_ context.Context, f *storagetypes.File) (*stora
 	return &storagetypes.ObjectInfo{Size: relocateSize, ETag: etag, ContentType: relocateContentType}, nil
 }
 
+// Open streams fixed content for transfers
+func (p *relocateProvider) Open(_ context.Context, _ *storagetypes.File) (io.ReadCloser, error) {
+	return io.NopCloser(strings.NewReader("hello, world!\n")), nil
+}
+
+// seededTransfers returns the transferred keys this test seeded; other tests leave referenced rows the backfill moves as well
+func (p *relocateProvider) seededTransfers() []string {
+	return lo.Filter(p.transferred, func(key string, _ int) bool { return strings.HasPrefix(key, relocateKeyPrefix) })
+}
+
 // Copy records the source bucket per destination bucket and key
 func (p *relocateProvider) Copy(_ context.Context, f *storagetypes.File, opts *storage.CopyOptions) error {
 	p.mu.Lock()
@@ -93,7 +105,7 @@ func (p *relocateProvider) Copy(_ context.Context, f *storagetypes.File, opts *s
 func seedFile(t *testing.T, ctx context.Context, name, provider, bucket string, modify func(*generated.FileCreate)) *generated.File {
 	t.Helper()
 
-	key := "relocate/" + ulids.New().String() + "-" + name
+	key := relocateKeyPrefix + ulids.New().String() + "-" + name
 	// required by the schema, empty on the production rows the backfill fills
 	create := suite.Client.DB.File.Create().
 		SetProvidedFileName(name).
@@ -165,10 +177,6 @@ func TestRelocateFiles(t *testing.T) {
 
 			return []string{prefix}, nil
 		}).
-		Maybe()
-	mockProvider.EXPECT().
-		Download(mock.Anything, mock.Anything, mock.Anything).
-		Return(&storage.DownloadedMetadata{File: []byte("hello, world!\n"), Size: relocateSize}, nil).
 		Maybe()
 	mockProvider.EXPECT().
 		Upload(mock.Anything, mock.Anything, mock.Anything).
@@ -305,7 +313,7 @@ func TestRelocateFiles(t *testing.T) {
 		provider.mu.Lock()
 		defer provider.mu.Unlock()
 
-		assert.DeepEqual(t, provider.transferred, []string{oldBucket.StoragePath})
+		assert.DeepEqual(t, provider.seededTransfers(), []string{oldBucket.StoragePath})
 	})
 
 	t.Run("object absent from the target bucket leaves the row untouched", func(t *testing.T) {
@@ -354,7 +362,7 @@ func TestRelocateFiles(t *testing.T) {
 
 		assert.Equal(t, len(provider.touched)-touchedBefore, 1)
 		assert.Equal(t, len(provider.copied), copiedBefore)
-		assert.Equal(t, len(provider.transferred), 1)
+		assert.Equal(t, len(provider.seededTransfers()), 1)
 		assert.Equal(t, load(notCopied.ID).StorageProvider, s3)
 		assert.Equal(t, load(softParent.ID).StorageProvider, r2)
 		assert.Equal(t, load(oldR2.ID).StorageVolume, relocateTargetBucket)
@@ -367,6 +375,6 @@ func TestRelocateFiles(t *testing.T) {
 		// two runs: five pulls on the first (soft parent, recorded, legacy, multipart, not copied), one retry on the second
 		assert.Equal(t, len(provider.touched), 6)
 		assert.Equal(t, len(provider.copied), 1)
-		assert.Equal(t, len(provider.transferred), 1)
+		assert.Equal(t, len(provider.seededTransfers()), 1)
 	})
 }

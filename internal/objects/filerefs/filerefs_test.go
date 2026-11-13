@@ -3,6 +3,7 @@
 package filerefs
 
 import (
+	"strings"
 	"testing"
 
 	"entgo.io/ent/dialect/sql"
@@ -24,4 +25,6 @@ func TestReferencedCoversGeneratedKeys(t *testing.T) {
 	assert.Check(t, is.Contains(stmt, `FROM "platform_files"`))
 	assert.Check(t, is.Contains(stmt, `FROM "action_plans"`))
 	assert.Check(t, is.Contains(stmt, `FROM "trust_center_docs"`))
+	// every upload is attached to its organization, so that edge cannot keep a file alive
+	assert.Check(t, !strings.Contains(stmt, `FROM "`+file.OrganizationTable+`"`))
 }

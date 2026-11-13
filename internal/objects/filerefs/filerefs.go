@@ -26,11 +26,12 @@ func ownedKeys() []predicate.File {
 	})
 }
 
-// inboundKeys matches the foreign keys on every other table that point at files
+// inboundKeys matches the foreign keys on every other table that point at files; the organization
+// edge is ownership stamped on every upload, so it does not count as a reference
 func inboundKeys() []predicate.File {
 	return lo.FlatMap(migrate.Tables, func(t *schema.Table, _ int) []predicate.File {
 		return lo.FilterMap(t.ForeignKeys, func(fk *schema.ForeignKey, _ int) (predicate.File, bool) {
-			if fk.RefTable != migrate.FilesTable {
+			if fk.RefTable != migrate.FilesTable || t.Name == file.OrganizationTable {
 				return nil, false
 			}
 

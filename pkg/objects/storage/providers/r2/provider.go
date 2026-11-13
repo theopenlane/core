@@ -131,6 +131,8 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		return nil, err
 	}
 
+	defer objects.ReleaseSeeker(seeker)
+
 	// If size wasn't known upfront, get it from the seeker
 	if !sizeKnown {
 		if sized, ok := seeker.(objects.SizedReader); ok {
@@ -238,6 +240,19 @@ func (p *Provider) Copy(ctx context.Context, file *storagetypes.File, opts *stor
 	})
 
 	return err
+}
+
+// Open implements storage.Opener by streaming the object body
+func (p *Provider) Open(ctx context.Context, file *storagetypes.File) (io.ReadCloser, error) {
+	out, err := p.client.GetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(p.options.BucketFor(file.StoredBucket())),
+		Key:    aws.String(file.Key),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Body, nil
 }
 
 // Touch implements storage.Toucher by requesting the first byte of the object and discarding it

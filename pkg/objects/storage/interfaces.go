@@ -2,9 +2,16 @@ package storage
 
 import (
 	"context"
+	"io"
 
 	"github.com/theopenlane/core/common/storagetypes"
 )
+
+// Opener is implemented by providers that stream an object body instead of buffering it in memory
+type Opener interface {
+	// Open returns the body of file, closed by the caller
+	Open(ctx context.Context, file *File) (io.ReadCloser, error)
+}
 
 // Statter is implemented by providers that report object metadata without reading the object body
 type Statter interface {
