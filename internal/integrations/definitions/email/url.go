@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
@@ -186,21 +187,21 @@ func resolveQuestionnaireOrgName(ctx context.Context, req types.OperationRequest
 		return nil
 	}
 
-	org, err := req.DB.Organization.Query().
+	input.OrgName = organizationDisplayName(ctx, req.DB, orgID)
+
+	return nil
+}
+
+// organizationDisplayName returns the organization display name, falling back to its name, or empty when it cannot be loaded
+func organizationDisplayName(ctx context.Context, db *generated.Client, orgID string) string {
+	org, err := db.Organization.Query().
 		Where(organization.IDEQ(orgID)).
 		Select(organization.FieldDisplayName, organization.FieldName).
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("org_id", orgID).Msg("failed resolving org name for questionnaire email")
-		return nil
+		return ""
 	}
 
-	switch {
-	case org.DisplayName != "":
-		input.OrgName = org.DisplayName
-	default:
-		input.OrgName = org.Name
-	}
-
-	return nil
+	return lo.CoalesceOrEmpty(org.DisplayName, org.Name)
 }

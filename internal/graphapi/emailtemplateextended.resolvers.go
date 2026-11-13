@@ -9,7 +9,6 @@ import (
 	"context"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/logx"
@@ -27,9 +26,7 @@ func (r *queryResolver) EmailTemplateCatalog(ctx context.Context) (*model.EmailT
 
 	dispatchers := email.CustomerSelectableDispatchers()
 
-	variables := lo.Map(email.TemplateVariables(), func(v models.TemplateVariable, _ int) *model.TemplateVariable {
-		return &model.TemplateVariable{Name: v.Name, Description: v.Description}
-	})
+	sharedVariables := email.TemplateVariables()
 
 	entries := make([]*model.EmailTemplateCatalogEntry, 0, len(dispatchers))
 	for _, d := range dispatchers {
@@ -64,7 +61,7 @@ func (r *queryResolver) EmailTemplateCatalog(ctx context.Context) (*model.EmailT
 			Description:   reg.Description,
 			ConfigSchema:  schema,
 			UISchema:      uiSchema,
-			Variables:     variables,
+			Variables:     catalogVariables(sharedVariables, d.TemplateVariables()),
 			ExampleValues: exampleValues,
 			HTMLPreview:   htmlPreview,
 		})

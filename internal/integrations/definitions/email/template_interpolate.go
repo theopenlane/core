@@ -3,6 +3,7 @@ package email
 import (
 	"encoding/json"
 	"fmt"
+	"maps"
 	"strconv"
 	"time"
 
@@ -12,7 +13,7 @@ import (
 )
 
 // interpolatePayload executes Go template expressions in the raw JSON payload against a variable map
-func interpolatePayload(client *Client, payload json.RawMessage) (json.RawMessage, error) {
+func interpolatePayload(client *Client, payload json.RawMessage, operationVars map[string]any) (json.RawMessage, error) {
 	if len(payload) == 0 {
 		return payload, nil
 	}
@@ -22,7 +23,7 @@ func interpolatePayload(client *Client, payload json.RawMessage) (json.RawMessag
 		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 	}
 
-	vars, err := buildTemplateVars(client.Config, document)
+	vars, err := buildTemplateVars(client.Config, document, operationVars)
 	if err != nil {
 		return nil, fmt.Errorf("%w: building template vars: %w", ErrTemplateRenderFailed, err)
 	}
@@ -43,7 +44,7 @@ func interpolatePayload(client *Client, payload json.RawMessage) (json.RawMessag
 // buildTemplateVars constructs the template variable map. Only allowlisted config fields are
 // included, so operational and secret config (apikey, resendsecret, provider, URLs, …) is never
 // interpolatable into rendered output regardless of which client's config backs the render
-func buildTemplateVars(cfg RuntimeEmailConfig, payloadVars map[string]any) (map[string]any, error) {
+func buildTemplateVars(cfg RuntimeEmailConfig, payloadVars map[string]any, operationVars map[string]any) (map[string]any, error) {
 	var cfgVars map[string]any
 	if err := jsonx.RoundTrip(cfg, &cfgVars); err != nil {
 		return nil, err
@@ -65,6 +66,8 @@ func buildTemplateVars(cfg RuntimeEmailConfig, payloadVars map[string]any) (map[
 			vars[variable.Name] = value
 		}
 	}
+
+	maps.Copy(vars, operationVars)
 
 	return vars, nil
 }

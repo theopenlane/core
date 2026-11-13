@@ -27,6 +27,8 @@ var (
 	ErrAssessmentNotFound = errors.New("email: assessment not found")
 	// ErrQuestionnaireDispatchFailed indicates failure during dispatch of a questionnaire access email to a campaign target
 	ErrQuestionnaireDispatchFailed = errors.New("email: questionnaire dispatch failed")
+	// ErrCampaignTemplateKeyMismatch indicates the email template linked to a campaign does not fit the campaign type
+	ErrCampaignTemplateKeyMismatch = errors.New("email: email template does not match the campaign type")
 	// ErrWebhookSecretMissing indicates the Resend webhook signing secret is not configured
 	ErrWebhookSecretMissing = errors.New("email: webhook secret missing")
 	// ErrWebhookPayloadInvalid indicates the inbound webhook payload could not be decoded

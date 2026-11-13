@@ -126,7 +126,7 @@ func (r *mutationResolver) validateTestEmailCampaign(ctx context.Context, campai
 		return err
 	}
 
-	return validateCampaignContentSource(campaignObj)
+	return validateCampaignContentSource(ctx, campaignObj)
 }
 
 // processTestEmails dispatches a test email for each deduped recipient

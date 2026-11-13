@@ -35,7 +35,7 @@ func TestUnsubscribeTokenInterpolatedIntoPayload(t *testing.T) {
 	})
 	assert.Check(t, err)
 
-	resolved, err := interpolatePayload(client, payload)
+	resolved, err := interpolatePayload(client, payload, nil)
 	assert.Check(t, err)
 
 	var req BrandedMessageRequest

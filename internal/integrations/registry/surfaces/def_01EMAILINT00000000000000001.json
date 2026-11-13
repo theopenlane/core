@@ -1,6 +1,6 @@
 {
-  "hash": "3b649480944467be65124ece8f261b0ed564c16ff0a4a1416afacbc1c65c352d",
-  "version": "01M4V1VGWH897QF5VPFV8A3MPG",
+  "hash": "4fdd2dd8d27b3ebd8ea9430d4243c2bc2e51e722163b315d064679f907e7eef1",
+  "version": "01M74CAPWBX7GKACG9S82YYVZX",
   "surface": {
     "id": "def_01EMAILINT00000000000000001",
     "credentials": [
@@ -152,6 +152,9 @@
       },
       {
         "name": "QuestionnaireAuthEmail"
+      },
+      {
+        "name": "QuestionnaireInvitationRequest"
       },
       {
         "name": "RecurringCampaignSweep"
