@@ -80,3 +80,16 @@ Others are allowed to make their own distribution of this software or include th
 ## Contributing
 
 See the [contributing guide](.github/CONTRIBUTING.md) for how to get involved. If our code or projects have helped you, or you want to support the work, we appreciate sponsorship on our GitHub project at any level.
+
+## Sponsors
+
+Thank you to our [GitHub sponsors](https://github.com/sponsors/theopenlane)!
+
+<a href="https://github.com/pereztr5"><img alt="pereztr5" src="https://github.com/pereztr5.png" height="48" /></a>
+<a href="https://github.com/litchford-b"><img alt="litchford-b" src="https://github.com/litchford-b.png" height="48" /></a>
+<a href="https://github.com/cmethvin"><img alt="cmethvin" src="https://github.com/cmethvin.png" height="48" /></a>
+<a href="https://github.com/LadyMeowler"><img alt="LadyMeowler" src="https://github.com/LadyMeowler.png" height="48" /></a>
+
+### CI Infrastructure support
+
+<a href="https://namespace.so/github-actions/?utm_source=oss&utm_campaign=openlane" target="_blank"><img alt="CI powered by Namespace" src="https://namespace.so/oss/badge.svg" height="20" /></a>
