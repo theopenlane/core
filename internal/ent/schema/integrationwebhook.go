@@ -177,7 +177,6 @@ func (w IntegrationWebhook) Mixin() []ent.Mixin {
 		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.IntegrationWebhook](w,
-				withParents(Integration{}),
 				withOrganizationOwnerServiceOnly(),
 				withSkipForSystemAdmin(),
 			),
@@ -196,7 +195,7 @@ func (IntegrationWebhook) Modules() []models.OrgModule {
 func (IntegrationWebhook) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
+			policy.CheckOrgRelationAccess(rule.CanManageIntegrationsRelation),
 		),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),

@@ -83,6 +83,7 @@ tests:
           can_create_scan: true
           can_create_platform: true
           can_create_identity_holder: true
+          can_manage_integrations: true
       - user: user:ulid-of-member
         object: organization:openlane
         assertions:
@@ -120,6 +121,7 @@ tests:
           can_create_scan: false
           can_create_platform: false
           can_create_identity_holder: false
+          can_manage_integrations: false
       - user: service:ulid-of-service-editor
         object: organization:openlane # parent org
         assertions:
@@ -229,6 +231,7 @@ tests:
           can_create_scan: true
           can_create_platform: true
           can_create_identity_holder: true
+          can_manage_integrations: true
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
         assertions:
@@ -613,6 +616,18 @@ tests:
           can_create_identity_holder: false
           can_create_asset: false
           can_create_workflow_definition: true
+          can_manage_integrations: true
+      - user: user:ulid-integrations-manager
+        object: organization:openlane
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_edit: false
+          can_view: true
+          can_manage_workflows: false
+          can_create_workflow_definition: false
+          can_manage_integrations: true
     list_objects:
       - user: user:ulid-of-owner
         type: organization
@@ -2557,7 +2572,7 @@ tests:
           sla_definition_viewer: false
           can_view_sla_definition: false
   - name: integration_run
-    description: integration runs are service-driven and visible to org members via parent context
+    description: integration runs are service-driven and only visible to integration managers
     tuple_file: tests/tuples/integration_runs.yaml
     check:
       - user: user:ulid-of-owner
@@ -2575,6 +2590,12 @@ tests:
       - user: user:ulid-of-member
         object: integration_run:run-1
         assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-integrations-manager
+        object: integration_run:run-1
+        assertions:
           can_view: true
           can_edit: false
           can_delete: false
@@ -2586,6 +2607,40 @@ tests:
           can_delete: true
       - user: user:ulid-of-owner-foobar # user of another org has no access
         object: integration_run:run-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+  - name: integration_webhook
+    description: integration webhooks are only visible to integration managers
+    tuple_file: tests/tuples/integration_webhooks.yaml
+    check:
+      - user: user:ulid-of-owner
+        object: integration_webhook:webhook-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-admin
+        object: integration_webhook:webhook-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-integrations-manager
+        object: integration_webhook:webhook-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member
+        object: integration_webhook:webhook-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: integration_webhook:webhook-1
         assertions:
           can_view: false
           can_edit: false

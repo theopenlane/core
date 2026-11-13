@@ -5228,11 +5228,13 @@ func init() {
 
 	organization.Hooks[81] = organizationMixinHooks7[76]
 
-	organization.Hooks[82] = organizationHooks[0]
+	organization.Hooks[82] = organizationMixinHooks7[77]
 
-	organization.Hooks[83] = organizationHooks[1]
+	organization.Hooks[83] = organizationHooks[0]
 
-	organization.Hooks[84] = organizationHooks[2]
+	organization.Hooks[84] = organizationHooks[1]
+
+	organization.Hooks[85] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]

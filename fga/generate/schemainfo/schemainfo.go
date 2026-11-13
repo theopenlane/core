@@ -31,6 +31,8 @@ type SchemaInfo struct {
 	HasUpdate bool `json:"hasUpdate,omitempty"`
 	// HasDelete indicates the schema should have crud delete operations
 	HasDelete bool `json:"hasDelete,omitempty"`
+	// ViewOnly limits the schema to a view relation, with no create, edit, or delete relations or scopes
+	ViewOnly bool `json:"viewOnly,omitempty"`
 	// HasGroupCreator indicates the schema should have group creator permissions
 	HasGroupCreator bool `json:"hasGroupCreator,omitempty"`
 	// Parents are the parent types the schema can also inherit crud access from

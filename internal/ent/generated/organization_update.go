@@ -1392,19 +1392,19 @@ func (_u *OrganizationUpdate) AddWorkflowDefinitionCreators(v ...*Group) *Organi
 	return _u.AddWorkflowDefinitionCreatorIDs(ids...)
 }
 
-// AddCampaignsManagerIDs adds the "campaigns_manager" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddCampaignsManagerIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddCampaignsManagerIDs(ids...)
+// AddCampaignManagerIDs adds the "campaign_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddCampaignManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddCampaignManagerIDs(ids...)
 	return _u
 }
 
-// AddCampaignsManager adds the "campaigns_manager" edges to the Group entity.
-func (_u *OrganizationUpdate) AddCampaignsManager(v ...*Group) *OrganizationUpdate {
+// AddCampaignManager adds the "campaign_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) AddCampaignManager(v ...*Group) *OrganizationUpdate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.AddCampaignsManagerIDs(ids...)
+	return _u.AddCampaignManagerIDs(ids...)
 }
 
 // AddComplianceManagerIDs adds the "compliance_manager" edge to the Group entity by IDs.
@@ -1437,19 +1437,34 @@ func (_u *OrganizationUpdate) AddGroupManager(v ...*Group) *OrganizationUpdate {
 	return _u.AddGroupManagerIDs(ids...)
 }
 
-// AddPoliciesManagerIDs adds the "policies_manager" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddPoliciesManagerIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddPoliciesManagerIDs(ids...)
+// AddIntegrationManagerIDs adds the "integration_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddIntegrationManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddIntegrationManagerIDs(ids...)
 	return _u
 }
 
-// AddPoliciesManager adds the "policies_manager" edges to the Group entity.
-func (_u *OrganizationUpdate) AddPoliciesManager(v ...*Group) *OrganizationUpdate {
+// AddIntegrationManager adds the "integration_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) AddIntegrationManager(v ...*Group) *OrganizationUpdate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.AddPoliciesManagerIDs(ids...)
+	return _u.AddIntegrationManagerIDs(ids...)
+}
+
+// AddPolicyManagerIDs adds the "policy_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddPolicyManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddPolicyManagerIDs(ids...)
+	return _u
+}
+
+// AddPolicyManager adds the "policy_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) AddPolicyManager(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPolicyManagerIDs(ids...)
 }
 
 // AddRegistryManagerIDs adds the "registry_manager" edge to the Group entity by IDs.
@@ -1497,19 +1512,19 @@ func (_u *OrganizationUpdate) AddTrustCenterManager(v ...*Group) *OrganizationUp
 	return _u.AddTrustCenterManagerIDs(ids...)
 }
 
-// AddWorkflowsManagerIDs adds the "workflows_manager" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddWorkflowsManagerIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddWorkflowsManagerIDs(ids...)
+// AddWorkflowManagerIDs adds the "workflow_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddWorkflowManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddWorkflowManagerIDs(ids...)
 	return _u
 }
 
-// AddWorkflowsManager adds the "workflows_manager" edges to the Group entity.
-func (_u *OrganizationUpdate) AddWorkflowsManager(v ...*Group) *OrganizationUpdate {
+// AddWorkflowManager adds the "workflow_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) AddWorkflowManager(v ...*Group) *OrganizationUpdate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.AddWorkflowsManagerIDs(ids...)
+	return _u.AddWorkflowManagerIDs(ids...)
 }
 
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
@@ -4253,25 +4268,25 @@ func (_u *OrganizationUpdate) RemoveWorkflowDefinitionCreators(v ...*Group) *Org
 	return _u.RemoveWorkflowDefinitionCreatorIDs(ids...)
 }
 
-// ClearCampaignsManager clears all "campaigns_manager" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearCampaignsManager() *OrganizationUpdate {
-	_u.mutation.ClearCampaignsManager()
+// ClearCampaignManager clears all "campaign_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearCampaignManager() *OrganizationUpdate {
+	_u.mutation.ClearCampaignManager()
 	return _u
 }
 
-// RemoveCampaignsManagerIDs removes the "campaigns_manager" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveCampaignsManagerIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveCampaignsManagerIDs(ids...)
+// RemoveCampaignManagerIDs removes the "campaign_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveCampaignManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveCampaignManagerIDs(ids...)
 	return _u
 }
 
-// RemoveCampaignsManager removes "campaigns_manager" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveCampaignsManager(v ...*Group) *OrganizationUpdate {
+// RemoveCampaignManager removes "campaign_manager" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveCampaignManager(v ...*Group) *OrganizationUpdate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.RemoveCampaignsManagerIDs(ids...)
+	return _u.RemoveCampaignManagerIDs(ids...)
 }
 
 // ClearComplianceManager clears all "compliance_manager" edges to the Group entity.
@@ -4316,25 +4331,46 @@ func (_u *OrganizationUpdate) RemoveGroupManager(v ...*Group) *OrganizationUpdat
 	return _u.RemoveGroupManagerIDs(ids...)
 }
 
-// ClearPoliciesManager clears all "policies_manager" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearPoliciesManager() *OrganizationUpdate {
-	_u.mutation.ClearPoliciesManager()
+// ClearIntegrationManager clears all "integration_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearIntegrationManager() *OrganizationUpdate {
+	_u.mutation.ClearIntegrationManager()
 	return _u
 }
 
-// RemovePoliciesManagerIDs removes the "policies_manager" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemovePoliciesManagerIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemovePoliciesManagerIDs(ids...)
+// RemoveIntegrationManagerIDs removes the "integration_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveIntegrationManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveIntegrationManagerIDs(ids...)
 	return _u
 }
 
-// RemovePoliciesManager removes "policies_manager" edges to Group entities.
-func (_u *OrganizationUpdate) RemovePoliciesManager(v ...*Group) *OrganizationUpdate {
+// RemoveIntegrationManager removes "integration_manager" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveIntegrationManager(v ...*Group) *OrganizationUpdate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.RemovePoliciesManagerIDs(ids...)
+	return _u.RemoveIntegrationManagerIDs(ids...)
+}
+
+// ClearPolicyManager clears all "policy_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearPolicyManager() *OrganizationUpdate {
+	_u.mutation.ClearPolicyManager()
+	return _u
+}
+
+// RemovePolicyManagerIDs removes the "policy_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemovePolicyManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemovePolicyManagerIDs(ids...)
+	return _u
+}
+
+// RemovePolicyManager removes "policy_manager" edges to Group entities.
+func (_u *OrganizationUpdate) RemovePolicyManager(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePolicyManagerIDs(ids...)
 }
 
 // ClearRegistryManager clears all "registry_manager" edges to the Group entity.
@@ -4400,25 +4436,25 @@ func (_u *OrganizationUpdate) RemoveTrustCenterManager(v ...*Group) *Organizatio
 	return _u.RemoveTrustCenterManagerIDs(ids...)
 }
 
-// ClearWorkflowsManager clears all "workflows_manager" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearWorkflowsManager() *OrganizationUpdate {
-	_u.mutation.ClearWorkflowsManager()
+// ClearWorkflowManager clears all "workflow_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearWorkflowManager() *OrganizationUpdate {
+	_u.mutation.ClearWorkflowManager()
 	return _u
 }
 
-// RemoveWorkflowsManagerIDs removes the "workflows_manager" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveWorkflowsManagerIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveWorkflowsManagerIDs(ids...)
+// RemoveWorkflowManagerIDs removes the "workflow_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveWorkflowManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveWorkflowManagerIDs(ids...)
 	return _u
 }
 
-// RemoveWorkflowsManager removes "workflows_manager" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveWorkflowsManager(v ...*Group) *OrganizationUpdate {
+// RemoveWorkflowManager removes "workflow_manager" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveWorkflowManager(v ...*Group) *OrganizationUpdate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.RemoveWorkflowsManagerIDs(ids...)
+	return _u.RemoveWorkflowManagerIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
@@ -9429,12 +9465,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.CampaignsManagerCleared() {
+	if _u.mutation.CampaignManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.CampaignsManagerTable,
-			Columns: []string{organization.CampaignsManagerColumn},
+			Table:   organization.CampaignManagerTable,
+			Columns: []string{organization.CampaignManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -9442,12 +9478,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedCampaignsManagerIDs(); len(nodes) > 0 && !_u.mutation.CampaignsManagerCleared() {
+	if nodes := _u.mutation.RemovedCampaignManagerIDs(); len(nodes) > 0 && !_u.mutation.CampaignManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.CampaignsManagerTable,
-			Columns: []string{organization.CampaignsManagerColumn},
+			Table:   organization.CampaignManagerTable,
+			Columns: []string{organization.CampaignManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -9458,12 +9494,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.CampaignsManagerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.CampaignManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.CampaignsManagerTable,
-			Columns: []string{organization.CampaignsManagerColumn},
+			Table:   organization.CampaignManagerTable,
+			Columns: []string{organization.CampaignManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -9564,12 +9600,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.PoliciesManagerCleared() {
+	if _u.mutation.IntegrationManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.PoliciesManagerTable,
-			Columns: []string{organization.PoliciesManagerColumn},
+			Table:   organization.IntegrationManagerTable,
+			Columns: []string{organization.IntegrationManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -9577,12 +9613,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedPoliciesManagerIDs(); len(nodes) > 0 && !_u.mutation.PoliciesManagerCleared() {
+	if nodes := _u.mutation.RemovedIntegrationManagerIDs(); len(nodes) > 0 && !_u.mutation.IntegrationManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.PoliciesManagerTable,
-			Columns: []string{organization.PoliciesManagerColumn},
+			Table:   organization.IntegrationManagerTable,
+			Columns: []string{organization.IntegrationManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -9593,12 +9629,57 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.PoliciesManagerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.IntegrationManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.PoliciesManagerTable,
-			Columns: []string{organization.PoliciesManagerColumn},
+			Table:   organization.IntegrationManagerTable,
+			Columns: []string{organization.IntegrationManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PolicyManagerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PolicyManagerTable,
+			Columns: []string{organization.PolicyManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPolicyManagerIDs(); len(nodes) > 0 && !_u.mutation.PolicyManagerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PolicyManagerTable,
+			Columns: []string{organization.PolicyManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PolicyManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PolicyManagerTable,
+			Columns: []string{organization.PolicyManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -9744,12 +9825,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.WorkflowsManagerCleared() {
+	if _u.mutation.WorkflowManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.WorkflowsManagerTable,
-			Columns: []string{organization.WorkflowsManagerColumn},
+			Table:   organization.WorkflowManagerTable,
+			Columns: []string{organization.WorkflowManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -9757,12 +9838,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedWorkflowsManagerIDs(); len(nodes) > 0 && !_u.mutation.WorkflowsManagerCleared() {
+	if nodes := _u.mutation.RemovedWorkflowManagerIDs(); len(nodes) > 0 && !_u.mutation.WorkflowManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.WorkflowsManagerTable,
-			Columns: []string{organization.WorkflowsManagerColumn},
+			Table:   organization.WorkflowManagerTable,
+			Columns: []string{organization.WorkflowManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -9773,12 +9854,12 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.WorkflowsManagerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.WorkflowManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.WorkflowsManagerTable,
-			Columns: []string{organization.WorkflowsManagerColumn},
+			Table:   organization.WorkflowManagerTable,
+			Columns: []string{organization.WorkflowManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -14888,19 +14969,19 @@ func (_u *OrganizationUpdateOne) AddWorkflowDefinitionCreators(v ...*Group) *Org
 	return _u.AddWorkflowDefinitionCreatorIDs(ids...)
 }
 
-// AddCampaignsManagerIDs adds the "campaigns_manager" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddCampaignsManagerIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddCampaignsManagerIDs(ids...)
+// AddCampaignManagerIDs adds the "campaign_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddCampaignManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddCampaignManagerIDs(ids...)
 	return _u
 }
 
-// AddCampaignsManager adds the "campaigns_manager" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddCampaignsManager(v ...*Group) *OrganizationUpdateOne {
+// AddCampaignManager adds the "campaign_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddCampaignManager(v ...*Group) *OrganizationUpdateOne {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.AddCampaignsManagerIDs(ids...)
+	return _u.AddCampaignManagerIDs(ids...)
 }
 
 // AddComplianceManagerIDs adds the "compliance_manager" edge to the Group entity by IDs.
@@ -14933,19 +15014,34 @@ func (_u *OrganizationUpdateOne) AddGroupManager(v ...*Group) *OrganizationUpdat
 	return _u.AddGroupManagerIDs(ids...)
 }
 
-// AddPoliciesManagerIDs adds the "policies_manager" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddPoliciesManagerIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddPoliciesManagerIDs(ids...)
+// AddIntegrationManagerIDs adds the "integration_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddIntegrationManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddIntegrationManagerIDs(ids...)
 	return _u
 }
 
-// AddPoliciesManager adds the "policies_manager" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddPoliciesManager(v ...*Group) *OrganizationUpdateOne {
+// AddIntegrationManager adds the "integration_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddIntegrationManager(v ...*Group) *OrganizationUpdateOne {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.AddPoliciesManagerIDs(ids...)
+	return _u.AddIntegrationManagerIDs(ids...)
+}
+
+// AddPolicyManagerIDs adds the "policy_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddPolicyManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddPolicyManagerIDs(ids...)
+	return _u
+}
+
+// AddPolicyManager adds the "policy_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddPolicyManager(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPolicyManagerIDs(ids...)
 }
 
 // AddRegistryManagerIDs adds the "registry_manager" edge to the Group entity by IDs.
@@ -14993,19 +15089,19 @@ func (_u *OrganizationUpdateOne) AddTrustCenterManager(v ...*Group) *Organizatio
 	return _u.AddTrustCenterManagerIDs(ids...)
 }
 
-// AddWorkflowsManagerIDs adds the "workflows_manager" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddWorkflowsManagerIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddWorkflowsManagerIDs(ids...)
+// AddWorkflowManagerIDs adds the "workflow_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddWorkflowManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddWorkflowManagerIDs(ids...)
 	return _u
 }
 
-// AddWorkflowsManager adds the "workflows_manager" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddWorkflowsManager(v ...*Group) *OrganizationUpdateOne {
+// AddWorkflowManager adds the "workflow_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddWorkflowManager(v ...*Group) *OrganizationUpdateOne {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.AddWorkflowsManagerIDs(ids...)
+	return _u.AddWorkflowManagerIDs(ids...)
 }
 
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
@@ -17749,25 +17845,25 @@ func (_u *OrganizationUpdateOne) RemoveWorkflowDefinitionCreators(v ...*Group) *
 	return _u.RemoveWorkflowDefinitionCreatorIDs(ids...)
 }
 
-// ClearCampaignsManager clears all "campaigns_manager" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearCampaignsManager() *OrganizationUpdateOne {
-	_u.mutation.ClearCampaignsManager()
+// ClearCampaignManager clears all "campaign_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearCampaignManager() *OrganizationUpdateOne {
+	_u.mutation.ClearCampaignManager()
 	return _u
 }
 
-// RemoveCampaignsManagerIDs removes the "campaigns_manager" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveCampaignsManagerIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveCampaignsManagerIDs(ids...)
+// RemoveCampaignManagerIDs removes the "campaign_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveCampaignManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveCampaignManagerIDs(ids...)
 	return _u
 }
 
-// RemoveCampaignsManager removes "campaigns_manager" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveCampaignsManager(v ...*Group) *OrganizationUpdateOne {
+// RemoveCampaignManager removes "campaign_manager" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveCampaignManager(v ...*Group) *OrganizationUpdateOne {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.RemoveCampaignsManagerIDs(ids...)
+	return _u.RemoveCampaignManagerIDs(ids...)
 }
 
 // ClearComplianceManager clears all "compliance_manager" edges to the Group entity.
@@ -17812,25 +17908,46 @@ func (_u *OrganizationUpdateOne) RemoveGroupManager(v ...*Group) *OrganizationUp
 	return _u.RemoveGroupManagerIDs(ids...)
 }
 
-// ClearPoliciesManager clears all "policies_manager" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearPoliciesManager() *OrganizationUpdateOne {
-	_u.mutation.ClearPoliciesManager()
+// ClearIntegrationManager clears all "integration_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearIntegrationManager() *OrganizationUpdateOne {
+	_u.mutation.ClearIntegrationManager()
 	return _u
 }
 
-// RemovePoliciesManagerIDs removes the "policies_manager" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemovePoliciesManagerIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemovePoliciesManagerIDs(ids...)
+// RemoveIntegrationManagerIDs removes the "integration_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveIntegrationManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveIntegrationManagerIDs(ids...)
 	return _u
 }
 
-// RemovePoliciesManager removes "policies_manager" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemovePoliciesManager(v ...*Group) *OrganizationUpdateOne {
+// RemoveIntegrationManager removes "integration_manager" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveIntegrationManager(v ...*Group) *OrganizationUpdateOne {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.RemovePoliciesManagerIDs(ids...)
+	return _u.RemoveIntegrationManagerIDs(ids...)
+}
+
+// ClearPolicyManager clears all "policy_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearPolicyManager() *OrganizationUpdateOne {
+	_u.mutation.ClearPolicyManager()
+	return _u
+}
+
+// RemovePolicyManagerIDs removes the "policy_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemovePolicyManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemovePolicyManagerIDs(ids...)
+	return _u
+}
+
+// RemovePolicyManager removes "policy_manager" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemovePolicyManager(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePolicyManagerIDs(ids...)
 }
 
 // ClearRegistryManager clears all "registry_manager" edges to the Group entity.
@@ -17896,25 +18013,25 @@ func (_u *OrganizationUpdateOne) RemoveTrustCenterManager(v ...*Group) *Organiza
 	return _u.RemoveTrustCenterManagerIDs(ids...)
 }
 
-// ClearWorkflowsManager clears all "workflows_manager" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearWorkflowsManager() *OrganizationUpdateOne {
-	_u.mutation.ClearWorkflowsManager()
+// ClearWorkflowManager clears all "workflow_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearWorkflowManager() *OrganizationUpdateOne {
+	_u.mutation.ClearWorkflowManager()
 	return _u
 }
 
-// RemoveWorkflowsManagerIDs removes the "workflows_manager" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveWorkflowsManagerIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveWorkflowsManagerIDs(ids...)
+// RemoveWorkflowManagerIDs removes the "workflow_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveWorkflowManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveWorkflowManagerIDs(ids...)
 	return _u
 }
 
-// RemoveWorkflowsManager removes "workflows_manager" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveWorkflowsManager(v ...*Group) *OrganizationUpdateOne {
+// RemoveWorkflowManager removes "workflow_manager" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveWorkflowManager(v ...*Group) *OrganizationUpdateOne {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.RemoveWorkflowsManagerIDs(ids...)
+	return _u.RemoveWorkflowManagerIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
@@ -22955,12 +23072,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.CampaignsManagerCleared() {
+	if _u.mutation.CampaignManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.CampaignsManagerTable,
-			Columns: []string{organization.CampaignsManagerColumn},
+			Table:   organization.CampaignManagerTable,
+			Columns: []string{organization.CampaignManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -22968,12 +23085,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedCampaignsManagerIDs(); len(nodes) > 0 && !_u.mutation.CampaignsManagerCleared() {
+	if nodes := _u.mutation.RemovedCampaignManagerIDs(); len(nodes) > 0 && !_u.mutation.CampaignManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.CampaignsManagerTable,
-			Columns: []string{organization.CampaignsManagerColumn},
+			Table:   organization.CampaignManagerTable,
+			Columns: []string{organization.CampaignManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -22984,12 +23101,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.CampaignsManagerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.CampaignManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.CampaignsManagerTable,
-			Columns: []string{organization.CampaignsManagerColumn},
+			Table:   organization.CampaignManagerTable,
+			Columns: []string{organization.CampaignManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -23090,12 +23207,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.PoliciesManagerCleared() {
+	if _u.mutation.IntegrationManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.PoliciesManagerTable,
-			Columns: []string{organization.PoliciesManagerColumn},
+			Table:   organization.IntegrationManagerTable,
+			Columns: []string{organization.IntegrationManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -23103,12 +23220,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedPoliciesManagerIDs(); len(nodes) > 0 && !_u.mutation.PoliciesManagerCleared() {
+	if nodes := _u.mutation.RemovedIntegrationManagerIDs(); len(nodes) > 0 && !_u.mutation.IntegrationManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.PoliciesManagerTable,
-			Columns: []string{organization.PoliciesManagerColumn},
+			Table:   organization.IntegrationManagerTable,
+			Columns: []string{organization.IntegrationManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -23119,12 +23236,57 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.PoliciesManagerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.IntegrationManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.PoliciesManagerTable,
-			Columns: []string{organization.PoliciesManagerColumn},
+			Table:   organization.IntegrationManagerTable,
+			Columns: []string{organization.IntegrationManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PolicyManagerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PolicyManagerTable,
+			Columns: []string{organization.PolicyManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPolicyManagerIDs(); len(nodes) > 0 && !_u.mutation.PolicyManagerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PolicyManagerTable,
+			Columns: []string{organization.PolicyManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PolicyManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PolicyManagerTable,
+			Columns: []string{organization.PolicyManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -23270,12 +23432,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.WorkflowsManagerCleared() {
+	if _u.mutation.WorkflowManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.WorkflowsManagerTable,
-			Columns: []string{organization.WorkflowsManagerColumn},
+			Table:   organization.WorkflowManagerTable,
+			Columns: []string{organization.WorkflowManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -23283,12 +23445,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedWorkflowsManagerIDs(); len(nodes) > 0 && !_u.mutation.WorkflowsManagerCleared() {
+	if nodes := _u.mutation.RemovedWorkflowManagerIDs(); len(nodes) > 0 && !_u.mutation.WorkflowManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.WorkflowsManagerTable,
-			Columns: []string{organization.WorkflowsManagerColumn},
+			Table:   organization.WorkflowManagerTable,
+			Columns: []string{organization.WorkflowManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -23299,12 +23461,12 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.WorkflowsManagerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.WorkflowManagerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.WorkflowsManagerTable,
-			Columns: []string{organization.WorkflowsManagerColumn},
+			Table:   organization.WorkflowManagerTable,
+			Columns: []string{organization.WorkflowManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

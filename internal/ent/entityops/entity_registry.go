@@ -16632,6 +16632,14 @@ func init() {
 			AddField:    "add_campaign_creator_ids",
 		},
 		{
+			Name:        "campaign_manager",
+			Label:       "CampaignManager",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "campaign_manager_ids",
+			AddField:    "add_campaign_manager_ids",
+		},
+		{
 			Name:        "campaign_target_creators",
 			Label:       "CampaignTargetCreators",
 			Target:      SchemaGroup,
@@ -16654,14 +16662,6 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
-		},
-		{
-			Name:        "campaigns_manager",
-			Label:       "CampaignsManager",
-			Target:      SchemaGroup,
-			TargetType:  "Group",
-			CreateField: "campaigns_manager_ids",
-			AddField:    "add_campaigns_manager_ids",
 		},
 		{
 			Name:        "check_result_creators",
@@ -17080,6 +17080,14 @@ func init() {
 			AddField:    "add_impersonation_event_ids",
 		},
 		{
+			Name:        "integration_manager",
+			Label:       "IntegrationManager",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "integration_manager_ids",
+			AddField:    "add_integration_manager_ids",
+		},
+		{
 			Name:        "integration_runs",
 			Label:       "IntegrationRuns",
 			Target:      SchemaIntegrationRun,
@@ -17297,12 +17305,12 @@ func init() {
 			AddField:    "add_platform_ids",
 		},
 		{
-			Name:        "policies_manager",
-			Label:       "PoliciesManager",
+			Name:        "policy_manager",
+			Label:       "PolicyManager",
 			Target:      SchemaGroup,
 			TargetType:  "Group",
-			CreateField: "policies_manager_ids",
-			AddField:    "add_policies_manager_ids",
+			CreateField: "policy_manager_ids",
+			AddField:    "add_policy_manager_ids",
 		},
 		{
 			Name:        "procedure_creators",
@@ -17826,6 +17834,14 @@ func init() {
 			AddField:    "add_workflow_instance_ids",
 		},
 		{
+			Name:        "workflow_manager",
+			Label:       "WorkflowManager",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "workflow_manager_ids",
+			AddField:    "add_workflow_manager_ids",
+		},
+		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
@@ -17840,14 +17856,6 @@ func init() {
 			TargetType:  "WorkflowProposal",
 			CreateField: "workflow_proposal_ids",
 			AddField:    "add_workflow_proposal_ids",
-		},
-		{
-			Name:        "workflows_manager",
-			Label:       "WorkflowsManager",
-			Target:      SchemaGroup,
-			TargetType:  "Group",
-			CreateField: "workflows_manager_ids",
-			AddField:    "add_workflows_manager_ids",
 		},
 	}
 	SchemaOrganizationBrandingSetting.Edges = []EdgeDescriptor{

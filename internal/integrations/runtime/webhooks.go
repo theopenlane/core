@@ -30,7 +30,7 @@ func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, db *ent.Cli
 		return err
 	}
 
-	existing, err := db.IntegrationWebhook.Query().Where(integrationwebhook.IntegrationIDEQ(integration.ID), integrationwebhook.ExternalEventIDIsNil()).All(ctx)
+	existing, err := db.IntegrationWebhook.Query().Where(integrationwebhook.IntegrationIDEQ(integration.ID), integrationwebhook.ExternalEventIDIsNil()).All(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		return err
 	}
@@ -268,7 +268,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, db *ent.Client, intg *ent.I
 			integrationwebhook.ExternalEventIDIsNil(),
 		).
 		Order(integrationwebhook.ByCreatedAt()).
-		All(ctx)
+		All(auth.WithInternalReadContext(ctx))
 	if err != nil {
 		return nil, err
 	}

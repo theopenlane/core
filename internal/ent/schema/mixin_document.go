@@ -64,13 +64,13 @@ func (d DocumentMixin) Hooks() []ent.Hook {
 			hooks.HookRelationTuples(map[string]string{
 				"approver": "group",
 			}, "approver"),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 		hook.On(
 			hooks.HookRelationTuples(map[string]string{
 				"delegate": "group",
 			}, "delegate"),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 		hooks.HookImportDocument(),
 		hooks.HookDetailsVersion(),

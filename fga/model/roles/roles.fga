@@ -55,6 +55,11 @@ extend type organization
     # @role: Workflow Manager | Manage workflows, jobs, integrations, and webhook configuration
     define workflow_manager: [service, user, group#member]
 
+    # @view: integration_run
+    define can_manage_integrations: integration_manager or can_edit or can_manage_workflows
+    # @role: Integration Manager | Manage integrations and run integration operations
+    define integration_manager: [service, user, group#member]
+
     # @crud: campaign, assessment, template, email_template, email_branding, notification_template
     # @view: document_data, assessment_response
     define can_manage_campaigns: campaign_manager or admin

@@ -17324,14 +17324,15 @@ input CreateOrganizationInput {
 	vendorScoringConfigCreatorIDs: [ID!]
 	vulnerabilityCreatorIDs: [ID!]
 	workflowDefinitionCreatorIDs: [ID!]
-	campaignsManagerIDs: [ID!]
+	campaignManagerIDs: [ID!]
 	complianceManagerIDs: [ID!]
 	groupManagerIDs: [ID!]
-	policiesManagerIDs: [ID!]
+	integrationManagerIDs: [ID!]
+	policyManagerIDs: [ID!]
 	registryManagerIDs: [ID!]
 	riskManagerIDs: [ID!]
 	trustCenterManagerIDs: [ID!]
-	workflowsManagerIDs: [ID!]
+	workflowManagerIDs: [ID!]
 	parentID: ID
 	settingID: ID
 	personalAccessTokenIDs: [ID!]
@@ -57704,7 +57705,7 @@ type Organization implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
-	campaignsManager(
+	campaignManager(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -57797,7 +57798,38 @@ type Organization implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
-	policiesManager(
+	integrationManager(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	policyManager(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -57921,7 +57953,7 @@ type Organization implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
-	workflowsManager(
+	workflowManager(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -59743,10 +59775,10 @@ input OrganizationWhereInput {
 	hasWorkflowDefinitionCreators: Boolean
 	hasWorkflowDefinitionCreatorsWith: [GroupWhereInput!]
 	"""
-	campaigns_manager edge predicates
+	campaign_manager edge predicates
 	"""
-	hasCampaignsManager: Boolean
-	hasCampaignsManagerWith: [GroupWhereInput!]
+	hasCampaignManager: Boolean
+	hasCampaignManagerWith: [GroupWhereInput!]
 	"""
 	compliance_manager edge predicates
 	"""
@@ -59758,10 +59790,15 @@ input OrganizationWhereInput {
 	hasGroupManager: Boolean
 	hasGroupManagerWith: [GroupWhereInput!]
 	"""
-	policies_manager edge predicates
+	integration_manager edge predicates
 	"""
-	hasPoliciesManager: Boolean
-	hasPoliciesManagerWith: [GroupWhereInput!]
+	hasIntegrationManager: Boolean
+	hasIntegrationManagerWith: [GroupWhereInput!]
+	"""
+	policy_manager edge predicates
+	"""
+	hasPolicyManager: Boolean
+	hasPolicyManagerWith: [GroupWhereInput!]
 	"""
 	registry_manager edge predicates
 	"""
@@ -59778,10 +59815,10 @@ input OrganizationWhereInput {
 	hasTrustCenterManager: Boolean
 	hasTrustCenterManagerWith: [GroupWhereInput!]
 	"""
-	workflows_manager edge predicates
+	workflow_manager edge predicates
 	"""
-	hasWorkflowsManager: Boolean
-	hasWorkflowsManagerWith: [GroupWhereInput!]
+	hasWorkflowManager: Boolean
+	hasWorkflowManagerWith: [GroupWhereInput!]
 	"""
 	parent edge predicates
 	"""
@@ -95557,18 +95594,21 @@ input UpdateOrganizationInput {
 	addWorkflowDefinitionCreatorIDs: [ID!]
 	removeWorkflowDefinitionCreatorIDs: [ID!]
 	clearWorkflowDefinitionCreators: Boolean
-	addCampaignsManagerIDs: [ID!]
-	removeCampaignsManagerIDs: [ID!]
-	clearCampaignsManager: Boolean
+	addCampaignManagerIDs: [ID!]
+	removeCampaignManagerIDs: [ID!]
+	clearCampaignManager: Boolean
 	addComplianceManagerIDs: [ID!]
 	removeComplianceManagerIDs: [ID!]
 	clearComplianceManager: Boolean
 	addGroupManagerIDs: [ID!]
 	removeGroupManagerIDs: [ID!]
 	clearGroupManager: Boolean
-	addPoliciesManagerIDs: [ID!]
-	removePoliciesManagerIDs: [ID!]
-	clearPoliciesManager: Boolean
+	addIntegrationManagerIDs: [ID!]
+	removeIntegrationManagerIDs: [ID!]
+	clearIntegrationManager: Boolean
+	addPolicyManagerIDs: [ID!]
+	removePolicyManagerIDs: [ID!]
+	clearPolicyManager: Boolean
 	addRegistryManagerIDs: [ID!]
 	removeRegistryManagerIDs: [ID!]
 	clearRegistryManager: Boolean
@@ -95578,9 +95618,9 @@ input UpdateOrganizationInput {
 	addTrustCenterManagerIDs: [ID!]
 	removeTrustCenterManagerIDs: [ID!]
 	clearTrustCenterManager: Boolean
-	addWorkflowsManagerIDs: [ID!]
-	removeWorkflowsManagerIDs: [ID!]
-	clearWorkflowsManager: Boolean
+	addWorkflowManagerIDs: [ID!]
+	removeWorkflowManagerIDs: [ID!]
+	clearWorkflowManager: Boolean
 	settingID: ID
 	clearSetting: Boolean
 	addPersonalAccessTokenIDs: [ID!]

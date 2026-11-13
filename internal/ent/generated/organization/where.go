@@ -2847,21 +2847,21 @@ func HasWorkflowDefinitionCreatorsWith(preds ...predicate.Group) predicate.Organ
 	})
 }
 
-// HasCampaignsManager applies the HasEdge predicate on the "campaigns_manager" edge.
-func HasCampaignsManager() predicate.Organization {
+// HasCampaignManager applies the HasEdge predicate on the "campaign_manager" edge.
+func HasCampaignManager() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, CampaignsManagerTable, CampaignsManagerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, CampaignManagerTable, CampaignManagerColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasCampaignsManagerWith applies the HasEdge predicate on the "campaigns_manager" edge with a given conditions (other predicates).
-func HasCampaignsManagerWith(preds ...predicate.Group) predicate.Organization {
+// HasCampaignManagerWith applies the HasEdge predicate on the "campaign_manager" edge with a given conditions (other predicates).
+func HasCampaignManagerWith(preds ...predicate.Group) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newCampaignsManagerStep()
+		step := newCampaignManagerStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2916,21 +2916,44 @@ func HasGroupManagerWith(preds ...predicate.Group) predicate.Organization {
 	})
 }
 
-// HasPoliciesManager applies the HasEdge predicate on the "policies_manager" edge.
-func HasPoliciesManager() predicate.Organization {
+// HasIntegrationManager applies the HasEdge predicate on the "integration_manager" edge.
+func HasIntegrationManager() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, PoliciesManagerTable, PoliciesManagerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, IntegrationManagerTable, IntegrationManagerColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasPoliciesManagerWith applies the HasEdge predicate on the "policies_manager" edge with a given conditions (other predicates).
-func HasPoliciesManagerWith(preds ...predicate.Group) predicate.Organization {
+// HasIntegrationManagerWith applies the HasEdge predicate on the "integration_manager" edge with a given conditions (other predicates).
+func HasIntegrationManagerWith(preds ...predicate.Group) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newPoliciesManagerStep()
+		step := newIntegrationManagerStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPolicyManager applies the HasEdge predicate on the "policy_manager" edge.
+func HasPolicyManager() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PolicyManagerTable, PolicyManagerColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPolicyManagerWith applies the HasEdge predicate on the "policy_manager" edge with a given conditions (other predicates).
+func HasPolicyManagerWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newPolicyManagerStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3008,21 +3031,21 @@ func HasTrustCenterManagerWith(preds ...predicate.Group) predicate.Organization 
 	})
 }
 
-// HasWorkflowsManager applies the HasEdge predicate on the "workflows_manager" edge.
-func HasWorkflowsManager() predicate.Organization {
+// HasWorkflowManager applies the HasEdge predicate on the "workflow_manager" edge.
+func HasWorkflowManager() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, WorkflowsManagerTable, WorkflowsManagerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, WorkflowManagerTable, WorkflowManagerColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasWorkflowsManagerWith applies the HasEdge predicate on the "workflows_manager" edge with a given conditions (other predicates).
-func HasWorkflowsManagerWith(preds ...predicate.Group) predicate.Organization {
+// HasWorkflowManagerWith applies the HasEdge predicate on the "workflow_manager" edge with a given conditions (other predicates).
+func HasWorkflowManagerWith(preds ...predicate.Group) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newWorkflowsManagerStep()
+		step := newWorkflowManagerStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

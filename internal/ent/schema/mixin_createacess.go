@@ -26,14 +26,19 @@ var createObjectTypes = func() []string {
 	return opts
 }()
 
-// createObjectTypes is derived from the model scopes for service subjects.
-var roleTypes = func() []string {
-	opts, err := fgamodel.RoleOptions()
+// roleRelations are the organization role relations annotated with @role in the fga model, e.g. campaign_manager
+var roleRelations = func() []string {
+	roles, err := fgamodel.OrganizationRoles()
 	if err != nil {
 		return nil
 	}
 
-	return opts
+	relations := make([]string, 0, len(roles))
+	for _, role := range roles {
+		relations = append(relations, role.ID)
+	}
+
+	return relations
 }()
 
 // GroupBasedCreateAccessMixin is a mixin for group permissions for creation of an entity
@@ -74,11 +79,9 @@ func (c GroupBasedCreateAccessMixin) Edges() []ent.Edge {
 		edges = append(edges, edge)
 	}
 
-	for _, t := range roleTypes {
-		toName := strings.ToLower(fmt.Sprintf("%s_manager", t))
-
-		edge := edge.To(toName, Group.Type).
-			Comment(fmt.Sprintf("groups that are allowed to manage %s features", t)).
+	for _, relation := range roleRelations {
+		edge := edge.To(strings.ToLower(relation), Group.Type).
+			Comment(fmt.Sprintf("groups that are assigned the %s role", relation)).
 			Annotations(
 				entgql.RelayConnection(),
 				entgql.QueryField(),
@@ -105,22 +108,20 @@ func (c GroupBasedCreateAccessMixin) Hooks() []ent.Hook {
 			hooks.HookRelationTuples(map[string]string{
 				idField: "group",
 			}, relation),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		)
 
 		h = append(h, hook)
 	}
 
-	for _, objectType := range roleTypes {
-		idField := fmt.Sprintf("%s_manager_id", objectType)
-
-		relation := fgax.Relation(objectType + "_manager")
+	for _, relation := range roleRelations {
+		idField := fmt.Sprintf("%s_id", relation)
 
 		hook := hook.On(
 			hooks.HookRelationTuples(map[string]string{
 				idField: "group",
-			}, relation),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			}, fgax.Relation(relation)),
+			ent.OpCreate|ent.OpUpdateOne,
 		)
 
 		h = append(h, hook)

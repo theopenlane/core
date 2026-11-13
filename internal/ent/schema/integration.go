@@ -280,6 +280,7 @@ func (Integration) Annotations() []schema.Annotation {
 			entgql.SkipMutationCreateInput,
 			entgql.SkipMutationUpdateInput,
 		),
+		entx.FGACrudSkip(entx.SkipAll),
 		history.Annotations{
 			Exclude: true,
 		},
