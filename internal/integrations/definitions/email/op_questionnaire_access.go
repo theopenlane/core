@@ -2,13 +2,11 @@ package email
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/render"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -30,19 +28,19 @@ type QuestionnaireEmailContent struct {
 	BrandOverrides
 }
 
-// QuestionnaireInvitationRequest is the customer-selectable catalog entry for questionnaire campaign emails
+// QuestionnaireAccessRequest is the customer-selectable catalog entry for questionnaire campaign emails
 // the access link, recipient and questionnaire fields are set per send and excluded from the authorable schema
-type QuestionnaireInvitationRequest struct {
+type QuestionnaireAccessRequest struct {
 	QuestionnaireAuthEmail `jsonschema:"-"`
 	CampaignContext        `jsonschema:"-"`
 	QuestionnaireEmailContent
 }
 
-// QuestionnaireInvitationOp is the typed operation ref used for catalog dispatch
-var QuestionnaireInvitationOp = types.OperationPayloadOf[QuestionnaireInvitationRequest]()
+// QuestionnaireAccessOp is the typed operation ref used for catalog dispatch
+var QuestionnaireAccessOp = types.OperationPayloadOf[QuestionnaireAccessRequest]()
 
-// questionnaireInvitationExample seeds the editor and preview with the default questionnaire wording
-var questionnaireInvitationExample = QuestionnaireInvitationRequest{
+// questionnaireAccessExample seeds the editor and preview with the default questionnaire wording
+var questionnaireAccessExample = QuestionnaireAccessRequest{
 	QuestionnaireAuthEmail: QuestionnaireAuthEmail{
 		RecipientInfo:  RecipientInfo{Email: "jordan.avery@example.com", FirstName: "Jordan", LastName: "Avery"},
 		OrgName:        "Acme Security",
@@ -57,40 +55,40 @@ var questionnaireInvitationExample = QuestionnaireInvitationRequest{
 	ButtonText:      defaultQuestionnaireButtonText,
 }
 
-// questionnaireInvitationUISchema carries only UI hints that JSON Schema cannot express
-var questionnaireInvitationUISchema = json.RawMessage(`{
+// questionnaireAccessUISchema carries only UI hints that JSON Schema cannot express
+var questionnaireAccessUISchema = json.RawMessage(`{
   "intros": {"items": {"ui:widget": "textarea"}}
 }`)
 
-var questionnaireInvitation = RegisterEmailOperation(Operation[QuestionnaireInvitationRequest]{
-	Op:                 QuestionnaireInvitationOp,
+var questionnaireAccess = RegisterEmailOperation(Operation[QuestionnaireAccessRequest]{
+	Op:                 QuestionnaireAccessOp,
 	Theme:              baseTheme,
-	Description:        "Questionnaire invitation with customizable text, logos, and colors; the questionnaire access link is always added by the system",
+	Description:        "Questionnaire access email with customizable text, logos, and colors; the questionnaire access link is always added by the system",
 	CustomerSelectable: new(true),
-	Example:            questionnaireInvitationExample,
-	UISchema:           questionnaireInvitationUISchema,
-	Variables: []OperationVariable[QuestionnaireInvitationRequest]{
+	Example:            questionnaireAccessExample,
+	UISchema:           questionnaireAccessUISchema,
+	Variables: []OperationVariable[QuestionnaireAccessRequest]{
 		{
 			Name:        "orgName",
 			Description: "Name of the organization sending the questionnaire",
-			Value:       func(req QuestionnaireInvitationRequest) string { return req.OrgName },
+			Value:       func(req QuestionnaireAccessRequest) string { return req.OrgName },
 		},
 		{
 			Name:        "questionnaireName",
 			Description: "Name of the questionnaire being sent",
-			Value:       func(req QuestionnaireInvitationRequest) string { return req.AssessmentName },
+			Value:       func(req QuestionnaireAccessRequest) string { return req.AssessmentName },
 		},
 	},
-	Subject: func(_ RuntimeEmailConfig, req QuestionnaireInvitationRequest) string {
+	Subject: func(_ RuntimeEmailConfig, req QuestionnaireAccessRequest) string {
 		return questionnaireSubject(req.QuestionnaireAuthEmail, req.QuestionnaireEmailContent)
 	},
-	Build: func(cfg RuntimeEmailConfig, req QuestionnaireInvitationRequest) render.ContentBody {
+	Build: func(cfg RuntimeEmailConfig, req QuestionnaireAccessRequest) render.ContentBody {
 		return questionnaireBody(cfg, req.QuestionnaireAuthEmail, req.QuestionnaireEmailContent)
 	},
-	Config: func(cfg RuntimeEmailConfig, req QuestionnaireInvitationRequest) RuntimeEmailConfig {
+	Config: func(cfg RuntimeEmailConfig, req QuestionnaireAccessRequest) RuntimeEmailConfig {
 		return req.apply(cfg)
 	},
-	MessageOptions: func(cfg RuntimeEmailConfig, _ QuestionnaireInvitationRequest) []newman.MessageOption {
+	MessageOptions: func(cfg RuntimeEmailConfig, _ QuestionnaireAccessRequest) []newman.MessageOption {
 		return questionnaireFromOption(cfg)
 	},
 })
@@ -136,16 +134,4 @@ func questionnaireFromOption(cfg RuntimeEmailConfig) []newman.MessageOption {
 	return []newman.MessageOption{
 		newman.WithFrom(cfg.QuestionnaireEmail),
 	}
-}
-
-// ValidateCampaignTemplateKey reports whether an email template key may be linked to a campaign of the given type
-// questionnaire campaigns only accept the questionnaire invitation template, and other campaigns never accept it
-func ValidateCampaignTemplateKey(campaignType enums.CampaignType, key string) error {
-	isQuestionnaireKey := key == QuestionnaireInvitationOp.Name()
-
-	if (campaignType == enums.CampaignTypeQuestionnaire) != isQuestionnaireKey {
-		return fmt.Errorf("%w: %s template cannot be used for a %s campaign", ErrCampaignTemplateKeyMismatch, key, campaignType)
-	}
-
-	return nil
 }

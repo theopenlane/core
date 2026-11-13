@@ -168,13 +168,13 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 	return markCampaignTargetSent(ctx, req.DB, target.ID)
 }
 
-// dispatchQuestionnaireEmail sends the questionnaire invitation, using the linked template's content when the campaign has one
+// dispatchQuestionnaireEmail sends the questionnaire access email, using the linked template's content when the campaign has one
 // the template only supplies the authored content, so it cannot change the recipient, questionnaire, or access link
 func dispatchQuestionnaireEmail(ctx context.Context, req types.OperationRequest, client *Client, dispatch questionnaireDispatch, target *generated.CampaignTarget, input QuestionnaireAuthEmail) error {
 	input.FirstName, input.LastName = splitFullName(target.FullName)
 	input.OrgName = dispatch.orgName
 
-	payload, err := json.Marshal(QuestionnaireInvitationRequest{
+	payload, err := json.Marshal(QuestionnaireAccessRequest{
 		QuestionnaireAuthEmail:    input,
 		CampaignContext:           dispatch.overlay,
 		QuestionnaireEmailContent: dispatch.content,
@@ -183,7 +183,7 @@ func dispatchQuestionnaireEmail(ctx context.Context, req types.OperationRequest,
 		return fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 	}
 
-	return questionnaireInvitation.SendByKey(ctx, req, client, payload)
+	return questionnaireAccess.SendByKey(ctx, req, client, payload)
 }
 
 // questionnairePath is the product route serving questionnaire access links
