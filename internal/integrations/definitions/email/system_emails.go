@@ -707,31 +707,13 @@ var questionnaireAuthEmail = RegisterEmailOperation(Operation[QuestionnaireAuthE
 	Description: "System email delivering a time-limited authentication link to a questionnaire",
 	PreHook:     resolveQuestionnaireOrgName,
 	Subject: func(_ RuntimeEmailConfig, req QuestionnaireAuthEmail) string {
-		return "Access " + req.AssessmentName + " Questionnaire from " + req.OrgName
+		return questionnaireSubject(req, QuestionnaireEmailContent{})
 	},
 	Build: func(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail) render.ContentBody {
-		return render.ContentBody{
-			Preheader: req.AssessmentName + " — complete your questionnaire from " + req.OrgName,
-			Header:    defaultHeader(cfg),
-			Title:     req.OrgName + " sent you an assessment to complete",
-			Intros: render.IntrosBlock{
-				Paragraphs: []string{
-					req.OrgName + " has shared a form (" + req.AssessmentName + ") for you to complete.",
-				},
-			},
-			Actions: []render.Action{{
-				Button: render.Button{Text: "Access Questionnaire", Link: req.AuthURL, Color: tcButtonColor, TextColor: tcButtonTextColor},
-			}},
-		}
+		return questionnaireBody(cfg, req, QuestionnaireEmailContent{})
 	},
 	MessageOptions: func(cfg RuntimeEmailConfig, _ QuestionnaireAuthEmail) []newman.MessageOption {
-		if cfg.QuestionnaireEmail == "" {
-			return nil
-		}
-
-		return []newman.MessageOption{
-			newman.WithFrom(cfg.QuestionnaireEmail),
-		}
+		return questionnaireFromOption(cfg)
 	},
 })
 

@@ -27,26 +27,7 @@ type BrandedMessageRequest struct {
 	ButtonLink string `json:"buttonLink,omitempty" jsonschema:"format=uri,description=Call-to-action button URL"`
 	// Outros are fine-print paragraphs rendered after the call-to-action
 	Outros []string `json:"outros,omitempty" jsonschema:"description=Fine-print paragraphs rendered after the call-to-action"`
-	// LogoURL overrides the hero logo displayed in the email body for this send
-	LogoURL string `json:"logoURL,omitempty" jsonschema:"format=uri,description=Hero logo URL override for this send"`
-	// HeaderLogoURL overrides the small logo/icon in the top header bar for this send
-	HeaderLogoURL string `json:"headerLogoURL,omitempty" jsonschema:"format=uri,description=Header bar logo/icon URL override for this send"`
-	// PrimaryColor overrides the headline/emphasis color for this send
-	PrimaryColor string `json:"primaryColor,omitempty" jsonschema:"format=color,description=Primary headline color override (hex)"`
-	// BodyBackgroundColor overrides the outer page background color for this send
-	BodyBackgroundColor string `json:"bodyBackgroundColor,omitempty" jsonschema:"format=color,description=Outer page background color override (hex)"`
-	// CardBackgroundColor overrides the card container background color for this send
-	CardBackgroundColor string `json:"cardBackgroundColor,omitempty" jsonschema:"format=color,description=Card container background color override (hex)"`
-	// HeroBackgroundColor overrides the hero banner background color for this send
-	HeroBackgroundColor string `json:"heroBackgroundColor,omitempty" jsonschema:"format=color,description=Hero banner background color override (hex)"`
-	// ButtonColor overrides the call-to-action button background color for this send
-	ButtonColor string `json:"buttonColor,omitempty" jsonschema:"format=color,description=CTA button background color override (hex)"`
-	// ButtonTextColor overrides the call-to-action button text color for this send
-	ButtonTextColor string `json:"buttonTextColor,omitempty" jsonschema:"format=color,description=CTA button text color override (hex)"`
-	// TextColor overrides the body paragraph text color for this send
-	TextColor string `json:"textColor,omitempty" jsonschema:"format=color,description=Body text color override (hex)"`
-	// FooterTextColor overrides the muted text color for this send
-	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"format=color,description=Muted text color override (hex)"`
+	BrandOverrides
 	// CompanyName is the company display name shown in the footer; customer-supplied because a branded message carries the customer's own identity rather than Openlane's
 	CompanyName string `json:"companyName,omitempty" jsonschema:"description=Company display name shown in the footer"`
 	// Corporation is the legal corporation name used in the footer copyright notice
@@ -140,42 +121,10 @@ var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 		cfg.PrivacyURL = req.PrivacyURL
 		cfg.UnsubscribeURL = req.UnsubscribeURL
 		cfg.Social = req.Social
-		cfg.LogoURL = req.LogoURL
-		cfg.HeaderLogoURL = req.HeaderLogoURL
+		cfg.LogoURL = ""
+		cfg.HeaderLogoURL = ""
 		cfg.HeaderText = ""
 
-		if req.PrimaryColor != "" {
-			cfg.HeadingColor = req.PrimaryColor
-		}
-
-		if req.BodyBackgroundColor != "" {
-			cfg.BodyBackgroundColor = req.BodyBackgroundColor
-		}
-
-		if req.CardBackgroundColor != "" {
-			cfg.CardBackgroundColor = req.CardBackgroundColor
-		}
-
-		if req.HeroBackgroundColor != "" {
-			cfg.HeroBackgroundColor = req.HeroBackgroundColor
-		}
-
-		if req.ButtonColor != "" {
-			cfg.ButtonColor = req.ButtonColor
-		}
-
-		if req.ButtonTextColor != "" {
-			cfg.ButtonTextColor = req.ButtonTextColor
-		}
-
-		if req.TextColor != "" {
-			cfg.TextColor = req.TextColor
-		}
-
-		if req.FooterTextColor != "" {
-			cfg.FooterTextColor = req.FooterTextColor
-		}
-
-		return cfg
+		return req.apply(cfg)
 	},
 })

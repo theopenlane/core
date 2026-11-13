@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/render"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/urlx"
@@ -42,6 +43,18 @@ type Dispatcher interface {
 	ExamplePayload() json.RawMessage
 	// BuilderUISchema returns the RJSF-style UI schema describing how the configurable fields render as a form, or nil when none is defined
 	BuilderUISchema() json.RawMessage
+	// TemplateVariables returns the operation-specific template variables available to authors of this entry
+	TemplateVariables() []models.TemplateVariable
+}
+
+// OperationVariable is an operation-specific template variable resolved from the typed input at render time
+type OperationVariable[T any] struct {
+	// Name is the variable name used in templates, e.g. orgName for {{ .orgName }}
+	Name string
+	// Description is shown to template authors in the variable picker
+	Description string
+	// Value resolves the variable from the typed input
+	Value func(input T) string
 }
 
 // RecipientInfo holds recipient addressing fields embedded in every email operation input
@@ -114,6 +127,8 @@ type Operation[T Recipient] struct {
 	MessageOptions func(cfg RuntimeEmailConfig, input T) []newman.MessageOption
 	// PreHook is an optional hook invoked before rendering to resolve dynamic fields
 	PreHook func(ctx context.Context, req types.OperationRequest, cfg RuntimeEmailConfig, input *T) error
+	// Variables are optional operation-specific template variables resolved from the typed input
+	Variables []OperationVariable[T]
 }
 
 // Name returns the catalog key for the operation, satisfying the Dispatcher interface
@@ -136,14 +151,48 @@ func (e Operation[T]) BuilderUISchema() json.RawMessage {
 	return e.UISchema
 }
 
+// TemplateVariables returns the operation-specific template variables, satisfying the Dispatcher interface
+func (e Operation[T]) TemplateVariables() []models.TemplateVariable {
+	variables := make([]models.TemplateVariable, 0, len(e.Variables))
+	for _, v := range e.Variables {
+		variables = append(variables, models.TemplateVariable{Name: v.Name, Description: v.Description})
+	}
+
+	return variables
+}
+
+// variableValues decodes the raw payload into T and resolves the operation-specific template variables from it
+func (e Operation[T]) variableValues(payload json.RawMessage) (map[string]any, error) {
+	if len(e.Variables) == 0 {
+		return nil, nil
+	}
+
+	var input T
+	if err := json.Unmarshal(payload, &input); err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+	}
+
+	values := make(map[string]any, len(e.Variables))
+	for _, v := range e.Variables {
+		values[v.Name] = v.Value(input)
+	}
+
+	return values, nil
+}
+
 // decodePayload interpolates template expressions in the raw JSON and unmarshals into T
-func decodePayload[T Recipient](client *Client, payload json.RawMessage) (T, error) {
+func (e Operation[T]) decodePayload(client *Client, payload json.RawMessage) (T, error) {
 	var input T
 	if len(payload) == 0 {
 		return input, nil
 	}
 
-	resolved, err := interpolatePayload(client, payload)
+	operationVars, err := e.variableValues(payload)
+	if err != nil {
+		return input, err
+	}
+
+	resolved, err := interpolatePayload(client, payload, operationVars)
 	if err != nil {
 		return input, err
 	}
@@ -157,7 +206,7 @@ func decodePayload[T Recipient](client *Client, payload json.RawMessage) (T, err
 
 // SendByKey decodes the payload into T and dispatches through the shared render pipeline
 func (e Operation[T]) SendByKey(ctx context.Context, req types.OperationRequest, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) error {
-	input, err := decodePayload[T](client, payload)
+	input, err := e.decodePayload(client, payload)
 	if err != nil {
 		return err
 	}
@@ -167,7 +216,7 @@ func (e Operation[T]) SendByKey(ctx context.Context, req types.OperationRequest,
 
 // RenderMessage decodes the payload and renders the email into a newman message without sending it
 func (e Operation[T]) RenderMessage(_ context.Context, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
-	input, err := decodePayload[T](client, payload)
+	input, err := e.decodePayload(client, payload)
 	if err != nil {
 		return nil, err
 	}

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
@@ -124,7 +125,7 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 		return err
 	}
 
-	return validateCampaignContentSource(campaignObj)
+	return validateCampaignContentSource(ctx, campaignObj)
 }
 
 // ensureCampaignAssessment backfills the assessment for questionnaire campaigns created with only a
@@ -167,7 +168,7 @@ func ensureCampaignAssessment(ctx context.Context, campaignObj *generated.Campai
 }
 
 // validateCampaignContentSource ensures the campaign references the content source its type renders from
-func validateCampaignContentSource(campaignObj *generated.Campaign) error {
+func validateCampaignContentSource(ctx context.Context, campaignObj *generated.Campaign) error {
 	switch campaignObj.CampaignType {
 	case enums.CampaignTypeQuestionnaire:
 		if campaignObj.AssessmentID == "" {
@@ -185,7 +186,24 @@ func validateCampaignContentSource(campaignObj *generated.Campaign) error {
 		}
 	}
 
-	return nil
+	return validateCampaignEmailTemplate(ctx, campaignObj)
+}
+
+// validateCampaignEmailTemplate ensures a linked email template fits the campaign type
+func validateCampaignEmailTemplate(ctx context.Context, campaignObj *generated.Campaign) error {
+	if campaignObj.EmailTemplateID == "" || campaignObj.CampaignType == enums.CampaignTypeTrustCenterUpdate {
+		return nil
+	}
+
+	templateObj, err := withTransactionalMutation(ctx).EmailTemplate.Query().
+		Where(emailtemplate.ID(campaignObj.EmailTemplateID)).
+		Select(emailtemplate.FieldKey).
+		Only(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailtemplate"})
+	}
+
+	return emaildef.ValidateCampaignTemplateKey(campaignObj.CampaignType, templateObj.Key)
 }
 
 // processDispatchTargets counts total targets and, for immediate dispatch,

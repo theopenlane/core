@@ -172,6 +172,10 @@ func campaignDispatcher(camp *generated.Campaign) (Dispatcher, error) {
 			return nil, fmt.Errorf("%w: no email template linked to campaign", ErrDispatcherNotFound)
 		}
 
+		if err := ValidateCampaignTemplateKey(camp.CampaignType, template.Key); err != nil {
+			return nil, err
+		}
+
 		key = template.Key
 	}
 
