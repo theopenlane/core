@@ -345,7 +345,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 		suite.SlackMock.Builder(),
 		suite.CloudflareMock.Builder(),
-		systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
+		systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}, systemdef.FileOrphanConfig{}),
 		objectstore.Builder(&suite.ObjectStoreRuntime, "", objectstore.Config{}),
 		testint.Builder(),
 		testint.MockHTTPBuilder(),

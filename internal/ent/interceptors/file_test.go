@@ -244,6 +244,10 @@ func TestInterceptorFileOrgFilter(t *testing.T) {
 			expectFilter: true,
 		},
 		{
+			name:   "full system caller is not filtered",
+			caller: (&auth.Caller{SubjectID: ulids.New().String()}).WithCapabilities(auth.CapBypassOrgFilter | auth.CapInternalOperation | auth.CapSystemSweep),
+		},
+		{
 			name:   "system admin is not filtered",
 			caller: (&auth.Caller{SubjectID: ulids.New().String()}).WithCapabilities(auth.CapSystemAdmin),
 		},

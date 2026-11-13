@@ -12,7 +12,9 @@ import (
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/objects/relocate"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 // backfillBypassCaps are the capabilities backfill routines run with
@@ -20,6 +22,11 @@ const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapSystemSweep | auth.
 
 // backfillBatchSize is the size for each backfill operation
 const backfillBatchSize = 50
+
+// BackfillCaller is the capability-only caller every backfill routine runs as
+func BackfillCaller() *auth.Caller {
+	return &auth.Caller{Capabilities: backfillBypassCaps}
+}
 
 // backfillRoutineTopicName is the topic suffix and key namespace for backfill routines
 const backfillRoutineTopicName = "startup.backfill.routine"
@@ -62,13 +69,12 @@ type backfillRoutine struct {
 // backfillRoutines are the registered backfill routines
 var backfillRoutines = []backfillRoutine{
 	{
-		// example registration
-		// Name:    "backfill-x",
-		// Version: "v1",
-		// Enabled: true,
-		// Run: func(ctx context.Context, deps backfillDeps) error {
-		// 	return backfillX(ctx, deps.Client)
-		// },
+		Name:    "relocate-files",
+		Version: "v1",
+		Enabled: true,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			return relocate.Files(ctx, deps.Client, relocate.Plan{Target: storage.R2Provider, PullFrom: storage.S3Provider})
+		},
 	},
 	{
 		Name:    "backfill-entities-risk",
@@ -110,7 +116,7 @@ func StartBackfill(ctx context.Context, galaApp *gala.Gala) error {
 	if _, err := gala.Register(galaApp, gala.Definition[backfillRoutineRequest]{
 		Topic: backfillRoutineTopic,
 		Caller: func(*auth.Caller, backfillRoutineRequest) *auth.Caller {
-			return &auth.Caller{Capabilities: backfillBypassCaps}
+			return BackfillCaller()
 		},
 		Handle: func(handlerCtx gala.HandlerContext, req backfillRoutineRequest) error {
 			return runBackfillRoutine(handlerCtx, galaApp, req.Name)
