@@ -52,6 +52,10 @@ func TestFileOrphanSweep(t *testing.T) {
 	referenced := seedFile(t, ctx, "referenced.txt", r2, relocateTargetBucket, nil)
 	attachContact(t, ctx, referenced.ID)
 
+	// held by a foreign key on the files table rather than an edge table
+	diagram := seedFile(t, ctx, "diagram.png", r2, relocateTargetBucket, nil)
+	attachPlatformDiagram(t, ctx, diagram.ID)
+
 	softParent := seedFile(t, ctx, "soft-parent.txt", r2, relocateTargetBucket, nil)
 	parent := attachContact(t, ctx, softParent.ID)
 	assert.NilError(t, suite.Client.DB.Contact.DeleteOneID(parent.ID).Exec(ctx))
@@ -66,7 +70,7 @@ func TestFileOrphanSweep(t *testing.T) {
 
 	assert.Check(t, !suite.Client.DeletedStorageKeys.Has(softOrphan.StoragePath), "soft delete keeps the object")
 
-	backdate(t, ctx, orphanS3.ID, orphanR2.ID, referenced.ID, softParent.ID, softReferenced.ID, softOrphan.ID)
+	backdate(t, ctx, orphanS3.ID, orphanR2.ID, referenced.ID, diagram.ID, softParent.ID, softReferenced.ID, softOrphan.ID)
 
 	exists := func(id string) bool {
 		ok, err := suite.Client.DB.File.Query().Where(file.ID(id)).Exist(entx.SkipSoftDelete(ctx))
@@ -75,7 +79,7 @@ func TestFileOrphanSweep(t *testing.T) {
 		return ok
 	}
 
-	kept := []*generated.File{recent, referenced, softParent, softReferenced}
+	kept := []*generated.File{recent, referenced, diagram, softParent, softReferenced}
 	swept := []*generated.File{orphanS3, orphanR2, softOrphan}
 
 	t.Run("dry run deletes nothing", func(t *testing.T) {
@@ -112,6 +116,20 @@ func TestFileOrphanSweep(t *testing.T) {
 
 		for _, seeded := range kept {
 			assert.Check(t, exists(seeded.ID), seeded.ProvidedFileName)
+		}
+	})
+}
+
+// attachPlatformDiagram references the file from a platform diagram removed after the test
+func attachPlatformDiagram(t *testing.T, ctx context.Context, fileID string) {
+	t.Helper()
+
+	p, err := suite.Client.DB.Platform.Create().SetName("sweep " + fileID).AddArchitectureDiagramIDs(fileID).Save(ctx)
+	assert.NilError(t, err)
+
+	t.Cleanup(func() {
+		if err := suite.Client.DB.Platform.DeleteOneID(p.ID).Exec(entx.SkipSoftDelete(ctx)); err != nil && !generated.IsNotFound(err) {
+			t.Error(err)
 		}
 	})
 }

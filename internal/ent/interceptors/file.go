@@ -45,7 +45,7 @@ func InterceptorFile() ent.Interceptor {
 		}
 
 		// sweeps and backfills have no organizations, so the filter would hide every file
-		if auth.HasCrossOrgCapabilities(ctx) {
+		if auth.HasFullSystemCapabilities(ctx) {
 			return nil
 		}
 
