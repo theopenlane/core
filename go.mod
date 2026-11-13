@@ -86,7 +86,7 @@ require (
 	github.com/oklog/ulid/v2 v2.1.2
 	github.com/okta/okta-sdk-golang/v8 v8.0.0
 	github.com/olekukonko/tablewriter v1.1.5
-	github.com/openfga/go-sdk v0.8.3
+	github.com/openfga/go-sdk v0.8.4
 	github.com/openfga/language/pkg/go v0.3.2
 	github.com/oracle/oci-go-sdk/v65 v65.129.0
 	github.com/pdfcpu/pdfcpu v0.16.4
@@ -108,7 +108,7 @@ require (
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf
 	github.com/slack-go/slack v0.34.0
 	github.com/spf13/cobra v1.10.2
-	github.com/spf13/pflag v1.0.10
+	github.com/spf13/pflag v1.1.0
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.12.1
 	github.com/stripe/stripe-go/v86 v86.2.0
