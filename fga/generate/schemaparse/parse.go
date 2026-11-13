@@ -88,7 +88,8 @@ func (si *parsedSchema) checkEntGQLAnnotation(schema *load.Schema) {
 
 	// skip means there is no external crud operations
 	// so this does't need to be included in crud scopes
-	if entgqlAnt.Skip.Is(entgql.SkipAll) {
+	// Is matches any flag, so check the type skip itself rather than SkipAll, partial skips like mutation inputs still have crud
+	if entgqlAnt.Skip.Is(entgql.SkipType) {
 		si.ExcludeFromGeneration = true
 		return
 	}
@@ -126,6 +127,8 @@ func (si *parsedSchema) checkSkipAnnotation(schema *load.Schema) {
 		if entFGACrudAnt.Skip.Has(entx.SkipDelete) {
 			si.HasDelete = false
 		}
+
+		si.ViewOnly = entFGACrudAnt.Skip.Has(entx.SkipCreate | entx.SkipUpdate | entx.SkipDelete)
 	}
 }
 

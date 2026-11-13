@@ -158,6 +158,7 @@ func (WorkflowProposal) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		// only create the type and enums
 		entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput | entgql.SkipOrderField | entgql.SkipWhereInput),
+		entx.FGACrudSkip(entx.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
 		history.Annotations{

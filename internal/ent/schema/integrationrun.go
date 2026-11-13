@@ -187,6 +187,7 @@ func (r IntegrationRun) Annotations() []schema.Annotation {
 		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
+		entx.FGACrudSkip(entx.SkipCreate | entx.SkipUpdate | entx.SkipDelete),
 		history.Annotations{
 			Exclude: true,
 		},

@@ -23,7 +23,9 @@
   },
   {
     "name": "AssessmentResponse",
-    "excludeFromGeneration": true
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
   },
   {
     "name": "Asset",
@@ -215,11 +217,13 @@
   },
   {
     "name": "Integration",
-    "excludeFromGeneration": true
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
   },
   {
     "name": "IntegrationRun",
-    "excludeFromGeneration": true
+    "viewOnly": true
   },
   {
     "name": "IntegrationWebhook",
@@ -261,7 +265,9 @@
   },
   {
     "name": "Notification",
-    "excludeFromGeneration": true
+    "excludeFromGeneration": true,
+    "hasCreate": true,
+    "hasUpdate": true
   },
   {
     "name": "NotificationPreference",
@@ -536,12 +542,16 @@
   {
     "name": "WorkflowAssignment",
     "excludeFromGeneration": true,
-    "canCreateServiceOnly": true
+    "canCreateServiceOnly": true,
+    "hasCreate": true,
+    "hasUpdate": true
   },
   {
     "name": "WorkflowAssignmentTarget",
     "excludeFromGeneration": true,
-    "canCreateServiceOnly": true
+    "canCreateServiceOnly": true,
+    "hasCreate": true,
+    "hasUpdate": true
   },
   {
     "name": "WorkflowDefinition",
@@ -552,17 +562,23 @@
   {
     "name": "WorkflowEvent",
     "excludeFromGeneration": true,
-    "canCreateServiceOnly": true
+    "canCreateServiceOnly": true,
+    "hasCreate": true,
+    "hasUpdate": true
   },
   {
     "name": "WorkflowInstance",
     "excludeFromGeneration": true,
-    "canCreateServiceOnly": true
+    "canCreateServiceOnly": true,
+    "hasCreate": true,
+    "hasUpdate": true
   },
   {
     "name": "WorkflowObjectRef",
     "excludeFromGeneration": true,
-    "canCreateServiceOnly": true
+    "canCreateServiceOnly": true,
+    "hasCreate": true,
+    "hasUpdate": true
   },
   {
     "name": "WorkflowProposal",
