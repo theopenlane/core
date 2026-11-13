@@ -31,7 +31,7 @@ orphans and dedicated files, trims `preTrims`.
 **post** — trims `postTrims`, strips the block gqlgen parks removed resolvers in,
 deletes files that are only now unreferenced (enums).
 
-**Still manual:** `fga/model/roles/roles.fga` `@crud` lists, `fga/tests/tests.yaml`,
+**Still manual:** `fga/model/roles/roles.fga` `@crud` lists, `fga/tests.yaml`,
 `fga/model/fga.mod`, then `task fga:generate && task fga:test`.
 
 ## Report mode

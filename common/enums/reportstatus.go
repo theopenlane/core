@@ -7,9 +7,9 @@ type ReportStatus string
 
 var (
 	// ReportStatusDraft indicates a draft report.
-	ReportStatusDraft   ReportStatus = "DRAFT"
+	ReportStatusDraft ReportStatus = "DRAFT"
 	// ReportStatusSaved indicates a saved report.
-	ReportStatusSaved   ReportStatus = "SAVED"
+	ReportStatusSaved ReportStatus = "SAVED"
 	// ReportStatusInvalid is used when an unknown or unsupported value is provided.
 	ReportStatusInvalid ReportStatus = "REPORTSTATUS_INVALID"
 )

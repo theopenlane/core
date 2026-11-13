@@ -155,8 +155,7 @@ github.com/olekukonko/tablewriter v1.1.5 h1:4LoZSfMySpMQY3PT8RWJsJeuEuMIoo9xGRgv
 github.com/olekukonko/tablewriter v1.1.5/go.mod h1:+kedxuyTtgoZLwif3P1Em4hARJs+mVnzKxmsCL/C5RY=
 github.com/openfga/api/proto v0.0.0-20260928071936-c0650ce2169b h1:TisFP2FTpsUDLUuf9LYsLF3yG1ZKW71bNIsOygdpdJc=
 github.com/openfga/api/proto v0.0.0-20260928071936-c0650ce2169b/go.mod h1:jjiX0r3dLFCFqKy/mvO5TaMnzsoVvdpqJn3lET0A16k=
-github.com/openfga/go-sdk v0.8.3 h1:I4haME2GkR+gzmJY3vuGjuaLfdNyuMixsqj0lQbB4zE=
-github.com/openfga/go-sdk v0.8.3/go.mod h1:4EwBqOVHnIfCsQZ6e7LTbgr+jKfngu3YibPPV1mLXCc=
+github.com/openfga/go-sdk v0.8.4 h1:rEKi+ZGQGgilapTwQITX1My1jPRCKMYwFUQKtwVRuLM=
 github.com/openfga/language/pkg/go v0.3.2 h1:QN/cBYzL50RzEh46e+7ILvFeBs0exge7Sia0B6uXjms=
 github.com/openfga/language/pkg/go v0.3.2/go.mod h1:Ia3Luc0WcZdLogjjnFFKbce8+427wwlDaUG3dREZVCY=
 github.com/pborman/getopt v0.0.0-20170112200414-7148bc3a4c30/go.mod h1:85jBQOZwpVEaDAr341tbn15RS4fCAsIst0qp7i8ex1o=
@@ -172,8 +171,7 @@ github.com/redis/go-redis/v9 v9.23.0 h1:/TTVdJa8BRNsybwwGGnmiYktHNlUXtbOQxlWpHBP
 github.com/redis/go-redis/v9 v9.23.0/go.mod h1:EWP2UUk+XDaI1s5nQB5mablZN6vccXlmBQTyfnF87D0=
 github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=
 github.com/robfig/cron/v3 v3.0.1/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
-github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
-github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
+github.com/rogpeppe/go-internal v1.15.0 h1:D0RCU5rMAp+SpgkiNdrjfJ+LX4J1M32V2NeCY7EJ6hc=
 github.com/rs/zerolog v1.35.1 h1:m7xQeoiLIiV0BCEY4Hs+j2NG4Gp2o2KPKmhnnLiazKI=
 github.com/rs/zerolog v1.35.1/go.mod h1:EjML9kdfa/RMA7h/6z6pYmq1ykOuA8/mjWaEvGI+jcw=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
@@ -184,8 +182,7 @@ github.com/sosodev/duration v1.4.0/go.mod h1:RQIBBX0+fMLc/D9+Jb/fwvVmo0eZvDDEERA
 github.com/spf13/cobra v1.10.2 h1:DMTTonx5m65Ic0GOoRY2c16WCbHxOOw6xxezuLaBpcU=
 github.com/spf13/cobra v1.10.2/go.mod h1:7C1pvHqHw5A4vrJfjNwvOdzYu0Gml16OCs2GRiTUUS4=
 github.com/spf13/pflag v1.0.9/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=
-github.com/spf13/pflag v1.0.10 h1:4EBh2KAYBwaONj6b2Ye1GiHfwjqyROoF4RwYO+vPwFk=
-github.com/spf13/pflag v1.0.10/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=
+github.com/spf13/pflag v1.1.0 h1:6W6MbVUrnMb8PEhjkqwsVLY7ryuzRfFHF4mQd7L94ag=
 github.com/stoewer/go-strcase v1.3.1 h1:iS0MdW+kVTxgMoE1LAZyMiYJFKlOzLooE4MxjirtkAs=
 github.com/stoewer/go-strcase v1.3.1/go.mod h1:fAH5hQ5pehh+j3nZfvwdk2RgEgQjAoM8wodgtPmh1xo=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

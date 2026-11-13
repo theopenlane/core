@@ -124,6 +124,18 @@ tasks:
         if [ -n "$status" ]; then
         echo "detected git diff after running generate; please re-run tasks"
         echo "$status"
+        if [ -n "${BUILDKITE_STEP_KEY:-}" ]; then
+        mkdir -p generated-patches
+        git add -A
+        git diff --cached --binary > "generated-patches/${BUILDKITE_STEP_KEY}.patch"
+        pr_repo=$(echo "${BUILDKITE_PULL_REQUEST_REPO:-}" | sed -E 's#^.*github.com[:/]##; s#\.git$##')
+        repo=$(echo "${BUILDKITE_REPO:-}" | sed -E 's#^.*github.com[:/]##; s#\.git$##')
+        # commit_generated commits the patch on our own branches, forks main and tags still fail
+        if [ "${BUILDKITE_BRANCH:-}" != "main" ] && [ -z "${BUILDKITE_TAG:-}" ] && { [ -z "$pr_repo" ] || [ "$pr_repo" = "$repo" ]; }; then
+        echo "saved patch for commit_generated"
+        exit 0
+        fi
+        fi
         exit 1
         fi
 
@@ -356,7 +368,14 @@ tasks:
     deps:
       - go:lint:custom
     cmds:
-      - ./bin/custom-gcl run --config=.golangci.yaml --verbose
+      - |
+        ./bin/custom-gcl run --config=.golangci.yaml --verbose $(
+          go list ./... \
+          | grep -v generated \
+          | grep -vE '^github.com/theopenlane/core(/v[0-9]+)?$' \
+          | sed -E 's|^github.com/theopenlane/core(/v[0-9]+)?/||' \
+          | sed 's|^|./|'
+        )
 
   go:lint:local:
     desc: runs all the ci linter tasks in parallel for local linting equivalent to ci
@@ -397,6 +416,15 @@ tasks:
           | sed -E 's|^github.com/theopenlane/core(/v[0-9]+)?/||' \
           | sed 's|^|./|'
         )
+
+  go:lint:ci:common:
+    silent: true
+    desc: runs golangci-lint on the common module for CI, it is a separate module so the root lint does not cover it
+    deps:
+      - go:lint:custom
+    dir: common
+    cmds:
+      - ../bin/custom-gcl run --config=../.golangci.yaml --verbose ./...
 
   go:test:
     desc: runs and outputs results of created go tests
@@ -512,6 +540,21 @@ tasks:
           exit 1
         fi
         go tool gotestsum --format standard-verbose --junitfile junit-no-api.xml --junitfile-hide-empty-pkg --packages "$PACKAGES" --format-hide-empty-pkg --rerun-fails=3 --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-no-api.out -tags test
+
+  go:testsum:ci:common:
+    desc: runs the common module tests using gotestsum for CI, it is a separate module so the root tests do not cover it
+    silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    dir: common
+    cmds:
+      - |
+        PACKAGES=$(go list -tags test -f '{{ `{{if or .TestGoFiles .XTestGoFiles}}{{.ImportPath}}{{end}}` }}' ./... | grep .)
+        if [ -z "$PACKAGES" ]; then
+          echo "no test packages found"
+          exit 1
+        fi
+        go tool gotestsum --format standard-verbose --junitfile ../junit-common.xml --junitfile-hide-empty-pkg --packages "$PACKAGES" --format-hide-empty-pkg --rerun-fails=3 --hide-summary output -- -p 20 -timeout 20m -coverprofile=../coverage-common.out -tags test
 
   go:testsum:ci:cover:
     desc: pushes test results to buildkite using gotestsum
