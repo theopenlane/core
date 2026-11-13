@@ -702,7 +702,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
 	},
 })
 
-var questionnaireAuthEmail = RegisterEmailOperation(Operation[QuestionnaireAuthEmail]{
+var _ = RegisterEmailOperation(Operation[QuestionnaireAuthEmail]{
 	Op: QuestionnaireAuthOp, Theme: baseTheme,
 	Description: "System email delivering a time-limited authentication link to a questionnaire",
 	PreHook:     resolveQuestionnaireOrgName,
