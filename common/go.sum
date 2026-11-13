@@ -150,8 +150,8 @@ github.com/theopenlane/core/v2 v2.14.3 h1:HsyTSdAb4x8vfkvzJrVuWos/XnsODljLIvfn6I
 github.com/theopenlane/core/v2 v2.14.3/go.mod h1:BMsgkpiu6nKeBRPAHB8Xmp4BtFFmx5YuBKLGm3rGapw=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
-github.com/theopenlane/entx v0.38.3 h1:+apOD/Jpm1kHH+XLwYQ91VXcsxcdg8EZDSvmF/8wa70=
-github.com/theopenlane/entx v0.38.3/go.mod h1:RQloG7V3x7zbRkKO/5olh5TyFQTNhSHPORid/xGOAbc=
+github.com/theopenlane/entx v0.38.4 h1:RMdZxO9Q+lI+Xr1ntFaftPw8B/Yp6apcG0sb0N92JJk=
+github.com/theopenlane/entx v0.38.4/go.mod h1:RQloG7V3x7zbRkKO/5olh5TyFQTNhSHPORid/xGOAbc=
 github.com/theopenlane/utils v0.7.4 h1:3R+Mg8rh6xwZ/2itWPOdEn0kW9ZyUygJ0pB1xWxffO0=
 github.com/theopenlane/utils v0.7.4/go.mod h1:MThjVD/86ERwVyCu5g7yZqfz+r7AO9fRvsPZUh9xpl0=
 github.com/tidwall/gjson v1.20.2 h1:Ag48cSOUCOq/sheSLXV3M4ZS0FOd4YMnY1N7FRoxGQY=
