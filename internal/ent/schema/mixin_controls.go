@@ -330,6 +330,9 @@ var controlFields = []ent.Field{
 	field.String("source_name").
 		Optional().
 		Nillable().
+		Annotations(
+			entgql.Directives(entgql.Deprecated("use control_origin_name instead")),
+		).
 		Comment("name of the source of the controls if not directly from a standard"),
 	field.String("reference_framework").
 		Comment("the reference framework for the control if it came from a standard, empty if not associated with a standard").

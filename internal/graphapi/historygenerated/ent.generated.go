@@ -13563,6 +13563,52 @@ func (ec *executionContext) fieldContext_ControlHistory_controlKindID(_ context.
 	return graphql.NewScalarFieldContext("ControlHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _ControlHistory_controlOriginName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlHistory_controlOriginName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOriginName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlHistory_controlOriginName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlHistory_controlOriginID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlHistory_controlOriginID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOriginID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlHistory_controlOriginID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _ControlHistory_environmentName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -53173,6 +53219,52 @@ func (ec *executionContext) _SubcontrolHistory_subcontrolKindID(ctx context.Cont
 	)
 }
 func (ec *executionContext) fieldContext_SubcontrolHistory_subcontrolKindID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SubcontrolHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _SubcontrolHistory_controlOriginName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.SubcontrolHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolHistory_controlOriginName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOriginName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolHistory_controlOriginName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SubcontrolHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _SubcontrolHistory_controlOriginID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.SubcontrolHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolHistory_controlOriginID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlOriginID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolHistory_controlOriginID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("SubcontrolHistory", field, false, false, "String")
 }
 
@@ -120004,6 +120096,16 @@ func (ec *executionContext) _ControlHistory(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "controlOriginName":
+			out.Values[i] = ec._ControlHistory_controlOriginName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "controlOriginID":
+			out.Values[i] = ec._ControlHistory_controlOriginID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "environmentName":
 			out.Values[i] = ec._ControlHistory_environmentName(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -131336,6 +131438,16 @@ func (ec *executionContext) _SubcontrolHistory(ctx context.Context, sel ast.Sele
 			}
 		case "subcontrolKindID":
 			out.Values[i] = ec._SubcontrolHistory_subcontrolKindID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "controlOriginName":
+			out.Values[i] = ec._SubcontrolHistory_controlOriginName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "controlOriginID":
+			out.Values[i] = ec._SubcontrolHistory_controlOriginID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

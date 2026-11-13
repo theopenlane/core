@@ -1145,6 +1145,7 @@ func init() {
 	controlMixinHooks13 := controlMixin[13].Hooks()
 	controlMixinHooks14 := controlMixin[14].Hooks()
 	controlMixinHooks15 := controlMixin[15].Hooks()
+	controlMixinHooks16 := controlMixin[16].Hooks()
 	controlHooks := schema.Control{}.Hooks()
 
 	control.Hooks[1] = controlMixinHooks0[0]
@@ -1181,9 +1182,11 @@ func init() {
 
 	control.Hooks[17] = controlMixinHooks15[0]
 
-	control.Hooks[18] = controlHooks[0]
+	control.Hooks[18] = controlMixinHooks16[0]
 
-	control.Hooks[19] = controlHooks[1]
+	control.Hooks[19] = controlHooks[0]
+
+	control.Hooks[20] = controlHooks[1]
 	controlMixinInters3 := controlMixin[3].Interceptors()
 	controlMixinInters8 := controlMixin[8].Interceptors()
 	controlMixinInters9 := controlMixin[9].Interceptors()
@@ -1207,8 +1210,8 @@ func init() {
 	_ = controlMixinFields9
 	controlMixinFields10 := controlMixin[10].Fields()
 	_ = controlMixinFields10
-	controlMixinFields15 := controlMixin[15].Fields()
-	_ = controlMixinFields15
+	controlMixinFields16 := controlMixin[16].Fields()
+	_ = controlMixinFields16
 	controlFields := schema.Control{}.Fields()
 	_ = controlFields
 	// controlDescCreatedAt is the schema descriptor for created_at field.
@@ -1242,7 +1245,7 @@ func init() {
 	// control.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	control.DefaultSystemOwned = controlDescSystemOwned.Default.(bool)
 	// controlDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	controlDescWorkflowEligibleMarker := controlMixinFields15[0].Descriptor()
+	controlDescWorkflowEligibleMarker := controlMixinFields16[0].Descriptor()
 	// control.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	control.DefaultWorkflowEligibleMarker = controlDescWorkflowEligibleMarker.Default.(bool)
 	// controlDescRefCode is the schema descriptor for ref_code field.
@@ -6894,6 +6897,7 @@ func init() {
 	subcontrolMixinHooks10 := subcontrolMixin[10].Hooks()
 	subcontrolMixinHooks11 := subcontrolMixin[11].Hooks()
 	subcontrolMixinHooks12 := subcontrolMixin[12].Hooks()
+	subcontrolMixinHooks13 := subcontrolMixin[13].Hooks()
 	subcontrolHooks := schema.Subcontrol{}.Hooks()
 
 	subcontrol.Hooks[1] = subcontrolMixinHooks0[0]
@@ -6922,9 +6926,11 @@ func init() {
 
 	subcontrol.Hooks[13] = subcontrolMixinHooks12[0]
 
-	subcontrol.Hooks[14] = subcontrolHooks[0]
+	subcontrol.Hooks[14] = subcontrolMixinHooks13[0]
 
-	subcontrol.Hooks[15] = subcontrolHooks[1]
+	subcontrol.Hooks[15] = subcontrolHooks[0]
+
+	subcontrol.Hooks[16] = subcontrolHooks[1]
 	subcontrolMixinInters3 := subcontrolMixin[3].Interceptors()
 	subcontrolMixinInters8 := subcontrolMixin[8].Interceptors()
 	subcontrolMixinInters9 := subcontrolMixin[9].Interceptors()
@@ -6946,8 +6952,8 @@ func init() {
 	_ = subcontrolMixinFields9
 	subcontrolMixinFields10 := subcontrolMixin[10].Fields()
 	_ = subcontrolMixinFields10
-	subcontrolMixinFields12 := subcontrolMixin[12].Fields()
-	_ = subcontrolMixinFields12
+	subcontrolMixinFields13 := subcontrolMixin[13].Fields()
+	_ = subcontrolMixinFields13
 	subcontrolFields := schema.Subcontrol{}.Fields()
 	_ = subcontrolFields
 	// subcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -6981,7 +6987,7 @@ func init() {
 	// subcontrol.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrol.DefaultSystemOwned = subcontrolDescSystemOwned.Default.(bool)
 	// subcontrolDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	subcontrolDescWorkflowEligibleMarker := subcontrolMixinFields12[0].Descriptor()
+	subcontrolDescWorkflowEligibleMarker := subcontrolMixinFields13[0].Descriptor()
 	// subcontrol.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	subcontrol.DefaultWorkflowEligibleMarker = subcontrolDescWorkflowEligibleMarker.Default.(bool)
 	// subcontrolDescRefCode is the schema descriptor for ref_code field.

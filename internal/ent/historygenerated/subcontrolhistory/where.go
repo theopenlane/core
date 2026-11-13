@@ -263,6 +263,16 @@ func SubcontrolKindID(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldSubcontrolKindID, v))
 }
 
+// ControlOriginName applies equality check predicate on the "control_origin_name" field. It's identical to ControlOriginNameEQ.
+func ControlOriginName(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldControlOriginName, v))
+}
+
+// ControlOriginID applies equality check predicate on the "control_origin_id" field. It's identical to ControlOriginIDEQ.
+func ControlOriginID(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldControlOriginID, v))
+}
+
 // WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
 func WorkflowEligibleMarker(v bool) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
@@ -3286,6 +3296,156 @@ func SubcontrolKindIDEqualFold(v string) predicate.SubcontrolHistory {
 // SubcontrolKindIDContainsFold applies the ContainsFold predicate on the "subcontrol_kind_id" field.
 func SubcontrolKindIDContainsFold(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldSubcontrolKindID, v))
+}
+
+// ControlOriginNameEQ applies the EQ predicate on the "control_origin_name" field.
+func ControlOriginNameEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldControlOriginName, v))
+}
+
+// ControlOriginNameNEQ applies the NEQ predicate on the "control_origin_name" field.
+func ControlOriginNameNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldControlOriginName, v))
+}
+
+// ControlOriginNameIn applies the In predicate on the "control_origin_name" field.
+func ControlOriginNameIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldControlOriginName, vs...))
+}
+
+// ControlOriginNameNotIn applies the NotIn predicate on the "control_origin_name" field.
+func ControlOriginNameNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldControlOriginName, vs...))
+}
+
+// ControlOriginNameGT applies the GT predicate on the "control_origin_name" field.
+func ControlOriginNameGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldControlOriginName, v))
+}
+
+// ControlOriginNameGTE applies the GTE predicate on the "control_origin_name" field.
+func ControlOriginNameGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldControlOriginName, v))
+}
+
+// ControlOriginNameLT applies the LT predicate on the "control_origin_name" field.
+func ControlOriginNameLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldControlOriginName, v))
+}
+
+// ControlOriginNameLTE applies the LTE predicate on the "control_origin_name" field.
+func ControlOriginNameLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldControlOriginName, v))
+}
+
+// ControlOriginNameContains applies the Contains predicate on the "control_origin_name" field.
+func ControlOriginNameContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldControlOriginName, v))
+}
+
+// ControlOriginNameHasPrefix applies the HasPrefix predicate on the "control_origin_name" field.
+func ControlOriginNameHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldControlOriginName, v))
+}
+
+// ControlOriginNameHasSuffix applies the HasSuffix predicate on the "control_origin_name" field.
+func ControlOriginNameHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldControlOriginName, v))
+}
+
+// ControlOriginNameIsNil applies the IsNil predicate on the "control_origin_name" field.
+func ControlOriginNameIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldControlOriginName))
+}
+
+// ControlOriginNameNotNil applies the NotNil predicate on the "control_origin_name" field.
+func ControlOriginNameNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldControlOriginName))
+}
+
+// ControlOriginNameEqualFold applies the EqualFold predicate on the "control_origin_name" field.
+func ControlOriginNameEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldControlOriginName, v))
+}
+
+// ControlOriginNameContainsFold applies the ContainsFold predicate on the "control_origin_name" field.
+func ControlOriginNameContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldControlOriginName, v))
+}
+
+// ControlOriginIDEQ applies the EQ predicate on the "control_origin_id" field.
+func ControlOriginIDEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldControlOriginID, v))
+}
+
+// ControlOriginIDNEQ applies the NEQ predicate on the "control_origin_id" field.
+func ControlOriginIDNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldControlOriginID, v))
+}
+
+// ControlOriginIDIn applies the In predicate on the "control_origin_id" field.
+func ControlOriginIDIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldControlOriginID, vs...))
+}
+
+// ControlOriginIDNotIn applies the NotIn predicate on the "control_origin_id" field.
+func ControlOriginIDNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldControlOriginID, vs...))
+}
+
+// ControlOriginIDGT applies the GT predicate on the "control_origin_id" field.
+func ControlOriginIDGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldControlOriginID, v))
+}
+
+// ControlOriginIDGTE applies the GTE predicate on the "control_origin_id" field.
+func ControlOriginIDGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldControlOriginID, v))
+}
+
+// ControlOriginIDLT applies the LT predicate on the "control_origin_id" field.
+func ControlOriginIDLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldControlOriginID, v))
+}
+
+// ControlOriginIDLTE applies the LTE predicate on the "control_origin_id" field.
+func ControlOriginIDLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldControlOriginID, v))
+}
+
+// ControlOriginIDContains applies the Contains predicate on the "control_origin_id" field.
+func ControlOriginIDContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldControlOriginID, v))
+}
+
+// ControlOriginIDHasPrefix applies the HasPrefix predicate on the "control_origin_id" field.
+func ControlOriginIDHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldControlOriginID, v))
+}
+
+// ControlOriginIDHasSuffix applies the HasSuffix predicate on the "control_origin_id" field.
+func ControlOriginIDHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldControlOriginID, v))
+}
+
+// ControlOriginIDIsNil applies the IsNil predicate on the "control_origin_id" field.
+func ControlOriginIDIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldControlOriginID))
+}
+
+// ControlOriginIDNotNil applies the NotNil predicate on the "control_origin_id" field.
+func ControlOriginIDNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldControlOriginID))
+}
+
+// ControlOriginIDEqualFold applies the EqualFold predicate on the "control_origin_id" field.
+func ControlOriginIDEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldControlOriginID, v))
+}
+
+// ControlOriginIDContainsFold applies the ContainsFold predicate on the "control_origin_id" field.
+func ControlOriginIDContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldControlOriginID, v))
 }
 
 // WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.

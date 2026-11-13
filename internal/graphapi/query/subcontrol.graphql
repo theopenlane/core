@@ -8,6 +8,8 @@ mutation CreateBulkCSVSubcontrol ($input: Upload!) {
 			category
 			categoryID
 			controlID
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -76,6 +78,8 @@ mutation CreateBulkSubcontrol ($input: [CreateSubcontrolInput!]) {
 			category
 			categoryID
 			controlID
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -144,6 +148,8 @@ mutation CreateSubcontrol ($input: CreateSubcontrolInput!) {
 			category
 			categoryID
 			controlID
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -263,6 +269,8 @@ query GetSubcontrolByID ($subcontrolId: ID!) {
 		category
 		categoryID
 		controlID
+		controlOriginID
+		controlOriginName
 		controlOwnerID
 		controlQuestions
 		createdAt
@@ -383,6 +391,8 @@ mutation UpdateSubcontrol ($updateSubcontrolId: ID!, $input: UpdateSubcontrolInp
 			category
 			categoryID
 			controlID
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt

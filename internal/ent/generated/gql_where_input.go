@@ -15768,6 +15768,32 @@ type ControlWhereInput struct {
 	ControlKindIDEqualFold    *string  `json:"controlKindIDEqualFold,omitempty"`
 	ControlKindIDContainsFold *string  `json:"controlKindIDContainsFold,omitempty"`
 
+	// "control_origin_name" field predicates.
+	ControlOriginName             *string  `json:"controlOriginName,omitempty"`
+	ControlOriginNameNEQ          *string  `json:"controlOriginNameNEQ,omitempty"`
+	ControlOriginNameIn           []string `json:"controlOriginNameIn,omitempty"`
+	ControlOriginNameNotIn        []string `json:"controlOriginNameNotIn,omitempty"`
+	ControlOriginNameContains     *string  `json:"controlOriginNameContains,omitempty"`
+	ControlOriginNameHasPrefix    *string  `json:"controlOriginNameHasPrefix,omitempty"`
+	ControlOriginNameHasSuffix    *string  `json:"controlOriginNameHasSuffix,omitempty"`
+	ControlOriginNameIsNil        bool     `json:"controlOriginNameIsNil,omitempty"`
+	ControlOriginNameNotNil       bool     `json:"controlOriginNameNotNil,omitempty"`
+	ControlOriginNameEqualFold    *string  `json:"controlOriginNameEqualFold,omitempty"`
+	ControlOriginNameContainsFold *string  `json:"controlOriginNameContainsFold,omitempty"`
+
+	// "control_origin_id" field predicates.
+	ControlOriginID             *string  `json:"controlOriginID,omitempty"`
+	ControlOriginIDNEQ          *string  `json:"controlOriginIDNEQ,omitempty"`
+	ControlOriginIDIn           []string `json:"controlOriginIDIn,omitempty"`
+	ControlOriginIDNotIn        []string `json:"controlOriginIDNotIn,omitempty"`
+	ControlOriginIDContains     *string  `json:"controlOriginIDContains,omitempty"`
+	ControlOriginIDHasPrefix    *string  `json:"controlOriginIDHasPrefix,omitempty"`
+	ControlOriginIDHasSuffix    *string  `json:"controlOriginIDHasSuffix,omitempty"`
+	ControlOriginIDIsNil        bool     `json:"controlOriginIDIsNil,omitempty"`
+	ControlOriginIDNotNil       bool     `json:"controlOriginIDNotNil,omitempty"`
+	ControlOriginIDEqualFold    *string  `json:"controlOriginIDEqualFold,omitempty"`
+	ControlOriginIDContainsFold *string  `json:"controlOriginIDContainsFold,omitempty"`
+
 	// "environment_name" field predicates.
 	EnvironmentName             *string  `json:"environmentName,omitempty"`
 	EnvironmentNameNEQ          *string  `json:"environmentNameNEQ,omitempty"`
@@ -15959,6 +15985,10 @@ type ControlWhereInput struct {
 	// "control_kind" edge predicates.
 	HasControlKind     *bool                       `json:"hasControlKind,omitempty"`
 	HasControlKindWith []*CustomTypeEnumWhereInput `json:"hasControlKindWith,omitempty"`
+
+	// "control_origin" edge predicates.
+	HasControlOrigin     *bool                       `json:"hasControlOrigin,omitempty"`
+	HasControlOriginWith []*CustomTypeEnumWhereInput `json:"hasControlOriginWith,omitempty"`
 
 	// "environment" edge predicates.
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
@@ -17272,6 +17302,72 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	if i.ControlKindIDContainsFold != nil {
 		predicates = append(predicates, control.ControlKindIDContainsFold(*i.ControlKindIDContainsFold))
 	}
+	if i.ControlOriginName != nil {
+		predicates = append(predicates, control.ControlOriginNameEQ(*i.ControlOriginName))
+	}
+	if i.ControlOriginNameNEQ != nil {
+		predicates = append(predicates, control.ControlOriginNameNEQ(*i.ControlOriginNameNEQ))
+	}
+	if len(i.ControlOriginNameIn) > 0 {
+		predicates = append(predicates, control.ControlOriginNameIn(i.ControlOriginNameIn...))
+	}
+	if len(i.ControlOriginNameNotIn) > 0 {
+		predicates = append(predicates, control.ControlOriginNameNotIn(i.ControlOriginNameNotIn...))
+	}
+	if i.ControlOriginNameContains != nil {
+		predicates = append(predicates, control.ControlOriginNameContains(*i.ControlOriginNameContains))
+	}
+	if i.ControlOriginNameHasPrefix != nil {
+		predicates = append(predicates, control.ControlOriginNameHasPrefix(*i.ControlOriginNameHasPrefix))
+	}
+	if i.ControlOriginNameHasSuffix != nil {
+		predicates = append(predicates, control.ControlOriginNameHasSuffix(*i.ControlOriginNameHasSuffix))
+	}
+	if i.ControlOriginNameIsNil {
+		predicates = append(predicates, control.ControlOriginNameIsNil())
+	}
+	if i.ControlOriginNameNotNil {
+		predicates = append(predicates, control.ControlOriginNameNotNil())
+	}
+	if i.ControlOriginNameEqualFold != nil {
+		predicates = append(predicates, control.ControlOriginNameEqualFold(*i.ControlOriginNameEqualFold))
+	}
+	if i.ControlOriginNameContainsFold != nil {
+		predicates = append(predicates, control.ControlOriginNameContainsFold(*i.ControlOriginNameContainsFold))
+	}
+	if i.ControlOriginID != nil {
+		predicates = append(predicates, control.ControlOriginIDEQ(*i.ControlOriginID))
+	}
+	if i.ControlOriginIDNEQ != nil {
+		predicates = append(predicates, control.ControlOriginIDNEQ(*i.ControlOriginIDNEQ))
+	}
+	if len(i.ControlOriginIDIn) > 0 {
+		predicates = append(predicates, control.ControlOriginIDIn(i.ControlOriginIDIn...))
+	}
+	if len(i.ControlOriginIDNotIn) > 0 {
+		predicates = append(predicates, control.ControlOriginIDNotIn(i.ControlOriginIDNotIn...))
+	}
+	if i.ControlOriginIDContains != nil {
+		predicates = append(predicates, control.ControlOriginIDContains(*i.ControlOriginIDContains))
+	}
+	if i.ControlOriginIDHasPrefix != nil {
+		predicates = append(predicates, control.ControlOriginIDHasPrefix(*i.ControlOriginIDHasPrefix))
+	}
+	if i.ControlOriginIDHasSuffix != nil {
+		predicates = append(predicates, control.ControlOriginIDHasSuffix(*i.ControlOriginIDHasSuffix))
+	}
+	if i.ControlOriginIDIsNil {
+		predicates = append(predicates, control.ControlOriginIDIsNil())
+	}
+	if i.ControlOriginIDNotNil {
+		predicates = append(predicates, control.ControlOriginIDNotNil())
+	}
+	if i.ControlOriginIDEqualFold != nil {
+		predicates = append(predicates, control.ControlOriginIDEqualFold(*i.ControlOriginIDEqualFold))
+	}
+	if i.ControlOriginIDContainsFold != nil {
+		predicates = append(predicates, control.ControlOriginIDContainsFold(*i.ControlOriginIDContainsFold))
+	}
 	if i.EnvironmentName != nil {
 		predicates = append(predicates, control.EnvironmentNameEQ(*i.EnvironmentName))
 	}
@@ -17933,6 +18029,25 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, control.HasControlKindWith(with...))
+	}
+	if i.HasControlOrigin != nil {
+		p := control.HasControlOrigin()
+		if !*i.HasControlOrigin {
+			p = control.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlOriginWith) > 0 {
+		with := make([]predicate.CustomTypeEnum, 0, len(i.HasControlOriginWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
+		for _, w := range i.HasControlOriginWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlOriginWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, control.HasControlOriginWith(with...))
 	}
 	if i.HasEnvironment != nil {
 		p := control.HasEnvironment()
@@ -92695,6 +92810,32 @@ type SubcontrolWhereInput struct {
 	SubcontrolKindIDEqualFold    *string  `json:"subcontrolKindIDEqualFold,omitempty"`
 	SubcontrolKindIDContainsFold *string  `json:"subcontrolKindIDContainsFold,omitempty"`
 
+	// "control_origin_name" field predicates.
+	ControlOriginName             *string  `json:"controlOriginName,omitempty"`
+	ControlOriginNameNEQ          *string  `json:"controlOriginNameNEQ,omitempty"`
+	ControlOriginNameIn           []string `json:"controlOriginNameIn,omitempty"`
+	ControlOriginNameNotIn        []string `json:"controlOriginNameNotIn,omitempty"`
+	ControlOriginNameContains     *string  `json:"controlOriginNameContains,omitempty"`
+	ControlOriginNameHasPrefix    *string  `json:"controlOriginNameHasPrefix,omitempty"`
+	ControlOriginNameHasSuffix    *string  `json:"controlOriginNameHasSuffix,omitempty"`
+	ControlOriginNameIsNil        bool     `json:"controlOriginNameIsNil,omitempty"`
+	ControlOriginNameNotNil       bool     `json:"controlOriginNameNotNil,omitempty"`
+	ControlOriginNameEqualFold    *string  `json:"controlOriginNameEqualFold,omitempty"`
+	ControlOriginNameContainsFold *string  `json:"controlOriginNameContainsFold,omitempty"`
+
+	// "control_origin_id" field predicates.
+	ControlOriginID             *string  `json:"controlOriginID,omitempty"`
+	ControlOriginIDNEQ          *string  `json:"controlOriginIDNEQ,omitempty"`
+	ControlOriginIDIn           []string `json:"controlOriginIDIn,omitempty"`
+	ControlOriginIDNotIn        []string `json:"controlOriginIDNotIn,omitempty"`
+	ControlOriginIDContains     *string  `json:"controlOriginIDContains,omitempty"`
+	ControlOriginIDHasPrefix    *string  `json:"controlOriginIDHasPrefix,omitempty"`
+	ControlOriginIDHasSuffix    *string  `json:"controlOriginIDHasSuffix,omitempty"`
+	ControlOriginIDIsNil        bool     `json:"controlOriginIDIsNil,omitempty"`
+	ControlOriginIDNotNil       bool     `json:"controlOriginIDNotNil,omitempty"`
+	ControlOriginIDEqualFold    *string  `json:"controlOriginIDEqualFold,omitempty"`
+	ControlOriginIDContainsFold *string  `json:"controlOriginIDContainsFold,omitempty"`
+
 	// "workflow_eligible_marker" field predicates.
 	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
 	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
@@ -92810,6 +92951,10 @@ type SubcontrolWhereInput struct {
 	// "subcontrol_kind" edge predicates.
 	HasSubcontrolKind     *bool                       `json:"hasSubcontrolKind,omitempty"`
 	HasSubcontrolKindWith []*CustomTypeEnumWhereInput `json:"hasSubcontrolKindWith,omitempty"`
+
+	// "control_origin" edge predicates.
+	HasControlOrigin     *bool                       `json:"hasControlOrigin,omitempty"`
+	HasControlOriginWith []*CustomTypeEnumWhereInput `json:"hasControlOriginWith,omitempty"`
 
 	// "control" edge predicates.
 	HasControl     *bool                `json:"hasControl,omitempty"`
@@ -94091,6 +94236,72 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	if i.SubcontrolKindIDContainsFold != nil {
 		predicates = append(predicates, subcontrol.SubcontrolKindIDContainsFold(*i.SubcontrolKindIDContainsFold))
 	}
+	if i.ControlOriginName != nil {
+		predicates = append(predicates, subcontrol.ControlOriginNameEQ(*i.ControlOriginName))
+	}
+	if i.ControlOriginNameNEQ != nil {
+		predicates = append(predicates, subcontrol.ControlOriginNameNEQ(*i.ControlOriginNameNEQ))
+	}
+	if len(i.ControlOriginNameIn) > 0 {
+		predicates = append(predicates, subcontrol.ControlOriginNameIn(i.ControlOriginNameIn...))
+	}
+	if len(i.ControlOriginNameNotIn) > 0 {
+		predicates = append(predicates, subcontrol.ControlOriginNameNotIn(i.ControlOriginNameNotIn...))
+	}
+	if i.ControlOriginNameContains != nil {
+		predicates = append(predicates, subcontrol.ControlOriginNameContains(*i.ControlOriginNameContains))
+	}
+	if i.ControlOriginNameHasPrefix != nil {
+		predicates = append(predicates, subcontrol.ControlOriginNameHasPrefix(*i.ControlOriginNameHasPrefix))
+	}
+	if i.ControlOriginNameHasSuffix != nil {
+		predicates = append(predicates, subcontrol.ControlOriginNameHasSuffix(*i.ControlOriginNameHasSuffix))
+	}
+	if i.ControlOriginNameIsNil {
+		predicates = append(predicates, subcontrol.ControlOriginNameIsNil())
+	}
+	if i.ControlOriginNameNotNil {
+		predicates = append(predicates, subcontrol.ControlOriginNameNotNil())
+	}
+	if i.ControlOriginNameEqualFold != nil {
+		predicates = append(predicates, subcontrol.ControlOriginNameEqualFold(*i.ControlOriginNameEqualFold))
+	}
+	if i.ControlOriginNameContainsFold != nil {
+		predicates = append(predicates, subcontrol.ControlOriginNameContainsFold(*i.ControlOriginNameContainsFold))
+	}
+	if i.ControlOriginID != nil {
+		predicates = append(predicates, subcontrol.ControlOriginIDEQ(*i.ControlOriginID))
+	}
+	if i.ControlOriginIDNEQ != nil {
+		predicates = append(predicates, subcontrol.ControlOriginIDNEQ(*i.ControlOriginIDNEQ))
+	}
+	if len(i.ControlOriginIDIn) > 0 {
+		predicates = append(predicates, subcontrol.ControlOriginIDIn(i.ControlOriginIDIn...))
+	}
+	if len(i.ControlOriginIDNotIn) > 0 {
+		predicates = append(predicates, subcontrol.ControlOriginIDNotIn(i.ControlOriginIDNotIn...))
+	}
+	if i.ControlOriginIDContains != nil {
+		predicates = append(predicates, subcontrol.ControlOriginIDContains(*i.ControlOriginIDContains))
+	}
+	if i.ControlOriginIDHasPrefix != nil {
+		predicates = append(predicates, subcontrol.ControlOriginIDHasPrefix(*i.ControlOriginIDHasPrefix))
+	}
+	if i.ControlOriginIDHasSuffix != nil {
+		predicates = append(predicates, subcontrol.ControlOriginIDHasSuffix(*i.ControlOriginIDHasSuffix))
+	}
+	if i.ControlOriginIDIsNil {
+		predicates = append(predicates, subcontrol.ControlOriginIDIsNil())
+	}
+	if i.ControlOriginIDNotNil {
+		predicates = append(predicates, subcontrol.ControlOriginIDNotNil())
+	}
+	if i.ControlOriginIDEqualFold != nil {
+		predicates = append(predicates, subcontrol.ControlOriginIDEqualFold(*i.ControlOriginIDEqualFold))
+	}
+	if i.ControlOriginIDContainsFold != nil {
+		predicates = append(predicates, subcontrol.ControlOriginIDContainsFold(*i.ControlOriginIDContainsFold))
+	}
 	if i.WorkflowEligibleMarker != nil {
 		predicates = append(predicates, subcontrol.WorkflowEligibleMarkerEQ(*i.WorkflowEligibleMarker))
 	}
@@ -94546,6 +94757,25 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, subcontrol.HasSubcontrolKindWith(with...))
+	}
+	if i.HasControlOrigin != nil {
+		p := subcontrol.HasControlOrigin()
+		if !*i.HasControlOrigin {
+			p = subcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlOriginWith) > 0 {
+		with := make([]predicate.CustomTypeEnum, 0, len(i.HasControlOriginWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
+		for _, w := range i.HasControlOriginWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlOriginWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subcontrol.HasControlOriginWith(with...))
 	}
 	if i.HasControl != nil {
 		p := subcontrol.HasControl()

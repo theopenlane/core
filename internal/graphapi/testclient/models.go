@@ -5051,6 +5051,10 @@ type Control struct {
 	ControlKindName *string `json:"controlKindName,omitempty"`
 	// the kind of the control
 	ControlKindID *string `json:"controlKindID,omitempty"`
+	// the control_origin of the control
+	ControlOriginName *string `json:"controlOriginName,omitempty"`
+	// the control_origin of the control
+	ControlOriginID *string `json:"controlOriginID,omitempty"`
 	// the environment of the control
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the environment of the control
@@ -5093,6 +5097,7 @@ type Control struct {
 	BlockedGroups          *GroupConnection                 `json:"blockedGroups"`
 	Editors                *GroupConnection                 `json:"editors"`
 	ControlKind            *CustomTypeEnum                  `json:"controlKind,omitempty"`
+	ControlOrigin          *CustomTypeEnum                  `json:"controlOrigin,omitempty"`
 	Environment            *CustomTypeEnum                  `json:"environment,omitempty"`
 	Scope                  *CustomTypeEnum                  `json:"scope,omitempty"`
 	Standard               *Standard                        `json:"standard,omitempty"`
@@ -6701,6 +6706,30 @@ type ControlWhereInput struct {
 	ControlKindIDNotNil       *bool    `json:"controlKindIDNotNil,omitempty"`
 	ControlKindIDEqualFold    *string  `json:"controlKindIDEqualFold,omitempty"`
 	ControlKindIDContainsFold *string  `json:"controlKindIDContainsFold,omitempty"`
+	// control_origin_name field predicates
+	ControlOriginName             *string  `json:"controlOriginName,omitempty"`
+	ControlOriginNameNeq          *string  `json:"controlOriginNameNEQ,omitempty"`
+	ControlOriginNameIn           []string `json:"controlOriginNameIn,omitempty"`
+	ControlOriginNameNotIn        []string `json:"controlOriginNameNotIn,omitempty"`
+	ControlOriginNameContains     *string  `json:"controlOriginNameContains,omitempty"`
+	ControlOriginNameHasPrefix    *string  `json:"controlOriginNameHasPrefix,omitempty"`
+	ControlOriginNameHasSuffix    *string  `json:"controlOriginNameHasSuffix,omitempty"`
+	ControlOriginNameIsNil        *bool    `json:"controlOriginNameIsNil,omitempty"`
+	ControlOriginNameNotNil       *bool    `json:"controlOriginNameNotNil,omitempty"`
+	ControlOriginNameEqualFold    *string  `json:"controlOriginNameEqualFold,omitempty"`
+	ControlOriginNameContainsFold *string  `json:"controlOriginNameContainsFold,omitempty"`
+	// control_origin_id field predicates
+	ControlOriginID             *string  `json:"controlOriginID,omitempty"`
+	ControlOriginIdneq          *string  `json:"controlOriginIDNEQ,omitempty"`
+	ControlOriginIDIn           []string `json:"controlOriginIDIn,omitempty"`
+	ControlOriginIDNotIn        []string `json:"controlOriginIDNotIn,omitempty"`
+	ControlOriginIDContains     *string  `json:"controlOriginIDContains,omitempty"`
+	ControlOriginIDHasPrefix    *string  `json:"controlOriginIDHasPrefix,omitempty"`
+	ControlOriginIDHasSuffix    *string  `json:"controlOriginIDHasSuffix,omitempty"`
+	ControlOriginIDIsNil        *bool    `json:"controlOriginIDIsNil,omitempty"`
+	ControlOriginIDNotNil       *bool    `json:"controlOriginIDNotNil,omitempty"`
+	ControlOriginIDEqualFold    *string  `json:"controlOriginIDEqualFold,omitempty"`
+	ControlOriginIDContainsFold *string  `json:"controlOriginIDContainsFold,omitempty"`
 	// environment_name field predicates
 	EnvironmentName             *string  `json:"environmentName,omitempty"`
 	EnvironmentNameNeq          *string  `json:"environmentNameNEQ,omitempty"`
@@ -6851,6 +6880,9 @@ type ControlWhereInput struct {
 	// control_kind edge predicates
 	HasControlKind     *bool                       `json:"hasControlKind,omitempty"`
 	HasControlKindWith []*CustomTypeEnumWhereInput `json:"hasControlKindWith,omitempty"`
+	// control_origin edge predicates
+	HasControlOrigin     *bool                       `json:"hasControlOrigin,omitempty"`
+	HasControlOriginWith []*CustomTypeEnumWhereInput `json:"hasControlOriginWith,omitempty"`
 	// environment edge predicates
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
 	HasEnvironmentWith []*CustomTypeEnumWhereInput `json:"hasEnvironmentWith,omitempty"`
@@ -7503,6 +7535,8 @@ type CreateControlInput struct {
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the kind of the control
 	ControlKindName *string `json:"controlKindName,omitempty"`
+	// the control_origin of the control
+	ControlOriginName *string `json:"controlOriginName,omitempty"`
 	// the environment of the control
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the control
@@ -7534,6 +7568,7 @@ type CreateControlInput struct {
 	BlockedGroupIDs          []string                            `json:"blockedGroupIDs,omitempty"`
 	EditorIDs                []string                            `json:"editorIDs,omitempty"`
 	ControlKindID            *string                             `json:"controlKindID,omitempty"`
+	ControlOriginID          *string                             `json:"controlOriginID,omitempty"`
 	EnvironmentID            *string                             `json:"environmentID,omitempty"`
 	ScopeID                  *string                             `json:"scopeID,omitempty"`
 	StandardID               *string                             `json:"standardID,omitempty"`
@@ -9986,6 +10021,8 @@ type CreateSubcontrolInput struct {
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the kind of the subcontrol
 	SubcontrolKindName *string `json:"subcontrolKindName,omitempty"`
+	// the control_origin of the subcontrol
+	ControlOriginName *string `json:"controlOriginName,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the unique reference code for the control
@@ -10009,6 +10046,7 @@ type CreateSubcontrolInput struct {
 	ScanIDs                  []string `json:"scanIDs,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
 	SubcontrolKindID         *string  `json:"subcontrolKindID,omitempty"`
+	ControlOriginID          *string  `json:"controlOriginID,omitempty"`
 	ControlID                string   `json:"controlID"`
 	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
 	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
@@ -33537,6 +33575,10 @@ type Subcontrol struct {
 	SubcontrolKindName *string `json:"subcontrolKindName,omitempty"`
 	// the kind of the subcontrol
 	SubcontrolKindID *string `json:"subcontrolKindID,omitempty"`
+	// the control_origin of the subcontrol
+	ControlOriginName *string `json:"controlOriginName,omitempty"`
+	// the control_origin of the subcontrol
+	ControlOriginID *string `json:"controlOriginID,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the unique reference code for the control
@@ -33565,6 +33607,7 @@ type Subcontrol struct {
 	Scans                  *ScanConnection                  `json:"scans"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	SubcontrolKind         *CustomTypeEnum                  `json:"subcontrolKind,omitempty"`
+	ControlOrigin          *CustomTypeEnum                  `json:"controlOrigin,omitempty"`
 	Control                *Control                         `json:"control"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
@@ -34096,6 +34139,30 @@ type SubcontrolWhereInput struct {
 	SubcontrolKindIDNotNil       *bool    `json:"subcontrolKindIDNotNil,omitempty"`
 	SubcontrolKindIDEqualFold    *string  `json:"subcontrolKindIDEqualFold,omitempty"`
 	SubcontrolKindIDContainsFold *string  `json:"subcontrolKindIDContainsFold,omitempty"`
+	// control_origin_name field predicates
+	ControlOriginName             *string  `json:"controlOriginName,omitempty"`
+	ControlOriginNameNeq          *string  `json:"controlOriginNameNEQ,omitempty"`
+	ControlOriginNameIn           []string `json:"controlOriginNameIn,omitempty"`
+	ControlOriginNameNotIn        []string `json:"controlOriginNameNotIn,omitempty"`
+	ControlOriginNameContains     *string  `json:"controlOriginNameContains,omitempty"`
+	ControlOriginNameHasPrefix    *string  `json:"controlOriginNameHasPrefix,omitempty"`
+	ControlOriginNameHasSuffix    *string  `json:"controlOriginNameHasSuffix,omitempty"`
+	ControlOriginNameIsNil        *bool    `json:"controlOriginNameIsNil,omitempty"`
+	ControlOriginNameNotNil       *bool    `json:"controlOriginNameNotNil,omitempty"`
+	ControlOriginNameEqualFold    *string  `json:"controlOriginNameEqualFold,omitempty"`
+	ControlOriginNameContainsFold *string  `json:"controlOriginNameContainsFold,omitempty"`
+	// control_origin_id field predicates
+	ControlOriginID             *string  `json:"controlOriginID,omitempty"`
+	ControlOriginIdneq          *string  `json:"controlOriginIDNEQ,omitempty"`
+	ControlOriginIDIn           []string `json:"controlOriginIDIn,omitempty"`
+	ControlOriginIDNotIn        []string `json:"controlOriginIDNotIn,omitempty"`
+	ControlOriginIDContains     *string  `json:"controlOriginIDContains,omitempty"`
+	ControlOriginIDHasPrefix    *string  `json:"controlOriginIDHasPrefix,omitempty"`
+	ControlOriginIDHasSuffix    *string  `json:"controlOriginIDHasSuffix,omitempty"`
+	ControlOriginIDIsNil        *bool    `json:"controlOriginIDIsNil,omitempty"`
+	ControlOriginIDNotNil       *bool    `json:"controlOriginIDNotNil,omitempty"`
+	ControlOriginIDEqualFold    *string  `json:"controlOriginIDEqualFold,omitempty"`
+	ControlOriginIDContainsFold *string  `json:"controlOriginIDContainsFold,omitempty"`
 	// workflow_eligible_marker field predicates
 	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
 	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
@@ -34178,6 +34245,9 @@ type SubcontrolWhereInput struct {
 	// subcontrol_kind edge predicates
 	HasSubcontrolKind     *bool                       `json:"hasSubcontrolKind,omitempty"`
 	HasSubcontrolKindWith []*CustomTypeEnumWhereInput `json:"hasSubcontrolKindWith,omitempty"`
+	// control_origin edge predicates
+	HasControlOrigin     *bool                       `json:"hasControlOrigin,omitempty"`
+	HasControlOriginWith []*CustomTypeEnumWhereInput `json:"hasControlOriginWith,omitempty"`
 	// control edge predicates
 	HasControl     *bool                `json:"hasControl,omitempty"`
 	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
@@ -40359,6 +40429,9 @@ type UpdateControlInput struct {
 	// the kind of the control
 	ControlKindName      *string `json:"controlKindName,omitempty"`
 	ClearControlKindName *bool   `json:"clearControlKindName,omitempty"`
+	// the control_origin of the control
+	ControlOriginName      *string `json:"controlOriginName,omitempty"`
+	ClearControlOriginName *bool   `json:"clearControlOriginName,omitempty"`
 	// the environment of the control
 	EnvironmentName      *string `json:"environmentName,omitempty"`
 	ClearEnvironmentName *bool   `json:"clearEnvironmentName,omitempty"`
@@ -40429,6 +40502,8 @@ type UpdateControlInput struct {
 	ClearEditors                   *bool                               `json:"clearEditors,omitempty"`
 	ControlKindID                  *string                             `json:"controlKindID,omitempty"`
 	ClearControlKind               *bool                               `json:"clearControlKind,omitempty"`
+	ControlOriginID                *string                             `json:"controlOriginID,omitempty"`
+	ClearControlOrigin             *bool                               `json:"clearControlOrigin,omitempty"`
 	EnvironmentID                  *string                             `json:"environmentID,omitempty"`
 	ClearEnvironment               *bool                               `json:"clearEnvironment,omitempty"`
 	ScopeID                        *string                             `json:"scopeID,omitempty"`
@@ -44637,6 +44712,9 @@ type UpdateSubcontrolInput struct {
 	// the kind of the subcontrol
 	SubcontrolKindName      *string `json:"subcontrolKindName,omitempty"`
 	ClearSubcontrolKindName *bool   `json:"clearSubcontrolKindName,omitempty"`
+	// the control_origin of the subcontrol
+	ControlOriginName      *string `json:"controlOriginName,omitempty"`
+	ClearControlOriginName *bool   `json:"clearControlOriginName,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
 	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
@@ -44692,6 +44770,8 @@ type UpdateSubcontrolInput struct {
 	ClearScans                     *bool                   `json:"clearScans,omitempty"`
 	SubcontrolKindID               *string                 `json:"subcontrolKindID,omitempty"`
 	ClearSubcontrolKind            *bool                   `json:"clearSubcontrolKind,omitempty"`
+	ControlOriginID                *string                 `json:"controlOriginID,omitempty"`
+	ClearControlOrigin             *bool                   `json:"clearControlOrigin,omitempty"`
 	ControlID                      *string                 `json:"controlID,omitempty"`
 	AddControlImplementationIDs    []string                `json:"addControlImplementationIDs,omitempty"`
 	RemoveControlImplementationIDs []string                `json:"removeControlImplementationIDs,omitempty"`
