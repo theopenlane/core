@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
