@@ -22,6 +22,12 @@ import (
 	"golang.org/x/text/encoding/charmap"
 )
 
+// pdfcpu otherwise writes config.yml under $HOME/.config and panics when that is unwritable
+// the stateless defaults match config.yml, revisit if we need custom fonts or trusted certs
+func init() {
+	model.ConfigPath = "disable"
+}
+
 // ContentType is the mime type of a pdf
 const ContentType = "application/pdf"
 

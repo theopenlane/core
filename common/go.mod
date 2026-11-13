@@ -60,6 +60,7 @@ require (
 	github.com/riverqueue/river/riverdriver v0.51.2 // indirect
 	github.com/riverqueue/river/rivershared v0.51.2 // indirect
 	github.com/riverqueue/river/rivertype v0.51.2 // indirect
+	github.com/rogpeppe/go-internal v1.15.0 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/tidwall/gjson v1.20.2 // indirect

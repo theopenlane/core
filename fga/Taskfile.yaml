@@ -6,6 +6,7 @@ vars:
   SYSTEM_OBJECT: "system:openlane_core"
   SYSTEM_ADMIN_RELATION: "system_admin"
   OPENLANE_API_HOST: '{{ default "http://localhost:17608" .OPENLANE_HOST }}'
+  FGA: GOWORK=off go run github.com/openfga/cli/cmd/fga@latest
 
 tasks:
   create:
@@ -27,6 +28,7 @@ tasks:
     cmds:
       - task: generate
       - task: :check:clean
+      - task: test
 
   generate:version:
     desc: stamps the model with a marker type derived from the hash of every model file
@@ -58,7 +60,7 @@ tasks:
     silent: true
     cmds:
       - |
-        result=$(fga model validate --file model/fga.mod)
+        result=$({{.FGA}} model validate --file model/fga.mod)
         if [ "$(echo "$result" | jq .is_valid)" != "true" ]; then
           echo "Model validation failed:"
           echo "$result" | jq .error
@@ -69,7 +71,7 @@ tasks:
     desc: runs the fga model tests
     cmds:
       - task: validate
-      - fga model test --tests tests/tests.yaml
+      - "{{.FGA}} model test --tests tests.yaml"
 
   tuple:write:
     desc: writes test tuples to the fga store

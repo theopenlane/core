@@ -125,6 +125,45 @@ $build_info"
     git commit -m "$commit_message"
 }
 
+# GitHub signs commits made through this mutation, so CI needs no signing key
+COMMIT_MUTATION='mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { url } } }'
+
+# Prints each staged file as a createCommitOnBranch change, piped because go.sum exceeds the argument size limit
+staged_file_changes() {
+    local status path
+    git diff --cached --name-status --no-renames | while IFS=$'\t' read -r status path; do
+        if [[ "$status" == "D" ]]; then
+            jq -n --arg path "$path" '{deletion: {path: $path}}'
+        else
+            git show ":$path" | base64 -w0 | jq -Rs --arg path "$path" '{addition: {path: $path, contents: .}}'
+        fi
+    done
+}
+
+# Commits the staged changes to the build branch through the GitHub API
+commit_staged_to_branch() {
+    local headline="$1"
+
+    install_gh
+
+    # expectedHeadOid rejects the commit if the branch moved after this checkout
+    staged_file_changes | jq -s \
+        --arg query "$COMMIT_MUTATION" \
+        --arg repo "$(normalize_github_repo "$BUILDKITE_REPO")" \
+        --arg branch "$BUILDKITE_BRANCH" \
+        --arg head "$(git rev-parse HEAD)" \
+        --arg headline "$headline" \
+        '{query: $query, variables: {input: {
+          branch: {repositoryNameWithOwner: $repo, branchName: $branch},
+          expectedHeadOid: $head,
+          message: {headline: $headline},
+          fileChanges: {
+            additions: [.[] | .addition // empty],
+            deletions: [.[] | .deletion // empty]
+          }
+        }}}' | gh api graphql --input -
+}
+
 # Function to safely push a branch
 safe_push_branch() {
     local branch="$1"

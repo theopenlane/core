@@ -1,10 +1,10 @@
 name: Openlane
-model_file: ../model/fga.mod
-tuple_file: tuples/_tuples.yaml
+model_file: model/fga.mod
+tuple_file: tests/tuples/_tuples.yaml
 tests:
   - name: organization
     description: test organization relationships
-    tuple_file: tuples/organizations.yaml
+    tuple_file: tests/tuples/organizations.yaml
     check:
       - user: user:ulid-of-owner
         object: organization:openlane
@@ -675,7 +675,7 @@ tests:
             - organization:openlane
   - name: groups
     description: test group relationships to their parent (organization)
-    tuple_file: tuples/groups.yaml
+    tuple_file: tests/tuples/groups.yaml
     check:
       - user: organization:openlane
         object: group:cat-lovers
@@ -749,7 +749,7 @@ tests:
           member:
   - name: files
     description: files can be associated to many objects and users can access files based on their permissions
-    tuple_file: tuples/files.yaml
+    tuple_file: tests/tuples/files.yaml
     check:
       - user: user:ulid-of-admin # admin of the file should have all permissions
         object: file:file-1
@@ -879,7 +879,7 @@ tests:
           can_delete:
   - name: tasks
     description: tasks can be associated to many objects and users can access tasks based on their permissions
-    tuple_file: tuples/tasks.yaml
+    tuple_file: tests/tuples/tasks.yaml
     check:
       - user: user:ulid-of-admin # parent user of the task should have all permissions
         object: task:task-1
@@ -979,7 +979,7 @@ tests:
           can_delete: false
   - name: procedures
     description: procedures are associated with an organization and by default all user in the organization can view them. edit access is provided by groups.
-    tuple_file: tuples/procedures.yaml
+    tuple_file: tests/tuples/procedures.yaml
     check:
       - user: user:ulid-admin # admin of the procedure should have all permissions
         object: procedure:procedure-1
@@ -1037,7 +1037,7 @@ tests:
           #     can_delete: true
   - name: internal policies
     description: policies are associated with an organization and by default all user in the organization can view them. edit access is provided by groups.
-    tuple_file: tuples/policies.yaml
+    tuple_file: tests/tuples/policies.yaml
     check:
       - user: user:ulid-admin # admin of the internal_policy should have all permissions
         object: internal_policy:internal_policy-1
@@ -1095,7 +1095,7 @@ tests:
           can_delete: true
   - name: programs
     description: programs are associated with an organization
-    tuple_file: tuples/programs.yaml
+    tuple_file: tests/tuples/programs.yaml
     check:
       - user: user:ulid-admin # admin of the program should have all permissions
         object: program:program-1
@@ -1129,7 +1129,7 @@ tests:
           can_delete: false
   - name: asset
     description: assets are always assigned to an organization and permissions are inherited from the organization
-    tuple_file: tuples/assets.yaml
+    tuple_file: tests/tuples/assets.yaml
     check:
       - user: user:ulid-of-owner # org owner has full access
         object: asset:asset-1
@@ -1170,7 +1170,7 @@ tests:
           can_delete: true
   - name: entity
     description: entities are always assigned to an organization and permissions are inherited from the organization
-    tuple_file: tuples/entities.yaml
+    tuple_file: tests/tuples/entities.yaml
     check:
       - user: user:ulid-of-owner # org owner has full access
         object: entity:entity-1
@@ -1199,7 +1199,7 @@ tests:
           can_delete: false
   - name: finding
     description: findings can be associated with organizations or programs and permissions are inherited accordingly
-    tuple_file: tuples/findings.yaml
+    tuple_file: tests/tuples/findings.yaml
     check:
       - user: user:ulid-of-member # is a member of program that is parent of finding
         object: finding:finding-2
@@ -1227,7 +1227,7 @@ tests:
           can_delete: true
   - name: vulnerability
     description: vulnerabilities can be associated with organizations or programs and permissions are inherited accordingly
-    tuple_file: tuples/vulnerabilities.yaml
+    tuple_file: tests/tuples/vulnerabilities.yaml
     check:
       - user: user:ulid-of-owner-foobar # user of another org has no access
         object: vulnerability:vulnerability-1
@@ -1255,7 +1255,7 @@ tests:
           can_delete: true
   - name: remediation
     description: remediations can be associated with organizations or findings and permissions are inherited accordingly
-    tuple_file: tuples/remediations.yaml
+    tuple_file: tests/tuples/remediations.yaml
     check:
       - user: user:ulid-of-member # org member can view due to parent edit access to vulnerability
         object: remediation:remediation-2
@@ -1265,7 +1265,7 @@ tests:
           can_delete: true
   - name: scan
     description: scans can be associated with organizations or platforms and permissions are inherited accordingly
-    tuple_file: tuples/scans.yaml
+    tuple_file: tests/tuples/scans.yaml
     check:
       - user: user:ulid-of-admin
         object: scan:scan-1
@@ -1275,7 +1275,7 @@ tests:
           can_delete: true
   - name: platform
     description: platforms are associated with organizations and permissions are inherited accordingly
-    tuple_file: tuples/platforms.yaml
+    tuple_file: tests/tuples/platforms.yaml
     check:
       - user: user:ulid-of-owner # org owner has full access
         object: platform:platform-1
@@ -1304,7 +1304,7 @@ tests:
           can_delete: false
   - name: identity_holder
     description: identity_holders are associated with organizations or platforms and permissions are inherited accordingly
-    tuple_file: tuples/identity_holders.yaml
+    tuple_file: tests/tuples/identity_holders.yaml
     check:
       - user: user:ulid-of-owner # org owner has full access by parent_context
         object: identity_holder:identity_holder-1
@@ -1339,7 +1339,7 @@ tests:
           can_delete: true
   - name: evidence
     description: evidence are always with an organization, and can be linked to many objects within the system
-    tuple_file: tuples/evidence.yaml
+    tuple_file: tests/tuples/evidence.yaml
     check:
       - user: user:ulid-super-admin # has full permission on the evidence
         object: evidence:evidence-1
@@ -1379,7 +1379,7 @@ tests:
           can_delete: true
   - name: notes
     description: notes can be associated to many objects and users can access notes based on their permissions
-    tuple_file: tuples/notes.yaml
+    tuple_file: tests/tuples/notes.yaml
     check:
       - user: user:ulid-admin
         object: note:note-1
@@ -1443,7 +1443,7 @@ tests:
           can_delete: true
   - name: controls and subcontrols
     description: control access is granted via groups and the parent program, subcontrols inherit permissions from their parent control
-    tuple_file: tuples/controls.yaml
+    tuple_file: tests/tuples/controls.yaml
     check:
       - user: user:ulid-of-member # member of the program that has access to the control
         object: control:control-1
@@ -1687,7 +1687,7 @@ tests:
           can_delete: true
   - name: standard
     description: standards can be made public with system-owned standards, or organizations can create their own custom standards
-    tuple_file: tuples/standards.yaml
+    tuple_file: tests/tuples/standards.yaml
     check:
       - user: user:ulid-of-member
         object: standard:standard-1
@@ -1751,7 +1751,7 @@ tests:
           can_delete: false
   - name: features
     description: organization feature entitlements
-    tuple_file: tuples/features.yaml
+    tuple_file: tests/tuples/features.yaml
     check:
       - user: organization:openlane
         object: feature:feature1
@@ -1771,7 +1771,7 @@ tests:
           enabled: false
   - name: assessment responses
     description: assessment response access controls
-    tuple_file: tuples/assessment_responses.yaml
+    tuple_file: tests/tuples/assessment_responses.yaml
     check:
       - user: user:ulid-response-owner
         object: assessment_response:response-1
@@ -1824,7 +1824,7 @@ tests:
             - assessment_response:response-entity
   - name: campaigns
     description: test campaign and campaign_target relationships with various parent types
-    tuple_file: tuples/campaigns.yaml
+    tuple_file: tests/tuples/campaigns.yaml
     check:
       # campaign with organization parent - org owner has full access
       - user: user:ulid-of-owner
@@ -1915,7 +1915,7 @@ tests:
           can_delete: true
   - name: exports
     description: test export relationships and permissions
-    tuple_file: tuples/exports.yaml
+    tuple_file: tests/tuples/exports.yaml
     check:
       - user: user:ulid-system-admin
         object: export:export-1
@@ -1992,7 +1992,7 @@ tests:
 
   - name: workflows
     description: test workflow types including workflow_definition, workflow_instance, workflow_assignment, workflow_object_ref, workflow_assignment_target, and workflow_event
-    tuple_file: tuples/workflows.yaml
+    tuple_file: tests/tuples/workflows.yaml
     check:
       # workflow_definition tests
       - user: user:ulid-of-owner # org owner has full access
@@ -2309,7 +2309,7 @@ tests:
           can_delete: [] # blocked + system-driven
   - name: "trust_center"
     description: "test trust center roles"
-    tuple_file: tuples/trust_center.yaml
+    tuple_file: tests/tuples/trust_center.yaml
     check:
       - user: user:tc-owner-tc-2
         object: trust_center:tc-2
@@ -2337,7 +2337,7 @@ tests:
           can_delete: false
   - name: "trust_center_docs"
     description: "test trust center documents and their relationships"
-    tuple_file: tuples/trust_center_doc.yaml
+    tuple_file: tests/tuples/trust_center_doc.yaml
     check:
       - user: user:tc-owner-1
         object: file:file-1
@@ -2432,7 +2432,7 @@ tests:
           can_delete: false
   - name: "trust_center_subprocessors"
     description: "test trust center subprocessors and their relationships"
-    tuple_file: tuples/trust_center_subprocessor.yaml
+    tuple_file: tests/tuples/trust_center_subprocessor.yaml
     check:
       - user: user:tc-owner-1
         object: trust_center_subprocessor:tcsubproc-1
@@ -2472,7 +2472,7 @@ tests:
           can_delete: false
   - name: risk
     description: risks are associated with the organization, but only visible to admins+ by default, and can be associated with other objects to inherit access e.g. with a program
-    tuple_file: tuples/risks.yaml
+    tuple_file: tests/tuples/risks.yaml
     check:
       - user: user:ulid-of-owner # org owner has full access
         object: risk:risk-1
@@ -2535,7 +2535,7 @@ tests:
           audit_log_viewer: true
   - name: sla_definition
     description: sla definitions are viewable by anyone who can view the organization or its risks, findings, or vulnerabilities
-    tuple_file: tuples/sla_definitions.yaml
+    tuple_file: tests/tuples/sla_definitions.yaml
     check:
       - user: user:ulid-risk-viewer
         object: organization:openlane
@@ -2573,7 +2573,7 @@ tests:
           can_view_sla_definition: false
   - name: integration_run
     description: integration runs are service-driven and only visible to integration managers
-    tuple_file: tuples/integration_runs.yaml
+    tuple_file: tests/tuples/integration_runs.yaml
     check:
       - user: user:ulid-of-owner
         object: integration_run:run-1
