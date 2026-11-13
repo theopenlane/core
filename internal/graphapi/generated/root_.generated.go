@@ -87572,7 +87572,7 @@ input ExportWhereInput {
   """
   fieldsHas: String
 }
-type File implements Node {
+type File implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time

@@ -24,7 +24,7 @@ var moduleInterceptorContextKey = contextx.NewKey[struct{}]()
 // from the auto generated pipeline
 func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 	return entintercept.TraverseFunc(func(ctx context.Context, q entintercept.Query) error {
-		if !modulesEnabled || q.Type() == generated.TypeFile {
+		if !modulesEnabled || features.SkipQueryCheckForModule[q.Type()] {
 			return nil
 		}
 

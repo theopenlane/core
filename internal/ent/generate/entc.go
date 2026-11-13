@@ -395,7 +395,7 @@ func runParallelPostGenHooks(g *gen.Graph) {
 	wg.Go(func() {
 		log.Info().Msg("generating module per schema for entitlements")
 
-		if err := genfeatures.GenerateModulePerSchema(schemaPath, featureMapDir); err != nil {
+		if err := genfeatures.GenerateModulePerSchema(schemaPath, featureMapDir, g); err != nil {
 			log.Fatal().Err(err).Msg("generating module per schema")
 		}
 	})

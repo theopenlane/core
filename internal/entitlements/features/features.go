@@ -95,3 +95,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"WorkflowObjectRef":           {models.CatalogWorkflowAddon},
 	"WorkflowProposal":            {models.CatalogWorkflowAddon},
 }
+
+var SkipQueryCheckForModule = map[string]bool{
+	"File": true,
+}

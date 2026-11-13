@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/md5" // #nosec G501 -- not used for security
 	"encoding/hex"
-	"errors"
 	"io"
 	"path"
 	"strings"
@@ -16,9 +15,6 @@ import (
 
 	"github.com/theopenlane/logx"
 
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/internal/objects/store"
 	"github.com/theopenlane/core/v2/pkg/metrics"
@@ -30,13 +26,6 @@ import (
 func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects.File) (context.Context, []pkgobjects.File, error) {
 	if len(files) == 0 {
 		return ctx, nil, nil
-	}
-
-	m := utils.EntClientFromContext(ctx).File.Create().Mutation()
-
-	err := rule.DenyIfMissingAllModules().EvalMutation(ctx, m)
-	if err != nil && !errors.Is(err, privacy.Skip) {
-		return ctx, nil, err
 	}
 
 	var uploadedFiles []pkgobjects.File
