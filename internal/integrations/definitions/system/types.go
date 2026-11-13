@@ -31,14 +31,14 @@ const (
 	IntegrationLifecycleMinInterval = 6 * time.Hour
 	// IntegrationLifecycleMaxInterval is the maximum polling interval for integration lifecycle sweeps
 	IntegrationLifecycleMaxInterval = 24 * time.Hour
-	// DefaultFileOrphanMaxPerRun is the default orphaned files deleted per sweep
-	DefaultFileOrphanMaxPerRun = 500
+	// defaultFileOrphanMaxPerRun is the default orphaned files deleted per sweep
+	defaultFileOrphanMaxPerRun = 500
 	// FileOrphanMinAge keeps uploads not yet attached to a parent out of the sweep
 	FileOrphanMinAge = 7 * 24 * time.Hour
-	// FileOrphanMinInterval is the minimum file orphan sweep interval
-	FileOrphanMinInterval = 6 * time.Hour
-	// FileOrphanMaxInterval is the maximum file orphan sweep interval
-	FileOrphanMaxInterval = 24 * time.Hour
+	// fileOrphanMinInterval is the minimum file orphan sweep interval
+	fileOrphanMinInterval = 6 * time.Hour
+	// fileOrphanMaxInterval is the maximum file orphan sweep interval
+	fileOrphanMaxInterval = 24 * time.Hour
 	// fileOrphanPageSize is the file records classified per query
 	fileOrphanPageSize = 200
 )
@@ -167,7 +167,7 @@ var (
 	// FileOrphanOp is the operation ref for the file orphan sweep
 	FileOrphanOp = types.OperationPayloadOf[FileOrphanSweep]().
 			Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).
-			Schedule(&gala.Schedule{MinInterval: FileOrphanMinInterval, MaxInterval: FileOrphanMaxInterval}).
+			Schedule(&gala.Schedule{MinInterval: fileOrphanMinInterval, MaxInterval: fileOrphanMaxInterval}).
 			CustomerSelectable(false).
 			SkipDefaultLookback()
 )

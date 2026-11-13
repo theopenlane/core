@@ -323,6 +323,8 @@ func ReaderToSeeker(r io.Reader) (io.ReadSeeker, error) {
 	// read one byte past the in-memory limit to learn whether the rest has to spool to disk
 	head, err := io.ReadAll(io.LimitReader(r, MaxInMemorySize+1))
 	if err != nil {
+		log.Error().Err(err).Msg("failed to read upload data")
+
 		return nil, ErrFailedToReadData
 	}
 

@@ -18,7 +18,7 @@ import (
 // included, or logs them under dry run, and returns the count
 func (s FileOrphanSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
 	if s.MaxPerRun <= 0 {
-		s.MaxPerRun = DefaultFileOrphanMaxPerRun
+		s.MaxPerRun = defaultFileOrphanMaxPerRun
 	}
 
 	systemCtx := entx.SkipSoftDelete(auth.WithSystemSweepContext(ctx))
