@@ -2613,7 +2613,7 @@ tests:
           can_delete: false
   - name: integration_webhook
     description: integration webhooks are only visible to integration managers
-    tuple_file: tuples/integration_webhooks.yaml
+    tuple_file: tests/tuples/integration_webhooks.yaml
     check:
       - user: user:ulid-of-owner
         object: integration_webhook:webhook-1
