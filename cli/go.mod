@@ -17,7 +17,7 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core/common v1.2.3
-	github.com/theopenlane/core/v2 v2.14.3
+	github.com/theopenlane/core/v2 v2.17.0
 	github.com/theopenlane/go-client v0.17.0
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.42.0
@@ -57,7 +57,6 @@ require (
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jwx-go/jwkfetch/v4 v4.0.4 // indirect
-	github.com/klauspost/cpuid/v2 v2.4.2 // indirect
 	github.com/knadh/koanf/maps v0.1.3 // indirect
 	github.com/labstack/echo/v5 v5.4.5 // indirect
 	github.com/labstack/gommon v0.5.0 // indirect
@@ -100,7 +99,6 @@ require (
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
-	github.com/yuin/gopher-lua v1.1.2 // indirect
 	github.com/zalando/go-keyring v0.2.8 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/otel v1.47.0 // indirect
