@@ -129,6 +129,10 @@ type Subcontrol struct {
 	SubcontrolKindName string `json:"subcontrol_kind_name,omitempty"`
 	// the kind of the subcontrol
 	SubcontrolKindID string `json:"subcontrol_kind_id,omitempty"`
+	// the control_origin of the subcontrol
+	ControlOriginName string `json:"control_origin_name,omitempty"`
+	// the control_origin of the subcontrol
+	ControlOriginID string `json:"control_origin_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	// the unique reference code for the control
@@ -184,6 +188,8 @@ type SubcontrolEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// SubcontrolKind holds the value of the subcontrol_kind edge.
 	SubcontrolKind *CustomTypeEnum `json:"subcontrol_kind,omitempty"`
+	// ControlOrigin holds the value of the control_origin edge.
+	ControlOrigin *CustomTypeEnum `json:"control_origin,omitempty"`
 	// Control holds the value of the control edge.
 	Control *Control `json:"control,omitempty"`
 	// the implementation(s) of the subcontrol
@@ -206,9 +212,9 @@ type SubcontrolEdges struct {
 	Findings []*Finding `json:"findings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [29]bool
+	loadedTypes [30]bool
 	// totalCount holds the count of the edges above.
-	totalCount [27]map[string]int
+	totalCount [28]map[string]int
 
 	namedIntegrationRuns        map[string][]*IntegrationRun
 	namedEvidence               map[string][]*Evidence
@@ -416,12 +422,23 @@ func (e SubcontrolEdges) SubcontrolKindOrErr() (*CustomTypeEnum, error) {
 	return nil, &NotLoadedError{edge: "subcontrol_kind"}
 }
 
+// ControlOriginOrErr returns the ControlOrigin value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) ControlOriginOrErr() (*CustomTypeEnum, error) {
+	if e.ControlOrigin != nil {
+		return e.ControlOrigin, nil
+	} else if e.loadedTypes[19] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "control_origin"}
+}
+
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e SubcontrolEdges) ControlOrErr() (*Control, error) {
 	if e.Control != nil {
 		return e.Control, nil
-	} else if e.loadedTypes[19] {
+	} else if e.loadedTypes[20] {
 		return nil, &NotFoundError{label: control.Label}
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -430,7 +447,7 @@ func (e SubcontrolEdges) ControlOrErr() (*Control, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -439,7 +456,7 @@ func (e SubcontrolEdges) ControlImplementationsOrErr() ([]*ControlImplementation
 // MappedToSubcontrolsOrErr returns the MappedToSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) MappedToSubcontrolsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.MappedToSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_subcontrols"}
@@ -448,7 +465,7 @@ func (e SubcontrolEdges) MappedToSubcontrolsOrErr() ([]*MappedControl, error) {
 // MappedFromSubcontrolsOrErr returns the MappedFromSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) MappedFromSubcontrolsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.MappedFromSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_subcontrols"}
@@ -457,7 +474,7 @@ func (e SubcontrolEdges) MappedFromSubcontrolsOrErr() ([]*MappedControl, error) 
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -466,7 +483,7 @@ func (e SubcontrolEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error)
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -475,7 +492,7 @@ func (e SubcontrolEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -484,7 +501,7 @@ func (e SubcontrolEdges) EntitiesOrErr() ([]*Entity, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -493,7 +510,7 @@ func (e SubcontrolEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[28] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -502,7 +519,7 @@ func (e SubcontrolEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[29] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -517,7 +534,7 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subcontrol.FieldSystemOwned, subcontrol.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldUpdatedByImpersonator, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldSourceDefinitionID, subcontrol.FieldSourceDefinitionVersion, subcontrol.FieldSourceInstanceID, subcontrol.FieldManagedBy, subcontrol.FieldIntegrationRunID, subcontrol.FieldSourceKey, subcontrol.FieldExternalID, subcontrol.FieldExternalUUID, subcontrol.FieldTitle, subcontrol.FieldDescription, subcontrol.FieldReferenceID, subcontrol.FieldAuditorReferenceID, subcontrol.FieldResponsiblePartyID, subcontrol.FieldStatus, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationDescription, subcontrol.FieldPublicRepresentation, subcontrol.FieldSource, subcontrol.FieldSourceName, subcontrol.FieldReferenceFramework, subcontrol.FieldReferenceFrameworkRevision, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlOwnerID, subcontrol.FieldDelegateID, subcontrol.FieldOwnerID, subcontrol.FieldInternalNotes, subcontrol.FieldSystemInternalID, subcontrol.FieldSubcontrolKindName, subcontrol.FieldSubcontrolKindID, subcontrol.FieldRefCode, subcontrol.FieldControlID:
+		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldUpdatedByImpersonator, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldSourceDefinitionID, subcontrol.FieldSourceDefinitionVersion, subcontrol.FieldSourceInstanceID, subcontrol.FieldManagedBy, subcontrol.FieldIntegrationRunID, subcontrol.FieldSourceKey, subcontrol.FieldExternalID, subcontrol.FieldExternalUUID, subcontrol.FieldTitle, subcontrol.FieldDescription, subcontrol.FieldReferenceID, subcontrol.FieldAuditorReferenceID, subcontrol.FieldResponsiblePartyID, subcontrol.FieldStatus, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationDescription, subcontrol.FieldPublicRepresentation, subcontrol.FieldSource, subcontrol.FieldSourceName, subcontrol.FieldReferenceFramework, subcontrol.FieldReferenceFrameworkRevision, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlOwnerID, subcontrol.FieldDelegateID, subcontrol.FieldOwnerID, subcontrol.FieldInternalNotes, subcontrol.FieldSystemInternalID, subcontrol.FieldSubcontrolKindName, subcontrol.FieldSubcontrolKindID, subcontrol.FieldControlOriginName, subcontrol.FieldControlOriginID, subcontrol.FieldRefCode, subcontrol.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -892,6 +909,18 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SubcontrolKindID = value.String
 			}
+		case subcontrol.FieldControlOriginName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_origin_name", values[i])
+			} else if value.Valid {
+				_m.ControlOriginName = value.String
+			}
+		case subcontrol.FieldControlOriginID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_origin_id", values[i])
+			} else if value.Valid {
+				_m.ControlOriginID = value.String
+			}
 		case subcontrol.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
@@ -1037,6 +1066,11 @@ func (_m *Subcontrol) QueryOwner() *OrganizationQuery {
 // QuerySubcontrolKind queries the "subcontrol_kind" edge of the Subcontrol entity.
 func (_m *Subcontrol) QuerySubcontrolKind() *CustomTypeEnumQuery {
 	return NewSubcontrolClient(_m.config).QuerySubcontrolKind(_m)
+}
+
+// QueryControlOrigin queries the "control_origin" edge of the Subcontrol entity.
+func (_m *Subcontrol) QueryControlOrigin() *CustomTypeEnumQuery {
+	return NewSubcontrolClient(_m.config).QueryControlOrigin(_m)
 }
 
 // QueryControl queries the "control" edge of the Subcontrol entity.
@@ -1283,6 +1317,12 @@ func (_m *Subcontrol) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("subcontrol_kind_id=")
 	builder.WriteString(_m.SubcontrolKindID)
+	builder.WriteString(", ")
+	builder.WriteString("control_origin_name=")
+	builder.WriteString(_m.ControlOriginName)
+	builder.WriteString(", ")
+	builder.WriteString("control_origin_id=")
+	builder.WriteString(_m.ControlOriginID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))

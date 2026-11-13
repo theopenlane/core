@@ -18,6 +18,9 @@ import (
 // backfillBypassCaps are the capabilities backfill routines run with
 const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapSystemSweep | auth.CapInternalOperation | auth.CapBypassManagedGroup
 
+// backfillBatchSize is the size for each backfill operation
+const backfillBatchSize = 50
+
 // backfillRoutineTopicName is the topic suffix and key namespace for backfill routines
 const backfillRoutineTopicName = "startup.backfill.routine"
 
@@ -76,10 +79,10 @@ var backfillRoutines = []backfillRoutine{
 		},
 	},
 	{
-		Name:    "normalize-slugs",
+		Name:    "backfill-controls-origin",
 		Version: "v1",
 		Enabled: true,
-		Run:     backfillSlugs,
+		Run:     backfillOrigins,
 	},
 }
 

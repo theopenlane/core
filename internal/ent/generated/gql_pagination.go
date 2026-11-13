@@ -43037,6 +43037,7 @@ func (_q *ControlQuery) clonePage() *ControlQuery {
 		}
 	}
 	c.withControlKind = _q.withControlKind.clonePage()
+	c.withControlOrigin = _q.withControlOrigin.clonePage()
 	c.withEnvironment = _q.withEnvironment.clonePage()
 	c.withScope = _q.withScope.clonePage()
 	c.withStandard = _q.withStandard.clonePage()
@@ -48552,6 +48553,7 @@ func (_q *SubcontrolQuery) clonePage() *SubcontrolQuery {
 	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withSubcontrolKind = _q.withSubcontrolKind.clonePage()
+	c.withControlOrigin = _q.withControlOrigin.clonePage()
 	c.withControl = _q.withControl.clonePage()
 	c.withControlImplementations = _q.withControlImplementations.clonePage()
 	if _q.withNamedControlImplementations != nil {

@@ -3657,6 +3657,7 @@ type CreateControlInput struct {
 	InternalNotes              *string                             `json:"internal_notes,omitempty"`
 	SystemInternalID           *string                             `json:"system_internal_id,omitempty"`
 	ControlKindName            *string                             `json:"control_kind_name,omitempty"`
+	ControlOriginName          *string                             `json:"control_origin_name,omitempty"`
 	EnvironmentName            *string                             `json:"environment_name,omitempty"`
 	ScopeName                  *string                             `json:"scope_name,omitempty"`
 	WorkflowEligibleMarker     *bool                               `json:"workflow_eligible_marker,omitempty"`
@@ -3683,6 +3684,7 @@ type CreateControlInput struct {
 	BlockedGroupIDs            []string                            `json:"blocked_group_ids,omitempty"`
 	EditorIDs                  []string                            `json:"editor_ids,omitempty"`
 	ControlKindID              *string                             `json:"control_kind_id,omitempty"`
+	ControlOriginID            *string                             `json:"control_origin_id,omitempty"`
 	EnvironmentID              *string                             `json:"environment_id,omitempty"`
 	ScopeID                    *string                             `json:"scope_id,omitempty"`
 	StandardID                 *string                             `json:"standard_id,omitempty"`
@@ -3797,6 +3799,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ControlKindName; v != nil {
 		m.SetControlKindName(*v)
 	}
+	if v := i.ControlOriginName; v != nil {
+		m.SetControlOriginName(*v)
+	}
 	if v := i.EnvironmentName; v != nil {
 		m.SetEnvironmentName(*v)
 	}
@@ -3872,6 +3877,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.ControlKindID; v != nil {
 		m.SetControlKindID(*v)
+	}
+	if v := i.ControlOriginID; v != nil {
+		m.SetControlOriginID(*v)
 	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
@@ -3999,6 +4007,8 @@ type UpdateControlInput struct {
 	SystemInternalID                *string `json:"system_internal_id,omitempty"`
 	ClearControlKindName            bool
 	ControlKindName                 *string `json:"control_kind_name,omitempty"`
+	ClearControlOriginName          bool
+	ControlOriginName               *string `json:"control_origin_name,omitempty"`
 	ClearEnvironmentName            bool
 	EnvironmentName                 *string `json:"environment_name,omitempty"`
 	ClearScopeName                  bool
@@ -4064,6 +4074,8 @@ type UpdateControlInput struct {
 	RemoveEditorIDs                 []string `json:"remove_editor_ids,omitempty"`
 	ClearControlKind                bool
 	ControlKindID                   *string `json:"control_kind_id,omitempty"`
+	ClearControlOrigin              bool
+	ControlOriginID                 *string `json:"control_origin_id,omitempty"`
 	ClearEnvironment                bool
 	EnvironmentID                   *string `json:"environment_id,omitempty"`
 	ClearScope                      bool
@@ -4329,6 +4341,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ControlKindName; v != nil {
 		m.SetControlKindName(*v)
 	}
+	if i.ClearControlOriginName {
+		m.ClearControlOriginName()
+	}
+	if v := i.ControlOriginName; v != nil {
+		m.SetControlOriginName(*v)
+	}
 	if i.ClearEnvironmentName {
 		m.ClearEnvironmentName()
 	}
@@ -4523,6 +4541,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.ControlKindID; v != nil {
 		m.SetControlKindID(*v)
+	}
+	if i.ClearControlOrigin {
+		m.ClearControlOrigin()
+	}
+	if v := i.ControlOriginID; v != nil {
+		m.SetControlOriginID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -24553,6 +24577,7 @@ type CreateSubcontrolInput struct {
 	InternalNotes              *string                            `json:"internal_notes,omitempty"`
 	SystemInternalID           *string                            `json:"system_internal_id,omitempty"`
 	SubcontrolKindName         *string                            `json:"subcontrol_kind_name,omitempty"`
+	ControlOriginName          *string                            `json:"control_origin_name,omitempty"`
 	WorkflowEligibleMarker     *bool                              `json:"workflow_eligible_marker,omitempty"`
 	RefCode                    string                             `json:"ref_code,omitempty"`
 	IntegrationRunIDs          []string                           `json:"integration_run_ids,omitempty"`
@@ -24574,6 +24599,7 @@ type CreateSubcontrolInput struct {
 	ScanIDs                    []string                           `json:"scan_ids,omitempty"`
 	OwnerID                    *string                            `json:"owner_id,omitempty"`
 	SubcontrolKindID           *string                            `json:"subcontrol_kind_id,omitempty"`
+	ControlOriginID            *string                            `json:"control_origin_id,omitempty"`
 	ControlID                  string                             `json:"control_id,omitempty"`
 	ControlImplementationIDs   []string                           `json:"control_implementation_ids,omitempty"`
 	WorkflowObjectRefIDs       []string                           `json:"workflow_object_ref_ids,omitempty"`
@@ -24682,6 +24708,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.SubcontrolKindName; v != nil {
 		m.SetSubcontrolKindName(*v)
 	}
+	if v := i.ControlOriginName; v != nil {
+		m.SetControlOriginName(*v)
+	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
 	}
@@ -24742,6 +24771,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.SubcontrolKindID; v != nil {
 		m.SetSubcontrolKindID(*v)
+	}
+	if v := i.ControlOriginID; v != nil {
+		m.SetControlOriginID(*v)
 	}
 	m.SetControlID(i.ControlID)
 	if v := i.ControlImplementationIDs; len(v) > 0 {
@@ -24849,6 +24881,8 @@ type UpdateSubcontrolInput struct {
 	SystemInternalID                *string `json:"system_internal_id,omitempty"`
 	ClearSubcontrolKindName         bool
 	SubcontrolKindName              *string `json:"subcontrol_kind_name,omitempty"`
+	ClearControlOriginName          bool
+	ControlOriginName               *string `json:"control_origin_name,omitempty"`
 	ClearWorkflowEligibleMarker     bool
 	WorkflowEligibleMarker          *bool   `json:"workflow_eligible_marker,omitempty"`
 	RefCode                         *string `json:"ref_code,omitempty"`
@@ -24902,6 +24936,8 @@ type UpdateSubcontrolInput struct {
 	RemoveScanIDs                   []string `json:"remove_scan_ids,omitempty"`
 	ClearSubcontrolKind             bool
 	SubcontrolKindID                *string `json:"subcontrol_kind_id,omitempty"`
+	ClearControlOrigin              bool
+	ControlOriginID                 *string `json:"control_origin_id,omitempty"`
 	ControlID                       *string `json:"control_id,omitempty"`
 	ClearControlImplementations     bool
 	AddControlImplementationIDs     []string `json:"add_control_implementation_ids,omitempty"`
@@ -25150,6 +25186,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.SubcontrolKindName; v != nil {
 		m.SetSubcontrolKindName(*v)
 	}
+	if i.ClearControlOriginName {
+		m.ClearControlOriginName()
+	}
+	if v := i.ControlOriginName; v != nil {
+		m.SetControlOriginName(*v)
+	}
 	if i.ClearWorkflowEligibleMarker {
 		m.ClearWorkflowEligibleMarker()
 	}
@@ -25308,6 +25350,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.SubcontrolKindID; v != nil {
 		m.SetSubcontrolKindID(*v)
+	}
+	if i.ClearControlOrigin {
+		m.ClearControlOrigin()
+	}
+	if v := i.ControlOriginID; v != nil {
+		m.SetControlOriginID(*v)
 	}
 	if v := i.ControlID; v != nil {
 		m.SetControlID(*v)

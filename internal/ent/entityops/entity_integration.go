@@ -495,6 +495,10 @@ var ControlFields = struct {
 	ControlKindID FieldDescriptor
 	// ControlKindName is the control_kind_name field
 	ControlKindName FieldDescriptor
+	// ControlOriginID is the control_origin_id field
+	ControlOriginID FieldDescriptor
+	// ControlOriginName is the control_origin_name field
+	ControlOriginName FieldDescriptor
 	// ControlOwnerID is the control_owner_id field
 	ControlOwnerID FieldDescriptor
 	// ControlQuestions is the control_questions field
@@ -572,6 +576,8 @@ var ControlFields = struct {
 	CategoryID:                 FieldDescriptor{Name: "category_id", Label: "CategoryID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category_id", Clearable: true},
 	ControlKindID:              FieldDescriptor{Name: "control_kind_id", Label: "ControlKindID", Type: "string", MatchKey: true, InputKey: "control_kind_id", Clearable: true},
 	ControlKindName:            FieldDescriptor{Name: "control_kind_name", Label: "ControlKindName", Type: "string", MatchKey: true, InputKey: "control_kind_name", Clearable: true, CaseInsensitive: true},
+	ControlOriginID:            FieldDescriptor{Name: "control_origin_id", Label: "ControlOriginID", Type: "string", MatchKey: true, InputKey: "control_origin_id", Clearable: true},
+	ControlOriginName:          FieldDescriptor{Name: "control_origin_name", Label: "ControlOriginName", Type: "string", MatchKey: true, InputKey: "control_origin_name", Clearable: true, CaseInsensitive: true},
 	ControlOwnerID:             FieldDescriptor{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "control_owner_id", Clearable: true},
 	ControlQuestions:           FieldDescriptor{Name: "control_questions", Label: "ControlQuestions", Type: "[]string", InputKey: "control_questions", Clearable: true},
 	DelegateID:                 FieldDescriptor{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
@@ -2390,6 +2396,10 @@ var SubcontrolFields = struct {
 	CategoryID FieldDescriptor
 	// ControlID is the control_id field
 	ControlID FieldDescriptor
+	// ControlOriginID is the control_origin_id field
+	ControlOriginID FieldDescriptor
+	// ControlOriginName is the control_origin_name field
+	ControlOriginName FieldDescriptor
 	// ControlOwnerID is the control_owner_id field
 	ControlOwnerID FieldDescriptor
 	// ControlQuestions is the control_questions field
@@ -2458,6 +2468,8 @@ var SubcontrolFields = struct {
 	Category:                   FieldDescriptor{Name: "category", Label: "Category", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category", Clearable: true},
 	CategoryID:                 FieldDescriptor{Name: "category_id", Label: "CategoryID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category_id", Clearable: true},
 	ControlID:                  FieldDescriptor{Name: "control_id", Label: "ControlID", Type: "string", MatchKey: true, InputKey: "control_id"},
+	ControlOriginID:            FieldDescriptor{Name: "control_origin_id", Label: "ControlOriginID", Type: "string", MatchKey: true, InputKey: "control_origin_id", Clearable: true},
+	ControlOriginName:          FieldDescriptor{Name: "control_origin_name", Label: "ControlOriginName", Type: "string", MatchKey: true, InputKey: "control_origin_name", Clearable: true, CaseInsensitive: true},
 	ControlOwnerID:             FieldDescriptor{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "control_owner_id", Clearable: true},
 	ControlQuestions:           FieldDescriptor{Name: "control_questions", Label: "ControlQuestions", Type: "[]string", InputKey: "control_questions", Clearable: true},
 	DelegateID:                 FieldDescriptor{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},

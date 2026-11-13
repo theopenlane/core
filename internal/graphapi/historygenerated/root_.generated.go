@@ -460,6 +460,8 @@ type ComplexityRoot struct {
 		CategoryID                 func(childComplexity int) int
 		ControlKindID              func(childComplexity int) int
 		ControlKindName            func(childComplexity int) int
+		ControlOriginID            func(childComplexity int) int
+		ControlOriginName          func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
 		CreatedAt                  func(childComplexity int) int
@@ -2390,6 +2392,8 @@ type ComplexityRoot struct {
 		Category                   func(childComplexity int) int
 		CategoryID                 func(childComplexity int) int
 		ControlID                  func(childComplexity int) int
+		ControlOriginID            func(childComplexity int) int
+		ControlOriginName          func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
 		CreatedAt                  func(childComplexity int) int
@@ -5439,6 +5443,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlHistory.ControlKindName(childComplexity), true
+	case "ControlHistory.controlOriginID":
+		if e.ComplexityRoot.ControlHistory.ControlOriginID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.ControlOriginID(childComplexity), true
+	case "ControlHistory.controlOriginName":
+		if e.ComplexityRoot.ControlHistory.ControlOriginName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.ControlOriginName(childComplexity), true
 	case "ControlHistory.controlOwnerID":
 		if e.ComplexityRoot.ControlHistory.ControlOwnerID == nil {
 			break
@@ -15306,6 +15322,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.ControlID(childComplexity), true
+	case "SubcontrolHistory.controlOriginID":
+		if e.ComplexityRoot.SubcontrolHistory.ControlOriginID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.ControlOriginID(childComplexity), true
+	case "SubcontrolHistory.controlOriginName":
+		if e.ComplexityRoot.SubcontrolHistory.ControlOriginName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.ControlOriginName(childComplexity), true
 	case "SubcontrolHistory.controlOwnerID":
 		if e.ComplexityRoot.SubcontrolHistory.ControlOwnerID == nil {
 			break
@@ -22814,7 +22842,7 @@ type ControlHistory implements Node {
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -22903,6 +22931,14 @@ type ControlHistory implements Node {
   the kind of the control
   """
   controlKindID: String
+  """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  """
+  the control_origin of the control
+  """
+  controlOriginID: String
   """
   the environment of the control
   """
@@ -37244,7 +37280,7 @@ type SubcontrolHistory implements Node {
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -37333,6 +37369,14 @@ type SubcontrolHistory implements Node {
   the kind of the subcontrol
   """
   subcontrolKindID: String
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginID: String
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -44194,6 +44238,10 @@ func (ec *executionContext) childFields_ControlHistory(ctx context.Context, fiel
 		return ec.fieldContext_ControlHistory_controlKindName(ctx, field)
 	case "controlKindID":
 		return ec.fieldContext_ControlHistory_controlKindID(ctx, field)
+	case "controlOriginName":
+		return ec.fieldContext_ControlHistory_controlOriginName(ctx, field)
+	case "controlOriginID":
+		return ec.fieldContext_ControlHistory_controlOriginID(ctx, field)
 	case "environmentName":
 		return ec.fieldContext_ControlHistory_environmentName(ctx, field)
 	case "environmentID":
@@ -47906,6 +47954,10 @@ func (ec *executionContext) childFields_SubcontrolHistory(ctx context.Context, f
 		return ec.fieldContext_SubcontrolHistory_subcontrolKindName(ctx, field)
 	case "subcontrolKindID":
 		return ec.fieldContext_SubcontrolHistory_subcontrolKindID(ctx, field)
+	case "controlOriginName":
+		return ec.fieldContext_SubcontrolHistory_controlOriginName(ctx, field)
+	case "controlOriginID":
+		return ec.fieldContext_SubcontrolHistory_controlOriginID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_SubcontrolHistory_workflowEligibleMarker(ctx, field)
 	case "refCode":

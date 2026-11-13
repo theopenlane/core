@@ -757,6 +757,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "control_origin": {
+	ObjectType:          "custom_type_enum",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 }, "environment": {
 	ObjectType:          "custom_type_enum",
 	SkipEditCheck:       true,
@@ -5351,6 +5356,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "subcontrol_kind": {
+	ObjectType:          "custom_type_enum",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "control_origin": {
 	ObjectType:          "custom_type_enum",
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
