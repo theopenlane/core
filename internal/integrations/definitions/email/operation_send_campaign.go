@@ -326,3 +326,15 @@ func formatCampaignDueDate(d *models.DateTime) string {
 
 	return time.Time(*d).Format("January 2, 2006")
 }
+
+// ValidateCampaignTemplateKey reports whether an email template key may be linked to a campaign of the given type
+// questionnaire campaigns only accept the questionnaire access template, and other campaigns never accept it
+func ValidateCampaignTemplateKey(campaignType enums.CampaignType, key string) error {
+	isQuestionnaireKey := key == QuestionnaireAccessOp.Name()
+
+	if (campaignType == enums.CampaignTypeQuestionnaire) != isQuestionnaireKey {
+		return fmt.Errorf("%w: %s template cannot be used for a %s campaign", ErrCampaignTemplateKeyMismatch, key, campaignType)
+	}
+
+	return nil
+}

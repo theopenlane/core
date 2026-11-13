@@ -3,27 +3,24 @@ package email
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"testing"
 
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
-
-	"github.com/theopenlane/core/common/enums"
 )
 
-const questionnaireInvitationKey = "QuestionnaireInvitationRequest"
+const questionnaireAccessKey = "QuestionnaireAccessRequest"
 
-func TestQuestionnaireInvitationCustomerSelectable(t *testing.T) {
-	d, ok := DispatcherByKey(questionnaireInvitationKey)
+func TestQuestionnaireAccessCustomerSelectable(t *testing.T) {
+	d, ok := DispatcherByKey(questionnaireAccessKey)
 	assert.Assert(t, ok)
 
 	cs := d.Registration().CustomerSelectable
 	assert.Check(t, cs != nil && *cs)
 }
 
-func TestQuestionnaireInvitationTemplateVariables(t *testing.T) {
-	d, ok := DispatcherByKey(questionnaireInvitationKey)
+func TestQuestionnaireAccessTemplateVariables(t *testing.T) {
+	d, ok := DispatcherByKey(questionnaireAccessKey)
 	assert.Assert(t, ok)
 
 	names := make(map[string]struct{})
@@ -40,8 +37,8 @@ func TestQuestionnaireInvitationTemplateVariables(t *testing.T) {
 	assert.Check(t, is.Len(branded.TemplateVariables(), 0))
 }
 
-func TestQuestionnaireInvitationConfigSchemaScoping(t *testing.T) {
-	d, ok := DispatcherByKey(questionnaireInvitationKey)
+func TestQuestionnaireAccessConfigSchemaScoping(t *testing.T) {
+	d, ok := DispatcherByKey(questionnaireAccessKey)
 	assert.Assert(t, ok)
 
 	var schema map[string]any
@@ -50,7 +47,7 @@ func TestQuestionnaireInvitationConfigSchemaScoping(t *testing.T) {
 	defs, ok := schema["$defs"].(map[string]any)
 	assert.Assert(t, ok)
 
-	entry, ok := defs[questionnaireInvitationKey].(map[string]any)
+	entry, ok := defs[questionnaireAccessKey].(map[string]any)
 	assert.Assert(t, ok)
 
 	props, ok := entry["properties"].(map[string]any)
@@ -67,12 +64,12 @@ func TestQuestionnaireInvitationConfigSchemaScoping(t *testing.T) {
 
 	for _, excluded := range []string{"buttonLink", "companyName", "social", "unsubscribeURL"} {
 		_, found := props[excluded]
-		assert.Check(t, !found, "field %q should not be authorable on the questionnaire invitation", excluded)
+		assert.Check(t, !found, "field %q should not be authorable on the questionnaire access email", excluded)
 	}
 }
 
-func TestQuestionnaireInvitationPreviewExample(t *testing.T) {
-	d, ok := DispatcherByKey(questionnaireInvitationKey)
+func TestQuestionnaireAccessPreviewExample(t *testing.T) {
+	d, ok := DispatcherByKey(questionnaireAccessKey)
 	assert.Assert(t, ok)
 
 	html, err := RenderCatalogPreview(context.Background(), &Client{Config: *MockRuntimeConfig()}, d, nil)
@@ -83,11 +80,11 @@ func TestQuestionnaireInvitationPreviewExample(t *testing.T) {
 	assert.Check(t, is.Contains(html, "https://example.com/questionnaire"))
 }
 
-func TestQuestionnaireInvitationRenderUsesAuthoredContent(t *testing.T) {
-	d, ok := DispatcherByKey(questionnaireInvitationKey)
+func TestQuestionnaireAccessRenderUsesAuthoredContent(t *testing.T) {
+	d, ok := DispatcherByKey(questionnaireAccessKey)
 	assert.Assert(t, ok)
 
-	payload, err := json.Marshal(QuestionnaireInvitationRequest{
+	payload, err := json.Marshal(QuestionnaireAccessRequest{
 		QuestionnaireAuthEmail: QuestionnaireAuthEmail{
 			RecipientInfo:  RecipientInfo{Email: "vendor@example.com", FirstName: "Sam"},
 			OrgName:        "Acme",
@@ -145,26 +142,4 @@ func TestQuestionnaireBodyAppliesHeaderLogoOverride(t *testing.T) {
 
 	assert.Assert(t, body.Header.Logo != nil)
 	assert.Check(t, is.Equal("https://acme.com/icon.png", body.Header.Logo.Src))
-}
-
-func TestValidateCampaignTemplateKey(t *testing.T) {
-	testCases := []struct {
-		name         string
-		campaignType enums.CampaignType
-		key          string
-		wantErr      bool
-	}{
-		{name: "questionnaire campaign with invitation template", campaignType: enums.CampaignTypeQuestionnaire, key: questionnaireInvitationKey},
-		{name: "questionnaire campaign with branded template", campaignType: enums.CampaignTypeQuestionnaire, key: brandedMessageKey, wantErr: true},
-		{name: "custom campaign with branded template", campaignType: enums.CampaignTypeCustom, key: brandedMessageKey},
-		{name: "custom campaign with invitation template", campaignType: enums.CampaignTypeCustom, key: questionnaireInvitationKey, wantErr: true},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			err := ValidateCampaignTemplateKey(tc.campaignType, tc.key)
-
-			assert.Check(t, is.Equal(tc.wantErr, errors.Is(err, ErrCampaignTemplateKeyMismatch)))
-		})
-	}
 }

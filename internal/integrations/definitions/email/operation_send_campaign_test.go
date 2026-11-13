@@ -2,11 +2,13 @@ package email
 
 import (
 	"encoding/json"
+	"errors"
 	"testing"
 
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 )
 
@@ -91,4 +93,26 @@ func TestSplitFullName_Unicode(t *testing.T) {
 
 	assert.Check(t, is.Equal("José", first))
 	assert.Check(t, is.Equal("García", last))
+}
+
+func TestValidateCampaignTemplateKey(t *testing.T) {
+	testCases := []struct {
+		name         string
+		campaignType enums.CampaignType
+		key          string
+		wantErr      bool
+	}{
+		{name: "questionnaire campaign with access template", campaignType: enums.CampaignTypeQuestionnaire, key: questionnaireAccessKey},
+		{name: "questionnaire campaign with branded template", campaignType: enums.CampaignTypeQuestionnaire, key: brandedMessageKey, wantErr: true},
+		{name: "custom campaign with branded template", campaignType: enums.CampaignTypeCustom, key: brandedMessageKey},
+		{name: "custom campaign with access template", campaignType: enums.CampaignTypeCustom, key: questionnaireAccessKey, wantErr: true},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := ValidateCampaignTemplateKey(tc.campaignType, tc.key)
+
+			assert.Check(t, is.Equal(tc.wantErr, errors.Is(err, ErrCampaignTemplateKeyMismatch)))
+		})
+	}
 }
