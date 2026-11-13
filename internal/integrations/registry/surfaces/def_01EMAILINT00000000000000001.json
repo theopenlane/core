@@ -1,6 +1,6 @@
 {
-  "hash": "3b649480944467be65124ece8f261b0ed564c16ff0a4a1416afacbc1c65c352d",
-  "version": "01M4V1VGWH897QF5VPFV8A3MPG",
+  "hash": "a3bfec98f89f7a46204574dc33c2989bbb8070d0a30ff69f553fa0d94b11babb",
+  "version": "01M7BHWMEXFNB4V37Y63FWN9R6",
   "surface": {
     "id": "def_01EMAILINT00000000000000001",
     "credentials": [
@@ -149,6 +149,9 @@
       },
       {
         "name": "PasswordResetSuccessRequest"
+      },
+      {
+        "name": "QuestionnaireAccessRequest"
       },
       {
         "name": "QuestionnaireAuthEmail"

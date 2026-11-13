@@ -429,6 +429,24 @@ func TestQuestionnaireAuthContent(t *testing.T) {
 	assert.Check(t, is.Contains(body.Intros.Paragraphs[0], "SOC2 Review"))
 }
 
+func TestQuestionnaireAuthSchemaKeepsSystemFields(t *testing.T) {
+	var schema map[string]any
+	assert.Check(t, json.Unmarshal(QuestionnaireAuthOp.Schema(), &schema))
+
+	defs, ok := schema["$defs"].(map[string]any)
+	assert.Assert(t, ok)
+
+	entry, ok := defs["QuestionnaireAuthEmail"].(map[string]any)
+	assert.Assert(t, ok)
+
+	props, ok := entry["properties"].(map[string]any)
+	assert.Assert(t, ok)
+
+	for _, field := range []string{"email", "tags", "org_name", "assessment_name", "auth_url"} {
+		assert.Check(t, is.Contains(props, field))
+	}
+}
+
 // TestQuestionnaireFromOverride verifies the from address override when configured
 func TestQuestionnaireFromOverride(t *testing.T) {
 	cfg := RuntimeEmailConfig{
