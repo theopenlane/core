@@ -173,7 +173,7 @@ func TestUnmatchedRouteLimiterKeysOnCFConnectingIPWithRemoteAddrFallback(t *test
 		req.RemoteAddr = remoteAddr
 
 		if cfIP != "" {
-			req.Header.Set("CF-Connecting-IP", cfIP)
+			req.Header.Set(clientip.HeaderCFConnectingIP, cfIP)
 		}
 
 		rec := httptest.NewRecorder()

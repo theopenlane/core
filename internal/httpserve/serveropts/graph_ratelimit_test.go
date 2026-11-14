@@ -45,7 +45,7 @@ func TestGraphRateLimitConfig(t *testing.T) {
 		t.Fatalf("unexpected graph rate limit window: %+v", cfg.Options)
 	}
 
-	if len(cfg.Headers) != 3 || cfg.Headers[0] != "CF-Connecting-IP" || cfg.Headers[1] != "True-Client-IP" || cfg.Headers[2] != "RemoteAddr" {
+	if len(cfg.Headers) != 3 || cfg.Headers[0] != clientip.HeaderCFConnectingIP || cfg.Headers[1] != clientip.HeaderTrueClientIP || cfg.Headers[2] != clientip.SourceRemoteAddr {
 		t.Fatalf("expected CF-Connecting-IP and True-Client-IP preferred with RemoteAddr fallback, got %v", cfg.Headers)
 	}
 }
@@ -91,7 +91,7 @@ func TestWithGraphRateLimiterEnforcesAheadOfGraphMiddleware(t *testing.T) {
 		req.RemoteAddr = fmt.Sprintf("203.0.113.%d:5000", i%250)
 
 		if cfIP != "" {
-			req.Header.Set("CF-Connecting-IP", cfIP)
+			req.Header.Set(clientip.HeaderCFConnectingIP, cfIP)
 		}
 
 		rec := httptest.NewRecorder()

@@ -28,7 +28,7 @@ func TestExtractor(t *testing.T) {
 			headers: map[string]string{
 				clientip.ForwarderSecretHeader:   secret,
 				clientip.ForwardedClientIPHeader: "203.0.113.7",
-				"CF-Connecting-IP":               "198.51.100.1",
+				clientip.HeaderCFConnectingIP:    "198.51.100.1",
 			},
 			expected: "203.0.113.7",
 		},
@@ -38,7 +38,7 @@ func TestExtractor(t *testing.T) {
 			headers: map[string]string{
 				clientip.ForwarderSecretHeader:   "nope",
 				clientip.ForwardedClientIPHeader: "203.0.113.7",
-				"CF-Connecting-IP":               "198.51.100.1",
+				clientip.HeaderCFConnectingIP:    "198.51.100.1",
 			},
 			expected: "198.51.100.1",
 		},
@@ -48,7 +48,7 @@ func TestExtractor(t *testing.T) {
 			headers: map[string]string{
 				clientip.ForwarderSecretHeader:   "",
 				clientip.ForwardedClientIPHeader: "203.0.113.7",
-				"CF-Connecting-IP":               "198.51.100.1",
+				clientip.HeaderCFConnectingIP:    "198.51.100.1",
 			},
 			expected: "198.51.100.1",
 		},
@@ -58,7 +58,7 @@ func TestExtractor(t *testing.T) {
 			headers: map[string]string{
 				clientip.ForwarderSecretHeader:   secret,
 				clientip.ForwardedClientIPHeader: "not-an-ip",
-				"CF-Connecting-IP":               "198.51.100.1",
+				clientip.HeaderCFConnectingIP:    "198.51.100.1",
 			},
 			expected: "198.51.100.1",
 		},
@@ -74,7 +74,7 @@ func TestExtractor(t *testing.T) {
 			name: "true-client-ip used when cloudflare header absent",
 			opts: clientip.Options{},
 			headers: map[string]string{
-				"True-Client-IP": "198.51.100.9",
+				clientip.HeaderTrueClientIP: "198.51.100.9",
 			},
 			expected: "198.51.100.9",
 		},
@@ -94,7 +94,7 @@ func TestExtractor(t *testing.T) {
 		},
 		{
 			name:     "configured headers without remoteaddr still fall back to the socket peer",
-			opts:     clientip.Options{Headers: []string{"CF-Connecting-IP"}},
+			opts:     clientip.Options{Headers: []string{clientip.HeaderCFConnectingIP}},
 			headers:  map[string]string{},
 			expected: "192.0.2.1",
 		},

@@ -15,15 +15,17 @@ const (
 	// ForwarderSecretHeader carries the shared secret a trusted forwarding proxy presents
 	ForwarderSecretHeader = "X-Openlane-Forwarder-Secret" //nolint:gosec // header name, not a credential
 
-	// remoteAddrSource names the socket peer as an entry in a header precedence list
-	remoteAddrSource = "remoteaddr"
-	// forwardedForSource names X-Forwarded-For as an entry in a header precedence list
-	forwardedForSource = "x-forwarded-for"
+	// HeaderCFConnectingIP is the visitor IP header Cloudflare sets on every proxied request
+	HeaderCFConnectingIP = "CF-Connecting-IP"
+	// HeaderTrueClientIP is the visitor IP header Cloudflare sets when True-Client-IP is enabled (Enterprise)
+	HeaderTrueClientIP = "True-Client-IP"
+	// SourceRemoteAddr names the socket peer as an entry in a header precedence list
+	SourceRemoteAddr = "RemoteAddr"
 )
 
 // DefaultHeaders is the header precedence used to derive the originating client IP
 // prefers CF-Connecting-IP, then True-Client-IP, falls back to the RemoteAddr
-var DefaultHeaders = []string{"CF-Connecting-IP", "True-Client-IP", "RemoteAddr"}
+var DefaultHeaders = []string{HeaderCFConnectingIP, HeaderTrueClientIP, SourceRemoteAddr}
 
 // Options controls how the client IP is resolved
 type Options struct {
@@ -68,8 +70,8 @@ func Resolve(req *http.Request, opts Options) string {
 	}
 
 	for _, header := range headers {
-		switch strings.ToLower(header) {
-		case remoteAddrSource:
+		switch {
+		case strings.EqualFold(header, SourceRemoteAddr):
 			if req.RemoteAddr == "" {
 				continue
 			}
@@ -80,7 +82,7 @@ func Resolve(req *http.Request, opts Options) string {
 			}
 
 			return ip
-		case forwardedForSource:
+		case strings.EqualFold(header, echo.HeaderXForwardedFor):
 			forwarded := req.Header.Get(echo.HeaderXForwardedFor)
 			if forwarded == "" {
 				continue

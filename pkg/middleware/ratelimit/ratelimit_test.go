@@ -18,7 +18,7 @@ func TestRateLimiterWithConfigBlocksAfterLimit(t *testing.T) {
 
 	config := &ratelimit.Config{
 		Enabled:              true,
-		Headers:              []string{"True-Client-IP"},
+		Headers:              []string{clientip.HeaderTrueClientIP},
 		SendRetryAfterHeader: true,
 		Options: []ratelimit.RateOption{
 			{
@@ -35,7 +35,7 @@ func TestRateLimiterWithConfigBlocksAfterLimit(t *testing.T) {
 
 	for i := range 3 {
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
-		req.Header.Set("True-Client-IP", "10.0.0.1")
+		req.Header.Set(clientip.HeaderTrueClientIP, "10.0.0.1")
 		rec := httptest.NewRecorder()
 
 		e.ServeHTTP(rec, req)
@@ -60,7 +60,7 @@ func TestRateLimiterWithConfigIncludesPathWhenConfigured(t *testing.T) {
 
 	config := &ratelimit.Config{
 		Enabled:     true,
-		Headers:     []string{"True-Client-IP"},
+		Headers:     []string{clientip.HeaderTrueClientIP},
 		IncludePath: true,
 		DenyStatus:  http.StatusTooManyRequests,
 		DenyMessage: "Too many requests",
@@ -82,7 +82,7 @@ func TestRateLimiterWithConfigIncludesPathWhenConfigured(t *testing.T) {
 
 	request := func(path string) *httptest.ResponseRecorder {
 		req := httptest.NewRequest(http.MethodGet, path, nil)
-		req.Header.Set("True-Client-IP", "10.0.0.2")
+		req.Header.Set(clientip.HeaderTrueClientIP, "10.0.0.2")
 		rec := httptest.NewRecorder()
 		e.ServeHTTP(rec, req)
 		return rec
@@ -109,7 +109,7 @@ func TestRateLimiterWithDryRunAllowsRequests(t *testing.T) {
 	config := &ratelimit.Config{
 		Enabled:              true,
 		DryRun:               true,
-		Headers:              []string{"True-Client-IP"},
+		Headers:              []string{clientip.HeaderTrueClientIP},
 		SendRetryAfterHeader: true,
 		Options: []ratelimit.RateOption{
 			{
@@ -126,7 +126,7 @@ func TestRateLimiterWithDryRunAllowsRequests(t *testing.T) {
 
 	for i := range 3 {
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
-		req.Header.Set("True-Client-IP", "192.0.2.1")
+		req.Header.Set(clientip.HeaderTrueClientIP, "192.0.2.1")
 		rec := httptest.NewRecorder()
 
 		e.ServeHTTP(rec, req)
@@ -152,7 +152,7 @@ func newForwarderEcho() *echo.Echo {
 
 	config := &ratelimit.Config{
 		Enabled:         true,
-		Headers:         []string{"CF-Connecting-IP"},
+		Headers:         []string{clientip.HeaderCFConnectingIP},
 		ForwarderSecret: testForwarderSecret,
 		Options: []ratelimit.RateOption{
 			{
@@ -174,7 +174,7 @@ func newForwarderEcho() *echo.Echo {
 func forwardedRequest(e *echo.Echo, secret, clientIP string) *httptest.ResponseRecorder {
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	req.RemoteAddr = testEdgeIP + ":443"
-	req.Header.Set("CF-Connecting-IP", testEdgeIP)
+	req.Header.Set(clientip.HeaderCFConnectingIP, testEdgeIP)
 	req.Header.Set(ratelimit.ForwarderSecretHeader, secret)
 	req.Header.Set(ratelimit.ForwardedClientIPHeader, clientIP)
 	rec := httptest.NewRecorder()
