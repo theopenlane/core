@@ -14,6 +14,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	dbprovider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/database"
@@ -82,7 +83,7 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context) error {
 		return h.Unauthorized(ctx, ErrUnauthorized)
 	}
 
-	storFile := buildStorageFile(downloadFile)
+	storFile := interceptors.StorageFileFromEnt(downloadFile)
 
 	objectURI := buildObjectURI(storFile, downloadFile)
 
@@ -174,25 +175,6 @@ func validateTokenAuthorization(requestCtx context.Context, downloadToken *token
 	}
 
 	return nil
-}
-
-// buildStorageFile constructs a storagetypes.File from an ent.File entity
-func buildStorageFile(fileEntity *ent.File) *storagetypes.File {
-	storFile := &storagetypes.File{
-		ID:           fileEntity.ID,
-		OriginalName: fileEntity.ProvidedFileName,
-		ProviderType: storagetypes.ProviderType(fileEntity.StorageProvider),
-		Key:          fileEntity.StoragePath,
-		Bucket:       fileEntity.StorageVolume,
-		ContentType:  fileEntity.DetectedContentType,
-		FullURI:      fileEntity.URI,
-		ProviderHints: &storagetypes.ProviderHints{
-			KnownProvider: storagetypes.ProviderType(fileEntity.StorageProvider),
-		},
-		BackupLocation: fileEntity.BackupState.Location(),
-	}
-
-	return storFile
 }
 
 // setDownloadTokens sets the download token details from the database record

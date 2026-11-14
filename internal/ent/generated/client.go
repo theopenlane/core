@@ -5088,6 +5088,22 @@ func (c *ControlClient) QueryControlKind(_m *Control) *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryControlOrigin queries the control_origin edge of a Control.
+func (c *ControlClient) QueryControlOrigin(_m *Control) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ControlOriginTable, control.ControlOriginColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEnvironment queries the environment edge of a Control.
 func (c *ControlClient) QueryEnvironment(_m *Control) *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: c.config}).Query()
@@ -20257,15 +20273,15 @@ func (c *OrganizationClient) QueryWorkflowDefinitionCreators(_m *Organization) *
 	return query
 }
 
-// QueryCampaignsManager queries the campaigns_manager edge of a Organization.
-func (c *OrganizationClient) QueryCampaignsManager(_m *Organization) *GroupQuery {
+// QueryCampaignManager queries the campaign_manager edge of a Organization.
+func (c *OrganizationClient) QueryCampaignManager(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignsManagerTable, organization.CampaignsManagerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignManagerTable, organization.CampaignManagerColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -20305,15 +20321,31 @@ func (c *OrganizationClient) QueryGroupManager(_m *Organization) *GroupQuery {
 	return query
 }
 
-// QueryPoliciesManager queries the policies_manager edge of a Organization.
-func (c *OrganizationClient) QueryPoliciesManager(_m *Organization) *GroupQuery {
+// QueryIntegrationManager queries the integration_manager edge of a Organization.
+func (c *OrganizationClient) QueryIntegrationManager(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.PoliciesManagerTable, organization.PoliciesManagerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationManagerTable, organization.IntegrationManagerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPolicyManager queries the policy_manager edge of a Organization.
+func (c *OrganizationClient) QueryPolicyManager(_m *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PolicyManagerTable, organization.PolicyManagerColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -20369,15 +20401,15 @@ func (c *OrganizationClient) QueryTrustCenterManager(_m *Organization) *GroupQue
 	return query
 }
 
-// QueryWorkflowsManager queries the workflows_manager edge of a Organization.
-func (c *OrganizationClient) QueryWorkflowsManager(_m *Organization) *GroupQuery {
+// QueryWorkflowManager queries the workflow_manager edge of a Organization.
+func (c *OrganizationClient) QueryWorkflowManager(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowsManagerTable, organization.WorkflowsManagerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowManagerTable, organization.WorkflowManagerColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -28097,6 +28129,22 @@ func (c *SubcontrolClient) QuerySubcontrolKind(_m *Subcontrol) *CustomTypeEnumQu
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.SubcontrolKindTable, subcontrol.SubcontrolKindColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlOrigin queries the control_origin edge of a Subcontrol.
+func (c *SubcontrolClient) QueryControlOrigin(_m *Subcontrol) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.ControlOriginTable, subcontrol.ControlOriginColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

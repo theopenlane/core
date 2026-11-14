@@ -164,9 +164,8 @@ func (r IntegrationRun) Mixin() []ent.Mixin {
 		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.IntegrationRun](r,
-				withOrganizationOwner(),
-				withSkipForSystemAdmin(),
-				withParents(Integration{}),
+				withOrganizationOwnerFieldOnly(),
+				withSkipperFunc(skipInterceptorForIntegrationManagers),
 			),
 		},
 	}.getMixins(r)
@@ -188,6 +187,7 @@ func (r IntegrationRun) Annotations() []schema.Annotation {
 		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
+		entx.FGACrudSkip(entx.SkipCreate | entx.SkipUpdate | entx.SkipDelete),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -197,8 +197,10 @@ func (r IntegrationRun) Annotations() []schema.Annotation {
 // Policy of the IntegrationRun.
 func (IntegrationRun) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithOnMutationRules(ent.OpCreate,
+			policy.CheckOrgRelationAccess(rule.CanManageIntegrationsRelation),
+		),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationIfSystemAdmin(),
 		),
 	)

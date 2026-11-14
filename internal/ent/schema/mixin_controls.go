@@ -191,13 +191,13 @@ func (ControlMixin) Hooks() []ent.Hook {
 			hooks.HookRelationTuples(map[string]string{
 				"control_owner": "group",
 			}, "owner"),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 		hook.On(
 			hooks.HookRelationTuples(map[string]string{
 				"delegate": "group",
 			}, "delegate"),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 		hooks.HookSlateJSON(),
 	}
@@ -330,6 +330,9 @@ var controlFields = []ent.Field{
 	field.String("source_name").
 		Optional().
 		Nillable().
+		Annotations(
+			entgql.Directives(entgql.Deprecated("use control_origin_name instead")),
+		).
 		Comment("name of the source of the controls if not directly from a standard"),
 	field.String("reference_framework").
 		Comment("the reference framework for the control if it came from a standard, empty if not associated with a standard").

@@ -978,6 +978,9 @@ type ComplexityRoot struct {
 		ControlKindName            func(childComplexity int) int
 		ControlMappings            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
 		ControlObjectives          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlOrigin              func(childComplexity int) int
+		ControlOriginID            func(childComplexity int) int
+		ControlOriginName          func(childComplexity int) int
 		ControlOwner               func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
@@ -4639,8 +4642,8 @@ type ComplexityRoot struct {
 		AvatarUpdatedAt                    func(childComplexity int) int
 		BrandingSetting                    func(childComplexity int) int
 		CampaignCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CampaignManager                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CampaignTargetCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CampaignsManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CheckResultCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Children                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		ComplianceManager                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -4675,6 +4678,7 @@ type ComplexityRoot struct {
 		HushCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                                 func(childComplexity int) int
 		IdentityHolderCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		IntegrationManager                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		InternalPolicyCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		InviteCreators                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Invites                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
@@ -4690,7 +4694,7 @@ type ComplexityRoot struct {
 		PersonalAccessTokens               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		PersonalOrg                        func(childComplexity int) int
 		PlatformCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		PoliciesManager                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		PolicyManager                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ProcedureCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ProgramCreators                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ProgramMembershipCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -4732,7 +4736,7 @@ type ComplexityRoot struct {
 		VendorScoringConfigCreators        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		VulnerabilityCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		WorkflowDefinitionCreators         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		WorkflowsManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		WorkflowManager                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	OrganizationBrandingSetting struct {
@@ -6416,6 +6420,9 @@ type ComplexityRoot struct {
 		ControlID                  func(childComplexity int) int
 		ControlImplementations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlOrigin              func(childComplexity int) int
+		ControlOriginID            func(childComplexity int) int
+		ControlOriginName          func(childComplexity int) int
 		ControlOwner               func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
@@ -12761,6 +12768,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
+	case "Control.controlOrigin":
+		if e.ComplexityRoot.Control.ControlOrigin == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ControlOrigin(childComplexity), true
+	case "Control.controlOriginID":
+		if e.ComplexityRoot.Control.ControlOriginID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ControlOriginID(childComplexity), true
+	case "Control.controlOriginName":
+		if e.ComplexityRoot.Control.ControlOriginName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ControlOriginName(childComplexity), true
 	case "Control.controlOwner":
 		if e.ComplexityRoot.Control.ControlOwner == nil {
 			break
@@ -33877,6 +33902,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.CampaignCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.campaignManager":
+		if e.ComplexityRoot.Organization.CampaignManager == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_campaignManager_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.CampaignManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.campaignTargetCreators":
 		if e.ComplexityRoot.Organization.CampaignTargetCreators == nil {
 			break
@@ -33888,17 +33924,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.CampaignTargetCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.campaignsManager":
-		if e.ComplexityRoot.Organization.CampaignsManager == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_campaignsManager_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.CampaignsManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.checkResultCreators":
 		if e.ComplexityRoot.Organization.CheckResultCreators == nil {
 			break
@@ -34248,6 +34273,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.IdentityHolderCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.integrationManager":
+		if e.ComplexityRoot.Organization.IntegrationManager == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_integrationManager_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.IntegrationManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.internalPolicyCreators":
 		if e.ComplexityRoot.Organization.InternalPolicyCreators == nil {
 			break
@@ -34393,17 +34429,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.PlatformCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.policiesManager":
-		if e.ComplexityRoot.Organization.PoliciesManager == nil {
+	case "Organization.policyManager":
+		if e.ComplexityRoot.Organization.PolicyManager == nil {
 			break
 		}
 
-		args, err := ec.field_Organization_policiesManager_args(ctx, rawArgs)
+		args, err := ec.field_Organization_policyManager_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Organization.PoliciesManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+		return e.ComplexityRoot.Organization.PolicyManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.procedureCreators":
 		if e.ComplexityRoot.Organization.ProcedureCreators == nil {
 			break
@@ -34820,17 +34856,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.WorkflowDefinitionCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.workflowsManager":
-		if e.ComplexityRoot.Organization.WorkflowsManager == nil {
+	case "Organization.workflowManager":
+		if e.ComplexityRoot.Organization.WorkflowManager == nil {
 			break
 		}
 
-		args, err := ec.field_Organization_workflowsManager_args(ctx, rawArgs)
+		args, err := ec.field_Organization_workflowManager_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Organization.WorkflowsManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+		return e.ComplexityRoot.Organization.WorkflowManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "OrganizationBrandingSetting.backgroundColor":
 		if e.ComplexityRoot.OrganizationBrandingSetting.BackgroundColor == nil {
@@ -44521,6 +44557,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Subcontrol.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
+	case "Subcontrol.controlOrigin":
+		if e.ComplexityRoot.Subcontrol.ControlOrigin == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.ControlOrigin(childComplexity), true
+	case "Subcontrol.controlOriginID":
+		if e.ComplexityRoot.Subcontrol.ControlOriginID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.ControlOriginID(childComplexity), true
+	case "Subcontrol.controlOriginName":
+		if e.ComplexityRoot.Subcontrol.ControlOriginName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.ControlOriginName(childComplexity), true
 	case "Subcontrol.controlOwner":
 		if e.ComplexityRoot.Subcontrol.ControlOwner == nil {
 			break
@@ -67387,7 +67441,7 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -67476,6 +67530,14 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   the kind of the control
   """
   controlKindID: ID
+  """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  """
+  the control_origin of the control
+  """
+  controlOriginID: ID
   """
   the environment of the control
   """
@@ -68022,6 +68084,7 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
     where: GroupWhereInput
   ): GroupConnection!
   controlKind: CustomTypeEnum
+  controlOrigin: CustomTypeEnum
   environment: CustomTypeEnum
   scope: CustomTypeEnum
   standard: Standard
@@ -70726,6 +70789,34 @@ input ControlWhereInput {
   controlKindIDEqualFold: ID
   controlKindIDContainsFold: ID
   """
+  control_origin_name field predicates
+  """
+  controlOriginName: String
+  controlOriginNameNEQ: String
+  controlOriginNameIn: [String!]
+  controlOriginNameNotIn: [String!]
+  controlOriginNameContains: String
+  controlOriginNameHasPrefix: String
+  controlOriginNameHasSuffix: String
+  controlOriginNameIsNil: Boolean
+  controlOriginNameNotNil: Boolean
+  controlOriginNameEqualFold: String
+  controlOriginNameContainsFold: String
+  """
+  control_origin_id field predicates
+  """
+  controlOriginID: ID
+  controlOriginIDNEQ: ID
+  controlOriginIDIn: [ID!]
+  controlOriginIDNotIn: [ID!]
+  controlOriginIDContains: ID
+  controlOriginIDHasPrefix: ID
+  controlOriginIDHasSuffix: ID
+  controlOriginIDIsNil: Boolean
+  controlOriginIDNotNil: Boolean
+  controlOriginIDEqualFold: ID
+  controlOriginIDContainsFold: ID
+  """
   environment_name field predicates
   """
   environmentName: String
@@ -70935,6 +71026,11 @@ input ControlWhereInput {
   """
   hasControlKind: Boolean
   hasControlKindWith: [CustomTypeEnumWhereInput!]
+  """
+  control_origin edge predicates
+  """
+  hasControlOrigin: Boolean
+  hasControlOriginWith: [CustomTypeEnumWhereInput!]
   """
   environment edge predicates
   """
@@ -71992,6 +72088,10 @@ input CreateControlInput {
   """
   controlKindName: String
   """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  """
   the environment of the control
   """
   environmentName: String
@@ -72032,6 +72132,7 @@ input CreateControlInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   controlKindID: ID
+  controlOriginID: ID
   environmentID: ID
   scopeID: ID
   standardID: ID
@@ -74520,14 +74621,15 @@ input CreateOrganizationInput {
   vendorScoringConfigCreatorIDs: [ID!]
   vulnerabilityCreatorIDs: [ID!]
   workflowDefinitionCreatorIDs: [ID!]
-  campaignsManagerIDs: [ID!]
+  campaignManagerIDs: [ID!]
   complianceManagerIDs: [ID!]
   groupManagerIDs: [ID!]
-  policiesManagerIDs: [ID!]
+  integrationManagerIDs: [ID!]
+  policyManagerIDs: [ID!]
   registryManagerIDs: [ID!]
   riskManagerIDs: [ID!]
   trustCenterManagerIDs: [ID!]
-  workflowsManagerIDs: [ID!]
+  workflowManagerIDs: [ID!]
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
@@ -75908,6 +76010,10 @@ input CreateSubcontrolInput {
   """
   subcontrolKindName: String
   """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -75934,6 +76040,7 @@ input CreateSubcontrolInput {
   scanIDs: [ID!]
   ownerID: ID
   subcontrolKindID: ID
+  controlOriginID: ID
   controlID: ID!
   controlImplementationIDs: [ID!]
   workflowObjectRefIDs: [ID!]
@@ -105965,7 +106072,7 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  campaignsManager(
+  campaignManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -106058,7 +106165,38 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  policiesManager(
+  integrationManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  policyManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -106182,7 +106320,7 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  workflowsManager(
+  workflowManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -107854,10 +107992,10 @@ input OrganizationWhereInput {
   hasWorkflowDefinitionCreators: Boolean
   hasWorkflowDefinitionCreatorsWith: [GroupWhereInput!]
   """
-  campaigns_manager edge predicates
+  campaign_manager edge predicates
   """
-  hasCampaignsManager: Boolean
-  hasCampaignsManagerWith: [GroupWhereInput!]
+  hasCampaignManager: Boolean
+  hasCampaignManagerWith: [GroupWhereInput!]
   """
   compliance_manager edge predicates
   """
@@ -107869,10 +108007,15 @@ input OrganizationWhereInput {
   hasGroupManager: Boolean
   hasGroupManagerWith: [GroupWhereInput!]
   """
-  policies_manager edge predicates
+  integration_manager edge predicates
   """
-  hasPoliciesManager: Boolean
-  hasPoliciesManagerWith: [GroupWhereInput!]
+  hasIntegrationManager: Boolean
+  hasIntegrationManagerWith: [GroupWhereInput!]
+  """
+  policy_manager edge predicates
+  """
+  hasPolicyManager: Boolean
+  hasPolicyManagerWith: [GroupWhereInput!]
   """
   registry_manager edge predicates
   """
@@ -107889,10 +108032,10 @@ input OrganizationWhereInput {
   hasTrustCenterManager: Boolean
   hasTrustCenterManagerWith: [GroupWhereInput!]
   """
-  workflows_manager edge predicates
+  workflow_manager edge predicates
   """
-  hasWorkflowsManager: Boolean
-  hasWorkflowsManagerWith: [GroupWhereInput!]
+  hasWorkflowManager: Boolean
+  hasWorkflowManagerWith: [GroupWhereInput!]
   """
   parent edge predicates
   """
@@ -124317,7 +124460,7 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -124406,6 +124549,14 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   the kind of the subcontrol
   """
   subcontrolKindID: ID
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginID: ID
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -124866,6 +125017,7 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   ): ScanConnection!
   owner: Organization
   subcontrolKind: CustomTypeEnum
+  controlOrigin: CustomTypeEnum
   control: Control!
   controlImplementations(
     """
@@ -125696,6 +125848,34 @@ input SubcontrolWhereInput {
   subcontrolKindIDEqualFold: ID
   subcontrolKindIDContainsFold: ID
   """
+  control_origin_name field predicates
+  """
+  controlOriginName: String
+  controlOriginNameNEQ: String
+  controlOriginNameIn: [String!]
+  controlOriginNameNotIn: [String!]
+  controlOriginNameContains: String
+  controlOriginNameHasPrefix: String
+  controlOriginNameHasSuffix: String
+  controlOriginNameIsNil: Boolean
+  controlOriginNameNotNil: Boolean
+  controlOriginNameEqualFold: String
+  controlOriginNameContainsFold: String
+  """
+  control_origin_id field predicates
+  """
+  controlOriginID: ID
+  controlOriginIDNEQ: ID
+  controlOriginIDIn: [ID!]
+  controlOriginIDNotIn: [ID!]
+  controlOriginIDContains: ID
+  controlOriginIDHasPrefix: ID
+  controlOriginIDHasSuffix: ID
+  controlOriginIDIsNil: Boolean
+  controlOriginIDNotNil: Boolean
+  controlOriginIDEqualFold: ID
+  controlOriginIDContainsFold: ID
+  """
   workflow_eligible_marker field predicates
   """
   workflowEligibleMarker: Boolean
@@ -125821,6 +126001,11 @@ input SubcontrolWhereInput {
   """
   hasSubcontrolKind: Boolean
   hasSubcontrolKindWith: [CustomTypeEnumWhereInput!]
+  """
+  control_origin edge predicates
+  """
+  hasControlOrigin: Boolean
+  hasControlOriginWith: [CustomTypeEnumWhereInput!]
   """
   control edge predicates
   """
@@ -135488,6 +135673,11 @@ input UpdateControlInput {
   controlKindName: String
   clearControlKindName: Boolean
   """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  clearControlOriginName: Boolean
+  """
   the environment of the control
   """
   environmentName: String
@@ -135567,6 +135757,8 @@ input UpdateControlInput {
   clearEditors: Boolean
   controlKindID: ID
   clearControlKind: Boolean
+  controlOriginID: ID
+  clearControlOrigin: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -139064,18 +139256,21 @@ input UpdateOrganizationInput {
   addWorkflowDefinitionCreatorIDs: [ID!]
   removeWorkflowDefinitionCreatorIDs: [ID!]
   clearWorkflowDefinitionCreators: Boolean
-  addCampaignsManagerIDs: [ID!]
-  removeCampaignsManagerIDs: [ID!]
-  clearCampaignsManager: Boolean
+  addCampaignManagerIDs: [ID!]
+  removeCampaignManagerIDs: [ID!]
+  clearCampaignManager: Boolean
   addComplianceManagerIDs: [ID!]
   removeComplianceManagerIDs: [ID!]
   clearComplianceManager: Boolean
   addGroupManagerIDs: [ID!]
   removeGroupManagerIDs: [ID!]
   clearGroupManager: Boolean
-  addPoliciesManagerIDs: [ID!]
-  removePoliciesManagerIDs: [ID!]
-  clearPoliciesManager: Boolean
+  addIntegrationManagerIDs: [ID!]
+  removeIntegrationManagerIDs: [ID!]
+  clearIntegrationManager: Boolean
+  addPolicyManagerIDs: [ID!]
+  removePolicyManagerIDs: [ID!]
+  clearPolicyManager: Boolean
   addRegistryManagerIDs: [ID!]
   removeRegistryManagerIDs: [ID!]
   clearRegistryManager: Boolean
@@ -139085,9 +139280,9 @@ input UpdateOrganizationInput {
   addTrustCenterManagerIDs: [ID!]
   removeTrustCenterManagerIDs: [ID!]
   clearTrustCenterManager: Boolean
-  addWorkflowsManagerIDs: [ID!]
-  removeWorkflowsManagerIDs: [ID!]
-  clearWorkflowsManager: Boolean
+  addWorkflowManagerIDs: [ID!]
+  removeWorkflowManagerIDs: [ID!]
+  clearWorkflowManager: Boolean
   settingID: ID
   clearSetting: Boolean
   addPersonalAccessTokenIDs: [ID!]
@@ -141122,6 +141317,11 @@ input UpdateSubcontrolInput {
   subcontrolKindName: String
   clearSubcontrolKindName: Boolean
   """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  clearControlOriginName: Boolean
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -141180,6 +141380,8 @@ input UpdateSubcontrolInput {
   clearScans: Boolean
   subcontrolKindID: ID
   clearSubcontrolKind: Boolean
+  controlOriginID: ID
+  clearControlOrigin: Boolean
   controlID: ID
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
@@ -165207,6 +165409,10 @@ func (ec *executionContext) childFields_Control(ctx context.Context, field graph
 		return ec.fieldContext_Control_controlKindName(ctx, field)
 	case "controlKindID":
 		return ec.fieldContext_Control_controlKindID(ctx, field)
+	case "controlOriginName":
+		return ec.fieldContext_Control_controlOriginName(ctx, field)
+	case "controlOriginID":
+		return ec.fieldContext_Control_controlOriginID(ctx, field)
 	case "environmentName":
 		return ec.fieldContext_Control_environmentName(ctx, field)
 	case "environmentID":
@@ -165267,6 +165473,8 @@ func (ec *executionContext) childFields_Control(ctx context.Context, field graph
 		return ec.fieldContext_Control_editors(ctx, field)
 	case "controlKind":
 		return ec.fieldContext_Control_controlKind(ctx, field)
+	case "controlOrigin":
+		return ec.fieldContext_Control_controlOrigin(ctx, field)
 	case "environment":
 		return ec.fieldContext_Control_environment(ctx, field)
 	case "scope":
@@ -171407,22 +171615,24 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_vulnerabilityCreators(ctx, field)
 	case "workflowDefinitionCreators":
 		return ec.fieldContext_Organization_workflowDefinitionCreators(ctx, field)
-	case "campaignsManager":
-		return ec.fieldContext_Organization_campaignsManager(ctx, field)
+	case "campaignManager":
+		return ec.fieldContext_Organization_campaignManager(ctx, field)
 	case "complianceManager":
 		return ec.fieldContext_Organization_complianceManager(ctx, field)
 	case "groupManager":
 		return ec.fieldContext_Organization_groupManager(ctx, field)
-	case "policiesManager":
-		return ec.fieldContext_Organization_policiesManager(ctx, field)
+	case "integrationManager":
+		return ec.fieldContext_Organization_integrationManager(ctx, field)
+	case "policyManager":
+		return ec.fieldContext_Organization_policyManager(ctx, field)
 	case "registryManager":
 		return ec.fieldContext_Organization_registryManager(ctx, field)
 	case "riskManager":
 		return ec.fieldContext_Organization_riskManager(ctx, field)
 	case "trustCenterManager":
 		return ec.fieldContext_Organization_trustCenterManager(ctx, field)
-	case "workflowsManager":
-		return ec.fieldContext_Organization_workflowsManager(ctx, field)
+	case "workflowManager":
+		return ec.fieldContext_Organization_workflowManager(ctx, field)
 	case "parent":
 		return ec.fieldContext_Organization_parent(ctx, field)
 	case "children":
@@ -174349,6 +174559,10 @@ func (ec *executionContext) childFields_Subcontrol(ctx context.Context, field gr
 		return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
 	case "subcontrolKindID":
 		return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
+	case "controlOriginName":
+		return ec.fieldContext_Subcontrol_controlOriginName(ctx, field)
+	case "controlOriginID":
+		return ec.fieldContext_Subcontrol_controlOriginID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_Subcontrol_workflowEligibleMarker(ctx, field)
 	case "refCode":
@@ -174393,6 +174607,8 @@ func (ec *executionContext) childFields_Subcontrol(ctx context.Context, field gr
 		return ec.fieldContext_Subcontrol_owner(ctx, field)
 	case "subcontrolKind":
 		return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
+	case "controlOrigin":
+		return ec.fieldContext_Subcontrol_controlOrigin(ctx, field)
 	case "control":
 		return ec.fieldContext_Subcontrol_control(ctx, field)
 	case "controlImplementations":

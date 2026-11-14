@@ -213,6 +213,8 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		return nil, err
 	}
 
+	defer objects.ReleaseSeeker(seeker)
+
 	// If size wasn't known upfront, get it from the seeker
 	if !sizeKnown {
 		if sized, ok := seeker.(objects.SizedReader); ok {
@@ -327,6 +329,67 @@ func CopySource(bucket, key string) string {
 	})
 
 	return bucket + "/" + strings.Join(segments, "/")
+}
+
+// TouchRange is the range header that requests only the first byte of an object
+const TouchRange = "bytes=0-0"
+
+// Open implements storage.Opener by streaming the object body
+func (p *Provider) Open(ctx context.Context, file *storagetypes.File) (io.ReadCloser, error) {
+	out, err := p.client.GetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(p.options.BucketFor(file.StoredBucket())),
+		Key:    aws.String(file.Key),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return out.Body, nil
+}
+
+// Touch implements storage.Toucher by requesting the first byte of the object and discarding it
+func (p *Provider) Touch(ctx context.Context, file *storagetypes.File) error {
+	out, err := p.client.GetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(p.options.BucketFor(file.StoredBucket())),
+		Key:    aws.String(file.Key),
+		Range:  aws.String(TouchRange),
+	})
+	if err != nil {
+		return err
+	}
+
+	defer out.Body.Close()
+
+	_, err = io.Copy(io.Discard, out.Body)
+
+	return err
+}
+
+// Stat implements storage.Statter through a head request
+func (p *Provider) Stat(ctx context.Context, file *storagetypes.File) (*storagetypes.ObjectInfo, error) {
+	return ObjectInfoFromHead(p.client.HeadObject(ctx, &s3.HeadObjectInput{
+		Bucket: aws.String(p.options.BucketFor(file.StoredBucket())),
+		Key:    aws.String(file.Key),
+	}))
+}
+
+// ObjectInfoFromHead converts the result of a head request into object info, mapping a missing
+// object to storage.ErrObjectNotFound
+func ObjectInfoFromHead(head *s3.HeadObjectOutput, err error) (*storagetypes.ObjectInfo, error) {
+	if err != nil {
+		if _, ok := errors.AsType[*types.NotFound](err); ok {
+			return nil, storage.ErrObjectNotFound
+		}
+
+		return nil, err
+	}
+
+	return &storagetypes.ObjectInfo{
+		Size:         lo.FromPtr(head.ContentLength),
+		ETag:         strings.Trim(lo.FromPtr(head.ETag), `"`),
+		ContentType:  lo.FromPtr(head.ContentType),
+		LastModified: lo.FromPtr(head.LastModified),
+	}, nil
 }
 
 // GetPresignedURL implements storagetypes.Provider

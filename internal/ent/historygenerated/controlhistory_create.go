@@ -683,6 +683,34 @@ func (_c *ControlHistoryCreate) SetNillableControlKindID(v *string) *ControlHist
 	return _c
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (_c *ControlHistoryCreate) SetControlOriginName(v string) *ControlHistoryCreate {
+	_c.mutation.SetControlOriginName(v)
+	return _c
+}
+
+// SetNillableControlOriginName sets the "control_origin_name" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableControlOriginName(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetControlOriginName(*v)
+	}
+	return _c
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (_c *ControlHistoryCreate) SetControlOriginID(v string) *ControlHistoryCreate {
+	_c.mutation.SetControlOriginID(v)
+	return _c
+}
+
+// SetNillableControlOriginID sets the "control_origin_id" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableControlOriginID(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetControlOriginID(*v)
+	}
+	return _c
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_c *ControlHistoryCreate) SetEnvironmentName(v string) *ControlHistoryCreate {
 	_c.mutation.SetEnvironmentName(v)
@@ -1208,6 +1236,14 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.ControlKindID(); ok {
 		_spec.SetField(controlhistory.FieldControlKindID, field.TypeString, value)
 		_node.ControlKindID = value
+	}
+	if value, ok := _c.mutation.ControlOriginName(); ok {
+		_spec.SetField(controlhistory.FieldControlOriginName, field.TypeString, value)
+		_node.ControlOriginName = value
+	}
+	if value, ok := _c.mutation.ControlOriginID(); ok {
+		_spec.SetField(controlhistory.FieldControlOriginID, field.TypeString, value)
+		_node.ControlOriginID = value
 	}
 	if value, ok := _c.mutation.EnvironmentName(); ok {
 		_spec.SetField(controlhistory.FieldEnvironmentName, field.TypeString, value)

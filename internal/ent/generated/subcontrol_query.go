@@ -71,6 +71,7 @@ type SubcontrolQuery struct {
 	withScans                       *ScanQuery
 	withOwner                       *OrganizationQuery
 	withSubcontrolKind              *CustomTypeEnumQuery
+	withControlOrigin               *CustomTypeEnumQuery
 	withControl                     *ControlQuery
 	withControlImplementations      *ControlImplementationQuery
 	withMappedToSubcontrols         *MappedControlQuery
@@ -561,6 +562,28 @@ func (_q *SubcontrolQuery) QuerySubcontrolKind() *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryControlOrigin chains the current query on the "control_origin" edge.
+func (_q *SubcontrolQuery) QueryControlOrigin() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.ControlOriginTable, subcontrol.ControlOriginColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControl chains the current query on the "control" edge.
 func (_q *SubcontrolQuery) QueryControl() *ControlQuery {
 	query := (&ControlClient{config: _q.config}).Query()
@@ -992,6 +1015,7 @@ func (_q *SubcontrolQuery) Clone() *SubcontrolQuery {
 		withScans:                  _q.withScans.Clone(),
 		withOwner:                  _q.withOwner.Clone(),
 		withSubcontrolKind:         _q.withSubcontrolKind.Clone(),
+		withControlOrigin:          _q.withControlOrigin.Clone(),
 		withControl:                _q.withControl.Clone(),
 		withControlImplementations: _q.withControlImplementations.Clone(),
 		withMappedToSubcontrols:    _q.withMappedToSubcontrols.Clone(),
@@ -1218,6 +1242,17 @@ func (_q *SubcontrolQuery) WithSubcontrolKind(opts ...func(*CustomTypeEnumQuery)
 	return _q
 }
 
+// WithControlOrigin tells the query-builder to eager-load the nodes that are connected to
+// the "control_origin" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithControlOrigin(opts ...func(*CustomTypeEnumQuery)) *SubcontrolQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControlOrigin = query
+	return _q
+}
+
 // WithControl tells the query-builder to eager-load the nodes that are connected to
 // the "control" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *SubcontrolQuery) WithControl(opts ...func(*ControlQuery)) *SubcontrolQuery {
@@ -1413,7 +1448,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [29]bool{
+		loadedTypes = [30]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
@@ -1433,6 +1468,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			_q.withScans != nil,
 			_q.withOwner != nil,
 			_q.withSubcontrolKind != nil,
+			_q.withControlOrigin != nil,
 			_q.withControl != nil,
 			_q.withControlImplementations != nil,
 			_q.withMappedToSubcontrols != nil,
@@ -1596,6 +1632,12 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	if query := _q.withSubcontrolKind; query != nil {
 		if err := _q.loadSubcontrolKind(ctx, query, nodes, nil,
 			func(n *Subcontrol, e *CustomTypeEnum) { n.Edges.SubcontrolKind = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withControlOrigin; query != nil {
+		if err := _q.loadControlOrigin(ctx, query, nodes, nil,
+			func(n *Subcontrol, e *CustomTypeEnum) { n.Edges.ControlOrigin = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2697,6 +2739,35 @@ func (_q *SubcontrolQuery) loadSubcontrolKind(ctx context.Context, query *Custom
 	}
 	return nil
 }
+func (_q *SubcontrolQuery) loadControlOrigin(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subcontrol)
+	for i := range nodes {
+		fk := nodes[i].ControlOriginID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "control_origin_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *SubcontrolQuery) loadControl(ctx context.Context, query *ControlQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Control)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Subcontrol)
@@ -3288,6 +3359,9 @@ func (_q *SubcontrolQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withSubcontrolKind != nil {
 			_spec.Node.AddColumnOnce(subcontrol.FieldSubcontrolKindID)
+		}
+		if _q.withControlOrigin != nil {
+			_spec.Node.AddColumnOnce(subcontrol.FieldControlOriginID)
 		}
 		if _q.withControl != nil {
 			_spec.Node.AddColumnOnce(subcontrol.FieldControlID)

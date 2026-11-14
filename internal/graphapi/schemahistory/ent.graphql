@@ -2809,7 +2809,7 @@ type ControlHistory implements Node {
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -2898,6 +2898,14 @@ type ControlHistory implements Node {
   the kind of the control
   """
   controlKindID: String
+  """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  """
+  the control_origin of the control
+  """
+  controlOriginID: String
   """
   the environment of the control
   """
@@ -17239,7 +17247,7 @@ type SubcontrolHistory implements Node {
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -17328,6 +17336,14 @@ type SubcontrolHistory implements Node {
   the kind of the subcontrol
   """
   subcontrolKindID: String
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginID: String
   """
   internal marker field for workflow eligibility, not exposed in API
   """

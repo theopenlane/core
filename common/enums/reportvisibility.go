@@ -7,13 +7,13 @@ type ReportVisibility string
 
 var (
 	// ReportVisibilityPrivate restricts access to the creator.
-	ReportVisibilityPrivate      ReportVisibility = "PRIVATE"
+	ReportVisibilityPrivate ReportVisibility = "PRIVATE"
 	// ReportVisibilityRestricted limits access to report memberships and permitted groups.
-	ReportVisibilityRestricted   ReportVisibility = "RESTRICTED"
+	ReportVisibilityRestricted ReportVisibility = "RESTRICTED"
 	// ReportVisibilityOrganization allows organization members to view the report.
 	ReportVisibilityOrganization ReportVisibility = "ORGANIZATION"
 	// ReportVisibilityInvalid is used when an unknown or unsupported value is provided.
-	ReportVisibilityInvalid      ReportVisibility = "REPORTVISIBILITY_INVALID"
+	ReportVisibilityInvalid ReportVisibility = "REPORTVISIBILITY_INVALID"
 )
 
 var reportVisibilityValues = []ReportVisibility{

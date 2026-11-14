@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -100,6 +101,7 @@ func (WorkflowEvent) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+		entx.FGACrudSkip(entx.SkipAll),
 		history.Annotations{
 			Exclude: true,
 		},

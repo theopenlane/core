@@ -927,6 +927,13 @@ coreConfiguration:
       dryrun: true  # @schema type:boolean; default:true
       # -- Maximum integrations to evaluate per run
       maxperrun: 100  # @schema type:integer; default:100
+    fileorphan:
+      # -- Whether the file orphan sweep is enabled
+      enabled: true  # @schema type:boolean; default:true
+      # -- If true only log file IDs that would be deleted
+      dryrun: true  # @schema type:boolean; default:true
+      # -- Maximum orphaned files to delete per run
+      maxperrun: 500  # @schema type:integer; default:500
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false

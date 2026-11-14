@@ -86,7 +86,7 @@ func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient) ([]authe
 			return nil, err
 		}
 
-		result, resp, err := c.CoreApi.CoreUsersList(ctx).
+		result, resp, err := c.CoreAPI.CoreUsersList(ctx).
 			Page(page).
 			PageSize(directoryDefaultPageSize).
 			Execute()
@@ -122,7 +122,7 @@ func listDirectoryGroups(ctx context.Context, c *authentikSDK.APIClient) ([]auth
 			return nil, err
 		}
 
-		result, resp, err := c.CoreApi.CoreGroupsList(ctx).
+		result, resp, err := c.CoreAPI.CoreGroupsList(ctx).
 			Page(page).
 			PageSize(directoryDefaultPageSize).
 			IncludeUsers(true).

@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/consts"
@@ -34,7 +35,8 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 		SetStoragePath(fileData.Key).
 		SetStorageVolume(fileData.Bucket).
 		SetStorageRegion(fileData.Region).
-		SetStorageProvider(string(fileData.ProviderType))
+		SetStorageProvider(string(fileData.ProviderType)).
+		SetStorageScheme(storage.Scheme(fileData.ProviderType))
 
 	if len(fileData.Metadata) > 0 {
 		metadata := make(map[string]any)
@@ -53,12 +55,17 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 }
 
 func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
-	contentType := f.ContentType
-	if contentType == "" {
+	var sniffed string
+
+	if f.RawFile != nil {
 		if detectedType, err := storage.DetectContentType(f.RawFile); err == nil {
-			contentType = detectedType
+			sniffed = detectedType
 		}
 	}
+
+	// the request's type is kept as the content type, the bytes decide the mime type
+	contentType := lo.CoalesceOrEmpty(f.ContentType, sniffed)
+	detectedMimeType := lo.CoalesceOrEmpty(sniffed, f.ContentType)
 
 	orgID, err := getOrgOwnerID(ctx, f)
 	if err != nil {
@@ -70,7 +77,7 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 		ProvidedFileName:      f.OriginalName,
 		ProvidedFileExtension: resolveProvidedExtension(f),
 		ProvidedFileSize:      &f.Size,
-		DetectedMimeType:      &f.ContentType,
+		DetectedMimeType:      &detectedMimeType,
 		DetectedContentType:   contentType,
 		StoreKey:              &f.Key,
 		StorageProvider:       new(string(f.ProviderType)),

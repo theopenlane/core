@@ -8535,7 +8535,7 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -8624,6 +8624,14 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   the kind of the control
   """
   controlKindID: ID
+  """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  """
+  the control_origin of the control
+  """
+  controlOriginID: ID
   """
   the environment of the control
   """
@@ -9170,6 +9178,7 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
     where: GroupWhereInput
   ): GroupConnection!
   controlKind: CustomTypeEnum
+  controlOrigin: CustomTypeEnum
   environment: CustomTypeEnum
   scope: CustomTypeEnum
   standard: Standard
@@ -11874,6 +11883,34 @@ input ControlWhereInput {
   controlKindIDEqualFold: ID
   controlKindIDContainsFold: ID
   """
+  control_origin_name field predicates
+  """
+  controlOriginName: String
+  controlOriginNameNEQ: String
+  controlOriginNameIn: [String!]
+  controlOriginNameNotIn: [String!]
+  controlOriginNameContains: String
+  controlOriginNameHasPrefix: String
+  controlOriginNameHasSuffix: String
+  controlOriginNameIsNil: Boolean
+  controlOriginNameNotNil: Boolean
+  controlOriginNameEqualFold: String
+  controlOriginNameContainsFold: String
+  """
+  control_origin_id field predicates
+  """
+  controlOriginID: ID
+  controlOriginIDNEQ: ID
+  controlOriginIDIn: [ID!]
+  controlOriginIDNotIn: [ID!]
+  controlOriginIDContains: ID
+  controlOriginIDHasPrefix: ID
+  controlOriginIDHasSuffix: ID
+  controlOriginIDIsNil: Boolean
+  controlOriginIDNotNil: Boolean
+  controlOriginIDEqualFold: ID
+  controlOriginIDContainsFold: ID
+  """
   environment_name field predicates
   """
   environmentName: String
@@ -12083,6 +12120,11 @@ input ControlWhereInput {
   """
   hasControlKind: Boolean
   hasControlKindWith: [CustomTypeEnumWhereInput!]
+  """
+  control_origin edge predicates
+  """
+  hasControlOrigin: Boolean
+  hasControlOriginWith: [CustomTypeEnumWhereInput!]
   """
   environment edge predicates
   """
@@ -13140,6 +13182,10 @@ input CreateControlInput {
   """
   controlKindName: String
   """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  """
   the environment of the control
   """
   environmentName: String
@@ -13180,6 +13226,7 @@ input CreateControlInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   controlKindID: ID
+  controlOriginID: ID
   environmentID: ID
   scopeID: ID
   standardID: ID
@@ -15668,14 +15715,15 @@ input CreateOrganizationInput {
   vendorScoringConfigCreatorIDs: [ID!]
   vulnerabilityCreatorIDs: [ID!]
   workflowDefinitionCreatorIDs: [ID!]
-  campaignsManagerIDs: [ID!]
+  campaignManagerIDs: [ID!]
   complianceManagerIDs: [ID!]
   groupManagerIDs: [ID!]
-  policiesManagerIDs: [ID!]
+  integrationManagerIDs: [ID!]
+  policyManagerIDs: [ID!]
   registryManagerIDs: [ID!]
   riskManagerIDs: [ID!]
   trustCenterManagerIDs: [ID!]
-  workflowsManagerIDs: [ID!]
+  workflowManagerIDs: [ID!]
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
@@ -17056,6 +17104,10 @@ input CreateSubcontrolInput {
   """
   subcontrolKindName: String
   """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -17082,6 +17134,7 @@ input CreateSubcontrolInput {
   scanIDs: [ID!]
   ownerID: ID
   subcontrolKindID: ID
+  controlOriginID: ID
   controlID: ID!
   controlImplementationIDs: [ID!]
   workflowObjectRefIDs: [ID!]
@@ -47113,7 +47166,7 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  campaignsManager(
+  campaignManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -47206,7 +47259,38 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  policiesManager(
+  integrationManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  policyManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -47330,7 +47414,7 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  workflowsManager(
+  workflowManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -49002,10 +49086,10 @@ input OrganizationWhereInput {
   hasWorkflowDefinitionCreators: Boolean
   hasWorkflowDefinitionCreatorsWith: [GroupWhereInput!]
   """
-  campaigns_manager edge predicates
+  campaign_manager edge predicates
   """
-  hasCampaignsManager: Boolean
-  hasCampaignsManagerWith: [GroupWhereInput!]
+  hasCampaignManager: Boolean
+  hasCampaignManagerWith: [GroupWhereInput!]
   """
   compliance_manager edge predicates
   """
@@ -49017,10 +49101,15 @@ input OrganizationWhereInput {
   hasGroupManager: Boolean
   hasGroupManagerWith: [GroupWhereInput!]
   """
-  policies_manager edge predicates
+  integration_manager edge predicates
   """
-  hasPoliciesManager: Boolean
-  hasPoliciesManagerWith: [GroupWhereInput!]
+  hasIntegrationManager: Boolean
+  hasIntegrationManagerWith: [GroupWhereInput!]
+  """
+  policy_manager edge predicates
+  """
+  hasPolicyManager: Boolean
+  hasPolicyManagerWith: [GroupWhereInput!]
   """
   registry_manager edge predicates
   """
@@ -49037,10 +49126,10 @@ input OrganizationWhereInput {
   hasTrustCenterManager: Boolean
   hasTrustCenterManagerWith: [GroupWhereInput!]
   """
-  workflows_manager edge predicates
+  workflow_manager edge predicates
   """
-  hasWorkflowsManager: Boolean
-  hasWorkflowsManagerWith: [GroupWhereInput!]
+  hasWorkflowManager: Boolean
+  hasWorkflowManagerWith: [GroupWhereInput!]
   """
   parent edge predicates
   """
@@ -65465,7 +65554,7 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -65554,6 +65643,14 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   the kind of the subcontrol
   """
   subcontrolKindID: ID
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginID: ID
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -66014,6 +66111,7 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   ): ScanConnection!
   owner: Organization
   subcontrolKind: CustomTypeEnum
+  controlOrigin: CustomTypeEnum
   control: Control!
   controlImplementations(
     """
@@ -66844,6 +66942,34 @@ input SubcontrolWhereInput {
   subcontrolKindIDEqualFold: ID
   subcontrolKindIDContainsFold: ID
   """
+  control_origin_name field predicates
+  """
+  controlOriginName: String
+  controlOriginNameNEQ: String
+  controlOriginNameIn: [String!]
+  controlOriginNameNotIn: [String!]
+  controlOriginNameContains: String
+  controlOriginNameHasPrefix: String
+  controlOriginNameHasSuffix: String
+  controlOriginNameIsNil: Boolean
+  controlOriginNameNotNil: Boolean
+  controlOriginNameEqualFold: String
+  controlOriginNameContainsFold: String
+  """
+  control_origin_id field predicates
+  """
+  controlOriginID: ID
+  controlOriginIDNEQ: ID
+  controlOriginIDIn: [ID!]
+  controlOriginIDNotIn: [ID!]
+  controlOriginIDContains: ID
+  controlOriginIDHasPrefix: ID
+  controlOriginIDHasSuffix: ID
+  controlOriginIDIsNil: Boolean
+  controlOriginIDNotNil: Boolean
+  controlOriginIDEqualFold: ID
+  controlOriginIDContainsFold: ID
+  """
   workflow_eligible_marker field predicates
   """
   workflowEligibleMarker: Boolean
@@ -66969,6 +67095,11 @@ input SubcontrolWhereInput {
   """
   hasSubcontrolKind: Boolean
   hasSubcontrolKindWith: [CustomTypeEnumWhereInput!]
+  """
+  control_origin edge predicates
+  """
+  hasControlOrigin: Boolean
+  hasControlOriginWith: [CustomTypeEnumWhereInput!]
   """
   control edge predicates
   """
@@ -76636,6 +76767,11 @@ input UpdateControlInput {
   controlKindName: String
   clearControlKindName: Boolean
   """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  clearControlOriginName: Boolean
+  """
   the environment of the control
   """
   environmentName: String
@@ -76715,6 +76851,8 @@ input UpdateControlInput {
   clearEditors: Boolean
   controlKindID: ID
   clearControlKind: Boolean
+  controlOriginID: ID
+  clearControlOrigin: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -80212,18 +80350,21 @@ input UpdateOrganizationInput {
   addWorkflowDefinitionCreatorIDs: [ID!]
   removeWorkflowDefinitionCreatorIDs: [ID!]
   clearWorkflowDefinitionCreators: Boolean
-  addCampaignsManagerIDs: [ID!]
-  removeCampaignsManagerIDs: [ID!]
-  clearCampaignsManager: Boolean
+  addCampaignManagerIDs: [ID!]
+  removeCampaignManagerIDs: [ID!]
+  clearCampaignManager: Boolean
   addComplianceManagerIDs: [ID!]
   removeComplianceManagerIDs: [ID!]
   clearComplianceManager: Boolean
   addGroupManagerIDs: [ID!]
   removeGroupManagerIDs: [ID!]
   clearGroupManager: Boolean
-  addPoliciesManagerIDs: [ID!]
-  removePoliciesManagerIDs: [ID!]
-  clearPoliciesManager: Boolean
+  addIntegrationManagerIDs: [ID!]
+  removeIntegrationManagerIDs: [ID!]
+  clearIntegrationManager: Boolean
+  addPolicyManagerIDs: [ID!]
+  removePolicyManagerIDs: [ID!]
+  clearPolicyManager: Boolean
   addRegistryManagerIDs: [ID!]
   removeRegistryManagerIDs: [ID!]
   clearRegistryManager: Boolean
@@ -80233,9 +80374,9 @@ input UpdateOrganizationInput {
   addTrustCenterManagerIDs: [ID!]
   removeTrustCenterManagerIDs: [ID!]
   clearTrustCenterManager: Boolean
-  addWorkflowsManagerIDs: [ID!]
-  removeWorkflowsManagerIDs: [ID!]
-  clearWorkflowsManager: Boolean
+  addWorkflowManagerIDs: [ID!]
+  removeWorkflowManagerIDs: [ID!]
+  clearWorkflowManager: Boolean
   settingID: ID
   clearSetting: Boolean
   addPersonalAccessTokenIDs: [ID!]
@@ -82270,6 +82411,11 @@ input UpdateSubcontrolInput {
   subcontrolKindName: String
   clearSubcontrolKindName: Boolean
   """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  clearControlOriginName: Boolean
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -82328,6 +82474,8 @@ input UpdateSubcontrolInput {
   clearScans: Boolean
   subcontrolKindID: ID
   clearSubcontrolKind: Boolean
+  controlOriginID: ID
+  clearControlOrigin: Boolean
   controlID: ID
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]

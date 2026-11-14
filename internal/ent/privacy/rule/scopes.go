@@ -25,6 +25,9 @@ const (
 	CanEditPrefix   = "can_edit_"
 	CanDeletePrefix = "can_delete_"
 	CanViewPrefix   = "can_view_"
+
+	// CanManageIntegrationsRelation is the organization relation required to run integration operations
+	CanManageIntegrationsRelation = "can_manage_integrations"
 )
 
 // scopedRelation returns the scoped relation based on the object type, relation, and operation. A operation is checked for for create, update, delete. If instead a specific relation should be checked, that should be passed instead of the operation

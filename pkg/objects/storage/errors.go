@@ -6,6 +6,8 @@ import (
 )
 
 var (
+	// ErrObjectNotFound is returned when the requested object does not exist in the backing store
+	ErrObjectNotFound = errors.New("object not found")
 	// ErrParseFailed is matched by every ParseError, so callers can check for any document parse failure with errors.Is
 	ErrParseFailed = errors.New("failed to parse document")
 	// ErrProviderResolutionRequired is returned when provider resolution is required but not available

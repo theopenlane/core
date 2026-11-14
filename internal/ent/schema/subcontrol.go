@@ -181,6 +181,7 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(s, withWorkflowEnumEdges()),
+			newCustomEnumMixin(s, withEnumFieldName("control_origin"), withGlobalEnum()),
 			WorkflowApprovalMixin{},
 		},
 	}.getMixins(s)
