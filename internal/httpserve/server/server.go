@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/specs"
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/pkg/metrics"
+	"github.com/theopenlane/core/v2/pkg/middleware/clientip"
 	echodebug "github.com/theopenlane/core/v2/pkg/middleware/debug"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/logx"
@@ -39,12 +40,16 @@ type LogConfig struct {
 	PrettyLog bool
 	// LogLevel sets the log level for the server, defaults to INFO
 	LogLevel echo_log.Lvl
+	// ClientIP configures how the request's real IP is resolved; it mirrors the rate limiter's settings so
+	// request logs, audit records, and limiter keys agree
+	ClientIP clientip.Options
 }
 
 // ConfigureEcho sets up the echo server with the default middleware and logging
 func ConfigureEcho(c LogConfig) *echo.Echo {
 	e := echo.New()
 	e.HTTPErrorHandler = CustomHTTPErrorHandler
+	e.IPExtractor = clientip.Extractor(c.ClientIP)
 
 	zLvl, _ := logx.MatchEchoLevel(c.LogLevel)
 	loggers := logx.Configure(logx.LoggerConfig{
@@ -124,6 +129,11 @@ func (s *Server) AddHandler(r handler) {
 func NewServer(c config.Config) (*Server, error) {
 	logConfig := LogConfig{
 		PrettyLog: c.Settings.Server.Pretty,
+		ClientIP: clientip.Options{
+			ForwarderSecret:          c.Settings.Ratelimit.ForwarderSecret,
+			Headers:                  c.Settings.Ratelimit.Headers,
+			ForwardedIndexFromBehind: c.Settings.Ratelimit.ForwardedIndexFromBehind,
+		},
 	}
 
 	if c.Settings.Server.Debug {
