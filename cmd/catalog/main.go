@@ -14,7 +14,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/urfave/cli/v3"
 
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 	"github.com/theopenlane/core/v2/pkg/catalog"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/utils/cli/tables"

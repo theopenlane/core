@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
