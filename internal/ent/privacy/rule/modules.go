@@ -14,14 +14,15 @@ import (
 	features "github.com/theopenlane/core/v2/internal/entitlements/features"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/mapx"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/permissioncache"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/mapx"
 )
 
 // HasFeature reports whether the current organization has the given feature enabled
@@ -308,7 +309,11 @@ func DenyIfMissingAllModules() privacy.MutationRule {
 
 		mutationType := m.Type()
 
-		if strings.HasSuffix(mutationType, "History") || ShouldSkipFeatureCheck(ctx) {
+		if strings.HasSuffix(mutationType, "History") {
+			return privacy.Skip
+		}
+
+		if !features.SkipQueryCheckForModule[mutationType] && ShouldSkipFeatureCheck(ctx) {
 			return privacy.Skip
 		}
 

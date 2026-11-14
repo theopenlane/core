@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/filedownloadtoken"
@@ -31,8 +32,9 @@ func TestDatabaseFileDownloadHandler_Success(t *testing.T) {
 	t.Cleanup(restore)
 
 	user := suite.userBuilder(context.Background())
+	suite.enableModules(user.ID, user.OrganizationID, []models.OrgModule{models.CatalogComplianceModule})
 
-	uploadCtx := auth.NewTestContextWithOrgID(user.ID, user.PersonalOrgID)
+	uploadCtx := auth.NewTestContextWithOrgID(user.ID, user.OrganizationID)
 	uploadCtx = auth.WithInternalOperationContext(uploadCtx)
 	uploadCtx = ent.NewContext(uploadCtx, suite.db)
 
@@ -43,7 +45,7 @@ func TestDatabaseFileDownloadHandler_Success(t *testing.T) {
 			RawFile:              bytes.NewReader(fileContent),
 			OriginalName:         "testfile.txt",
 			FieldName:            "uploadFile",
-			CorrelatedObjectID:   user.PersonalOrgID,
+			CorrelatedObjectID:   user.OrganizationID,
 			CorrelatedObjectType: "organization",
 			ContentType:          "text/plain",
 		},
@@ -96,8 +98,9 @@ func TestDatabaseFileDownloadHandler_WithUserID(t *testing.T) {
 	t.Cleanup(restore)
 
 	user := suite.userBuilder(context.Background())
+	suite.enableModules(user.ID, user.OrganizationID, []models.OrgModule{models.CatalogComplianceModule})
 
-	uploadCtx := auth.NewTestContextWithOrgID(user.ID, user.PersonalOrgID)
+	uploadCtx := auth.NewTestContextWithOrgID(user.ID, user.OrganizationID)
 	uploadCtx = auth.WithInternalOperationContext(uploadCtx)
 	uploadCtx = ent.NewContext(uploadCtx, suite.db)
 
@@ -108,7 +111,7 @@ func TestDatabaseFileDownloadHandler_WithUserID(t *testing.T) {
 			RawFile:              bytes.NewReader(fileContent),
 			OriginalName:         "userfile.txt",
 			FieldName:            "uploadFile",
-			CorrelatedObjectID:   user.PersonalOrgID,
+			CorrelatedObjectID:   user.OrganizationID,
 			CorrelatedObjectType: "organization",
 			ContentType:          "text/plain",
 		},
@@ -184,8 +187,9 @@ func TestDatabaseFileDownloadHandler_PresignedURLGeneration(t *testing.T) {
 	})
 
 	user := suite.userBuilder(context.Background())
+	suite.enableModules(user.ID, user.OrganizationID, []models.OrgModule{models.CatalogComplianceModule})
 
-	uploadCtx := auth.NewTestContextWithOrgID(user.ID, user.PersonalOrgID)
+	uploadCtx := auth.NewTestContextWithOrgID(user.ID, user.OrganizationID)
 	uploadCtx = auth.WithInternalOperationContext(uploadCtx)
 	uploadCtx = ent.NewContext(uploadCtx, suite.db)
 
@@ -196,7 +200,7 @@ func TestDatabaseFileDownloadHandler_PresignedURLGeneration(t *testing.T) {
 			RawFile:              bytes.NewReader(fileContent),
 			OriginalName:         "presigned.txt",
 			FieldName:            "uploadFile",
-			CorrelatedObjectID:   user.PersonalOrgID,
+			CorrelatedObjectID:   user.OrganizationID,
 			CorrelatedObjectType: "organization",
 			ContentType:          "text/plain",
 		},
