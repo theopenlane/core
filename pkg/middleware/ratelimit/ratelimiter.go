@@ -2,9 +2,7 @@ package ratelimit
 
 import (
 	"context"
-	"crypto/subtle"
 	"math"
-	"net"
 	"net/http"
 	"strconv"
 	"strings"
@@ -13,6 +11,8 @@ import (
 	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/logx"
+
+	"github.com/theopenlane/core/v2/pkg/middleware/clientip"
 )
 
 const (
@@ -23,17 +23,14 @@ const (
 	rateLimitLogComponent    = "ratelimit"
 )
 
-// DefaultClientIPHeaders is the header precedence used to derive the originating client IP. It prefers Cloudflare's
-// real-client-IP headers - CF-Connecting-IP (all plans) then the Enterprise True-Client-IP - and falls back to the
-// socket peer (RemoteAddr). These forwarded headers are only trustworthy when the origin is locked to Cloudflare
-// (authenticated origin pulls or firewalling to Cloudflare IP ranges); otherwise a direct-to-origin request can spoof them
-var DefaultClientIPHeaders = []string{"CF-Connecting-IP", "True-Client-IP", "RemoteAddr"}
+// DefaultClientIPHeaders aliases clientip.DefaultHeaders, the header precedence used to derive the originating client IP
+var DefaultClientIPHeaders = clientip.DefaultHeaders
 
 const (
-	// ForwardedClientIPHeader carries the originating visitor IP asserted by a trusted forwarding proxy
-	ForwardedClientIPHeader = "X-Openlane-Client-IP"
-	// ForwarderSecretHeader carries the shared secret a trusted forwarding proxy presents
-	ForwarderSecretHeader = "X-Openlane-Forwarder-Secret" //nolint:gosec // header name, not a credential
+	// ForwardedClientIPHeader aliases clientip.ForwardedClientIPHeader
+	ForwardedClientIPHeader = clientip.ForwardedClientIPHeader
+	// ForwarderSecretHeader aliases clientip.ForwarderSecretHeader
+	ForwarderSecretHeader = clientip.ForwarderSecretHeader
 )
 
 // RateOption defines a distinct rate limiting window and request allowance.
@@ -282,7 +279,7 @@ func deriveRateLimitLogger(c echo.Context, key string) zerolog.Logger {
 		Str("request_path", c.Path()).
 		Str("request_method", c.Request().Method).
 		Str("remote_ip", c.RealIP()).
-		Str("cf_connecting_ip", c.Request().Header.Get("CF-Connecting-IP")).
+		Str("cf_connecting_ip", c.Request().Header.Get(clientip.HeaderCFConnectingIP)).
 		Logger()
 }
 
@@ -317,68 +314,11 @@ func logRateLimitDecision(input limitDecisionLogInput) {
 	event.Msg("rate limit exceeded")
 }
 
-// extractIP derives the client IP for the limiter key
+// extractIP derives the client IP for the limiter key using the same resolution as the server's IP extractor
 func extractIP(c echo.Context, headers []string, conf *Config) string {
-	req := c.Request()
-
-	if ip := trustedForwardedIP(req, conf.ForwarderSecret); ip != "" {
-		return ip
-	}
-
-	for _, header := range headers {
-		switch strings.ToLower(header) {
-		case "remoteaddr":
-			if req.RemoteAddr == "" {
-				continue
-			}
-
-			ip, _, err := net.SplitHostPort(req.RemoteAddr)
-			if err != nil {
-				return req.RemoteAddr
-			}
-
-			return ip
-		case "x-forwarded-for":
-			forwarded := req.Header.Get("X-Forwarded-For")
-			if forwarded == "" {
-				continue
-			}
-
-			parts := strings.Split(forwarded, ",")
-			for i, part := range parts {
-				parts[i] = strings.TrimSpace(part)
-			}
-
-			index := max(len(parts)-1-conf.ForwardedIndexFromBehind, 0)
-
-			if parts[index] != "" {
-				return parts[index]
-			}
-		default:
-			if value := req.Header.Get(header); value != "" {
-				return value
-			}
-		}
-	}
-
-	return ""
-}
-
-// trustedForwardedIP returns the client IP asserted in ForwardedClientIPHeader
-func trustedForwardedIP(req *http.Request, secret string) string {
-	if secret == "" {
-		return ""
-	}
-
-	presented := req.Header.Get(ForwarderSecretHeader)
-	if subtle.ConstantTimeCompare([]byte(presented), []byte(secret)) != 1 {
-		return ""
-	}
-
-	ip := net.ParseIP(strings.TrimSpace(req.Header.Get(ForwardedClientIPHeader)))
-	if ip == nil {
-		return ""
-	}
-
-	return ip.String()
+	return clientip.Resolve(c.Request(), clientip.Options{
+		ForwarderSecret:          conf.ForwarderSecret,
+		Headers:                  headers,
+		ForwardedIndexFromBehind: conf.ForwardedIndexFromBehind,
+	})
 }
