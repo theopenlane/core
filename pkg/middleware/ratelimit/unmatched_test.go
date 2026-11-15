@@ -8,6 +8,7 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/core/v2/pkg/middleware/clientip"
 	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
 )
 

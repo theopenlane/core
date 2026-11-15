@@ -10,6 +10,7 @@ import (
 
 	coreconfig "github.com/theopenlane/core/v2/config"
 	serverconfig "github.com/theopenlane/core/v2/internal/httpserve/config"
+	"github.com/theopenlane/core/v2/pkg/middleware/clientip"
 	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
 )
 
