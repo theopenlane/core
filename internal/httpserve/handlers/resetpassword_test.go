@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -10,8 +11,12 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/utils/passwd"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
@@ -19,12 +24,21 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/testutils"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestResetPasswordHandler(t *testing.T) {
 	suite := suite.setupTest(t)
+
+	// a functional blacklist is required for cutoff revocation to take effect
+	tm, err := testutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
+	assert.NilError(t, err)
+
+	tm.WithBlacklist(tokens.NewRedisTokenBlacklist(suite.sharedRedisClient, "reset-test:"))
+
+	suite.h.TokenManager = tm
 
 	// setup request request
 	suite.registerTestHandler("POST", "password-reset", suite.h.ResetPassword)
@@ -110,6 +124,37 @@ func TestResetPasswordHandler(t *testing.T) {
 			rt, _, err := suite.createUserWithResetToken(t, ec, tc.email, tc.ttl)
 			assert.NilError(t, err)
 
+			userID := rt.OwnerID
+
+			// issue an access token and a session before the reset; iat has second precision and a token
+			// minted in the cutoff second stays valid, so the token is backdated instead of waiting
+			oldClaims := &tokens.Claims{Subject: userID, UserID: userID}
+			oldToken, err := tm.CreateAccessToken(oldClaims)
+			assert.NilError(t, err)
+
+			oldClaims.IssuedAt = jwt.NewNumericDate(time.Now().Add(-time.Minute))
+
+			oldAccess, err := tm.Sign(oldToken)
+			assert.NilError(t, err)
+
+			sessionRec := httptest.NewRecorder()
+			_, err = suite.h.SessionConfig.CreateAndStoreSession(ec, sessionRec, userID)
+			assert.NilError(t, err)
+
+			sessionReq := httptest.NewRequest(http.MethodGet, "/", nil)
+			for _, c := range sessionRec.Result().Cookies() {
+				sessionReq.AddCookie(c)
+			}
+
+			session, err := suite.h.SessionConfig.SessionManager.Get(sessionReq, suite.h.SessionConfig.CookieConfig.Name)
+			assert.NilError(t, err)
+
+			sessionID := suite.h.SessionConfig.SessionManager.GetSessionIDFromCookie(session)
+
+			exists, err := suite.h.SessionConfig.RedisStore.Exists(ec, sessionID)
+			assert.NilError(t, err)
+			assert.Assert(t, is.Equal(int64(1), exists))
+
 			pwResetJSON := models.ResetPasswordRequest{
 				Password: tc.newPassword,
 			}
@@ -153,7 +198,26 @@ func TestResetPasswordHandler(t *testing.T) {
 
 			if tc.expectedStatus != http.StatusOK {
 				assert.Check(t, is.Contains(out.Error, tc.expectedResp))
+
+				// a failed reset leaves existing credentials intact
+				_, err = tm.Verify(oldAccess)
+				assert.Check(t, err == nil)
 			} else {
+				// tokens issued before the reset are rejected and the session is gone
+				_, err = tm.Verify(oldAccess)
+				assert.Check(t, is.ErrorIs(err, tokens.ErrTokenInvalid))
+
+				exists, err := suite.h.SessionConfig.RedisStore.Exists(ec, sessionID)
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(int64(0), exists))
+
+				// a pair created after the reset verifies
+				newAccess, _, err := tm.CreateTokenPair(&tokens.Claims{Subject: userID, UserID: userID})
+				assert.NilError(t, err)
+
+				_, err = tm.Verify(newAccess)
+				assert.NilError(t, err)
+
 				suite.WaitForEvents()
 
 				msgs := suite.mockEmailSender().Messages()
@@ -166,6 +230,110 @@ func TestResetPasswordHandler(t *testing.T) {
 }
 
 // createUserWithResetToken creates a user with a valid reset token and returns the token, user id, and error if one occurred
+// errRevocation simulates a redis failure while revoking credentials during a password reset
+var errRevocation = errors.New("revocation failed")
+
+// failingCutoffBlacklist wraps a TokenBlacklist but always fails RevokeIssuedBefore
+type failingCutoffBlacklist struct {
+	tokens.TokenBlacklist
+}
+
+// RevokeIssuedBefore always returns an error
+func (failingCutoffBlacklist) RevokeIssuedBefore(context.Context, string, time.Time, time.Duration) error {
+	return errRevocation
+}
+
+// failingUserSessionsStore wraps a PersistentStore but always fails DeleteUserSessions
+type failingUserSessionsStore struct {
+	sessions.PersistentStore
+}
+
+// DeleteUserSessions always returns an error
+func (failingUserSessionsStore) DeleteUserSessions(context.Context, string) error {
+	return errRevocation
+}
+
+// TestResetPasswordHandlerRevocationFailure verifies a reset whose credential revocation fails is rolled
+// back, leaving the password and the reset token as they were so the reset can be retried
+func TestResetPasswordHandlerRevocationFailure(t *testing.T) {
+	testCases := []struct {
+		name  string
+		email string
+		setup func(t *testing.T, suite *HandlerTestSuite)
+	}{
+		{
+			name:  "token cutoff revocation fails",
+			email: "vin@theopenlane.io",
+			setup: func(t *testing.T, suite *HandlerTestSuite) {
+				tm, err := testutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
+				assert.NilError(t, err)
+
+				tm.WithBlacklist(failingCutoffBlacklist{tokens.NewRedisTokenBlacklist(suite.sharedRedisClient, "reset-fail-test:")})
+
+				suite.h.TokenManager = tm
+			},
+		},
+		{
+			name:  "session destruction fails",
+			email: "elend@theopenlane.io",
+			setup: func(_ *testing.T, suite *HandlerTestSuite) {
+				// copy the config so the failing store does not leak into other tests
+				sc := *suite.h.SessionConfig
+				sc.RedisStore = failingUserSessionsStore{sc.RedisStore}
+
+				suite.h.SessionConfig = &sc
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			suite := suite.setupTest(t)
+
+			tc.setup(t, suite)
+
+			suite.registerTestHandler("POST", "password-reset", suite.h.ResetPassword)
+
+			ec := echocontext.NewTestEchoContext().Request().Context()
+
+			rt, userID, err := suite.createUserWithResetToken(t, ec, tc.email, "")
+			assert.NilError(t, err)
+
+			body, err := json.Marshal(models.ResetPasswordRequest{
+				Password: "6z9Fqc-E-9v32NsJzLNU",
+				Token:    rt.Token,
+			})
+			assert.NilError(t, err)
+
+			req := httptest.NewRequest(http.MethodPost, "/password-reset", strings.NewReader(string(body)))
+			req.Header.Set("Content-Type", "application/json")
+
+			recorder := httptest.NewRecorder()
+
+			suite.e.ServeHTTP(recorder, req)
+
+			assert.Check(t, is.Equal(http.StatusInternalServerError, recorder.Code))
+
+			internalCtx := auth.WithInternalOperationContext(ec)
+
+			// the password change was rolled back
+			user := suite.db.User.GetX(internalCtx, userID)
+
+			valid, err := passwd.VerifyDerivedKey(*user.Password, validPassword)
+			assert.NilError(t, err)
+			assert.Check(t, valid)
+
+			// the reset token was not consumed
+			stored := suite.db.PasswordResetToken.GetX(internalCtx, rt.ID)
+			assert.Check(t, stored.TTL.After(time.Now()))
+
+			// no success email was sent
+			suite.WaitForEvents()
+			assert.Check(t, is.Len(suite.mockEmailSender().Messages(), 0))
+		})
+	}
+}
+
 func (suite *HandlerTestSuite) createUserWithResetToken(t *testing.T, ec context.Context, email string, ttl string) (*ent.PasswordResetToken, string, error) {
 	ctx := auth.WithInternalOperationContext(ec)
 
