@@ -75,7 +75,6 @@ type RiskQuery struct {
 	withTasks                     *TaskQuery
 	withAssets                    *AssetQuery
 	withEntities                  *EntityQuery
-	withLegacyEntities            *EntityQuery
 	withScans                     *ScanQuery
 	withStakeholder               *GroupQuery
 	withDelegate                  *GroupQuery
@@ -103,7 +102,6 @@ type RiskQuery struct {
 	withNamedTasks                map[string]*TaskQuery
 	withNamedAssets               map[string]*AssetQuery
 	withNamedEntities             map[string]*EntityQuery
-	withNamedLegacyEntities       map[string]*EntityQuery
 	withNamedScans                map[string]*ScanQuery
 	withNamedComments             map[string]*NoteQuery
 	withNamedDiscussions          map[string]*DiscussionQuery
@@ -698,28 +696,6 @@ func (_q *RiskQuery) QueryEntities() *EntityQuery {
 	return query
 }
 
-// QueryLegacyEntities chains the current query on the "legacy_entities" edge.
-func (_q *RiskQuery) QueryLegacyEntities() *EntityQuery {
-	query := (&EntityClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(risk.Table, risk.FieldID, selector),
-			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, risk.LegacyEntitiesTable, risk.LegacyEntitiesColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryScans chains the current query on the "scans" edge.
 func (_q *RiskQuery) QueryScans() *ScanQuery {
 	query := (&ScanClient{config: _q.config}).Query()
@@ -1157,7 +1133,6 @@ func (_q *RiskQuery) Clone() *RiskQuery {
 		withTasks:                     _q.withTasks.Clone(),
 		withAssets:                    _q.withAssets.Clone(),
 		withEntities:                  _q.withEntities.Clone(),
-		withLegacyEntities:            _q.withLegacyEntities.Clone(),
 		withScans:                     _q.withScans.Clone(),
 		withStakeholder:               _q.withStakeholder.Clone(),
 		withDelegate:                  _q.withDelegate.Clone(),
@@ -1450,17 +1425,6 @@ func (_q *RiskQuery) WithEntities(opts ...func(*EntityQuery)) *RiskQuery {
 	return _q
 }
 
-// WithLegacyEntities tells the query-builder to eager-load the nodes that are connected to
-// the "legacy_entities" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *RiskQuery) WithLegacyEntities(opts ...func(*EntityQuery)) *RiskQuery {
-	query := (&EntityClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withLegacyEntities = query
-	return _q
-}
-
 // WithScans tells the query-builder to eager-load the nodes that are connected to
 // the "scans" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *RiskQuery) WithScans(opts ...func(*ScanQuery)) *RiskQuery {
@@ -1656,7 +1620,7 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [36]bool{
+		loadedTypes = [35]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
@@ -1682,7 +1646,6 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			_q.withTasks != nil,
 			_q.withAssets != nil,
 			_q.withEntities != nil,
-			_q.withLegacyEntities != nil,
 			_q.withScans != nil,
 			_q.withStakeholder != nil,
 			_q.withDelegate != nil,
@@ -1883,13 +1846,6 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			return nil, err
 		}
 	}
-	if query := _q.withLegacyEntities; query != nil {
-		if err := _q.loadLegacyEntities(ctx, query, nodes,
-			func(n *Risk) { n.Edges.LegacyEntities = []*Entity{} },
-			func(n *Risk, e *Entity) { n.Edges.LegacyEntities = append(n.Edges.LegacyEntities, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withScans; query != nil {
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Scans = []*Scan{} },
@@ -2055,13 +2011,6 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedEntities(name) },
 			func(n *Risk, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedLegacyEntities {
-		if err := _q.loadLegacyEntities(ctx, query, nodes,
-			func(n *Risk) { n.appendNamedLegacyEntities(name) },
-			func(n *Risk, e *Entity) { n.appendNamedLegacyEntities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3272,37 +3221,6 @@ func (_q *RiskQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes
 	}
 	return nil
 }
-func (_q *RiskQuery) loadLegacyEntities(ctx context.Context, query *EntityQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Entity)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Risk)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Entity(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(risk.LegacyEntitiesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.risk_entities
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "risk_entities" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "risk_entities" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
 func (_q *RiskQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Scan)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Risk)
@@ -4056,20 +3974,6 @@ func (_q *RiskQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) 
 		_q.withNamedEntities = make(map[string]*EntityQuery)
 	}
 	_q.withNamedEntities[name] = query
-	return _q
-}
-
-// WithNamedLegacyEntities tells the query-builder to eager-load the nodes that are connected to the "legacy_entities"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *RiskQuery) WithNamedLegacyEntities(name string, opts ...func(*EntityQuery)) *RiskQuery {
-	query := (&EntityClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedLegacyEntities == nil {
-		_q.withNamedLegacyEntities = make(map[string]*EntityQuery)
-	}
-	_q.withNamedLegacyEntities[name] = query
 	return _q
 }
 

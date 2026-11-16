@@ -1089,21 +1089,6 @@ func (_c *RiskCreate) AddEntities(v ...*Entity) *RiskCreate {
 	return _c.AddEntityIDs(ids...)
 }
 
-// AddLegacyEntityIDs adds the "legacy_entities" edge to the Entity entity by IDs.
-func (_c *RiskCreate) AddLegacyEntityIDs(ids ...string) *RiskCreate {
-	_c.mutation.AddLegacyEntityIDs(ids...)
-	return _c
-}
-
-// AddLegacyEntities adds the "legacy_entities" edges to the Entity entity.
-func (_c *RiskCreate) AddLegacyEntities(v ...*Entity) *RiskCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddLegacyEntityIDs(ids...)
-}
-
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
 func (_c *RiskCreate) AddScanIDs(ids ...string) *RiskCreate {
 	_c.mutation.AddScanIDs(ids...)
@@ -1983,22 +1968,6 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 			Inverse: false,
 			Table:   risk.EntitiesTable,
 			Columns: risk.EntitiesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.LegacyEntitiesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   risk.LegacyEntitiesTable,
-			Columns: []string{risk.LegacyEntitiesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),

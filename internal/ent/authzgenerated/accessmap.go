@@ -5031,11 +5031,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
-}, "legacy_entities": {
-	ObjectType:          "entity",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
-	HasSystemOwnedField: true,
 }, "scans": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,

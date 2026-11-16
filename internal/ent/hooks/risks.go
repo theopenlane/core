@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -20,7 +22,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
-	"github.com/theopenlane/logx"
 )
 
 // HookRisks sets fields on the risk based on changes to fields
@@ -32,10 +33,6 @@ func HookRisks() ent.Hook {
 			// skip if delete op, we don't care about setting any fields
 			if isDeleteOp(ctx, m) {
 				return next.Mutate(ctx, m)
-			}
-
-			if len(m.LegacyEntitiesIDs()) > 0 || len(m.RemovedLegacyEntitiesIDs()) > 0 || m.LegacyEntitiesCleared() {
-				return nil, fmt.Errorf("%w: legacy_entities is deprecated; use entities instead", ErrInvalidInput) //nolint:err113
 			}
 
 			// set last reviewed at timestamp if a completed review is added

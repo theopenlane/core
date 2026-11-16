@@ -19428,14 +19428,6 @@ func init() {
 			AddField:    "add_internal_policy_ids",
 		},
 		{
-			Name:        "legacy_entities",
-			Label:       "LegacyEntities",
-			Target:      SchemaEntity,
-			TargetType:  "Entity",
-			CreateField: "legacy_entity_ids",
-			AddField:    "add_legacy_entity_ids",
-		},
-		{
 			Name:        "owner",
 			Label:       "Owner",
 			Target:      SchemaOrganization,
