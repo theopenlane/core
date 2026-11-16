@@ -184,8 +184,6 @@ const (
 	EdgeAssets = "assets"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
-	// EdgeLegacyEntities holds the string denoting the legacy_entities edge name in mutations.
-	EdgeLegacyEntities = "legacy_entities"
 	// EdgeScans holds the string denoting the scans edge name in mutations.
 	EdgeScans = "scans"
 	// EdgeStakeholder holds the string denoting the stakeholder edge name in mutations.
@@ -357,13 +355,6 @@ const (
 	// EntitiesInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntitiesInverseTable = "entities"
-	// LegacyEntitiesTable is the table that holds the legacy_entities relation/edge.
-	LegacyEntitiesTable = "entities"
-	// LegacyEntitiesInverseTable is the table name for the Entity entity.
-	// It exists in this package in order to avoid circular dependency with the "entity" package.
-	LegacyEntitiesInverseTable = "entities"
-	// LegacyEntitiesColumn is the table column denoting the legacy_entities relation/edge.
-	LegacyEntitiesColumn = "risk_entities"
 	// ScansTable is the table that holds the scans relation/edge.
 	ScansTable = "scans"
 	// ScansInverseTable is the table name for the Scan entity.
@@ -1206,20 +1197,6 @@ func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByLegacyEntitiesCount orders the results by legacy_entities count.
-func ByLegacyEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newLegacyEntitiesStep(), opts...)
-	}
-}
-
-// ByLegacyEntities orders the results by legacy_entities terms.
-func ByLegacyEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newLegacyEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByScansCount orders the results by scans count.
 func ByScansCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1518,13 +1495,6 @@ func newEntitiesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntitiesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
-	)
-}
-func newLegacyEntitiesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(LegacyEntitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, LegacyEntitiesTable, LegacyEntitiesColumn),
 	)
 }
 func newScansStep() *sqlgraph.Step {

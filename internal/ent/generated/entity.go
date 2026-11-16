@@ -187,7 +187,6 @@ type Entity struct {
 	// The values are being populated by the EntityQuery when eager-loading is set.
 	Edges                EntityEdges `json:"edges"`
 	entity_type_entities *string
-	risk_entities        *string
 	selectValues         sql.SelectValues
 }
 
@@ -777,8 +776,6 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case entity.ForeignKeys[0]: // entity_type_entities
 			values[i] = new(sql.NullString)
-		case entity.ForeignKeys[1]: // risk_entities
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -1302,13 +1299,6 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.entity_type_entities = new(string)
 				*_m.entity_type_entities = value.String
-			}
-		case entity.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field risk_entities", values[i])
-			} else if value.Valid {
-				_m.risk_entities = new(string)
-				*_m.risk_entities = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

@@ -4422,29 +4422,6 @@ func HasEntitiesWith(preds ...predicate.Entity) predicate.Risk {
 	})
 }
 
-// HasLegacyEntities applies the HasEdge predicate on the "legacy_entities" edge.
-func HasLegacyEntities() predicate.Risk {
-	return predicate.Risk(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, LegacyEntitiesTable, LegacyEntitiesColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasLegacyEntitiesWith applies the HasEdge predicate on the "legacy_entities" edge with a given conditions (other predicates).
-func HasLegacyEntitiesWith(preds ...predicate.Entity) predicate.Risk {
-	return predicate.Risk(func(s *sql.Selector) {
-		step := newLegacyEntitiesStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasScans applies the HasEdge predicate on the "scans" edge.
 func HasScans() predicate.Risk {
 	return predicate.Risk(func(s *sql.Selector) {

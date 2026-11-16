@@ -1387,21 +1387,6 @@ func (_u *RiskUpdate) AddEntities(v ...*Entity) *RiskUpdate {
 	return _u.AddEntityIDs(ids...)
 }
 
-// AddLegacyEntityIDs adds the "legacy_entities" edge to the Entity entity by IDs.
-func (_u *RiskUpdate) AddLegacyEntityIDs(ids ...string) *RiskUpdate {
-	_u.mutation.AddLegacyEntityIDs(ids...)
-	return _u
-}
-
-// AddLegacyEntities adds the "legacy_entities" edges to the Entity entity.
-func (_u *RiskUpdate) AddLegacyEntities(v ...*Entity) *RiskUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddLegacyEntityIDs(ids...)
-}
-
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
 func (_u *RiskUpdate) AddScanIDs(ids ...string) *RiskUpdate {
 	_u.mutation.AddScanIDs(ids...)
@@ -1889,27 +1874,6 @@ func (_u *RiskUpdate) RemoveEntities(v ...*Entity) *RiskUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEntityIDs(ids...)
-}
-
-// ClearLegacyEntities clears all "legacy_entities" edges to the Entity entity.
-func (_u *RiskUpdate) ClearLegacyEntities() *RiskUpdate {
-	_u.mutation.ClearLegacyEntities()
-	return _u
-}
-
-// RemoveLegacyEntityIDs removes the "legacy_entities" edge to Entity entities by IDs.
-func (_u *RiskUpdate) RemoveLegacyEntityIDs(ids ...string) *RiskUpdate {
-	_u.mutation.RemoveLegacyEntityIDs(ids...)
-	return _u
-}
-
-// RemoveLegacyEntities removes "legacy_entities" edges to Entity entities.
-func (_u *RiskUpdate) RemoveLegacyEntities(v ...*Entity) *RiskUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveLegacyEntityIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
@@ -3378,51 +3342,6 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Inverse: false,
 			Table:   risk.EntitiesTable,
 			Columns: risk.EntitiesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.LegacyEntitiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   risk.LegacyEntitiesTable,
-			Columns: []string{risk.LegacyEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedLegacyEntitiesIDs(); len(nodes) > 0 && !_u.mutation.LegacyEntitiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   risk.LegacyEntitiesTable,
-			Columns: []string{risk.LegacyEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.LegacyEntitiesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   risk.LegacyEntitiesTable,
-			Columns: []string{risk.LegacyEntitiesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
@@ -5205,21 +5124,6 @@ func (_u *RiskUpdateOne) AddEntities(v ...*Entity) *RiskUpdateOne {
 	return _u.AddEntityIDs(ids...)
 }
 
-// AddLegacyEntityIDs adds the "legacy_entities" edge to the Entity entity by IDs.
-func (_u *RiskUpdateOne) AddLegacyEntityIDs(ids ...string) *RiskUpdateOne {
-	_u.mutation.AddLegacyEntityIDs(ids...)
-	return _u
-}
-
-// AddLegacyEntities adds the "legacy_entities" edges to the Entity entity.
-func (_u *RiskUpdateOne) AddLegacyEntities(v ...*Entity) *RiskUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddLegacyEntityIDs(ids...)
-}
-
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
 func (_u *RiskUpdateOne) AddScanIDs(ids ...string) *RiskUpdateOne {
 	_u.mutation.AddScanIDs(ids...)
@@ -5707,27 +5611,6 @@ func (_u *RiskUpdateOne) RemoveEntities(v ...*Entity) *RiskUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEntityIDs(ids...)
-}
-
-// ClearLegacyEntities clears all "legacy_entities" edges to the Entity entity.
-func (_u *RiskUpdateOne) ClearLegacyEntities() *RiskUpdateOne {
-	_u.mutation.ClearLegacyEntities()
-	return _u
-}
-
-// RemoveLegacyEntityIDs removes the "legacy_entities" edge to Entity entities by IDs.
-func (_u *RiskUpdateOne) RemoveLegacyEntityIDs(ids ...string) *RiskUpdateOne {
-	_u.mutation.RemoveLegacyEntityIDs(ids...)
-	return _u
-}
-
-// RemoveLegacyEntities removes "legacy_entities" edges to Entity entities.
-func (_u *RiskUpdateOne) RemoveLegacyEntities(v ...*Entity) *RiskUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveLegacyEntityIDs(ids...)
 }
 
 // ClearScans clears all "scans" edges to the Scan entity.
@@ -7226,51 +7109,6 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 			Inverse: false,
 			Table:   risk.EntitiesTable,
 			Columns: risk.EntitiesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.LegacyEntitiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   risk.LegacyEntitiesTable,
-			Columns: []string{risk.LegacyEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedLegacyEntitiesIDs(); len(nodes) > 0 && !_u.mutation.LegacyEntitiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   risk.LegacyEntitiesTable,
-			Columns: []string{risk.LegacyEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.LegacyEntitiesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   risk.LegacyEntitiesTable,
-			Columns: []string{risk.LegacyEntitiesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),

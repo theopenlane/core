@@ -6014,7 +6014,6 @@ type ComplexityRoot struct {
 		IntegrationRuns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		InternalPolicies            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		LastReviewedAt              func(childComplexity int) int
-		LegacyEntities              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Likelihood                  func(childComplexity int) int
 		ManagedBy                   func(childComplexity int) int
 		MitigatedAt                 func(childComplexity int) int
@@ -42572,17 +42571,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.LastReviewedAt(childComplexity), true
-	case "Risk.legacyEntities":
-		if e.ComplexityRoot.Risk.LegacyEntities == nil {
-			break
-		}
-
-		args, err := ec.field_Risk_legacyEntities_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Risk.LegacyEntities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Risk.likelihood":
 		if e.ComplexityRoot.Risk.Likelihood == nil {
 			break
@@ -75666,7 +75654,6 @@ input CreateRiskInput {
   taskIDs: [ID!]
   assetIDs: [ID!]
   entityIDs: [ID!]
-  legacyEntityIDs: [ID!]
   scanIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
@@ -120831,37 +120818,6 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
     """
     where: EntityWhereInput
   ): EntityConnection!
-  legacyEntities(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Entities returned from the connection.
-    """
-    orderBy: [EntityOrder!]
-
-    """
-    Filtering options for Entities returned from the connection.
-    """
-    where: EntityWhereInput
-  ): EntityConnection! @deprecated(reason: "use entities instead")
   scans(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -122033,11 +121989,6 @@ input RiskWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
-  """
-  legacy_entities edge predicates
-  """
-  hasLegacyEntities: Boolean
-  hasLegacyEntitiesWith: [EntityWhereInput!]
   """
   scans edge predicates
   """
@@ -140823,9 +140774,6 @@ input UpdateRiskInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
-  addLegacyEntityIDs: [ID!]
-  removeLegacyEntityIDs: [ID!]
-  clearLegacyEntities: Boolean
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
@@ -173763,8 +173711,6 @@ func (ec *executionContext) childFields_Risk(ctx context.Context, field graphql.
 		return ec.fieldContext_Risk_assets(ctx, field)
 	case "entities":
 		return ec.fieldContext_Risk_entities(ctx, field)
-	case "legacyEntities":
-		return ec.fieldContext_Risk_legacyEntities(ctx, field)
 	case "scans":
 		return ec.fieldContext_Risk_scans(ctx, field)
 	case "stakeholder":

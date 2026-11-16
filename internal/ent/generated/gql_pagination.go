@@ -48190,13 +48190,6 @@ func (_q *RiskQuery) clonePage() *RiskQuery {
 			c.withNamedEntities[name] = q.clonePage()
 		}
 	}
-	c.withLegacyEntities = _q.withLegacyEntities.clonePage()
-	if _q.withNamedLegacyEntities != nil {
-		c.withNamedLegacyEntities = make(map[string]*EntityQuery, len(_q.withNamedLegacyEntities))
-		for name, q := range _q.withNamedLegacyEntities {
-			c.withNamedLegacyEntities[name] = q.clonePage()
-		}
-	}
 	c.withScans = _q.withScans.clonePage()
 	if _q.withNamedScans != nil {
 		c.withNamedScans = make(map[string]*ScanQuery, len(_q.withNamedScans))

@@ -26540,22 +26540,6 @@ func (c *RiskClient) QueryEntities(_m *Risk) *EntityQuery {
 	return query
 }
 
-// QueryLegacyEntities queries the legacy_entities edge of a Risk.
-func (c *RiskClient) QueryLegacyEntities(_m *Risk) *EntityQuery {
-	query := (&EntityClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(risk.Table, risk.FieldID, id),
-			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, risk.LegacyEntitiesTable, risk.LegacyEntitiesColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryScans queries the scans edge of a Risk.
 func (c *RiskClient) QueryScans(_m *Risk) *ScanQuery {
 	query := (&ScanClient{config: c.config}).Query()

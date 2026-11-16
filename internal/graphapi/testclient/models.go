@@ -9818,7 +9818,6 @@ type CreateRiskInput struct {
 	TaskIDs                     []string            `json:"taskIDs,omitempty"`
 	AssetIDs                    []string            `json:"assetIDs,omitempty"`
 	EntityIDs                   []string            `json:"entityIDs,omitempty"`
-	LegacyEntityIDs             []string            `json:"legacyEntityIDs,omitempty"`
 	ScanIDs                     []string            `json:"scanIDs,omitempty"`
 	StakeholderID               *string             `json:"stakeholderID,omitempty"`
 	DelegateID                  *string             `json:"delegateID,omitempty"`
@@ -31335,7 +31334,6 @@ type Risk struct {
 	Tasks                     *TaskConnection           `json:"tasks"`
 	Assets                    *AssetConnection          `json:"assets"`
 	Entities                  *EntityConnection         `json:"entities"`
-	LegacyEntities            *EntityConnection         `json:"legacyEntities"`
 	Scans                     *ScanConnection           `json:"scans"`
 	// the group of users who are responsible for risk oversight
 	Stakeholder *Group `json:"stakeholder,omitempty"`
@@ -32067,9 +32065,6 @@ type RiskWhereInput struct {
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
-	// legacy_entities edge predicates
-	HasLegacyEntities     *bool               `json:"hasLegacyEntities,omitempty"`
-	HasLegacyEntitiesWith []*EntityWhereInput `json:"hasLegacyEntitiesWith,omitempty"`
 	// scans edge predicates
 	HasScans     *bool             `json:"hasScans,omitempty"`
 	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
@@ -44351,9 +44346,6 @@ type UpdateRiskInput struct {
 	AddEntityIDs                   []string                `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs                []string                `json:"removeEntityIDs,omitempty"`
 	ClearEntities                  *bool                   `json:"clearEntities,omitempty"`
-	AddLegacyEntityIDs             []string                `json:"addLegacyEntityIDs,omitempty"`
-	RemoveLegacyEntityIDs          []string                `json:"removeLegacyEntityIDs,omitempty"`
-	ClearLegacyEntities            *bool                   `json:"clearLegacyEntities,omitempty"`
 	AddScanIDs                     []string                `json:"addScanIDs,omitempty"`
 	RemoveScanIDs                  []string                `json:"removeScanIDs,omitempty"`
 	ClearScans                     *bool                   `json:"clearScans,omitempty"`

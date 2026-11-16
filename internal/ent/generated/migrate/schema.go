@@ -2690,7 +2690,6 @@ var (
 		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_entities", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "risk_entities", Type: field.TypeString, Nullable: true},
 	}
 	// EntitiesTable holds the schema information for the "entities" table.
 	EntitiesTable = &schema.Table{
@@ -2792,12 +2791,6 @@ var (
 				Symbol:     "entities_organizations_entities",
 				Columns:    []*schema.Column{EntitiesColumns[79]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "entities_risks_entities",
-				Columns:    []*schema.Column{EntitiesColumns[80]},
-				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -17568,7 +17561,6 @@ func init() {
 	EntitiesTable.ForeignKeys[13].RefTable = FilesTable
 	EntitiesTable.ForeignKeys[14].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[15].RefTable = OrganizationsTable
-	EntitiesTable.ForeignKeys[16].RefTable = RisksTable
 	EntityTypesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EventsTable.ForeignKeys[0].RefTable = DirectoryMembershipsTable
 	EventsTable.ForeignKeys[1].RefTable = ExportsTable

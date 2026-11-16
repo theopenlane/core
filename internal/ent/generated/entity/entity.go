@@ -618,7 +618,6 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"entity_type_entities",
-	"risk_entities",
 }
 
 var (
