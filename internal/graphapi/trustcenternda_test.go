@@ -222,7 +222,12 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signatory_info": map[string]any{
 						"email": "test@example.com",
 					},
-					"acknowledgment": true,
+					"acknowledgment": map[string]any{
+						"acknowledged": true,
+						"fullName":     "Jane Doe",
+						"signature":    "data:image/svg+xml;charset=utf-8",
+						"signedAt":     "2026-11-16T14:30:00Z",
+					},
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
@@ -244,7 +249,12 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signatory_info": map[string]any{
 						"email": "test@example.com",
 					},
-					"acknowledgment": true,
+					"acknowledgment": map[string]any{
+						"acknowledged": true,
+						"fullName":     "Jane Doe",
+						"signature":    "data:image/svg+xml;charset=utf-8",
+						"signedAt":     "2026-11-16T14:30:00Z",
+					},
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
@@ -266,7 +276,12 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signatory_info": map[string]any{
 						"email": "wrongemail@yahoo.com",
 					},
-					"acknowledgment": true,
+					"acknowledgment": map[string]any{
+						"acknowledged": true,
+						"fullName":     "Jane Doe",
+						"signature":    "data:image/svg+xml;charset=utf-8",
+						"signedAt":     "2026-11-16T14:30:00Z",
+					},
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
@@ -288,7 +303,12 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signatory_info": map[string]any{
 						"email": "test@example.com",
 					},
-					"acknowledgment": true,
+					"acknowledgment": map[string]any{
+						"acknowledged": true,
+						"fullName":     "Jane Doe",
+						"signature":    "data:image/svg+xml;charset=utf-8",
+						"signedAt":     "2026-11-16T14:30:00Z",
+					},
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
@@ -310,7 +330,12 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signatory_info": map[string]any{
 						"email": "test@example.com",
 					},
-					"acknowledgment": true,
+					"acknowledgment": map[string]any{
+						"acknowledged": true,
+						"fullName":     "Jane Doe",
+						"signature":    "data:image/svg+xml;charset=utf-8",
+						"signedAt":     "2026-11-16T14:30:00Z",
+					},
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2026-06-29T19:37:59.988Z",
@@ -332,7 +357,12 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signatory_info": map[string]any{
 						"email": "test@example.com",
 					},
-					"acknowledgment": true,
+					"acknowledgment": map[string]any{
+						"acknowledged": true,
+						"fullName":     "Jane Doe",
+						"signature":    "data:image/svg+xml;charset=utf-8",
+						"signedAt":     "2026-11-16T14:30:00Z",
+					},
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2026-06-29T20:37:59.988Z",
@@ -354,7 +384,12 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"signatory_info": map[string]any{
 						"email": "test@example.com",
 					},
-					"acknowledgment": true,
+					"acknowledgment": map[string]any{
+						"acknowledged": true,
+						"fullName":     "Jane Doe",
+						"signature":    "data:image/svg+xml;charset=utf-8",
+						"signedAt":     "2026-11-16T14:30:00Z",
+					},
 					"signature_metadata": map[string]any{
 						"ip_address": "192.168.1.100",
 						"timestamp":  "2025-09-22T19:37:59.988Z",
