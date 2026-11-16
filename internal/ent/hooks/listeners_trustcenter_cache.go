@@ -17,6 +17,9 @@ import (
 	"github.com/theopenlane/httpsling/httpclient"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
@@ -25,11 +28,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/jsonx"
 )
 
 // init registers the trust center cache listeners so gala setup picks them up automatically
@@ -50,12 +52,17 @@ func TrustCenterCacheListeners() []gala.Registration {
 		entityops.SchemaTrustCenterSubprocessor,
 		entityops.SchemaTrustCenterCompliance,
 		entityops.SchemaTrustCenterFAQ,
-		entityops.SchemaTrustCenterSetting,
 	}, entityops.MutationListener{
 		Operations:  entityops.AllMutationOps,
 		ContextKeys: trustCenterSoftDeleteKeys,
 		Handle:      refreshResolvedTrustCenter,
 	}),
+		entityops.MutationListener{
+			Schema:      entityops.SchemaTrustCenterSetting,
+			Operations:  entityops.AllMutationOps,
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      handleTrustCenterSettingMutationGala,
+		},
 		entityops.MutationListener{
 			Schema:      entityops.SchemaTrustCenterDoc,
 			Operations:  entityops.AllMutationOps,
@@ -152,6 +159,25 @@ func refreshLinkedTrustCenters(inv entityops.Invocation, ids []string, source st
 	for _, tcID := range trustCenterIDs {
 		refreshTrustCenterCache(inv.Context, inv.Client, tcID, source)
 	}
+}
+
+func handleTrustCenterSettingMutationGala(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	setting, err := inv.Client.TrustCenterSetting.Query().
+		Where(trustcentersetting.ID(inv.EntityID)).
+		Select(trustcentersetting.FieldEnvironment, trustcentersetting.FieldTrustCenterID).
+		Only(inv.Context)
+	if err != nil {
+		logx.FromContext(inv.Context).Warn().
+			Err(err).
+			Str("trust_center_setting_id", inv.EntityID).
+			Msg("could not fetch trustcenter settings to refresh")
+
+		return err
+	}
+
+	refreshTrustCenterCache(inv.Context, inv.Client,
+		setting.TrustCenterID, "trust center setting mutation", setting.Environment)
+	return nil
 }
 
 // handleTrustCenterDocMutationGala processes TrustCenterDoc mutations and invalidates cache when needed
@@ -267,16 +293,16 @@ var (
 
 // refreshTrustCenterCache is best-effort: refresh failures are logged and never fail the
 // envelope, so a broken domain or origin cannot park mutation events in retry
-func refreshTrustCenterCache(ctx context.Context, client *entgen.Client, trustCenterID, source string) {
+func refreshTrustCenterCache(ctx context.Context, client *entgen.Client, trustCenterID, source string, environments ...enums.TrustCenterEnvironment) {
 	ctx = logx.WithFields(ctx, map[string]any{"trust_center_id": trustCenterID, "caller": source})
 
-	if err := enqueueCacheRefresh(ctx, client, trustCenterID); err != nil {
+	if err := enqueueCacheRefresh(ctx, client, trustCenterID, environments...); err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Msg("failed to refresh trust center cache")
 	}
 }
 
 // enqueueCacheRefresh triggers a cache refresh by hitting the trust center URL with ?fresh=1
-func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenterID string) error {
+func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenterID string, envs ...enums.TrustCenterEnvironment) error {
 	tc, err := client.TrustCenter.Query().
 		Where(trustcenter.ID(trustCenterID)).
 		Select(trustcenter.FieldCustomDomainID, trustcenter.FieldSlug, trustcenter.FieldPreviewDomainID).
@@ -290,40 +316,52 @@ func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenter
 		return err
 	}
 
-	var customDomain string
-	if tc.CustomDomainID != nil {
-		customDomain, err = getVerifiedDomain(ctx, client, *tc.CustomDomainID, false)
-		if err != nil {
-			return err
+	if len(envs) == 0 {
+		envs = []enums.TrustCenterEnvironment{
+			enums.TrustCenterEnvironmentLive,
+			enums.TrustCenterEnvironmentPreview,
 		}
 	}
 
-	targetURL := buildTrustCenterURL(customDomain, tc.Slug)
-	if targetURL != "" {
+	for _, env := range envs {
+		var targetURL string
+
+		switch env {
+		case enums.TrustCenterEnvironmentLive:
+			var customDomain string
+			if tc.CustomDomainID != nil {
+				customDomain, err = getVerifiedDomain(ctx, client, *tc.CustomDomainID, false)
+			}
+			if err != nil {
+				return err
+			}
+
+			targetURL = buildTrustCenterURL(customDomain, tc.Slug)
+		case enums.TrustCenterEnvironmentPreview:
+			if tc.PreviewDomainID == "" {
+				continue
+			}
+
+			previewDomain, err := getVerifiedDomain(ctx, client, tc.PreviewDomainID, true)
+			if err != nil {
+				return err
+			}
+			if previewDomain == "" {
+				continue
+			}
+
+			targetURL = buildTrustCenterURL(previewDomain, "")
+		}
+
+		if targetURL == "" {
+			continue
+		}
 		if err := triggerCacheRefresh(ctx, targetURL); err != nil {
 			return err
 		}
 	}
 
-	if tc.PreviewDomainID == "" {
-		return nil
-	}
-
-	previewDomain, err := getVerifiedDomain(ctx, client, tc.PreviewDomainID, true)
-	if err != nil {
-		return err
-	}
-
-	if previewDomain == "" {
-		return nil
-	}
-
-	previewURL := buildTrustCenterURL(previewDomain, "")
-	if previewURL == "" {
-		return nil
-	}
-
-	return triggerCacheRefresh(ctx, previewURL)
+	return nil
 }
 
 // buildTrustCenterURL constructs the trust center URL from custom domain or slug, delegating to the
