@@ -39,8 +39,8 @@
         "required": ["first_name", "last_name", "company_name", "email"]
       },
       "acknowledgment": {
-        "type": "boolean",
-        "title": "I have read and agree to the terms of this Non-Disclosure Agreement"
+        "type": "acknowledgement",
+        "name": "acknowledgement",
       },
       "signature_metadata": {
         "type": "object",
