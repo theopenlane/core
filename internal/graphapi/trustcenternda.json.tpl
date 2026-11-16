@@ -41,7 +41,7 @@
       "acknowledgment": {
         "type": "acknowledgement",
         "name": "acknowledgement",
-        "title": "I have read and agree to the terms of this Non-Disclosure Agreement"
+        "statement": "I have read and agree to the terms of this Non-Disclosure Agreement"
       },
       "signature_metadata": {
         "type": "object",
