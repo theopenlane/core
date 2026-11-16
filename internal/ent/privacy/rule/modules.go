@@ -313,6 +313,10 @@ func DenyIfMissingAllModules() privacy.MutationRule {
 			return privacy.Skip
 		}
 
+		if auth.HasFullSystemCapabilities(ctx) {
+			return privacy.Skip
+		}
+
 		if !features.SkipQueryCheckForModule[mutationType] && ShouldSkipFeatureCheck(ctx) {
 			return privacy.Skip
 		}
