@@ -193,6 +193,6 @@ func (TrustCenterWatermarkConfig) Annotations() []schema.Annotation {
 // Interceptors of the TrustCenterWatermarkConfig
 func (TrustCenterWatermarkConfig) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorTrustCenterChild(),
+		interceptors.InterceptorTrustCenterChildDenyAnon(),
 	}
 }

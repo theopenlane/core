@@ -30,19 +30,6 @@ extend type Mutation{
         input: [CreateReportMembershipInput!]
     ): ReportMembershipBulkCreatePayload!
     """
-    Update multiple existing reportMemberships
-    """
-    updateBulkReportMembership(
-        """
-        IDs of the reportMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the reportMemberships with
-        """
-        input: UpdateReportMembershipInput!
-    ): ReportMembershipBulkUpdatePayload!
-    """
     Update an existing reportMembership
     """
     updateReportMembership(
@@ -64,15 +51,6 @@ extend type Mutation{
         """
         id: ID!
     ): ReportMembershipDeletePayload!
-    """
-    Delete multiple reportMemberships
-    """
-    deleteBulkReportMembership(
-        """
-        IDs of the reportMemberships to delete
-        """
-        ids: [ID!]!
-    ): ReportMembershipBulkDeletePayload!
 }
 
 """
@@ -115,42 +93,3 @@ type ReportMembershipBulkCreatePayload {
     reportMemberships: [ReportMembership!]
 }
 
-"""
-Return response for updateBulkReportMembership mutation
-"""
-type ReportMembershipBulkUpdatePayload {
-    """
-    Updated reportMemberships
-    """
-    reportMemberships: [ReportMembership!]
-    """
-    IDs of the updated reportMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for deleteBulkReportMembership mutation
-"""
-type ReportMembershipBulkDeletePayload {
-    """
-    Deleted reportMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    Error returned when the bulk delete is only partially applied
-    """
-    error: String
-    """
-    IDs of reportMemberships that were not deleted
-    """
-    notDeletedIDs: [ID!]
-}

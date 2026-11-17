@@ -9,6 +9,7 @@ type note
     define can_view: viewer
     define can_edit: editor or can_delete
     define can_delete: editor
+    define can_view_org: can_view
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: owner or parent_editor

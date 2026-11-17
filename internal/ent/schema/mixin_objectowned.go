@@ -66,8 +66,8 @@ type ObjectOwnedMixin struct {
 	// InterceptorFunc is the interceptor function for the object owned mixin
 	// that will be called on all queries
 	InterceptorFuncs []InterceptorFunc
-	// AllowAnonymousTrustCenterAccess allows anonymous users from the trust center to access the object
-	AllowAnonymousTrustCenterAccess bool
+	// AnonymousTrustCenterScope limits anonymous trust center callers to rows of the active trust center, nil denies them
+	AnonymousTrustCenterScope interceptors.AnonTrustCenterScope
 	// UseListObjectsFilter allows to use the list objects filter for the object owned mixin instead of batch checks
 	// use sparingly, as list objects can be expensive
 	UseListObjectsFilter bool
@@ -111,6 +111,8 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 		log.Fatal().Msg("ObjectOwnedMixin: AllowEmptyForSystemAdmin cannot be set to true if withOrganizationOwner is false")
 	}
 
+	o.InterceptorFuncs = append(o.InterceptorFuncs, anonTrustCenterInterceptorFunc)
+
 	// setup the correct interceptor
 	getObjectInterceptor[V](&o)
 
@@ -151,11 +153,21 @@ func withSkipperFunc(skipper func(ctx context.Context) bool) objectOwnedOption {
 	}
 }
 
-// withAllowAnonymousTrustCenterAccess allows anonymous users from the trust center to access the object
-func withAllowAnonymousTrustCenterAccess(allow bool) objectOwnedOption {
+// withAnonymousTrustCenterAccess allows anonymous users from the trust center to access rows of the active trust center
+func withAnonymousTrustCenterAccess() objectOwnedOption {
+	return withAnonymousTrustCenterScope(interceptors.AnonScopeTrustCenterID)
+}
+
+// withAnonymousTrustCenterScope allows anonymous users from the trust center to access the rows matched by the scope
+func withAnonymousTrustCenterScope(scope interceptors.AnonTrustCenterScope) objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
-		o.AllowAnonymousTrustCenterAccess = allow
+		o.AnonymousTrustCenterScope = scope
 	}
+}
+
+// anonTrustCenterInterceptorFunc scopes or denies anonymous trust center callers for every object owned schema
+var anonTrustCenterInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor {
+	return interceptors.InterceptorAnonTrustCenter(o.AnonymousTrustCenterScope)
 }
 
 // withWorkflowOwnedEdges marks object owner edges as workflow-eligible.

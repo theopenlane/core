@@ -18846,28 +18846,6 @@ type GroupMembershipBulkCreatePayload struct {
 	GroupMemberships []*GroupMembership `json:"groupMemberships,omitempty"`
 }
 
-// Return response for deleteBulkGroupMembership mutation
-type GroupMembershipBulkDeletePayload struct {
-	// Deleted groupMembership IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkGroupMembership mutation
-type GroupMembershipBulkUpdatePayload struct {
-	// Updated groupMemberships
-	GroupMemberships []*GroupMembership `json:"groupMemberships,omitempty"`
-	// IDs of the updated groupMemberships
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
 // A connection to a list of items.
 type GroupMembershipConnection struct {
 	// A list of edges.
@@ -28748,28 +28726,6 @@ type ProgramMembershipBulkCreatePayload struct {
 	ProgramMemberships []*ProgramMembership `json:"programMemberships,omitempty"`
 }
 
-// Return response for deleteBulkProgramMembership mutation
-type ProgramMembershipBulkDeletePayload struct {
-	// Deleted programMembership IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkProgramMembership mutation
-type ProgramMembershipBulkUpdatePayload struct {
-	// Updated programMemberships
-	ProgramMemberships []*ProgramMembership `json:"programMemberships,omitempty"`
-	// IDs of the updated programMemberships
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
 // A connection to a list of items.
 type ProgramMembershipConnection struct {
 	// A list of edges.
@@ -30177,28 +30133,6 @@ func (ReportMembership) IsNode() {}
 type ReportMembershipBulkCreatePayload struct {
 	// Created reportMemberships
 	ReportMemberships []*ReportMembership `json:"reportMemberships,omitempty"`
-}
-
-// Return response for deleteBulkReportMembership mutation
-type ReportMembershipBulkDeletePayload struct {
-	// Deleted reportMembership IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// Error returned when the bulk delete is only partially applied
-	Error *string `json:"error,omitempty"`
-	// IDs of reportMemberships that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
-}
-
-// Return response for updateBulkReportMembership mutation
-type ReportMembershipBulkUpdatePayload struct {
-	// Updated reportMemberships
-	ReportMemberships []*ReportMembership `json:"reportMemberships,omitempty"`
-	// IDs of the updated reportMemberships
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
 }
 
 // A connection to a list of items.

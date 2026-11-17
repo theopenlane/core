@@ -10957,6 +10957,102 @@ func (c *FileClient) QueryOriginalTrustCenterDoc(_m *File) *TrustCenterDocQuery 
 	return query
 }
 
+// QueryTrustCenterSettingLogo queries the trust_center_setting_logo edge of a File.
+func (c *FileClient) QueryTrustCenterSettingLogo(_m *File) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.TrustCenterSettingLogoTable, file.TrustCenterSettingLogoColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenterSettingFavicon queries the trust_center_setting_favicon edge of a File.
+func (c *FileClient) QueryTrustCenterSettingFavicon(_m *File) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.TrustCenterSettingFaviconTable, file.TrustCenterSettingFaviconColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenterSettingHeroImage queries the trust_center_setting_hero_image edge of a File.
+func (c *FileClient) QueryTrustCenterSettingHeroImage(_m *File) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.TrustCenterSettingHeroImageTable, file.TrustCenterSettingHeroImageColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenterEntityLogo queries the trust_center_entity_logo edge of a File.
+func (c *FileClient) QueryTrustCenterEntityLogo(_m *File) *TrustCenterEntityQuery {
+	query := (&TrustCenterEntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcenterentity.Table, trustcenterentity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.TrustCenterEntityLogoTable, file.TrustCenterEntityLogoColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubprocessorLogo queries the subprocessor_logo edge of a File.
+func (c *FileClient) QuerySubprocessorLogo(_m *File) *SubprocessorQuery {
+	query := (&SubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.SubprocessorLogoTable, file.SubprocessorLogoColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStandardLogo queries the standard_logo edge of a File.
+func (c *FileClient) QueryStandardLogo(_m *File) *StandardQuery {
+	query := (&StandardClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.StandardLogoTable, file.StandardLogoColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *FileClient) Hooks() []Hook {
 	hooks := c.hooks.File

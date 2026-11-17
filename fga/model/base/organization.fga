@@ -22,7 +22,8 @@ type organization
 
     # additional fine-grained permissions
     # allow owner and assigned users to view audit logs
-    define audit_log_viewer: ([user, service] or full_access or audit_log_viewer from parent) and can_view
+    define audit_log_viewer: ([user, service] or audit_log_viewer_grant) and can_view
+    define audit_log_viewer_grant: full_access or audit_log_viewer_grant from parent
 
     define user_in_context: [user]
 
