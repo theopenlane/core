@@ -560,22 +560,6 @@ func (ec *executionContext) marshalNReportMembershipBulkCreatePayload2ᚖgithub�
 	return ec._ReportMembershipBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNReportMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReportMembershipBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReportMembershipBulkDeletePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "ReportMembershipBulkDeletePayload!")
-		return graphql.Null
-	}
-	return ec._ReportMembershipBulkDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNReportMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReportMembershipBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReportMembershipBulkUpdatePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "ReportMembershipBulkUpdatePayload!")
-		return graphql.Null
-	}
-	return ec._ReportMembershipBulkUpdatePayload(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNReportMembershipCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReportMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReportMembershipCreatePayload) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "ReportMembershipCreatePayload!")

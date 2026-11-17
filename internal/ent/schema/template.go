@@ -106,7 +106,7 @@ func (t Template) Mixin() []ent.Mixin {
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
 				withSkipperFunc(skipInterceptorForOrgMembers),
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterAccess(),
 			),
 			mixin.NewSystemOwnedMixin(),
 			newCustomEnumMixin(t, withEnumFieldName("environment"), withGlobalEnum()),

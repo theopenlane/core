@@ -78,7 +78,7 @@ func (t TrustCenterFAQ) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterFAQ](t,
 				withParents(TrustCenter{}),
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterAccess(),
 			),
 			newCustomEnumMixin(t),
 			newGroupPermissionsMixin(withSkipViewPermissions()),

@@ -37,15 +37,6 @@ func (r *mutationResolver) CreateBulkReportMembership(ctx context.Context, input
 	return r.bulkCreateReportMembership(ctx, input)
 }
 
-// UpdateBulkReportMembership is the resolver for the updateBulkReportMembership field.
-func (r *mutationResolver) UpdateBulkReportMembership(ctx context.Context, ids []string, input generated.UpdateReportMembershipInput) (*model.ReportMembershipBulkUpdatePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkUpdateReportMembership(ctx, ids, input)
-}
-
 // UpdateReportMembership is the resolver for the updateReportMembership field.
 func (r *mutationResolver) UpdateReportMembership(ctx context.Context, id string, input generated.UpdateReportMembershipInput) (*model.ReportMembershipUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ReportMembership.Get(ctx, id)
@@ -83,15 +74,6 @@ func (r *mutationResolver) DeleteReportMembership(ctx context.Context, id string
 	}, nil
 }
 
-// DeleteBulkReportMembership is the resolver for the deleteBulkReportMembership field.
-func (r *mutationResolver) DeleteBulkReportMembership(ctx context.Context, ids []string) (*model.ReportMembershipBulkDeletePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkDeleteReportMembership(ctx, ids)
-}
-
 // ReportMembership is the resolver for the reportMembership field.
 func (r *queryResolver) ReportMembership(ctx context.Context, id string) (*generated.ReportMembership, error) {
 	query, err := withTransactionalMutation(ctx).ReportMembership.Query().Where(reportmembership.ID(id)).CollectFields(ctx)
@@ -106,3 +88,26 @@ func (r *queryResolver) ReportMembership(ctx context.Context, id string) (*gener
 
 	return res, nil
 }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *mutationResolver) UpdateBulkReportMembership(ctx context.Context, ids []string, input generated.UpdateReportMembershipInput) (*model.ReportMembershipBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateReportMembership(ctx, ids, input)
+}
+func (r *mutationResolver) DeleteBulkReportMembership(ctx context.Context, ids []string) (*model.ReportMembershipBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteReportMembership(ctx, ids)
+}
+*/

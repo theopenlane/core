@@ -48034,38 +48034,6 @@ type Mutation {
 		id: ID!
 	): GroupMembershipDeletePayload!
 	"""
-	Delete multiple groupMemberships
-	"""
-	deleteBulkGroupMembership(
-		"""
-		IDs of the groupMemberships to delete
-		"""
-		ids: [ID!]!
-	): GroupMembershipBulkDeletePayload!
-	"""
-	Update multiple existing groupMemberships
-	"""
-	updateBulkGroupMembership(
-		"""
-		IDs of the groupMemberships to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the groupMemberships with
-		"""
-		input: UpdateGroupMembershipInput!
-	): GroupMembershipBulkUpdatePayload!
-	"""
-	Update multiple existing groupMemberships via file upload
-	"""
-	updateBulkCSVGroupMembership(
-		"""
-		csv file containing values of the groupMembership, must include ID column
-		"""
-		input: Upload!
-	): GroupMembershipBulkUpdatePayload!
-	"""
 	Create a new groupSetting
 	"""
 	createGroupSetting(
@@ -49741,38 +49709,6 @@ type Mutation {
 		id: ID!
 	): ProgramMembershipDeletePayload!
 	"""
-	Delete multiple programMemberships
-	"""
-	deleteBulkProgramMembership(
-		"""
-		IDs of the programMemberships to delete
-		"""
-		ids: [ID!]!
-	): ProgramMembershipBulkDeletePayload!
-	"""
-	Update multiple existing programMemberships
-	"""
-	updateBulkProgramMembership(
-		"""
-		IDs of the programMemberships to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the programMemberships with
-		"""
-		input: UpdateProgramMembershipInput!
-	): ProgramMembershipBulkUpdatePayload!
-	"""
-	Update multiple existing programMemberships via file upload
-	"""
-	updateBulkCSVProgramMembership(
-		"""
-		csv file containing values of the programMembership, must include ID column
-		"""
-		input: Upload!
-	): ProgramMembershipBulkUpdatePayload!
-	"""
 	Create a new remediation
 	"""
 	createRemediation(
@@ -49915,20 +49851,6 @@ type Mutation {
 		input: [CreateReportMembershipInput!]
 	): ReportMembershipBulkCreatePayload!
 	"""
-	Update multiple existing reportMemberships
-	"""
-	updateBulkReportMembership(
-		"""
-		IDs of the reportMemberships to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the reportMemberships with
-		"""
-		input: UpdateReportMembershipInput!
-	): ReportMembershipBulkUpdatePayload!
-	"""
 	Update an existing reportMembership
 	"""
 	updateReportMembership(
@@ -49951,15 +49873,6 @@ type Mutation {
 		"""
 		id: ID!
 	): ReportMembershipDeletePayload!
-	"""
-	Delete multiple reportMemberships
-	"""
-	deleteBulkReportMembership(
-		"""
-		IDs of the reportMemberships to delete
-		"""
-		ids: [ID!]!
-	): ReportMembershipBulkDeletePayload!
 	"""
 	Create a new review
 	"""

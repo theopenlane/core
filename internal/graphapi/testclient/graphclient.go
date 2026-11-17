@@ -471,7 +471,6 @@ type TestGraphClient interface {
 	GetAllProgramMemberships(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramMemberships, error)
 	GetProgramMembershipByID(ctx context.Context, programMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipByID, error)
 	GetProgramMemberships(ctx context.Context, where *ProgramMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMemberships, error)
-	UpdateBulkProgramMembership(ctx context.Context, ids []string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProgramMembership, error)
 	UpdateProgramMembership(ctx context.Context, updateProgramMembershipID string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateProgramMembership, error)
 	CreateBulkCSVRemediation(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVRemediation, error)
 	CreateBulkRemediation(ctx context.Context, input []*CreateRemediationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkRemediation, error)
@@ -494,13 +493,11 @@ type TestGraphClient interface {
 	AddUserToReportWithRole(ctx context.Context, input CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*AddUserToReportWithRole, error)
 	CreateBulkReportMembership(ctx context.Context, input []*CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkReportMembership, error)
 	CreateReportMembership(ctx context.Context, input CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateReportMembership, error)
-	DeleteBulkReportMembership(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkReportMembership, error)
 	DeleteReportMembership(ctx context.Context, deleteReportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*DeleteReportMembership, error)
 	GetAllReportMemberships(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportMembershipOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllReportMemberships, error)
 	GetReportMembershipByID(ctx context.Context, reportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetReportMembershipByID, error)
 	GetReportMemberships(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportMembershipOrder, where *ReportMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetReportMemberships, error)
 	RemoveUserFromReport(ctx context.Context, deleteReportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*RemoveUserFromReport, error)
-	UpdateBulkReportMembership(ctx context.Context, ids []string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkReportMembership, error)
 	UpdateReportMembership(ctx context.Context, updateReportMembershipID string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateReportMembership, error)
 	CreateBulkCSVReview(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVReview, error)
 	CreateBulkReview(ctx context.Context, input []*CreateReviewInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkReview, error)
@@ -104964,98 +104961,6 @@ func (t *GetProgramMemberships_ProgramMemberships) GetEdges() []*GetProgramMembe
 	return t.Edges
 }
 
-type UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships struct {
-	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                    string     "json:\"id\" graphql:\"id\""
-	ProgramID             string     "json:\"programID\" graphql:\"programID\""
-	Role                  enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	UserID                string     "json:\"userID\" graphql:\"userID\""
-}
-
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetID() string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.ID
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetProgramID() string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.ProgramID
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetRole() *enums.Role {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return &t.Role
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.UpdatedBy
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUserID() string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.UserID
-}
-
-type UpdateBulkProgramMembership_UpdateBulkProgramMembership struct {
-	NotUpdatedIDs      []string                                                                      "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
-	ProgramMemberships []*UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships "json:\"programMemberships,omitempty\" graphql:\"programMemberships\""
-	UpdatedIDs         []string                                                                      "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
-}
-
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership) GetNotUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership{}
-	}
-	return t.NotUpdatedIDs
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership) GetProgramMemberships() []*UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership{}
-	}
-	return t.ProgramMemberships
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership) GetUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership{}
-	}
-	return t.UpdatedIDs
-}
-
 type UpdateProgramMembership_UpdateProgramMembership_ProgramMembership struct {
 	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -110047,17 +109952,6 @@ func (t *CreateReportMembership_CreateReportMembership) GetReportMembership() *C
 	return &t.ReportMembership
 }
 
-type DeleteBulkReportMembership_DeleteBulkReportMembership struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
-}
-
-func (t *DeleteBulkReportMembership_DeleteBulkReportMembership) GetDeletedIDs() []string {
-	if t == nil {
-		t = &DeleteBulkReportMembership_DeleteBulkReportMembership{}
-	}
-	return t.DeletedIDs
-}
-
 type DeleteReportMembership_DeleteReportMembership struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -110415,91 +110309,6 @@ func (t *RemoveUserFromReport_DeleteReportMembership) GetDeletedID() string {
 		t = &RemoveUserFromReport_DeleteReportMembership{}
 	}
 	return t.DeletedID
-}
-
-type UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships struct {
-	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                    string     "json:\"id\" graphql:\"id\""
-	ReportID              string     "json:\"reportID\" graphql:\"reportID\""
-	Role                  enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	UserID                string     "json:\"userID\" graphql:\"userID\""
-}
-
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetID() string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.ID
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetReportID() string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.ReportID
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetRole() *enums.Role {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return &t.Role
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.UpdatedBy
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUserID() string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.UserID
-}
-
-type UpdateBulkReportMembership_UpdateBulkReportMembership struct {
-	ReportMemberships []*UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships "json:\"reportMemberships,omitempty\" graphql:\"reportMemberships\""
-	UpdatedIDs        []string                                                                   "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
-}
-
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership) GetReportMemberships() []*UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership{}
-	}
-	return t.ReportMemberships
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership) GetUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership{}
-	}
-	return t.UpdatedIDs
 }
 
 type UpdateReportMembership_UpdateReportMembership_ReportMembership struct {
@@ -182217,17 +182026,6 @@ func (t *GetProgramMemberships) GetProgramMemberships() *GetProgramMemberships_P
 	return &t.ProgramMemberships
 }
 
-type UpdateBulkProgramMembership struct {
-	UpdateBulkProgramMembership UpdateBulkProgramMembership_UpdateBulkProgramMembership "json:\"updateBulkProgramMembership\" graphql:\"updateBulkProgramMembership\""
-}
-
-func (t *UpdateBulkProgramMembership) GetUpdateBulkProgramMembership() *UpdateBulkProgramMembership_UpdateBulkProgramMembership {
-	if t == nil {
-		t = &UpdateBulkProgramMembership{}
-	}
-	return &t.UpdateBulkProgramMembership
-}
-
 type UpdateProgramMembership struct {
 	UpdateProgramMembership UpdateProgramMembership_UpdateProgramMembership "json:\"updateProgramMembership\" graphql:\"updateProgramMembership\""
 }
@@ -182470,17 +182268,6 @@ func (t *CreateReportMembership) GetCreateReportMembership() *CreateReportMember
 	return &t.CreateReportMembership
 }
 
-type DeleteBulkReportMembership struct {
-	DeleteBulkReportMembership DeleteBulkReportMembership_DeleteBulkReportMembership "json:\"deleteBulkReportMembership\" graphql:\"deleteBulkReportMembership\""
-}
-
-func (t *DeleteBulkReportMembership) GetDeleteBulkReportMembership() *DeleteBulkReportMembership_DeleteBulkReportMembership {
-	if t == nil {
-		t = &DeleteBulkReportMembership{}
-	}
-	return &t.DeleteBulkReportMembership
-}
-
 type DeleteReportMembership struct {
 	DeleteReportMembership DeleteReportMembership_DeleteReportMembership "json:\"deleteReportMembership\" graphql:\"deleteReportMembership\""
 }
@@ -182534,17 +182321,6 @@ func (t *RemoveUserFromReport) GetDeleteReportMembership() *RemoveUserFromReport
 		t = &RemoveUserFromReport{}
 	}
 	return &t.DeleteReportMembership
-}
-
-type UpdateBulkReportMembership struct {
-	UpdateBulkReportMembership UpdateBulkReportMembership_UpdateBulkReportMembership "json:\"updateBulkReportMembership\" graphql:\"updateBulkReportMembership\""
-}
-
-func (t *UpdateBulkReportMembership) GetUpdateBulkReportMembership() *UpdateBulkReportMembership_UpdateBulkReportMembership {
-	if t == nil {
-		t = &UpdateBulkReportMembership{}
-	}
-	return &t.UpdateBulkReportMembership
 }
 
 type UpdateReportMembership struct {
@@ -211904,43 +211680,6 @@ func (c *Client) GetProgramMemberships(ctx context.Context, where *ProgramMember
 	return &res, nil
 }
 
-const UpdateBulkProgramMembershipDocument = `mutation UpdateBulkProgramMembership ($ids: [ID!]!, $input: UpdateProgramMembershipInput!) {
-	updateBulkProgramMembership(ids: $ids, input: $input) {
-		programMemberships {
-			createdAt
-			createdBy
-			id
-			programID
-			role
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			userID
-		}
-		updatedIDs
-		notUpdatedIDs
-	}
-}
-`
-
-func (c *Client) UpdateBulkProgramMembership(ctx context.Context, ids []string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProgramMembership, error) {
-	vars := map[string]any{
-		"ids":   ids,
-		"input": input,
-	}
-
-	var res UpdateBulkProgramMembership
-	if err := c.Client.Post(ctx, "UpdateBulkProgramMembership", UpdateBulkProgramMembershipDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const UpdateProgramMembershipDocument = `mutation UpdateProgramMembership ($updateProgramMembershipId: ID!, $input: UpdateProgramMembershipInput!) {
 	updateProgramMembership(id: $updateProgramMembershipId, input: $input) {
 		programMembership {
@@ -213199,30 +212938,6 @@ func (c *Client) CreateReportMembership(ctx context.Context, input CreateReportM
 	return &res, nil
 }
 
-const DeleteBulkReportMembershipDocument = `mutation DeleteBulkReportMembership ($ids: [ID!]!) {
-	deleteBulkReportMembership(ids: $ids) {
-		deletedIDs
-	}
-}
-`
-
-func (c *Client) DeleteBulkReportMembership(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkReportMembership, error) {
-	vars := map[string]any{
-		"ids": ids,
-	}
-
-	var res DeleteBulkReportMembership
-	if err := c.Client.Post(ctx, "DeleteBulkReportMembership", DeleteBulkReportMembershipDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const DeleteReportMembershipDocument = `mutation DeleteReportMembership ($deleteReportMembershipId: ID!) {
 	deleteReportMembership(id: $deleteReportMembershipId) {
 		deletedID
@@ -213388,42 +213103,6 @@ func (c *Client) RemoveUserFromReport(ctx context.Context, deleteReportMembershi
 
 	var res RemoveUserFromReport
 	if err := c.Client.Post(ctx, "RemoveUserFromReport", RemoveUserFromReportDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const UpdateBulkReportMembershipDocument = `mutation UpdateBulkReportMembership ($ids: [ID!]!, $input: UpdateReportMembershipInput!) {
-	updateBulkReportMembership(ids: $ids, input: $input) {
-		reportMemberships {
-			createdAt
-			createdBy
-			id
-			reportID
-			role
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			userID
-		}
-		updatedIDs
-	}
-}
-`
-
-func (c *Client) UpdateBulkReportMembership(ctx context.Context, ids []string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkReportMembership, error) {
-	vars := map[string]any{
-		"ids":   ids,
-		"input": input,
-	}
-
-	var res UpdateBulkReportMembership
-	if err := c.Client.Post(ctx, "UpdateBulkReportMembership", UpdateBulkReportMembershipDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -230809,7 +230488,6 @@ var DocumentOperationNames = map[string]string{
 	GetAllProgramMembershipsDocument:                    "GetAllProgramMemberships",
 	GetProgramMembershipByIDDocument:                    "GetProgramMembershipByID",
 	GetProgramMembershipsDocument:                       "GetProgramMemberships",
-	UpdateBulkProgramMembershipDocument:                 "UpdateBulkProgramMembership",
 	UpdateProgramMembershipDocument:                     "UpdateProgramMembership",
 	CreateBulkCSVRemediationDocument:                    "CreateBulkCSVRemediation",
 	CreateBulkRemediationDocument:                       "CreateBulkRemediation",
@@ -230832,13 +230510,11 @@ var DocumentOperationNames = map[string]string{
 	AddUserToReportWithRoleDocument:                     "AddUserToReportWithRole",
 	CreateBulkReportMembershipDocument:                  "CreateBulkReportMembership",
 	CreateReportMembershipDocument:                      "CreateReportMembership",
-	DeleteBulkReportMembershipDocument:                  "DeleteBulkReportMembership",
 	DeleteReportMembershipDocument:                      "DeleteReportMembership",
 	GetAllReportMembershipsDocument:                     "GetAllReportMemberships",
 	GetReportMembershipByIDDocument:                     "GetReportMembershipByID",
 	GetReportMembershipsDocument:                        "GetReportMemberships",
 	RemoveUserFromReportDocument:                        "RemoveUserFromReport",
-	UpdateBulkReportMembershipDocument:                  "UpdateBulkReportMembership",
 	UpdateReportMembershipDocument:                      "UpdateReportMembership",
 	CreateBulkCSVReviewDocument:                         "CreateBulkCSVReview",
 	CreateBulkReviewDocument:                            "CreateBulkReview",

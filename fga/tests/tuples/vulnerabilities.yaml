@@ -25,3 +25,16 @@
 - user: user:ulid-of-member
   relation: viewer
   object: scan:scan-1
+
+# vulnerability-org-1 is only associated with the organization
+- user: organization:openlane
+  relation: parent_context
+  object: vulnerability:vulnerability-org-1
+
+# org level view only and edit grants for vulnerabilities
+- user: user:ulid-vuln-view-only
+  relation: can_view_vulnerability
+  object: organization:openlane
+- user: user:ulid-vuln-edit
+  relation: can_edit_vulnerability
+  object: organization:openlane

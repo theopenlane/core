@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -14,6 +15,13 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentercompliance"
 )
+
+// AnonScopeStandard limits anonymous trust center callers to the standards shown on the active trust center
+func AnonScopeStandard(trustCenterID string) func(*sql.Selector) {
+	return standard.HasTrustCenterCompliancesWith(
+		trustcentercompliance.TrustCenterID(trustCenterID),
+	)
+}
 
 // TraverseStandard only returns public standards and standards owned by the organization
 func TraverseStandard() ent.Interceptor {

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 )
 
@@ -103,7 +104,7 @@ func (n Note) Mixin() []ent.Mixin {
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}, TrustCenterFAQ{}, Review{}, Vulnerability{}, Finding{}),
 				withOrganizationOwner(),
 				withOwnerRelation(fgax.OwnerRelation),
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterScope(interceptors.AnonScopeNote),
 			),
 		},
 	}.getMixins(n)

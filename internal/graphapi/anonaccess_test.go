@@ -11,6 +11,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -493,6 +494,20 @@ func TestControlAnonymousTrustCenterAccess(t *testing.T) {
 		Save(org1DBCtx)
 	assert.NilError(t, err)
 
+	systemControl, err := suite.Client.DB.Control.Create().
+		SetRefCode("SYS-TC-" + ulids.New().String()).
+		SetTitle("System Owned Public TC Control").
+		SetSource(enums.ControlSourceUserDefined).
+		SetIsTrustCenterControl(true).
+		SetSystemOwned(true).
+		SetTrustCenterVisibility(enums.TrustCenterControlVisibilityPubliclyVisible).
+		Save(th.SharedSystemAdminUser.UserCtx)
+	assert.NilError(t, err)
+	assert.Check(t, systemControl.OwnerID == "")
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: systemControl.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	})
+
 	anonCtxOrg1 := th.CreateAnonymousTrustCenterContext(tcOrg1.TrustCenter.ID, tcOrg1.OrganizationID)
 	anonCtxOrg2 := th.CreateAnonymousTrustCenterContext(tcOrg2.TrustCenter.ID, tcOrg2.OrganizationID)
 
@@ -542,6 +557,12 @@ func TestControlAnonymousTrustCenterAccess(t *testing.T) {
 			ctx:     tcOrg1.Owner.UserCtx,
 			queryID: regularControl.ID,
 		},
+		{
+			name:        "anon TC user (org1) cannot see system owned public TC control via TC query",
+			ctx:         anonCtxOrg1,
+			queryID:     systemControl.ID,
+			expectedErr: th.NotFoundErrorMsg,
+		},
 	}
 
 	for _, tc := range tcControlTestCases {
@@ -577,6 +598,7 @@ func TestControlAnonymousTrustCenterAccess(t *testing.T) {
 		assert.Check(t, !lo.Contains(ids, tcControlPrivate.ID), "anon TC user should not see private TC control")
 		assert.Check(t, !lo.Contains(ids, tcControl2.ID), "anon TC user should not see org2 TC controls")
 		assert.Check(t, !lo.Contains(ids, regularControl.ID), "anon TC user should not see non-TC compliance controls")
+		assert.Check(t, !lo.Contains(ids, systemControl.ID), "anon TC user should not see system owned TC controls")
 	})
 
 	t.Run("anon TC user (org2) list controls only includes org2 public TC controls", func(t *testing.T) {
@@ -595,4 +617,41 @@ func TestControlAnonymousTrustCenterAccess(t *testing.T) {
 
 	th.CleanupOrganizationDataWithContext(tcOrg1.Owner.UserCtx, t)
 	th.CleanupOrganizationDataWithContext(tcOrg2.Owner.UserCtx, t)
+}
+
+func TestAnonymousTrustCenterDeniedWithoutScope(t *testing.T) {
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
+
+	anonCtx := generated.NewContext(th.CreateAnonymousTrustCenterContext(tcOrg.TrustCenter.ID, tcOrg.OrganizationID), suite.Client.DB)
+
+	testCases := []struct {
+		name string
+		ids  func(context.Context) ([]string, error)
+	}{
+		{
+			name: "program",
+			ids:  suite.Client.DB.Program.Query().IDs,
+		},
+		{
+			name: "evidence",
+			ids:  suite.Client.DB.Evidence.Query().IDs,
+		},
+		{
+			name: "risk",
+			ids:  suite.Client.DB.Risk.Query().IDs,
+		},
+		{
+			name: "trust center watermark config",
+			ids:  suite.Client.DB.TrustCenterWatermarkConfig.Query().IDs,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := tc.ids(anonCtx)
+			assert.ErrorContains(t, err, "anonymous trust center access not allowed")
+		})
+	}
+
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }

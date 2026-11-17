@@ -13,6 +13,7 @@ import (
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
@@ -29,6 +30,59 @@ func InterceptorTrustCenter() ent.Interceptor {
 
 		return nil
 	})
+}
+
+// AnonTrustCenterScope returns the predicate that limits an anonymous trust center caller to rows of the active trust center
+type AnonTrustCenterScope func(trustCenterID string) func(*sql.Selector)
+
+// InterceptorAnonTrustCenter applies the schema scope to anonymous trust center callers and denies them when the schema has no scope
+func InterceptorAnonTrustCenter(scope AnonTrustCenterScope) ent.Interceptor {
+	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		if auth.HasCrossOrgCapabilities(ctx) {
+			return nil
+		}
+
+		tcID, _, ok := auth.TrustCenterScopeFromContext(ctx)
+		if !ok {
+			return nil
+		}
+
+		if scope == nil {
+			return privacy.Denyf("anonymous trust center access not allowed for %s", q.Type())
+		}
+
+		q.WhereP(scope(tcID))
+
+		return nil
+	})
+}
+
+// AnonScopeTrustCenterID limits anonymous trust center callers to rows owned by the active trust center
+func AnonScopeTrustCenterID(trustCenterID string) func(*sql.Selector) {
+	return sql.FieldEQ("trust_center_id", trustCenterID)
+}
+
+// AnonScopeTrustCenter limits anonymous trust center callers to the active trust center
+func AnonScopeTrustCenter(trustCenterID string) func(*sql.Selector) {
+	return sql.FieldEQ(trustcenter.FieldID, trustCenterID)
+}
+
+// AnonScopeCustomDomain limits anonymous trust center callers to the custom and preview domains of the active trust center
+func AnonScopeCustomDomain(trustCenterID string) func(*sql.Selector) {
+	return func(s *sql.Selector) {
+		s.Where(sql.Or(
+			sql.EQ(s.C(customdomain.FieldTrustCenterID), trustCenterID),
+			sql.In(s.C(customdomain.FieldID), trustCenterColumnSelect(trustcenter.FieldCustomDomainID, trustCenterID)),
+			sql.In(s.C(customdomain.FieldID), trustCenterColumnSelect(trustcenter.FieldPreviewDomainID, trustCenterID)),
+		))
+	}
+}
+
+// trustCenterColumnSelect selects a single column from the given trust center
+func trustCenterColumnSelect(column, trustCenterID string) *sql.Selector {
+	t := sql.Table(trustcenter.Table)
+
+	return sql.Select(t.C(column)).From(t).Where(sql.EQ(t.C(trustcenter.FieldID), trustCenterID))
 }
 
 // AnonInterceptorTrustCenterChild filters trust center child queries for anon callers only
@@ -112,8 +166,13 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
-		// anonymous callers read back what they submit in a mutation, so scope those reads to their trust center instead of denying them
-		return applyAnonTrustCenterFilter(q, tcID, allowAnonAccess || isMutationRequest(ctx))
+		// anonymous callers read back what they submit in a mutation, so only deny their reads outside of a mutation
+		// rows are scoped to the trust center by the anonymous scope in the object owned mixin
+		if !allowAnonAccess && !isMutationRequest(ctx) {
+			return privacy.Denyf("anonymous trust center access not allowed for this resource: %s", q.Type())
+		}
+
+		return nil
 	}
 
 	// deny all trust center requests that did not have a trust center key
@@ -140,19 +199,6 @@ func isMutationRequest(ctx context.Context) bool {
 	}
 
 	return graphql.GetOperationContext(ctx).Operation.Operation == ast.Mutation
-}
-
-// applyAnonTrustCenterFilter scopes the query to the active trust center key, denying resources
-// that do not permit anonymous access
-func applyAnonTrustCenterFilter(q intercept.Query, tcID string, allowAnonAccess bool) error {
-	if !allowAnonAccess {
-		return privacy.Denyf("anonymous trust center access not allowed for this resource: %s", q.Type())
-	}
-
-	// filter the request by trust center
-	q.WhereP(sql.FieldEQ("trust_center_id", tcID))
-
-	return nil
 }
 
 // parentOwnedByOrgsP restricts fkColumn to rows of parentTable whose ownerColumn is any of the given organizations

@@ -60,37 +60,6 @@ extend type Mutation{
         """
         id: ID!
     ): GroupMembershipDeletePayload!
-    """
-    Delete multiple groupMemberships
-    """
-    deleteBulkGroupMembership(
-        """
-        IDs of the groupMemberships to delete
-        """
-        ids: [ID!]!
-    ): GroupMembershipBulkDeletePayload!
-    """
-    Update multiple existing groupMemberships
-    """
-    updateBulkGroupMembership(
-        """
-        IDs of the groupMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the groupMemberships with
-        """
-        input: UpdateGroupMembershipInput!
-    ): GroupMembershipBulkUpdatePayload!
-    """
-    Update multiple existing groupMemberships via file upload
-    """
-    updateBulkCSVGroupMembership(
-        """
-        csv file containing values of the groupMembership, must include ID column
-        """
-        input: Upload!
-    ): GroupMembershipBulkUpdatePayload!
 }
 
 """

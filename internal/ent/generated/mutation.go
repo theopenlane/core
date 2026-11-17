@@ -93366,109 +93366,127 @@ func (m *ExportMutation) ResetEdge(name string) error {
 // FileMutation represents an operation that mutates the File nodes in the graph.
 type FileMutation struct {
 	config
-	op                               Op
-	typ                              string
-	id                               *string
-	created_at                       *time.Time
-	updated_at                       *time.Time
-	created_by                       *string
-	updated_by                       *string
-	updated_by_impersonator          *string
-	deleted_at                       *time.Time
-	deleted_by                       *string
-	tags                             *[]string
-	appendtags                       []string
-	system_owned                     *bool
-	internal_notes                   *string
-	system_internal_id               *string
-	environment_name                 *string
-	scope_name                       *string
-	category_name                    *string
-	name                             *string
-	provided_file_name               *string
-	provided_file_extension          *string
-	provided_file_size               *int64
-	addprovided_file_size            *int64
-	persisted_file_size              *int64
-	addpersisted_file_size           *int64
-	detected_mime_type               *string
-	md5_hash                         *string
-	detected_content_type            *string
-	store_key                        *string
-	uri                              *string
-	storage_scheme                   *string
-	storage_volume                   *string
-	storage_path                     *string
-	file_contents                    *[]byte
-	metadata                         *map[string]interface{}
-	storage_region                   *string
-	storage_provider                 *string
-	backup_state                     *models.FileBackupState
-	last_accessed_at                 *time.Time
-	clearedFields                    map[string]struct{}
-	environment                      *string
-	clearedenvironment               bool
-	scope                            *string
-	clearedscope                     bool
-	category                         *string
-	clearedcategory                  bool
-	organization                     map[string]struct{}
-	removedorganization              map[string]struct{}
-	clearedorganization              bool
-	groups                           map[string]struct{}
-	removedgroups                    map[string]struct{}
-	clearedgroups                    bool
-	contact                          map[string]struct{}
-	removedcontact                   map[string]struct{}
-	clearedcontact                   bool
-	entity                           map[string]struct{}
-	removedentity                    map[string]struct{}
-	clearedentity                    bool
-	organization_setting             map[string]struct{}
-	removedorganization_setting      map[string]struct{}
-	clearedorganization_setting      bool
-	template                         map[string]struct{}
-	removedtemplate                  map[string]struct{}
-	clearedtemplate                  bool
-	document                         map[string]struct{}
-	removeddocument                  map[string]struct{}
-	cleareddocument                  bool
-	program                          map[string]struct{}
-	removedprogram                   map[string]struct{}
-	clearedprogram                   bool
-	platform                         map[string]struct{}
-	removedplatform                  map[string]struct{}
-	clearedplatform                  bool
-	evidence                         map[string]struct{}
-	removedevidence                  map[string]struct{}
-	clearedevidence                  bool
-	identity_holder                  map[string]struct{}
-	removedidentity_holder           map[string]struct{}
-	clearedidentity_holder           bool
-	scan                             map[string]struct{}
-	removedscan                      map[string]struct{}
-	clearedscan                      bool
-	events                           map[string]struct{}
-	removedevents                    map[string]struct{}
-	clearedevents                    bool
-	integrations                     map[string]struct{}
-	removedintegrations              map[string]struct{}
-	clearedintegrations              bool
-	secrets                          map[string]struct{}
-	removedsecrets                   map[string]struct{}
-	clearedsecrets                   bool
-	trust_center_entities            map[string]struct{}
-	removedtrust_center_entities     map[string]struct{}
-	clearedtrust_center_entities     bool
-	trust_center_doc                 map[string]struct{}
-	removedtrust_center_doc          map[string]struct{}
-	clearedtrust_center_doc          bool
-	original_trust_center_doc        map[string]struct{}
-	removedoriginal_trust_center_doc map[string]struct{}
-	clearedoriginal_trust_center_doc bool
-	done                             bool
-	oldValue                         func(context.Context) (*File, error)
-	predicates                       []predicate.File
+	op                                     Op
+	typ                                    string
+	id                                     *string
+	created_at                             *time.Time
+	updated_at                             *time.Time
+	created_by                             *string
+	updated_by                             *string
+	updated_by_impersonator                *string
+	deleted_at                             *time.Time
+	deleted_by                             *string
+	tags                                   *[]string
+	appendtags                             []string
+	system_owned                           *bool
+	internal_notes                         *string
+	system_internal_id                     *string
+	environment_name                       *string
+	scope_name                             *string
+	category_name                          *string
+	name                                   *string
+	provided_file_name                     *string
+	provided_file_extension                *string
+	provided_file_size                     *int64
+	addprovided_file_size                  *int64
+	persisted_file_size                    *int64
+	addpersisted_file_size                 *int64
+	detected_mime_type                     *string
+	md5_hash                               *string
+	detected_content_type                  *string
+	store_key                              *string
+	uri                                    *string
+	storage_scheme                         *string
+	storage_volume                         *string
+	storage_path                           *string
+	file_contents                          *[]byte
+	metadata                               *map[string]interface{}
+	storage_region                         *string
+	storage_provider                       *string
+	backup_state                           *models.FileBackupState
+	last_accessed_at                       *time.Time
+	clearedFields                          map[string]struct{}
+	environment                            *string
+	clearedenvironment                     bool
+	scope                                  *string
+	clearedscope                           bool
+	category                               *string
+	clearedcategory                        bool
+	organization                           map[string]struct{}
+	removedorganization                    map[string]struct{}
+	clearedorganization                    bool
+	groups                                 map[string]struct{}
+	removedgroups                          map[string]struct{}
+	clearedgroups                          bool
+	contact                                map[string]struct{}
+	removedcontact                         map[string]struct{}
+	clearedcontact                         bool
+	entity                                 map[string]struct{}
+	removedentity                          map[string]struct{}
+	clearedentity                          bool
+	organization_setting                   map[string]struct{}
+	removedorganization_setting            map[string]struct{}
+	clearedorganization_setting            bool
+	template                               map[string]struct{}
+	removedtemplate                        map[string]struct{}
+	clearedtemplate                        bool
+	document                               map[string]struct{}
+	removeddocument                        map[string]struct{}
+	cleareddocument                        bool
+	program                                map[string]struct{}
+	removedprogram                         map[string]struct{}
+	clearedprogram                         bool
+	platform                               map[string]struct{}
+	removedplatform                        map[string]struct{}
+	clearedplatform                        bool
+	evidence                               map[string]struct{}
+	removedevidence                        map[string]struct{}
+	clearedevidence                        bool
+	identity_holder                        map[string]struct{}
+	removedidentity_holder                 map[string]struct{}
+	clearedidentity_holder                 bool
+	scan                                   map[string]struct{}
+	removedscan                            map[string]struct{}
+	clearedscan                            bool
+	events                                 map[string]struct{}
+	removedevents                          map[string]struct{}
+	clearedevents                          bool
+	integrations                           map[string]struct{}
+	removedintegrations                    map[string]struct{}
+	clearedintegrations                    bool
+	secrets                                map[string]struct{}
+	removedsecrets                         map[string]struct{}
+	clearedsecrets                         bool
+	trust_center_entities                  map[string]struct{}
+	removedtrust_center_entities           map[string]struct{}
+	clearedtrust_center_entities           bool
+	trust_center_doc                       map[string]struct{}
+	removedtrust_center_doc                map[string]struct{}
+	clearedtrust_center_doc                bool
+	original_trust_center_doc              map[string]struct{}
+	removedoriginal_trust_center_doc       map[string]struct{}
+	clearedoriginal_trust_center_doc       bool
+	trust_center_setting_logo              map[string]struct{}
+	removedtrust_center_setting_logo       map[string]struct{}
+	clearedtrust_center_setting_logo       bool
+	trust_center_setting_favicon           map[string]struct{}
+	removedtrust_center_setting_favicon    map[string]struct{}
+	clearedtrust_center_setting_favicon    bool
+	trust_center_setting_hero_image        map[string]struct{}
+	removedtrust_center_setting_hero_image map[string]struct{}
+	clearedtrust_center_setting_hero_image bool
+	trust_center_entity_logo               map[string]struct{}
+	removedtrust_center_entity_logo        map[string]struct{}
+	clearedtrust_center_entity_logo        bool
+	subprocessor_logo                      map[string]struct{}
+	removedsubprocessor_logo               map[string]struct{}
+	clearedsubprocessor_logo               bool
+	standard_logo                          map[string]struct{}
+	removedstandard_logo                   map[string]struct{}
+	clearedstandard_logo                   bool
+	done                                   bool
+	oldValue                               func(context.Context) (*File, error)
+	predicates                             []predicate.File
 }
 
 var _ ent.Mutation = (*FileMutation)(nil)
@@ -96411,6 +96429,330 @@ func (m *FileMutation) ResetOriginalTrustCenterDoc() {
 	m.removedoriginal_trust_center_doc = nil
 }
 
+// AddTrustCenterSettingLogoIDs adds the "trust_center_setting_logo" edge to the TrustCenterSetting entity by ids.
+func (m *FileMutation) AddTrustCenterSettingLogoIDs(ids ...string) {
+	if m.trust_center_setting_logo == nil {
+		m.trust_center_setting_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.trust_center_setting_logo[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTrustCenterSettingLogo clears the "trust_center_setting_logo" edge to the TrustCenterSetting entity.
+func (m *FileMutation) ClearTrustCenterSettingLogo() {
+	m.clearedtrust_center_setting_logo = true
+}
+
+// TrustCenterSettingLogoCleared reports if the "trust_center_setting_logo" edge to the TrustCenterSetting entity was cleared.
+func (m *FileMutation) TrustCenterSettingLogoCleared() bool {
+	return m.clearedtrust_center_setting_logo
+}
+
+// RemoveTrustCenterSettingLogoIDs removes the "trust_center_setting_logo" edge to the TrustCenterSetting entity by IDs.
+func (m *FileMutation) RemoveTrustCenterSettingLogoIDs(ids ...string) {
+	if m.removedtrust_center_setting_logo == nil {
+		m.removedtrust_center_setting_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.trust_center_setting_logo, ids[i])
+		m.removedtrust_center_setting_logo[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTrustCenterSettingLogo returns the removed IDs of the "trust_center_setting_logo" edge to the TrustCenterSetting entity.
+func (m *FileMutation) RemovedTrustCenterSettingLogoIDs() (ids []string) {
+	for id := range m.removedtrust_center_setting_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TrustCenterSettingLogoIDs returns the "trust_center_setting_logo" edge IDs in the mutation.
+func (m *FileMutation) TrustCenterSettingLogoIDs() (ids []string) {
+	for id := range m.trust_center_setting_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTrustCenterSettingLogo resets all changes to the "trust_center_setting_logo" edge.
+func (m *FileMutation) ResetTrustCenterSettingLogo() {
+	m.trust_center_setting_logo = nil
+	m.clearedtrust_center_setting_logo = false
+	m.removedtrust_center_setting_logo = nil
+}
+
+// AddTrustCenterSettingFaviconIDs adds the "trust_center_setting_favicon" edge to the TrustCenterSetting entity by ids.
+func (m *FileMutation) AddTrustCenterSettingFaviconIDs(ids ...string) {
+	if m.trust_center_setting_favicon == nil {
+		m.trust_center_setting_favicon = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.trust_center_setting_favicon[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTrustCenterSettingFavicon clears the "trust_center_setting_favicon" edge to the TrustCenterSetting entity.
+func (m *FileMutation) ClearTrustCenterSettingFavicon() {
+	m.clearedtrust_center_setting_favicon = true
+}
+
+// TrustCenterSettingFaviconCleared reports if the "trust_center_setting_favicon" edge to the TrustCenterSetting entity was cleared.
+func (m *FileMutation) TrustCenterSettingFaviconCleared() bool {
+	return m.clearedtrust_center_setting_favicon
+}
+
+// RemoveTrustCenterSettingFaviconIDs removes the "trust_center_setting_favicon" edge to the TrustCenterSetting entity by IDs.
+func (m *FileMutation) RemoveTrustCenterSettingFaviconIDs(ids ...string) {
+	if m.removedtrust_center_setting_favicon == nil {
+		m.removedtrust_center_setting_favicon = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.trust_center_setting_favicon, ids[i])
+		m.removedtrust_center_setting_favicon[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTrustCenterSettingFavicon returns the removed IDs of the "trust_center_setting_favicon" edge to the TrustCenterSetting entity.
+func (m *FileMutation) RemovedTrustCenterSettingFaviconIDs() (ids []string) {
+	for id := range m.removedtrust_center_setting_favicon {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TrustCenterSettingFaviconIDs returns the "trust_center_setting_favicon" edge IDs in the mutation.
+func (m *FileMutation) TrustCenterSettingFaviconIDs() (ids []string) {
+	for id := range m.trust_center_setting_favicon {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTrustCenterSettingFavicon resets all changes to the "trust_center_setting_favicon" edge.
+func (m *FileMutation) ResetTrustCenterSettingFavicon() {
+	m.trust_center_setting_favicon = nil
+	m.clearedtrust_center_setting_favicon = false
+	m.removedtrust_center_setting_favicon = nil
+}
+
+// AddTrustCenterSettingHeroImageIDs adds the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity by ids.
+func (m *FileMutation) AddTrustCenterSettingHeroImageIDs(ids ...string) {
+	if m.trust_center_setting_hero_image == nil {
+		m.trust_center_setting_hero_image = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.trust_center_setting_hero_image[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTrustCenterSettingHeroImage clears the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity.
+func (m *FileMutation) ClearTrustCenterSettingHeroImage() {
+	m.clearedtrust_center_setting_hero_image = true
+}
+
+// TrustCenterSettingHeroImageCleared reports if the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity was cleared.
+func (m *FileMutation) TrustCenterSettingHeroImageCleared() bool {
+	return m.clearedtrust_center_setting_hero_image
+}
+
+// RemoveTrustCenterSettingHeroImageIDs removes the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity by IDs.
+func (m *FileMutation) RemoveTrustCenterSettingHeroImageIDs(ids ...string) {
+	if m.removedtrust_center_setting_hero_image == nil {
+		m.removedtrust_center_setting_hero_image = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.trust_center_setting_hero_image, ids[i])
+		m.removedtrust_center_setting_hero_image[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTrustCenterSettingHeroImage returns the removed IDs of the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity.
+func (m *FileMutation) RemovedTrustCenterSettingHeroImageIDs() (ids []string) {
+	for id := range m.removedtrust_center_setting_hero_image {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TrustCenterSettingHeroImageIDs returns the "trust_center_setting_hero_image" edge IDs in the mutation.
+func (m *FileMutation) TrustCenterSettingHeroImageIDs() (ids []string) {
+	for id := range m.trust_center_setting_hero_image {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTrustCenterSettingHeroImage resets all changes to the "trust_center_setting_hero_image" edge.
+func (m *FileMutation) ResetTrustCenterSettingHeroImage() {
+	m.trust_center_setting_hero_image = nil
+	m.clearedtrust_center_setting_hero_image = false
+	m.removedtrust_center_setting_hero_image = nil
+}
+
+// AddTrustCenterEntityLogoIDs adds the "trust_center_entity_logo" edge to the TrustCenterEntity entity by ids.
+func (m *FileMutation) AddTrustCenterEntityLogoIDs(ids ...string) {
+	if m.trust_center_entity_logo == nil {
+		m.trust_center_entity_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.trust_center_entity_logo[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTrustCenterEntityLogo clears the "trust_center_entity_logo" edge to the TrustCenterEntity entity.
+func (m *FileMutation) ClearTrustCenterEntityLogo() {
+	m.clearedtrust_center_entity_logo = true
+}
+
+// TrustCenterEntityLogoCleared reports if the "trust_center_entity_logo" edge to the TrustCenterEntity entity was cleared.
+func (m *FileMutation) TrustCenterEntityLogoCleared() bool {
+	return m.clearedtrust_center_entity_logo
+}
+
+// RemoveTrustCenterEntityLogoIDs removes the "trust_center_entity_logo" edge to the TrustCenterEntity entity by IDs.
+func (m *FileMutation) RemoveTrustCenterEntityLogoIDs(ids ...string) {
+	if m.removedtrust_center_entity_logo == nil {
+		m.removedtrust_center_entity_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.trust_center_entity_logo, ids[i])
+		m.removedtrust_center_entity_logo[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTrustCenterEntityLogo returns the removed IDs of the "trust_center_entity_logo" edge to the TrustCenterEntity entity.
+func (m *FileMutation) RemovedTrustCenterEntityLogoIDs() (ids []string) {
+	for id := range m.removedtrust_center_entity_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TrustCenterEntityLogoIDs returns the "trust_center_entity_logo" edge IDs in the mutation.
+func (m *FileMutation) TrustCenterEntityLogoIDs() (ids []string) {
+	for id := range m.trust_center_entity_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTrustCenterEntityLogo resets all changes to the "trust_center_entity_logo" edge.
+func (m *FileMutation) ResetTrustCenterEntityLogo() {
+	m.trust_center_entity_logo = nil
+	m.clearedtrust_center_entity_logo = false
+	m.removedtrust_center_entity_logo = nil
+}
+
+// AddSubprocessorLogoIDs adds the "subprocessor_logo" edge to the Subprocessor entity by ids.
+func (m *FileMutation) AddSubprocessorLogoIDs(ids ...string) {
+	if m.subprocessor_logo == nil {
+		m.subprocessor_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.subprocessor_logo[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSubprocessorLogo clears the "subprocessor_logo" edge to the Subprocessor entity.
+func (m *FileMutation) ClearSubprocessorLogo() {
+	m.clearedsubprocessor_logo = true
+}
+
+// SubprocessorLogoCleared reports if the "subprocessor_logo" edge to the Subprocessor entity was cleared.
+func (m *FileMutation) SubprocessorLogoCleared() bool {
+	return m.clearedsubprocessor_logo
+}
+
+// RemoveSubprocessorLogoIDs removes the "subprocessor_logo" edge to the Subprocessor entity by IDs.
+func (m *FileMutation) RemoveSubprocessorLogoIDs(ids ...string) {
+	if m.removedsubprocessor_logo == nil {
+		m.removedsubprocessor_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.subprocessor_logo, ids[i])
+		m.removedsubprocessor_logo[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSubprocessorLogo returns the removed IDs of the "subprocessor_logo" edge to the Subprocessor entity.
+func (m *FileMutation) RemovedSubprocessorLogoIDs() (ids []string) {
+	for id := range m.removedsubprocessor_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SubprocessorLogoIDs returns the "subprocessor_logo" edge IDs in the mutation.
+func (m *FileMutation) SubprocessorLogoIDs() (ids []string) {
+	for id := range m.subprocessor_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSubprocessorLogo resets all changes to the "subprocessor_logo" edge.
+func (m *FileMutation) ResetSubprocessorLogo() {
+	m.subprocessor_logo = nil
+	m.clearedsubprocessor_logo = false
+	m.removedsubprocessor_logo = nil
+}
+
+// AddStandardLogoIDs adds the "standard_logo" edge to the Standard entity by ids.
+func (m *FileMutation) AddStandardLogoIDs(ids ...string) {
+	if m.standard_logo == nil {
+		m.standard_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.standard_logo[ids[i]] = struct{}{}
+	}
+}
+
+// ClearStandardLogo clears the "standard_logo" edge to the Standard entity.
+func (m *FileMutation) ClearStandardLogo() {
+	m.clearedstandard_logo = true
+}
+
+// StandardLogoCleared reports if the "standard_logo" edge to the Standard entity was cleared.
+func (m *FileMutation) StandardLogoCleared() bool {
+	return m.clearedstandard_logo
+}
+
+// RemoveStandardLogoIDs removes the "standard_logo" edge to the Standard entity by IDs.
+func (m *FileMutation) RemoveStandardLogoIDs(ids ...string) {
+	if m.removedstandard_logo == nil {
+		m.removedstandard_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.standard_logo, ids[i])
+		m.removedstandard_logo[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedStandardLogo returns the removed IDs of the "standard_logo" edge to the Standard entity.
+func (m *FileMutation) RemovedStandardLogoIDs() (ids []string) {
+	for id := range m.removedstandard_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// StandardLogoIDs returns the "standard_logo" edge IDs in the mutation.
+func (m *FileMutation) StandardLogoIDs() (ids []string) {
+	for id := range m.standard_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetStandardLogo resets all changes to the "standard_logo" edge.
+func (m *FileMutation) ResetStandardLogo() {
+	m.standard_logo = nil
+	m.clearedstandard_logo = false
+	m.removedstandard_logo = nil
+}
+
 // Where appends a list predicates to the FileMutation builder.
 func (m *FileMutation) Where(ps ...predicate.File) {
 	m.predicates = append(m.predicates, ps...)
@@ -97367,7 +97709,7 @@ func (m *FileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 27)
 	if m.environment != nil {
 		edges = append(edges, file.EdgeEnvironment)
 	}
@@ -97430,6 +97772,24 @@ func (m *FileMutation) AddedEdges() []string {
 	}
 	if m.original_trust_center_doc != nil {
 		edges = append(edges, file.EdgeOriginalTrustCenterDoc)
+	}
+	if m.trust_center_setting_logo != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingLogo)
+	}
+	if m.trust_center_setting_favicon != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingFavicon)
+	}
+	if m.trust_center_setting_hero_image != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingHeroImage)
+	}
+	if m.trust_center_entity_logo != nil {
+		edges = append(edges, file.EdgeTrustCenterEntityLogo)
+	}
+	if m.subprocessor_logo != nil {
+		edges = append(edges, file.EdgeSubprocessorLogo)
+	}
+	if m.standard_logo != nil {
+		edges = append(edges, file.EdgeStandardLogo)
 	}
 	return edges
 }
@@ -97558,13 +97918,49 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeTrustCenterSettingLogo:
+		ids := make([]ent.Value, 0, len(m.trust_center_setting_logo))
+		for id := range m.trust_center_setting_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterSettingFavicon:
+		ids := make([]ent.Value, 0, len(m.trust_center_setting_favicon))
+		for id := range m.trust_center_setting_favicon {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterSettingHeroImage:
+		ids := make([]ent.Value, 0, len(m.trust_center_setting_hero_image))
+		for id := range m.trust_center_setting_hero_image {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterEntityLogo:
+		ids := make([]ent.Value, 0, len(m.trust_center_entity_logo))
+		for id := range m.trust_center_entity_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeSubprocessorLogo:
+		ids := make([]ent.Value, 0, len(m.subprocessor_logo))
+		for id := range m.subprocessor_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeStandardLogo:
+		ids := make([]ent.Value, 0, len(m.standard_logo))
+		for id := range m.standard_logo {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 27)
 	if m.removedorganization != nil {
 		edges = append(edges, file.EdgeOrganization)
 	}
@@ -97618,6 +98014,24 @@ func (m *FileMutation) RemovedEdges() []string {
 	}
 	if m.removedoriginal_trust_center_doc != nil {
 		edges = append(edges, file.EdgeOriginalTrustCenterDoc)
+	}
+	if m.removedtrust_center_setting_logo != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingLogo)
+	}
+	if m.removedtrust_center_setting_favicon != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingFavicon)
+	}
+	if m.removedtrust_center_setting_hero_image != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingHeroImage)
+	}
+	if m.removedtrust_center_entity_logo != nil {
+		edges = append(edges, file.EdgeTrustCenterEntityLogo)
+	}
+	if m.removedsubprocessor_logo != nil {
+		edges = append(edges, file.EdgeSubprocessorLogo)
+	}
+	if m.removedstandard_logo != nil {
+		edges = append(edges, file.EdgeStandardLogo)
 	}
 	return edges
 }
@@ -97734,13 +98148,49 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeTrustCenterSettingLogo:
+		ids := make([]ent.Value, 0, len(m.removedtrust_center_setting_logo))
+		for id := range m.removedtrust_center_setting_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterSettingFavicon:
+		ids := make([]ent.Value, 0, len(m.removedtrust_center_setting_favicon))
+		for id := range m.removedtrust_center_setting_favicon {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterSettingHeroImage:
+		ids := make([]ent.Value, 0, len(m.removedtrust_center_setting_hero_image))
+		for id := range m.removedtrust_center_setting_hero_image {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterEntityLogo:
+		ids := make([]ent.Value, 0, len(m.removedtrust_center_entity_logo))
+		for id := range m.removedtrust_center_entity_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeSubprocessorLogo:
+		ids := make([]ent.Value, 0, len(m.removedsubprocessor_logo))
+		for id := range m.removedsubprocessor_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeStandardLogo:
+		ids := make([]ent.Value, 0, len(m.removedstandard_logo))
+		for id := range m.removedstandard_logo {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 27)
 	if m.clearedenvironment {
 		edges = append(edges, file.EdgeEnvironment)
 	}
@@ -97804,6 +98254,24 @@ func (m *FileMutation) ClearedEdges() []string {
 	if m.clearedoriginal_trust_center_doc {
 		edges = append(edges, file.EdgeOriginalTrustCenterDoc)
 	}
+	if m.clearedtrust_center_setting_logo {
+		edges = append(edges, file.EdgeTrustCenterSettingLogo)
+	}
+	if m.clearedtrust_center_setting_favicon {
+		edges = append(edges, file.EdgeTrustCenterSettingFavicon)
+	}
+	if m.clearedtrust_center_setting_hero_image {
+		edges = append(edges, file.EdgeTrustCenterSettingHeroImage)
+	}
+	if m.clearedtrust_center_entity_logo {
+		edges = append(edges, file.EdgeTrustCenterEntityLogo)
+	}
+	if m.clearedsubprocessor_logo {
+		edges = append(edges, file.EdgeSubprocessorLogo)
+	}
+	if m.clearedstandard_logo {
+		edges = append(edges, file.EdgeStandardLogo)
+	}
 	return edges
 }
 
@@ -97853,6 +98321,18 @@ func (m *FileMutation) EdgeCleared(name string) bool {
 		return m.clearedtrust_center_doc
 	case file.EdgeOriginalTrustCenterDoc:
 		return m.clearedoriginal_trust_center_doc
+	case file.EdgeTrustCenterSettingLogo:
+		return m.clearedtrust_center_setting_logo
+	case file.EdgeTrustCenterSettingFavicon:
+		return m.clearedtrust_center_setting_favicon
+	case file.EdgeTrustCenterSettingHeroImage:
+		return m.clearedtrust_center_setting_hero_image
+	case file.EdgeTrustCenterEntityLogo:
+		return m.clearedtrust_center_entity_logo
+	case file.EdgeSubprocessorLogo:
+		return m.clearedsubprocessor_logo
+	case file.EdgeStandardLogo:
+		return m.clearedstandard_logo
 	}
 	return false
 }
@@ -97940,6 +98420,24 @@ func (m *FileMutation) ResetEdge(name string) error {
 		return nil
 	case file.EdgeOriginalTrustCenterDoc:
 		m.ResetOriginalTrustCenterDoc()
+		return nil
+	case file.EdgeTrustCenterSettingLogo:
+		m.ResetTrustCenterSettingLogo()
+		return nil
+	case file.EdgeTrustCenterSettingFavicon:
+		m.ResetTrustCenterSettingFavicon()
+		return nil
+	case file.EdgeTrustCenterSettingHeroImage:
+		m.ResetTrustCenterSettingHeroImage()
+		return nil
+	case file.EdgeTrustCenterEntityLogo:
+		m.ResetTrustCenterEntityLogo()
+		return nil
+	case file.EdgeSubprocessorLogo:
+		m.ResetSubprocessorLogo()
+		return nil
+	case file.EdgeStandardLogo:
+		m.ResetStandardLogo()
 		return nil
 	}
 	return fmt.Errorf("unknown File edge %s", name)

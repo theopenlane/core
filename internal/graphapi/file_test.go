@@ -10,9 +10,11 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryFile(t *testing.T) {
@@ -45,6 +47,85 @@ func TestQueryFile(t *testing.T) {
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 
 	userFileID := *userResp.UpdateUser.User.AvatarLocalFileID
+
+	trustCenter := (&th.TrustCenterBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.TrustCenterDeleteOne]{Client: suite.Client.DB.TrustCenter, ID: trustCenter.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	publicControl, err := suite.Client.DB.Control.Create().
+		SetRefCode("OTS-TEST-" + ulids.New().String()).
+		SetTitle("Trust Center Public Control").
+		SetSource(enums.ControlSourceUserDefined).
+		SetIsTrustCenterControl(true).
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
+		Save(th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB))
+	assert.NilError(t, err)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: publicControl.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	_, err = suite.Client.API.UpdateControl(th.SharedTestUser1.UserCtx, publicControl.ID, testclient.UpdateControlInput{
+		TrustCenterVisibility: &enums.TrustCenterControlVisibilityPubliclyVisible,
+	})
+	assert.NilError(t, err)
+
+	publicEvidenceUpload := th.UploadFile(t, "testdata/uploads/orgs.csv")
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*publicEvidenceUpload})
+
+	publicEvidence, err := suite.Client.API.CreateEvidence(th.SharedTestUser1.UserCtx, testclient.CreateEvidenceInput{
+		Name:       "Evidence on a public trust center control",
+		ControlIDs: []string{publicControl.ID},
+	}, []*graphql.Upload{publicEvidenceUpload})
+	assert.NilError(t, err)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, ID: publicEvidence.CreateEvidence.Evidence.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	getPublicEvidence, err := suite.Client.API.GetEvidenceByID(th.SharedTestUser1.UserCtx, publicEvidence.CreateEvidence.Evidence.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(getPublicEvidence.Evidence.Files.Edges, 1))
+
+	publicEvidenceFileID := getPublicEvidence.Evidence.Files.Edges[0].Node.ID
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.FileDeleteOne]{Client: suite.Client.DB.File, ID: publicEvidenceFileID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	publicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: publicStandard.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	})
+
+	standardControl := (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: standardControl.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	standardEvidenceUpload := th.UploadFile(t, "testdata/uploads/orgs.csv")
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*standardEvidenceUpload})
+
+	standardEvidence, err := suite.Client.API.CreateEvidence(th.SharedTestUser1.UserCtx, testclient.CreateEvidenceInput{
+		Name:       "Evidence on a control linked to a public standard",
+		ControlIDs: []string{standardControl.ID},
+	}, []*graphql.Upload{standardEvidenceUpload})
+	assert.NilError(t, err)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, ID: standardEvidence.CreateEvidence.Evidence.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	getStandardEvidence, err := suite.Client.API.GetEvidenceByID(th.SharedTestUser1.UserCtx, standardEvidence.CreateEvidence.Evidence.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(getStandardEvidence.Evidence.Files.Edges, 1))
+
+	standardEvidenceFileID := getStandardEvidence.Evidence.Files.Edges[0].Node.ID
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.FileDeleteOne]{Client: suite.Client.DB.File, ID: standardEvidenceFileID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	anonCtx := th.CreateAnonymousTrustCenterContext(trustCenter.ID, th.SharedTestUser1.OrganizationID)
+
+	_, err = suite.Client.API.GetTrustCenterControlByID(anonCtx, publicControl.ID)
+	assert.NilError(t, err)
 
 	// user in another org context
 	adminUserCtxAnotherOrg := auth.NewTestContextWithOrgID(th.SharedAdminUser.ID, th.SharedAdminUser.PersonalOrgID)
@@ -119,6 +200,32 @@ func TestQueryFile(t *testing.T) {
 			queryID:  userFileID,
 			client:   suite.Client.API,
 			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
+		},
+		{
+			name:    "happy path, evidence file on public trust center control",
+			queryID: publicEvidenceFileID,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:     "anonymous trust center user cannot view evidence file on public trust center control",
+			queryID:  publicEvidenceFileID,
+			client:   suite.Client.API,
+			ctx:      anonCtx,
+			errorMsg: th.NotFoundErrorMsg,
+		},
+		{
+			name:    "happy path, evidence file on control linked to public standard",
+			queryID: standardEvidenceFileID,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:     "anonymous trust center user cannot view evidence file on control linked to public standard",
+			queryID:  standardEvidenceFileID,
+			client:   suite.Client.API,
+			ctx:      anonCtx,
 			errorMsg: th.NotFoundErrorMsg,
 		},
 	}

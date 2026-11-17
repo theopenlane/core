@@ -30,19 +30,6 @@ extend type Mutation{
         input: [CreateReportMembershipInput!]
     ): ReportMembershipBulkCreatePayload!
     """
-    Update multiple existing reportMemberships
-    """
-    updateBulkReportMembership(
-        """
-        IDs of the reportMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the reportMemberships with
-        """
-        input: UpdateReportMembershipInput!
-    ): ReportMembershipBulkUpdatePayload!
-    """
     Update an existing reportMembership
     """
     updateReportMembership(
@@ -64,15 +51,6 @@ extend type Mutation{
         """
         id: ID!
     ): ReportMembershipDeletePayload!
-    """
-    Delete multiple reportMemberships
-    """
-    deleteBulkReportMembership(
-        """
-        IDs of the reportMemberships to delete
-        """
-        ids: [ID!]!
-    ): ReportMembershipBulkDeletePayload!
 }
 
 """

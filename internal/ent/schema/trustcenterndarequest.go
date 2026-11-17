@@ -145,6 +145,7 @@ func (t TrustCenterNDARequest) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterNDARequest](t,
 				withParents(TrustCenter{}),
+				withAnonymousTrustCenterAccess(),
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},

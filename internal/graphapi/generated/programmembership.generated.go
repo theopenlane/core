@@ -560,22 +560,6 @@ func (ec *executionContext) marshalNProgramMembershipBulkCreatePayload2ᚖgithub
 	return ec._ProgramMembershipBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProgramMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipBulkDeletePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "ProgramMembershipBulkDeletePayload!")
-		return graphql.Null
-	}
-	return ec._ProgramMembershipBulkDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProgramMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipBulkUpdatePayload) graphql.Marshaler {
-	if v == nil {
-		graphql.AddInvalidNullError(ctx, "ProgramMembershipBulkUpdatePayload!")
-		return graphql.Null
-	}
-	return ec._ProgramMembershipBulkUpdatePayload(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNProgramMembershipCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipCreatePayload) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "ProgramMembershipCreatePayload!")

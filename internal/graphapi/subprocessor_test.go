@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"testing"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -107,6 +108,39 @@ func TestQuerySubprocessorByID(t *testing.T) {
 			}
 		})
 	}
+
+	trustCenter := (&th.TrustCenterBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.TrustCenterDeleteOne]{Client: suite.Client.DB.TrustCenter, ID: trustCenter.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	kind := (&th.CustomTypeEnumBuilder{
+		Client:     suite.Client,
+		ObjectType: "trust_center_subprocessor",
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	_, err = suite.Client.API.CreateTrustCenterSubprocessor(th.SharedTestUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+		SubprocessorID:                  subprocessor.ID,
+		TrustCenterID:                   &trustCenter.ID,
+		TrustCenterSubprocessorKindName: &kind.Name,
+		Countries:                       []string{"US"},
+	})
+	assert.NilError(t, err)
+
+	unlinkedSubprocessor := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: unlinkedSubprocessor.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	t.Run("Get anonymous trust center user only sees system owned and linked subprocessors", func(t *testing.T) {
+		anonCtx := th.CreateAnonymousTrustCenterContext(trustCenter.ID, th.SharedTestUser1.OrganizationID)
+
+		ids, err := suite.Client.DB.Subprocessor.Query().IDs(generated.NewContext(anonCtx, suite.Client.DB))
+		assert.NilError(t, err)
+		assert.Check(t, is.Contains(ids, subprocessor.ID))
+		assert.Check(t, is.Contains(ids, systemSubprocessr.ID))
+		assert.Check(t, !slices.Contains(ids, unlinkedSubprocessor.ID))
+	})
 
 	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: systemSubprocessr.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)

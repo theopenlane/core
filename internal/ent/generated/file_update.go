@@ -30,9 +30,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 )
 
 // FileUpdate is the builder for updating File entities.
@@ -964,6 +967,96 @@ func (_u *FileUpdate) AddOriginalTrustCenterDoc(v ...*TrustCenterDoc) *FileUpdat
 	return _u.AddOriginalTrustCenterDocIDs(ids...)
 }
 
+// AddTrustCenterSettingLogoIDs adds the "trust_center_setting_logo" edge to the TrustCenterSetting entity by IDs.
+func (_u *FileUpdate) AddTrustCenterSettingLogoIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddTrustCenterSettingLogoIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterSettingLogo adds the "trust_center_setting_logo" edges to the TrustCenterSetting entity.
+func (_u *FileUpdate) AddTrustCenterSettingLogo(v ...*TrustCenterSetting) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterSettingLogoIDs(ids...)
+}
+
+// AddTrustCenterSettingFaviconIDs adds the "trust_center_setting_favicon" edge to the TrustCenterSetting entity by IDs.
+func (_u *FileUpdate) AddTrustCenterSettingFaviconIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddTrustCenterSettingFaviconIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterSettingFavicon adds the "trust_center_setting_favicon" edges to the TrustCenterSetting entity.
+func (_u *FileUpdate) AddTrustCenterSettingFavicon(v ...*TrustCenterSetting) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterSettingFaviconIDs(ids...)
+}
+
+// AddTrustCenterSettingHeroImageIDs adds the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity by IDs.
+func (_u *FileUpdate) AddTrustCenterSettingHeroImageIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddTrustCenterSettingHeroImageIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterSettingHeroImage adds the "trust_center_setting_hero_image" edges to the TrustCenterSetting entity.
+func (_u *FileUpdate) AddTrustCenterSettingHeroImage(v ...*TrustCenterSetting) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterSettingHeroImageIDs(ids...)
+}
+
+// AddTrustCenterEntityLogoIDs adds the "trust_center_entity_logo" edge to the TrustCenterEntity entity by IDs.
+func (_u *FileUpdate) AddTrustCenterEntityLogoIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddTrustCenterEntityLogoIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterEntityLogo adds the "trust_center_entity_logo" edges to the TrustCenterEntity entity.
+func (_u *FileUpdate) AddTrustCenterEntityLogo(v ...*TrustCenterEntity) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterEntityLogoIDs(ids...)
+}
+
+// AddSubprocessorLogoIDs adds the "subprocessor_logo" edge to the Subprocessor entity by IDs.
+func (_u *FileUpdate) AddSubprocessorLogoIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddSubprocessorLogoIDs(ids...)
+	return _u
+}
+
+// AddSubprocessorLogo adds the "subprocessor_logo" edges to the Subprocessor entity.
+func (_u *FileUpdate) AddSubprocessorLogo(v ...*Subprocessor) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubprocessorLogoIDs(ids...)
+}
+
+// AddStandardLogoIDs adds the "standard_logo" edge to the Standard entity by IDs.
+func (_u *FileUpdate) AddStandardLogoIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddStandardLogoIDs(ids...)
+	return _u
+}
+
+// AddStandardLogo adds the "standard_logo" edges to the Standard entity.
+func (_u *FileUpdate) AddStandardLogo(v ...*Standard) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddStandardLogoIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdate) Mutation() *FileMutation {
 	return _u.mutation
@@ -1363,6 +1456,132 @@ func (_u *FileUpdate) RemoveOriginalTrustCenterDoc(v ...*TrustCenterDoc) *FileUp
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveOriginalTrustCenterDocIDs(ids...)
+}
+
+// ClearTrustCenterSettingLogo clears all "trust_center_setting_logo" edges to the TrustCenterSetting entity.
+func (_u *FileUpdate) ClearTrustCenterSettingLogo() *FileUpdate {
+	_u.mutation.ClearTrustCenterSettingLogo()
+	return _u
+}
+
+// RemoveTrustCenterSettingLogoIDs removes the "trust_center_setting_logo" edge to TrustCenterSetting entities by IDs.
+func (_u *FileUpdate) RemoveTrustCenterSettingLogoIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveTrustCenterSettingLogoIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterSettingLogo removes "trust_center_setting_logo" edges to TrustCenterSetting entities.
+func (_u *FileUpdate) RemoveTrustCenterSettingLogo(v ...*TrustCenterSetting) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterSettingLogoIDs(ids...)
+}
+
+// ClearTrustCenterSettingFavicon clears all "trust_center_setting_favicon" edges to the TrustCenterSetting entity.
+func (_u *FileUpdate) ClearTrustCenterSettingFavicon() *FileUpdate {
+	_u.mutation.ClearTrustCenterSettingFavicon()
+	return _u
+}
+
+// RemoveTrustCenterSettingFaviconIDs removes the "trust_center_setting_favicon" edge to TrustCenterSetting entities by IDs.
+func (_u *FileUpdate) RemoveTrustCenterSettingFaviconIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveTrustCenterSettingFaviconIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterSettingFavicon removes "trust_center_setting_favicon" edges to TrustCenterSetting entities.
+func (_u *FileUpdate) RemoveTrustCenterSettingFavicon(v ...*TrustCenterSetting) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterSettingFaviconIDs(ids...)
+}
+
+// ClearTrustCenterSettingHeroImage clears all "trust_center_setting_hero_image" edges to the TrustCenterSetting entity.
+func (_u *FileUpdate) ClearTrustCenterSettingHeroImage() *FileUpdate {
+	_u.mutation.ClearTrustCenterSettingHeroImage()
+	return _u
+}
+
+// RemoveTrustCenterSettingHeroImageIDs removes the "trust_center_setting_hero_image" edge to TrustCenterSetting entities by IDs.
+func (_u *FileUpdate) RemoveTrustCenterSettingHeroImageIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveTrustCenterSettingHeroImageIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterSettingHeroImage removes "trust_center_setting_hero_image" edges to TrustCenterSetting entities.
+func (_u *FileUpdate) RemoveTrustCenterSettingHeroImage(v ...*TrustCenterSetting) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterSettingHeroImageIDs(ids...)
+}
+
+// ClearTrustCenterEntityLogo clears all "trust_center_entity_logo" edges to the TrustCenterEntity entity.
+func (_u *FileUpdate) ClearTrustCenterEntityLogo() *FileUpdate {
+	_u.mutation.ClearTrustCenterEntityLogo()
+	return _u
+}
+
+// RemoveTrustCenterEntityLogoIDs removes the "trust_center_entity_logo" edge to TrustCenterEntity entities by IDs.
+func (_u *FileUpdate) RemoveTrustCenterEntityLogoIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveTrustCenterEntityLogoIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterEntityLogo removes "trust_center_entity_logo" edges to TrustCenterEntity entities.
+func (_u *FileUpdate) RemoveTrustCenterEntityLogo(v ...*TrustCenterEntity) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterEntityLogoIDs(ids...)
+}
+
+// ClearSubprocessorLogo clears all "subprocessor_logo" edges to the Subprocessor entity.
+func (_u *FileUpdate) ClearSubprocessorLogo() *FileUpdate {
+	_u.mutation.ClearSubprocessorLogo()
+	return _u
+}
+
+// RemoveSubprocessorLogoIDs removes the "subprocessor_logo" edge to Subprocessor entities by IDs.
+func (_u *FileUpdate) RemoveSubprocessorLogoIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveSubprocessorLogoIDs(ids...)
+	return _u
+}
+
+// RemoveSubprocessorLogo removes "subprocessor_logo" edges to Subprocessor entities.
+func (_u *FileUpdate) RemoveSubprocessorLogo(v ...*Subprocessor) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubprocessorLogoIDs(ids...)
+}
+
+// ClearStandardLogo clears all "standard_logo" edges to the Standard entity.
+func (_u *FileUpdate) ClearStandardLogo() *FileUpdate {
+	_u.mutation.ClearStandardLogo()
+	return _u
+}
+
+// RemoveStandardLogoIDs removes the "standard_logo" edge to Standard entities by IDs.
+func (_u *FileUpdate) RemoveStandardLogoIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveStandardLogoIDs(ids...)
+	return _u
+}
+
+// RemoveStandardLogo removes "standard_logo" edges to Standard entities.
+func (_u *FileUpdate) RemoveStandardLogo(v ...*Standard) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveStandardLogoIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2528,6 +2747,276 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TrustCenterSettingLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingLogoTable,
+			Columns: []string{file.TrustCenterSettingLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterSettingLogoIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSettingLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingLogoTable,
+			Columns: []string{file.TrustCenterSettingLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterSettingLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingLogoTable,
+			Columns: []string{file.TrustCenterSettingLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterSettingFaviconCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingFaviconTable,
+			Columns: []string{file.TrustCenterSettingFaviconColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterSettingFaviconIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSettingFaviconCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingFaviconTable,
+			Columns: []string{file.TrustCenterSettingFaviconColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterSettingFaviconIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingFaviconTable,
+			Columns: []string{file.TrustCenterSettingFaviconColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterSettingHeroImageCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingHeroImageTable,
+			Columns: []string{file.TrustCenterSettingHeroImageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterSettingHeroImageIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSettingHeroImageCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingHeroImageTable,
+			Columns: []string{file.TrustCenterSettingHeroImageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterSettingHeroImageIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingHeroImageTable,
+			Columns: []string{file.TrustCenterSettingHeroImageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterEntityLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterEntityLogoTable,
+			Columns: []string{file.TrustCenterEntityLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterEntityLogoIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterEntityLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterEntityLogoTable,
+			Columns: []string{file.TrustCenterEntityLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterEntityLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterEntityLogoTable,
+			Columns: []string{file.TrustCenterEntityLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubprocessorLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.SubprocessorLogoTable,
+			Columns: []string{file.SubprocessorLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubprocessorLogoIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.SubprocessorLogoTable,
+			Columns: []string{file.SubprocessorLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubprocessorLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.SubprocessorLogoTable,
+			Columns: []string{file.SubprocessorLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StandardLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.StandardLogoTable,
+			Columns: []string{file.StandardLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedStandardLogoIDs(); len(nodes) > 0 && !_u.mutation.StandardLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.StandardLogoTable,
+			Columns: []string{file.StandardLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StandardLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.StandardLogoTable,
+			Columns: []string{file.StandardLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -3465,6 +3954,96 @@ func (_u *FileUpdateOne) AddOriginalTrustCenterDoc(v ...*TrustCenterDoc) *FileUp
 	return _u.AddOriginalTrustCenterDocIDs(ids...)
 }
 
+// AddTrustCenterSettingLogoIDs adds the "trust_center_setting_logo" edge to the TrustCenterSetting entity by IDs.
+func (_u *FileUpdateOne) AddTrustCenterSettingLogoIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddTrustCenterSettingLogoIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterSettingLogo adds the "trust_center_setting_logo" edges to the TrustCenterSetting entity.
+func (_u *FileUpdateOne) AddTrustCenterSettingLogo(v ...*TrustCenterSetting) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterSettingLogoIDs(ids...)
+}
+
+// AddTrustCenterSettingFaviconIDs adds the "trust_center_setting_favicon" edge to the TrustCenterSetting entity by IDs.
+func (_u *FileUpdateOne) AddTrustCenterSettingFaviconIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddTrustCenterSettingFaviconIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterSettingFavicon adds the "trust_center_setting_favicon" edges to the TrustCenterSetting entity.
+func (_u *FileUpdateOne) AddTrustCenterSettingFavicon(v ...*TrustCenterSetting) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterSettingFaviconIDs(ids...)
+}
+
+// AddTrustCenterSettingHeroImageIDs adds the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity by IDs.
+func (_u *FileUpdateOne) AddTrustCenterSettingHeroImageIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddTrustCenterSettingHeroImageIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterSettingHeroImage adds the "trust_center_setting_hero_image" edges to the TrustCenterSetting entity.
+func (_u *FileUpdateOne) AddTrustCenterSettingHeroImage(v ...*TrustCenterSetting) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterSettingHeroImageIDs(ids...)
+}
+
+// AddTrustCenterEntityLogoIDs adds the "trust_center_entity_logo" edge to the TrustCenterEntity entity by IDs.
+func (_u *FileUpdateOne) AddTrustCenterEntityLogoIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddTrustCenterEntityLogoIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterEntityLogo adds the "trust_center_entity_logo" edges to the TrustCenterEntity entity.
+func (_u *FileUpdateOne) AddTrustCenterEntityLogo(v ...*TrustCenterEntity) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterEntityLogoIDs(ids...)
+}
+
+// AddSubprocessorLogoIDs adds the "subprocessor_logo" edge to the Subprocessor entity by IDs.
+func (_u *FileUpdateOne) AddSubprocessorLogoIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddSubprocessorLogoIDs(ids...)
+	return _u
+}
+
+// AddSubprocessorLogo adds the "subprocessor_logo" edges to the Subprocessor entity.
+func (_u *FileUpdateOne) AddSubprocessorLogo(v ...*Subprocessor) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubprocessorLogoIDs(ids...)
+}
+
+// AddStandardLogoIDs adds the "standard_logo" edge to the Standard entity by IDs.
+func (_u *FileUpdateOne) AddStandardLogoIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddStandardLogoIDs(ids...)
+	return _u
+}
+
+// AddStandardLogo adds the "standard_logo" edges to the Standard entity.
+func (_u *FileUpdateOne) AddStandardLogo(v ...*Standard) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddStandardLogoIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdateOne) Mutation() *FileMutation {
 	return _u.mutation
@@ -3864,6 +4443,132 @@ func (_u *FileUpdateOne) RemoveOriginalTrustCenterDoc(v ...*TrustCenterDoc) *Fil
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveOriginalTrustCenterDocIDs(ids...)
+}
+
+// ClearTrustCenterSettingLogo clears all "trust_center_setting_logo" edges to the TrustCenterSetting entity.
+func (_u *FileUpdateOne) ClearTrustCenterSettingLogo() *FileUpdateOne {
+	_u.mutation.ClearTrustCenterSettingLogo()
+	return _u
+}
+
+// RemoveTrustCenterSettingLogoIDs removes the "trust_center_setting_logo" edge to TrustCenterSetting entities by IDs.
+func (_u *FileUpdateOne) RemoveTrustCenterSettingLogoIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveTrustCenterSettingLogoIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterSettingLogo removes "trust_center_setting_logo" edges to TrustCenterSetting entities.
+func (_u *FileUpdateOne) RemoveTrustCenterSettingLogo(v ...*TrustCenterSetting) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterSettingLogoIDs(ids...)
+}
+
+// ClearTrustCenterSettingFavicon clears all "trust_center_setting_favicon" edges to the TrustCenterSetting entity.
+func (_u *FileUpdateOne) ClearTrustCenterSettingFavicon() *FileUpdateOne {
+	_u.mutation.ClearTrustCenterSettingFavicon()
+	return _u
+}
+
+// RemoveTrustCenterSettingFaviconIDs removes the "trust_center_setting_favicon" edge to TrustCenterSetting entities by IDs.
+func (_u *FileUpdateOne) RemoveTrustCenterSettingFaviconIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveTrustCenterSettingFaviconIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterSettingFavicon removes "trust_center_setting_favicon" edges to TrustCenterSetting entities.
+func (_u *FileUpdateOne) RemoveTrustCenterSettingFavicon(v ...*TrustCenterSetting) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterSettingFaviconIDs(ids...)
+}
+
+// ClearTrustCenterSettingHeroImage clears all "trust_center_setting_hero_image" edges to the TrustCenterSetting entity.
+func (_u *FileUpdateOne) ClearTrustCenterSettingHeroImage() *FileUpdateOne {
+	_u.mutation.ClearTrustCenterSettingHeroImage()
+	return _u
+}
+
+// RemoveTrustCenterSettingHeroImageIDs removes the "trust_center_setting_hero_image" edge to TrustCenterSetting entities by IDs.
+func (_u *FileUpdateOne) RemoveTrustCenterSettingHeroImageIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveTrustCenterSettingHeroImageIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterSettingHeroImage removes "trust_center_setting_hero_image" edges to TrustCenterSetting entities.
+func (_u *FileUpdateOne) RemoveTrustCenterSettingHeroImage(v ...*TrustCenterSetting) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterSettingHeroImageIDs(ids...)
+}
+
+// ClearTrustCenterEntityLogo clears all "trust_center_entity_logo" edges to the TrustCenterEntity entity.
+func (_u *FileUpdateOne) ClearTrustCenterEntityLogo() *FileUpdateOne {
+	_u.mutation.ClearTrustCenterEntityLogo()
+	return _u
+}
+
+// RemoveTrustCenterEntityLogoIDs removes the "trust_center_entity_logo" edge to TrustCenterEntity entities by IDs.
+func (_u *FileUpdateOne) RemoveTrustCenterEntityLogoIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveTrustCenterEntityLogoIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterEntityLogo removes "trust_center_entity_logo" edges to TrustCenterEntity entities.
+func (_u *FileUpdateOne) RemoveTrustCenterEntityLogo(v ...*TrustCenterEntity) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterEntityLogoIDs(ids...)
+}
+
+// ClearSubprocessorLogo clears all "subprocessor_logo" edges to the Subprocessor entity.
+func (_u *FileUpdateOne) ClearSubprocessorLogo() *FileUpdateOne {
+	_u.mutation.ClearSubprocessorLogo()
+	return _u
+}
+
+// RemoveSubprocessorLogoIDs removes the "subprocessor_logo" edge to Subprocessor entities by IDs.
+func (_u *FileUpdateOne) RemoveSubprocessorLogoIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveSubprocessorLogoIDs(ids...)
+	return _u
+}
+
+// RemoveSubprocessorLogo removes "subprocessor_logo" edges to Subprocessor entities.
+func (_u *FileUpdateOne) RemoveSubprocessorLogo(v ...*Subprocessor) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubprocessorLogoIDs(ids...)
+}
+
+// ClearStandardLogo clears all "standard_logo" edges to the Standard entity.
+func (_u *FileUpdateOne) ClearStandardLogo() *FileUpdateOne {
+	_u.mutation.ClearStandardLogo()
+	return _u
+}
+
+// RemoveStandardLogoIDs removes the "standard_logo" edge to Standard entities by IDs.
+func (_u *FileUpdateOne) RemoveStandardLogoIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveStandardLogoIDs(ids...)
+	return _u
+}
+
+// RemoveStandardLogo removes "standard_logo" edges to Standard entities.
+func (_u *FileUpdateOne) RemoveStandardLogo(v ...*Standard) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveStandardLogoIDs(ids...)
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -5052,6 +5757,276 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterSettingLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingLogoTable,
+			Columns: []string{file.TrustCenterSettingLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterSettingLogoIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSettingLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingLogoTable,
+			Columns: []string{file.TrustCenterSettingLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterSettingLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingLogoTable,
+			Columns: []string{file.TrustCenterSettingLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterSettingFaviconCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingFaviconTable,
+			Columns: []string{file.TrustCenterSettingFaviconColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterSettingFaviconIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSettingFaviconCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingFaviconTable,
+			Columns: []string{file.TrustCenterSettingFaviconColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterSettingFaviconIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingFaviconTable,
+			Columns: []string{file.TrustCenterSettingFaviconColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterSettingHeroImageCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingHeroImageTable,
+			Columns: []string{file.TrustCenterSettingHeroImageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterSettingHeroImageIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSettingHeroImageCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingHeroImageTable,
+			Columns: []string{file.TrustCenterSettingHeroImageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterSettingHeroImageIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingHeroImageTable,
+			Columns: []string{file.TrustCenterSettingHeroImageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterEntityLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterEntityLogoTable,
+			Columns: []string{file.TrustCenterEntityLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterEntityLogoIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterEntityLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterEntityLogoTable,
+			Columns: []string{file.TrustCenterEntityLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterEntityLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterEntityLogoTable,
+			Columns: []string{file.TrustCenterEntityLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubprocessorLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.SubprocessorLogoTable,
+			Columns: []string{file.SubprocessorLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubprocessorLogoIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.SubprocessorLogoTable,
+			Columns: []string{file.SubprocessorLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubprocessorLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.SubprocessorLogoTable,
+			Columns: []string{file.SubprocessorLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StandardLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.StandardLogoTable,
+			Columns: []string{file.StandardLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedStandardLogoIDs(); len(nodes) > 0 && !_u.mutation.StandardLogoCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.StandardLogoTable,
+			Columns: []string{file.StandardLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StandardLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.StandardLogoTable,
+			Columns: []string{file.StandardLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

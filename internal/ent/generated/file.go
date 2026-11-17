@@ -158,30 +158,48 @@ type FileEdges struct {
 	TrustCenterDoc []*TrustCenterDoc `json:"trust_center_doc,omitempty"`
 	// OriginalTrustCenterDoc holds the value of the original_trust_center_doc edge.
 	OriginalTrustCenterDoc []*TrustCenterDoc `json:"original_trust_center_doc,omitempty"`
+	// TrustCenterSettingLogo holds the value of the trust_center_setting_logo edge.
+	TrustCenterSettingLogo []*TrustCenterSetting `json:"trust_center_setting_logo,omitempty"`
+	// TrustCenterSettingFavicon holds the value of the trust_center_setting_favicon edge.
+	TrustCenterSettingFavicon []*TrustCenterSetting `json:"trust_center_setting_favicon,omitempty"`
+	// TrustCenterSettingHeroImage holds the value of the trust_center_setting_hero_image edge.
+	TrustCenterSettingHeroImage []*TrustCenterSetting `json:"trust_center_setting_hero_image,omitempty"`
+	// TrustCenterEntityLogo holds the value of the trust_center_entity_logo edge.
+	TrustCenterEntityLogo []*TrustCenterEntity `json:"trust_center_entity_logo,omitempty"`
+	// SubprocessorLogo holds the value of the subprocessor_logo edge.
+	SubprocessorLogo []*Subprocessor `json:"subprocessor_logo,omitempty"`
+	// StandardLogo holds the value of the standard_logo edge.
+	StandardLogo []*Standard `json:"standard_logo,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
 	totalCount [21]map[string]int
 
-	namedOrganization           map[string][]*Organization
-	namedGroups                 map[string][]*Group
-	namedContact                map[string][]*Contact
-	namedEntity                 map[string][]*Entity
-	namedOrganizationSetting    map[string][]*OrganizationSetting
-	namedTemplate               map[string][]*Template
-	namedDocument               map[string][]*DocumentData
-	namedProgram                map[string][]*Program
-	namedPlatform               map[string][]*Platform
-	namedEvidence               map[string][]*Evidence
-	namedIdentityHolder         map[string][]*IdentityHolder
-	namedScan                   map[string][]*Scan
-	namedEvents                 map[string][]*Event
-	namedIntegrations           map[string][]*Integration
-	namedSecrets                map[string][]*Hush
-	namedTrustCenterEntities    map[string][]*TrustCenterEntity
-	namedTrustCenterDoc         map[string][]*TrustCenterDoc
-	namedOriginalTrustCenterDoc map[string][]*TrustCenterDoc
+	namedOrganization                map[string][]*Organization
+	namedGroups                      map[string][]*Group
+	namedContact                     map[string][]*Contact
+	namedEntity                      map[string][]*Entity
+	namedOrganizationSetting         map[string][]*OrganizationSetting
+	namedTemplate                    map[string][]*Template
+	namedDocument                    map[string][]*DocumentData
+	namedProgram                     map[string][]*Program
+	namedPlatform                    map[string][]*Platform
+	namedEvidence                    map[string][]*Evidence
+	namedIdentityHolder              map[string][]*IdentityHolder
+	namedScan                        map[string][]*Scan
+	namedEvents                      map[string][]*Event
+	namedIntegrations                map[string][]*Integration
+	namedSecrets                     map[string][]*Hush
+	namedTrustCenterEntities         map[string][]*TrustCenterEntity
+	namedTrustCenterDoc              map[string][]*TrustCenterDoc
+	namedOriginalTrustCenterDoc      map[string][]*TrustCenterDoc
+	namedTrustCenterSettingLogo      map[string][]*TrustCenterSetting
+	namedTrustCenterSettingFavicon   map[string][]*TrustCenterSetting
+	namedTrustCenterSettingHeroImage map[string][]*TrustCenterSetting
+	namedTrustCenterEntityLogo       map[string][]*TrustCenterEntity
+	namedSubprocessorLogo            map[string][]*Subprocessor
+	namedStandardLogo                map[string][]*Standard
 }
 
 // EnvironmentOrErr returns the Environment value or an error if the edge
@@ -377,6 +395,60 @@ func (e FileEdges) OriginalTrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
 		return e.OriginalTrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "original_trust_center_doc"}
+}
+
+// TrustCenterSettingLogoOrErr returns the TrustCenterSettingLogo value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) TrustCenterSettingLogoOrErr() ([]*TrustCenterSetting, error) {
+	if e.loadedTypes[21] {
+		return e.TrustCenterSettingLogo, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_setting_logo"}
+}
+
+// TrustCenterSettingFaviconOrErr returns the TrustCenterSettingFavicon value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) TrustCenterSettingFaviconOrErr() ([]*TrustCenterSetting, error) {
+	if e.loadedTypes[22] {
+		return e.TrustCenterSettingFavicon, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_setting_favicon"}
+}
+
+// TrustCenterSettingHeroImageOrErr returns the TrustCenterSettingHeroImage value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) TrustCenterSettingHeroImageOrErr() ([]*TrustCenterSetting, error) {
+	if e.loadedTypes[23] {
+		return e.TrustCenterSettingHeroImage, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_setting_hero_image"}
+}
+
+// TrustCenterEntityLogoOrErr returns the TrustCenterEntityLogo value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) TrustCenterEntityLogoOrErr() ([]*TrustCenterEntity, error) {
+	if e.loadedTypes[24] {
+		return e.TrustCenterEntityLogo, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_entity_logo"}
+}
+
+// SubprocessorLogoOrErr returns the SubprocessorLogo value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) SubprocessorLogoOrErr() ([]*Subprocessor, error) {
+	if e.loadedTypes[25] {
+		return e.SubprocessorLogo, nil
+	}
+	return nil, &NotLoadedError{edge: "subprocessor_logo"}
+}
+
+// StandardLogoOrErr returns the StandardLogo value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) StandardLogoOrErr() ([]*Standard, error) {
+	if e.loadedTypes[26] {
+		return e.StandardLogo, nil
+	}
+	return nil, &NotLoadedError{edge: "standard_logo"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -856,6 +928,36 @@ func (_m *File) QueryTrustCenterDoc() *TrustCenterDocQuery {
 // QueryOriginalTrustCenterDoc queries the "original_trust_center_doc" edge of the File entity.
 func (_m *File) QueryOriginalTrustCenterDoc() *TrustCenterDocQuery {
 	return NewFileClient(_m.config).QueryOriginalTrustCenterDoc(_m)
+}
+
+// QueryTrustCenterSettingLogo queries the "trust_center_setting_logo" edge of the File entity.
+func (_m *File) QueryTrustCenterSettingLogo() *TrustCenterSettingQuery {
+	return NewFileClient(_m.config).QueryTrustCenterSettingLogo(_m)
+}
+
+// QueryTrustCenterSettingFavicon queries the "trust_center_setting_favicon" edge of the File entity.
+func (_m *File) QueryTrustCenterSettingFavicon() *TrustCenterSettingQuery {
+	return NewFileClient(_m.config).QueryTrustCenterSettingFavicon(_m)
+}
+
+// QueryTrustCenterSettingHeroImage queries the "trust_center_setting_hero_image" edge of the File entity.
+func (_m *File) QueryTrustCenterSettingHeroImage() *TrustCenterSettingQuery {
+	return NewFileClient(_m.config).QueryTrustCenterSettingHeroImage(_m)
+}
+
+// QueryTrustCenterEntityLogo queries the "trust_center_entity_logo" edge of the File entity.
+func (_m *File) QueryTrustCenterEntityLogo() *TrustCenterEntityQuery {
+	return NewFileClient(_m.config).QueryTrustCenterEntityLogo(_m)
+}
+
+// QuerySubprocessorLogo queries the "subprocessor_logo" edge of the File entity.
+func (_m *File) QuerySubprocessorLogo() *SubprocessorQuery {
+	return NewFileClient(_m.config).QuerySubprocessorLogo(_m)
+}
+
+// QueryStandardLogo queries the "standard_logo" edge of the File entity.
+func (_m *File) QueryStandardLogo() *StandardQuery {
+	return NewFileClient(_m.config).QueryStandardLogo(_m)
 }
 
 // Update returns a builder for updating this File.
@@ -1429,6 +1531,150 @@ func (_m *File) appendNamedOriginalTrustCenterDoc(name string, edges ...*TrustCe
 		_m.Edges.namedOriginalTrustCenterDoc[name] = []*TrustCenterDoc{}
 	} else {
 		_m.Edges.namedOriginalTrustCenterDoc[name] = append(_m.Edges.namedOriginalTrustCenterDoc[name], edges...)
+	}
+}
+
+// NamedTrustCenterSettingLogo returns the TrustCenterSettingLogo named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedTrustCenterSettingLogo(name string) ([]*TrustCenterSetting, error) {
+	if _m.Edges.namedTrustCenterSettingLogo == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterSettingLogo[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedTrustCenterSettingLogo(name string, edges ...*TrustCenterSetting) {
+	if _m.Edges.namedTrustCenterSettingLogo == nil {
+		_m.Edges.namedTrustCenterSettingLogo = make(map[string][]*TrustCenterSetting)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterSettingLogo[name] = []*TrustCenterSetting{}
+	} else {
+		_m.Edges.namedTrustCenterSettingLogo[name] = append(_m.Edges.namedTrustCenterSettingLogo[name], edges...)
+	}
+}
+
+// NamedTrustCenterSettingFavicon returns the TrustCenterSettingFavicon named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedTrustCenterSettingFavicon(name string) ([]*TrustCenterSetting, error) {
+	if _m.Edges.namedTrustCenterSettingFavicon == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterSettingFavicon[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedTrustCenterSettingFavicon(name string, edges ...*TrustCenterSetting) {
+	if _m.Edges.namedTrustCenterSettingFavicon == nil {
+		_m.Edges.namedTrustCenterSettingFavicon = make(map[string][]*TrustCenterSetting)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterSettingFavicon[name] = []*TrustCenterSetting{}
+	} else {
+		_m.Edges.namedTrustCenterSettingFavicon[name] = append(_m.Edges.namedTrustCenterSettingFavicon[name], edges...)
+	}
+}
+
+// NamedTrustCenterSettingHeroImage returns the TrustCenterSettingHeroImage named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedTrustCenterSettingHeroImage(name string) ([]*TrustCenterSetting, error) {
+	if _m.Edges.namedTrustCenterSettingHeroImage == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterSettingHeroImage[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedTrustCenterSettingHeroImage(name string, edges ...*TrustCenterSetting) {
+	if _m.Edges.namedTrustCenterSettingHeroImage == nil {
+		_m.Edges.namedTrustCenterSettingHeroImage = make(map[string][]*TrustCenterSetting)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterSettingHeroImage[name] = []*TrustCenterSetting{}
+	} else {
+		_m.Edges.namedTrustCenterSettingHeroImage[name] = append(_m.Edges.namedTrustCenterSettingHeroImage[name], edges...)
+	}
+}
+
+// NamedTrustCenterEntityLogo returns the TrustCenterEntityLogo named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedTrustCenterEntityLogo(name string) ([]*TrustCenterEntity, error) {
+	if _m.Edges.namedTrustCenterEntityLogo == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterEntityLogo[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedTrustCenterEntityLogo(name string, edges ...*TrustCenterEntity) {
+	if _m.Edges.namedTrustCenterEntityLogo == nil {
+		_m.Edges.namedTrustCenterEntityLogo = make(map[string][]*TrustCenterEntity)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterEntityLogo[name] = []*TrustCenterEntity{}
+	} else {
+		_m.Edges.namedTrustCenterEntityLogo[name] = append(_m.Edges.namedTrustCenterEntityLogo[name], edges...)
+	}
+}
+
+// NamedSubprocessorLogo returns the SubprocessorLogo named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedSubprocessorLogo(name string) ([]*Subprocessor, error) {
+	if _m.Edges.namedSubprocessorLogo == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSubprocessorLogo[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedSubprocessorLogo(name string, edges ...*Subprocessor) {
+	if _m.Edges.namedSubprocessorLogo == nil {
+		_m.Edges.namedSubprocessorLogo = make(map[string][]*Subprocessor)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSubprocessorLogo[name] = []*Subprocessor{}
+	} else {
+		_m.Edges.namedSubprocessorLogo[name] = append(_m.Edges.namedSubprocessorLogo[name], edges...)
+	}
+}
+
+// NamedStandardLogo returns the StandardLogo named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedStandardLogo(name string) ([]*Standard, error) {
+	if _m.Edges.namedStandardLogo == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedStandardLogo[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedStandardLogo(name string, edges ...*Standard) {
+	if _m.Edges.namedStandardLogo == nil {
+		_m.Edges.namedStandardLogo = make(map[string][]*Standard)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedStandardLogo[name] = []*Standard{}
+	} else {
+		_m.Edges.namedStandardLogo[name] = append(_m.Edges.namedStandardLogo[name], edges...)
 	}
 }
 

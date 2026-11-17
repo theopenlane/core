@@ -1,0 +1,92 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to blocked users on a parent object
+# a user blocked on a parent must stay blocked on child tasks, action plans, and reviews
+############################################
+
+# org members used in these tests
+- user: user:ulid-pb-group-editor
+  relation: member
+  object: organization:openlane
+- user: user:ulid-pb-org-editor
+  relation: member
+  object: organization:openlane
+- user: user:ulid-pb-unblocked
+  relation: member
+  object: organization:openlane
+
+# control-pb-1 is edited by a group, one of its members is blocked on the control
+- user: organization:openlane
+  relation: parent_context
+  object: control:control-pb-1
+- user: user:ulid-pb-group-editor
+  relation: member
+  object: group:group-pb-editors
+- user: user:ulid-pb-unblocked
+  relation: member
+  object: group:group-pb-editors
+- user: group:group-pb-editors#member
+  relation: editor
+  object: control:control-pb-1
+- user: user:ulid-pb-group-editor
+  relation: blocked
+  object: control:control-pb-1
+
+# org level control edit grant, blocked on the control
+- user: user:ulid-pb-org-editor
+  relation: can_edit_control
+  object: organization:openlane
+- user: user:ulid-pb-org-editor
+  relation: blocked
+  object: control:control-pb-1
+
+# children of the control
+- user: control:control-pb-1
+  relation: parent
+  object: task:task-pb-1
+- user: organization:openlane
+  relation: parent_context
+  object: task:task-pb-1
+- user: control:control-pb-1
+  relation: parent
+  object: action_plan:action-plan-pb-1
+- user: organization:openlane
+  relation: parent_context
+  object: action_plan:action-plan-pb-1
+- user: control:control-pb-1
+  relation: parent
+  object: review:review-pb-1
+- user: organization:openlane
+  relation: parent_context
+  object: review:review-pb-1
+
+# grandchild: task under the action plan under the control
+- user: action_plan:action-plan-pb-1
+  relation: parent
+  object: task:task-pb-2
+- user: organization:openlane
+  relation: parent_context
+  object: task:task-pb-2
+
+# program-pb-1: program admin and an org level program editor are both blocked on the program
+- user: organization:openlane
+  relation: parent_context
+  object: program:program-pb-1
+- user: user:ulid-pb-program-admin
+  relation: member
+  object: organization:openlane
+- user: user:ulid-pb-program-admin
+  relation: admin
+  object: program:program-pb-1
+- user: user:ulid-pb-program-admin
+  relation: blocked
+  object: program:program-pb-1
+- user: user:ulid-pb-program-editor
+  relation: member
+  object: organization:openlane
+- user: user:ulid-pb-program-editor
+  relation: can_edit_program
+  object: organization:openlane
+- user: user:ulid-pb-program-editor
+  relation: blocked
+  object: program:program-pb-1
