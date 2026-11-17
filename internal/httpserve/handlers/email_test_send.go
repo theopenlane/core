@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
+	"strings"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/newman"
@@ -19,6 +19,9 @@ type EmailTestSendRequest struct {
 	To string `json:"to" jsonschema:"required,description=Recipient email address"`
 	// Name filters to a single dispatcher; empty sends all registered dispatchers
 	Name string `json:"name,omitempty" jsonschema:"description=Dispatcher name to send (empty sends all)"`
+	// Branding selects the branding variant for brandable emails: "default" renders the Openlane fallback
+	// and any other value renders the configured branding
+	Branding string `json:"branding,omitempty" jsonschema:"description=Branding variant: default or branded"`
 }
 
 // EmailTestSendResult is the per-dispatcher outcome in the response
@@ -102,31 +105,24 @@ func (h *Handler) EmailTestSendHandler(ctx echo.Context) error {
 			continue
 		}
 
-		fixtures := email.TestFixture(op.Name, req.To)
-		if len(fixtures) == 0 {
+		payload := email.TestFixture(op.Name, req.To, strings.EqualFold(req.Branding, "default"))
+		if payload == nil {
 			results = append(results, EmailTestSendResult{Name: op.Name, Status: "SKIP", Error: "no fixture defined"})
 			continue
 		}
 
-		for i, payload := range fixtures {
-			resultName := op.Name
-			if i > 0 {
-				resultName = fmt.Sprintf("%s #%d", op.Name, i+1)
-			}
+		logx.FromContext(requestCtx).Info().Str("dispatcher", op.Name).Str("to", req.To).Msg("sending test email")
 
-			logx.FromContext(requestCtx).Info().Str("dispatcher", resultName).Str("to", req.To).Msg("sending test email")
+		// test sends must not mint real tracking links; PreHooks still run for org lookups
+		sendErr := dispatcher.SendByKey(shortlinks.ContextWithoutShortlinks(requestCtx), types.OperationRequest{DB: h.IntegrationsRuntime.DB()}, emailClient, payload, newman.WithTag(testTag))
+		if sendErr != nil {
+			logx.FromContext(requestCtx).Error().Err(sendErr).Str("dispatcher", op.Name).Msg("test email failed")
+			results = append(results, EmailTestSendResult{Name: op.Name, Status: "FAIL", Error: sendErr.Error()})
 
-			// test sends must not mint real tracking links; PreHooks still run for org lookups
-			sendErr := dispatcher.SendByKey(shortlinks.ContextWithoutShortlinks(requestCtx), types.OperationRequest{DB: h.IntegrationsRuntime.DB()}, emailClient, payload, newman.WithTag(testTag))
-			if sendErr != nil {
-				logx.FromContext(requestCtx).Error().Err(sendErr).Str("dispatcher", resultName).Msg("test email failed")
-				results = append(results, EmailTestSendResult{Name: resultName, Status: "FAIL", Error: sendErr.Error()})
-
-				continue
-			}
-
-			results = append(results, EmailTestSendResult{Name: resultName, Status: "OK"})
+			continue
 		}
+
+		results = append(results, EmailTestSendResult{Name: op.Name, Status: "OK"})
 	}
 
 	return ctx.JSON(http.StatusOK, EmailTestSendResponse{Results: results})
