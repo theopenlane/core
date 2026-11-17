@@ -75,12 +75,11 @@ func InterceptorFile() ent.Interceptor {
 	})
 }
 
-// AnonScopeFile limits anonymous trust center callers to system owned files and the files displayed by rows they can see
+// AnonScopeFile limits anonymous trust center callers to the files displayed by rows they can see
 func AnonScopeFile(trustCenterID string) func(*sql.Selector) {
 	inTrustCenter := AnonScopeTrustCenterID(trustCenterID)
 
 	return file.Or(
-		file.SystemOwned(true),
 		file.HasTemplateWith(inTrustCenter),
 		file.HasTrustCenterDocWith(inTrustCenter),
 		file.HasOriginalTrustCenterDocWith(inTrustCenter),

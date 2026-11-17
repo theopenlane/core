@@ -13,16 +13,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
-// AnonScopeSubprocessor limits anonymous trust center callers to system owned subprocessors and those linked to the active trust center
+// AnonScopeSubprocessor limits anonymous trust center callers to subprocessors linked to the active trust center
 func AnonScopeSubprocessor(trustCenterID string) func(*sql.Selector) {
-	return subprocessor.Or(
-		subprocessor.And(
-			subprocessor.OwnerIDIsNil(),
-			subprocessor.SystemOwned(true),
-		),
-		subprocessor.HasTrustCenterSubprocessorsWith(
-			trustcentersubprocessor.TrustCenterID(trustCenterID),
-		),
+	return subprocessor.HasTrustCenterSubprocessorsWith(
+		trustcentersubprocessor.TrustCenterID(trustCenterID),
 	)
 }
 

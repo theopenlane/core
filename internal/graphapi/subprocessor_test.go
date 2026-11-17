@@ -12,6 +12,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -127,12 +128,30 @@ func TestQuerySubprocessorByID(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
+	_, err = suite.Client.API.CreateTrustCenterSubprocessor(th.SharedTestUser1.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+		SubprocessorID:                  systemSubprocessr.ID,
+		TrustCenterID:                   &trustCenter.ID,
+		TrustCenterSubprocessorKindName: &kind.Name,
+		Countries:                       []string{"US"},
+	})
+	assert.NilError(t, err)
+
 	unlinkedSubprocessor := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	t.Cleanup(func() {
 		(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: unlinkedSubprocessor.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
-	t.Run("Get anonymous trust center user only sees system owned and linked subprocessors", func(t *testing.T) {
+	unlinkedSystemResp, err := suite.Client.API.CreateSubprocessor(th.SharedSystemAdminUser.UserCtx, testclient.CreateSubprocessorInput{
+		Name: "unlinked system subprocessor" + ulids.New().String(),
+	}, nil, nil)
+	assert.NilError(t, err)
+
+	unlinkedSystemSubprocessor := unlinkedSystemResp.CreateSubprocessor.Subprocessor
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: unlinkedSystemSubprocessor.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	})
+
+	t.Run("Get anonymous trust center user only sees linked subprocessors", func(t *testing.T) {
 		anonCtx := th.CreateAnonymousTrustCenterContext(trustCenter.ID, th.SharedTestUser1.OrganizationID)
 
 		ids, err := suite.Client.DB.Subprocessor.Query().IDs(generated.NewContext(anonCtx, suite.Client.DB))
@@ -140,6 +159,15 @@ func TestQuerySubprocessorByID(t *testing.T) {
 		assert.Check(t, is.Contains(ids, subprocessor.ID))
 		assert.Check(t, is.Contains(ids, systemSubprocessr.ID))
 		assert.Check(t, !slices.Contains(ids, unlinkedSubprocessor.ID))
+		assert.Check(t, !slices.Contains(ids, unlinkedSystemSubprocessor.ID))
+	})
+
+	t.Run("Get anonymous trust center user can see system owned subprocessor logo", func(t *testing.T) {
+		anonCtx := th.CreateAnonymousTrustCenterContext(trustCenter.ID, th.SharedTestUser1.OrganizationID)
+
+		ids, err := suite.Client.DB.File.Query().Where(file.ID(*systemSubprocessr.LogoFileID)).IDs(generated.NewContext(anonCtx, suite.Client.DB))
+		assert.NilError(t, err)
+		assert.Check(t, is.Contains(ids, *systemSubprocessr.LogoFileID))
 	})
 
 	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
