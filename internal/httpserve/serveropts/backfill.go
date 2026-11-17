@@ -69,8 +69,8 @@ type backfillRoutine struct {
 // backfillRoutines are the registered backfill routines
 var backfillRoutines = []backfillRoutine{
 	{
-		Name:    "relocate-files",
-		Version: "v1",
+		Name:    "relocate-files-v2",
+		Version: "v2",
 		Enabled: true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			return relocate.Files(ctx, deps.Client, relocate.Plan{Target: storage.R2Provider, PullFrom: storage.S3Provider})
