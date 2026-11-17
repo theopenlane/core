@@ -36788,44 +36788,6 @@ type GroupMembershipBulkCreatePayload {
 	groupMemberships: [GroupMembership!]
 }
 """
-Return response for deleteBulkGroupMembership mutation
-"""
-type GroupMembershipBulkDeletePayload {
-	"""
-	Deleted groupMembership IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkGroupMembership mutation
-"""
-type GroupMembershipBulkUpdatePayload {
-	"""
-	Updated groupMemberships
-	"""
-	groupMemberships: [GroupMembership!]
-	"""
-	IDs of the updated groupMemberships
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
-}
-"""
 A connection to a list of items.
 """
 type GroupMembershipConnection {
@@ -65016,44 +64978,6 @@ type ProgramMembershipBulkCreatePayload {
 	programMemberships: [ProgramMembership!]
 }
 """
-Return response for deleteBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkDeletePayload {
-	"""
-	Deleted programMembership IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkUpdatePayload {
-	"""
-	Updated programMemberships
-	"""
-	programMemberships: [ProgramMembership!]
-	"""
-	IDs of the updated programMemberships
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
-}
-"""
 A connection to a list of items.
 """
 type ProgramMembershipConnection {
@@ -72886,44 +72810,6 @@ type ReportMembershipBulkCreatePayload {
 	Created reportMemberships
 	"""
 	reportMemberships: [ReportMembership!]
-}
-"""
-Return response for deleteBulkReportMembership mutation
-"""
-type ReportMembershipBulkDeletePayload {
-	"""
-	Deleted reportMembership IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	Error returned when the bulk delete is only partially applied
-	"""
-	error: String
-	"""
-	IDs of reportMemberships that were not deleted
-	"""
-	notDeletedIDs: [ID!]
-}
-"""
-Return response for updateBulkReportMembership mutation
-"""
-type ReportMembershipBulkUpdatePayload {
-	"""
-	Updated reportMemberships
-	"""
-	reportMemberships: [ReportMembership!]
-	"""
-	IDs of the updated reportMemberships
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
 }
 """
 A connection to a list of items.

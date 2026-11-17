@@ -559,6 +559,7 @@ type TestGraphClient interface {
 	CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *FileMetadataInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error)
 	DeleteSubprocessor(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubprocessor, error)
 	GetAllSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessors, error)
+	GetPublicSubprocessors(ctx context.Context, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPublicSubprocessors, error)
 	GetSubprocessorByID(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorByID, error)
 	GetSubprocessors(ctx context.Context, first *int64, last *int64, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessors, error)
 	UpdateBulkSubprocessor(ctx context.Context, ids []string, input UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkSubprocessor, error)
@@ -130583,6 +130584,78 @@ func (t *GetAllSubprocessors_Subprocessors) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetPublicSubprocessors_Subprocessors_Edges_Node struct {
+	ID         string                                                    "json:\"id\" graphql:\"id\""
+	LogoFile   *GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoFileID *string                                                   "json:\"logoFileID,omitempty\" graphql:\"logoFileID\""
+	Name       string                                                    "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node) GetLogoFile() *GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node) GetLogoFileID() *string {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoFileID
+}
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetPublicSubprocessors_Subprocessors_Edges struct {
+	Node *GetPublicSubprocessors_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetPublicSubprocessors_Subprocessors_Edges) GetNode() *GetPublicSubprocessors_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetPublicSubprocessors_Subprocessors struct {
+	Edges      []*GetPublicSubprocessors_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetPublicSubprocessors_Subprocessors) GetEdges() []*GetPublicSubprocessors_Subprocessors_Edges {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetPublicSubprocessors_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
 type GetSubprocessorByID_Subprocessor_LogoFile struct {
 	ID           string  "json:\"id\" graphql:\"id\""
 	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
@@ -182994,6 +183067,17 @@ func (t *GetAllSubprocessors) GetSubprocessors() *GetAllSubprocessors_Subprocess
 	return &t.Subprocessors
 }
 
+type GetPublicSubprocessors struct {
+	Subprocessors GetPublicSubprocessors_Subprocessors "json:\"subprocessors\" graphql:\"subprocessors\""
+}
+
+func (t *GetPublicSubprocessors) GetSubprocessors() *GetPublicSubprocessors_Subprocessors {
+	if t == nil {
+		t = &GetPublicSubprocessors{}
+	}
+	return &t.Subprocessors
+}
+
 type GetSubprocessorByID struct {
 	Subprocessor GetSubprocessorByID_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
 }
@@ -217564,6 +217648,40 @@ func (c *Client) GetAllSubprocessors(ctx context.Context, interceptors ...client
 	return &res, nil
 }
 
+const GetPublicSubprocessorsDocument = `query GetPublicSubprocessors ($where: SubprocessorWhereInput) {
+	subprocessors(where: $where) {
+		totalCount
+		edges {
+			node {
+				id
+				name
+				logoFileID
+				logoFile {
+					presignedURL
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetPublicSubprocessors(ctx context.Context, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPublicSubprocessors, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetPublicSubprocessors
+	if err := c.Client.Post(ctx, "GetPublicSubprocessors", GetPublicSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetSubprocessorByIDDocument = `query GetSubprocessorByID ($subprocessorId: ID!) {
 	subprocessor(id: $subprocessorId) {
 		createdAt
@@ -230576,6 +230694,7 @@ var DocumentOperationNames = map[string]string{
 	CreateSubprocessorDocument:                          "CreateSubprocessor",
 	DeleteSubprocessorDocument:                          "DeleteSubprocessor",
 	GetAllSubprocessorsDocument:                         "GetAllSubprocessors",
+	GetPublicSubprocessorsDocument:                      "GetPublicSubprocessors",
 	GetSubprocessorByIDDocument:                         "GetSubprocessorByID",
 	GetSubprocessorsDocument:                            "GetSubprocessors",
 	UpdateBulkSubprocessorDocument:                      "UpdateBulkSubprocessor",

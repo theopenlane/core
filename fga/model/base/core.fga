@@ -14,7 +14,7 @@ type user
     define editor: _self
     define can_view_org: _self
     define audit_log_viewer: _self
-    # always empty, a user or service is never blocked on itself; defined so `blocked from parent`
+    # always empty, a user or service is never blocked on itself, defined so `blocked from parent`
     # resolves when a user or service is the parent of an object (weighted graph requires it on every parent type)
     define blocked: _self but not _self
 
@@ -29,7 +29,7 @@ type service
     define viewer: _self
     define editor: _self
     define audit_log_viewer: _self
-    # always empty, a user or service is never blocked on itself; defined so `blocked from parent`
+    # always empty, a user or service is never blocked on itself, defined so `blocked from parent`
     # resolves when a user or service is the parent of an object (weighted graph requires it on every parent type)
     define blocked: _self but not _self
 

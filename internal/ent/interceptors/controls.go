@@ -35,8 +35,7 @@ func InterceptorTrustCenterControl() ent.Interceptor {
 			return nil
 		}
 
-		// skip if modules are not enabled after the filter for anon users
-		// doing this first would skip the filter when modules are off
+		// skip if modules are not enabled
 		client := generated.FromContext(ctx)
 		if !utils.ModulesEnabled(client) {
 			return nil

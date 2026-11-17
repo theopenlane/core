@@ -114,12 +114,20 @@ func TestQuerySubprocessorByID(t *testing.T) {
 
 func TestQuerySubprocessors(t *testing.T) {
 	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+	})
+
 	testUser := localTestOrg.Owner
 	viewUser := localTestOrg.Member
 
 	subprocessor1 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
 	(&th.SubprocessorBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
 	subprocessor3 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor3.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	})
+
 	logoFile := th.UploadFile(t, th.LogoFilePath)
 	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*logoFile})
 
@@ -129,6 +137,9 @@ func TestQuerySubprocessors(t *testing.T) {
 	assert.NilError(t, err)
 
 	subprocessor4 := subprocessor4Resp.CreateSubprocessor.Subprocessor
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor4.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	})
 
 	trustCenter := (&th.TrustCenterBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
 
@@ -198,22 +209,33 @@ func TestQuerySubprocessors(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
+			if tc.anonymous {
+				resp, err := tc.client.GetPublicSubprocessors(tc.ctx, tc.where)
+				assert.NilError(t, err)
+				assert.Assert(t, resp != nil)
+				assert.Check(t, is.Equal(tc.expectedResults, resp.Subprocessors.TotalCount))
+
+				ids := []string{}
+				for _, edge := range resp.Subprocessors.Edges {
+					ids = append(ids, edge.Node.ID)
+
+					if edge.Node.ID == subprocessor4.ID {
+						assert.Check(t, edge.Node.LogoFile != nil)
+					}
+				}
+
+				assert.Check(t, is.Contains(ids, subprocessor1.ID))
+				assert.Check(t, is.Contains(ids, subprocessor4.ID))
+
+				return
+			}
+
 			resp, err := tc.client.GetSubprocessors(tc.ctx, nil, nil, tc.where)
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
 			assert.Check(t, is.Equal(tc.expectedResults, resp.Subprocessors.TotalCount))
-
-			if tc.anonymous {
-				for _, subprocessor := range resp.Subprocessors.Edges {
-					if subprocessor.Node.ID == subprocessor4.ID {
-						assert.Check(t, subprocessor.Node.LogoFile != nil)
-					}
-				}
-
-				return
-			}
 
 			for _, subprocessor := range resp.Subprocessors.Edges {
 				if subprocessor.Node.Name != subprocessor4.Name {
@@ -225,10 +247,6 @@ func TestQuerySubprocessors(t *testing.T) {
 			}
 		})
 	}
-
-	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor3.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
-	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor4.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
-	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
 }
 
 func TestMutationCreateSubprocessor(t *testing.T) {

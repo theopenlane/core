@@ -108,7 +108,7 @@ func InterceptorTrustCenterChildDenyAnon() ent.Interceptor {
 // trustCenterInterceptor builds the shared interceptor body for all filters and should be used with the exported functions
 // applyToAllRequests: when true, regular (non-anon) users get a fallback SQL filter scoped to
 // trust centers owned by their organizations
-// allowAnonAccess: when true, anon Trust Center  callers with an active key get a trust_center_id filter;
+// allowAnonAccess: when true, anon Trust Center callers with an active key are allowed and scoped by the mixin
 // when false they are denied outright from querying data
 func trustCenterInterceptor(applyToAllRequests, allowAnonAccess bool) ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {

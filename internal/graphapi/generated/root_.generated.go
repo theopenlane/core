@@ -2883,19 +2883,6 @@ type ComplexityRoot struct {
 		GroupMemberships func(childComplexity int) int
 	}
 
-	GroupMembershipBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	GroupMembershipBulkUpdatePayload struct {
-		Error            func(childComplexity int) int
-		GroupMemberships func(childComplexity int) int
-		NotUpdatedIDs    func(childComplexity int) int
-		UpdatedIDs       func(childComplexity int) int
-	}
-
 	GroupMembershipConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -5336,19 +5323,6 @@ type ComplexityRoot struct {
 		ProgramMemberships func(childComplexity int) int
 	}
 
-	ProgramMembershipBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	ProgramMembershipBulkUpdatePayload struct {
-		Error              func(childComplexity int) int
-		NotUpdatedIDs      func(childComplexity int) int
-		ProgramMemberships func(childComplexity int) int
-		UpdatedIDs         func(childComplexity int) int
-	}
-
 	ProgramMembershipConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -5817,19 +5791,6 @@ type ComplexityRoot struct {
 
 	ReportMembershipBulkCreatePayload struct {
 		ReportMemberships func(childComplexity int) int
-	}
-
-	ReportMembershipBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	ReportMembershipBulkUpdatePayload struct {
-		Error             func(childComplexity int) int
-		NotUpdatedIDs     func(childComplexity int) int
-		ReportMemberships func(childComplexity int) int
-		UpdatedIDs        func(childComplexity int) int
 	}
 
 	ReportMembershipConnection struct {
@@ -22049,50 +22010,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.GroupMembershipBulkCreatePayload.GroupMemberships(childComplexity), true
 
-	case "GroupMembershipBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "GroupMembershipBulkDeletePayload.error":
-		if e.ComplexityRoot.GroupMembershipBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.Error(childComplexity), true
-	case "GroupMembershipBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "GroupMembershipBulkUpdatePayload.error":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.Error(childComplexity), true
-	case "GroupMembershipBulkUpdatePayload.groupMemberships":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.GroupMemberships == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.GroupMemberships(childComplexity), true
-	case "GroupMembershipBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "GroupMembershipBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
-
 	case "GroupMembershipConnection.edges":
 		if e.ComplexityRoot.GroupMembershipConnection.Edges == nil {
 			break
@@ -37783,50 +37700,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ProgramMembershipBulkCreatePayload.ProgramMemberships(childComplexity), true
 
-	case "ProgramMembershipBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "ProgramMembershipBulkDeletePayload.error":
-		if e.ComplexityRoot.ProgramMembershipBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.Error(childComplexity), true
-	case "ProgramMembershipBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "ProgramMembershipBulkUpdatePayload.error":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.Error(childComplexity), true
-	case "ProgramMembershipBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "ProgramMembershipBulkUpdatePayload.programMemberships":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.ProgramMemberships == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.ProgramMemberships(childComplexity), true
-	case "ProgramMembershipBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
-
 	case "ProgramMembershipConnection.edges":
 		if e.ComplexityRoot.ProgramMembershipConnection.Edges == nil {
 			break
@@ -41503,50 +41376,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReportMembershipBulkCreatePayload.ReportMemberships(childComplexity), true
-
-	case "ReportMembershipBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "ReportMembershipBulkDeletePayload.error":
-		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.Error(childComplexity), true
-	case "ReportMembershipBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "ReportMembershipBulkUpdatePayload.error":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.Error(childComplexity), true
-	case "ReportMembershipBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "ReportMembershipBulkUpdatePayload.reportMemberships":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.ReportMemberships == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.ReportMemberships(childComplexity), true
-	case "ReportMembershipBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "ReportMembershipConnection.edges":
 		if e.ComplexityRoot.ReportMembershipConnection.Edges == nil {
@@ -152893,45 +152722,6 @@ type GroupMembershipBulkCreatePayload {
     groupMemberships: [GroupMembership!]
 }
 
-"""
-Return response for deleteBulkGroupMembership mutation
-"""
-type GroupMembershipBulkDeletePayload {
-    """
-    Deleted groupMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkGroupMembership mutation
-"""
-type GroupMembershipBulkUpdatePayload {
-    """
-    Updated groupMemberships
-    """
-    groupMemberships: [GroupMembership!]
-    """
-    IDs of the updated groupMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
 `, BuiltIn: false},
 	{Name: "../schema/groupsetting.graphql", Input: `extend type Query {
     """
@@ -156578,45 +156368,6 @@ type ProgramMembershipBulkCreatePayload {
     programMemberships: [ProgramMembership!]
 }
 
-"""
-Return response for deleteBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkDeletePayload {
-    """
-    Deleted programMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkUpdatePayload {
-    """
-    Updated programMemberships
-    """
-    programMemberships: [ProgramMembership!]
-    """
-    IDs of the updated programMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
 `, BuiltIn: false},
 	{Name: "../schema/remediation.graphql", Input: `extend type Remediation {
     """
@@ -157000,45 +156751,6 @@ type ReportMembershipBulkCreatePayload {
     reportMemberships: [ReportMembership!]
 }
 
-"""
-Return response for updateBulkReportMembership mutation
-"""
-type ReportMembershipBulkUpdatePayload {
-    """
-    Updated reportMemberships
-    """
-    reportMemberships: [ReportMembership!]
-    """
-    IDs of the updated reportMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for deleteBulkReportMembership mutation
-"""
-type ReportMembershipBulkDeletePayload {
-    """
-    Deleted reportMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    Error returned when the bulk delete is only partially applied
-    """
-    error: String
-    """
-    IDs of reportMemberships that were not deleted
-    """
-    notDeletedIDs: [ID!]
-}
 `, BuiltIn: false},
 	{Name: "../schema/review.graphql", Input: `extend type Query {
     """

@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
-	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentercompliance"
 )
 
@@ -31,15 +30,8 @@ func TraverseStandard() ent.Interceptor {
 			return auth.ErrNoAuthUser
 		}
 
-		if caller.IsAnonymous() {
-			q.Where(
-				standard.HasTrustCenterCompliancesWith(
-					trustcentercompliance.HasTrustCenterWith(
-						trustcenter.OwnerID(caller.OrganizationID),
-					),
-				),
-			)
-
+		// anonymous trust center users are scoped by AnonScopeStandard in the object owned mixin
+		if auth.IsTrustCenterFromContext(ctx) {
 			return nil
 		}
 
