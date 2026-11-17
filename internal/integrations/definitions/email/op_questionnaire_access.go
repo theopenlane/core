@@ -70,10 +70,10 @@ var questionnaireAccess = RegisterEmailOperation(Operation[QuestionnaireAccessRe
 		return req.Subject
 	},
 	Build: func(cfg RuntimeEmailConfig, req QuestionnaireAccessRequest) render.ContentBody {
-		return questionnaireBody(cfg, req.QuestionnaireAuthEmail, req.QuestionnaireEmailContent)
+		return questionnaireBody(customQuestionnaireConfig(cfg, req.QuestionnaireEmailContent), req.QuestionnaireAuthEmail, req.QuestionnaireEmailContent)
 	},
 	Config: func(cfg RuntimeEmailConfig, req QuestionnaireAccessRequest) RuntimeEmailConfig {
-		return questionnaireConfig(cfg, req.QuestionnaireEmailContent)
+		return customQuestionnaireConfig(cfg, req.QuestionnaireEmailContent)
 	},
 	MessageOptions: func(cfg RuntimeEmailConfig, _ QuestionnaireAccessRequest) []newman.MessageOption {
 		return questionnaireFromOption(cfg)
@@ -106,6 +106,13 @@ func questionnaireConfig(cfg RuntimeEmailConfig, content QuestionnaireEmailConte
 	cfg.ButtonTextColor = tcButtonTextColor
 
 	return content.apply(cfg)
+}
+
+// customQuestionnaireConfig clears the Openlane header logo so a custom template without one renders no header
+func customQuestionnaireConfig(cfg RuntimeEmailConfig, content QuestionnaireEmailContent) RuntimeEmailConfig {
+	cfg.HeaderLogoURL = ""
+
+	return questionnaireConfig(cfg, content)
 }
 
 // questionnaireFromOption returns the questionnaire from address override when one is configured

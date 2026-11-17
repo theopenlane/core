@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/newman"
 
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/utils/jsonx"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
@@ -43,7 +42,7 @@ var SendQuestionnaireCampaignOp = types.OperationPayloadOf[SendQuestionnaireCamp
 type questionnaireDispatch struct {
 	camp       *generated.Campaign
 	dispatcher Dispatcher
-	// defaults are the linked template's authored values, or the default content when none is linked
+	// defaults are the linked template's authored values, nil when no template is linked
 	defaults map[string]any
 	// overlay is the campaign template context
 	overlay CampaignContext
@@ -99,11 +98,11 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 	})
 }
 
-// newQuestionnaireDispatch resolves the campaign-wide send state, using the default content when no template is linked
+// newQuestionnaireDispatch resolves the campaign-wide send state, using the system questionnaire email when no template is linked
 func newQuestionnaireDispatch(ctx context.Context, db *generated.Client, camp *generated.Campaign, questionnaireName string) (questionnaireDispatch, error) {
 	dispatch := questionnaireDispatch{
 		camp:       camp,
-		dispatcher: questionnaireAccess,
+		dispatcher: questionnaireAuthEmail,
 		overlay:    campaignOverlay(camp),
 		base: QuestionnaireAuthEmail{
 			OrgName:        organizationDisplayName(ctx, db, camp.OwnerID),
@@ -113,10 +112,7 @@ func newQuestionnaireDispatch(ctx context.Context, db *generated.Client, camp *g
 
 	template := camp.Edges.EmailTemplate
 	if template == nil {
-		defaults, err := jsonx.ToMap(questionnaireAccessExample.QuestionnaireEmailContent)
-		dispatch.defaults = defaults
-
-		return dispatch, err
+		return dispatch, nil
 	}
 
 	dispatcher, err := campaignDispatcher(camp)

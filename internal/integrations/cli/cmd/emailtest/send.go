@@ -18,9 +18,8 @@ import (
 
 // emailTestSendRequest mirrors handlers.EmailTestSendRequest
 type emailTestSendRequest struct {
-	To       string `json:"to"`
-	Name     string `json:"name,omitempty"`
-	Branding string `json:"branding,omitempty"`
+	To   string `json:"to"`
+	Name string `json:"name,omitempty"`
 }
 
 // emailTestSendResult mirrors handlers.EmailTestSendResult
@@ -48,7 +47,7 @@ The server must be running in dev mode with integrations enabled.`,
 			return ErrNameRequired
 		}
 
-		return sendTestEmail(c.Context(), cmd.Config.String("to"), name, cmd.Config.String("branding"))
+		return sendTestEmail(c.Context(), cmd.Config.String("to"), name)
 	},
 }
 
@@ -60,7 +59,7 @@ server's email-test endpoint using scaffolded fixture data. Requires --to.
 
 The server must be running in dev mode with integrations enabled.`,
 	RunE: func(c *cobra.Command, _ []string) error {
-		return sendTestEmail(c.Context(), cmd.Config.String("to"), "", cmd.Config.String("branding"))
+		return sendTestEmail(c.Context(), cmd.Config.String("to"), "")
 	},
 }
 
@@ -70,15 +69,13 @@ func init() {
 
 	sendCmd.Flags().String("to", "", "recipient email address (required)")
 	sendCmd.Flags().String("name", "", "dispatcher name to send (required)")
-	sendCmd.Flags().String("branding", "", "trust center branding variant for trust-center emails: default (Openlane fallback) or trustcenter (default)")
 
 	sendAllCmd.Flags().String("to", "", "recipient email address (required)")
-	sendAllCmd.Flags().String("branding", "", "trust center branding variant for trust-center emails: default (Openlane fallback) or trustcenter (default)")
 }
 
 // sendTestEmail calls the server's email-test/send endpoint.
-// When name is empty, all dispatchers are sent. branding selects the trust center branding variant
-func sendTestEmail(ctx context.Context, toEmail, name, branding string) error {
+// When name is empty, all dispatchers are sent
+func sendTestEmail(ctx context.Context, toEmail, name string) error {
 	if toEmail == "" {
 		return ErrRecipientRequired
 	}
@@ -96,9 +93,8 @@ func sendTestEmail(ctx context.Context, toEmail, name, branding string) error {
 	resp, err := requester.SendWithContext(ctx,
 		httpsling.Post(host+"/email-test/send"),
 		httpsling.Body(emailTestSendRequest{
-			To:       toEmail,
-			Name:     name,
-			Branding: branding,
+			To:   toEmail,
+			Name: name,
 		}),
 	)
 	if err != nil {

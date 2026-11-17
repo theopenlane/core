@@ -702,10 +702,11 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
 	},
 })
 
-var _ = RegisterEmailOperation(Operation[QuestionnaireAuthEmail]{
+var questionnaireAuthEmail = RegisterEmailOperation(Operation[QuestionnaireAuthEmail]{
 	Op: QuestionnaireAuthOp, Theme: baseTheme,
 	Description: "System email delivering a time-limited authentication link to a questionnaire",
 	PreHook:     resolveQuestionnaireOrgName,
+	SystemKeys:  payloadKeys[QuestionnaireAuthEmail](),
 	Subject: func(_ RuntimeEmailConfig, req QuestionnaireAuthEmail) string {
 		return defaultQuestionnaireContent(req).Subject
 	},

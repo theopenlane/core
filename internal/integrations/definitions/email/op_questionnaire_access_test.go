@@ -145,6 +145,18 @@ func TestQuestionnaireBodyAppliesHeaderLogoOverride(t *testing.T) {
 	assert.Check(t, is.Equal("https://acme.com/icon.png", body.Header.Logo.Src))
 }
 
+func TestQuestionnaireHeaderLogoRemovedOnlyForCustomTemplate(t *testing.T) {
+	cfg := RuntimeEmailConfig{HeaderLogoURL: "https://openlane.io/icon.png"}
+	req := QuestionnaireAuthEmail{OrgName: "Acme", AssessmentName: "SOC 2 Vendor Review"}
+
+	custom := testDispatcher[QuestionnaireAccessRequest](t, questionnaireAccessKey).Build(cfg, QuestionnaireAccessRequest{QuestionnaireAuthEmail: req})
+	assert.Check(t, custom.Header.Logo == nil)
+
+	system := testDispatcher[QuestionnaireAuthEmail](t, "QuestionnaireAuthEmail").Build(cfg, req)
+	assert.Assert(t, system.Header.Logo != nil)
+	assert.Check(t, is.Equal("https://openlane.io/icon.png", system.Header.Logo.Src))
+}
+
 func TestQuestionnaireAccessRenderKeepsSystemFieldsLiteral(t *testing.T) {
 	d, ok := DispatcherByKey(questionnaireAccessKey)
 	assert.Assert(t, ok)

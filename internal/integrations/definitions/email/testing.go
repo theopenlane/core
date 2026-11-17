@@ -94,168 +94,220 @@ func TestRecipient(toEmail string) RecipientInfo {
 	}
 }
 
-// TestFixture returns a scaffolded JSON payload for the given dispatcher name.
+// TestFixture returns the scaffolded JSON payloads for the given dispatcher name.
 // All required fields are populated with realistic test values; URL-resolved fields
 // (NDAURL, AuthURL) are set directly so PreHooks that require a database are bypassed.
-// When defaultBranding is true, the trust center branding overlay is stripped from trust-center emails
-// so they render with the Openlane system defaults (the fallback used when a trust center configures no
-// branding), letting both branding variants be previewed. Returns nil when no fixture is defined
-func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
+// Trust-center emails are sent with their configured branding and again with the Openlane system defaults
+// (the fallback used when a trust center configures no branding). Returns nil when no fixture is defined
+func TestFixture(name, toEmail string) []json.RawMessage {
 	r := TestRecipient(toEmail)
 
-	fixtures := map[string]any{
-		"VerifyEmailRequest": VerifyEmailRequest{
+	subscribe := SubscribeRequest{
+		RecipientInfo:       r,
+		TrustCenterBranding: cloudflareTrustCenterBranding(),
+		OrgName:             "Cloudflare",
+		Token:               "test-subscribe-token-12345",
+		VerifyURL:           "https://www.cloudflare.com/trust-hub/subscribe/verify?token=test-subscribe-token-12345",
+		UnsubscribeURL:      "https://www.cloudflare.com/trust-hub/unsubscribe?token=test-subscribe-token-12345",
+	}
+
+	subprocessors := SubprocessorNotificationRequest{
+		Email:               toEmail,
+		FirstName:           r.FirstName,
+		LastName:            r.LastName,
+		UnsubscribeToken:    "test-unsubscribe-token-12345",
+		TrustCenterBranding: cloudflareTrustCenterBranding(),
+		Subprocessors: []SubprocessorEntry{
+			{Name: "Amazon Web Services", Change: "Added"},
+			{Name: "Stripe", Change: "Updated"},
+			{Name: "Twilio", Change: "Removed"},
+		},
+		TrustCenterURL: "https://www.cloudflare.com/trust-hub/",
+		UnsubscribeURL: "https://www.cloudflare.com/trust-hub/unsubscribe?token={{ .unsubscribeToken }}",
+	}
+
+	trustCenterUpdate := TrustCenterUpdateRequest{
+		Email:               toEmail,
+		FirstName:           r.FirstName,
+		LastName:            r.LastName,
+		UnsubscribeToken:    "test-unsubscribe-token-12345",
+		TrustCenterBranding: cloudflareTrustCenterBranding(),
+		PostTitle:           "SOC 2 Type II report published",
+		PostText:            "Our latest SOC 2 Type II report is now available in the trust center.\nRequest access to review the full report.",
+		TrustCenterURL:      "https://www.cloudflare.com/trust-hub/",
+		UnsubscribeURL:      "https://www.cloudflare.com/trust-hub/unsubscribe?token={{ .unsubscribeToken }}",
+	}
+
+	fixtures := map[string][]any{
+		"VerifyEmailRequest": {VerifyEmailRequest{
 			RecipientInfo: r,
 			Token:         "test-verify-token-12345",
-		},
-		"WelcomeRequest": WelcomeRequest{
+		}},
+		"WelcomeRequest": {WelcomeRequest{
 			RecipientInfo: r,
-		},
-		"InviteRequest": InviteRequest{
+		}},
+		"InviteRequest": {InviteRequest{
 			// production sets only Email on the invite recipient (no name), so there is no greeting name
+			Email:       toEmail,
+			InviterName: "Jane Smith",
+			OrgName:     "Acme Corp",
+			Role:        "admin",
+			Token:       "test-invite-token-12345",
+			NewUser:     true,
+		}},
+		"InviteJoinedRequest": {InviteJoinedRequest{
 			RecipientInfo: RecipientInfo{Email: toEmail},
-			InviterName:   "Jane Smith",
 			OrgName:       "Acme Corp",
-			Role:          "admin",
-			Token:         "test-invite-token-12345",
-			NewUser:       true,
-		},
-		"InviteJoinedRequest": InviteJoinedRequest{
-			RecipientInfo: RecipientInfo{Email: toEmail},
-			OrgName:       "Acme Corp",
-		},
-		"PasswordResetEmailRequest": PasswordResetEmailRequest{
+		}},
+		"PasswordResetEmailRequest": {PasswordResetEmailRequest{
 			RecipientInfo: r,
 			Token:         "test-reset-token-12345",
-		},
-		"PasswordResetSuccessRequest": PasswordResetSuccessRequest{
+		}},
+		"PasswordResetSuccessRequest": {PasswordResetSuccessRequest{
 			RecipientInfo: r,
+		}},
+		"SubscribeRequest": {
+			subscribe,
+			withDefaultBranding(subscribe),
 		},
-		"SubscribeRequest": SubscribeRequest{
-			RecipientInfo:       r,
-			TrustCenterBranding: cloudflareTrustCenterBranding(),
-			OrgName:             "Cloudflare",
-			Token:               "test-subscribe-token-12345",
-			VerifyURL:           "https://www.cloudflare.com/trust-hub/subscribe/verify?token=test-subscribe-token-12345",
-			UnsubscribeURL:      "https://www.cloudflare.com/trust-hub/unsubscribe?token=test-subscribe-token-12345",
-		},
-		"VerifyBillingRequest": VerifyBillingRequest{
+		"VerifyBillingRequest": {VerifyBillingRequest{
 			RecipientInfo: r,
 			Token:         "test-billing-token-12345",
-		},
-		"TrustCenterNDARequestEmail": TrustCenterNDARequestEmail{
+		}},
+		"TrustCenterNDARequestEmail": {TrustCenterNDARequestEmail{
 			RecipientInfo: r,
 			OrgName:       "SecureCorp",
 			NDAURL:        "https://trustcenter.example.com/securecorp/access/sign-nda?token=test",
-		},
-		"TrustCenterNDASignedEmail": TrustCenterNDASignedEmail{
+		}},
+		"TrustCenterNDASignedEmail": {TrustCenterNDASignedEmail{
 			RecipientInfo:      r,
 			OrgName:            "SecureCorp",
 			TrustCenterURL:     "https://trustcenter.example.com/securecorp?token=test",
 			AttachmentFilename: "signed_nda_file.pdf",
 			AttachmentData:     testAttestedNDAPDF(),
-		},
-		"TrustCenterAuthEmail": TrustCenterAuthEmail{
+		}},
+		"TrustCenterAuthEmail": {TrustCenterAuthEmail{
 			RecipientInfo: r,
 			OrgName:       "SecureCorp",
 			AuthURL:       "https://trustcenter.example.com/securecorp?token=test",
-		},
-		"TrustCenterNDAApprovalRequestEmail": TrustCenterNDAApprovalRequestEmail{
-			RecipientInfo:  RecipientInfo{Email: toEmail, Recipients: []string{toEmail}, FirstName: r.FirstName, LastName: r.LastName},
+		}},
+		"TrustCenterNDAApprovalRequestEmail": {TrustCenterNDAApprovalRequestEmail{
+			Email: toEmail, Recipients: []string{toEmail}, FirstName: r.FirstName, LastName: r.LastName,
 			OrgName:        "SecureCorp",
 			RequesterName:  "Dolores Abernathy",
 			RequesterEmail: "dolores.abernathy@example.com",
-		},
-		"QuestionnaireAuthEmail": QuestionnaireAuthEmail{
+		}},
+		"QuestionnaireAuthEmail": {QuestionnaireAuthEmail{
 			RecipientInfo:  r,
 			OrgName:        "Acme Corp",
 			AssessmentName: "SOC 2 Type II Review",
 			AuthURL:        "https://questionnaire.example.com/questionnaire?token=test",
-		},
-		"BillingEmailChangedEmail": BillingEmailChangedEmail{
+		}},
+		"QuestionnaireAccessRequest": {QuestionnaireAccessRequest{
+			RecipientInfo:             r,
+			OrgName:                   "Acme Corp",
+			AssessmentName:            "SOC 2 Type II Review",
+			AuthURL:                   "https://questionnaire.example.com/questionnaire?token=test",
+			CampaignName:              "Test Questionnaire Campaign",
+			QuestionnaireEmailContent: questionnaireAccessExample.QuestionnaireEmailContent,
+		}, QuestionnaireAccessRequest{
+			RecipientInfo:   r,
+			OrgName:         cloudflareTrustCenterBranding().CompanyName,
+			AssessmentName:  "Acceptable Use Policy",
+			AuthURL:         "https://questionnaire.example.com/questionnaire?token=test",
+			CampaignName:    "Annual Policy Sign-Off",
+			Subject:         "Action required: sign off on the {{ .questionnaireName }}",
+			Preheader:       "{{ .orgName }} needs your acknowledgement of the {{ .questionnaireName }}",
+			Title:           "Hi {{ .firstName }}, please review and sign off on the {{ .questionnaireName }}",
+			Intros:          []string{"{{ .orgName }} has updated the {{ .questionnaireName }} and every employee needs to acknowledge it.", "Read through the policy and confirm that you understand and agree to it."},
+			ButtonText:      "Review and Sign Off",
+			LogoURL:         cloudflareTrustCenterBranding().LogoURL,
+			PrimaryColor:    cloudflareTrustCenterBranding().AccentColor,
+			ButtonColor:     cloudflareTrustCenterBranding().AccentColor,
+			ButtonTextColor: "#ffffff",
+		}},
+		"BillingEmailChangedEmail": {BillingEmailChangedEmail{
 			RecipientInfo:   r,
 			OrgName:         "Acme Corp",
 			OldBillingEmail: "old-billing@acme.com",
 			NewBillingEmail: "new-billing@acme.com",
 			ChangedAt:       time.Now().UTC(),
-		},
-		"OrgDeletionNoticeEmail": OrgDeletionNoticeEmail{
+		}},
+		"OrgDeletionNoticeEmail": {OrgDeletionNoticeEmail{
 			RecipientInfo: r,
 			OrgName:       "Acme Corp",
 			DeletionDate:  time.Now().UTC().AddDate(0, 0, 7), //nolint:mnd
+		}},
+		"BrandedMessageRequest": {BrandedMessageRequest{
+			RecipientInfo:       r,
+			CampaignName:        "Test Campaign",
+			CampaignDescription: "A test campaign to verify branded message rendering",
+			Subject:             "{{ .companyName }} - Test Branded Message",
+			Preheader:           "Hi {{ .firstName }}, this is a test branded message",
+			Title:               "Welcome to {{ .companyName }}",
+			Intros:              []string{"Hi {{ .firstName }}, this branded message was sent via the email-test CLI.", "All templates are rendering correctly for {{ .companyName }}."},
+			ButtonText:          "Visit Dashboard",
+			ButtonLink:          "https://app.example.com/campaigns",
+			Outros:              []string{"If you received this, the branded message template is working as expected.", "Questions? Reach us at {{ .supportemail }}."},
+		}, BrandedMessageRequest{
+			RecipientInfo:   r,
+			CampaignName:    "Cloudflare Customer Update",
+			Subject:         "{{ .companyName }} - Security update for {{ .firstName }}",
+			Preheader:       "A quick update from the {{ .companyName }} security team",
+			Title:           "Hi {{ .firstName }}, here is your quarterly security update",
+			Intros:          []string{"Our latest SOC 2 Type II report is now available.", "Visit the trust hub to review the report and our updated subprocessor list."},
+			ButtonText:      "Visit Trust Hub",
+			ButtonLink:      "https://www.cloudflare.com/trust-hub/",
+			Outros:          []string{"Questions? Reply to this email and our team will help out."},
+			CompanyName:     cloudflareTrustCenterBranding().CompanyName,
+			Corporation:     "Cloudflare, Inc.",
+			CompanyAddress:  "101 Townsend St, San Francisco, CA 94107",
+			LogoURL:         cloudflareTrustCenterBranding().LogoURL,
+			PrimaryColor:    cloudflareTrustCenterBranding().AccentColor,
+			ButtonColor:     cloudflareTrustCenterBranding().AccentColor,
+			ButtonTextColor: "#ffffff",
+		}},
+		"SubprocessorNotificationRequest": {
+			subprocessors,
+			withDefaultBranding(subprocessors),
 		},
-		"BrandedMessageRequest": BrandedMessageRequest{
-			RecipientInfo: r,
-			CampaignContext: CampaignContext{
-				CampaignName:        "Test Campaign",
-				CampaignDescription: "A test campaign to verify branded message rendering",
-			},
-			Subject:    "{{ .companyName }} - Test Branded Message",
-			Preheader:  "Hi {{ .firstName }}, this is a test branded message",
-			Title:      "Welcome to {{ .companyName }}",
-			Intros:     []string{"Hi {{ .firstName }}, this branded message was sent via the email-test CLI.", "All templates are rendering correctly for {{ .companyName }}."},
-			ButtonText: "Visit Dashboard",
-			ButtonLink: "https://app.example.com/campaigns",
-			Outros:     []string{"If you received this, the branded message template is working as expected.", "Questions? Reach us at {{ .supportemail }}."},
-		},
-		"SubprocessorNotificationRequest": SubprocessorNotificationRequest{
-			RecipientInfo: RecipientInfo{
-				Email:            toEmail,
-				FirstName:        r.FirstName,
-				LastName:         r.LastName,
-				UnsubscribeToken: "test-unsubscribe-token-12345",
-			},
-			TrustCenterBranding: cloudflareTrustCenterBranding(),
-			Subprocessors: []SubprocessorEntry{
-				{Name: "Amazon Web Services", Change: "Added"},
-				{Name: "Stripe", Change: "Updated"},
-				{Name: "Twilio", Change: "Removed"},
-			},
-			TrustCenterURL: "https://www.cloudflare.com/trust-hub/",
-			UnsubscribeURL: "https://www.cloudflare.com/trust-hub/unsubscribe?token={{ .unsubscribeToken }}",
-		},
-		TrustCenterUpdateTemplate: TrustCenterUpdateRequest{
-			RecipientInfo: RecipientInfo{
-				Email:            toEmail,
-				FirstName:        r.FirstName,
-				LastName:         r.LastName,
-				UnsubscribeToken: "test-unsubscribe-token-12345",
-			},
-			TrustCenterBranding: cloudflareTrustCenterBranding(),
-			PostTitle:           "SOC 2 Type II report published",
-			PostText:            "Our latest SOC 2 Type II report is now available in the trust center.\nRequest access to review the full report.",
-			TrustCenterURL:      "https://www.cloudflare.com/trust-hub/",
-			UnsubscribeURL:      "https://www.cloudflare.com/trust-hub/unsubscribe?token={{ .unsubscribeToken }}",
+		TrustCenterUpdateTemplate: {
+			trustCenterUpdate,
+			withDefaultBranding(trustCenterUpdate),
 		},
 	}
 
-	fixture, ok := fixtures[name]
-	if !ok {
-		return nil
-	}
+	payloads := make([]json.RawMessage, 0, len(fixtures[name]))
 
-	// preview the Openlane fallback by clearing the trust center branding overlay
-	if defaultBranding {
-		switch req := fixture.(type) {
-		case SubprocessorNotificationRequest:
-			req.TrustCenterBranding = TrustCenterBranding{}
-			fixture = req
-		case TrustCenterUpdateRequest:
-			req.TrustCenterBranding = TrustCenterBranding{}
-			fixture = req
-		case SubscribeRequest:
-			req.TrustCenterBranding = TrustCenterBranding{}
-			req.OrgName = ""
-			fixture = req
+	for _, fixture := range fixtures[name] {
+		data, err := json.Marshal(fixture)
+		if err != nil {
+			continue
 		}
+
+		payloads = append(payloads, data)
 	}
 
-	data, err := json.Marshal(fixture)
-	if err != nil {
-		return nil
-	}
+	return payloads
+}
 
-	return data
+// withDefaultBranding returns a copy of the fixture with the trust center branding cleared to preview the Openlane fallback
+func withDefaultBranding(fixture any) any {
+	switch req := fixture.(type) {
+	case SubprocessorNotificationRequest:
+		req.TrustCenterBranding = TrustCenterBranding{}
+		return req
+	case TrustCenterUpdateRequest:
+		req.TrustCenterBranding = TrustCenterBranding{}
+		return req
+	case SubscribeRequest:
+		req.TrustCenterBranding = TrustCenterBranding{}
+		req.OrgName = ""
+
+		return req
+	default:
+		return fixture
+	}
 }
 
 const testPDFFontSize = 14
