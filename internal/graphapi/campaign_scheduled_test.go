@@ -47,6 +47,7 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 
 	input := testclient.CreateCampaignInput{
 		Name:            "Recurring Schedule Test",
+		CampaignType:    &enums.CampaignTypeCustom,
 		EmailTemplateID: new(emailTemplate.ID),
 		IsActive:        new(true),
 		Status:          &enums.CampaignStatusActive,
@@ -149,6 +150,7 @@ func TestRecurringCampaignExhaustion(t *testing.T) {
 
 	campaignObj, err := suite.Client.DB.Campaign.Create().
 		SetName("Exhaustion Test Campaign").
+		SetCampaignType(enums.CampaignTypeCustom).
 		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetIsRecurring(true).

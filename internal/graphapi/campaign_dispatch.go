@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
@@ -73,7 +74,7 @@ func (r *mutationResolver) initCampaignDispatch(ctx context.Context, campaignID 
 		return nil, rout.NewMissingRequiredFieldError("campaignID")
 	}
 
-	campaignObj, err := withTransactionalMutation(ctx).Campaign.Query().Where(campaign.ID(campaignID)).Only(ctx)
+	campaignObj, err := withTransactionalMutation(ctx).Campaign.Query().Where(campaign.ID(campaignID)).WithEmailTemplate(selectEmailTemplateKey).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
 	}
@@ -185,7 +186,22 @@ func validateCampaignContentSource(campaignObj *generated.Campaign) error {
 		}
 	}
 
-	return nil
+	return validateCampaignEmailTemplate(campaignObj)
+}
+
+// selectEmailTemplateKey limits an eager-loaded email template to its key
+func selectEmailTemplateKey(q *generated.EmailTemplateQuery) {
+	q.Select(emailtemplate.FieldKey)
+}
+
+// validateCampaignEmailTemplate ensures the eager-loaded email template fits the campaign type
+func validateCampaignEmailTemplate(campaignObj *generated.Campaign) error {
+	templateObj := campaignObj.Edges.EmailTemplate
+	if templateObj == nil || campaignObj.CampaignType == enums.CampaignTypeTrustCenterUpdate {
+		return nil
+	}
+
+	return emaildef.ValidateCampaignTemplateKey(campaignObj.CampaignType, templateObj.Key)
 }
 
 // processDispatchTargets counts total targets and, for immediate dispatch,

@@ -789,6 +789,7 @@ func init() {
 	campaignMixinHooks8 := campaignMixin[8].Hooks()
 	campaignMixinHooks9 := campaignMixin[9].Hooks()
 	campaignMixinHooks11 := campaignMixin[11].Hooks()
+	campaignHooks := schema.Campaign{}.Hooks()
 
 	campaign.Hooks[1] = campaignMixinHooks0[0]
 
@@ -811,6 +812,8 @@ func init() {
 	campaign.Hooks[10] = campaignMixinHooks9[2]
 
 	campaign.Hooks[11] = campaignMixinHooks11[0]
+
+	campaign.Hooks[12] = campaignHooks[0]
 	campaignMixinInters3 := campaignMixin[3].Interceptors()
 	campaignMixinInters8 := campaignMixin[8].Interceptors()
 	campaign.Interceptors[0] = campaignMixinInters3[0]
