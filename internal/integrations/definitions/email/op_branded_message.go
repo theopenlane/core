@@ -114,8 +114,10 @@ var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 		cfg.PrivacyURL = req.PrivacyURL
 		cfg.UnsubscribeURL = req.UnsubscribeURL
 		cfg.Social = req.Social
-		cfg.LogoURL = ""
-		cfg.HeaderLogoURL = ""
+		cfg.LogoURL = req.LogoURL
+		cfg.HeaderLogoURL = req.HeaderLogoURL
+
+		// clear Openlane's header text, branded messages have no customer header text
 		cfg.HeaderText = ""
 
 		return req.apply(cfg)
