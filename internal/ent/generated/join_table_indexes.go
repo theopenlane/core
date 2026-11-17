@@ -223,6 +223,7 @@ var joinTables = map[string]bool{
 	"scan_remediations":                     true,
 	"scan_action_plans":                     true,
 	"scan_tasks":                            true,
+	"share_link_files":                      true,
 	"subcontrol_control_objectives":         true,
 	"subcontrol_tasks":                      true,
 	"subcontrol_risks":                      true,

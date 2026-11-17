@@ -354,6 +354,26 @@ func (_u *OrganizationSettingUpdate) ClearAllowMatchingDomainsAutojoin() *Organi
 	return _u
 }
 
+// SetExternalSharingEnabled sets the "external_sharing_enabled" field.
+func (_u *OrganizationSettingUpdate) SetExternalSharingEnabled(v bool) *OrganizationSettingUpdate {
+	_u.mutation.SetExternalSharingEnabled(v)
+	return _u
+}
+
+// SetNillableExternalSharingEnabled sets the "external_sharing_enabled" field if the given value is not nil.
+func (_u *OrganizationSettingUpdate) SetNillableExternalSharingEnabled(v *bool) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetExternalSharingEnabled(*v)
+	}
+	return _u
+}
+
+// ClearExternalSharingEnabled clears the value of the "external_sharing_enabled" field.
+func (_u *OrganizationSettingUpdate) ClearExternalSharingEnabled() *OrganizationSettingUpdate {
+	_u.mutation.ClearExternalSharingEnabled()
+	return _u
+}
+
 // SetIdentityProvider sets the "identity_provider" field.
 func (_u *OrganizationSettingUpdate) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingUpdate {
 	_u.mutation.SetIdentityProvider(v)
@@ -962,6 +982,12 @@ func (_u *OrganizationSettingUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.AllowMatchingDomainsAutojoinCleared() {
 		_spec.ClearField(organizationsetting.FieldAllowMatchingDomainsAutojoin, field.TypeBool)
 	}
+	if value, ok := _u.mutation.ExternalSharingEnabled(); ok {
+		_spec.SetField(organizationsetting.FieldExternalSharingEnabled, field.TypeBool, value)
+	}
+	if _u.mutation.ExternalSharingEnabledCleared() {
+		_spec.ClearField(organizationsetting.FieldExternalSharingEnabled, field.TypeBool)
+	}
 	if value, ok := _u.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProvider, field.TypeEnum, value)
 	}
@@ -1481,6 +1507,26 @@ func (_u *OrganizationSettingUpdateOne) SetNillableAllowMatchingDomainsAutojoin(
 // ClearAllowMatchingDomainsAutojoin clears the value of the "allow_matching_domains_autojoin" field.
 func (_u *OrganizationSettingUpdateOne) ClearAllowMatchingDomainsAutojoin() *OrganizationSettingUpdateOne {
 	_u.mutation.ClearAllowMatchingDomainsAutojoin()
+	return _u
+}
+
+// SetExternalSharingEnabled sets the "external_sharing_enabled" field.
+func (_u *OrganizationSettingUpdateOne) SetExternalSharingEnabled(v bool) *OrganizationSettingUpdateOne {
+	_u.mutation.SetExternalSharingEnabled(v)
+	return _u
+}
+
+// SetNillableExternalSharingEnabled sets the "external_sharing_enabled" field if the given value is not nil.
+func (_u *OrganizationSettingUpdateOne) SetNillableExternalSharingEnabled(v *bool) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetExternalSharingEnabled(*v)
+	}
+	return _u
+}
+
+// ClearExternalSharingEnabled clears the value of the "external_sharing_enabled" field.
+func (_u *OrganizationSettingUpdateOne) ClearExternalSharingEnabled() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearExternalSharingEnabled()
 	return _u
 }
 
@@ -2121,6 +2167,12 @@ func (_u *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if _u.mutation.AllowMatchingDomainsAutojoinCleared() {
 		_spec.ClearField(organizationsetting.FieldAllowMatchingDomainsAutojoin, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalSharingEnabled(); ok {
+		_spec.SetField(organizationsetting.FieldExternalSharingEnabled, field.TypeBool, value)
+	}
+	if _u.mutation.ExternalSharingEnabledCleared() {
+		_spec.ClearField(organizationsetting.FieldExternalSharingEnabled, field.TypeBool)
 	}
 	if value, ok := _u.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProvider, field.TypeEnum, value)

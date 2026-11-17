@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
@@ -66,6 +67,7 @@ type FileQuery struct {
 	withIntegrations                     *IntegrationQuery
 	withSecrets                          *HushQuery
 	withTrustCenterEntities              *TrustCenterEntityQuery
+	withShareLinks                       *ShareLinkQuery
 	withTrustCenterDoc                   *TrustCenterDocQuery
 	withOriginalTrustCenterDoc           *TrustCenterDocQuery
 	withTrustCenterSettingLogo           *TrustCenterSettingQuery
@@ -93,6 +95,7 @@ type FileQuery struct {
 	withNamedIntegrations                map[string]*IntegrationQuery
 	withNamedSecrets                     map[string]*HushQuery
 	withNamedTrustCenterEntities         map[string]*TrustCenterEntityQuery
+	withNamedShareLinks                  map[string]*ShareLinkQuery
 	withNamedTrustCenterDoc              map[string]*TrustCenterDocQuery
 	withNamedOriginalTrustCenterDoc      map[string]*TrustCenterDocQuery
 	withNamedTrustCenterSettingLogo      map[string]*TrustCenterSettingQuery
@@ -555,6 +558,28 @@ func (_q *FileQuery) QueryTrustCenterEntities() *TrustCenterEntityQuery {
 	return query
 }
 
+// QueryShareLinks chains the current query on the "share_links" edge.
+func (_q *FileQuery) QueryShareLinks() *ShareLinkQuery {
+	query := (&ShareLinkClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(sharelink.Table, sharelink.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ShareLinksTable, file.ShareLinksPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryTrustCenterDoc chains the current query on the "trust_center_doc" edge.
 func (_q *FileQuery) QueryTrustCenterDoc() *TrustCenterDocQuery {
 	query := (&TrustCenterDocClient{config: _q.config}).Query()
@@ -942,6 +967,7 @@ func (_q *FileQuery) Clone() *FileQuery {
 		withIntegrations:                _q.withIntegrations.Clone(),
 		withSecrets:                     _q.withSecrets.Clone(),
 		withTrustCenterEntities:         _q.withTrustCenterEntities.Clone(),
+		withShareLinks:                  _q.withShareLinks.Clone(),
 		withTrustCenterDoc:              _q.withTrustCenterDoc.Clone(),
 		withOriginalTrustCenterDoc:      _q.withOriginalTrustCenterDoc.Clone(),
 		withTrustCenterSettingLogo:      _q.withTrustCenterSettingLogo.Clone(),
@@ -1166,6 +1192,17 @@ func (_q *FileQuery) WithTrustCenterEntities(opts ...func(*TrustCenterEntityQuer
 	return _q
 }
 
+// WithShareLinks tells the query-builder to eager-load the nodes that are connected to
+// the "share_links" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithShareLinks(opts ...func(*ShareLinkQuery)) *FileQuery {
+	query := (&ShareLinkClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withShareLinks = query
+	return _q
+}
+
 // WithTrustCenterDoc tells the query-builder to eager-load the nodes that are connected to
 // the "trust_center_doc" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *FileQuery) WithTrustCenterDoc(opts ...func(*TrustCenterDocQuery)) *FileQuery {
@@ -1339,7 +1376,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		nodes       = []*File{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [28]bool{
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withCategory != nil,
@@ -1359,6 +1396,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			_q.withIntegrations != nil,
 			_q.withSecrets != nil,
 			_q.withTrustCenterEntities != nil,
+			_q.withShareLinks != nil,
 			_q.withTrustCenterDoc != nil,
 			_q.withOriginalTrustCenterDoc != nil,
 			_q.withTrustCenterSettingLogo != nil,
@@ -1524,6 +1562,13 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			func(n *File, e *TrustCenterEntity) {
 				n.Edges.TrustCenterEntities = append(n.Edges.TrustCenterEntities, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withShareLinks; query != nil {
+		if err := _q.loadShareLinks(ctx, query, nodes,
+			func(n *File) { n.Edges.ShareLinks = []*ShareLink{} },
+			func(n *File, e *ShareLink) { n.Edges.ShareLinks = append(n.Edges.ShareLinks, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1702,6 +1747,13 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := _q.loadTrustCenterEntities(ctx, query, nodes,
 			func(n *File) { n.appendNamedTrustCenterEntities(name) },
 			func(n *File, e *TrustCenterEntity) { n.appendNamedTrustCenterEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedShareLinks {
+		if err := _q.loadShareLinks(ctx, query, nodes,
+			func(n *File) { n.appendNamedShareLinks(name) },
+			func(n *File, e *ShareLink) { n.appendNamedShareLinks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2772,6 +2824,67 @@ func (_q *FileQuery) loadTrustCenterEntities(ctx context.Context, query *TrustCe
 	}
 	return nil
 }
+func (_q *FileQuery) loadShareLinks(ctx context.Context, query *ShareLinkQuery, nodes []*File, init func(*File), assign func(*File, *ShareLink)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.ShareLinksTable)
+		s.Join(joinT).On(s.C(sharelink.FieldID), joinT.C(file.ShareLinksPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.ShareLinksPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.ShareLinksPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ShareLink](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "share_links" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *FileQuery) loadTrustCenterDoc(ctx context.Context, query *TrustCenterDocQuery, nodes []*File, init func(*File), assign func(*File, *TrustCenterDoc)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*File)
@@ -3364,6 +3477,20 @@ func (_q *FileQuery) WithNamedTrustCenterEntities(name string, opts ...func(*Tru
 		_q.withNamedTrustCenterEntities = make(map[string]*TrustCenterEntityQuery)
 	}
 	_q.withNamedTrustCenterEntities[name] = query
+	return _q
+}
+
+// WithNamedShareLinks tells the query-builder to eager-load the nodes that are connected to the "share_links"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithNamedShareLinks(name string, opts ...func(*ShareLinkQuery)) *FileQuery {
+	query := (&ShareLinkClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedShareLinks == nil {
+		_q.withNamedShareLinks = make(map[string]*ShareLinkQuery)
+	}
+	_q.withNamedShareLinks[name] = query
 	return _q
 }
 

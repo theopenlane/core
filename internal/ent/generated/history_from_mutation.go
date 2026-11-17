@@ -16075,6 +16075,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetAllowMatchingDomainsAutojoin(allowMatchingDomainsAutojoin)
 	}
 
+	if externalSharingEnabled, exists := m.ExternalSharingEnabled(); exists {
+		create = create.SetExternalSharingEnabled(externalSharingEnabled)
+	}
+
 	if identityProvider, exists := m.IdentityProvider(); exists {
 		create = create.SetIdentityProvider(identityProvider)
 	}
@@ -16295,6 +16299,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetAllowMatchingDomainsAutojoin(organizationsetting.AllowMatchingDomainsAutojoin)
 		}
 
+		if externalSharingEnabled, exists := m.ExternalSharingEnabled(); exists {
+			create = create.SetExternalSharingEnabled(externalSharingEnabled)
+		} else {
+			create = create.SetExternalSharingEnabled(organizationsetting.ExternalSharingEnabled)
+		}
+
 		if identityProvider, exists := m.IdentityProvider(); exists {
 			create = create.SetIdentityProvider(identityProvider)
 		} else {
@@ -16460,6 +16470,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetBillingNotificationsEnabled(organizationsetting.BillingNotificationsEnabled).
 			SetAllowedEmailDomains(organizationsetting.AllowedEmailDomains).
 			SetAllowMatchingDomainsAutojoin(organizationsetting.AllowMatchingDomainsAutojoin).
+			SetExternalSharingEnabled(organizationsetting.ExternalSharingEnabled).
 			SetIdentityProvider(organizationsetting.IdentityProvider).
 			SetNillableIdentityProviderClientID(organizationsetting.IdentityProviderClientID).
 			SetNillableIdentityProviderClientSecret(organizationsetting.IdentityProviderClientSecret).

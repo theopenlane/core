@@ -96424,6 +96424,7 @@ type OrganizationSettingHistoryMutation struct {
 	allowed_email_domains               *[]string
 	appendallowed_email_domains         []string
 	allow_matching_domains_autojoin     *bool
+	external_sharing_enabled            *bool
 	identity_provider                   *enums.SSOProvider
 	identity_provider_client_id         *string
 	identity_provider_client_secret     *string
@@ -97641,6 +97642,55 @@ func (m *OrganizationSettingHistoryMutation) ResetAllowMatchingDomainsAutojoin()
 	delete(m.clearedFields, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin)
 }
 
+// SetExternalSharingEnabled sets the "external_sharing_enabled" field.
+func (m *OrganizationSettingHistoryMutation) SetExternalSharingEnabled(b bool) {
+	m.external_sharing_enabled = &b
+}
+
+// ExternalSharingEnabled returns the value of the "external_sharing_enabled" field in the mutation.
+func (m *OrganizationSettingHistoryMutation) ExternalSharingEnabled() (r bool, exists bool) {
+	v := m.external_sharing_enabled
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalSharingEnabled returns the old "external_sharing_enabled" field's value of the OrganizationSettingHistory entity.
+// If the OrganizationSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationSettingHistoryMutation) OldExternalSharingEnabled(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalSharingEnabled is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalSharingEnabled requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalSharingEnabled: %w", err)
+	}
+	return oldValue.ExternalSharingEnabled, nil
+}
+
+// ClearExternalSharingEnabled clears the value of the "external_sharing_enabled" field.
+func (m *OrganizationSettingHistoryMutation) ClearExternalSharingEnabled() {
+	m.external_sharing_enabled = nil
+	m.clearedFields[organizationsettinghistory.FieldExternalSharingEnabled] = struct{}{}
+}
+
+// ExternalSharingEnabledCleared returns if the "external_sharing_enabled" field was cleared in this mutation.
+func (m *OrganizationSettingHistoryMutation) ExternalSharingEnabledCleared() bool {
+	_, ok := m.clearedFields[organizationsettinghistory.FieldExternalSharingEnabled]
+	return ok
+}
+
+// ResetExternalSharingEnabled resets all changes to the "external_sharing_enabled" field.
+func (m *OrganizationSettingHistoryMutation) ResetExternalSharingEnabled() {
+	m.external_sharing_enabled = nil
+	delete(m.clearedFields, organizationsettinghistory.FieldExternalSharingEnabled)
+}
+
 // SetIdentityProvider sets the "identity_provider" field.
 func (m *OrganizationSettingHistoryMutation) SetIdentityProvider(ep enums.SSOProvider) {
 	m.identity_provider = &ep
@@ -98537,7 +98587,7 @@ func (m *OrganizationSettingHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationSettingHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 40)
+	fields := make([]string, 0, 41)
 	if m.history_time != nil {
 		fields = append(fields, organizationsettinghistory.FieldHistoryTime)
 	}
@@ -98603,6 +98653,9 @@ func (m *OrganizationSettingHistoryMutation) Fields() []string {
 	}
 	if m.allow_matching_domains_autojoin != nil {
 		fields = append(fields, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin)
+	}
+	if m.external_sharing_enabled != nil {
+		fields = append(fields, organizationsettinghistory.FieldExternalSharingEnabled)
 	}
 	if m.identity_provider != nil {
 		fields = append(fields, organizationsettinghistory.FieldIdentityProvider)
@@ -98710,6 +98763,8 @@ func (m *OrganizationSettingHistoryMutation) Field(name string) (ent.Value, bool
 		return m.AllowedEmailDomains()
 	case organizationsettinghistory.FieldAllowMatchingDomainsAutojoin:
 		return m.AllowMatchingDomainsAutojoin()
+	case organizationsettinghistory.FieldExternalSharingEnabled:
+		return m.ExternalSharingEnabled()
 	case organizationsettinghistory.FieldIdentityProvider:
 		return m.IdentityProvider()
 	case organizationsettinghistory.FieldIdentityProviderClientID:
@@ -98799,6 +98854,8 @@ func (m *OrganizationSettingHistoryMutation) OldField(ctx context.Context, name 
 		return m.OldAllowedEmailDomains(ctx)
 	case organizationsettinghistory.FieldAllowMatchingDomainsAutojoin:
 		return m.OldAllowMatchingDomainsAutojoin(ctx)
+	case organizationsettinghistory.FieldExternalSharingEnabled:
+		return m.OldExternalSharingEnabled(ctx)
 	case organizationsettinghistory.FieldIdentityProvider:
 		return m.OldIdentityProvider(ctx)
 	case organizationsettinghistory.FieldIdentityProviderClientID:
@@ -98997,6 +99054,13 @@ func (m *OrganizationSettingHistoryMutation) SetField(name string, value ent.Val
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAllowMatchingDomainsAutojoin(v)
+		return nil
+	case organizationsettinghistory.FieldExternalSharingEnabled:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalSharingEnabled(v)
 		return nil
 	case organizationsettinghistory.FieldIdentityProvider:
 		v, ok := value.(enums.SSOProvider)
@@ -99211,6 +99275,9 @@ func (m *OrganizationSettingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin) {
 		fields = append(fields, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin)
 	}
+	if m.FieldCleared(organizationsettinghistory.FieldExternalSharingEnabled) {
+		fields = append(fields, organizationsettinghistory.FieldExternalSharingEnabled)
+	}
 	if m.FieldCleared(organizationsettinghistory.FieldIdentityProvider) {
 		fields = append(fields, organizationsettinghistory.FieldIdentityProvider)
 	}
@@ -99323,6 +99390,9 @@ func (m *OrganizationSettingHistoryMutation) ClearField(name string) error {
 		return nil
 	case organizationsettinghistory.FieldAllowMatchingDomainsAutojoin:
 		m.ClearAllowMatchingDomainsAutojoin()
+		return nil
+	case organizationsettinghistory.FieldExternalSharingEnabled:
+		m.ClearExternalSharingEnabled()
 		return nil
 	case organizationsettinghistory.FieldIdentityProvider:
 		m.ClearIdentityProvider()
@@ -99439,6 +99509,9 @@ func (m *OrganizationSettingHistoryMutation) ResetField(name string) error {
 		return nil
 	case organizationsettinghistory.FieldAllowMatchingDomainsAutojoin:
 		m.ResetAllowMatchingDomainsAutojoin()
+		return nil
+	case organizationsettinghistory.FieldExternalSharingEnabled:
+		m.ResetExternalSharingEnabled()
 		return nil
 	case organizationsettinghistory.FieldIdentityProvider:
 		m.ResetIdentityProvider()

@@ -73,6 +73,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -55444,6 +55446,96 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				*wq = *query
 			})
 
+		case "shareLinkCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: _q.config}).Query()
+			)
+			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newGroupPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						query := query.Clone()
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"organization_share_link_creators"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.ShareLinkCreatorsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.ShareLinkCreatorsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[48] == nil {
+								nodes[i].Edges.totalCount[48] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[48][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.ShareLinkCreators)
+							if nodes[i].Edges.totalCount[48] == nil {
+								nodes[i].Edges.totalCount[48] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[48][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.ShareLinkCreatorsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedShareLinkCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
 		case "slaDefinitionCreators":
 			var (
 				alias = field.Alias
@@ -55488,10 +55580,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[48] == nil {
-								nodes[i].Edges.totalCount[48] = make(map[string]int)
+							if nodes[i].Edges.totalCount[49] == nil {
+								nodes[i].Edges.totalCount[49] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[48][alias] = n
+							nodes[i].Edges.totalCount[49][alias] = n
 						}
 						return nil
 					})
@@ -55499,10 +55591,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.SLADefinitionCreators)
-							if nodes[i].Edges.totalCount[48] == nil {
-								nodes[i].Edges.totalCount[48] = make(map[string]int)
+							if nodes[i].Edges.totalCount[49] == nil {
+								nodes[i].Edges.totalCount[49] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[48][alias] = n
+							nodes[i].Edges.totalCount[49][alias] = n
 						}
 						return nil
 					})
@@ -55578,10 +55670,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[49] == nil {
-								nodes[i].Edges.totalCount[49] = make(map[string]int)
+							if nodes[i].Edges.totalCount[50] == nil {
+								nodes[i].Edges.totalCount[50] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[49][alias] = n
+							nodes[i].Edges.totalCount[50][alias] = n
 						}
 						return nil
 					})
@@ -55589,10 +55681,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.StandardCreators)
-							if nodes[i].Edges.totalCount[49] == nil {
-								nodes[i].Edges.totalCount[49] = make(map[string]int)
+							if nodes[i].Edges.totalCount[50] == nil {
+								nodes[i].Edges.totalCount[50] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[49][alias] = n
+							nodes[i].Edges.totalCount[50][alias] = n
 						}
 						return nil
 					})
@@ -55668,10 +55760,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[50] == nil {
-								nodes[i].Edges.totalCount[50] = make(map[string]int)
+							if nodes[i].Edges.totalCount[51] == nil {
+								nodes[i].Edges.totalCount[51] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[50][alias] = n
+							nodes[i].Edges.totalCount[51][alias] = n
 						}
 						return nil
 					})
@@ -55679,10 +55771,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.SubcontrolCreators)
-							if nodes[i].Edges.totalCount[50] == nil {
-								nodes[i].Edges.totalCount[50] = make(map[string]int)
+							if nodes[i].Edges.totalCount[51] == nil {
+								nodes[i].Edges.totalCount[51] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[50][alias] = n
+							nodes[i].Edges.totalCount[51][alias] = n
 						}
 						return nil
 					})
@@ -55758,10 +55850,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[51] == nil {
-								nodes[i].Edges.totalCount[51] = make(map[string]int)
+							if nodes[i].Edges.totalCount[52] == nil {
+								nodes[i].Edges.totalCount[52] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[51][alias] = n
+							nodes[i].Edges.totalCount[52][alias] = n
 						}
 						return nil
 					})
@@ -55769,10 +55861,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.SubprocessorCreators)
-							if nodes[i].Edges.totalCount[51] == nil {
-								nodes[i].Edges.totalCount[51] = make(map[string]int)
+							if nodes[i].Edges.totalCount[52] == nil {
+								nodes[i].Edges.totalCount[52] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[51][alias] = n
+							nodes[i].Edges.totalCount[52][alias] = n
 						}
 						return nil
 					})
@@ -55848,10 +55940,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[52] == nil {
-								nodes[i].Edges.totalCount[52] = make(map[string]int)
+							if nodes[i].Edges.totalCount[53] == nil {
+								nodes[i].Edges.totalCount[53] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[52][alias] = n
+							nodes[i].Edges.totalCount[53][alias] = n
 						}
 						return nil
 					})
@@ -55859,10 +55951,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.SubscriberCreators)
-							if nodes[i].Edges.totalCount[52] == nil {
-								nodes[i].Edges.totalCount[52] = make(map[string]int)
+							if nodes[i].Edges.totalCount[53] == nil {
+								nodes[i].Edges.totalCount[53] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[52][alias] = n
+							nodes[i].Edges.totalCount[53][alias] = n
 						}
 						return nil
 					})
@@ -55938,10 +56030,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[53] == nil {
-								nodes[i].Edges.totalCount[53] = make(map[string]int)
+							if nodes[i].Edges.totalCount[54] == nil {
+								nodes[i].Edges.totalCount[54] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[53][alias] = n
+							nodes[i].Edges.totalCount[54][alias] = n
 						}
 						return nil
 					})
@@ -55949,10 +56041,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.SystemDetailCreators)
-							if nodes[i].Edges.totalCount[53] == nil {
-								nodes[i].Edges.totalCount[53] = make(map[string]int)
+							if nodes[i].Edges.totalCount[54] == nil {
+								nodes[i].Edges.totalCount[54] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[53][alias] = n
+							nodes[i].Edges.totalCount[54][alias] = n
 						}
 						return nil
 					})
@@ -56028,10 +56120,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[54] == nil {
-								nodes[i].Edges.totalCount[54] = make(map[string]int)
+							if nodes[i].Edges.totalCount[55] == nil {
+								nodes[i].Edges.totalCount[55] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[54][alias] = n
+							nodes[i].Edges.totalCount[55][alias] = n
 						}
 						return nil
 					})
@@ -56039,10 +56131,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TagDefinitionCreators)
-							if nodes[i].Edges.totalCount[54] == nil {
-								nodes[i].Edges.totalCount[54] = make(map[string]int)
+							if nodes[i].Edges.totalCount[55] == nil {
+								nodes[i].Edges.totalCount[55] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[54][alias] = n
+							nodes[i].Edges.totalCount[55][alias] = n
 						}
 						return nil
 					})
@@ -56118,10 +56210,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[55] == nil {
-								nodes[i].Edges.totalCount[55] = make(map[string]int)
+							if nodes[i].Edges.totalCount[56] == nil {
+								nodes[i].Edges.totalCount[56] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[55][alias] = n
+							nodes[i].Edges.totalCount[56][alias] = n
 						}
 						return nil
 					})
@@ -56129,10 +56221,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TaskCreators)
-							if nodes[i].Edges.totalCount[55] == nil {
-								nodes[i].Edges.totalCount[55] = make(map[string]int)
+							if nodes[i].Edges.totalCount[56] == nil {
+								nodes[i].Edges.totalCount[56] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[55][alias] = n
+							nodes[i].Edges.totalCount[56][alias] = n
 						}
 						return nil
 					})
@@ -56208,10 +56300,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[56] == nil {
-								nodes[i].Edges.totalCount[56] = make(map[string]int)
+							if nodes[i].Edges.totalCount[57] == nil {
+								nodes[i].Edges.totalCount[57] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[56][alias] = n
+							nodes[i].Edges.totalCount[57][alias] = n
 						}
 						return nil
 					})
@@ -56219,10 +56311,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TemplateCreators)
-							if nodes[i].Edges.totalCount[56] == nil {
-								nodes[i].Edges.totalCount[56] = make(map[string]int)
+							if nodes[i].Edges.totalCount[57] == nil {
+								nodes[i].Edges.totalCount[57] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[56][alias] = n
+							nodes[i].Edges.totalCount[57][alias] = n
 						}
 						return nil
 					})
@@ -56298,10 +56390,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[57] == nil {
-								nodes[i].Edges.totalCount[57] = make(map[string]int)
+							if nodes[i].Edges.totalCount[58] == nil {
+								nodes[i].Edges.totalCount[58] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[57][alias] = n
+							nodes[i].Edges.totalCount[58][alias] = n
 						}
 						return nil
 					})
@@ -56309,10 +56401,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterCreators)
-							if nodes[i].Edges.totalCount[57] == nil {
-								nodes[i].Edges.totalCount[57] = make(map[string]int)
+							if nodes[i].Edges.totalCount[58] == nil {
+								nodes[i].Edges.totalCount[58] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[57][alias] = n
+							nodes[i].Edges.totalCount[58][alias] = n
 						}
 						return nil
 					})
@@ -56388,10 +56480,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[58] == nil {
-								nodes[i].Edges.totalCount[58] = make(map[string]int)
+							if nodes[i].Edges.totalCount[59] == nil {
+								nodes[i].Edges.totalCount[59] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[58][alias] = n
+							nodes[i].Edges.totalCount[59][alias] = n
 						}
 						return nil
 					})
@@ -56399,10 +56491,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterComplianceCreators)
-							if nodes[i].Edges.totalCount[58] == nil {
-								nodes[i].Edges.totalCount[58] = make(map[string]int)
+							if nodes[i].Edges.totalCount[59] == nil {
+								nodes[i].Edges.totalCount[59] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[58][alias] = n
+							nodes[i].Edges.totalCount[59][alias] = n
 						}
 						return nil
 					})
@@ -56478,10 +56570,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[59] == nil {
-								nodes[i].Edges.totalCount[59] = make(map[string]int)
+							if nodes[i].Edges.totalCount[60] == nil {
+								nodes[i].Edges.totalCount[60] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[59][alias] = n
+							nodes[i].Edges.totalCount[60][alias] = n
 						}
 						return nil
 					})
@@ -56489,10 +56581,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterDocCreators)
-							if nodes[i].Edges.totalCount[59] == nil {
-								nodes[i].Edges.totalCount[59] = make(map[string]int)
+							if nodes[i].Edges.totalCount[60] == nil {
+								nodes[i].Edges.totalCount[60] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[59][alias] = n
+							nodes[i].Edges.totalCount[60][alias] = n
 						}
 						return nil
 					})
@@ -56568,10 +56660,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[60] == nil {
-								nodes[i].Edges.totalCount[60] = make(map[string]int)
+							if nodes[i].Edges.totalCount[61] == nil {
+								nodes[i].Edges.totalCount[61] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[60][alias] = n
+							nodes[i].Edges.totalCount[61][alias] = n
 						}
 						return nil
 					})
@@ -56579,10 +56671,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterEntityCreators)
-							if nodes[i].Edges.totalCount[60] == nil {
-								nodes[i].Edges.totalCount[60] = make(map[string]int)
+							if nodes[i].Edges.totalCount[61] == nil {
+								nodes[i].Edges.totalCount[61] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[60][alias] = n
+							nodes[i].Edges.totalCount[61][alias] = n
 						}
 						return nil
 					})
@@ -56658,10 +56750,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[61] == nil {
-								nodes[i].Edges.totalCount[61] = make(map[string]int)
+							if nodes[i].Edges.totalCount[62] == nil {
+								nodes[i].Edges.totalCount[62] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[61][alias] = n
+							nodes[i].Edges.totalCount[62][alias] = n
 						}
 						return nil
 					})
@@ -56669,10 +56761,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterFaqCreators)
-							if nodes[i].Edges.totalCount[61] == nil {
-								nodes[i].Edges.totalCount[61] = make(map[string]int)
+							if nodes[i].Edges.totalCount[62] == nil {
+								nodes[i].Edges.totalCount[62] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[61][alias] = n
+							nodes[i].Edges.totalCount[62][alias] = n
 						}
 						return nil
 					})
@@ -56748,10 +56840,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[62] == nil {
-								nodes[i].Edges.totalCount[62] = make(map[string]int)
+							if nodes[i].Edges.totalCount[63] == nil {
+								nodes[i].Edges.totalCount[63] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[62][alias] = n
+							nodes[i].Edges.totalCount[63][alias] = n
 						}
 						return nil
 					})
@@ -56759,10 +56851,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterNdaRequestCreators)
-							if nodes[i].Edges.totalCount[62] == nil {
-								nodes[i].Edges.totalCount[62] = make(map[string]int)
+							if nodes[i].Edges.totalCount[63] == nil {
+								nodes[i].Edges.totalCount[63] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[62][alias] = n
+							nodes[i].Edges.totalCount[63][alias] = n
 						}
 						return nil
 					})
@@ -56838,10 +56930,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[63] == nil {
-								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							if nodes[i].Edges.totalCount[64] == nil {
+								nodes[i].Edges.totalCount[64] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[63][alias] = n
+							nodes[i].Edges.totalCount[64][alias] = n
 						}
 						return nil
 					})
@@ -56849,10 +56941,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterSubprocessorCreators)
-							if nodes[i].Edges.totalCount[63] == nil {
-								nodes[i].Edges.totalCount[63] = make(map[string]int)
+							if nodes[i].Edges.totalCount[64] == nil {
+								nodes[i].Edges.totalCount[64] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[63][alias] = n
+							nodes[i].Edges.totalCount[64][alias] = n
 						}
 						return nil
 					})
@@ -56928,10 +57020,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[64] == nil {
-								nodes[i].Edges.totalCount[64] = make(map[string]int)
+							if nodes[i].Edges.totalCount[65] == nil {
+								nodes[i].Edges.totalCount[65] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[64][alias] = n
+							nodes[i].Edges.totalCount[65][alias] = n
 						}
 						return nil
 					})
@@ -56939,10 +57031,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterWatermarkConfigCreators)
-							if nodes[i].Edges.totalCount[64] == nil {
-								nodes[i].Edges.totalCount[64] = make(map[string]int)
+							if nodes[i].Edges.totalCount[65] == nil {
+								nodes[i].Edges.totalCount[65] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[64][alias] = n
+							nodes[i].Edges.totalCount[65][alias] = n
 						}
 						return nil
 					})
@@ -57018,10 +57110,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[65] == nil {
-								nodes[i].Edges.totalCount[65] = make(map[string]int)
+							if nodes[i].Edges.totalCount[66] == nil {
+								nodes[i].Edges.totalCount[66] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[65][alias] = n
+							nodes[i].Edges.totalCount[66][alias] = n
 						}
 						return nil
 					})
@@ -57029,10 +57121,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.VendorRiskScoreCreators)
-							if nodes[i].Edges.totalCount[65] == nil {
-								nodes[i].Edges.totalCount[65] = make(map[string]int)
+							if nodes[i].Edges.totalCount[66] == nil {
+								nodes[i].Edges.totalCount[66] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[65][alias] = n
+							nodes[i].Edges.totalCount[66][alias] = n
 						}
 						return nil
 					})
@@ -57108,10 +57200,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[66] == nil {
-								nodes[i].Edges.totalCount[66] = make(map[string]int)
+							if nodes[i].Edges.totalCount[67] == nil {
+								nodes[i].Edges.totalCount[67] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[66][alias] = n
+							nodes[i].Edges.totalCount[67][alias] = n
 						}
 						return nil
 					})
@@ -57119,10 +57211,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.VendorScoringConfigCreators)
-							if nodes[i].Edges.totalCount[66] == nil {
-								nodes[i].Edges.totalCount[66] = make(map[string]int)
+							if nodes[i].Edges.totalCount[67] == nil {
+								nodes[i].Edges.totalCount[67] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[66][alias] = n
+							nodes[i].Edges.totalCount[67][alias] = n
 						}
 						return nil
 					})
@@ -57198,10 +57290,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[67] == nil {
-								nodes[i].Edges.totalCount[67] = make(map[string]int)
+							if nodes[i].Edges.totalCount[68] == nil {
+								nodes[i].Edges.totalCount[68] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[67][alias] = n
+							nodes[i].Edges.totalCount[68][alias] = n
 						}
 						return nil
 					})
@@ -57209,10 +57301,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.VulnerabilityCreators)
-							if nodes[i].Edges.totalCount[67] == nil {
-								nodes[i].Edges.totalCount[67] = make(map[string]int)
+							if nodes[i].Edges.totalCount[68] == nil {
+								nodes[i].Edges.totalCount[68] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[67][alias] = n
+							nodes[i].Edges.totalCount[68][alias] = n
 						}
 						return nil
 					})
@@ -57288,10 +57380,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[68] == nil {
-								nodes[i].Edges.totalCount[68] = make(map[string]int)
+							if nodes[i].Edges.totalCount[69] == nil {
+								nodes[i].Edges.totalCount[69] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[68][alias] = n
+							nodes[i].Edges.totalCount[69][alias] = n
 						}
 						return nil
 					})
@@ -57299,10 +57391,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowDefinitionCreators)
-							if nodes[i].Edges.totalCount[68] == nil {
-								nodes[i].Edges.totalCount[68] = make(map[string]int)
+							if nodes[i].Edges.totalCount[69] == nil {
+								nodes[i].Edges.totalCount[69] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[68][alias] = n
+							nodes[i].Edges.totalCount[69][alias] = n
 						}
 						return nil
 					})
@@ -57378,10 +57470,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[69] == nil {
-								nodes[i].Edges.totalCount[69] = make(map[string]int)
+							if nodes[i].Edges.totalCount[70] == nil {
+								nodes[i].Edges.totalCount[70] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[69][alias] = n
+							nodes[i].Edges.totalCount[70][alias] = n
 						}
 						return nil
 					})
@@ -57389,10 +57481,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.CampaignManager)
-							if nodes[i].Edges.totalCount[69] == nil {
-								nodes[i].Edges.totalCount[69] = make(map[string]int)
+							if nodes[i].Edges.totalCount[70] == nil {
+								nodes[i].Edges.totalCount[70] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[69][alias] = n
+							nodes[i].Edges.totalCount[70][alias] = n
 						}
 						return nil
 					})
@@ -57468,10 +57560,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[70] == nil {
-								nodes[i].Edges.totalCount[70] = make(map[string]int)
+							if nodes[i].Edges.totalCount[71] == nil {
+								nodes[i].Edges.totalCount[71] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[70][alias] = n
+							nodes[i].Edges.totalCount[71][alias] = n
 						}
 						return nil
 					})
@@ -57479,10 +57571,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ComplianceManager)
-							if nodes[i].Edges.totalCount[70] == nil {
-								nodes[i].Edges.totalCount[70] = make(map[string]int)
+							if nodes[i].Edges.totalCount[71] == nil {
+								nodes[i].Edges.totalCount[71] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[70][alias] = n
+							nodes[i].Edges.totalCount[71][alias] = n
 						}
 						return nil
 					})
@@ -57558,10 +57650,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[71] == nil {
-								nodes[i].Edges.totalCount[71] = make(map[string]int)
+							if nodes[i].Edges.totalCount[72] == nil {
+								nodes[i].Edges.totalCount[72] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[71][alias] = n
+							nodes[i].Edges.totalCount[72][alias] = n
 						}
 						return nil
 					})
@@ -57569,10 +57661,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.GroupManager)
-							if nodes[i].Edges.totalCount[71] == nil {
-								nodes[i].Edges.totalCount[71] = make(map[string]int)
+							if nodes[i].Edges.totalCount[72] == nil {
+								nodes[i].Edges.totalCount[72] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[71][alias] = n
+							nodes[i].Edges.totalCount[72][alias] = n
 						}
 						return nil
 					})
@@ -57648,10 +57740,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[72] == nil {
-								nodes[i].Edges.totalCount[72] = make(map[string]int)
+							if nodes[i].Edges.totalCount[73] == nil {
+								nodes[i].Edges.totalCount[73] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[72][alias] = n
+							nodes[i].Edges.totalCount[73][alias] = n
 						}
 						return nil
 					})
@@ -57659,10 +57751,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.IntegrationManager)
-							if nodes[i].Edges.totalCount[72] == nil {
-								nodes[i].Edges.totalCount[72] = make(map[string]int)
+							if nodes[i].Edges.totalCount[73] == nil {
+								nodes[i].Edges.totalCount[73] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[72][alias] = n
+							nodes[i].Edges.totalCount[73][alias] = n
 						}
 						return nil
 					})
@@ -57738,10 +57830,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[73] == nil {
-								nodes[i].Edges.totalCount[73] = make(map[string]int)
+							if nodes[i].Edges.totalCount[74] == nil {
+								nodes[i].Edges.totalCount[74] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[73][alias] = n
+							nodes[i].Edges.totalCount[74][alias] = n
 						}
 						return nil
 					})
@@ -57749,10 +57841,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.PolicyManager)
-							if nodes[i].Edges.totalCount[73] == nil {
-								nodes[i].Edges.totalCount[73] = make(map[string]int)
+							if nodes[i].Edges.totalCount[74] == nil {
+								nodes[i].Edges.totalCount[74] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[73][alias] = n
+							nodes[i].Edges.totalCount[74][alias] = n
 						}
 						return nil
 					})
@@ -57828,10 +57920,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[74] == nil {
-								nodes[i].Edges.totalCount[74] = make(map[string]int)
+							if nodes[i].Edges.totalCount[75] == nil {
+								nodes[i].Edges.totalCount[75] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[74][alias] = n
+							nodes[i].Edges.totalCount[75][alias] = n
 						}
 						return nil
 					})
@@ -57839,10 +57931,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.RegistryManager)
-							if nodes[i].Edges.totalCount[74] == nil {
-								nodes[i].Edges.totalCount[74] = make(map[string]int)
+							if nodes[i].Edges.totalCount[75] == nil {
+								nodes[i].Edges.totalCount[75] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[74][alias] = n
+							nodes[i].Edges.totalCount[75][alias] = n
 						}
 						return nil
 					})
@@ -57918,10 +58010,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[75] == nil {
-								nodes[i].Edges.totalCount[75] = make(map[string]int)
+							if nodes[i].Edges.totalCount[76] == nil {
+								nodes[i].Edges.totalCount[76] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[75][alias] = n
+							nodes[i].Edges.totalCount[76][alias] = n
 						}
 						return nil
 					})
@@ -57929,10 +58021,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.RiskManager)
-							if nodes[i].Edges.totalCount[75] == nil {
-								nodes[i].Edges.totalCount[75] = make(map[string]int)
+							if nodes[i].Edges.totalCount[76] == nil {
+								nodes[i].Edges.totalCount[76] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[75][alias] = n
+							nodes[i].Edges.totalCount[76][alias] = n
 						}
 						return nil
 					})
@@ -58008,10 +58100,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[76] == nil {
-								nodes[i].Edges.totalCount[76] = make(map[string]int)
+							if nodes[i].Edges.totalCount[77] == nil {
+								nodes[i].Edges.totalCount[77] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[76][alias] = n
+							nodes[i].Edges.totalCount[77][alias] = n
 						}
 						return nil
 					})
@@ -58019,10 +58111,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterManager)
-							if nodes[i].Edges.totalCount[76] == nil {
-								nodes[i].Edges.totalCount[76] = make(map[string]int)
+							if nodes[i].Edges.totalCount[77] == nil {
+								nodes[i].Edges.totalCount[77] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[76][alias] = n
+							nodes[i].Edges.totalCount[77][alias] = n
 						}
 						return nil
 					})
@@ -58098,10 +58190,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[77] == nil {
-								nodes[i].Edges.totalCount[77] = make(map[string]int)
+							if nodes[i].Edges.totalCount[78] == nil {
+								nodes[i].Edges.totalCount[78] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[77][alias] = n
+							nodes[i].Edges.totalCount[78][alias] = n
 						}
 						return nil
 					})
@@ -58109,10 +58201,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowManager)
-							if nodes[i].Edges.totalCount[77] == nil {
-								nodes[i].Edges.totalCount[77] = make(map[string]int)
+							if nodes[i].Edges.totalCount[78] == nil {
+								nodes[i].Edges.totalCount[78] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[77][alias] = n
+							nodes[i].Edges.totalCount[78][alias] = n
 						}
 						return nil
 					})
@@ -58203,10 +58295,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[79] == nil {
-								nodes[i].Edges.totalCount[79] = make(map[string]int)
+							if nodes[i].Edges.totalCount[80] == nil {
+								nodes[i].Edges.totalCount[80] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[79][alias] = n
+							nodes[i].Edges.totalCount[80][alias] = n
 						}
 						return nil
 					})
@@ -58214,10 +58306,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Children)
-							if nodes[i].Edges.totalCount[79] == nil {
-								nodes[i].Edges.totalCount[79] = make(map[string]int)
+							if nodes[i].Edges.totalCount[80] == nil {
+								nodes[i].Edges.totalCount[80] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[79][alias] = n
+							nodes[i].Edges.totalCount[80][alias] = n
 						}
 						return nil
 					})
@@ -58308,10 +58400,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[81] == nil {
-								nodes[i].Edges.totalCount[81] = make(map[string]int)
+							if nodes[i].Edges.totalCount[82] == nil {
+								nodes[i].Edges.totalCount[82] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[81][alias] = n
+							nodes[i].Edges.totalCount[82][alias] = n
 						}
 						return nil
 					})
@@ -58319,10 +58411,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.PersonalAccessTokens)
-							if nodes[i].Edges.totalCount[81] == nil {
-								nodes[i].Edges.totalCount[81] = make(map[string]int)
+							if nodes[i].Edges.totalCount[82] == nil {
+								nodes[i].Edges.totalCount[82] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[81][alias] = n
+							nodes[i].Edges.totalCount[82][alias] = n
 						}
 						return nil
 					})
@@ -58413,10 +58505,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[83] == nil {
-								nodes[i].Edges.totalCount[83] = make(map[string]int)
+							if nodes[i].Edges.totalCount[84] == nil {
+								nodes[i].Edges.totalCount[84] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[83][alias] = n
+							nodes[i].Edges.totalCount[84][alias] = n
 						}
 						return nil
 					})
@@ -58424,10 +58516,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Users)
-							if nodes[i].Edges.totalCount[83] == nil {
-								nodes[i].Edges.totalCount[83] = make(map[string]int)
+							if nodes[i].Edges.totalCount[84] == nil {
+								nodes[i].Edges.totalCount[84] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[83][alias] = n
+							nodes[i].Edges.totalCount[84][alias] = n
 						}
 						return nil
 					})
@@ -58507,10 +58599,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[84] == nil {
-								nodes[i].Edges.totalCount[84] = make(map[string]int)
+							if nodes[i].Edges.totalCount[85] == nil {
+								nodes[i].Edges.totalCount[85] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[84][alias] = n
+							nodes[i].Edges.totalCount[85][alias] = n
 						}
 						return nil
 					})
@@ -58518,10 +58610,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
-							if nodes[i].Edges.totalCount[84] == nil {
-								nodes[i].Edges.totalCount[84] = make(map[string]int)
+							if nodes[i].Edges.totalCount[85] == nil {
+								nodes[i].Edges.totalCount[85] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[84][alias] = n
+							nodes[i].Edges.totalCount[85][alias] = n
 						}
 						return nil
 					})
@@ -58601,10 +58693,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[85] == nil {
-								nodes[i].Edges.totalCount[85] = make(map[string]int)
+							if nodes[i].Edges.totalCount[86] == nil {
+								nodes[i].Edges.totalCount[86] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[85][alias] = n
+							nodes[i].Edges.totalCount[86][alias] = n
 						}
 						return nil
 					})
@@ -58612,10 +58704,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
-							if nodes[i].Edges.totalCount[85] == nil {
-								nodes[i].Edges.totalCount[85] = make(map[string]int)
+							if nodes[i].Edges.totalCount[86] == nil {
+								nodes[i].Edges.totalCount[86] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[85][alias] = n
+							nodes[i].Edges.totalCount[86][alias] = n
 						}
 						return nil
 					})
@@ -58719,10 +58811,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[88] == nil {
-								nodes[i].Edges.totalCount[88] = make(map[string]int)
+							if nodes[i].Edges.totalCount[89] == nil {
+								nodes[i].Edges.totalCount[89] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[88][alias] = n
+							nodes[i].Edges.totalCount[89][alias] = n
 						}
 						return nil
 					})
@@ -58730,10 +58822,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Invites)
-							if nodes[i].Edges.totalCount[88] == nil {
-								nodes[i].Edges.totalCount[88] = make(map[string]int)
+							if nodes[i].Edges.totalCount[89] == nil {
+								nodes[i].Edges.totalCount[89] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[88][alias] = n
+							nodes[i].Edges.totalCount[89][alias] = n
 						}
 						return nil
 					})
@@ -58809,10 +58901,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[89] == nil {
-								nodes[i].Edges.totalCount[89] = make(map[string]int)
+							if nodes[i].Edges.totalCount[90] == nil {
+								nodes[i].Edges.totalCount[90] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[89][alias] = n
+							nodes[i].Edges.totalCount[90][alias] = n
 						}
 						return nil
 					})
@@ -58820,10 +58912,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[89] == nil {
-								nodes[i].Edges.totalCount[89] = make(map[string]int)
+							if nodes[i].Edges.totalCount[90] == nil {
+								nodes[i].Edges.totalCount[90] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[89][alias] = n
+							nodes[i].Edges.totalCount[90][alias] = n
 						}
 						return nil
 					})
@@ -59382,6 +59474,11 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationsetting.FieldAllowMatchingDomainsAutojoin]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldAllowMatchingDomainsAutojoin)
 				fieldSeen[organizationsetting.FieldAllowMatchingDomainsAutojoin] = struct{}{}
+			}
+		case "externalSharingEnabled":
+			if _, ok := fieldSeen[organizationsetting.FieldExternalSharingEnabled]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldExternalSharingEnabled)
+				fieldSeen[organizationsetting.FieldExternalSharingEnabled] = struct{}{}
 			}
 		case "identityProvider":
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProvider]; !ok {
@@ -77501,6 +77598,535 @@ func newScanPaginateArgs(rv map[string]any) *scanPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*ScanWhereInput); ok {
 		args.opts = append(args.opts, WithScanFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *ShareLinkQuery) CollectFields(ctx context.Context, satisfies ...string) (*ShareLinkQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *ShareLinkQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(sharelink.Columns))
+		selectedFields = []string{sharelink.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[sharelink.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldOwnerID)
+				fieldSeen[sharelink.FieldOwnerID] = struct{}{}
+			}
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newFilePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ShareLink) error {
+						query := query.Clone()
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"share_link_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(sharelink.FilesTable)
+							s.Join(joinT).On(s.C(file.FieldID), joinT.C(sharelink.FilesPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(sharelink.FilesPrimaryKey[0]), ids...))
+							s.Select(joinT.C(sharelink.FilesPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(sharelink.FilesPrimaryKey[0]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*ShareLink) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Files)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(sharelink.FilesPrimaryKey[0], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
+
+		case "shareLinkAccessEvents":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ShareLinkAccessEventClient{config: _q.config}).Query()
+			)
+			args := newShareLinkAccessEventPaginateArgs(fieldArgs(ctx, new(ShareLinkAccessEventWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newShareLinkAccessEventPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ShareLink) error {
+						query := query.Clone()
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"share_link_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(sharelink.ShareLinkAccessEventsColumn), ids...))
+						})
+						if err := query.GroupBy(sharelink.ShareLinkAccessEventsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*ShareLink) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.ShareLinkAccessEvents)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, sharelinkaccesseventImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(sharelink.ShareLinkAccessEventsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedShareLinkAccessEvents(alias, func(wq *ShareLinkAccessEventQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[sharelink.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldCreatedAt)
+				fieldSeen[sharelink.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[sharelink.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldUpdatedAt)
+				fieldSeen[sharelink.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[sharelink.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldCreatedBy)
+				fieldSeen[sharelink.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[sharelink.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldUpdatedBy)
+				fieldSeen[sharelink.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[sharelink.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldUpdatedByImpersonator)
+				fieldSeen[sharelink.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[sharelink.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldOwnerID)
+				fieldSeen[sharelink.FieldOwnerID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[sharelink.FieldName]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldName)
+				fieldSeen[sharelink.FieldName] = struct{}{}
+			}
+		case "expiresAt":
+			if _, ok := fieldSeen[sharelink.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldExpiresAt)
+				fieldSeen[sharelink.FieldExpiresAt] = struct{}{}
+			}
+		case "maxUses":
+			if _, ok := fieldSeen[sharelink.FieldMaxUses]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldMaxUses)
+				fieldSeen[sharelink.FieldMaxUses] = struct{}{}
+			}
+		case "useCount":
+			if _, ok := fieldSeen[sharelink.FieldUseCount]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldUseCount)
+				fieldSeen[sharelink.FieldUseCount] = struct{}{}
+			}
+		case "recipientEmails":
+			if _, ok := fieldSeen[sharelink.FieldRecipientEmails]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldRecipientEmails)
+				fieldSeen[sharelink.FieldRecipientEmails] = struct{}{}
+			}
+		case "landingPage":
+			if _, ok := fieldSeen[sharelink.FieldLandingPage]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldLandingPage)
+				fieldSeen[sharelink.FieldLandingPage] = struct{}{}
+			}
+		case "requireSession":
+			if _, ok := fieldSeen[sharelink.FieldRequireSession]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldRequireSession)
+				fieldSeen[sharelink.FieldRequireSession] = struct{}{}
+			}
+		case "revokedAt":
+			if _, ok := fieldSeen[sharelink.FieldRevokedAt]; !ok {
+				selectedFields = append(selectedFields, sharelink.FieldRevokedAt)
+				fieldSeen[sharelink.FieldRevokedAt] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type sharelinkPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ShareLinkPaginateOption
+}
+
+func newShareLinkPaginateArgs(rv map[string]any) *sharelinkPaginateArgs {
+	args := &sharelinkPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ShareLinkOrder:
+			args.opts = append(args.opts, WithShareLinkOrder(v))
+		case []any:
+			var orders []*ShareLinkOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ShareLinkOrder{Field: &ShareLinkOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithShareLinkOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*ShareLinkWhereInput); ok {
+		args.opts = append(args.opts, WithShareLinkFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *ShareLinkAccessEventQuery) CollectFields(ctx context.Context, satisfies ...string) (*ShareLinkAccessEventQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *ShareLinkAccessEventQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(sharelinkaccessevent.Columns))
+		selectedFields = []string{sharelinkaccessevent.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldOwnerID)
+				fieldSeen[sharelinkaccessevent.FieldOwnerID] = struct{}{}
+			}
+
+		case "shareLink":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ShareLinkClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, sharelinkImplementors)...); err != nil {
+				return err
+			}
+			_q.withShareLink = query
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldShareLinkID]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldShareLinkID)
+				fieldSeen[sharelinkaccessevent.FieldShareLinkID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldCreatedAt)
+				fieldSeen[sharelinkaccessevent.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldUpdatedAt)
+				fieldSeen[sharelinkaccessevent.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldCreatedBy)
+				fieldSeen[sharelinkaccessevent.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldUpdatedBy)
+				fieldSeen[sharelinkaccessevent.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldUpdatedByImpersonator)
+				fieldSeen[sharelinkaccessevent.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldOwnerID)
+				fieldSeen[sharelinkaccessevent.FieldOwnerID] = struct{}{}
+			}
+		case "shareLinkID":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldShareLinkID]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldShareLinkID)
+				fieldSeen[sharelinkaccessevent.FieldShareLinkID] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldFileID)
+				fieldSeen[sharelinkaccessevent.FieldFileID] = struct{}{}
+			}
+		case "ipAddress":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldIPAddress]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldIPAddress)
+				fieldSeen[sharelinkaccessevent.FieldIPAddress] = struct{}{}
+			}
+		case "userAgent":
+			if _, ok := fieldSeen[sharelinkaccessevent.FieldUserAgent]; !ok {
+				selectedFields = append(selectedFields, sharelinkaccessevent.FieldUserAgent)
+				fieldSeen[sharelinkaccessevent.FieldUserAgent] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type sharelinkaccesseventPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ShareLinkAccessEventPaginateOption
+}
+
+func newShareLinkAccessEventPaginateArgs(rv map[string]any) *sharelinkaccesseventPaginateArgs {
+	args := &sharelinkaccesseventPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ShareLinkAccessEventOrder:
+			args.opts = append(args.opts, WithShareLinkAccessEventOrder(v))
+		case []any:
+			var orders []*ShareLinkAccessEventOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ShareLinkAccessEventOrder{Field: &ShareLinkAccessEventOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithShareLinkAccessEventOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*ShareLinkAccessEventWhereInput); ok {
+		args.opts = append(args.opts, WithShareLinkAccessEventFilter(v.Filter))
 	}
 	return args
 }

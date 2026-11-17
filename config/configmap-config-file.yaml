@@ -1699,6 +1699,15 @@ data:
       linkttl: {{ .Values.openlane.coreConfiguration.shortlinks.linkttl | quote }}
       {{- end }}
     {{- end }}
+    {{- if .Values.openlane.coreConfiguration.storagelinks }}
+    storagelinks:
+      {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.storagelinks.enabled) }}
+      enabled: {{ .Values.openlane.coreConfiguration.storagelinks.enabled }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.storagelinks.baseurl }}
+      baseurl: {{ .Values.openlane.coreConfiguration.storagelinks.baseurl | quote }}
+      {{- end }}
+    {{- end }}
     {{- if .Values.openlane.coreConfiguration.backfill }}
     backfill:
       {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.backfill.enabled) }}

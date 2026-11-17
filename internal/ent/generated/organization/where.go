@@ -2364,6 +2364,29 @@ func HasScanCreatorsWith(preds ...predicate.Group) predicate.Organization {
 	})
 }
 
+// HasShareLinkCreators applies the HasEdge predicate on the "share_link_creators" edge.
+func HasShareLinkCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ShareLinkCreatorsTable, ShareLinkCreatorsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasShareLinkCreatorsWith applies the HasEdge predicate on the "share_link_creators" edge with a given conditions (other predicates).
+func HasShareLinkCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newShareLinkCreatorsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasSLADefinitionCreators applies the HasEdge predicate on the "sla_definition_creators" edge.
 func HasSLADefinitionCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -5001,6 +5024,52 @@ func HasCheckResults() predicate.Organization {
 func HasCheckResultsWith(preds ...predicate.CheckResult) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := newCheckResultsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasShareLinks applies the HasEdge predicate on the "share_links" edge.
+func HasShareLinks() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ShareLinksTable, ShareLinksColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasShareLinksWith applies the HasEdge predicate on the "share_links" edge with a given conditions (other predicates).
+func HasShareLinksWith(preds ...predicate.ShareLink) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newShareLinksStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasShareLinkAccessEvents applies the HasEdge predicate on the "share_link_access_events" edge.
+func HasShareLinkAccessEvents() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ShareLinkAccessEventsTable, ShareLinkAccessEventsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasShareLinkAccessEventsWith applies the HasEdge predicate on the "share_link_access_events" edge with a given conditions (other predicates).
+func HasShareLinkAccessEventsWith(preds ...predicate.ShareLinkAccessEvent) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newShareLinkAccessEventsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

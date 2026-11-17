@@ -603,6 +603,7 @@ var ForeignKeys = []string{
 	"organization_review_creators",
 	"organization_risk_creators",
 	"organization_scan_creators",
+	"organization_share_link_creators",
 	"organization_sla_definition_creators",
 	"organization_standard_creators",
 	"organization_subcontrol_creators",

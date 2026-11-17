@@ -529,6 +529,12 @@ type TestGraphClient interface {
 	GetScans(ctx context.Context, first *int64, last *int64, where *ScanWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScans, error)
 	UpdateScan(ctx context.Context, updateScanID string, input UpdateScanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateScan, error)
 	GlobalSearch(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*GlobalSearch, error)
+	CreateShareLink(ctx context.Context, input CreateShareLinkInput, interceptors ...clientv2.RequestInterceptor) (*CreateShareLink, error)
+	DeleteShareLink(ctx context.Context, deleteShareLinkID string, interceptors ...clientv2.RequestInterceptor) (*DeleteShareLink, error)
+	GetAllShareLinks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ShareLinkOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllShareLinks, error)
+	GetShareLinkByID(ctx context.Context, shareLinkID string, interceptors ...clientv2.RequestInterceptor) (*GetShareLinkByID, error)
+	GetShareLinks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ShareLinkOrder, where *ShareLinkWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetShareLinks, error)
+	UpdateShareLink(ctx context.Context, updateShareLinkID string, input UpdateShareLinkInput, interceptors ...clientv2.RequestInterceptor) (*UpdateShareLink, error)
 	CreateBulkCSVSLADefinition(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSLADefinition, error)
 	CreateBulkSLADefinition(ctx context.Context, input []*CreateSLADefinitionInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSLADefinition, error)
 	CreateSLADefinition(ctx context.Context, input CreateSLADefinitionInput, interceptors ...clientv2.RequestInterceptor) (*CreateSLADefinition, error)
@@ -88693,6 +88699,7 @@ type GetOrganizationSettingByID_OrganizationSetting struct {
 	CreatedAt                        *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                        *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Domains                          []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
+	ExternalSharingEnabled           *bool                                                        "json:\"externalSharingEnabled,omitempty\" graphql:\"externalSharingEnabled\""
 	GeoLocation                      *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID                               string                                                       "json:\"id\" graphql:\"id\""
 	IdentityProvider                 *enums.SSOProvider                                           "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
@@ -88785,6 +88792,12 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetDomains() []string {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
 	}
 	return t.Domains
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetExternalSharingEnabled() *bool {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.ExternalSharingEnabled
 }
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetGeoLocation() *enums.Region {
 	if t == nil {
@@ -89165,6 +89178,7 @@ type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting str
 	CreatedAt                        *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                        *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Domains                          []string                                                                              "json:\"domains,omitempty\" graphql:\"domains\""
+	ExternalSharingEnabled           *bool                                                                                 "json:\"externalSharingEnabled,omitempty\" graphql:\"externalSharingEnabled\""
 	GeoLocation                      *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID                               string                                                                                "json:\"id\" graphql:\"id\""
 	IdentityProvider                 *enums.SSOProvider                                                                    "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
@@ -89257,6 +89271,12 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
 	}
 	return t.Domains
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetExternalSharingEnabled() *bool {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.ExternalSharingEnabled
 }
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetGeoLocation() *enums.Region {
 	if t == nil {
@@ -124394,6 +124414,889 @@ func (t *GlobalSearch_Search) GetVulnerabilities() *GlobalSearch_Search_Vulnerab
 		t = &GlobalSearch_Search{}
 	}
 	return t.Vulnerabilities
+}
+
+type CreateShareLink_CreateShareLink_ShareLink_Files_Edges_Node struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateShareLink_CreateShareLink_ShareLink_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink_Files_Edges_Node{}
+	}
+	return t.ID
+}
+
+type CreateShareLink_CreateShareLink_ShareLink_Files_Edges struct {
+	Node *CreateShareLink_CreateShareLink_ShareLink_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateShareLink_CreateShareLink_ShareLink_Files_Edges) GetNode() *CreateShareLink_CreateShareLink_ShareLink_Files_Edges_Node {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink_Files_Edges{}
+	}
+	return t.Node
+}
+
+type CreateShareLink_CreateShareLink_ShareLink_Files struct {
+	Edges      []*CreateShareLink_CreateShareLink_ShareLink_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateShareLink_CreateShareLink_ShareLink_Files) GetEdges() []*CreateShareLink_CreateShareLink_ShareLink_Files_Edges {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink_Files{}
+	}
+	return t.Edges
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink_Files) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink_Files{}
+	}
+	return t.TotalCount
+}
+
+type CreateShareLink_CreateShareLink_ShareLink struct {
+	CreatedAt             *time.Time                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt             *time.Time                                      "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	Files                 CreateShareLink_CreateShareLink_ShareLink_Files "json:\"files\" graphql:\"files\""
+	ID                    string                                          "json:\"id\" graphql:\"id\""
+	LandingPage           *bool                                           "json:\"landingPage,omitempty\" graphql:\"landingPage\""
+	MaxUses               *int64                                          "json:\"maxUses,omitempty\" graphql:\"maxUses\""
+	Name                  *string                                         "json:\"name,omitempty\" graphql:\"name\""
+	OwnerID               *string                                         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RecipientEmails       []string                                        "json:\"recipientEmails,omitempty\" graphql:\"recipientEmails\""
+	RequireSession        *bool                                           "json:\"requireSession,omitempty\" graphql:\"requireSession\""
+	RevokedAt             *time.Time                                      "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	UpdatedAt             *time.Time                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                                         "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseCount              int64                                           "json:\"useCount\" graphql:\"useCount\""
+}
+
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.ExpiresAt
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetFiles() *CreateShareLink_CreateShareLink_ShareLink_Files {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return &t.Files
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetID() string {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.ID
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetLandingPage() *bool {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.LandingPage
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetMaxUses() *int64 {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.MaxUses
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetName() *string {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.Name
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.OwnerID
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetRecipientEmails() []string {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.RecipientEmails
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetRequireSession() *bool {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.RequireSession
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.RevokedAt
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateShareLink_CreateShareLink_ShareLink) GetUseCount() int64 {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink_ShareLink{}
+	}
+	return t.UseCount
+}
+
+type CreateShareLink_CreateShareLink struct {
+	ShareLink CreateShareLink_CreateShareLink_ShareLink "json:\"shareLink\" graphql:\"shareLink\""
+}
+
+func (t *CreateShareLink_CreateShareLink) GetShareLink() *CreateShareLink_CreateShareLink_ShareLink {
+	if t == nil {
+		t = &CreateShareLink_CreateShareLink{}
+	}
+	return &t.ShareLink
+}
+
+type DeleteShareLink_DeleteShareLink struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteShareLink_DeleteShareLink) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteShareLink_DeleteShareLink{}
+	}
+	return t.DeletedID
+}
+
+type GetAllShareLinks_ShareLinks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllShareLinks_ShareLinks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllShareLinks_ShareLinks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllShareLinks_ShareLinks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllShareLinks_ShareLinks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllShareLinks_ShareLinks_Edges_Node struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt             *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	LandingPage           *bool      "json:\"landingPage,omitempty\" graphql:\"landingPage\""
+	MaxUses               *int64     "json:\"maxUses,omitempty\" graphql:\"maxUses\""
+	Name                  *string    "json:\"name,omitempty\" graphql:\"name\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RecipientEmails       []string   "json:\"recipientEmails,omitempty\" graphql:\"recipientEmails\""
+	RequireSession        *bool      "json:\"requireSession,omitempty\" graphql:\"requireSession\""
+	RevokedAt             *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseCount              int64      "json:\"useCount\" graphql:\"useCount\""
+}
+
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.ExpiresAt
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetLandingPage() *bool {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.LandingPage
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetMaxUses() *int64 {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.MaxUses
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetName() *string {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetRecipientEmails() []string {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.RecipientEmails
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetRequireSession() *bool {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.RequireSession
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetAllShareLinks_ShareLinks_Edges_Node) GetUseCount() int64 {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.UseCount
+}
+
+type GetAllShareLinks_ShareLinks_Edges struct {
+	Node *GetAllShareLinks_ShareLinks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllShareLinks_ShareLinks_Edges) GetNode() *GetAllShareLinks_ShareLinks_Edges_Node {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllShareLinks_ShareLinks struct {
+	Edges      []*GetAllShareLinks_ShareLinks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllShareLinks_ShareLinks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllShareLinks_ShareLinks) GetEdges() []*GetAllShareLinks_ShareLinks_Edges {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks{}
+	}
+	return t.Edges
+}
+func (t *GetAllShareLinks_ShareLinks) GetPageInfo() *GetAllShareLinks_ShareLinks_PageInfo {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllShareLinks_ShareLinks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllShareLinks_ShareLinks{}
+	}
+	return t.TotalCount
+}
+
+type GetShareLinkByID_ShareLink_Files_Edges_Node struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *GetShareLinkByID_ShareLink_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_Files_Edges_Node{}
+	}
+	return t.ID
+}
+
+type GetShareLinkByID_ShareLink_Files_Edges struct {
+	Node *GetShareLinkByID_ShareLink_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetShareLinkByID_ShareLink_Files_Edges) GetNode() *GetShareLinkByID_ShareLink_Files_Edges_Node {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetShareLinkByID_ShareLink_Files struct {
+	Edges      []*GetShareLinkByID_ShareLink_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetShareLinkByID_ShareLink_Files) GetEdges() []*GetShareLinkByID_ShareLink_Files_Edges {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_Files{}
+	}
+	return t.Edges
+}
+func (t *GetShareLinkByID_ShareLink_Files) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_Files{}
+	}
+	return t.TotalCount
+}
+
+type GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	FileID    string     "json:\"fileID\" graphql:\"fileID\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	IPAddress *string    "json:\"ipAddress,omitempty\" graphql:\"ipAddress\""
+	UserAgent *string    "json:\"userAgent,omitempty\" graphql:\"userAgent\""
+}
+
+func (t *GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node) GetFileID() string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node{}
+	}
+	return t.FileID
+}
+func (t *GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node) GetIPAddress() *string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node{}
+	}
+	return t.IPAddress
+}
+func (t *GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node) GetUserAgent() *string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node{}
+	}
+	return t.UserAgent
+}
+
+type GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges struct {
+	Node *GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges) GetNode() *GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges_Node {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges{}
+	}
+	return t.Node
+}
+
+type GetShareLinkByID_ShareLink_ShareLinkAccessEvents struct {
+	Edges      []*GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetShareLinkByID_ShareLink_ShareLinkAccessEvents) GetEdges() []*GetShareLinkByID_ShareLink_ShareLinkAccessEvents_Edges {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_ShareLinkAccessEvents{}
+	}
+	return t.Edges
+}
+func (t *GetShareLinkByID_ShareLink_ShareLinkAccessEvents) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink_ShareLinkAccessEvents{}
+	}
+	return t.TotalCount
+}
+
+type GetShareLinkByID_ShareLink struct {
+	CreatedAt             *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt             *time.Time                                       "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	Files                 GetShareLinkByID_ShareLink_Files                 "json:\"files\" graphql:\"files\""
+	ID                    string                                           "json:\"id\" graphql:\"id\""
+	LandingPage           *bool                                            "json:\"landingPage,omitempty\" graphql:\"landingPage\""
+	MaxUses               *int64                                           "json:\"maxUses,omitempty\" graphql:\"maxUses\""
+	Name                  *string                                          "json:\"name,omitempty\" graphql:\"name\""
+	OwnerID               *string                                          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RecipientEmails       []string                                         "json:\"recipientEmails,omitempty\" graphql:\"recipientEmails\""
+	RequireSession        *bool                                            "json:\"requireSession,omitempty\" graphql:\"requireSession\""
+	RevokedAt             *time.Time                                       "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	ShareLinkAccessEvents GetShareLinkByID_ShareLink_ShareLinkAccessEvents "json:\"shareLinkAccessEvents\" graphql:\"shareLinkAccessEvents\""
+	UpdatedAt             *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                                          "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseCount              int64                                            "json:\"useCount\" graphql:\"useCount\""
+}
+
+func (t *GetShareLinkByID_ShareLink) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.CreatedAt
+}
+func (t *GetShareLinkByID_ShareLink) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.CreatedBy
+}
+func (t *GetShareLinkByID_ShareLink) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.ExpiresAt
+}
+func (t *GetShareLinkByID_ShareLink) GetFiles() *GetShareLinkByID_ShareLink_Files {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return &t.Files
+}
+func (t *GetShareLinkByID_ShareLink) GetID() string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.ID
+}
+func (t *GetShareLinkByID_ShareLink) GetLandingPage() *bool {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.LandingPage
+}
+func (t *GetShareLinkByID_ShareLink) GetMaxUses() *int64 {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.MaxUses
+}
+func (t *GetShareLinkByID_ShareLink) GetName() *string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.Name
+}
+func (t *GetShareLinkByID_ShareLink) GetOwnerID() *string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.OwnerID
+}
+func (t *GetShareLinkByID_ShareLink) GetRecipientEmails() []string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.RecipientEmails
+}
+func (t *GetShareLinkByID_ShareLink) GetRequireSession() *bool {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.RequireSession
+}
+func (t *GetShareLinkByID_ShareLink) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.RevokedAt
+}
+func (t *GetShareLinkByID_ShareLink) GetShareLinkAccessEvents() *GetShareLinkByID_ShareLink_ShareLinkAccessEvents {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return &t.ShareLinkAccessEvents
+}
+func (t *GetShareLinkByID_ShareLink) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetShareLinkByID_ShareLink) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetShareLinkByID_ShareLink) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetShareLinkByID_ShareLink) GetUseCount() int64 {
+	if t == nil {
+		t = &GetShareLinkByID_ShareLink{}
+	}
+	return t.UseCount
+}
+
+type GetShareLinks_ShareLinks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetShareLinks_ShareLinks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetShareLinks_ShareLinks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetShareLinks_ShareLinks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetShareLinks_ShareLinks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetShareLinks_ShareLinks_Edges_Node struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt             *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	LandingPage           *bool      "json:\"landingPage,omitempty\" graphql:\"landingPage\""
+	MaxUses               *int64     "json:\"maxUses,omitempty\" graphql:\"maxUses\""
+	Name                  *string    "json:\"name,omitempty\" graphql:\"name\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RecipientEmails       []string   "json:\"recipientEmails,omitempty\" graphql:\"recipientEmails\""
+	RequireSession        *bool      "json:\"requireSession,omitempty\" graphql:\"requireSession\""
+	RevokedAt             *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseCount              int64      "json:\"useCount\" graphql:\"useCount\""
+}
+
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.ExpiresAt
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetLandingPage() *bool {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.LandingPage
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetMaxUses() *int64 {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.MaxUses
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetName() *string {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetRecipientEmails() []string {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.RecipientEmails
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetRequireSession() *bool {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.RequireSession
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetShareLinks_ShareLinks_Edges_Node) GetUseCount() int64 {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges_Node{}
+	}
+	return t.UseCount
+}
+
+type GetShareLinks_ShareLinks_Edges struct {
+	Node *GetShareLinks_ShareLinks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetShareLinks_ShareLinks_Edges) GetNode() *GetShareLinks_ShareLinks_Edges_Node {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks_Edges{}
+	}
+	return t.Node
+}
+
+type GetShareLinks_ShareLinks struct {
+	Edges      []*GetShareLinks_ShareLinks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetShareLinks_ShareLinks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetShareLinks_ShareLinks) GetEdges() []*GetShareLinks_ShareLinks_Edges {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks{}
+	}
+	return t.Edges
+}
+func (t *GetShareLinks_ShareLinks) GetPageInfo() *GetShareLinks_ShareLinks_PageInfo {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks{}
+	}
+	return &t.PageInfo
+}
+func (t *GetShareLinks_ShareLinks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetShareLinks_ShareLinks{}
+	}
+	return t.TotalCount
+}
+
+type UpdateShareLink_UpdateShareLink_ShareLink struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt             *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	LandingPage           *bool      "json:\"landingPage,omitempty\" graphql:\"landingPage\""
+	MaxUses               *int64     "json:\"maxUses,omitempty\" graphql:\"maxUses\""
+	Name                  *string    "json:\"name,omitempty\" graphql:\"name\""
+	OwnerID               *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RecipientEmails       []string   "json:\"recipientEmails,omitempty\" graphql:\"recipientEmails\""
+	RequireSession        *bool      "json:\"requireSession,omitempty\" graphql:\"requireSession\""
+	RevokedAt             *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseCount              int64      "json:\"useCount\" graphql:\"useCount\""
+}
+
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.ExpiresAt
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetID() string {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.ID
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetLandingPage() *bool {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.LandingPage
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetMaxUses() *int64 {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.MaxUses
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetName() *string {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.Name
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetRecipientEmails() []string {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.RecipientEmails
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetRequireSession() *bool {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.RequireSession
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.RevokedAt
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateShareLink_UpdateShareLink_ShareLink) GetUseCount() int64 {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink_ShareLink{}
+	}
+	return t.UseCount
+}
+
+type UpdateShareLink_UpdateShareLink struct {
+	ShareLink UpdateShareLink_UpdateShareLink_ShareLink "json:\"shareLink\" graphql:\"shareLink\""
+}
+
+func (t *UpdateShareLink_UpdateShareLink) GetShareLink() *UpdateShareLink_UpdateShareLink_ShareLink {
+	if t == nil {
+		t = &UpdateShareLink_UpdateShareLink{}
+	}
+	return &t.ShareLink
 }
 
 type CreateBulkCSVSLADefinition_CreateBulkCSVSLADefinition_SLADefinitions struct {
@@ -182737,6 +183640,72 @@ func (t *GlobalSearch) GetSearch() *GlobalSearch_Search {
 	return t.Search
 }
 
+type CreateShareLink struct {
+	CreateShareLink CreateShareLink_CreateShareLink "json:\"createShareLink\" graphql:\"createShareLink\""
+}
+
+func (t *CreateShareLink) GetCreateShareLink() *CreateShareLink_CreateShareLink {
+	if t == nil {
+		t = &CreateShareLink{}
+	}
+	return &t.CreateShareLink
+}
+
+type DeleteShareLink struct {
+	DeleteShareLink DeleteShareLink_DeleteShareLink "json:\"deleteShareLink\" graphql:\"deleteShareLink\""
+}
+
+func (t *DeleteShareLink) GetDeleteShareLink() *DeleteShareLink_DeleteShareLink {
+	if t == nil {
+		t = &DeleteShareLink{}
+	}
+	return &t.DeleteShareLink
+}
+
+type GetAllShareLinks struct {
+	ShareLinks GetAllShareLinks_ShareLinks "json:\"shareLinks\" graphql:\"shareLinks\""
+}
+
+func (t *GetAllShareLinks) GetShareLinks() *GetAllShareLinks_ShareLinks {
+	if t == nil {
+		t = &GetAllShareLinks{}
+	}
+	return &t.ShareLinks
+}
+
+type GetShareLinkByID struct {
+	ShareLink GetShareLinkByID_ShareLink "json:\"shareLink\" graphql:\"shareLink\""
+}
+
+func (t *GetShareLinkByID) GetShareLink() *GetShareLinkByID_ShareLink {
+	if t == nil {
+		t = &GetShareLinkByID{}
+	}
+	return &t.ShareLink
+}
+
+type GetShareLinks struct {
+	ShareLinks GetShareLinks_ShareLinks "json:\"shareLinks\" graphql:\"shareLinks\""
+}
+
+func (t *GetShareLinks) GetShareLinks() *GetShareLinks_ShareLinks {
+	if t == nil {
+		t = &GetShareLinks{}
+	}
+	return &t.ShareLinks
+}
+
+type UpdateShareLink struct {
+	UpdateShareLink UpdateShareLink_UpdateShareLink "json:\"updateShareLink\" graphql:\"updateShareLink\""
+}
+
+func (t *UpdateShareLink) GetUpdateShareLink() *UpdateShareLink_UpdateShareLink {
+	if t == nil {
+		t = &UpdateShareLink{}
+	}
+	return &t.UpdateShareLink
+}
+
 type CreateBulkCSVSLADefinition struct {
 	CreateBulkCSVSLADefinition CreateBulkCSVSLADefinition_CreateBulkCSVSLADefinition "json:\"createBulkCSVSLADefinition\" graphql:\"createBulkCSVSLADefinition\""
 }
@@ -207826,6 +208795,7 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 		createdAt
 		createdBy
 		domains
+		externalSharingEnabled
 		geoLocation
 		id
 		identityProvider
@@ -207941,6 +208911,7 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			createdAt
 			createdBy
 			domains
+			externalSharingEnabled
 			geoLocation
 			id
 			identityProvider
@@ -216031,6 +217002,284 @@ func (c *Client) GlobalSearch(ctx context.Context, query string, interceptors ..
 
 	var res GlobalSearch
 	if err := c.Client.Post(ctx, "GlobalSearch", GlobalSearchDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateShareLinkDocument = `mutation CreateShareLink ($input: CreateShareLinkInput!) {
+	createShareLink(input: $input) {
+		shareLink {
+			createdAt
+			createdBy
+			expiresAt
+			id
+			landingPage
+			maxUses
+			name
+			ownerID
+			recipientEmails
+			requireSession
+			revokedAt
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			useCount
+			files {
+				totalCount
+				edges {
+					node {
+						id
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateShareLink(ctx context.Context, input CreateShareLinkInput, interceptors ...clientv2.RequestInterceptor) (*CreateShareLink, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateShareLink
+	if err := c.Client.Post(ctx, "CreateShareLink", CreateShareLinkDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteShareLinkDocument = `mutation DeleteShareLink ($deleteShareLinkId: ID!) {
+	deleteShareLink(id: $deleteShareLinkId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteShareLink(ctx context.Context, deleteShareLinkID string, interceptors ...clientv2.RequestInterceptor) (*DeleteShareLink, error) {
+	vars := map[string]any{
+		"deleteShareLinkId": deleteShareLinkID,
+	}
+
+	var res DeleteShareLink
+	if err := c.Client.Post(ctx, "DeleteShareLink", DeleteShareLinkDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllShareLinksDocument = `query GetAllShareLinks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ShareLinkOrder!]) {
+	shareLinks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				expiresAt
+				id
+				landingPage
+				maxUses
+				name
+				ownerID
+				recipientEmails
+				requireSession
+				revokedAt
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				useCount
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllShareLinks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ShareLinkOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllShareLinks, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
+
+	var res GetAllShareLinks
+	if err := c.Client.Post(ctx, "GetAllShareLinks", GetAllShareLinksDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetShareLinkByIDDocument = `query GetShareLinkByID ($shareLinkId: ID!) {
+	shareLink(id: $shareLinkId) {
+		createdAt
+		createdBy
+		expiresAt
+		id
+		landingPage
+		maxUses
+		name
+		ownerID
+		recipientEmails
+		requireSession
+		revokedAt
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		useCount
+		files {
+			totalCount
+			edges {
+				node {
+					id
+				}
+			}
+		}
+		shareLinkAccessEvents {
+			totalCount
+			edges {
+				node {
+					id
+					createdAt
+					fileID
+					ipAddress
+					userAgent
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetShareLinkByID(ctx context.Context, shareLinkID string, interceptors ...clientv2.RequestInterceptor) (*GetShareLinkByID, error) {
+	vars := map[string]any{
+		"shareLinkId": shareLinkID,
+	}
+
+	var res GetShareLinkByID
+	if err := c.Client.Post(ctx, "GetShareLinkByID", GetShareLinkByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetShareLinksDocument = `query GetShareLinks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ShareLinkOrder!], $where: ShareLinkWhereInput) {
+	shareLinks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				expiresAt
+				id
+				landingPage
+				maxUses
+				name
+				ownerID
+				recipientEmails
+				requireSession
+				revokedAt
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				useCount
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetShareLinks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ShareLinkOrder, where *ShareLinkWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetShareLinks, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+		"where":   where,
+	}
+
+	var res GetShareLinks
+	if err := c.Client.Post(ctx, "GetShareLinks", GetShareLinksDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateShareLinkDocument = `mutation UpdateShareLink ($updateShareLinkId: ID!, $input: UpdateShareLinkInput!) {
+	updateShareLink(id: $updateShareLinkId, input: $input) {
+		shareLink {
+			createdAt
+			createdBy
+			expiresAt
+			id
+			landingPage
+			maxUses
+			name
+			ownerID
+			recipientEmails
+			requireSession
+			revokedAt
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			useCount
+		}
+	}
+}
+`
+
+func (c *Client) UpdateShareLink(ctx context.Context, updateShareLinkID string, input UpdateShareLinkInput, interceptors ...clientv2.RequestInterceptor) (*UpdateShareLink, error) {
+	vars := map[string]any{
+		"updateShareLinkId": updateShareLinkID,
+		"input":             input,
+	}
+
+	var res UpdateShareLink
+	if err := c.Client.Post(ctx, "UpdateShareLink", UpdateShareLinkDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -230664,6 +231913,12 @@ var DocumentOperationNames = map[string]string{
 	GetScansDocument:                                    "GetScans",
 	UpdateScanDocument:                                  "UpdateScan",
 	GlobalSearchDocument:                                "GlobalSearch",
+	CreateShareLinkDocument:                             "CreateShareLink",
+	DeleteShareLinkDocument:                             "DeleteShareLink",
+	GetAllShareLinksDocument:                            "GetAllShareLinks",
+	GetShareLinkByIDDocument:                            "GetShareLinkByID",
+	GetShareLinksDocument:                               "GetShareLinks",
+	UpdateShareLinkDocument:                             "UpdateShareLink",
 	CreateBulkCSVSLADefinitionDocument:                  "CreateBulkCSVSLADefinition",
 	CreateBulkSLADefinitionDocument:                     "CreateBulkSLADefinition",
 	CreateSLADefinitionDocument:                         "CreateSLADefinition",

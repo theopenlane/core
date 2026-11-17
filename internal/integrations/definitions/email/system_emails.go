@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/samber/lo"
@@ -260,6 +261,19 @@ type OrgDeletionNoticeEmail struct {
 	BillingURL string `json:"billingURL,omitempty" jsonschema:"description=Billing link the button points at"`
 }
 
+// ShareLinkCodeEmail is the input for the share link verification code sent to a recipient-bound share
+type ShareLinkCodeEmail struct {
+	RecipientInfo
+	// OrgName is the name of the organization sharing the file
+	OrgName string `json:"org_name,omitempty" jsonschema:"description=Organization name"`
+	// ShareName is the display name of the share link, when it has one
+	ShareName string `json:"share_name,omitempty" jsonschema:"description=Share link name"`
+	// Code is the verification code the recipient enters on the share landing page
+	Code string `json:"code" jsonschema:"required,description=Verification code"`
+	// ExpiresInMinutes is how long the code stays valid
+	ExpiresInMinutes int `json:"expires_in_minutes" jsonschema:"required,description=Minutes until the code expires"`
+}
+
 // TrustCenterNDAApprovalRequestEmail is the input for notifying the organization's designated approver that an NDA request is pending approval
 type TrustCenterNDAApprovalRequestEmail struct {
 	RecipientInfo
@@ -291,6 +305,7 @@ var (
 	BillingEmailChangedOp  = types.OperationPayloadOf[BillingEmailChangedEmail]()           //nolint:revive
 	OrgDeletionNoticeOp    = types.OperationPayloadOf[OrgDeletionNoticeEmail]()             //nolint:revive
 	TCNDAApprovalRequestOp = types.OperationPayloadOf[TrustCenterNDAApprovalRequestEmail]() //nolint:revive
+	ShareLinkCodeOp        = types.OperationPayloadOf[ShareLinkCodeEmail]()                 //nolint:revive
 )
 
 var _ = RegisterEmailOperation(Operation[VerifyEmailRequest]{
@@ -795,6 +810,46 @@ var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
 		}
 	},
 })
+
+var _ = RegisterEmailOperation(Operation[ShareLinkCodeEmail]{
+	Op: ShareLinkCodeOp, Theme: baseTheme,
+	Description: "System email delivering the verification code for a share link bound to the recipient's email address",
+	Subject: func(_ RuntimeEmailConfig, req ShareLinkCodeEmail) string {
+		return "Your verification code for a file shared by " + shareLinkSender(req)
+	},
+	Build: func(cfg RuntimeEmailConfig, req ShareLinkCodeEmail) render.ContentBody {
+		sender := shareLinkSender(req)
+
+		return render.ContentBody{
+			Preheader: "Your verification code for a file shared by " + sender,
+			Header:    defaultHeader(cfg),
+			Title:     sender + " shared a file with you",
+			Intros: render.IntrosBlock{
+				Paragraphs: []string{
+					"Enter the code below on the share page to verify this email address and download " + shareLinkSubject(req) + ".",
+				},
+			},
+			Actions: []render.Action{{
+				Instructions: "This code expires in " + strconv.Itoa(req.ExpiresInMinutes) + " minutes. If you did not request it, you can ignore this email.",
+				InviteCode:   req.Code,
+			}},
+		}
+	},
+})
+
+// shareLinkSender names who shared the file in a share link code email
+func shareLinkSender(req ShareLinkCodeEmail) string {
+	return cmp.Or(req.OrgName, "an Openlane organization")
+}
+
+// shareLinkSubject names what was shared in a share link code email
+func shareLinkSubject(req ShareLinkCodeEmail) string {
+	if req.ShareName != "" {
+		return strconv.Quote(req.ShareName)
+	}
+
+	return "the shared file"
+}
 
 // AllEmailOperations returns all system email operation registrations for wiring into the builder
 func AllEmailOperations() []types.OperationRegistration {

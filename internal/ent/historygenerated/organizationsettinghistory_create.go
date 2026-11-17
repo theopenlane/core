@@ -301,6 +301,20 @@ func (_c *OrganizationSettingHistoryCreate) SetNillableAllowMatchingDomainsAutoj
 	return _c
 }
 
+// SetExternalSharingEnabled sets the "external_sharing_enabled" field.
+func (_c *OrganizationSettingHistoryCreate) SetExternalSharingEnabled(v bool) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetExternalSharingEnabled(v)
+	return _c
+}
+
+// SetNillableExternalSharingEnabled sets the "external_sharing_enabled" field if the given value is not nil.
+func (_c *OrganizationSettingHistoryCreate) SetNillableExternalSharingEnabled(v *bool) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetExternalSharingEnabled(*v)
+	}
+	return _c
+}
+
 // SetIdentityProvider sets the "identity_provider" field.
 func (_c *OrganizationSettingHistoryCreate) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingHistoryCreate {
 	_c.mutation.SetIdentityProvider(v)
@@ -625,6 +639,10 @@ func (_c *OrganizationSettingHistoryCreate) defaults() error {
 		v := organizationsettinghistory.DefaultAllowMatchingDomainsAutojoin
 		_c.mutation.SetAllowMatchingDomainsAutojoin(v)
 	}
+	if _, ok := _c.mutation.ExternalSharingEnabled(); !ok {
+		v := organizationsettinghistory.DefaultExternalSharingEnabled
+		_c.mutation.SetExternalSharingEnabled(v)
+	}
 	if _, ok := _c.mutation.IdentityProvider(); !ok {
 		v := organizationsettinghistory.DefaultIdentityProvider
 		_c.mutation.SetIdentityProvider(v)
@@ -823,6 +841,10 @@ func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHi
 	if value, ok := _c.mutation.AllowMatchingDomainsAutojoin(); ok {
 		_spec.SetField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool, value)
 		_node.AllowMatchingDomainsAutojoin = value
+	}
+	if value, ok := _c.mutation.ExternalSharingEnabled(); ok {
+		_spec.SetField(organizationsettinghistory.FieldExternalSharingEnabled, field.TypeBool, value)
+		_node.ExternalSharingEnabled = value
 	}
 	if value, ok := _c.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)

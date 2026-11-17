@@ -86,6 +86,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -201,6 +203,8 @@ const (
 	TypeRisk                        = "Risk"
 	TypeSLADefinition               = "SLADefinition"
 	TypeScan                        = "Scan"
+	TypeShareLink                   = "ShareLink"
+	TypeShareLinkAccessEvent        = "ShareLinkAccessEvent"
 	TypeStandard                    = "Standard"
 	TypeSubcontrol                  = "Subcontrol"
 	TypeSubprocessor                = "Subprocessor"
@@ -93460,6 +93464,9 @@ type FileMutation struct {
 	trust_center_entities                  map[string]struct{}
 	removedtrust_center_entities           map[string]struct{}
 	clearedtrust_center_entities           bool
+	share_links                            map[string]struct{}
+	removedshare_links                     map[string]struct{}
+	clearedshare_links                     bool
 	trust_center_doc                       map[string]struct{}
 	removedtrust_center_doc                map[string]struct{}
 	clearedtrust_center_doc                bool
@@ -96321,6 +96328,60 @@ func (m *FileMutation) ResetTrustCenterEntities() {
 	m.removedtrust_center_entities = nil
 }
 
+// AddShareLinkIDs adds the "share_links" edge to the ShareLink entity by ids.
+func (m *FileMutation) AddShareLinkIDs(ids ...string) {
+	if m.share_links == nil {
+		m.share_links = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.share_links[ids[i]] = struct{}{}
+	}
+}
+
+// ClearShareLinks clears the "share_links" edge to the ShareLink entity.
+func (m *FileMutation) ClearShareLinks() {
+	m.clearedshare_links = true
+}
+
+// ShareLinksCleared reports if the "share_links" edge to the ShareLink entity was cleared.
+func (m *FileMutation) ShareLinksCleared() bool {
+	return m.clearedshare_links
+}
+
+// RemoveShareLinkIDs removes the "share_links" edge to the ShareLink entity by IDs.
+func (m *FileMutation) RemoveShareLinkIDs(ids ...string) {
+	if m.removedshare_links == nil {
+		m.removedshare_links = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.share_links, ids[i])
+		m.removedshare_links[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedShareLinks returns the removed IDs of the "share_links" edge to the ShareLink entity.
+func (m *FileMutation) RemovedShareLinksIDs() (ids []string) {
+	for id := range m.removedshare_links {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ShareLinksIDs returns the "share_links" edge IDs in the mutation.
+func (m *FileMutation) ShareLinksIDs() (ids []string) {
+	for id := range m.share_links {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetShareLinks resets all changes to the "share_links" edge.
+func (m *FileMutation) ResetShareLinks() {
+	m.share_links = nil
+	m.clearedshare_links = false
+	m.removedshare_links = nil
+}
+
 // AddTrustCenterDocIDs adds the "trust_center_doc" edge to the TrustCenterDoc entity by ids.
 func (m *FileMutation) AddTrustCenterDocIDs(ids ...string) {
 	if m.trust_center_doc == nil {
@@ -97709,7 +97770,7 @@ func (m *FileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.environment != nil {
 		edges = append(edges, file.EdgeEnvironment)
 	}
@@ -97766,6 +97827,9 @@ func (m *FileMutation) AddedEdges() []string {
 	}
 	if m.trust_center_entities != nil {
 		edges = append(edges, file.EdgeTrustCenterEntities)
+	}
+	if m.share_links != nil {
+		edges = append(edges, file.EdgeShareLinks)
 	}
 	if m.trust_center_doc != nil {
 		edges = append(edges, file.EdgeTrustCenterDoc)
@@ -97906,6 +97970,12 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeShareLinks:
+		ids := make([]ent.Value, 0, len(m.share_links))
+		for id := range m.share_links {
+			ids = append(ids, id)
+		}
+		return ids
 	case file.EdgeTrustCenterDoc:
 		ids := make([]ent.Value, 0, len(m.trust_center_doc))
 		for id := range m.trust_center_doc {
@@ -97960,7 +98030,7 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.removedorganization != nil {
 		edges = append(edges, file.EdgeOrganization)
 	}
@@ -98008,6 +98078,9 @@ func (m *FileMutation) RemovedEdges() []string {
 	}
 	if m.removedtrust_center_entities != nil {
 		edges = append(edges, file.EdgeTrustCenterEntities)
+	}
+	if m.removedshare_links != nil {
+		edges = append(edges, file.EdgeShareLinks)
 	}
 	if m.removedtrust_center_doc != nil {
 		edges = append(edges, file.EdgeTrustCenterDoc)
@@ -98136,6 +98209,12 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeShareLinks:
+		ids := make([]ent.Value, 0, len(m.removedshare_links))
+		for id := range m.removedshare_links {
+			ids = append(ids, id)
+		}
+		return ids
 	case file.EdgeTrustCenterDoc:
 		ids := make([]ent.Value, 0, len(m.removedtrust_center_doc))
 		for id := range m.removedtrust_center_doc {
@@ -98190,7 +98269,7 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.clearedenvironment {
 		edges = append(edges, file.EdgeEnvironment)
 	}
@@ -98247,6 +98326,9 @@ func (m *FileMutation) ClearedEdges() []string {
 	}
 	if m.clearedtrust_center_entities {
 		edges = append(edges, file.EdgeTrustCenterEntities)
+	}
+	if m.clearedshare_links {
+		edges = append(edges, file.EdgeShareLinks)
 	}
 	if m.clearedtrust_center_doc {
 		edges = append(edges, file.EdgeTrustCenterDoc)
@@ -98317,6 +98399,8 @@ func (m *FileMutation) EdgeCleared(name string) bool {
 		return m.clearedsecrets
 	case file.EdgeTrustCenterEntities:
 		return m.clearedtrust_center_entities
+	case file.EdgeShareLinks:
+		return m.clearedshare_links
 	case file.EdgeTrustCenterDoc:
 		return m.clearedtrust_center_doc
 	case file.EdgeOriginalTrustCenterDoc:
@@ -98414,6 +98498,9 @@ func (m *FileMutation) ResetEdge(name string) error {
 		return nil
 	case file.EdgeTrustCenterEntities:
 		m.ResetTrustCenterEntities()
+		return nil
+	case file.EdgeShareLinks:
+		m.ResetShareLinks()
 		return nil
 	case file.EdgeTrustCenterDoc:
 		m.ResetTrustCenterDoc()
@@ -171952,6 +172039,9 @@ type OrganizationMutation struct {
 	scan_creators                                 map[string]struct{}
 	removedscan_creators                          map[string]struct{}
 	clearedscan_creators                          bool
+	share_link_creators                           map[string]struct{}
+	removedshare_link_creators                    map[string]struct{}
+	clearedshare_link_creators                    bool
 	sla_definition_creators                       map[string]struct{}
 	removedsla_definition_creators                map[string]struct{}
 	clearedsla_definition_creators                bool
@@ -172293,6 +172383,12 @@ type OrganizationMutation struct {
 	check_results                                 map[string]struct{}
 	removedcheck_results                          map[string]struct{}
 	clearedcheck_results                          bool
+	share_links                                   map[string]struct{}
+	removedshare_links                            map[string]struct{}
+	clearedshare_links                            bool
+	share_link_access_events                      map[string]struct{}
+	removedshare_link_access_events               map[string]struct{}
+	clearedshare_link_access_events               bool
 	members                                       map[string]struct{}
 	removedmembers                                map[string]struct{}
 	clearedmembers                                bool
@@ -175867,6 +175963,60 @@ func (m *OrganizationMutation) ResetScanCreators() {
 	m.scan_creators = nil
 	m.clearedscan_creators = false
 	m.removedscan_creators = nil
+}
+
+// AddShareLinkCreatorIDs adds the "share_link_creators" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddShareLinkCreatorIDs(ids ...string) {
+	if m.share_link_creators == nil {
+		m.share_link_creators = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.share_link_creators[ids[i]] = struct{}{}
+	}
+}
+
+// ClearShareLinkCreators clears the "share_link_creators" edge to the Group entity.
+func (m *OrganizationMutation) ClearShareLinkCreators() {
+	m.clearedshare_link_creators = true
+}
+
+// ShareLinkCreatorsCleared reports if the "share_link_creators" edge to the Group entity was cleared.
+func (m *OrganizationMutation) ShareLinkCreatorsCleared() bool {
+	return m.clearedshare_link_creators
+}
+
+// RemoveShareLinkCreatorIDs removes the "share_link_creators" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemoveShareLinkCreatorIDs(ids ...string) {
+	if m.removedshare_link_creators == nil {
+		m.removedshare_link_creators = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.share_link_creators, ids[i])
+		m.removedshare_link_creators[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedShareLinkCreators returns the removed IDs of the "share_link_creators" edge to the Group entity.
+func (m *OrganizationMutation) RemovedShareLinkCreatorsIDs() (ids []string) {
+	for id := range m.removedshare_link_creators {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ShareLinkCreatorsIDs returns the "share_link_creators" edge IDs in the mutation.
+func (m *OrganizationMutation) ShareLinkCreatorsIDs() (ids []string) {
+	for id := range m.share_link_creators {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetShareLinkCreators resets all changes to the "share_link_creators" edge.
+func (m *OrganizationMutation) ResetShareLinkCreators() {
+	m.share_link_creators = nil
+	m.clearedshare_link_creators = false
+	m.removedshare_link_creators = nil
 }
 
 // AddSLADefinitionCreatorIDs adds the "sla_definition_creators" edge to the Group entity by ids.
@@ -182021,6 +182171,114 @@ func (m *OrganizationMutation) ResetCheckResults() {
 	m.removedcheck_results = nil
 }
 
+// AddShareLinkIDs adds the "share_links" edge to the ShareLink entity by ids.
+func (m *OrganizationMutation) AddShareLinkIDs(ids ...string) {
+	if m.share_links == nil {
+		m.share_links = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.share_links[ids[i]] = struct{}{}
+	}
+}
+
+// ClearShareLinks clears the "share_links" edge to the ShareLink entity.
+func (m *OrganizationMutation) ClearShareLinks() {
+	m.clearedshare_links = true
+}
+
+// ShareLinksCleared reports if the "share_links" edge to the ShareLink entity was cleared.
+func (m *OrganizationMutation) ShareLinksCleared() bool {
+	return m.clearedshare_links
+}
+
+// RemoveShareLinkIDs removes the "share_links" edge to the ShareLink entity by IDs.
+func (m *OrganizationMutation) RemoveShareLinkIDs(ids ...string) {
+	if m.removedshare_links == nil {
+		m.removedshare_links = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.share_links, ids[i])
+		m.removedshare_links[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedShareLinks returns the removed IDs of the "share_links" edge to the ShareLink entity.
+func (m *OrganizationMutation) RemovedShareLinksIDs() (ids []string) {
+	for id := range m.removedshare_links {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ShareLinksIDs returns the "share_links" edge IDs in the mutation.
+func (m *OrganizationMutation) ShareLinksIDs() (ids []string) {
+	for id := range m.share_links {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetShareLinks resets all changes to the "share_links" edge.
+func (m *OrganizationMutation) ResetShareLinks() {
+	m.share_links = nil
+	m.clearedshare_links = false
+	m.removedshare_links = nil
+}
+
+// AddShareLinkAccessEventIDs adds the "share_link_access_events" edge to the ShareLinkAccessEvent entity by ids.
+func (m *OrganizationMutation) AddShareLinkAccessEventIDs(ids ...string) {
+	if m.share_link_access_events == nil {
+		m.share_link_access_events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.share_link_access_events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearShareLinkAccessEvents clears the "share_link_access_events" edge to the ShareLinkAccessEvent entity.
+func (m *OrganizationMutation) ClearShareLinkAccessEvents() {
+	m.clearedshare_link_access_events = true
+}
+
+// ShareLinkAccessEventsCleared reports if the "share_link_access_events" edge to the ShareLinkAccessEvent entity was cleared.
+func (m *OrganizationMutation) ShareLinkAccessEventsCleared() bool {
+	return m.clearedshare_link_access_events
+}
+
+// RemoveShareLinkAccessEventIDs removes the "share_link_access_events" edge to the ShareLinkAccessEvent entity by IDs.
+func (m *OrganizationMutation) RemoveShareLinkAccessEventIDs(ids ...string) {
+	if m.removedshare_link_access_events == nil {
+		m.removedshare_link_access_events = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.share_link_access_events, ids[i])
+		m.removedshare_link_access_events[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedShareLinkAccessEvents returns the removed IDs of the "share_link_access_events" edge to the ShareLinkAccessEvent entity.
+func (m *OrganizationMutation) RemovedShareLinkAccessEventsIDs() (ids []string) {
+	for id := range m.removedshare_link_access_events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ShareLinkAccessEventsIDs returns the "share_link_access_events" edge IDs in the mutation.
+func (m *OrganizationMutation) ShareLinkAccessEventsIDs() (ids []string) {
+	for id := range m.share_link_access_events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetShareLinkAccessEvents resets all changes to the "share_link_access_events" edge.
+func (m *OrganizationMutation) ResetShareLinkAccessEvents() {
+	m.share_link_access_events = nil
+	m.clearedshare_link_access_events = false
+	m.removedshare_link_access_events = nil
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by ids.
 func (m *OrganizationMutation) AddMemberIDs(ids ...string) {
 	if m.members == nil {
@@ -182596,7 +182854,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 164)
+	edges := make([]string, 0, 167)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -182740,6 +182998,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.scan_creators != nil {
 		edges = append(edges, organization.EdgeScanCreators)
+	}
+	if m.share_link_creators != nil {
+		edges = append(edges, organization.EdgeShareLinkCreators)
 	}
 	if m.sla_definition_creators != nil {
 		edges = append(edges, organization.EdgeSLADefinitionCreators)
@@ -183086,6 +183347,12 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.check_results != nil {
 		edges = append(edges, organization.EdgeCheckResults)
 	}
+	if m.share_links != nil {
+		edges = append(edges, organization.EdgeShareLinks)
+	}
+	if m.share_link_access_events != nil {
+		edges = append(edges, organization.EdgeShareLinkAccessEvents)
+	}
 	if m.members != nil {
 		edges = append(edges, organization.EdgeMembers)
 	}
@@ -183381,6 +183648,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 	case organization.EdgeScanCreators:
 		ids := make([]ent.Value, 0, len(m.scan_creators))
 		for id := range m.scan_creators {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeShareLinkCreators:
+		ids := make([]ent.Value, 0, len(m.share_link_creators))
+		for id := range m.share_link_creators {
 			ids = append(ids, id)
 		}
 		return ids
@@ -184066,6 +184339,18 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeShareLinks:
+		ids := make([]ent.Value, 0, len(m.share_links))
+		for id := range m.share_links {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeShareLinkAccessEvents:
+		ids := make([]ent.Value, 0, len(m.share_link_access_events))
+		for id := range m.share_link_access_events {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.members))
 		for id := range m.members {
@@ -184078,7 +184363,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 164)
+	edges := make([]string, 0, 167)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -184222,6 +184507,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedscan_creators != nil {
 		edges = append(edges, organization.EdgeScanCreators)
+	}
+	if m.removedshare_link_creators != nil {
+		edges = append(edges, organization.EdgeShareLinkCreators)
 	}
 	if m.removedsla_definition_creators != nil {
 		edges = append(edges, organization.EdgeSLADefinitionCreators)
@@ -184556,6 +184844,12 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedcheck_results != nil {
 		edges = append(edges, organization.EdgeCheckResults)
 	}
+	if m.removedshare_links != nil {
+		edges = append(edges, organization.EdgeShareLinks)
+	}
+	if m.removedshare_link_access_events != nil {
+		edges = append(edges, organization.EdgeShareLinkAccessEvents)
+	}
 	if m.removedmembers != nil {
 		edges = append(edges, organization.EdgeMembers)
 	}
@@ -184851,6 +185145,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 	case organization.EdgeScanCreators:
 		ids := make([]ent.Value, 0, len(m.removedscan_creators))
 		for id := range m.removedscan_creators {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeShareLinkCreators:
+		ids := make([]ent.Value, 0, len(m.removedshare_link_creators))
+		for id := range m.removedshare_link_creators {
 			ids = append(ids, id)
 		}
 		return ids
@@ -185520,6 +185820,18 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeShareLinks:
+		ids := make([]ent.Value, 0, len(m.removedshare_links))
+		for id := range m.removedshare_links {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeShareLinkAccessEvents:
+		ids := make([]ent.Value, 0, len(m.removedshare_link_access_events))
+		for id := range m.removedshare_link_access_events {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.removedmembers))
 		for id := range m.removedmembers {
@@ -185532,7 +185844,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 164)
+	edges := make([]string, 0, 167)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -185676,6 +185988,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	}
 	if m.clearedscan_creators {
 		edges = append(edges, organization.EdgeScanCreators)
+	}
+	if m.clearedshare_link_creators {
+		edges = append(edges, organization.EdgeShareLinkCreators)
 	}
 	if m.clearedsla_definition_creators {
 		edges = append(edges, organization.EdgeSLADefinitionCreators)
@@ -186022,6 +186337,12 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedcheck_results {
 		edges = append(edges, organization.EdgeCheckResults)
 	}
+	if m.clearedshare_links {
+		edges = append(edges, organization.EdgeShareLinks)
+	}
+	if m.clearedshare_link_access_events {
+		edges = append(edges, organization.EdgeShareLinkAccessEvents)
+	}
 	if m.clearedmembers {
 		edges = append(edges, organization.EdgeMembers)
 	}
@@ -186128,6 +186449,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedrisk_creators
 	case organization.EdgeScanCreators:
 		return m.clearedscan_creators
+	case organization.EdgeShareLinkCreators:
+		return m.clearedshare_link_creators
 	case organization.EdgeSLADefinitionCreators:
 		return m.clearedsla_definition_creators
 	case organization.EdgeStandardCreators:
@@ -186358,6 +186681,10 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedvendor_risk_scores
 	case organization.EdgeCheckResults:
 		return m.clearedcheck_results
+	case organization.EdgeShareLinks:
+		return m.clearedshare_links
+	case organization.EdgeShareLinkAccessEvents:
+		return m.clearedshare_link_access_events
 	case organization.EdgeMembers:
 		return m.clearedmembers
 	}
@@ -186531,6 +186858,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeScanCreators:
 		m.ResetScanCreators()
+		return nil
+	case organization.EdgeShareLinkCreators:
+		m.ResetShareLinkCreators()
 		return nil
 	case organization.EdgeSLADefinitionCreators:
 		m.ResetSLADefinitionCreators()
@@ -186876,6 +187206,12 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeCheckResults:
 		m.ResetCheckResults()
+		return nil
+	case organization.EdgeShareLinks:
+		m.ResetShareLinks()
+		return nil
+	case organization.EdgeShareLinkAccessEvents:
+		m.ResetShareLinkAccessEvents()
 		return nil
 	case organization.EdgeMembers:
 		m.ResetMembers()
@@ -188358,6 +188694,7 @@ type OrganizationSettingMutation struct {
 	allowed_email_domains               *[]string
 	appendallowed_email_domains         []string
 	allow_matching_domains_autojoin     *bool
+	external_sharing_enabled            *bool
 	identity_provider                   *enums.SSOProvider
 	identity_provider_client_id         *string
 	identity_provider_client_secret     *string
@@ -189459,6 +189796,55 @@ func (m *OrganizationSettingMutation) ResetAllowMatchingDomainsAutojoin() {
 	delete(m.clearedFields, organizationsetting.FieldAllowMatchingDomainsAutojoin)
 }
 
+// SetExternalSharingEnabled sets the "external_sharing_enabled" field.
+func (m *OrganizationSettingMutation) SetExternalSharingEnabled(b bool) {
+	m.external_sharing_enabled = &b
+}
+
+// ExternalSharingEnabled returns the value of the "external_sharing_enabled" field in the mutation.
+func (m *OrganizationSettingMutation) ExternalSharingEnabled() (r bool, exists bool) {
+	v := m.external_sharing_enabled
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalSharingEnabled returns the old "external_sharing_enabled" field's value of the OrganizationSetting entity.
+// If the OrganizationSetting object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationSettingMutation) OldExternalSharingEnabled(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalSharingEnabled is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalSharingEnabled requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalSharingEnabled: %w", err)
+	}
+	return oldValue.ExternalSharingEnabled, nil
+}
+
+// ClearExternalSharingEnabled clears the value of the "external_sharing_enabled" field.
+func (m *OrganizationSettingMutation) ClearExternalSharingEnabled() {
+	m.external_sharing_enabled = nil
+	m.clearedFields[organizationsetting.FieldExternalSharingEnabled] = struct{}{}
+}
+
+// ExternalSharingEnabledCleared returns if the "external_sharing_enabled" field was cleared in this mutation.
+func (m *OrganizationSettingMutation) ExternalSharingEnabledCleared() bool {
+	_, ok := m.clearedFields[organizationsetting.FieldExternalSharingEnabled]
+	return ok
+}
+
+// ResetExternalSharingEnabled resets all changes to the "external_sharing_enabled" field.
+func (m *OrganizationSettingMutation) ResetExternalSharingEnabled() {
+	m.external_sharing_enabled = nil
+	delete(m.clearedFields, organizationsetting.FieldExternalSharingEnabled)
+}
+
 // SetIdentityProvider sets the "identity_provider" field.
 func (m *OrganizationSettingMutation) SetIdentityProvider(ep enums.SSOProvider) {
 	m.identity_provider = &ep
@@ -190436,7 +190822,7 @@ func (m *OrganizationSettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationSettingMutation) Fields() []string {
-	fields := make([]string, 0, 37)
+	fields := make([]string, 0, 38)
 	if m.created_at != nil {
 		fields = append(fields, organizationsetting.FieldCreatedAt)
 	}
@@ -190493,6 +190879,9 @@ func (m *OrganizationSettingMutation) Fields() []string {
 	}
 	if m.allow_matching_domains_autojoin != nil {
 		fields = append(fields, organizationsetting.FieldAllowMatchingDomainsAutojoin)
+	}
+	if m.external_sharing_enabled != nil {
+		fields = append(fields, organizationsetting.FieldExternalSharingEnabled)
 	}
 	if m.identity_provider != nil {
 		fields = append(fields, organizationsetting.FieldIdentityProvider)
@@ -190594,6 +190983,8 @@ func (m *OrganizationSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.AllowedEmailDomains()
 	case organizationsetting.FieldAllowMatchingDomainsAutojoin:
 		return m.AllowMatchingDomainsAutojoin()
+	case organizationsetting.FieldExternalSharingEnabled:
+		return m.ExternalSharingEnabled()
 	case organizationsetting.FieldIdentityProvider:
 		return m.IdentityProvider()
 	case organizationsetting.FieldIdentityProviderClientID:
@@ -190677,6 +191068,8 @@ func (m *OrganizationSettingMutation) OldField(ctx context.Context, name string)
 		return m.OldAllowedEmailDomains(ctx)
 	case organizationsetting.FieldAllowMatchingDomainsAutojoin:
 		return m.OldAllowMatchingDomainsAutojoin(ctx)
+	case organizationsetting.FieldExternalSharingEnabled:
+		return m.OldExternalSharingEnabled(ctx)
 	case organizationsetting.FieldIdentityProvider:
 		return m.OldIdentityProvider(ctx)
 	case organizationsetting.FieldIdentityProviderClientID:
@@ -190854,6 +191247,13 @@ func (m *OrganizationSettingMutation) SetField(name string, value ent.Value) err
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAllowMatchingDomainsAutojoin(v)
+		return nil
+	case organizationsetting.FieldExternalSharingEnabled:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalSharingEnabled(v)
 		return nil
 	case organizationsetting.FieldIdentityProvider:
 		v, ok := value.(enums.SSOProvider)
@@ -191065,6 +191465,9 @@ func (m *OrganizationSettingMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationsetting.FieldAllowMatchingDomainsAutojoin) {
 		fields = append(fields, organizationsetting.FieldAllowMatchingDomainsAutojoin)
 	}
+	if m.FieldCleared(organizationsetting.FieldExternalSharingEnabled) {
+		fields = append(fields, organizationsetting.FieldExternalSharingEnabled)
+	}
 	if m.FieldCleared(organizationsetting.FieldIdentityProvider) {
 		fields = append(fields, organizationsetting.FieldIdentityProvider)
 	}
@@ -191175,6 +191578,9 @@ func (m *OrganizationSettingMutation) ClearField(name string) error {
 	case organizationsetting.FieldAllowMatchingDomainsAutojoin:
 		m.ClearAllowMatchingDomainsAutojoin()
 		return nil
+	case organizationsetting.FieldExternalSharingEnabled:
+		m.ClearExternalSharingEnabled()
+		return nil
 	case organizationsetting.FieldIdentityProvider:
 		m.ClearIdentityProvider()
 		return nil
@@ -191281,6 +191687,9 @@ func (m *OrganizationSettingMutation) ResetField(name string) error {
 		return nil
 	case organizationsetting.FieldAllowMatchingDomainsAutojoin:
 		m.ResetAllowMatchingDomainsAutojoin()
+		return nil
+	case organizationsetting.FieldExternalSharingEnabled:
+		m.ResetExternalSharingEnabled()
 		return nil
 	case organizationsetting.FieldIdentityProvider:
 		m.ResetIdentityProvider()
@@ -241451,6 +241860,3324 @@ func (m *ScanMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Scan edge %s", name)
+}
+
+// ShareLinkMutation represents an operation that mutates the ShareLink nodes in the graph.
+type ShareLinkMutation struct {
+	config
+	op                              Op
+	typ                             string
+	id                              *string
+	created_at                      *time.Time
+	updated_at                      *time.Time
+	created_by                      *string
+	updated_by                      *string
+	updated_by_impersonator         *string
+	deleted_at                      *time.Time
+	deleted_by                      *string
+	name                            *string
+	expires_at                      *time.Time
+	max_uses                        *int
+	addmax_uses                     *int
+	use_count                       *int
+	adduse_count                    *int
+	recipient_emails                *[]string
+	appendrecipient_emails          []string
+	landing_page                    *bool
+	require_session                 *bool
+	code_hash                       *[]byte
+	code_expires_at                 *time.Time
+	code_attempts                   *int
+	addcode_attempts                *int
+	revoked_at                      *time.Time
+	token                           *string
+	secret                          *[]byte
+	clearedFields                   map[string]struct{}
+	owner                           *string
+	clearedowner                    bool
+	files                           map[string]struct{}
+	removedfiles                    map[string]struct{}
+	clearedfiles                    bool
+	share_link_access_events        map[string]struct{}
+	removedshare_link_access_events map[string]struct{}
+	clearedshare_link_access_events bool
+	done                            bool
+	oldValue                        func(context.Context) (*ShareLink, error)
+	predicates                      []predicate.ShareLink
+}
+
+var _ ent.Mutation = (*ShareLinkMutation)(nil)
+
+// sharelinkOption allows management of the mutation configuration using functional options.
+type sharelinkOption func(*ShareLinkMutation)
+
+// newShareLinkMutation creates new mutation for the ShareLink entity.
+func newShareLinkMutation(c config, op Op, opts ...sharelinkOption) *ShareLinkMutation {
+	m := &ShareLinkMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeShareLink,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withShareLinkID sets the ID field of the mutation.
+func withShareLinkID(id string) sharelinkOption {
+	return func(m *ShareLinkMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ShareLink
+		)
+		m.oldValue = func(ctx context.Context) (*ShareLink, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ShareLink.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withShareLink sets the old ShareLink of the mutation.
+func withShareLink(node *ShareLink) sharelinkOption {
+	return func(m *ShareLinkMutation) {
+		m.oldValue = func(context.Context) (*ShareLink, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ShareLinkMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ShareLinkMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ShareLink entities.
+func (m *ShareLinkMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ShareLinkMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ShareLinkMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ShareLink.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ShareLinkMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ShareLinkMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ShareLinkMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[sharelink.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ShareLinkMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ShareLinkMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, sharelink.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ShareLinkMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ShareLinkMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ShareLinkMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[sharelink.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ShareLinkMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ShareLinkMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, sharelink.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ShareLinkMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ShareLinkMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ShareLinkMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[sharelink.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ShareLinkMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ShareLinkMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, sharelink.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ShareLinkMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ShareLinkMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ShareLinkMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[sharelink.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ShareLinkMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ShareLinkMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, sharelink.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *ShareLinkMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *ShareLinkMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *ShareLinkMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[sharelink.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *ShareLinkMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *ShareLinkMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, sharelink.FieldUpdatedByImpersonator)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ShareLinkMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ShareLinkMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ShareLinkMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[sharelink.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ShareLinkMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ShareLinkMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, sharelink.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ShareLinkMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ShareLinkMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ShareLinkMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[sharelink.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ShareLinkMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ShareLinkMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, sharelink.FieldDeletedBy)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *ShareLinkMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *ShareLinkMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *ShareLinkMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[sharelink.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *ShareLinkMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *ShareLinkMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, sharelink.FieldOwnerID)
+}
+
+// SetName sets the "name" field.
+func (m *ShareLinkMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ShareLinkMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ClearName clears the value of the "name" field.
+func (m *ShareLinkMutation) ClearName() {
+	m.name = nil
+	m.clearedFields[sharelink.FieldName] = struct{}{}
+}
+
+// NameCleared returns if the "name" field was cleared in this mutation.
+func (m *ShareLinkMutation) NameCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldName]
+	return ok
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ShareLinkMutation) ResetName() {
+	m.name = nil
+	delete(m.clearedFields, sharelink.FieldName)
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (m *ShareLinkMutation) SetExpiresAt(t time.Time) {
+	m.expires_at = &t
+}
+
+// ExpiresAt returns the value of the "expires_at" field in the mutation.
+func (m *ShareLinkMutation) ExpiresAt() (r time.Time, exists bool) {
+	v := m.expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExpiresAt returns the old "expires_at" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldExpiresAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExpiresAt: %w", err)
+	}
+	return oldValue.ExpiresAt, nil
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (m *ShareLinkMutation) ClearExpiresAt() {
+	m.expires_at = nil
+	m.clearedFields[sharelink.FieldExpiresAt] = struct{}{}
+}
+
+// ExpiresAtCleared returns if the "expires_at" field was cleared in this mutation.
+func (m *ShareLinkMutation) ExpiresAtCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldExpiresAt]
+	return ok
+}
+
+// ResetExpiresAt resets all changes to the "expires_at" field.
+func (m *ShareLinkMutation) ResetExpiresAt() {
+	m.expires_at = nil
+	delete(m.clearedFields, sharelink.FieldExpiresAt)
+}
+
+// SetMaxUses sets the "max_uses" field.
+func (m *ShareLinkMutation) SetMaxUses(i int) {
+	m.max_uses = &i
+	m.addmax_uses = nil
+}
+
+// MaxUses returns the value of the "max_uses" field in the mutation.
+func (m *ShareLinkMutation) MaxUses() (r int, exists bool) {
+	v := m.max_uses
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMaxUses returns the old "max_uses" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldMaxUses(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMaxUses is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMaxUses requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMaxUses: %w", err)
+	}
+	return oldValue.MaxUses, nil
+}
+
+// AddMaxUses adds i to the "max_uses" field.
+func (m *ShareLinkMutation) AddMaxUses(i int) {
+	if m.addmax_uses != nil {
+		*m.addmax_uses += i
+	} else {
+		m.addmax_uses = &i
+	}
+}
+
+// AddedMaxUses returns the value that was added to the "max_uses" field in this mutation.
+func (m *ShareLinkMutation) AddedMaxUses() (r int, exists bool) {
+	v := m.addmax_uses
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearMaxUses clears the value of the "max_uses" field.
+func (m *ShareLinkMutation) ClearMaxUses() {
+	m.max_uses = nil
+	m.addmax_uses = nil
+	m.clearedFields[sharelink.FieldMaxUses] = struct{}{}
+}
+
+// MaxUsesCleared returns if the "max_uses" field was cleared in this mutation.
+func (m *ShareLinkMutation) MaxUsesCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldMaxUses]
+	return ok
+}
+
+// ResetMaxUses resets all changes to the "max_uses" field.
+func (m *ShareLinkMutation) ResetMaxUses() {
+	m.max_uses = nil
+	m.addmax_uses = nil
+	delete(m.clearedFields, sharelink.FieldMaxUses)
+}
+
+// SetUseCount sets the "use_count" field.
+func (m *ShareLinkMutation) SetUseCount(i int) {
+	m.use_count = &i
+	m.adduse_count = nil
+}
+
+// UseCount returns the value of the "use_count" field in the mutation.
+func (m *ShareLinkMutation) UseCount() (r int, exists bool) {
+	v := m.use_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUseCount returns the old "use_count" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldUseCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUseCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUseCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUseCount: %w", err)
+	}
+	return oldValue.UseCount, nil
+}
+
+// AddUseCount adds i to the "use_count" field.
+func (m *ShareLinkMutation) AddUseCount(i int) {
+	if m.adduse_count != nil {
+		*m.adduse_count += i
+	} else {
+		m.adduse_count = &i
+	}
+}
+
+// AddedUseCount returns the value that was added to the "use_count" field in this mutation.
+func (m *ShareLinkMutation) AddedUseCount() (r int, exists bool) {
+	v := m.adduse_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUseCount resets all changes to the "use_count" field.
+func (m *ShareLinkMutation) ResetUseCount() {
+	m.use_count = nil
+	m.adduse_count = nil
+}
+
+// SetRecipientEmails sets the "recipient_emails" field.
+func (m *ShareLinkMutation) SetRecipientEmails(s []string) {
+	m.recipient_emails = &s
+	m.appendrecipient_emails = nil
+}
+
+// RecipientEmails returns the value of the "recipient_emails" field in the mutation.
+func (m *ShareLinkMutation) RecipientEmails() (r []string, exists bool) {
+	v := m.recipient_emails
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRecipientEmails returns the old "recipient_emails" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldRecipientEmails(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRecipientEmails is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRecipientEmails requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRecipientEmails: %w", err)
+	}
+	return oldValue.RecipientEmails, nil
+}
+
+// AppendRecipientEmails adds s to the "recipient_emails" field.
+func (m *ShareLinkMutation) AppendRecipientEmails(s []string) {
+	m.appendrecipient_emails = append(m.appendrecipient_emails, s...)
+}
+
+// AppendedRecipientEmails returns the list of values that were appended to the "recipient_emails" field in this mutation.
+func (m *ShareLinkMutation) AppendedRecipientEmails() ([]string, bool) {
+	if len(m.appendrecipient_emails) == 0 {
+		return nil, false
+	}
+	return m.appendrecipient_emails, true
+}
+
+// ClearRecipientEmails clears the value of the "recipient_emails" field.
+func (m *ShareLinkMutation) ClearRecipientEmails() {
+	m.recipient_emails = nil
+	m.appendrecipient_emails = nil
+	m.clearedFields[sharelink.FieldRecipientEmails] = struct{}{}
+}
+
+// RecipientEmailsCleared returns if the "recipient_emails" field was cleared in this mutation.
+func (m *ShareLinkMutation) RecipientEmailsCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldRecipientEmails]
+	return ok
+}
+
+// ResetRecipientEmails resets all changes to the "recipient_emails" field.
+func (m *ShareLinkMutation) ResetRecipientEmails() {
+	m.recipient_emails = nil
+	m.appendrecipient_emails = nil
+	delete(m.clearedFields, sharelink.FieldRecipientEmails)
+}
+
+// SetLandingPage sets the "landing_page" field.
+func (m *ShareLinkMutation) SetLandingPage(b bool) {
+	m.landing_page = &b
+}
+
+// LandingPage returns the value of the "landing_page" field in the mutation.
+func (m *ShareLinkMutation) LandingPage() (r bool, exists bool) {
+	v := m.landing_page
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLandingPage returns the old "landing_page" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldLandingPage(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLandingPage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLandingPage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLandingPage: %w", err)
+	}
+	return oldValue.LandingPage, nil
+}
+
+// ClearLandingPage clears the value of the "landing_page" field.
+func (m *ShareLinkMutation) ClearLandingPage() {
+	m.landing_page = nil
+	m.clearedFields[sharelink.FieldLandingPage] = struct{}{}
+}
+
+// LandingPageCleared returns if the "landing_page" field was cleared in this mutation.
+func (m *ShareLinkMutation) LandingPageCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldLandingPage]
+	return ok
+}
+
+// ResetLandingPage resets all changes to the "landing_page" field.
+func (m *ShareLinkMutation) ResetLandingPage() {
+	m.landing_page = nil
+	delete(m.clearedFields, sharelink.FieldLandingPage)
+}
+
+// SetRequireSession sets the "require_session" field.
+func (m *ShareLinkMutation) SetRequireSession(b bool) {
+	m.require_session = &b
+}
+
+// RequireSession returns the value of the "require_session" field in the mutation.
+func (m *ShareLinkMutation) RequireSession() (r bool, exists bool) {
+	v := m.require_session
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRequireSession returns the old "require_session" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldRequireSession(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRequireSession is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRequireSession requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRequireSession: %w", err)
+	}
+	return oldValue.RequireSession, nil
+}
+
+// ClearRequireSession clears the value of the "require_session" field.
+func (m *ShareLinkMutation) ClearRequireSession() {
+	m.require_session = nil
+	m.clearedFields[sharelink.FieldRequireSession] = struct{}{}
+}
+
+// RequireSessionCleared returns if the "require_session" field was cleared in this mutation.
+func (m *ShareLinkMutation) RequireSessionCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldRequireSession]
+	return ok
+}
+
+// ResetRequireSession resets all changes to the "require_session" field.
+func (m *ShareLinkMutation) ResetRequireSession() {
+	m.require_session = nil
+	delete(m.clearedFields, sharelink.FieldRequireSession)
+}
+
+// SetCodeHash sets the "code_hash" field.
+func (m *ShareLinkMutation) SetCodeHash(b []byte) {
+	m.code_hash = &b
+}
+
+// CodeHash returns the value of the "code_hash" field in the mutation.
+func (m *ShareLinkMutation) CodeHash() (r []byte, exists bool) {
+	v := m.code_hash
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCodeHash returns the old "code_hash" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldCodeHash(ctx context.Context) (v []byte, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCodeHash is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCodeHash requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCodeHash: %w", err)
+	}
+	return oldValue.CodeHash, nil
+}
+
+// ClearCodeHash clears the value of the "code_hash" field.
+func (m *ShareLinkMutation) ClearCodeHash() {
+	m.code_hash = nil
+	m.clearedFields[sharelink.FieldCodeHash] = struct{}{}
+}
+
+// CodeHashCleared returns if the "code_hash" field was cleared in this mutation.
+func (m *ShareLinkMutation) CodeHashCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldCodeHash]
+	return ok
+}
+
+// ResetCodeHash resets all changes to the "code_hash" field.
+func (m *ShareLinkMutation) ResetCodeHash() {
+	m.code_hash = nil
+	delete(m.clearedFields, sharelink.FieldCodeHash)
+}
+
+// SetCodeExpiresAt sets the "code_expires_at" field.
+func (m *ShareLinkMutation) SetCodeExpiresAt(t time.Time) {
+	m.code_expires_at = &t
+}
+
+// CodeExpiresAt returns the value of the "code_expires_at" field in the mutation.
+func (m *ShareLinkMutation) CodeExpiresAt() (r time.Time, exists bool) {
+	v := m.code_expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCodeExpiresAt returns the old "code_expires_at" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldCodeExpiresAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCodeExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCodeExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCodeExpiresAt: %w", err)
+	}
+	return oldValue.CodeExpiresAt, nil
+}
+
+// ClearCodeExpiresAt clears the value of the "code_expires_at" field.
+func (m *ShareLinkMutation) ClearCodeExpiresAt() {
+	m.code_expires_at = nil
+	m.clearedFields[sharelink.FieldCodeExpiresAt] = struct{}{}
+}
+
+// CodeExpiresAtCleared returns if the "code_expires_at" field was cleared in this mutation.
+func (m *ShareLinkMutation) CodeExpiresAtCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldCodeExpiresAt]
+	return ok
+}
+
+// ResetCodeExpiresAt resets all changes to the "code_expires_at" field.
+func (m *ShareLinkMutation) ResetCodeExpiresAt() {
+	m.code_expires_at = nil
+	delete(m.clearedFields, sharelink.FieldCodeExpiresAt)
+}
+
+// SetCodeAttempts sets the "code_attempts" field.
+func (m *ShareLinkMutation) SetCodeAttempts(i int) {
+	m.code_attempts = &i
+	m.addcode_attempts = nil
+}
+
+// CodeAttempts returns the value of the "code_attempts" field in the mutation.
+func (m *ShareLinkMutation) CodeAttempts() (r int, exists bool) {
+	v := m.code_attempts
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCodeAttempts returns the old "code_attempts" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldCodeAttempts(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCodeAttempts is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCodeAttempts requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCodeAttempts: %w", err)
+	}
+	return oldValue.CodeAttempts, nil
+}
+
+// AddCodeAttempts adds i to the "code_attempts" field.
+func (m *ShareLinkMutation) AddCodeAttempts(i int) {
+	if m.addcode_attempts != nil {
+		*m.addcode_attempts += i
+	} else {
+		m.addcode_attempts = &i
+	}
+}
+
+// AddedCodeAttempts returns the value that was added to the "code_attempts" field in this mutation.
+func (m *ShareLinkMutation) AddedCodeAttempts() (r int, exists bool) {
+	v := m.addcode_attempts
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCodeAttempts resets all changes to the "code_attempts" field.
+func (m *ShareLinkMutation) ResetCodeAttempts() {
+	m.code_attempts = nil
+	m.addcode_attempts = nil
+}
+
+// SetRevokedAt sets the "revoked_at" field.
+func (m *ShareLinkMutation) SetRevokedAt(t time.Time) {
+	m.revoked_at = &t
+}
+
+// RevokedAt returns the value of the "revoked_at" field in the mutation.
+func (m *ShareLinkMutation) RevokedAt() (r time.Time, exists bool) {
+	v := m.revoked_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRevokedAt returns the old "revoked_at" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldRevokedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRevokedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRevokedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRevokedAt: %w", err)
+	}
+	return oldValue.RevokedAt, nil
+}
+
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (m *ShareLinkMutation) ClearRevokedAt() {
+	m.revoked_at = nil
+	m.clearedFields[sharelink.FieldRevokedAt] = struct{}{}
+}
+
+// RevokedAtCleared returns if the "revoked_at" field was cleared in this mutation.
+func (m *ShareLinkMutation) RevokedAtCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldRevokedAt]
+	return ok
+}
+
+// ResetRevokedAt resets all changes to the "revoked_at" field.
+func (m *ShareLinkMutation) ResetRevokedAt() {
+	m.revoked_at = nil
+	delete(m.clearedFields, sharelink.FieldRevokedAt)
+}
+
+// SetToken sets the "token" field.
+func (m *ShareLinkMutation) SetToken(s string) {
+	m.token = &s
+}
+
+// Token returns the value of the "token" field in the mutation.
+func (m *ShareLinkMutation) Token() (r string, exists bool) {
+	v := m.token
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldToken returns the old "token" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldToken(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldToken is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldToken requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldToken: %w", err)
+	}
+	return oldValue.Token, nil
+}
+
+// ResetToken resets all changes to the "token" field.
+func (m *ShareLinkMutation) ResetToken() {
+	m.token = nil
+}
+
+// SetSecret sets the "secret" field.
+func (m *ShareLinkMutation) SetSecret(b []byte) {
+	m.secret = &b
+}
+
+// Secret returns the value of the "secret" field in the mutation.
+func (m *ShareLinkMutation) Secret() (r []byte, exists bool) {
+	v := m.secret
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSecret returns the old "secret" field's value of the ShareLink entity.
+// If the ShareLink object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkMutation) OldSecret(ctx context.Context) (v []byte, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSecret is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSecret requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSecret: %w", err)
+	}
+	return oldValue.Secret, nil
+}
+
+// ClearSecret clears the value of the "secret" field.
+func (m *ShareLinkMutation) ClearSecret() {
+	m.secret = nil
+	m.clearedFields[sharelink.FieldSecret] = struct{}{}
+}
+
+// SecretCleared returns if the "secret" field was cleared in this mutation.
+func (m *ShareLinkMutation) SecretCleared() bool {
+	_, ok := m.clearedFields[sharelink.FieldSecret]
+	return ok
+}
+
+// ResetSecret resets all changes to the "secret" field.
+func (m *ShareLinkMutation) ResetSecret() {
+	m.secret = nil
+	delete(m.clearedFields, sharelink.FieldSecret)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *ShareLinkMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[sharelink.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *ShareLinkMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *ShareLinkMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *ShareLinkMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// AddFileIDs adds the "files" edge to the File entity by ids.
+func (m *ShareLinkMutation) AddFileIDs(ids ...string) {
+	if m.files == nil {
+		m.files = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.files[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFiles clears the "files" edge to the File entity.
+func (m *ShareLinkMutation) ClearFiles() {
+	m.clearedfiles = true
+}
+
+// FilesCleared reports if the "files" edge to the File entity was cleared.
+func (m *ShareLinkMutation) FilesCleared() bool {
+	return m.clearedfiles
+}
+
+// RemoveFileIDs removes the "files" edge to the File entity by IDs.
+func (m *ShareLinkMutation) RemoveFileIDs(ids ...string) {
+	if m.removedfiles == nil {
+		m.removedfiles = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.files, ids[i])
+		m.removedfiles[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFiles returns the removed IDs of the "files" edge to the File entity.
+func (m *ShareLinkMutation) RemovedFilesIDs() (ids []string) {
+	for id := range m.removedfiles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FilesIDs returns the "files" edge IDs in the mutation.
+func (m *ShareLinkMutation) FilesIDs() (ids []string) {
+	for id := range m.files {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFiles resets all changes to the "files" edge.
+func (m *ShareLinkMutation) ResetFiles() {
+	m.files = nil
+	m.clearedfiles = false
+	m.removedfiles = nil
+}
+
+// AddShareLinkAccessEventIDs adds the "share_link_access_events" edge to the ShareLinkAccessEvent entity by ids.
+func (m *ShareLinkMutation) AddShareLinkAccessEventIDs(ids ...string) {
+	if m.share_link_access_events == nil {
+		m.share_link_access_events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.share_link_access_events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearShareLinkAccessEvents clears the "share_link_access_events" edge to the ShareLinkAccessEvent entity.
+func (m *ShareLinkMutation) ClearShareLinkAccessEvents() {
+	m.clearedshare_link_access_events = true
+}
+
+// ShareLinkAccessEventsCleared reports if the "share_link_access_events" edge to the ShareLinkAccessEvent entity was cleared.
+func (m *ShareLinkMutation) ShareLinkAccessEventsCleared() bool {
+	return m.clearedshare_link_access_events
+}
+
+// RemoveShareLinkAccessEventIDs removes the "share_link_access_events" edge to the ShareLinkAccessEvent entity by IDs.
+func (m *ShareLinkMutation) RemoveShareLinkAccessEventIDs(ids ...string) {
+	if m.removedshare_link_access_events == nil {
+		m.removedshare_link_access_events = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.share_link_access_events, ids[i])
+		m.removedshare_link_access_events[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedShareLinkAccessEvents returns the removed IDs of the "share_link_access_events" edge to the ShareLinkAccessEvent entity.
+func (m *ShareLinkMutation) RemovedShareLinkAccessEventsIDs() (ids []string) {
+	for id := range m.removedshare_link_access_events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ShareLinkAccessEventsIDs returns the "share_link_access_events" edge IDs in the mutation.
+func (m *ShareLinkMutation) ShareLinkAccessEventsIDs() (ids []string) {
+	for id := range m.share_link_access_events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetShareLinkAccessEvents resets all changes to the "share_link_access_events" edge.
+func (m *ShareLinkMutation) ResetShareLinkAccessEvents() {
+	m.share_link_access_events = nil
+	m.clearedshare_link_access_events = false
+	m.removedshare_link_access_events = nil
+}
+
+// Where appends a list predicates to the ShareLinkMutation builder.
+func (m *ShareLinkMutation) Where(ps ...predicate.ShareLink) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ShareLinkMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ShareLinkMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ShareLink, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ShareLinkMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ShareLinkMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ShareLink).
+func (m *ShareLinkMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ShareLinkMutation) Fields() []string {
+	fields := make([]string, 0, 21)
+	if m.created_at != nil {
+		fields = append(fields, sharelink.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, sharelink.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, sharelink.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, sharelink.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, sharelink.FieldUpdatedByImpersonator)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, sharelink.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, sharelink.FieldDeletedBy)
+	}
+	if m.owner != nil {
+		fields = append(fields, sharelink.FieldOwnerID)
+	}
+	if m.name != nil {
+		fields = append(fields, sharelink.FieldName)
+	}
+	if m.expires_at != nil {
+		fields = append(fields, sharelink.FieldExpiresAt)
+	}
+	if m.max_uses != nil {
+		fields = append(fields, sharelink.FieldMaxUses)
+	}
+	if m.use_count != nil {
+		fields = append(fields, sharelink.FieldUseCount)
+	}
+	if m.recipient_emails != nil {
+		fields = append(fields, sharelink.FieldRecipientEmails)
+	}
+	if m.landing_page != nil {
+		fields = append(fields, sharelink.FieldLandingPage)
+	}
+	if m.require_session != nil {
+		fields = append(fields, sharelink.FieldRequireSession)
+	}
+	if m.code_hash != nil {
+		fields = append(fields, sharelink.FieldCodeHash)
+	}
+	if m.code_expires_at != nil {
+		fields = append(fields, sharelink.FieldCodeExpiresAt)
+	}
+	if m.code_attempts != nil {
+		fields = append(fields, sharelink.FieldCodeAttempts)
+	}
+	if m.revoked_at != nil {
+		fields = append(fields, sharelink.FieldRevokedAt)
+	}
+	if m.token != nil {
+		fields = append(fields, sharelink.FieldToken)
+	}
+	if m.secret != nil {
+		fields = append(fields, sharelink.FieldSecret)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ShareLinkMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case sharelink.FieldCreatedAt:
+		return m.CreatedAt()
+	case sharelink.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case sharelink.FieldCreatedBy:
+		return m.CreatedBy()
+	case sharelink.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case sharelink.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case sharelink.FieldDeletedAt:
+		return m.DeletedAt()
+	case sharelink.FieldDeletedBy:
+		return m.DeletedBy()
+	case sharelink.FieldOwnerID:
+		return m.OwnerID()
+	case sharelink.FieldName:
+		return m.Name()
+	case sharelink.FieldExpiresAt:
+		return m.ExpiresAt()
+	case sharelink.FieldMaxUses:
+		return m.MaxUses()
+	case sharelink.FieldUseCount:
+		return m.UseCount()
+	case sharelink.FieldRecipientEmails:
+		return m.RecipientEmails()
+	case sharelink.FieldLandingPage:
+		return m.LandingPage()
+	case sharelink.FieldRequireSession:
+		return m.RequireSession()
+	case sharelink.FieldCodeHash:
+		return m.CodeHash()
+	case sharelink.FieldCodeExpiresAt:
+		return m.CodeExpiresAt()
+	case sharelink.FieldCodeAttempts:
+		return m.CodeAttempts()
+	case sharelink.FieldRevokedAt:
+		return m.RevokedAt()
+	case sharelink.FieldToken:
+		return m.Token()
+	case sharelink.FieldSecret:
+		return m.Secret()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ShareLinkMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case sharelink.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case sharelink.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case sharelink.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case sharelink.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case sharelink.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case sharelink.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case sharelink.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case sharelink.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case sharelink.FieldName:
+		return m.OldName(ctx)
+	case sharelink.FieldExpiresAt:
+		return m.OldExpiresAt(ctx)
+	case sharelink.FieldMaxUses:
+		return m.OldMaxUses(ctx)
+	case sharelink.FieldUseCount:
+		return m.OldUseCount(ctx)
+	case sharelink.FieldRecipientEmails:
+		return m.OldRecipientEmails(ctx)
+	case sharelink.FieldLandingPage:
+		return m.OldLandingPage(ctx)
+	case sharelink.FieldRequireSession:
+		return m.OldRequireSession(ctx)
+	case sharelink.FieldCodeHash:
+		return m.OldCodeHash(ctx)
+	case sharelink.FieldCodeExpiresAt:
+		return m.OldCodeExpiresAt(ctx)
+	case sharelink.FieldCodeAttempts:
+		return m.OldCodeAttempts(ctx)
+	case sharelink.FieldRevokedAt:
+		return m.OldRevokedAt(ctx)
+	case sharelink.FieldToken:
+		return m.OldToken(ctx)
+	case sharelink.FieldSecret:
+		return m.OldSecret(ctx)
+	}
+	return nil, fmt.Errorf("unknown ShareLink field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ShareLinkMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case sharelink.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case sharelink.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case sharelink.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case sharelink.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case sharelink.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case sharelink.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case sharelink.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case sharelink.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case sharelink.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case sharelink.FieldExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExpiresAt(v)
+		return nil
+	case sharelink.FieldMaxUses:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMaxUses(v)
+		return nil
+	case sharelink.FieldUseCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUseCount(v)
+		return nil
+	case sharelink.FieldRecipientEmails:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRecipientEmails(v)
+		return nil
+	case sharelink.FieldLandingPage:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLandingPage(v)
+		return nil
+	case sharelink.FieldRequireSession:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRequireSession(v)
+		return nil
+	case sharelink.FieldCodeHash:
+		v, ok := value.([]byte)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCodeHash(v)
+		return nil
+	case sharelink.FieldCodeExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCodeExpiresAt(v)
+		return nil
+	case sharelink.FieldCodeAttempts:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCodeAttempts(v)
+		return nil
+	case sharelink.FieldRevokedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRevokedAt(v)
+		return nil
+	case sharelink.FieldToken:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetToken(v)
+		return nil
+	case sharelink.FieldSecret:
+		v, ok := value.([]byte)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSecret(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLink field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ShareLinkMutation) AddedFields() []string {
+	var fields []string
+	if m.addmax_uses != nil {
+		fields = append(fields, sharelink.FieldMaxUses)
+	}
+	if m.adduse_count != nil {
+		fields = append(fields, sharelink.FieldUseCount)
+	}
+	if m.addcode_attempts != nil {
+		fields = append(fields, sharelink.FieldCodeAttempts)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ShareLinkMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case sharelink.FieldMaxUses:
+		return m.AddedMaxUses()
+	case sharelink.FieldUseCount:
+		return m.AddedUseCount()
+	case sharelink.FieldCodeAttempts:
+		return m.AddedCodeAttempts()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ShareLinkMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case sharelink.FieldMaxUses:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMaxUses(v)
+		return nil
+	case sharelink.FieldUseCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUseCount(v)
+		return nil
+	case sharelink.FieldCodeAttempts:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCodeAttempts(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLink numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ShareLinkMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(sharelink.FieldCreatedAt) {
+		fields = append(fields, sharelink.FieldCreatedAt)
+	}
+	if m.FieldCleared(sharelink.FieldUpdatedAt) {
+		fields = append(fields, sharelink.FieldUpdatedAt)
+	}
+	if m.FieldCleared(sharelink.FieldCreatedBy) {
+		fields = append(fields, sharelink.FieldCreatedBy)
+	}
+	if m.FieldCleared(sharelink.FieldUpdatedBy) {
+		fields = append(fields, sharelink.FieldUpdatedBy)
+	}
+	if m.FieldCleared(sharelink.FieldUpdatedByImpersonator) {
+		fields = append(fields, sharelink.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(sharelink.FieldDeletedAt) {
+		fields = append(fields, sharelink.FieldDeletedAt)
+	}
+	if m.FieldCleared(sharelink.FieldDeletedBy) {
+		fields = append(fields, sharelink.FieldDeletedBy)
+	}
+	if m.FieldCleared(sharelink.FieldOwnerID) {
+		fields = append(fields, sharelink.FieldOwnerID)
+	}
+	if m.FieldCleared(sharelink.FieldName) {
+		fields = append(fields, sharelink.FieldName)
+	}
+	if m.FieldCleared(sharelink.FieldExpiresAt) {
+		fields = append(fields, sharelink.FieldExpiresAt)
+	}
+	if m.FieldCleared(sharelink.FieldMaxUses) {
+		fields = append(fields, sharelink.FieldMaxUses)
+	}
+	if m.FieldCleared(sharelink.FieldRecipientEmails) {
+		fields = append(fields, sharelink.FieldRecipientEmails)
+	}
+	if m.FieldCleared(sharelink.FieldLandingPage) {
+		fields = append(fields, sharelink.FieldLandingPage)
+	}
+	if m.FieldCleared(sharelink.FieldRequireSession) {
+		fields = append(fields, sharelink.FieldRequireSession)
+	}
+	if m.FieldCleared(sharelink.FieldCodeHash) {
+		fields = append(fields, sharelink.FieldCodeHash)
+	}
+	if m.FieldCleared(sharelink.FieldCodeExpiresAt) {
+		fields = append(fields, sharelink.FieldCodeExpiresAt)
+	}
+	if m.FieldCleared(sharelink.FieldRevokedAt) {
+		fields = append(fields, sharelink.FieldRevokedAt)
+	}
+	if m.FieldCleared(sharelink.FieldSecret) {
+		fields = append(fields, sharelink.FieldSecret)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ShareLinkMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ShareLinkMutation) ClearField(name string) error {
+	switch name {
+	case sharelink.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case sharelink.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case sharelink.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case sharelink.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case sharelink.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case sharelink.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case sharelink.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case sharelink.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case sharelink.FieldName:
+		m.ClearName()
+		return nil
+	case sharelink.FieldExpiresAt:
+		m.ClearExpiresAt()
+		return nil
+	case sharelink.FieldMaxUses:
+		m.ClearMaxUses()
+		return nil
+	case sharelink.FieldRecipientEmails:
+		m.ClearRecipientEmails()
+		return nil
+	case sharelink.FieldLandingPage:
+		m.ClearLandingPage()
+		return nil
+	case sharelink.FieldRequireSession:
+		m.ClearRequireSession()
+		return nil
+	case sharelink.FieldCodeHash:
+		m.ClearCodeHash()
+		return nil
+	case sharelink.FieldCodeExpiresAt:
+		m.ClearCodeExpiresAt()
+		return nil
+	case sharelink.FieldRevokedAt:
+		m.ClearRevokedAt()
+		return nil
+	case sharelink.FieldSecret:
+		m.ClearSecret()
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLink nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ShareLinkMutation) ResetField(name string) error {
+	switch name {
+	case sharelink.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case sharelink.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case sharelink.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case sharelink.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case sharelink.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case sharelink.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case sharelink.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case sharelink.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case sharelink.FieldName:
+		m.ResetName()
+		return nil
+	case sharelink.FieldExpiresAt:
+		m.ResetExpiresAt()
+		return nil
+	case sharelink.FieldMaxUses:
+		m.ResetMaxUses()
+		return nil
+	case sharelink.FieldUseCount:
+		m.ResetUseCount()
+		return nil
+	case sharelink.FieldRecipientEmails:
+		m.ResetRecipientEmails()
+		return nil
+	case sharelink.FieldLandingPage:
+		m.ResetLandingPage()
+		return nil
+	case sharelink.FieldRequireSession:
+		m.ResetRequireSession()
+		return nil
+	case sharelink.FieldCodeHash:
+		m.ResetCodeHash()
+		return nil
+	case sharelink.FieldCodeExpiresAt:
+		m.ResetCodeExpiresAt()
+		return nil
+	case sharelink.FieldCodeAttempts:
+		m.ResetCodeAttempts()
+		return nil
+	case sharelink.FieldRevokedAt:
+		m.ResetRevokedAt()
+		return nil
+	case sharelink.FieldToken:
+		m.ResetToken()
+		return nil
+	case sharelink.FieldSecret:
+		m.ResetSecret()
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLink field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ShareLinkMutation) AddedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.owner != nil {
+		edges = append(edges, sharelink.EdgeOwner)
+	}
+	if m.files != nil {
+		edges = append(edges, sharelink.EdgeFiles)
+	}
+	if m.share_link_access_events != nil {
+		edges = append(edges, sharelink.EdgeShareLinkAccessEvents)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ShareLinkMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case sharelink.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case sharelink.EdgeFiles:
+		ids := make([]ent.Value, 0, len(m.files))
+		for id := range m.files {
+			ids = append(ids, id)
+		}
+		return ids
+	case sharelink.EdgeShareLinkAccessEvents:
+		ids := make([]ent.Value, 0, len(m.share_link_access_events))
+		for id := range m.share_link_access_events {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ShareLinkMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.removedfiles != nil {
+		edges = append(edges, sharelink.EdgeFiles)
+	}
+	if m.removedshare_link_access_events != nil {
+		edges = append(edges, sharelink.EdgeShareLinkAccessEvents)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ShareLinkMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case sharelink.EdgeFiles:
+		ids := make([]ent.Value, 0, len(m.removedfiles))
+		for id := range m.removedfiles {
+			ids = append(ids, id)
+		}
+		return ids
+	case sharelink.EdgeShareLinkAccessEvents:
+		ids := make([]ent.Value, 0, len(m.removedshare_link_access_events))
+		for id := range m.removedshare_link_access_events {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ShareLinkMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.clearedowner {
+		edges = append(edges, sharelink.EdgeOwner)
+	}
+	if m.clearedfiles {
+		edges = append(edges, sharelink.EdgeFiles)
+	}
+	if m.clearedshare_link_access_events {
+		edges = append(edges, sharelink.EdgeShareLinkAccessEvents)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ShareLinkMutation) EdgeCleared(name string) bool {
+	switch name {
+	case sharelink.EdgeOwner:
+		return m.clearedowner
+	case sharelink.EdgeFiles:
+		return m.clearedfiles
+	case sharelink.EdgeShareLinkAccessEvents:
+		return m.clearedshare_link_access_events
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ShareLinkMutation) ClearEdge(name string) error {
+	switch name {
+	case sharelink.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLink unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ShareLinkMutation) ResetEdge(name string) error {
+	switch name {
+	case sharelink.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case sharelink.EdgeFiles:
+		m.ResetFiles()
+		return nil
+	case sharelink.EdgeShareLinkAccessEvents:
+		m.ResetShareLinkAccessEvents()
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLink edge %s", name)
+}
+
+// ShareLinkAccessEventMutation represents an operation that mutates the ShareLinkAccessEvent nodes in the graph.
+type ShareLinkAccessEventMutation struct {
+	config
+	op                      Op
+	typ                     string
+	id                      *string
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	updated_by_impersonator *string
+	deleted_at              *time.Time
+	deleted_by              *string
+	file_id                 *string
+	ip_address              *string
+	user_agent              *string
+	clearedFields           map[string]struct{}
+	owner                   *string
+	clearedowner            bool
+	share_link              *string
+	clearedshare_link       bool
+	done                    bool
+	oldValue                func(context.Context) (*ShareLinkAccessEvent, error)
+	predicates              []predicate.ShareLinkAccessEvent
+}
+
+var _ ent.Mutation = (*ShareLinkAccessEventMutation)(nil)
+
+// sharelinkaccesseventOption allows management of the mutation configuration using functional options.
+type sharelinkaccesseventOption func(*ShareLinkAccessEventMutation)
+
+// newShareLinkAccessEventMutation creates new mutation for the ShareLinkAccessEvent entity.
+func newShareLinkAccessEventMutation(c config, op Op, opts ...sharelinkaccesseventOption) *ShareLinkAccessEventMutation {
+	m := &ShareLinkAccessEventMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeShareLinkAccessEvent,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withShareLinkAccessEventID sets the ID field of the mutation.
+func withShareLinkAccessEventID(id string) sharelinkaccesseventOption {
+	return func(m *ShareLinkAccessEventMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ShareLinkAccessEvent
+		)
+		m.oldValue = func(ctx context.Context) (*ShareLinkAccessEvent, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ShareLinkAccessEvent.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withShareLinkAccessEvent sets the old ShareLinkAccessEvent of the mutation.
+func withShareLinkAccessEvent(node *ShareLinkAccessEvent) sharelinkaccesseventOption {
+	return func(m *ShareLinkAccessEventMutation) {
+		m.oldValue = func(context.Context) (*ShareLinkAccessEvent, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ShareLinkAccessEventMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ShareLinkAccessEventMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ShareLinkAccessEvent entities.
+func (m *ShareLinkAccessEventMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ShareLinkAccessEventMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ShareLinkAccessEventMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ShareLinkAccessEvent.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ShareLinkAccessEventMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ShareLinkAccessEventMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ShareLinkAccessEventMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[sharelinkaccessevent.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ShareLinkAccessEventMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ShareLinkAccessEventMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ShareLinkAccessEventMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ShareLinkAccessEventMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[sharelinkaccessevent.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ShareLinkAccessEventMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ShareLinkAccessEventMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ShareLinkAccessEventMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ShareLinkAccessEventMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[sharelinkaccessevent.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ShareLinkAccessEventMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ShareLinkAccessEventMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ShareLinkAccessEventMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ShareLinkAccessEventMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[sharelinkaccessevent.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ShareLinkAccessEventMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *ShareLinkAccessEventMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *ShareLinkAccessEventMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *ShareLinkAccessEventMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[sharelinkaccessevent.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *ShareLinkAccessEventMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldUpdatedByImpersonator)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ShareLinkAccessEventMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ShareLinkAccessEventMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ShareLinkAccessEventMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[sharelinkaccessevent.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ShareLinkAccessEventMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ShareLinkAccessEventMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ShareLinkAccessEventMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ShareLinkAccessEventMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[sharelinkaccessevent.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ShareLinkAccessEventMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldDeletedBy)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *ShareLinkAccessEventMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *ShareLinkAccessEventMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *ShareLinkAccessEventMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[sharelinkaccessevent.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *ShareLinkAccessEventMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldOwnerID)
+}
+
+// SetShareLinkID sets the "share_link_id" field.
+func (m *ShareLinkAccessEventMutation) SetShareLinkID(s string) {
+	m.share_link = &s
+}
+
+// ShareLinkID returns the value of the "share_link_id" field in the mutation.
+func (m *ShareLinkAccessEventMutation) ShareLinkID() (r string, exists bool) {
+	v := m.share_link
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShareLinkID returns the old "share_link_id" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldShareLinkID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShareLinkID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShareLinkID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShareLinkID: %w", err)
+	}
+	return oldValue.ShareLinkID, nil
+}
+
+// ResetShareLinkID resets all changes to the "share_link_id" field.
+func (m *ShareLinkAccessEventMutation) ResetShareLinkID() {
+	m.share_link = nil
+}
+
+// SetFileID sets the "file_id" field.
+func (m *ShareLinkAccessEventMutation) SetFileID(s string) {
+	m.file_id = &s
+}
+
+// FileID returns the value of the "file_id" field in the mutation.
+func (m *ShareLinkAccessEventMutation) FileID() (r string, exists bool) {
+	v := m.file_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileID returns the old "file_id" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldFileID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileID: %w", err)
+	}
+	return oldValue.FileID, nil
+}
+
+// ResetFileID resets all changes to the "file_id" field.
+func (m *ShareLinkAccessEventMutation) ResetFileID() {
+	m.file_id = nil
+}
+
+// SetIPAddress sets the "ip_address" field.
+func (m *ShareLinkAccessEventMutation) SetIPAddress(s string) {
+	m.ip_address = &s
+}
+
+// IPAddress returns the value of the "ip_address" field in the mutation.
+func (m *ShareLinkAccessEventMutation) IPAddress() (r string, exists bool) {
+	v := m.ip_address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIPAddress returns the old "ip_address" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldIPAddress(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIPAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIPAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIPAddress: %w", err)
+	}
+	return oldValue.IPAddress, nil
+}
+
+// ClearIPAddress clears the value of the "ip_address" field.
+func (m *ShareLinkAccessEventMutation) ClearIPAddress() {
+	m.ip_address = nil
+	m.clearedFields[sharelinkaccessevent.FieldIPAddress] = struct{}{}
+}
+
+// IPAddressCleared returns if the "ip_address" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) IPAddressCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldIPAddress]
+	return ok
+}
+
+// ResetIPAddress resets all changes to the "ip_address" field.
+func (m *ShareLinkAccessEventMutation) ResetIPAddress() {
+	m.ip_address = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldIPAddress)
+}
+
+// SetUserAgent sets the "user_agent" field.
+func (m *ShareLinkAccessEventMutation) SetUserAgent(s string) {
+	m.user_agent = &s
+}
+
+// UserAgent returns the value of the "user_agent" field in the mutation.
+func (m *ShareLinkAccessEventMutation) UserAgent() (r string, exists bool) {
+	v := m.user_agent
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserAgent returns the old "user_agent" field's value of the ShareLinkAccessEvent entity.
+// If the ShareLinkAccessEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ShareLinkAccessEventMutation) OldUserAgent(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserAgent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserAgent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserAgent: %w", err)
+	}
+	return oldValue.UserAgent, nil
+}
+
+// ClearUserAgent clears the value of the "user_agent" field.
+func (m *ShareLinkAccessEventMutation) ClearUserAgent() {
+	m.user_agent = nil
+	m.clearedFields[sharelinkaccessevent.FieldUserAgent] = struct{}{}
+}
+
+// UserAgentCleared returns if the "user_agent" field was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) UserAgentCleared() bool {
+	_, ok := m.clearedFields[sharelinkaccessevent.FieldUserAgent]
+	return ok
+}
+
+// ResetUserAgent resets all changes to the "user_agent" field.
+func (m *ShareLinkAccessEventMutation) ResetUserAgent() {
+	m.user_agent = nil
+	delete(m.clearedFields, sharelinkaccessevent.FieldUserAgent)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *ShareLinkAccessEventMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[sharelinkaccessevent.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *ShareLinkAccessEventMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *ShareLinkAccessEventMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *ShareLinkAccessEventMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// ClearShareLink clears the "share_link" edge to the ShareLink entity.
+func (m *ShareLinkAccessEventMutation) ClearShareLink() {
+	m.clearedshare_link = true
+	m.clearedFields[sharelinkaccessevent.FieldShareLinkID] = struct{}{}
+}
+
+// ShareLinkCleared reports if the "share_link" edge to the ShareLink entity was cleared.
+func (m *ShareLinkAccessEventMutation) ShareLinkCleared() bool {
+	return m.clearedshare_link
+}
+
+// ShareLinkIDs returns the "share_link" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ShareLinkID instead. It exists only for internal usage by the builders.
+func (m *ShareLinkAccessEventMutation) ShareLinkIDs() (ids []string) {
+	if id := m.share_link; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetShareLink resets all changes to the "share_link" edge.
+func (m *ShareLinkAccessEventMutation) ResetShareLink() {
+	m.share_link = nil
+	m.clearedshare_link = false
+}
+
+// Where appends a list predicates to the ShareLinkAccessEventMutation builder.
+func (m *ShareLinkAccessEventMutation) Where(ps ...predicate.ShareLinkAccessEvent) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ShareLinkAccessEventMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ShareLinkAccessEventMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ShareLinkAccessEvent, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ShareLinkAccessEventMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ShareLinkAccessEventMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ShareLinkAccessEvent).
+func (m *ShareLinkAccessEventMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ShareLinkAccessEventMutation) Fields() []string {
+	fields := make([]string, 0, 12)
+	if m.created_at != nil {
+		fields = append(fields, sharelinkaccessevent.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, sharelinkaccessevent.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, sharelinkaccessevent.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, sharelinkaccessevent.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, sharelinkaccessevent.FieldUpdatedByImpersonator)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, sharelinkaccessevent.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, sharelinkaccessevent.FieldDeletedBy)
+	}
+	if m.owner != nil {
+		fields = append(fields, sharelinkaccessevent.FieldOwnerID)
+	}
+	if m.share_link != nil {
+		fields = append(fields, sharelinkaccessevent.FieldShareLinkID)
+	}
+	if m.file_id != nil {
+		fields = append(fields, sharelinkaccessevent.FieldFileID)
+	}
+	if m.ip_address != nil {
+		fields = append(fields, sharelinkaccessevent.FieldIPAddress)
+	}
+	if m.user_agent != nil {
+		fields = append(fields, sharelinkaccessevent.FieldUserAgent)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ShareLinkAccessEventMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case sharelinkaccessevent.FieldCreatedAt:
+		return m.CreatedAt()
+	case sharelinkaccessevent.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case sharelinkaccessevent.FieldCreatedBy:
+		return m.CreatedBy()
+	case sharelinkaccessevent.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case sharelinkaccessevent.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case sharelinkaccessevent.FieldDeletedAt:
+		return m.DeletedAt()
+	case sharelinkaccessevent.FieldDeletedBy:
+		return m.DeletedBy()
+	case sharelinkaccessevent.FieldOwnerID:
+		return m.OwnerID()
+	case sharelinkaccessevent.FieldShareLinkID:
+		return m.ShareLinkID()
+	case sharelinkaccessevent.FieldFileID:
+		return m.FileID()
+	case sharelinkaccessevent.FieldIPAddress:
+		return m.IPAddress()
+	case sharelinkaccessevent.FieldUserAgent:
+		return m.UserAgent()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ShareLinkAccessEventMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case sharelinkaccessevent.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case sharelinkaccessevent.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case sharelinkaccessevent.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case sharelinkaccessevent.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case sharelinkaccessevent.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case sharelinkaccessevent.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case sharelinkaccessevent.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case sharelinkaccessevent.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case sharelinkaccessevent.FieldShareLinkID:
+		return m.OldShareLinkID(ctx)
+	case sharelinkaccessevent.FieldFileID:
+		return m.OldFileID(ctx)
+	case sharelinkaccessevent.FieldIPAddress:
+		return m.OldIPAddress(ctx)
+	case sharelinkaccessevent.FieldUserAgent:
+		return m.OldUserAgent(ctx)
+	}
+	return nil, fmt.Errorf("unknown ShareLinkAccessEvent field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ShareLinkAccessEventMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case sharelinkaccessevent.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case sharelinkaccessevent.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case sharelinkaccessevent.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case sharelinkaccessevent.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case sharelinkaccessevent.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case sharelinkaccessevent.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case sharelinkaccessevent.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case sharelinkaccessevent.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case sharelinkaccessevent.FieldShareLinkID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShareLinkID(v)
+		return nil
+	case sharelinkaccessevent.FieldFileID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileID(v)
+		return nil
+	case sharelinkaccessevent.FieldIPAddress:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIPAddress(v)
+		return nil
+	case sharelinkaccessevent.FieldUserAgent:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserAgent(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLinkAccessEvent field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ShareLinkAccessEventMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ShareLinkAccessEventMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ShareLinkAccessEventMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ShareLinkAccessEvent numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ShareLinkAccessEventMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(sharelinkaccessevent.FieldCreatedAt) {
+		fields = append(fields, sharelinkaccessevent.FieldCreatedAt)
+	}
+	if m.FieldCleared(sharelinkaccessevent.FieldUpdatedAt) {
+		fields = append(fields, sharelinkaccessevent.FieldUpdatedAt)
+	}
+	if m.FieldCleared(sharelinkaccessevent.FieldCreatedBy) {
+		fields = append(fields, sharelinkaccessevent.FieldCreatedBy)
+	}
+	if m.FieldCleared(sharelinkaccessevent.FieldUpdatedBy) {
+		fields = append(fields, sharelinkaccessevent.FieldUpdatedBy)
+	}
+	if m.FieldCleared(sharelinkaccessevent.FieldUpdatedByImpersonator) {
+		fields = append(fields, sharelinkaccessevent.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(sharelinkaccessevent.FieldDeletedAt) {
+		fields = append(fields, sharelinkaccessevent.FieldDeletedAt)
+	}
+	if m.FieldCleared(sharelinkaccessevent.FieldDeletedBy) {
+		fields = append(fields, sharelinkaccessevent.FieldDeletedBy)
+	}
+	if m.FieldCleared(sharelinkaccessevent.FieldOwnerID) {
+		fields = append(fields, sharelinkaccessevent.FieldOwnerID)
+	}
+	if m.FieldCleared(sharelinkaccessevent.FieldIPAddress) {
+		fields = append(fields, sharelinkaccessevent.FieldIPAddress)
+	}
+	if m.FieldCleared(sharelinkaccessevent.FieldUserAgent) {
+		fields = append(fields, sharelinkaccessevent.FieldUserAgent)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ShareLinkAccessEventMutation) ClearField(name string) error {
+	switch name {
+	case sharelinkaccessevent.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case sharelinkaccessevent.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case sharelinkaccessevent.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case sharelinkaccessevent.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case sharelinkaccessevent.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case sharelinkaccessevent.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case sharelinkaccessevent.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case sharelinkaccessevent.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case sharelinkaccessevent.FieldIPAddress:
+		m.ClearIPAddress()
+		return nil
+	case sharelinkaccessevent.FieldUserAgent:
+		m.ClearUserAgent()
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLinkAccessEvent nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ShareLinkAccessEventMutation) ResetField(name string) error {
+	switch name {
+	case sharelinkaccessevent.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case sharelinkaccessevent.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case sharelinkaccessevent.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case sharelinkaccessevent.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case sharelinkaccessevent.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case sharelinkaccessevent.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case sharelinkaccessevent.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case sharelinkaccessevent.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case sharelinkaccessevent.FieldShareLinkID:
+		m.ResetShareLinkID()
+		return nil
+	case sharelinkaccessevent.FieldFileID:
+		m.ResetFileID()
+		return nil
+	case sharelinkaccessevent.FieldIPAddress:
+		m.ResetIPAddress()
+		return nil
+	case sharelinkaccessevent.FieldUserAgent:
+		m.ResetUserAgent()
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLinkAccessEvent field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ShareLinkAccessEventMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.owner != nil {
+		edges = append(edges, sharelinkaccessevent.EdgeOwner)
+	}
+	if m.share_link != nil {
+		edges = append(edges, sharelinkaccessevent.EdgeShareLink)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ShareLinkAccessEventMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case sharelinkaccessevent.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case sharelinkaccessevent.EdgeShareLink:
+		if id := m.share_link; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ShareLinkAccessEventMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ShareLinkAccessEventMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedowner {
+		edges = append(edges, sharelinkaccessevent.EdgeOwner)
+	}
+	if m.clearedshare_link {
+		edges = append(edges, sharelinkaccessevent.EdgeShareLink)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ShareLinkAccessEventMutation) EdgeCleared(name string) bool {
+	switch name {
+	case sharelinkaccessevent.EdgeOwner:
+		return m.clearedowner
+	case sharelinkaccessevent.EdgeShareLink:
+		return m.clearedshare_link
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ShareLinkAccessEventMutation) ClearEdge(name string) error {
+	switch name {
+	case sharelinkaccessevent.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	case sharelinkaccessevent.EdgeShareLink:
+		m.ClearShareLink()
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLinkAccessEvent unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ShareLinkAccessEventMutation) ResetEdge(name string) error {
+	switch name {
+	case sharelinkaccessevent.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case sharelinkaccessevent.EdgeShareLink:
+		m.ResetShareLink()
+		return nil
+	}
+	return fmt.Errorf("unknown ShareLinkAccessEvent edge %s", name)
 }
 
 // StandardMutation represents an operation that mutates the Standard nodes in the graph.

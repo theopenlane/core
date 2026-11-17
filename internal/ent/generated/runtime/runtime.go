@@ -78,6 +78,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -5280,11 +5282,13 @@ func init() {
 
 	organization.Hooks[82] = organizationMixinHooks7[77]
 
-	organization.Hooks[83] = organizationHooks[0]
+	organization.Hooks[83] = organizationMixinHooks7[78]
 
-	organization.Hooks[84] = organizationHooks[1]
+	organization.Hooks[84] = organizationHooks[0]
 
-	organization.Hooks[85] = organizationHooks[2]
+	organization.Hooks[85] = organizationHooks[1]
+
+	organization.Hooks[86] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]
@@ -5523,40 +5527,44 @@ func init() {
 	organizationsettingDescAllowMatchingDomainsAutojoin := organizationsettingFields[10].Descriptor()
 	// organizationsetting.DefaultAllowMatchingDomainsAutojoin holds the default value on creation for the allow_matching_domains_autojoin field.
 	organizationsetting.DefaultAllowMatchingDomainsAutojoin = organizationsettingDescAllowMatchingDomainsAutojoin.Default.(bool)
+	// organizationsettingDescExternalSharingEnabled is the schema descriptor for external_sharing_enabled field.
+	organizationsettingDescExternalSharingEnabled := organizationsettingFields[11].Descriptor()
+	// organizationsetting.DefaultExternalSharingEnabled holds the default value on creation for the external_sharing_enabled field.
+	organizationsetting.DefaultExternalSharingEnabled = organizationsettingDescExternalSharingEnabled.Default.(bool)
 	// organizationsettingDescIdentityProviderAuthTested is the schema descriptor for identity_provider_auth_tested field.
-	organizationsettingDescIdentityProviderAuthTested := organizationsettingFields[15].Descriptor()
+	organizationsettingDescIdentityProviderAuthTested := organizationsettingFields[16].Descriptor()
 	// organizationsetting.DefaultIdentityProviderAuthTested holds the default value on creation for the identity_provider_auth_tested field.
 	organizationsetting.DefaultIdentityProviderAuthTested = organizationsettingDescIdentityProviderAuthTested.Default.(bool)
 	// organizationsettingDescSamlSigninURL is the schema descriptor for saml_signin_url field.
-	organizationsettingDescSamlSigninURL := organizationsettingFields[18].Descriptor()
+	organizationsettingDescSamlSigninURL := organizationsettingFields[19].Descriptor()
 	// organizationsetting.SamlSigninURLValidator is a validator for the "saml_signin_url" field. It is called by the builders before save.
 	organizationsetting.SamlSigninURLValidator = organizationsettingDescSamlSigninURL.Validators[0].(func(string) error)
 	// organizationsettingDescIdentityProviderLoginEnforced is the schema descriptor for identity_provider_login_enforced field.
-	organizationsettingDescIdentityProviderLoginEnforced := organizationsettingFields[21].Descriptor()
+	organizationsettingDescIdentityProviderLoginEnforced := organizationsettingFields[22].Descriptor()
 	// organizationsetting.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
 	organizationsetting.DefaultIdentityProviderLoginEnforced = organizationsettingDescIdentityProviderLoginEnforced.Default.(bool)
 	// organizationsettingDescIdentityProviderJitProvisioning is the schema descriptor for identity_provider_jit_provisioning field.
-	organizationsettingDescIdentityProviderJitProvisioning := organizationsettingFields[22].Descriptor()
+	organizationsettingDescIdentityProviderJitProvisioning := organizationsettingFields[23].Descriptor()
 	// organizationsetting.DefaultIdentityProviderJitProvisioning holds the default value on creation for the identity_provider_jit_provisioning field.
 	organizationsetting.DefaultIdentityProviderJitProvisioning = organizationsettingDescIdentityProviderJitProvisioning.Default.(bool)
 	// organizationsettingDescJitAllowedEmailDomains is the schema descriptor for jit_allowed_email_domains field.
-	organizationsettingDescJitAllowedEmailDomains := organizationsettingFields[23].Descriptor()
+	organizationsettingDescJitAllowedEmailDomains := organizationsettingFields[24].Descriptor()
 	// organizationsetting.JitAllowedEmailDomainsValidator is a validator for the "jit_allowed_email_domains" field. It is called by the builders before save.
 	organizationsetting.JitAllowedEmailDomainsValidator = organizationsettingDescJitAllowedEmailDomains.Validators[0].(func([]string) error)
 	// organizationsettingDescMultifactorAuthEnforced is the schema descriptor for multifactor_auth_enforced field.
-	organizationsettingDescMultifactorAuthEnforced := organizationsettingFields[24].Descriptor()
+	organizationsettingDescMultifactorAuthEnforced := organizationsettingFields[25].Descriptor()
 	// organizationsetting.DefaultMultifactorAuthEnforced holds the default value on creation for the multifactor_auth_enforced field.
 	organizationsetting.DefaultMultifactorAuthEnforced = organizationsettingDescMultifactorAuthEnforced.Default.(bool)
 	// organizationsettingDescSSOExemptDomains is the schema descriptor for sso_exempt_domains field.
-	organizationsettingDescSSOExemptDomains := organizationsettingFields[25].Descriptor()
+	organizationsettingDescSSOExemptDomains := organizationsettingFields[26].Descriptor()
 	// organizationsetting.SSOExemptDomainsValidator is a validator for the "sso_exempt_domains" field. It is called by the builders before save.
 	organizationsetting.SSOExemptDomainsValidator = organizationsettingDescSSOExemptDomains.Validators[0].(func([]string) error)
 	// organizationsettingDescAllowSupportAccess is the schema descriptor for allow_support_access field.
-	organizationsettingDescAllowSupportAccess := organizationsettingFields[26].Descriptor()
+	organizationsettingDescAllowSupportAccess := organizationsettingFields[27].Descriptor()
 	// organizationsetting.DefaultAllowSupportAccess holds the default value on creation for the allow_support_access field.
 	organizationsetting.DefaultAllowSupportAccess = organizationsettingDescAllowSupportAccess.Default.(bool)
 	// organizationsettingDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettingDescPaymentMethodAdded := organizationsettingFields[27].Descriptor()
+	organizationsettingDescPaymentMethodAdded := organizationsettingFields[28].Descriptor()
 	// organizationsetting.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsetting.DefaultPaymentMethodAdded = organizationsettingDescPaymentMethodAdded.Default.(bool)
 	// organizationsettingDescID is the schema descriptor for id field.
@@ -6800,6 +6808,155 @@ func init() {
 	scanDescID := scanMixinFields4[0].Descriptor()
 	// scan.DefaultID holds the default value on creation for the id field.
 	scan.DefaultID = scanDescID.Default.(func() string)
+	sharelinkMixin := schema.ShareLink{}.Mixin()
+	sharelink.Policy = privacy.NewPolicies(schema.ShareLink{})
+	sharelink.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := sharelink.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	sharelinkMixinHooks0 := sharelinkMixin[0].Hooks()
+	sharelinkMixinHooks1 := sharelinkMixin[1].Hooks()
+	sharelinkMixinHooks3 := sharelinkMixin[3].Hooks()
+	sharelinkMixinHooks6 := sharelinkMixin[6].Hooks()
+	sharelinkHooks := schema.ShareLink{}.Hooks()
+
+	sharelink.Hooks[1] = sharelinkMixinHooks0[0]
+
+	sharelink.Hooks[2] = sharelinkMixinHooks1[0]
+
+	sharelink.Hooks[3] = sharelinkMixinHooks3[0]
+
+	sharelink.Hooks[4] = sharelinkMixinHooks6[0]
+
+	sharelink.Hooks[5] = sharelinkHooks[0]
+
+	sharelink.Hooks[6] = sharelinkHooks[1]
+	sharelinkMixinInters3 := sharelinkMixin[3].Interceptors()
+	sharelinkMixinInters6 := sharelinkMixin[6].Interceptors()
+	sharelinkInters := schema.ShareLink{}.Interceptors()
+	sharelink.Interceptors[0] = sharelinkMixinInters3[0]
+	sharelink.Interceptors[1] = sharelinkMixinInters6[0]
+	sharelink.Interceptors[2] = sharelinkInters[0]
+	sharelinkMixinFields0 := sharelinkMixin[0].Fields()
+	_ = sharelinkMixinFields0
+	sharelinkMixinFields4 := sharelinkMixin[4].Fields()
+	_ = sharelinkMixinFields4
+	sharelinkMixinFields6 := sharelinkMixin[6].Fields()
+	_ = sharelinkMixinFields6
+	sharelinkFields := schema.ShareLink{}.Fields()
+	_ = sharelinkFields
+	// sharelinkDescCreatedAt is the schema descriptor for created_at field.
+	sharelinkDescCreatedAt := sharelinkMixinFields0[0].Descriptor()
+	// sharelink.DefaultCreatedAt holds the default value on creation for the created_at field.
+	sharelink.DefaultCreatedAt = sharelinkDescCreatedAt.Default.(func() time.Time)
+	// sharelinkDescUpdatedAt is the schema descriptor for updated_at field.
+	sharelinkDescUpdatedAt := sharelinkMixinFields0[1].Descriptor()
+	// sharelink.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	sharelink.DefaultUpdatedAt = sharelinkDescUpdatedAt.Default.(func() time.Time)
+	// sharelink.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	sharelink.UpdateDefaultUpdatedAt = sharelinkDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// sharelinkDescOwnerID is the schema descriptor for owner_id field.
+	sharelinkDescOwnerID := sharelinkMixinFields6[0].Descriptor()
+	// sharelink.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	sharelink.OwnerIDValidator = sharelinkDescOwnerID.Validators[0].(func(string) error)
+	// sharelinkDescExpiresAt is the schema descriptor for expires_at field.
+	sharelinkDescExpiresAt := sharelinkFields[1].Descriptor()
+	// sharelink.DefaultExpiresAt holds the default value on creation for the expires_at field.
+	sharelink.DefaultExpiresAt = sharelinkDescExpiresAt.Default.(func() time.Time)
+	// sharelinkDescMaxUses is the schema descriptor for max_uses field.
+	sharelinkDescMaxUses := sharelinkFields[2].Descriptor()
+	// sharelink.DefaultMaxUses holds the default value on creation for the max_uses field.
+	sharelink.DefaultMaxUses = sharelinkDescMaxUses.Default.(int)
+	// sharelink.MaxUsesValidator is a validator for the "max_uses" field. It is called by the builders before save.
+	sharelink.MaxUsesValidator = sharelinkDescMaxUses.Validators[0].(func(int) error)
+	// sharelinkDescUseCount is the schema descriptor for use_count field.
+	sharelinkDescUseCount := sharelinkFields[3].Descriptor()
+	// sharelink.DefaultUseCount holds the default value on creation for the use_count field.
+	sharelink.DefaultUseCount = sharelinkDescUseCount.Default.(int)
+	// sharelinkDescRecipientEmails is the schema descriptor for recipient_emails field.
+	sharelinkDescRecipientEmails := sharelinkFields[4].Descriptor()
+	// sharelink.RecipientEmailsValidator is a validator for the "recipient_emails" field. It is called by the builders before save.
+	sharelink.RecipientEmailsValidator = sharelinkDescRecipientEmails.Validators[0].(func([]string) error)
+	// sharelinkDescLandingPage is the schema descriptor for landing_page field.
+	sharelinkDescLandingPage := sharelinkFields[5].Descriptor()
+	// sharelink.DefaultLandingPage holds the default value on creation for the landing_page field.
+	sharelink.DefaultLandingPage = sharelinkDescLandingPage.Default.(bool)
+	// sharelinkDescRequireSession is the schema descriptor for require_session field.
+	sharelinkDescRequireSession := sharelinkFields[6].Descriptor()
+	// sharelink.DefaultRequireSession holds the default value on creation for the require_session field.
+	sharelink.DefaultRequireSession = sharelinkDescRequireSession.Default.(bool)
+	// sharelinkDescCodeAttempts is the schema descriptor for code_attempts field.
+	sharelinkDescCodeAttempts := sharelinkFields[9].Descriptor()
+	// sharelink.DefaultCodeAttempts holds the default value on creation for the code_attempts field.
+	sharelink.DefaultCodeAttempts = sharelinkDescCodeAttempts.Default.(int)
+	// sharelinkDescID is the schema descriptor for id field.
+	sharelinkDescID := sharelinkMixinFields4[0].Descriptor()
+	// sharelink.DefaultID holds the default value on creation for the id field.
+	sharelink.DefaultID = sharelinkDescID.Default.(func() string)
+	sharelinkaccesseventMixin := schema.ShareLinkAccessEvent{}.Mixin()
+	sharelinkaccessevent.Policy = privacy.NewPolicies(schema.ShareLinkAccessEvent{})
+	sharelinkaccessevent.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := sharelinkaccessevent.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	sharelinkaccesseventMixinHooks0 := sharelinkaccesseventMixin[0].Hooks()
+	sharelinkaccesseventMixinHooks1 := sharelinkaccesseventMixin[1].Hooks()
+	sharelinkaccesseventMixinHooks3 := sharelinkaccesseventMixin[3].Hooks()
+	sharelinkaccesseventMixinHooks6 := sharelinkaccesseventMixin[6].Hooks()
+
+	sharelinkaccessevent.Hooks[1] = sharelinkaccesseventMixinHooks0[0]
+
+	sharelinkaccessevent.Hooks[2] = sharelinkaccesseventMixinHooks1[0]
+
+	sharelinkaccessevent.Hooks[3] = sharelinkaccesseventMixinHooks3[0]
+
+	sharelinkaccessevent.Hooks[4] = sharelinkaccesseventMixinHooks6[0]
+	sharelinkaccesseventMixinInters3 := sharelinkaccesseventMixin[3].Interceptors()
+	sharelinkaccesseventMixinInters6 := sharelinkaccesseventMixin[6].Interceptors()
+	sharelinkaccessevent.Interceptors[0] = sharelinkaccesseventMixinInters3[0]
+	sharelinkaccessevent.Interceptors[1] = sharelinkaccesseventMixinInters6[0]
+	sharelinkaccesseventMixinFields0 := sharelinkaccesseventMixin[0].Fields()
+	_ = sharelinkaccesseventMixinFields0
+	sharelinkaccesseventMixinFields4 := sharelinkaccesseventMixin[4].Fields()
+	_ = sharelinkaccesseventMixinFields4
+	sharelinkaccesseventMixinFields6 := sharelinkaccesseventMixin[6].Fields()
+	_ = sharelinkaccesseventMixinFields6
+	sharelinkaccesseventFields := schema.ShareLinkAccessEvent{}.Fields()
+	_ = sharelinkaccesseventFields
+	// sharelinkaccesseventDescCreatedAt is the schema descriptor for created_at field.
+	sharelinkaccesseventDescCreatedAt := sharelinkaccesseventMixinFields0[0].Descriptor()
+	// sharelinkaccessevent.DefaultCreatedAt holds the default value on creation for the created_at field.
+	sharelinkaccessevent.DefaultCreatedAt = sharelinkaccesseventDescCreatedAt.Default.(func() time.Time)
+	// sharelinkaccesseventDescUpdatedAt is the schema descriptor for updated_at field.
+	sharelinkaccesseventDescUpdatedAt := sharelinkaccesseventMixinFields0[1].Descriptor()
+	// sharelinkaccessevent.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	sharelinkaccessevent.DefaultUpdatedAt = sharelinkaccesseventDescUpdatedAt.Default.(func() time.Time)
+	// sharelinkaccessevent.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	sharelinkaccessevent.UpdateDefaultUpdatedAt = sharelinkaccesseventDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// sharelinkaccesseventDescOwnerID is the schema descriptor for owner_id field.
+	sharelinkaccesseventDescOwnerID := sharelinkaccesseventMixinFields6[0].Descriptor()
+	// sharelinkaccessevent.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	sharelinkaccessevent.OwnerIDValidator = sharelinkaccesseventDescOwnerID.Validators[0].(func(string) error)
+	// sharelinkaccesseventDescShareLinkID is the schema descriptor for share_link_id field.
+	sharelinkaccesseventDescShareLinkID := sharelinkaccesseventFields[0].Descriptor()
+	// sharelinkaccessevent.ShareLinkIDValidator is a validator for the "share_link_id" field. It is called by the builders before save.
+	sharelinkaccessevent.ShareLinkIDValidator = sharelinkaccesseventDescShareLinkID.Validators[0].(func(string) error)
+	// sharelinkaccesseventDescFileID is the schema descriptor for file_id field.
+	sharelinkaccesseventDescFileID := sharelinkaccesseventFields[1].Descriptor()
+	// sharelinkaccessevent.FileIDValidator is a validator for the "file_id" field. It is called by the builders before save.
+	sharelinkaccessevent.FileIDValidator = sharelinkaccesseventDescFileID.Validators[0].(func(string) error)
+	// sharelinkaccesseventDescID is the schema descriptor for id field.
+	sharelinkaccesseventDescID := sharelinkaccesseventMixinFields4[0].Descriptor()
+	// sharelinkaccessevent.DefaultID holds the default value on creation for the id field.
+	sharelinkaccessevent.DefaultID = sharelinkaccesseventDescID.Default.(func() string)
 	standardMixin := schema.Standard{}.Mixin()
 	standard.Policy = privacy.NewPolicies(standardMixin[9], schema.Standard{})
 	standard.Hooks[0] = func(next ent.Mutator) ent.Mutator {

@@ -11096,6 +11096,10 @@ type OrganizationSettingHistory implements Node {
   """
   allowMatchingDomainsAutojoin: Boolean
   """
+  allow members to create share links that grant people outside the organization downloads of files
+  """
+  externalSharingEnabled: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingHistorySSOProvider

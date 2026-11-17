@@ -40,6 +40,8 @@ var (
 	AssessmentCnameTarget    = "assessment-cname.test.net"
 	TrustCenterDefaultDomain = "trust.test.net"
 	TrustCenterPreviewZoneID = "mappable-domain-zone-id"
+	// MockStorageLinksBaseURL is the base URL the mock storage service mints download and share URLs under
+	MockStorageLinksBaseURL = "https://files.test.net/v1/storage"
 )
 
 // localRoundTripper is an http.RoundTripper that executes HTTP transactions
@@ -367,6 +369,7 @@ func newMockStorageService(t *testing.T, validationFunc storage.ValidationFunc, 
 		Resolver:       resolver,
 		ClientService:  clientService,
 		ValidationFunc: validationFunc,
+		Links:          storage.LinksConfig{Enabled: true, BaseURL: MockStorageLinksBaseURL},
 	})
 
 	// Return service and provider for test setup

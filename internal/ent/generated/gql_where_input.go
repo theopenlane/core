@@ -73,6 +73,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -66139,6 +66141,10 @@ type OrganizationWhereInput struct {
 	HasScanCreators     *bool              `json:"hasScanCreators,omitempty"`
 	HasScanCreatorsWith []*GroupWhereInput `json:"hasScanCreatorsWith,omitempty"`
 
+	// "share_link_creators" edge predicates.
+	HasShareLinkCreators     *bool              `json:"hasShareLinkCreators,omitempty"`
+	HasShareLinkCreatorsWith []*GroupWhereInput `json:"hasShareLinkCreatorsWith,omitempty"`
+
 	// "sla_definition_creators" edge predicates.
 	HasSLADefinitionCreators     *bool              `json:"hasSLADefinitionCreators,omitempty"`
 	HasSLADefinitionCreatorsWith []*GroupWhereInput `json:"hasSLADefinitionCreatorsWith,omitempty"`
@@ -67649,6 +67655,25 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasScanCreatorsWith(with...))
+	}
+	if i.HasShareLinkCreators != nil {
+		p := organization.HasShareLinkCreators()
+		if !*i.HasShareLinkCreators {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasShareLinkCreatorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasShareLinkCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasShareLinkCreatorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasShareLinkCreatorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasShareLinkCreatorsWith(with...))
 	}
 	if i.HasSLADefinitionCreators != nil {
 		p := organization.HasSLADefinitionCreators()
@@ -69252,6 +69277,12 @@ type OrganizationSettingWhereInput struct {
 	AllowMatchingDomainsAutojoinIsNil  bool  `json:"allowMatchingDomainsAutojoinIsNil,omitempty"`
 	AllowMatchingDomainsAutojoinNotNil bool  `json:"allowMatchingDomainsAutojoinNotNil,omitempty"`
 
+	// "external_sharing_enabled" field predicates.
+	ExternalSharingEnabled       *bool `json:"externalSharingEnabled,omitempty"`
+	ExternalSharingEnabledNEQ    *bool `json:"externalSharingEnabledNEQ,omitempty"`
+	ExternalSharingEnabledIsNil  bool  `json:"externalSharingEnabledIsNil,omitempty"`
+	ExternalSharingEnabledNotNil bool  `json:"externalSharingEnabledNotNil,omitempty"`
+
 	// "identity_provider" field predicates.
 	IdentityProvider       *enums.SSOProvider  `json:"identityProvider,omitempty"`
 	IdentityProviderNEQ    *enums.SSOProvider  `json:"identityProviderNEQ,omitempty"`
@@ -69842,6 +69873,18 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	}
 	if i.AllowMatchingDomainsAutojoinNotNil {
 		predicates = append(predicates, organizationsetting.AllowMatchingDomainsAutojoinNotNil())
+	}
+	if i.ExternalSharingEnabled != nil {
+		predicates = append(predicates, organizationsetting.ExternalSharingEnabledEQ(*i.ExternalSharingEnabled))
+	}
+	if i.ExternalSharingEnabledNEQ != nil {
+		predicates = append(predicates, organizationsetting.ExternalSharingEnabledNEQ(*i.ExternalSharingEnabledNEQ))
+	}
+	if i.ExternalSharingEnabledIsNil {
+		predicates = append(predicates, organizationsetting.ExternalSharingEnabledIsNil())
+	}
+	if i.ExternalSharingEnabledNotNil {
+		predicates = append(predicates, organizationsetting.ExternalSharingEnabledNotNil())
 	}
 	if i.IdentityProvider != nil {
 		predicates = append(predicates, organizationsetting.IdentityProviderEQ(*i.IdentityProvider))
@@ -91136,6 +91179,1221 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 		return predicates[0], nil
 	default:
 		return scan.And(predicates...), nil
+	}
+}
+
+// ShareLinkWhereInput represents a where input for filtering ShareLink queries.
+type ShareLinkWhereInput struct {
+	Predicates []predicate.ShareLink  `json:"-"`
+	Not        *ShareLinkWhereInput   `json:"not,omitempty"`
+	Or         []*ShareLinkWhereInput `json:"or,omitempty"`
+	And        []*ShareLinkWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time `json:"createdAt,omitempty"`
+	CreatedAtGT     *time.Time `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool       `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool       `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time `json:"updatedAt,omitempty"`
+	UpdatedAtGT     *time.Time `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool       `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool       `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "updated_by_impersonator" field predicates.
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNEQ          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameIsNil        bool     `json:"nameIsNil,omitempty"`
+	NameNotNil       bool     `json:"nameNotNil,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "expires_at" field predicates.
+	ExpiresAt       *time.Time `json:"expiresAt,omitempty"`
+	ExpiresAtGT     *time.Time `json:"expiresAtGT,omitempty"`
+	ExpiresAtGTE    *time.Time `json:"expiresAtGTE,omitempty"`
+	ExpiresAtLT     *time.Time `json:"expiresAtLT,omitempty"`
+	ExpiresAtLTE    *time.Time `json:"expiresAtLTE,omitempty"`
+	ExpiresAtIsNil  bool       `json:"expiresAtIsNil,omitempty"`
+	ExpiresAtNotNil bool       `json:"expiresAtNotNil,omitempty"`
+
+	// "max_uses" field predicates.
+	MaxUses       *int `json:"maxUses,omitempty"`
+	MaxUsesNEQ    *int `json:"maxUsesNEQ,omitempty"`
+	MaxUsesGT     *int `json:"maxUsesGT,omitempty"`
+	MaxUsesGTE    *int `json:"maxUsesGTE,omitempty"`
+	MaxUsesLT     *int `json:"maxUsesLT,omitempty"`
+	MaxUsesLTE    *int `json:"maxUsesLTE,omitempty"`
+	MaxUsesIsNil  bool `json:"maxUsesIsNil,omitempty"`
+	MaxUsesNotNil bool `json:"maxUsesNotNil,omitempty"`
+
+	// "use_count" field predicates.
+	UseCount    *int `json:"useCount,omitempty"`
+	UseCountNEQ *int `json:"useCountNEQ,omitempty"`
+	UseCountGT  *int `json:"useCountGT,omitempty"`
+	UseCountGTE *int `json:"useCountGTE,omitempty"`
+	UseCountLT  *int `json:"useCountLT,omitempty"`
+	UseCountLTE *int `json:"useCountLTE,omitempty"`
+
+	// "landing_page" field predicates.
+	LandingPage       *bool `json:"landingPage,omitempty"`
+	LandingPageNEQ    *bool `json:"landingPageNEQ,omitempty"`
+	LandingPageIsNil  bool  `json:"landingPageIsNil,omitempty"`
+	LandingPageNotNil bool  `json:"landingPageNotNil,omitempty"`
+
+	// "require_session" field predicates.
+	RequireSession       *bool `json:"requireSession,omitempty"`
+	RequireSessionNEQ    *bool `json:"requireSessionNEQ,omitempty"`
+	RequireSessionIsNil  bool  `json:"requireSessionIsNil,omitempty"`
+	RequireSessionNotNil bool  `json:"requireSessionNotNil,omitempty"`
+
+	// "revoked_at" field predicates.
+	RevokedAt       *time.Time `json:"revokedAt,omitempty"`
+	RevokedAtGT     *time.Time `json:"revokedAtGT,omitempty"`
+	RevokedAtGTE    *time.Time `json:"revokedAtGTE,omitempty"`
+	RevokedAtLT     *time.Time `json:"revokedAtLT,omitempty"`
+	RevokedAtLTE    *time.Time `json:"revokedAtLTE,omitempty"`
+	RevokedAtIsNil  bool       `json:"revokedAtIsNil,omitempty"`
+	RevokedAtNotNil bool       `json:"revokedAtNotNil,omitempty"`
+
+	// "recipient_emails" JSON-string-array predicates.
+	RecipientEmailsHas *string `json:"recipientEmailsHas,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+
+	// "share_link_access_events" edge predicates.
+	HasShareLinkAccessEvents     *bool                             `json:"hasShareLinkAccessEvents,omitempty"`
+	HasShareLinkAccessEventsWith []*ShareLinkAccessEventWhereInput `json:"hasShareLinkAccessEventsWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ShareLinkWhereInput) AddPredicates(predicates ...predicate.ShareLink) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ShareLinkWhereInput filter on the ShareLinkQuery builder.
+func (i *ShareLinkWhereInput) Filter(q *ShareLinkQuery) (*ShareLinkQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyShareLinkWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyShareLinkWhereInput is returned in case the ShareLinkWhereInput is empty.
+var ErrEmptyShareLinkWhereInput = errors.New("generated: empty predicate ShareLinkWhereInput")
+
+// P returns a predicate for filtering sharelinks.
+// An error is returned if the input is empty or invalid.
+func (i *ShareLinkWhereInput) P() (predicate.ShareLink, error) {
+	var predicates []predicate.ShareLink
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, sharelink.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.ShareLink, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, sharelink.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.ShareLink, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, sharelink.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, sharelink.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, sharelink.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, sharelink.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, sharelink.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, sharelink.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, sharelink.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, sharelink.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, sharelink.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, sharelink.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, sharelink.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, sharelink.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, sharelink.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, sharelink.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, sharelink.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, sharelink.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, sharelink.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, sharelink.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, sharelink.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, sharelink.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, sharelink.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, sharelink.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, sharelink.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, sharelink.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, sharelink.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, sharelink.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, sharelink.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, sharelink.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, sharelink.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, sharelink.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, sharelink.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, sharelink.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, sharelink.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, sharelink.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, sharelink.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, sharelink.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, sharelink.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, sharelink.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, sharelink.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, sharelink.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, sharelink.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, sharelink.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, sharelink.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.UpdatedByImpersonator != nil {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorEQ(*i.UpdatedByImpersonator))
+	}
+	if i.UpdatedByImpersonatorNEQ != nil {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorNEQ(*i.UpdatedByImpersonatorNEQ))
+	}
+	if len(i.UpdatedByImpersonatorIn) > 0 {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorIn(i.UpdatedByImpersonatorIn...))
+	}
+	if len(i.UpdatedByImpersonatorNotIn) > 0 {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorNotIn(i.UpdatedByImpersonatorNotIn...))
+	}
+	if i.UpdatedByImpersonatorContains != nil {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
+	if i.UpdatedByImpersonatorHasSuffix != nil {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
+	}
+	if i.UpdatedByImpersonatorIsNil {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorIsNil())
+	}
+	if i.UpdatedByImpersonatorNotNil {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorNotNil())
+	}
+	if i.UpdatedByImpersonatorEqualFold != nil {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorEqualFold(*i.UpdatedByImpersonatorEqualFold))
+	}
+	if i.UpdatedByImpersonatorContainsFold != nil {
+		predicates = append(predicates, sharelink.UpdatedByImpersonatorContainsFold(*i.UpdatedByImpersonatorContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, sharelink.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, sharelink.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, sharelink.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, sharelink.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, sharelink.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, sharelink.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, sharelink.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, sharelink.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, sharelink.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, sharelink.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, sharelink.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.Name != nil {
+		predicates = append(predicates, sharelink.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, sharelink.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, sharelink.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, sharelink.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, sharelink.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, sharelink.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, sharelink.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameIsNil {
+		predicates = append(predicates, sharelink.NameIsNil())
+	}
+	if i.NameNotNil {
+		predicates = append(predicates, sharelink.NameNotNil())
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, sharelink.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, sharelink.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.ExpiresAt != nil {
+		predicates = append(predicates, sharelink.ExpiresAtEQ(*i.ExpiresAt))
+	}
+	if i.ExpiresAtGT != nil {
+		predicates = append(predicates, sharelink.ExpiresAtGT(*i.ExpiresAtGT))
+	}
+	if i.ExpiresAtGTE != nil {
+		predicates = append(predicates, sharelink.ExpiresAtGTE(*i.ExpiresAtGTE))
+	}
+	if i.ExpiresAtLT != nil {
+		predicates = append(predicates, sharelink.ExpiresAtLT(*i.ExpiresAtLT))
+	}
+	if i.ExpiresAtLTE != nil {
+		predicates = append(predicates, sharelink.ExpiresAtLTE(*i.ExpiresAtLTE))
+	}
+	if i.ExpiresAtIsNil {
+		predicates = append(predicates, sharelink.ExpiresAtIsNil())
+	}
+	if i.ExpiresAtNotNil {
+		predicates = append(predicates, sharelink.ExpiresAtNotNil())
+	}
+	if i.MaxUses != nil {
+		predicates = append(predicates, sharelink.MaxUsesEQ(*i.MaxUses))
+	}
+	if i.MaxUsesNEQ != nil {
+		predicates = append(predicates, sharelink.MaxUsesNEQ(*i.MaxUsesNEQ))
+	}
+	if i.MaxUsesGT != nil {
+		predicates = append(predicates, sharelink.MaxUsesGT(*i.MaxUsesGT))
+	}
+	if i.MaxUsesGTE != nil {
+		predicates = append(predicates, sharelink.MaxUsesGTE(*i.MaxUsesGTE))
+	}
+	if i.MaxUsesLT != nil {
+		predicates = append(predicates, sharelink.MaxUsesLT(*i.MaxUsesLT))
+	}
+	if i.MaxUsesLTE != nil {
+		predicates = append(predicates, sharelink.MaxUsesLTE(*i.MaxUsesLTE))
+	}
+	if i.MaxUsesIsNil {
+		predicates = append(predicates, sharelink.MaxUsesIsNil())
+	}
+	if i.MaxUsesNotNil {
+		predicates = append(predicates, sharelink.MaxUsesNotNil())
+	}
+	if i.UseCount != nil {
+		predicates = append(predicates, sharelink.UseCountEQ(*i.UseCount))
+	}
+	if i.UseCountNEQ != nil {
+		predicates = append(predicates, sharelink.UseCountNEQ(*i.UseCountNEQ))
+	}
+	if i.UseCountGT != nil {
+		predicates = append(predicates, sharelink.UseCountGT(*i.UseCountGT))
+	}
+	if i.UseCountGTE != nil {
+		predicates = append(predicates, sharelink.UseCountGTE(*i.UseCountGTE))
+	}
+	if i.UseCountLT != nil {
+		predicates = append(predicates, sharelink.UseCountLT(*i.UseCountLT))
+	}
+	if i.UseCountLTE != nil {
+		predicates = append(predicates, sharelink.UseCountLTE(*i.UseCountLTE))
+	}
+	if i.LandingPage != nil {
+		predicates = append(predicates, sharelink.LandingPageEQ(*i.LandingPage))
+	}
+	if i.LandingPageNEQ != nil {
+		predicates = append(predicates, sharelink.LandingPageNEQ(*i.LandingPageNEQ))
+	}
+	if i.LandingPageIsNil {
+		predicates = append(predicates, sharelink.LandingPageIsNil())
+	}
+	if i.LandingPageNotNil {
+		predicates = append(predicates, sharelink.LandingPageNotNil())
+	}
+	if i.RequireSession != nil {
+		predicates = append(predicates, sharelink.RequireSessionEQ(*i.RequireSession))
+	}
+	if i.RequireSessionNEQ != nil {
+		predicates = append(predicates, sharelink.RequireSessionNEQ(*i.RequireSessionNEQ))
+	}
+	if i.RequireSessionIsNil {
+		predicates = append(predicates, sharelink.RequireSessionIsNil())
+	}
+	if i.RequireSessionNotNil {
+		predicates = append(predicates, sharelink.RequireSessionNotNil())
+	}
+	if i.RevokedAt != nil {
+		predicates = append(predicates, sharelink.RevokedAtEQ(*i.RevokedAt))
+	}
+	if i.RevokedAtGT != nil {
+		predicates = append(predicates, sharelink.RevokedAtGT(*i.RevokedAtGT))
+	}
+	if i.RevokedAtGTE != nil {
+		predicates = append(predicates, sharelink.RevokedAtGTE(*i.RevokedAtGTE))
+	}
+	if i.RevokedAtLT != nil {
+		predicates = append(predicates, sharelink.RevokedAtLT(*i.RevokedAtLT))
+	}
+	if i.RevokedAtLTE != nil {
+		predicates = append(predicates, sharelink.RevokedAtLTE(*i.RevokedAtLTE))
+	}
+	if i.RevokedAtIsNil {
+		predicates = append(predicates, sharelink.RevokedAtIsNil())
+	}
+	if i.RevokedAtNotNil {
+		predicates = append(predicates, sharelink.RevokedAtNotNil())
+	}
+
+	if i.RecipientEmailsHas != nil {
+		v := *i.RecipientEmailsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(schemautil.ValueContainsFold(s.C(sharelink.FieldRecipientEmails), v))
+		})
+	}
+
+	if i.HasOwner != nil {
+		p := sharelink.HasOwner()
+		if !*i.HasOwner {
+			p = sharelink.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, sharelink.HasOwnerWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := sharelink.HasFiles()
+		if !*i.HasFiles {
+			p = sharelink.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, sharelink.HasFilesWith(with...))
+	}
+	if i.HasShareLinkAccessEvents != nil {
+		p := sharelink.HasShareLinkAccessEvents()
+		if !*i.HasShareLinkAccessEvents {
+			p = sharelink.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasShareLinkAccessEventsWith) > 0 {
+		with := make([]predicate.ShareLinkAccessEvent, 0, len(i.HasShareLinkAccessEventsWith))
+		with = append(with, sharelinkaccessevent.DeletedAtIsNil())
+		for _, w := range i.HasShareLinkAccessEventsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasShareLinkAccessEventsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, sharelink.HasShareLinkAccessEventsWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyShareLinkWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return sharelink.And(predicates...), nil
+	}
+}
+
+// ShareLinkAccessEventWhereInput represents a where input for filtering ShareLinkAccessEvent queries.
+type ShareLinkAccessEventWhereInput struct {
+	Predicates []predicate.ShareLinkAccessEvent  `json:"-"`
+	Not        *ShareLinkAccessEventWhereInput   `json:"not,omitempty"`
+	Or         []*ShareLinkAccessEventWhereInput `json:"or,omitempty"`
+	And        []*ShareLinkAccessEventWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time `json:"createdAt,omitempty"`
+	CreatedAtGT     *time.Time `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool       `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool       `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time `json:"updatedAt,omitempty"`
+	UpdatedAtGT     *time.Time `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool       `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool       `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "updated_by_impersonator" field predicates.
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNEQ          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "share_link_id" field predicates.
+	ShareLinkID             *string  `json:"shareLinkID,omitempty"`
+	ShareLinkIDNEQ          *string  `json:"shareLinkIDNEQ,omitempty"`
+	ShareLinkIDIn           []string `json:"shareLinkIDIn,omitempty"`
+	ShareLinkIDNotIn        []string `json:"shareLinkIDNotIn,omitempty"`
+	ShareLinkIDContains     *string  `json:"shareLinkIDContains,omitempty"`
+	ShareLinkIDHasPrefix    *string  `json:"shareLinkIDHasPrefix,omitempty"`
+	ShareLinkIDHasSuffix    *string  `json:"shareLinkIDHasSuffix,omitempty"`
+	ShareLinkIDEqualFold    *string  `json:"shareLinkIDEqualFold,omitempty"`
+	ShareLinkIDContainsFold *string  `json:"shareLinkIDContainsFold,omitempty"`
+
+	// "file_id" field predicates.
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIDNEQ          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+
+	// "ip_address" field predicates.
+	IPAddress             *string  `json:"ipAddress,omitempty"`
+	IPAddressNEQ          *string  `json:"ipAddressNEQ,omitempty"`
+	IPAddressIn           []string `json:"ipAddressIn,omitempty"`
+	IPAddressNotIn        []string `json:"ipAddressNotIn,omitempty"`
+	IPAddressContains     *string  `json:"ipAddressContains,omitempty"`
+	IPAddressHasPrefix    *string  `json:"ipAddressHasPrefix,omitempty"`
+	IPAddressHasSuffix    *string  `json:"ipAddressHasSuffix,omitempty"`
+	IPAddressIsNil        bool     `json:"ipAddressIsNil,omitempty"`
+	IPAddressNotNil       bool     `json:"ipAddressNotNil,omitempty"`
+	IPAddressEqualFold    *string  `json:"ipAddressEqualFold,omitempty"`
+	IPAddressContainsFold *string  `json:"ipAddressContainsFold,omitempty"`
+
+	// "user_agent" field predicates.
+	UserAgent             *string  `json:"userAgent,omitempty"`
+	UserAgentNEQ          *string  `json:"userAgentNEQ,omitempty"`
+	UserAgentIn           []string `json:"userAgentIn,omitempty"`
+	UserAgentNotIn        []string `json:"userAgentNotIn,omitempty"`
+	UserAgentContains     *string  `json:"userAgentContains,omitempty"`
+	UserAgentHasPrefix    *string  `json:"userAgentHasPrefix,omitempty"`
+	UserAgentHasSuffix    *string  `json:"userAgentHasSuffix,omitempty"`
+	UserAgentIsNil        bool     `json:"userAgentIsNil,omitempty"`
+	UserAgentNotNil       bool     `json:"userAgentNotNil,omitempty"`
+	UserAgentEqualFold    *string  `json:"userAgentEqualFold,omitempty"`
+	UserAgentContainsFold *string  `json:"userAgentContainsFold,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "share_link" edge predicates.
+	HasShareLink     *bool                  `json:"hasShareLink,omitempty"`
+	HasShareLinkWith []*ShareLinkWhereInput `json:"hasShareLinkWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *ShareLinkAccessEventWhereInput) AddPredicates(predicates ...predicate.ShareLinkAccessEvent) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the ShareLinkAccessEventWhereInput filter on the ShareLinkAccessEventQuery builder.
+func (i *ShareLinkAccessEventWhereInput) Filter(q *ShareLinkAccessEventQuery) (*ShareLinkAccessEventQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyShareLinkAccessEventWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyShareLinkAccessEventWhereInput is returned in case the ShareLinkAccessEventWhereInput is empty.
+var ErrEmptyShareLinkAccessEventWhereInput = errors.New("generated: empty predicate ShareLinkAccessEventWhereInput")
+
+// P returns a predicate for filtering sharelinkaccessevents.
+// An error is returned if the input is empty or invalid.
+func (i *ShareLinkAccessEventWhereInput) P() (predicate.ShareLinkAccessEvent, error) {
+	var predicates []predicate.ShareLinkAccessEvent
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, sharelinkaccessevent.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.ShareLinkAccessEvent, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, sharelinkaccessevent.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.ShareLinkAccessEvent, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, sharelinkaccessevent.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, sharelinkaccessevent.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, sharelinkaccessevent.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.UpdatedByImpersonator != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorEQ(*i.UpdatedByImpersonator))
+	}
+	if i.UpdatedByImpersonatorNEQ != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorNEQ(*i.UpdatedByImpersonatorNEQ))
+	}
+	if len(i.UpdatedByImpersonatorIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorIn(i.UpdatedByImpersonatorIn...))
+	}
+	if len(i.UpdatedByImpersonatorNotIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorNotIn(i.UpdatedByImpersonatorNotIn...))
+	}
+	if i.UpdatedByImpersonatorContains != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
+	if i.UpdatedByImpersonatorHasSuffix != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
+	}
+	if i.UpdatedByImpersonatorIsNil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorIsNil())
+	}
+	if i.UpdatedByImpersonatorNotNil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorNotNil())
+	}
+	if i.UpdatedByImpersonatorEqualFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorEqualFold(*i.UpdatedByImpersonatorEqualFold))
+	}
+	if i.UpdatedByImpersonatorContainsFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.UpdatedByImpersonatorContainsFold(*i.UpdatedByImpersonatorContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.ShareLinkID != nil {
+		predicates = append(predicates, sharelinkaccessevent.ShareLinkIDEQ(*i.ShareLinkID))
+	}
+	if i.ShareLinkIDNEQ != nil {
+		predicates = append(predicates, sharelinkaccessevent.ShareLinkIDNEQ(*i.ShareLinkIDNEQ))
+	}
+	if len(i.ShareLinkIDIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.ShareLinkIDIn(i.ShareLinkIDIn...))
+	}
+	if len(i.ShareLinkIDNotIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.ShareLinkIDNotIn(i.ShareLinkIDNotIn...))
+	}
+	if i.ShareLinkIDContains != nil {
+		predicates = append(predicates, sharelinkaccessevent.ShareLinkIDContains(*i.ShareLinkIDContains))
+	}
+	if i.ShareLinkIDHasPrefix != nil {
+		predicates = append(predicates, sharelinkaccessevent.ShareLinkIDHasPrefix(*i.ShareLinkIDHasPrefix))
+	}
+	if i.ShareLinkIDHasSuffix != nil {
+		predicates = append(predicates, sharelinkaccessevent.ShareLinkIDHasSuffix(*i.ShareLinkIDHasSuffix))
+	}
+	if i.ShareLinkIDEqualFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.ShareLinkIDEqualFold(*i.ShareLinkIDEqualFold))
+	}
+	if i.ShareLinkIDContainsFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.ShareLinkIDContainsFold(*i.ShareLinkIDContainsFold))
+	}
+	if i.FileID != nil {
+		predicates = append(predicates, sharelinkaccessevent.FileIDEQ(*i.FileID))
+	}
+	if i.FileIDNEQ != nil {
+		predicates = append(predicates, sharelinkaccessevent.FileIDNEQ(*i.FileIDNEQ))
+	}
+	if len(i.FileIDIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.FileIDIn(i.FileIDIn...))
+	}
+	if len(i.FileIDNotIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.FileIDNotIn(i.FileIDNotIn...))
+	}
+	if i.FileIDContains != nil {
+		predicates = append(predicates, sharelinkaccessevent.FileIDContains(*i.FileIDContains))
+	}
+	if i.FileIDHasPrefix != nil {
+		predicates = append(predicates, sharelinkaccessevent.FileIDHasPrefix(*i.FileIDHasPrefix))
+	}
+	if i.FileIDHasSuffix != nil {
+		predicates = append(predicates, sharelinkaccessevent.FileIDHasSuffix(*i.FileIDHasSuffix))
+	}
+	if i.FileIDEqualFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.FileIDEqualFold(*i.FileIDEqualFold))
+	}
+	if i.FileIDContainsFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.FileIDContainsFold(*i.FileIDContainsFold))
+	}
+	if i.IPAddress != nil {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressEQ(*i.IPAddress))
+	}
+	if i.IPAddressNEQ != nil {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressNEQ(*i.IPAddressNEQ))
+	}
+	if len(i.IPAddressIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressIn(i.IPAddressIn...))
+	}
+	if len(i.IPAddressNotIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressNotIn(i.IPAddressNotIn...))
+	}
+	if i.IPAddressContains != nil {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressContains(*i.IPAddressContains))
+	}
+	if i.IPAddressHasPrefix != nil {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressHasPrefix(*i.IPAddressHasPrefix))
+	}
+	if i.IPAddressHasSuffix != nil {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressHasSuffix(*i.IPAddressHasSuffix))
+	}
+	if i.IPAddressIsNil {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressIsNil())
+	}
+	if i.IPAddressNotNil {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressNotNil())
+	}
+	if i.IPAddressEqualFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressEqualFold(*i.IPAddressEqualFold))
+	}
+	if i.IPAddressContainsFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.IPAddressContainsFold(*i.IPAddressContainsFold))
+	}
+	if i.UserAgent != nil {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentEQ(*i.UserAgent))
+	}
+	if i.UserAgentNEQ != nil {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentNEQ(*i.UserAgentNEQ))
+	}
+	if len(i.UserAgentIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentIn(i.UserAgentIn...))
+	}
+	if len(i.UserAgentNotIn) > 0 {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentNotIn(i.UserAgentNotIn...))
+	}
+	if i.UserAgentContains != nil {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentContains(*i.UserAgentContains))
+	}
+	if i.UserAgentHasPrefix != nil {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentHasPrefix(*i.UserAgentHasPrefix))
+	}
+	if i.UserAgentHasSuffix != nil {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentHasSuffix(*i.UserAgentHasSuffix))
+	}
+	if i.UserAgentIsNil {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentIsNil())
+	}
+	if i.UserAgentNotNil {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentNotNil())
+	}
+	if i.UserAgentEqualFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentEqualFold(*i.UserAgentEqualFold))
+	}
+	if i.UserAgentContainsFold != nil {
+		predicates = append(predicates, sharelinkaccessevent.UserAgentContainsFold(*i.UserAgentContainsFold))
+	}
+
+	if i.HasOwner != nil {
+		p := sharelinkaccessevent.HasOwner()
+		if !*i.HasOwner {
+			p = sharelinkaccessevent.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, sharelinkaccessevent.HasOwnerWith(with...))
+	}
+	if i.HasShareLink != nil {
+		p := sharelinkaccessevent.HasShareLink()
+		if !*i.HasShareLink {
+			p = sharelinkaccessevent.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasShareLinkWith) > 0 {
+		with := make([]predicate.ShareLink, 0, len(i.HasShareLinkWith))
+		with = append(with, sharelink.DeletedAtIsNil())
+		for _, w := range i.HasShareLinkWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasShareLinkWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, sharelinkaccessevent.HasShareLinkWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyShareLinkAccessEventWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return sharelinkaccessevent.And(predicates...), nil
 	}
 }
 

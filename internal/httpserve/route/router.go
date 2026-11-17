@@ -458,6 +458,16 @@ func RegisterRoutes(router *Router) error {
 		routeHandlers = append(routeHandlers, registerUploadsHandler)
 	}
 
+	// Register the share link callbacks only when storage links are enabled and the forwarder secret is configured
+	if router.Handler.ObjectStore != nil && router.Handler.ObjectStore.Links().Enabled && router.Handler.ForwarderSecret != "" {
+		routeHandlers = append(routeHandlers,
+			registerShareLinkResolveHandler,
+			registerShareLinkCodeHandler,
+			registerShareLinkVerifyHandler,
+			registerShareLinkConsumeHandler,
+		)
+	}
+
 	for _, route := range routeHandlers {
 		if err := route.(func(*Router) error)(router); err != nil {
 			return err

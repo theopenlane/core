@@ -1694,28 +1694,32 @@ func init() {
 	organizationsettinghistoryDescAllowMatchingDomainsAutojoin := organizationsettinghistoryFields[22].Descriptor()
 	// organizationsettinghistory.DefaultAllowMatchingDomainsAutojoin holds the default value on creation for the allow_matching_domains_autojoin field.
 	organizationsettinghistory.DefaultAllowMatchingDomainsAutojoin = organizationsettinghistoryDescAllowMatchingDomainsAutojoin.Default.(bool)
+	// organizationsettinghistoryDescExternalSharingEnabled is the schema descriptor for external_sharing_enabled field.
+	organizationsettinghistoryDescExternalSharingEnabled := organizationsettinghistoryFields[23].Descriptor()
+	// organizationsettinghistory.DefaultExternalSharingEnabled holds the default value on creation for the external_sharing_enabled field.
+	organizationsettinghistory.DefaultExternalSharingEnabled = organizationsettinghistoryDescExternalSharingEnabled.Default.(bool)
 	// organizationsettinghistoryDescIdentityProviderAuthTested is the schema descriptor for identity_provider_auth_tested field.
-	organizationsettinghistoryDescIdentityProviderAuthTested := organizationsettinghistoryFields[27].Descriptor()
+	organizationsettinghistoryDescIdentityProviderAuthTested := organizationsettinghistoryFields[28].Descriptor()
 	// organizationsettinghistory.DefaultIdentityProviderAuthTested holds the default value on creation for the identity_provider_auth_tested field.
 	organizationsettinghistory.DefaultIdentityProviderAuthTested = organizationsettinghistoryDescIdentityProviderAuthTested.Default.(bool)
 	// organizationsettinghistoryDescIdentityProviderLoginEnforced is the schema descriptor for identity_provider_login_enforced field.
-	organizationsettinghistoryDescIdentityProviderLoginEnforced := organizationsettinghistoryFields[33].Descriptor()
+	organizationsettinghistoryDescIdentityProviderLoginEnforced := organizationsettinghistoryFields[34].Descriptor()
 	// organizationsettinghistory.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
 	organizationsettinghistory.DefaultIdentityProviderLoginEnforced = organizationsettinghistoryDescIdentityProviderLoginEnforced.Default.(bool)
 	// organizationsettinghistoryDescIdentityProviderJitProvisioning is the schema descriptor for identity_provider_jit_provisioning field.
-	organizationsettinghistoryDescIdentityProviderJitProvisioning := organizationsettinghistoryFields[34].Descriptor()
+	organizationsettinghistoryDescIdentityProviderJitProvisioning := organizationsettinghistoryFields[35].Descriptor()
 	// organizationsettinghistory.DefaultIdentityProviderJitProvisioning holds the default value on creation for the identity_provider_jit_provisioning field.
 	organizationsettinghistory.DefaultIdentityProviderJitProvisioning = organizationsettinghistoryDescIdentityProviderJitProvisioning.Default.(bool)
 	// organizationsettinghistoryDescMultifactorAuthEnforced is the schema descriptor for multifactor_auth_enforced field.
-	organizationsettinghistoryDescMultifactorAuthEnforced := organizationsettinghistoryFields[36].Descriptor()
+	organizationsettinghistoryDescMultifactorAuthEnforced := organizationsettinghistoryFields[37].Descriptor()
 	// organizationsettinghistory.DefaultMultifactorAuthEnforced holds the default value on creation for the multifactor_auth_enforced field.
 	organizationsettinghistory.DefaultMultifactorAuthEnforced = organizationsettinghistoryDescMultifactorAuthEnforced.Default.(bool)
 	// organizationsettinghistoryDescAllowSupportAccess is the schema descriptor for allow_support_access field.
-	organizationsettinghistoryDescAllowSupportAccess := organizationsettinghistoryFields[38].Descriptor()
+	organizationsettinghistoryDescAllowSupportAccess := organizationsettinghistoryFields[39].Descriptor()
 	// organizationsettinghistory.DefaultAllowSupportAccess holds the default value on creation for the allow_support_access field.
 	organizationsettinghistory.DefaultAllowSupportAccess = organizationsettinghistoryDescAllowSupportAccess.Default.(bool)
 	// organizationsettinghistoryDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[39].Descriptor()
+	organizationsettinghistoryDescPaymentMethodAdded := organizationsettinghistoryFields[40].Descriptor()
 	// organizationsettinghistory.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsettinghistory.DefaultPaymentMethodAdded = organizationsettinghistoryDescPaymentMethodAdded.Default.(bool)
 	// organizationsettinghistoryDescID is the schema descriptor for id field.

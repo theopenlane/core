@@ -1840,6 +1840,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "share_links": {
+	ObjectType:          "share_link",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "trust_center_doc": {
 	ObjectType:          "trust_center_doc",
 	SkipEditCheck:       false,
@@ -3533,6 +3538,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "share_link_creators": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "sla_definition_creators": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
@@ -4105,6 +4115,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "check_results": {
 	ObjectType:          "check_result",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "share_links": {
+	ObjectType:          "share_link",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "share_link_access_events": {
+	ObjectType:          "share_link_access_event",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
@@ -5267,6 +5287,33 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+},
+}, "share_link": {"owner": {
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "files": {
+	ObjectType:          "file",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "share_link_access_events": {
+	ObjectType:          "share_link_access_event",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+},
+}, "share_link_access_event": {"owner": {
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "share_link": {
+	ObjectType:          "share_link",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 },
 }, "standard": {"owner": {

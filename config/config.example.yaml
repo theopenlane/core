@@ -581,6 +581,10 @@ shortlinks:
     enabled: false
     endpointurl: https://admin.s.theopenlane.io/api/links
     linkttl: 7776000000000000
+storagelinks:
+    baseurl: http://localhost:17608/v1/storage
+    enabled: false
+    forwardersecret: ""
 subscription:
     enabled: false
     privatestripekey: ""

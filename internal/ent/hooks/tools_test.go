@@ -22,10 +22,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/entdb"
+	"github.com/theopenlane/core/v2/internal/objects"
 	coreutils "github.com/theopenlane/core/v2/internal/testutils"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
@@ -47,6 +49,8 @@ type HookTestSuite struct {
 	tf          *testutils.TestFixture
 	ofgaTF      *fgatest.OpenFGATestFixture
 	galaRuntime *gala.Gala
+	// opts are the options the shared client was opened with, reused to open clients differing in one option
+	opts []generated.Option
 }
 
 // suite is the shared hook test state set up once in TestMain, each test works on its own copy from setupTest
@@ -179,7 +183,12 @@ func (s *HookTestSuite) setupClient() *generated.Client {
 		generated.SessionConfig(&sessionConfig),
 		generated.EntConfig(entCfg),
 		generated.EntitlementManager(entitilements),
+		generated.ObjectManager(objects.NewService(objects.Config{
+			Links: storage.LinksConfig{Enabled: true, BaseURL: shareLinkBaseURL},
+		})),
 	}
+
+	s.opts = opts
 
 	s.tf = entdb.NewTestFixture()
 

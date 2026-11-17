@@ -90,6 +90,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -289,6 +291,10 @@ type Client struct {
 	SLADefinition *SLADefinitionClient
 	// Scan is the client for interacting with the Scan builders.
 	Scan *ScanClient
+	// ShareLink is the client for interacting with the ShareLink builders.
+	ShareLink *ShareLinkClient
+	// ShareLinkAccessEvent is the client for interacting with the ShareLinkAccessEvent builders.
+	ShareLinkAccessEvent *ShareLinkAccessEventClient
 	// Standard is the client for interacting with the Standard builders.
 	Standard *StandardClient
 	// Subcontrol is the client for interacting with the Subcontrol builders.
@@ -443,6 +449,8 @@ func (c *Client) init() {
 	c.Risk = NewRiskClient(c.config)
 	c.SLADefinition = NewSLADefinitionClient(c.config)
 	c.Scan = NewScanClient(c.config)
+	c.ShareLink = NewShareLinkClient(c.config)
+	c.ShareLinkAccessEvent = NewShareLinkAccessEventClient(c.config)
 	c.Standard = NewStandardClient(c.config)
 	c.Subcontrol = NewSubcontrolClient(c.config)
 	c.Subprocessor = NewSubprocessorClient(c.config)
@@ -744,6 +752,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Risk:                        NewRiskClient(cfg),
 		SLADefinition:               NewSLADefinitionClient(cfg),
 		Scan:                        NewScanClient(cfg),
+		ShareLink:                   NewShareLinkClient(cfg),
+		ShareLinkAccessEvent:        NewShareLinkAccessEventClient(cfg),
 		Standard:                    NewStandardClient(cfg),
 		Subcontrol:                  NewSubcontrolClient(cfg),
 		Subprocessor:                NewSubprocessorClient(cfg),
@@ -866,6 +876,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Risk:                        NewRiskClient(cfg),
 		SLADefinition:               NewSLADefinitionClient(cfg),
 		Scan:                        NewScanClient(cfg),
+		ShareLink:                   NewShareLinkClient(cfg),
+		ShareLinkAccessEvent:        NewShareLinkAccessEventClient(cfg),
 		Standard:                    NewStandardClient(cfg),
 		Subcontrol:                  NewSubcontrolClient(cfg),
 		Subprocessor:                NewSubprocessorClient(cfg),
@@ -941,15 +953,15 @@ func (c *Client) Use(hooks ...Hook) {
 		c.OrgSubscription, c.Organization, c.OrganizationBrandingSetting,
 		c.OrganizationSetting, c.PasswordResetToken, c.PersonalAccessToken, c.Platform,
 		c.Procedure, c.Program, c.ProgramMembership, c.Remediation, c.Report,
-		c.ReportMembership, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
-		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
-		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
-		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
-		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
-		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.VendorRiskScore,
-		c.VendorScoringConfig, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
-		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
-		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.ReportMembership, c.Review, c.Risk, c.SLADefinition, c.Scan, c.ShareLink,
+		c.ShareLinkAccessEvent, c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber,
+		c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task, c.Template,
+		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
+		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
+		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
+		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
+		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
+		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
 	} {
 		n.Use(hooks...)
 	}
@@ -974,15 +986,15 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.OrgSubscription, c.Organization, c.OrganizationBrandingSetting,
 		c.OrganizationSetting, c.PasswordResetToken, c.PersonalAccessToken, c.Platform,
 		c.Procedure, c.Program, c.ProgramMembership, c.Remediation, c.Report,
-		c.ReportMembership, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
-		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
-		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
-		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
-		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
-		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.VendorRiskScore,
-		c.VendorScoringConfig, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
-		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
-		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.ReportMembership, c.Review, c.Risk, c.SLADefinition, c.Scan, c.ShareLink,
+		c.ShareLinkAccessEvent, c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber,
+		c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task, c.Template,
+		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
+		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
+		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
+		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
+		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
+		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1211,6 +1223,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.SLADefinition.mutate(ctx, m)
 	case *ScanMutation:
 		return c.Scan.mutate(ctx, m)
+	case *ShareLinkMutation:
+		return c.ShareLink.mutate(ctx, m)
+	case *ShareLinkAccessEventMutation:
+		return c.ShareLinkAccessEvent.mutate(ctx, m)
 	case *StandardMutation:
 		return c.Standard.mutate(ctx, m)
 	case *SubcontrolMutation:
@@ -10925,6 +10941,22 @@ func (c *FileClient) QueryTrustCenterEntities(_m *File) *TrustCenterEntityQuery 
 	return query
 }
 
+// QueryShareLinks queries the share_links edge of a File.
+func (c *FileClient) QueryShareLinks(_m *File) *ShareLinkQuery {
+	query := (&ShareLinkClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(sharelink.Table, sharelink.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ShareLinksTable, file.ShareLinksPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTrustCenterDoc queries the trust_center_doc edge of a File.
 func (c *FileClient) QueryTrustCenterDoc(_m *File) *TrustCenterDocQuery {
 	query := (&TrustCenterDocClient{config: c.config}).Query()
@@ -20033,6 +20065,22 @@ func (c *OrganizationClient) QueryScanCreators(_m *Organization) *GroupQuery {
 	return query
 }
 
+// QueryShareLinkCreators queries the share_link_creators edge of a Organization.
+func (c *OrganizationClient) QueryShareLinkCreators(_m *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ShareLinkCreatorsTable, organization.ShareLinkCreatorsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QuerySLADefinitionCreators queries the sla_definition_creators edge of a Organization.
 func (c *OrganizationClient) QuerySLADefinitionCreators(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -21866,6 +21914,38 @@ func (c *OrganizationClient) QueryCheckResults(_m *Organization) *CheckResultQue
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(checkresult.Table, checkresult.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CheckResultsTable, organization.CheckResultsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryShareLinks queries the share_links edge of a Organization.
+func (c *OrganizationClient) QueryShareLinks(_m *Organization) *ShareLinkQuery {
+	query := (&ShareLinkClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(sharelink.Table, sharelink.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ShareLinksTable, organization.ShareLinksColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryShareLinkAccessEvents queries the share_link_access_events edge of a Organization.
+func (c *OrganizationClient) QueryShareLinkAccessEvents(_m *Organization) *ShareLinkAccessEventQuery {
+	query := (&ShareLinkAccessEventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(sharelinkaccessevent.Table, sharelinkaccessevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ShareLinkAccessEventsTable, organization.ShareLinkAccessEventsColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -27586,6 +27666,356 @@ func (c *ScanClient) mutate(ctx context.Context, m *ScanMutation) (Value, error)
 		return (&ScanDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Scan mutation op: %q", m.Op())
+	}
+}
+
+// ShareLinkClient is a client for the ShareLink schema.
+type ShareLinkClient struct {
+	config
+}
+
+// NewShareLinkClient returns a client for the ShareLink from the given config.
+func NewShareLinkClient(c config) *ShareLinkClient {
+	return &ShareLinkClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `sharelink.Hooks(f(g(h())))`.
+func (c *ShareLinkClient) Use(hooks ...Hook) {
+	c.hooks.ShareLink = append(c.hooks.ShareLink, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `sharelink.Intercept(f(g(h())))`.
+func (c *ShareLinkClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ShareLink = append(c.inters.ShareLink, interceptors...)
+}
+
+// Create returns a builder for creating a ShareLink entity.
+func (c *ShareLinkClient) Create() *ShareLinkCreate {
+	mutation := newShareLinkMutation(c.config, OpCreate)
+	return &ShareLinkCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ShareLink entities.
+func (c *ShareLinkClient) CreateBulk(builders ...*ShareLinkCreate) *ShareLinkCreateBulk {
+	return &ShareLinkCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ShareLinkClient) MapCreateBulk(slice any, setFunc func(*ShareLinkCreate, int)) *ShareLinkCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ShareLinkCreateBulk{err: fmt.Errorf("calling to ShareLinkClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ShareLinkCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ShareLinkCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ShareLink.
+func (c *ShareLinkClient) Update() *ShareLinkUpdate {
+	mutation := newShareLinkMutation(c.config, OpUpdate)
+	return &ShareLinkUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ShareLinkClient) UpdateOne(_m *ShareLink) *ShareLinkUpdateOne {
+	mutation := newShareLinkMutation(c.config, OpUpdateOne, withShareLink(_m))
+	return &ShareLinkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ShareLinkClient) UpdateOneID(id string) *ShareLinkUpdateOne {
+	mutation := newShareLinkMutation(c.config, OpUpdateOne, withShareLinkID(id))
+	return &ShareLinkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ShareLink.
+func (c *ShareLinkClient) Delete() *ShareLinkDelete {
+	mutation := newShareLinkMutation(c.config, OpDelete)
+	return &ShareLinkDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ShareLinkClient) DeleteOne(_m *ShareLink) *ShareLinkDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ShareLinkClient) DeleteOneID(id string) *ShareLinkDeleteOne {
+	builder := c.Delete().Where(sharelink.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ShareLinkDeleteOne{builder}
+}
+
+// Query returns a query builder for ShareLink.
+func (c *ShareLinkClient) Query() *ShareLinkQuery {
+	return &ShareLinkQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeShareLink},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ShareLink entity by its id.
+func (c *ShareLinkClient) Get(ctx context.Context, id string) (*ShareLink, error) {
+	return c.Query().Where(sharelink.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ShareLinkClient) GetX(ctx context.Context, id string) *ShareLink {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a ShareLink.
+func (c *ShareLinkClient) QueryOwner(_m *ShareLink) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sharelink.Table, sharelink.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, sharelink.OwnerTable, sharelink.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a ShareLink.
+func (c *ShareLinkClient) QueryFiles(_m *ShareLink) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sharelink.Table, sharelink.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, sharelink.FilesTable, sharelink.FilesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryShareLinkAccessEvents queries the share_link_access_events edge of a ShareLink.
+func (c *ShareLinkClient) QueryShareLinkAccessEvents(_m *ShareLink) *ShareLinkAccessEventQuery {
+	query := (&ShareLinkAccessEventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sharelink.Table, sharelink.FieldID, id),
+			sqlgraph.To(sharelinkaccessevent.Table, sharelinkaccessevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, sharelink.ShareLinkAccessEventsTable, sharelink.ShareLinkAccessEventsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ShareLinkClient) Hooks() []Hook {
+	hooks := c.hooks.ShareLink
+	return append(hooks[:len(hooks):len(hooks)], sharelink.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ShareLinkClient) Interceptors() []Interceptor {
+	inters := c.inters.ShareLink
+	return append(inters[:len(inters):len(inters)], sharelink.Interceptors[:]...)
+}
+
+func (c *ShareLinkClient) mutate(ctx context.Context, m *ShareLinkMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ShareLinkCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ShareLinkUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ShareLinkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ShareLinkDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ShareLink mutation op: %q", m.Op())
+	}
+}
+
+// ShareLinkAccessEventClient is a client for the ShareLinkAccessEvent schema.
+type ShareLinkAccessEventClient struct {
+	config
+}
+
+// NewShareLinkAccessEventClient returns a client for the ShareLinkAccessEvent from the given config.
+func NewShareLinkAccessEventClient(c config) *ShareLinkAccessEventClient {
+	return &ShareLinkAccessEventClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `sharelinkaccessevent.Hooks(f(g(h())))`.
+func (c *ShareLinkAccessEventClient) Use(hooks ...Hook) {
+	c.hooks.ShareLinkAccessEvent = append(c.hooks.ShareLinkAccessEvent, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `sharelinkaccessevent.Intercept(f(g(h())))`.
+func (c *ShareLinkAccessEventClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ShareLinkAccessEvent = append(c.inters.ShareLinkAccessEvent, interceptors...)
+}
+
+// Create returns a builder for creating a ShareLinkAccessEvent entity.
+func (c *ShareLinkAccessEventClient) Create() *ShareLinkAccessEventCreate {
+	mutation := newShareLinkAccessEventMutation(c.config, OpCreate)
+	return &ShareLinkAccessEventCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ShareLinkAccessEvent entities.
+func (c *ShareLinkAccessEventClient) CreateBulk(builders ...*ShareLinkAccessEventCreate) *ShareLinkAccessEventCreateBulk {
+	return &ShareLinkAccessEventCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ShareLinkAccessEventClient) MapCreateBulk(slice any, setFunc func(*ShareLinkAccessEventCreate, int)) *ShareLinkAccessEventCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ShareLinkAccessEventCreateBulk{err: fmt.Errorf("calling to ShareLinkAccessEventClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ShareLinkAccessEventCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ShareLinkAccessEventCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ShareLinkAccessEvent.
+func (c *ShareLinkAccessEventClient) Update() *ShareLinkAccessEventUpdate {
+	mutation := newShareLinkAccessEventMutation(c.config, OpUpdate)
+	return &ShareLinkAccessEventUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ShareLinkAccessEventClient) UpdateOne(_m *ShareLinkAccessEvent) *ShareLinkAccessEventUpdateOne {
+	mutation := newShareLinkAccessEventMutation(c.config, OpUpdateOne, withShareLinkAccessEvent(_m))
+	return &ShareLinkAccessEventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ShareLinkAccessEventClient) UpdateOneID(id string) *ShareLinkAccessEventUpdateOne {
+	mutation := newShareLinkAccessEventMutation(c.config, OpUpdateOne, withShareLinkAccessEventID(id))
+	return &ShareLinkAccessEventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ShareLinkAccessEvent.
+func (c *ShareLinkAccessEventClient) Delete() *ShareLinkAccessEventDelete {
+	mutation := newShareLinkAccessEventMutation(c.config, OpDelete)
+	return &ShareLinkAccessEventDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ShareLinkAccessEventClient) DeleteOne(_m *ShareLinkAccessEvent) *ShareLinkAccessEventDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ShareLinkAccessEventClient) DeleteOneID(id string) *ShareLinkAccessEventDeleteOne {
+	builder := c.Delete().Where(sharelinkaccessevent.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ShareLinkAccessEventDeleteOne{builder}
+}
+
+// Query returns a query builder for ShareLinkAccessEvent.
+func (c *ShareLinkAccessEventClient) Query() *ShareLinkAccessEventQuery {
+	return &ShareLinkAccessEventQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeShareLinkAccessEvent},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ShareLinkAccessEvent entity by its id.
+func (c *ShareLinkAccessEventClient) Get(ctx context.Context, id string) (*ShareLinkAccessEvent, error) {
+	return c.Query().Where(sharelinkaccessevent.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ShareLinkAccessEventClient) GetX(ctx context.Context, id string) *ShareLinkAccessEvent {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a ShareLinkAccessEvent.
+func (c *ShareLinkAccessEventClient) QueryOwner(_m *ShareLinkAccessEvent) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sharelinkaccessevent.Table, sharelinkaccessevent.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, sharelinkaccessevent.OwnerTable, sharelinkaccessevent.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryShareLink queries the share_link edge of a ShareLinkAccessEvent.
+func (c *ShareLinkAccessEventClient) QueryShareLink(_m *ShareLinkAccessEvent) *ShareLinkQuery {
+	query := (&ShareLinkClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sharelinkaccessevent.Table, sharelinkaccessevent.FieldID, id),
+			sqlgraph.To(sharelink.Table, sharelink.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, sharelinkaccessevent.ShareLinkTable, sharelinkaccessevent.ShareLinkColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ShareLinkAccessEventClient) Hooks() []Hook {
+	hooks := c.hooks.ShareLinkAccessEvent
+	return append(hooks[:len(hooks):len(hooks)], sharelinkaccessevent.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ShareLinkAccessEventClient) Interceptors() []Interceptor {
+	inters := c.inters.ShareLinkAccessEvent
+	return append(inters[:len(inters):len(inters)], sharelinkaccessevent.Interceptors[:]...)
+}
+
+func (c *ShareLinkAccessEventClient) mutate(ctx context.Context, m *ShareLinkAccessEventMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ShareLinkAccessEventCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ShareLinkAccessEventUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ShareLinkAccessEventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ShareLinkAccessEventDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ShareLinkAccessEvent mutation op: %q", m.Op())
 	}
 }
 
@@ -36591,11 +37021,12 @@ type (
 		OrganizationBrandingSetting, OrganizationSetting, PasswordResetToken,
 		PersonalAccessToken, Platform, Procedure, Program, ProgramMembership,
 		Remediation, Report, ReportMembership, Review, Risk, SLADefinition, Scan,
-		Standard, Subcontrol, Subprocessor, Subscriber, SystemDetail, TFASetting,
-		TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
-		TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest,
-		TrustCenterSetting, TrustCenterSubprocessor, TrustCenterWatermarkConfig, User,
-		UserSetting, VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		ShareLink, ShareLinkAccessEvent, Standard, Subcontrol, Subprocessor,
+		Subscriber, SystemDetail, TFASetting, TagDefinition, Task, Template,
+		TrustCenter, TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity,
+		TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
 		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
 		WorkflowEvent, WorkflowInstance, WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
@@ -36614,11 +37045,12 @@ type (
 		OrganizationBrandingSetting, OrganizationSetting, PasswordResetToken,
 		PersonalAccessToken, Platform, Procedure, Program, ProgramMembership,
 		Remediation, Report, ReportMembership, Review, Risk, SLADefinition, Scan,
-		Standard, Subcontrol, Subprocessor, Subscriber, SystemDetail, TFASetting,
-		TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
-		TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest,
-		TrustCenterSetting, TrustCenterSubprocessor, TrustCenterWatermarkConfig, User,
-		UserSetting, VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		ShareLink, ShareLinkAccessEvent, Standard, Subcontrol, Subprocessor,
+		Subscriber, SystemDetail, TFASetting, TagDefinition, Task, Template,
+		TrustCenter, TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity,
+		TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
 		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
 		WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
 		WorkflowProposal []ent.Interceptor

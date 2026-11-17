@@ -80,6 +80,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -2114,6 +2116,60 @@ func (f TraverseScan) Traverse(ctx context.Context, q generated.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *generated.ScanQuery", q)
 }
 
+// The ShareLinkFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ShareLinkFunc func(context.Context, *generated.ShareLinkQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ShareLinkFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ShareLinkQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ShareLinkQuery", q)
+}
+
+// The TraverseShareLink type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseShareLink func(context.Context, *generated.ShareLinkQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseShareLink) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseShareLink) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ShareLinkQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ShareLinkQuery", q)
+}
+
+// The ShareLinkAccessEventFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ShareLinkAccessEventFunc func(context.Context, *generated.ShareLinkAccessEventQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ShareLinkAccessEventFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ShareLinkAccessEventQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ShareLinkAccessEventQuery", q)
+}
+
+// The TraverseShareLinkAccessEvent type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseShareLinkAccessEvent func(context.Context, *generated.ShareLinkAccessEventQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseShareLinkAccessEvent) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseShareLinkAccessEvent) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ShareLinkAccessEventQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ShareLinkAccessEventQuery", q)
+}
+
 // The StandardFunc type is an adapter to allow the use of ordinary function as a Querier.
 type StandardFunc func(context.Context, *generated.StandardQuery) (generated.Value, error)
 
@@ -3098,6 +3154,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.SLADefinitionQuery, predicate.SLADefinition, sladefinition.OrderOption]{typ: generated.TypeSLADefinition, tq: q}, nil
 	case *generated.ScanQuery:
 		return &query[*generated.ScanQuery, predicate.Scan, scan.OrderOption]{typ: generated.TypeScan, tq: q}, nil
+	case *generated.ShareLinkQuery:
+		return &query[*generated.ShareLinkQuery, predicate.ShareLink, sharelink.OrderOption]{typ: generated.TypeShareLink, tq: q}, nil
+	case *generated.ShareLinkAccessEventQuery:
+		return &query[*generated.ShareLinkAccessEventQuery, predicate.ShareLinkAccessEvent, sharelinkaccessevent.OrderOption]{typ: generated.TypeShareLinkAccessEvent, tq: q}, nil
 	case *generated.StandardQuery:
 		return &query[*generated.StandardQuery, predicate.Standard, standard.OrderOption]{typ: generated.TypeStandard, tq: q}, nil
 	case *generated.SubcontrolQuery:

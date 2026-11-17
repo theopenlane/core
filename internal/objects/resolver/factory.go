@@ -23,6 +23,7 @@ type serviceOptions struct {
 	tokenAudience    string
 	tokenIssuer      string
 	baseURL          string
+	links            storage.LinksConfig
 }
 
 // providerResolver simplifies references to the eddy resolver used for object providers
@@ -77,6 +78,13 @@ func WithPresignBaseURL(baseURL string) Option {
 	}
 }
 
+// WithLinksConfig configures signed download and share link URLs.
+func WithLinksConfig(links storage.LinksConfig) Option {
+	return func(opts *serviceOptions) {
+		opts.links = links
+	}
+}
+
 // NewServiceFromConfig constructs a storage service complete with resolver rules derived from runtime configuration.
 func NewServiceFromConfig(config storage.ProviderConfig, opts ...Option) (*objects.Service, error) {
 	runtime := serviceOptions{}
@@ -96,6 +104,7 @@ func NewServiceFromConfig(config storage.ProviderConfig, opts ...Option) (*objec
 		ClientService:  clientService,
 		ValidationFunc: validators.UploadValidator,
 		Backups:        backups,
+		Links:          runtime.links,
 	})
 
 	return service, nil

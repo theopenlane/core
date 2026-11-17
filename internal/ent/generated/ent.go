@@ -83,6 +83,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -247,6 +249,8 @@ func checkColumn(t, c string) error {
 			risk.Table:                        risk.ValidColumn,
 			sladefinition.Table:               sladefinition.ValidColumn,
 			scan.Table:                        scan.ValidColumn,
+			sharelink.Table:                   sharelink.ValidColumn,
+			sharelinkaccessevent.Table:        sharelinkaccessevent.ValidColumn,
 			standard.Table:                    standard.ValidColumn,
 			subcontrol.Table:                  subcontrol.ValidColumn,
 			subprocessor.Table:                subprocessor.ValidColumn,

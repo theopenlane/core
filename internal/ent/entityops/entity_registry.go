@@ -83,6 +83,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -6430,6 +6432,54 @@ var (
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "scan.ingest.requested"),
 		},
 	}
+	SchemaShareLink = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:   "ShareLink",
+			Snake:  "share_link",
+			Lower:  "sharelink",
+			Plural: "share_links",
+		},
+		OwnerField: sharelink.FieldOwnerID,
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "share_link", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.ShareLink.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
+	SchemaShareLinkAccessEvent = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:   "ShareLinkAccessEvent",
+			Snake:  "share_link_access_event",
+			Lower:  "sharelinkaccessevent",
+			Plural: "share_link_access_events",
+		},
+		OwnerField: sharelinkaccessevent.FieldOwnerID,
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "share_link_access_event", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.ShareLinkAccessEvent.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
 	SchemaStandard = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
 			Name:   "Standard",
@@ -9576,6 +9626,7 @@ func init() {
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "domains", Label: "Domains", Type: "[]string", Clearable: true},
+		{Name: "external_sharing_enabled", Label: "ExternalSharingEnabled", Type: "bool", Clearable: true},
 		{Name: "geo_location", Label: "GeoLocation", Type: "enums.Region", Clearable: true},
 		{Name: "identity_provider", Label: "IdentityProvider", Type: "enums.SSOProvider", Clearable: true},
 		{Name: "identity_provider_auth_tested", Label: "IdentityProviderAuthTested", Type: "bool"},
@@ -10045,6 +10096,43 @@ func init() {
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+	}
+	SchemaShareLink.Fields = []FieldDescriptor{
+		{Name: "code_attempts", Label: "CodeAttempts", Type: "int"},
+		{Name: "code_expires_at", Label: "CodeExpiresAt", Type: "time.Time", Clearable: true},
+		{Name: "code_hash", Label: "CodeHash", Type: "[]byte", Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "expires_at", Label: "ExpiresAt", Type: "time.Time", Clearable: true},
+		{Name: "landing_page", Label: "LandingPage", Type: "bool", Clearable: true},
+		{Name: "max_uses", Label: "MaxUses", Type: "int", Clearable: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "recipient_emails", Label: "RecipientEmails", Type: "[]string", Clearable: true},
+		{Name: "require_session", Label: "RequireSession", Type: "bool", Clearable: true},
+		{Name: "revoked_at", Label: "RevokedAt", Type: "time.Time", Clearable: true},
+		{Name: "secret", Label: "Secret", Type: "[]byte", Clearable: true},
+		{Name: "token", Label: "Token", Type: "string"},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "use_count", Label: "UseCount", Type: "int"},
+	}
+	SchemaShareLinkAccessEvent.Fields = []FieldDescriptor{
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true},
+		{Name: "ip_address", Label: "IPAddress", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "share_link_id", Label: "ShareLinkID", Type: "string", MatchKey: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "user_agent", Label: "UserAgent", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaStandard.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -14072,6 +14160,14 @@ func init() {
 			AddField:    "add_subprocessor_logo_ids",
 		},
 		{
+			Name:        "share_links",
+			Label:       "ShareLinks",
+			Target:      SchemaShareLink,
+			TargetType:  "ShareLink",
+			CreateField: "share_link_ids",
+			AddField:    "add_share_link_ids",
+		},
+		{
 			Name:        "template",
 			Label:       "Template",
 			Target:      SchemaTemplate,
@@ -17521,6 +17617,30 @@ func init() {
 			CreateField: "setting_id",
 		},
 		{
+			Name:        "share_link_access_events",
+			Label:       "ShareLinkAccessEvents",
+			Target:      SchemaShareLinkAccessEvent,
+			TargetType:  "ShareLinkAccessEvent",
+			CreateField: "share_link_access_event_ids",
+			AddField:    "add_share_link_access_event_ids",
+		},
+		{
+			Name:        "share_link_creators",
+			Label:       "ShareLinkCreators",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "share_link_creator_ids",
+			AddField:    "add_share_link_creator_ids",
+		},
+		{
+			Name:        "share_links",
+			Label:       "ShareLinks",
+			Target:      SchemaShareLink,
+			TargetType:  "ShareLink",
+			CreateField: "share_link_ids",
+			AddField:    "add_share_link_ids",
+		},
+		{
 			Name:        "sla_definition_creators",
 			Label:       "SLADefinitionCreators",
 			Target:      SchemaGroup,
@@ -19899,6 +20019,52 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+		},
+	}
+	SchemaShareLink.Edges = []EdgeDescriptor{
+		{
+			Name:        "files",
+			Label:       "Files",
+			Target:      SchemaFile,
+			TargetType:  "File",
+			CreateField: "file_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
+		{
+			Name:        "share_link_access_events",
+			Label:       "ShareLinkAccessEvents",
+			Target:      SchemaShareLinkAccessEvent,
+			TargetType:  "ShareLinkAccessEvent",
+			CreateField: "share_link_access_event_ids",
+			AddField:    "add_share_link_access_event_ids",
+		},
+	}
+	SchemaShareLinkAccessEvent.Edges = []EdgeDescriptor{
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
+		{
+			Name:        "share_link",
+			Label:       "ShareLink",
+			Target:      SchemaShareLink,
+			TargetType:  "ShareLink",
+			Unique:      true,
+			CreateField: "share_link_id",
+			Field:       "share_link_id",
 		},
 	}
 	SchemaStandard.Edges = []EdgeDescriptor{
@@ -30677,6 +30843,8 @@ var allSchemas = []*Schema{
 	SchemaRisk,
 	SchemaSLADefinition,
 	SchemaScan,
+	SchemaShareLink,
+	SchemaShareLinkAccessEvent,
 	SchemaStandard,
 	SchemaSubcontrol,
 	SchemaSubprocessor,

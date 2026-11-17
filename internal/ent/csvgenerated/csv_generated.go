@@ -1926,6 +1926,10 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"ShareLink": {
+		SchemaName: "ShareLink",
+		Rules:      []CSVReferenceRule{},
+	},
 	"Standard": {
 		SchemaName: "Standard",
 		Rules:      []CSVReferenceRule{},
@@ -3665,6 +3669,24 @@ type ScanCSVUpdateInput struct {
 
 // CSVInputWrapper marks ScanCSVUpdateInput for CSV header preprocessing.
 func (ScanCSVUpdateInput) CSVInputWrapper() {}
+
+// ShareLinkCSVInput wraps CreateShareLinkInput with CSV reference columns.
+type ShareLinkCSVInput struct {
+	Input generated.CreateShareLinkInput
+}
+
+// CSVInputWrapper marks ShareLinkCSVInput for CSV header preprocessing.
+func (ShareLinkCSVInput) CSVInputWrapper() {}
+
+// ShareLinkCSVUpdateInput wraps UpdateShareLinkInput with CSV reference columns for bulk updates.
+type ShareLinkCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID    string `csv:"ID"`
+	Input generated.UpdateShareLinkInput
+}
+
+// CSVInputWrapper marks ShareLinkCSVUpdateInput for CSV header preprocessing.
+func (ShareLinkCSVUpdateInput) CSVInputWrapper() {}
 
 // StandardCSVInput wraps CreateStandardInput with CSV reference columns.
 type StandardCSVInput struct {
