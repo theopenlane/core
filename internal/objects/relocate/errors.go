@@ -15,4 +15,20 @@ var (
 	ErrOpenUnsupported = errors.New("storage provider does not support streaming objects")
 	// ErrKeyChanged is returned when the target stored a transferred object under another key
 	ErrKeyChanged = errors.New("storage provider changed the object key")
+	// ErrPullFailed is returned when reading the object through the target did not succeed
+	ErrPullFailed = errors.New("failed to read object through target bucket")
+	// ErrCopyFailed is returned when the target could not copy the object from its current bucket
+	ErrCopyFailed = errors.New("failed to copy object into target bucket")
+	// ErrResolveSourceFailed is returned when the provider a record is stored on cannot be resolved
+	ErrResolveSourceFailed = errors.New("failed to resolve source provider")
+	// ErrOpenSourceFailed is returned when the object cannot be opened on its source provider
+	ErrOpenSourceFailed = errors.New("failed to open object on source provider")
+	// ErrUploadFailed is returned when the object cannot be uploaded to the target
+	ErrUploadFailed = errors.New("failed to upload object to target bucket")
+	// ErrConfirmFailed is returned when the target bucket cannot be listed to confirm the object landed
+	ErrConfirmFailed = errors.New("failed to list target bucket for object")
+	// ErrStatFailed is returned when the landed object's metadata cannot be read
+	ErrStatFailed = errors.New("failed to read landed object metadata")
+	// ErrRepointFailed is returned when the file record cannot be updated to the target
+	ErrRepointFailed = errors.New("failed to update file record to target")
 )
