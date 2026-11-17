@@ -5,7 +5,8 @@ type program
     # base permissions - these should all be derived permissions
     define can_view: (viewer but not blocked)
     define can_edit: (editor but not blocked) or can_delete
-    define can_delete: deletor
+    define can_delete: deletor but not blocked
+    define can_view_org: can_view
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define deletor: admin or parent_editor

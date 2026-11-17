@@ -51,6 +51,8 @@ func newOrgOwnedMixin(schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
 		opt(&o)
 	}
 
+	o.InterceptorFuncs = append(o.InterceptorFuncs, anonTrustCenterInterceptorFunc)
+
 	return o
 }
 
@@ -260,13 +262,8 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return privacy.Denyf("anonymous access not allowed unless filtered by a trust center")
 		}
 
-		// check for trust center anon access on schemas, if its not allowed
-		// deny the query, otherwise filter on trust center
+		// trust center anon access is scoped or denied by anonTrustCenterInterceptorFunc, here only filter on the trust center org
 		if isTrustCenterAnon {
-			if !o.AllowAnonymousTrustCenterAccess {
-				return privacy.Denyf("anonymous trust center access not allowed")
-			}
-
 			// Trust Center users with an active trust center key: scope results to their specific org
 			// to prevent cross-org data leakage through the org filter fallback below
 			o.PWithField(q, ownerFieldName, []string{trustCenterOrganization})

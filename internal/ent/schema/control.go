@@ -214,7 +214,7 @@ func (c Control) Mixin() []ent.Mixin {
 				// skip the interceptor
 				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 				withWorkflowOwnedEdges(),
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterScope(interceptors.AnonScopeTrustCenterControl),
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			// add groups permissions with editor, and blocked groups

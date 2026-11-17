@@ -71,7 +71,7 @@ func (t TrustCenterSubprocessor) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterSubprocessor](t,
 				withParents(TrustCenter{}),
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterAccess(),
 			),
 			newCustomEnumMixin(t),
 			newGroupPermissionsMixin(withSkipViewPermissions()),

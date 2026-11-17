@@ -97,44 +97,6 @@ func (r *mutationResolver) DeleteProgramMembership(ctx context.Context, id strin
 	}, nil
 }
 
-// DeleteBulkProgramMembership is the resolver for the deleteBulkProgramMembership field.
-func (r *mutationResolver) DeleteBulkProgramMembership(ctx context.Context, ids []string) (*model.ProgramMembershipBulkDeletePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkDeleteProgramMembership(ctx, ids)
-}
-
-// UpdateBulkProgramMembership is the resolver for the updateBulkProgramMembership field.
-func (r *mutationResolver) UpdateBulkProgramMembership(ctx context.Context, ids []string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipBulkUpdatePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkUpdateProgramMembership(ctx, ids, input)
-}
-
-// UpdateBulkCSVProgramMembership is the resolver for the updateBulkCSVProgramMembership field.
-func (r *mutationResolver) UpdateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*model.ProgramMembershipBulkUpdatePayload, error) {
-	data, err := common.UnmarshalBulkData[csvgenerated.ProgramMembershipCSVUpdateInput](input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "programmembership"})
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	if err := resolveCSVReferencesForSchema(ctx, "ProgramMembership", data); err != nil {
-		return nil, err
-	}
-
-	return r.bulkUpdateCSVProgramMembership(ctx, data)
-}
-
 // ProgramMembership is the resolver for the programMembership field.
 func (r *queryResolver) ProgramMembership(ctx context.Context, id string) (*generated.ProgramMembership, error) {
 	query, err := withTransactionalMutation(ctx).ProgramMembership.Query().Where(programmembership.ID(id)).CollectFields(ctx)

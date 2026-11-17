@@ -2883,19 +2883,6 @@ type ComplexityRoot struct {
 		GroupMemberships func(childComplexity int) int
 	}
 
-	GroupMembershipBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	GroupMembershipBulkUpdatePayload struct {
-		Error            func(childComplexity int) int
-		GroupMemberships func(childComplexity int) int
-		NotUpdatedIDs    func(childComplexity int) int
-		UpdatedIDs       func(childComplexity int) int
-	}
-
 	GroupMembershipConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3866,7 +3853,6 @@ type ComplexityRoot struct {
 		DeleteBulkFinding                        func(childComplexity int, ids []string) int
 		DeleteBulkFindingControl                 func(childComplexity int, ids []string) int
 		DeleteBulkGroup                          func(childComplexity int, ids []string) int
-		DeleteBulkGroupMembership                func(childComplexity int, ids []string) int
 		DeleteBulkGroupSetting                   func(childComplexity int, ids []string) int
 		DeleteBulkHush                           func(childComplexity int, ids []string) int
 		DeleteBulkIdentityHolder                 func(childComplexity int, ids []string) int
@@ -3880,9 +3866,7 @@ type ComplexityRoot struct {
 		DeleteBulkOrganizationBrandingSetting    func(childComplexity int, ids []string) int
 		DeleteBulkProcedure                      func(childComplexity int, ids []string) int
 		DeleteBulkProgram                        func(childComplexity int, ids []string) int
-		DeleteBulkProgramMembership              func(childComplexity int, ids []string) int
 		DeleteBulkRemediation                    func(childComplexity int, ids []string) int
-		DeleteBulkReportMembership               func(childComplexity int, ids []string) int
 		DeleteBulkReview                         func(childComplexity int, ids []string) int
 		DeleteBulkRisk                           func(childComplexity int, ids []string) int
 		DeleteBulkSLADefinition                  func(childComplexity int, ids []string) int
@@ -4023,7 +4007,6 @@ type ComplexityRoot struct {
 		UpdateBulkCSVEvidence                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVFinding                     func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroup                       func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVGroupMembership             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroupSetting                func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVIdentityHolder              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInternalPolicy              func(childComplexity int, input graphql.Upload) int
@@ -4036,7 +4019,6 @@ type ComplexityRoot struct {
 		UpdateBulkCSVOrganizationBrandingSetting func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProcedure                   func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProgram                     func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVProgramMembership           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVRemediation                 func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVReview                      func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVRisk                        func(childComplexity int, input graphql.Upload) int
@@ -4068,7 +4050,6 @@ type ComplexityRoot struct {
 		UpdateBulkEvidence                       func(childComplexity int, ids []string, input generated.UpdateEvidenceInput) int
 		UpdateBulkFinding                        func(childComplexity int, ids []string, input generated.UpdateFindingInput) int
 		UpdateBulkGroup                          func(childComplexity int, ids []string, input generated.UpdateGroupInput) int
-		UpdateBulkGroupMembership                func(childComplexity int, ids []string, input generated.UpdateGroupMembershipInput) int
 		UpdateBulkGroupSetting                   func(childComplexity int, ids []string, input generated.UpdateGroupSettingInput) int
 		UpdateBulkHush                           func(childComplexity int, ids []string, input generated.UpdateHushInput) int
 		UpdateBulkIdentityHolder                 func(childComplexity int, ids []string, input generated.UpdateIdentityHolderInput) int
@@ -4082,9 +4063,7 @@ type ComplexityRoot struct {
 		UpdateBulkOrganizationBrandingSetting    func(childComplexity int, ids []string, input generated.UpdateOrganizationBrandingSettingInput) int
 		UpdateBulkProcedure                      func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
 		UpdateBulkProgram                        func(childComplexity int, ids []string, input generated.UpdateProgramInput) int
-		UpdateBulkProgramMembership              func(childComplexity int, ids []string, input generated.UpdateProgramMembershipInput) int
 		UpdateBulkRemediation                    func(childComplexity int, ids []string, input generated.UpdateRemediationInput) int
-		UpdateBulkReportMembership               func(childComplexity int, ids []string, input generated.UpdateReportMembershipInput) int
 		UpdateBulkReview                         func(childComplexity int, ids []string, input generated.UpdateReviewInput) int
 		UpdateBulkRisk                           func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
 		UpdateBulkSLADefinition                  func(childComplexity int, ids []string, input generated.UpdateSLADefinitionInput) int
@@ -5344,19 +5323,6 @@ type ComplexityRoot struct {
 		ProgramMemberships func(childComplexity int) int
 	}
 
-	ProgramMembershipBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	ProgramMembershipBulkUpdatePayload struct {
-		Error              func(childComplexity int) int
-		NotUpdatedIDs      func(childComplexity int) int
-		ProgramMemberships func(childComplexity int) int
-		UpdatedIDs         func(childComplexity int) int
-	}
-
 	ProgramMembershipConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -5825,19 +5791,6 @@ type ComplexityRoot struct {
 
 	ReportMembershipBulkCreatePayload struct {
 		ReportMemberships func(childComplexity int) int
-	}
-
-	ReportMembershipBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	ReportMembershipBulkUpdatePayload struct {
-		Error             func(childComplexity int) int
-		NotUpdatedIDs     func(childComplexity int) int
-		ReportMemberships func(childComplexity int) int
-		UpdatedIDs        func(childComplexity int) int
 	}
 
 	ReportMembershipConnection struct {
@@ -22057,50 +22010,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.GroupMembershipBulkCreatePayload.GroupMemberships(childComplexity), true
 
-	case "GroupMembershipBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "GroupMembershipBulkDeletePayload.error":
-		if e.ComplexityRoot.GroupMembershipBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.Error(childComplexity), true
-	case "GroupMembershipBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "GroupMembershipBulkUpdatePayload.error":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.Error(childComplexity), true
-	case "GroupMembershipBulkUpdatePayload.groupMemberships":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.GroupMemberships == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.GroupMemberships(childComplexity), true
-	case "GroupMembershipBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "GroupMembershipBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
-
 	case "GroupMembershipConnection.edges":
 		if e.ComplexityRoot.GroupMembershipConnection.Edges == nil {
 			break
@@ -28383,17 +28292,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkGroup(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkGroupMembership":
-		if e.ComplexityRoot.Mutation.DeleteBulkGroupMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkGroupMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkGroupMembership(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkGroupSetting":
 		if e.ComplexityRoot.Mutation.DeleteBulkGroupSetting == nil {
 			break
@@ -28537,17 +28435,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkProgram(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkProgramMembership":
-		if e.ComplexityRoot.Mutation.DeleteBulkProgramMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkProgramMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkProgramMembership(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkRemediation":
 		if e.ComplexityRoot.Mutation.DeleteBulkRemediation == nil {
 			break
@@ -28559,17 +28446,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkRemediation(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkReportMembership":
-		if e.ComplexityRoot.Mutation.DeleteBulkReportMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkReportMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkReportMembership(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkReview":
 		if e.ComplexityRoot.Mutation.DeleteBulkReview == nil {
 			break
@@ -30105,17 +29981,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVGroup(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVGroupMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVGroupMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVGroupMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVGroupMembership(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVGroupSetting":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVGroupSetting == nil {
 			break
@@ -30248,17 +30113,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVProgram(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVProgramMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVProgramMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVProgramMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVProgramMembership(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVRemediation":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVRemediation == nil {
 			break
@@ -30600,17 +30454,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkGroup(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateGroupInput)), true
-	case "Mutation.updateBulkGroupMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkGroupMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkGroupMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkGroupMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateGroupMembershipInput)), true
 	case "Mutation.updateBulkGroupSetting":
 		if e.ComplexityRoot.Mutation.UpdateBulkGroupSetting == nil {
 			break
@@ -30754,17 +30597,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkProgram(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateProgramInput)), true
-	case "Mutation.updateBulkProgramMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkProgramMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkProgramMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkProgramMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateProgramMembershipInput)), true
 	case "Mutation.updateBulkRemediation":
 		if e.ComplexityRoot.Mutation.UpdateBulkRemediation == nil {
 			break
@@ -30776,17 +30608,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkRemediation(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateRemediationInput)), true
-	case "Mutation.updateBulkReportMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkReportMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkReportMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkReportMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateReportMembershipInput)), true
 	case "Mutation.updateBulkReview":
 		if e.ComplexityRoot.Mutation.UpdateBulkReview == nil {
 			break
@@ -37879,50 +37700,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ProgramMembershipBulkCreatePayload.ProgramMemberships(childComplexity), true
 
-	case "ProgramMembershipBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "ProgramMembershipBulkDeletePayload.error":
-		if e.ComplexityRoot.ProgramMembershipBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.Error(childComplexity), true
-	case "ProgramMembershipBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "ProgramMembershipBulkUpdatePayload.error":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.Error(childComplexity), true
-	case "ProgramMembershipBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "ProgramMembershipBulkUpdatePayload.programMemberships":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.ProgramMemberships == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.ProgramMemberships(childComplexity), true
-	case "ProgramMembershipBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
-
 	case "ProgramMembershipConnection.edges":
 		if e.ComplexityRoot.ProgramMembershipConnection.Edges == nil {
 			break
@@ -41599,50 +41376,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReportMembershipBulkCreatePayload.ReportMemberships(childComplexity), true
-
-	case "ReportMembershipBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "ReportMembershipBulkDeletePayload.error":
-		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.Error(childComplexity), true
-	case "ReportMembershipBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "ReportMembershipBulkUpdatePayload.error":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.Error(childComplexity), true
-	case "ReportMembershipBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "ReportMembershipBulkUpdatePayload.reportMemberships":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.ReportMemberships == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.ReportMemberships(childComplexity), true
-	case "ReportMembershipBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "ReportMembershipConnection.edges":
 		if e.ComplexityRoot.ReportMembershipConnection.Edges == nil {
@@ -152947,37 +152680,6 @@ extend type Mutation{
         """
         id: ID!
     ): GroupMembershipDeletePayload!
-    """
-    Delete multiple groupMemberships
-    """
-    deleteBulkGroupMembership(
-        """
-        IDs of the groupMemberships to delete
-        """
-        ids: [ID!]!
-    ): GroupMembershipBulkDeletePayload!
-    """
-    Update multiple existing groupMemberships
-    """
-    updateBulkGroupMembership(
-        """
-        IDs of the groupMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the groupMemberships with
-        """
-        input: UpdateGroupMembershipInput!
-    ): GroupMembershipBulkUpdatePayload!
-    """
-    Update multiple existing groupMemberships via file upload
-    """
-    updateBulkCSVGroupMembership(
-        """
-        csv file containing values of the groupMembership, must include ID column
-        """
-        input: Upload!
-    ): GroupMembershipBulkUpdatePayload!
 }
 
 """
@@ -153020,45 +152722,6 @@ type GroupMembershipBulkCreatePayload {
     groupMemberships: [GroupMembership!]
 }
 
-"""
-Return response for deleteBulkGroupMembership mutation
-"""
-type GroupMembershipBulkDeletePayload {
-    """
-    Deleted groupMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkGroupMembership mutation
-"""
-type GroupMembershipBulkUpdatePayload {
-    """
-    Updated groupMemberships
-    """
-    groupMemberships: [GroupMembership!]
-    """
-    IDs of the updated groupMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
 `, BuiltIn: false},
 	{Name: "../schema/groupsetting.graphql", Input: `extend type Query {
     """
@@ -156663,37 +156326,6 @@ extend type Mutation{
         """
         id: ID!
     ): ProgramMembershipDeletePayload!
-    """
-    Delete multiple programMemberships
-    """
-    deleteBulkProgramMembership(
-        """
-        IDs of the programMemberships to delete
-        """
-        ids: [ID!]!
-    ): ProgramMembershipBulkDeletePayload!
-    """
-    Update multiple existing programMemberships
-    """
-    updateBulkProgramMembership(
-        """
-        IDs of the programMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the programMemberships with
-        """
-        input: UpdateProgramMembershipInput!
-    ): ProgramMembershipBulkUpdatePayload!
-    """
-    Update multiple existing programMemberships via file upload
-    """
-    updateBulkCSVProgramMembership(
-        """
-        csv file containing values of the programMembership, must include ID column
-        """
-        input: Upload!
-    ): ProgramMembershipBulkUpdatePayload!
 }
 
 """
@@ -156736,45 +156368,6 @@ type ProgramMembershipBulkCreatePayload {
     programMemberships: [ProgramMembership!]
 }
 
-"""
-Return response for deleteBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkDeletePayload {
-    """
-    Deleted programMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkUpdatePayload {
-    """
-    Updated programMemberships
-    """
-    programMemberships: [ProgramMembership!]
-    """
-    IDs of the updated programMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
 `, BuiltIn: false},
 	{Name: "../schema/remediation.graphql", Input: `extend type Remediation {
     """
@@ -157095,19 +156688,6 @@ extend type Mutation{
         input: [CreateReportMembershipInput!]
     ): ReportMembershipBulkCreatePayload!
     """
-    Update multiple existing reportMemberships
-    """
-    updateBulkReportMembership(
-        """
-        IDs of the reportMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the reportMemberships with
-        """
-        input: UpdateReportMembershipInput!
-    ): ReportMembershipBulkUpdatePayload!
-    """
     Update an existing reportMembership
     """
     updateReportMembership(
@@ -157129,15 +156709,6 @@ extend type Mutation{
         """
         id: ID!
     ): ReportMembershipDeletePayload!
-    """
-    Delete multiple reportMemberships
-    """
-    deleteBulkReportMembership(
-        """
-        IDs of the reportMemberships to delete
-        """
-        ids: [ID!]!
-    ): ReportMembershipBulkDeletePayload!
 }
 
 """
@@ -157180,45 +156751,6 @@ type ReportMembershipBulkCreatePayload {
     reportMemberships: [ReportMembership!]
 }
 
-"""
-Return response for updateBulkReportMembership mutation
-"""
-type ReportMembershipBulkUpdatePayload {
-    """
-    Updated reportMemberships
-    """
-    reportMemberships: [ReportMembership!]
-    """
-    IDs of the updated reportMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for deleteBulkReportMembership mutation
-"""
-type ReportMembershipBulkDeletePayload {
-    """
-    Deleted reportMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    Error returned when the bulk delete is only partially applied
-    """
-    error: String
-    """
-    IDs of reportMemberships that were not deleted
-    """
-    notDeletedIDs: [ID!]
-}
 `, BuiltIn: false},
 	{Name: "../schema/review.graphql", Input: `extend type Query {
     """
@@ -169135,32 +168667,6 @@ func (ec *executionContext) childFields_GroupMembershipBulkCreatePayload(ctx con
 	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipBulkCreatePayload", field.Name)
 }
 
-func (ec *executionContext) childFields_GroupMembershipBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_GroupMembershipBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_GroupMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_GroupMembershipBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_GroupMembershipBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "groupMemberships":
-		return ec.fieldContext_GroupMembershipBulkUpdatePayload_groupMemberships(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_GroupMembershipBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_GroupMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_GroupMembershipBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipBulkUpdatePayload", field.Name)
-}
-
 func (ec *executionContext) childFields_GroupMembershipConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "edges":
@@ -172855,32 +172361,6 @@ func (ec *executionContext) childFields_ProgramMembershipBulkCreatePayload(ctx c
 	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipBulkCreatePayload", field.Name)
 }
 
-func (ec *executionContext) childFields_ProgramMembershipBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_ProgramMembershipBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_ProgramMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ProgramMembershipBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ProgramMembershipBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "programMemberships":
-		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_programMemberships(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipBulkUpdatePayload", field.Name)
-}
-
 func (ec *executionContext) childFields_ProgramMembershipConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "edges":
@@ -173305,32 +172785,6 @@ func (ec *executionContext) childFields_ReportMembershipBulkCreatePayload(ctx co
 		return ec.fieldContext_ReportMembershipBulkCreatePayload_reportMemberships(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ReportMembershipBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_ReportMembershipBulkDeletePayload_deletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ReportMembershipBulkDeletePayload_error(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_ReportMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ReportMembershipBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "reportMemberships":
-		return ec.fieldContext_ReportMembershipBulkUpdatePayload_reportMemberships(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_ReportMembershipBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_ReportMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ReportMembershipBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipBulkUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_ReportMembershipConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

@@ -237,9 +237,6 @@ type MutationResolver interface {
 	CreateBulkCSVGroupMembership(ctx context.Context, input graphql.Upload) (*model.GroupMembershipBulkCreatePayload, error)
 	UpdateGroupMembership(ctx context.Context, id string, input generated.UpdateGroupMembershipInput) (*model.GroupMembershipUpdatePayload, error)
 	DeleteGroupMembership(ctx context.Context, id string) (*model.GroupMembershipDeletePayload, error)
-	DeleteBulkGroupMembership(ctx context.Context, ids []string) (*model.GroupMembershipBulkDeletePayload, error)
-	UpdateBulkGroupMembership(ctx context.Context, ids []string, input generated.UpdateGroupMembershipInput) (*model.GroupMembershipBulkUpdatePayload, error)
-	UpdateBulkCSVGroupMembership(ctx context.Context, input graphql.Upload) (*model.GroupMembershipBulkUpdatePayload, error)
 	CreateGroupSetting(ctx context.Context, input generated.CreateGroupSettingInput) (*model.GroupSettingCreatePayload, error)
 	CreateBulkGroupSetting(ctx context.Context, input []*generated.CreateGroupSettingInput) (*model.GroupSettingBulkCreatePayload, error)
 	CreateBulkCSVGroupSetting(ctx context.Context, input graphql.Upload) (*model.GroupSettingBulkCreatePayload, error)
@@ -389,9 +386,6 @@ type MutationResolver interface {
 	CreateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*model.ProgramMembershipBulkCreatePayload, error)
 	UpdateProgramMembership(ctx context.Context, id string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipUpdatePayload, error)
 	DeleteProgramMembership(ctx context.Context, id string) (*model.ProgramMembershipDeletePayload, error)
-	DeleteBulkProgramMembership(ctx context.Context, ids []string) (*model.ProgramMembershipBulkDeletePayload, error)
-	UpdateBulkProgramMembership(ctx context.Context, ids []string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipBulkUpdatePayload, error)
-	UpdateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*model.ProgramMembershipBulkUpdatePayload, error)
 	CreateRemediation(ctx context.Context, input generated.CreateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) (*model.RemediationCreatePayload, error)
 	CreateBulkRemediation(ctx context.Context, input []*generated.CreateRemediationInput) (*model.RemediationBulkCreatePayload, error)
 	CreateBulkCSVRemediation(ctx context.Context, input graphql.Upload) (*model.RemediationBulkCreatePayload, error)
@@ -405,10 +399,8 @@ type MutationResolver interface {
 	DeleteReport(ctx context.Context, id string) (*model.ReportDeletePayload, error)
 	CreateReportMembership(ctx context.Context, input generated.CreateReportMembershipInput) (*model.ReportMembershipCreatePayload, error)
 	CreateBulkReportMembership(ctx context.Context, input []*generated.CreateReportMembershipInput) (*model.ReportMembershipBulkCreatePayload, error)
-	UpdateBulkReportMembership(ctx context.Context, ids []string, input generated.UpdateReportMembershipInput) (*model.ReportMembershipBulkUpdatePayload, error)
 	UpdateReportMembership(ctx context.Context, id string, input generated.UpdateReportMembershipInput) (*model.ReportMembershipUpdatePayload, error)
 	DeleteReportMembership(ctx context.Context, id string) (*model.ReportMembershipDeletePayload, error)
-	DeleteBulkReportMembership(ctx context.Context, ids []string) (*model.ReportMembershipBulkDeletePayload, error)
 	CreateReview(ctx context.Context, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) (*model.ReviewCreatePayload, error)
 	CreateBulkReview(ctx context.Context, input []*generated.CreateReviewInput) (*model.ReviewBulkCreatePayload, error)
 	DeleteBulkReview(ctx context.Context, ids []string) (*model.ReviewBulkDeletePayload, error)
@@ -4932,20 +4924,6 @@ func (ec *executionContext) field_Mutation_deleteBulkFinding_args(ctx context.Co
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteBulkGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids",
-		func(ctx context.Context, v any) ([]string, error) {
-			return ec.unmarshalNID2ᚕstringᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["ids"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_deleteBulkGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -5128,20 +5106,6 @@ func (ec *executionContext) field_Mutation_deleteBulkProcedure_args(ctx context.
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteBulkProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids",
-		func(ctx context.Context, v any) ([]string, error) {
-			return ec.unmarshalNID2ᚕstringᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["ids"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_deleteBulkProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -5157,20 +5121,6 @@ func (ec *executionContext) field_Mutation_deleteBulkProgram_args(ctx context.Co
 }
 
 func (ec *executionContext) field_Mutation_deleteBulkRemediation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids",
-		func(ctx context.Context, v any) ([]string, error) {
-			return ec.unmarshalNID2ᚕstringᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["ids"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteBulkReportMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids",
@@ -7260,20 +7210,6 @@ func (ec *executionContext) field_Mutation_updateBulkCSVFinding_args(ctx context
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_updateBulkCSVGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) (graphql.Upload, error) {
-			return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_updateBulkCSVGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -7429,20 +7365,6 @@ func (ec *executionContext) field_Mutation_updateBulkCSVOrganizationBrandingSett
 }
 
 func (ec *executionContext) field_Mutation_updateBulkCSVProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) (graphql.Upload, error) {
-			return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateBulkCSVProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
@@ -7994,28 +7916,6 @@ func (ec *executionContext) field_Mutation_updateBulkFinding_args(ctx context.Co
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_updateBulkGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids",
-		func(ctx context.Context, v any) ([]string, error) {
-			return ec.unmarshalNID2ᚕstringᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) (generated.UpdateGroupMembershipInput, error) {
-			return ec.unmarshalNUpdateGroupMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateGroupMembershipInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_updateBulkGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -8302,28 +8202,6 @@ func (ec *executionContext) field_Mutation_updateBulkProcedure_args(ctx context.
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_updateBulkProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids",
-		func(ctx context.Context, v any) ([]string, error) {
-			return ec.unmarshalNID2ᚕstringᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) (generated.UpdateProgramMembershipInput, error) {
-			return ec.unmarshalNUpdateProgramMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateProgramMembershipInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_updateBulkProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -8360,28 +8238,6 @@ func (ec *executionContext) field_Mutation_updateBulkRemediation_args(ctx contex
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (generated.UpdateRemediationInput, error) {
 			return ec.unmarshalNUpdateRemediationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateRemediationInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateBulkReportMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids",
-		func(ctx context.Context, v any) ([]string, error) {
-			return ec.unmarshalNID2ᚕstringᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) (generated.UpdateReportMembershipInput, error) {
-			return ec.unmarshalNUpdateReportMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateReportMembershipInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -21413,138 +21269,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteGroupMembership(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_deleteBulkGroupMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_deleteBulkGroupMembership(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().DeleteBulkGroupMembership(ctx, fc.Args["ids"].([]string))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.GroupMembershipBulkDeletePayload) graphql.Marshaler {
-			return ec.marshalNGroupMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkDeletePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_deleteBulkGroupMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_GroupMembershipBulkDeletePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteBulkGroupMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateBulkGroupMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkGroupMembership(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkGroupMembership(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateGroupMembershipInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.GroupMembershipBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNGroupMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_updateBulkGroupMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_GroupMembershipBulkUpdatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateBulkGroupMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateBulkCSVGroupMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkCSVGroupMembership(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkCSVGroupMembership(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.GroupMembershipBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNGroupMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_updateBulkCSVGroupMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_GroupMembershipBulkUpdatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateBulkCSVGroupMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_createGroupSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -28101,138 +27825,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteProgramMembership(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_deleteBulkProgramMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_deleteBulkProgramMembership(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().DeleteBulkProgramMembership(ctx, fc.Args["ids"].([]string))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.ProgramMembershipBulkDeletePayload) graphql.Marshaler {
-			return ec.marshalNProgramMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkDeletePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_deleteBulkProgramMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ProgramMembershipBulkDeletePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteBulkProgramMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateBulkProgramMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkProgramMembership(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkProgramMembership(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateProgramMembershipInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.ProgramMembershipBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNProgramMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_updateBulkProgramMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ProgramMembershipBulkUpdatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateBulkProgramMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateBulkCSVProgramMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkCSVProgramMembership(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkCSVProgramMembership(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.ProgramMembershipBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNProgramMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_updateBulkCSVProgramMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ProgramMembershipBulkUpdatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateBulkCSVProgramMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_createRemediation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -28805,50 +28397,6 @@ func (ec *executionContext) fieldContext_Mutation_createBulkReportMembership(ctx
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateBulkReportMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateBulkReportMembership(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateBulkReportMembership(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateReportMembershipInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.ReportMembershipBulkUpdatePayload) graphql.Marshaler {
-			return ec.marshalNReportMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReportMembershipBulkUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_updateBulkReportMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ReportMembershipBulkUpdatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateBulkReportMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_updateReportMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -28931,50 +28479,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteReportMembership(ctx con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteReportMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_deleteBulkReportMembership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_deleteBulkReportMembership(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().DeleteBulkReportMembership(ctx, fc.Args["ids"].([]string))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.ReportMembershipBulkDeletePayload) graphql.Marshaler {
-			return ec.marshalNReportMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReportMembershipBulkDeletePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_deleteBulkReportMembership(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_ReportMembershipBulkDeletePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteBulkReportMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -39512,27 +39016,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "deleteBulkGroupMembership":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteBulkGroupMembership(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateBulkGroupMembership":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkGroupMembership(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateBulkCSVGroupMembership":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkCSVGroupMembership(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "createGroupSetting":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createGroupSetting(ctx, field)
@@ -40576,27 +40059,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "deleteBulkProgramMembership":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteBulkProgramMembership(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateBulkProgramMembership":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkProgramMembership(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateBulkCSVProgramMembership":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkCSVProgramMembership(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "createRemediation":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createRemediation(ctx, field)
@@ -40688,13 +40150,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "updateBulkReportMembership":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateBulkReportMembership(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "updateReportMembership":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateReportMembership(ctx, field)
@@ -40705,13 +40160,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteReportMembership":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteReportMembership(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "deleteBulkReportMembership":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteBulkReportMembership(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
