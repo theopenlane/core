@@ -31,6 +31,8 @@ var (
 	ErrCampaignTemplateKeyMismatch = errors.New("email: email template does not match the campaign type")
 	// ErrInvalidBrandColor indicates a brand color override is not a valid hex color
 	ErrInvalidBrandColor = errors.New("email: invalid brand color")
+	// ErrQuestionnaireButtonTextRequired indicates a questionnaire email template has no button text
+	ErrQuestionnaireButtonTextRequired = errors.New("email: questionnaire email template requires button text")
 	// ErrWebhookSecretMissing indicates the Resend webhook signing secret is not configured
 	ErrWebhookSecretMissing = errors.New("email: webhook secret missing")
 	// ErrWebhookPayloadInvalid indicates the inbound webhook payload could not be decoded

@@ -707,10 +707,10 @@ var _ = RegisterEmailOperation(Operation[QuestionnaireAuthEmail]{
 	Description: "System email delivering a time-limited authentication link to a questionnaire",
 	PreHook:     resolveQuestionnaireOrgName,
 	Subject: func(_ RuntimeEmailConfig, req QuestionnaireAuthEmail) string {
-		return questionnaireSubject(req, QuestionnaireEmailContent{})
+		return defaultQuestionnaireContent(req).Subject
 	},
 	Build: func(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail) render.ContentBody {
-		return questionnaireBody(cfg, req, QuestionnaireEmailContent{})
+		return questionnaireBody(cfg, req, defaultQuestionnaireContent(req))
 	},
 	MessageOptions: func(cfg RuntimeEmailConfig, _ QuestionnaireAuthEmail) []newman.MessageOption {
 		return questionnaireFromOption(cfg)

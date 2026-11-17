@@ -111,18 +111,19 @@ func TestQuestionnaireAccessRenderUsesAuthoredContent(t *testing.T) {
 	assert.Check(t, is.Contains(msg.GetHTML(), "https://q.example.com/auth?tok=abc"))
 }
 
-func TestQuestionnaireBodyDefaultsWhenContentEmpty(t *testing.T) {
+func TestQuestionnaireBodyDefaultContent(t *testing.T) {
 	req := QuestionnaireAuthEmail{OrgName: "Acme", AssessmentName: "SOC 2 Vendor Review", AuthURL: "https://q.example.com/auth"}
+	content := defaultQuestionnaireContent(req)
 
-	body := questionnaireBody(RuntimeEmailConfig{}, req, QuestionnaireEmailContent{})
+	body := questionnaireBody(RuntimeEmailConfig{}, req, content)
 
 	assert.Check(t, is.Equal("Acme sent you a questionnaire to complete", body.Title))
 	assert.Check(t, is.DeepEqual([]string{"Acme has shared the SOC 2 Vendor Review questionnaire for you to complete."}, body.Intros.Paragraphs))
 	assert.Assert(t, is.Len(body.Actions, 1))
-	assert.Check(t, is.Equal(defaultQuestionnaireButtonText, body.Actions[0].Button.Text))
+	assert.Check(t, is.Equal("Access Questionnaire", body.Actions[0].Button.Text))
 	assert.Check(t, is.Equal(tcButtonColor, body.Actions[0].Button.Color))
 	assert.Check(t, is.Equal(tcButtonTextColor, body.Actions[0].Button.TextColor))
-	assert.Check(t, is.Equal("Access SOC 2 Vendor Review Questionnaire from Acme", questionnaireSubject(req, QuestionnaireEmailContent{})))
+	assert.Check(t, is.Equal("Access SOC 2 Vendor Review Questionnaire from Acme", content.Subject))
 }
 
 func TestQuestionnaireBodyAlwaysLinksAuthURL(t *testing.T) {
@@ -157,7 +158,8 @@ func TestQuestionnaireAccessRenderKeepsSystemFieldsLiteral(t *testing.T) {
 		},
 		CampaignContext: CampaignContext{CampaignName: "Q4 {{"},
 		QuestionnaireEmailContent: QuestionnaireEmailContent{
-			Title: "Hi {{ .firstName }} from {{ .orgName }}",
+			Subject: "{{ .questionnaireName }} from {{ .orgName }}",
+			Title:   "Hi {{ .firstName }} from {{ .orgName }}",
 		},
 	})
 	assert.Assert(t, err)
@@ -165,6 +167,6 @@ func TestQuestionnaireAccessRenderKeepsSystemFieldsLiteral(t *testing.T) {
 	msg, err := d.RenderMessage(context.Background(), &Client{Config: *MockRuntimeConfig()}, payload)
 	assert.Assert(t, err)
 
-	assert.Check(t, is.Equal("Access Review {{ Questionnaire from Acme {{ .companyName }}", msg.Subject))
+	assert.Check(t, is.Equal("Review {{ from Acme {{ .companyName }}", msg.Subject))
 	assert.Check(t, is.Contains(msg.GetHTML(), "Hi Sam {{ from Acme {{ .companyName }}"))
 }

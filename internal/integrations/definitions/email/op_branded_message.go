@@ -13,20 +13,13 @@ type BrandedMessageRequest struct {
 	// RecipientInfo and CampaignContext are populated per-send (campaign target and dispatch context), not authored in the template, so they are excluded from the reflected catalog config schema via jsonschema:"-"
 	RecipientInfo   `jsonschema:"-"`
 	CampaignContext `jsonschema:"-"`
-	// Subject is the email subject line
-	Subject string `json:"subject" jsonschema:"required,description=Email subject line"`
-	// Preheader is hidden preview text shown in the inbox list
-	Preheader string `json:"preheader,omitempty" jsonschema:"description=Inbox preview text"`
-	// Title is the headline shown above the body paragraphs
-	Title string `json:"title" jsonschema:"required,description=Email headline"`
-	// Intros are body paragraphs rendered before the optional call-to-action button
-	Intros []string `json:"intros,omitempty" jsonschema:"description=Body paragraphs rendered before the call-to-action"`
-	// ButtonText is the optional call-to-action button label
-	ButtonText string `json:"buttonText,omitempty" jsonschema:"description=Call-to-action button label"`
+	// MessageContent is the authored subject, headline, body paragraphs, and button label
+	MessageContent
 	// ButtonLink is the URL the call-to-action button navigates to
 	ButtonLink string `json:"buttonLink,omitempty" jsonschema:"format=uri,description=Call-to-action button URL"`
 	// Outros are fine-print paragraphs rendered after the call-to-action
 	Outros []string `json:"outros,omitempty" jsonschema:"description=Fine-print paragraphs rendered after the call-to-action"`
+	// BrandOverrides are the authored logo and color overrides
 	BrandOverrides
 	// CompanyName is the company display name shown in the footer; customer-supplied because a branded message carries the customer's own identity rather than Openlane's
 	CompanyName string `json:"companyName,omitempty" jsonschema:"description=Company display name shown in the footer"`
