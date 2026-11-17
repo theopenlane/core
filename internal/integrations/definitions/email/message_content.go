@@ -6,9 +6,24 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/utils/jsonx"
+	"github.com/theopenlane/utils/mapx"
 
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
+
+// MessageContent holds the customer-authored text shared by message-style catalog entries
+type MessageContent struct {
+	// Subject is the email subject line
+	Subject string `json:"subject" jsonschema:"required,description=Email subject line"`
+	// Preheader is hidden preview text shown in the inbox list
+	Preheader string `json:"preheader,omitempty" jsonschema:"description=Inbox preview text"`
+	// Title is the headline shown above the body paragraphs
+	Title string `json:"title" jsonschema:"required,description=Email headline"`
+	// Intros are body paragraphs rendered before the call-to-action button
+	Intros []string `json:"intros,omitempty" jsonschema:"description=Body paragraphs rendered before the call-to-action"`
+	// ButtonText is the call-to-action button label
+	ButtonText string `json:"buttonText,omitempty" jsonschema:"description=Call-to-action button label"`
+}
 
 // BrandOverrides holds the customer-authored logo and color overrides shared by brandable email operations
 type BrandOverrides struct {
@@ -32,6 +47,35 @@ type BrandOverrides struct {
 	TextColor string `json:"textColor,omitempty" jsonschema:"format=color,description=Body text color override (hex)"`
 	// FooterTextColor overrides the muted text color for this send
 	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"format=color,description=Muted text color override (hex)"`
+}
+
+// ValidateTemplateDefaults returns an error when an email template's defaults are invalid for its catalog key
+func ValidateTemplateDefaults(key string, defaults map[string]any) error {
+	if err := ValidateBrandColors(defaults); err != nil {
+		return err
+	}
+
+	if key == QuestionnaireAccessOp.Name() && mapx.Value[string](defaults, "buttonText") == "" {
+		return ErrQuestionnaireButtonTextRequired
+	}
+
+	return nil
+}
+
+// ValidateBrandColors returns an error when a brand color in the template defaults is not a valid hex color
+func ValidateBrandColors(defaults map[string]any) error {
+	for _, key := range brandColorKeys {
+		value, ok := defaults[key].(string)
+		if !ok || value == "" {
+			continue
+		}
+
+		if err := validator.HexColorValidator(value); err != nil {
+			return fmt.Errorf("%w: %s: %w", ErrInvalidBrandColor, key, err)
+		}
+	}
+
+	return nil
 }
 
 // apply overlays the set overrides onto the config, skipping invalid hex colors
@@ -72,22 +116,6 @@ func schemaKeysWithFormat(schema json.RawMessage, format string) []string {
 	}
 
 	return keys
-}
-
-// ValidateBrandColors returns an error when a brand color in the template defaults is not a valid hex color
-func ValidateBrandColors(defaults map[string]any) error {
-	for _, key := range brandColorKeys {
-		value, ok := defaults[key].(string)
-		if !ok || value == "" {
-			continue
-		}
-
-		if err := validator.HexColorValidator(value); err != nil {
-			return fmt.Errorf("%w: %s: %w", ErrInvalidBrandColor, key, err)
-		}
-	}
-
-	return nil
 }
 
 // overrideColor returns the override when it is a valid hex color, otherwise the fallback
