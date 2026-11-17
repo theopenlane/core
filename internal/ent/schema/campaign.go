@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 )
 
@@ -360,6 +361,13 @@ func (Campaign) Annotations() []schema.Annotation {
 		entx.NewExportable(),
 		entx.IntegrationMappingSchema().
 			StockPersist(),
+	}
+}
+
+// Hooks of the Campaign
+func (Campaign) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookCampaignEmailTemplate(),
 	}
 }
 

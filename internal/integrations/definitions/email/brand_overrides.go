@@ -1,7 +1,11 @@
 package email
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/samber/lo"
+	"github.com/theopenlane/utils/jsonx"
 
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
@@ -44,6 +48,46 @@ func (b BrandOverrides) apply(cfg RuntimeEmailConfig) RuntimeEmailConfig {
 	cfg.FooterTextColor = overrideColor(b.FooterTextColor, cfg.FooterTextColor)
 
 	return cfg
+}
+
+// colorFormat is the JSON schema format tagged on color fields
+const colorFormat = "color"
+
+// brandColorKeys are the JSON keys of the BrandOverrides fields tagged format=color
+var brandColorKeys = schemaKeysWithFormat(jsonx.SchemaFrom[BrandOverrides](), colorFormat)
+
+// schemaKeysWithFormat returns the top-level property keys of a schema that declare the given format
+func schemaKeysWithFormat(schema json.RawMessage, format string) []string {
+	root, _, err := jsonx.SchemaRoot(schema)
+	if err != nil || root.Properties == nil {
+		return nil
+	}
+
+	var keys []string
+
+	for pair := root.Properties.Oldest(); pair != nil; pair = pair.Next() {
+		if pair.Value.Format == format {
+			keys = append(keys, pair.Key)
+		}
+	}
+
+	return keys
+}
+
+// ValidateBrandColors returns an error when a brand color in the template defaults is not a valid hex color
+func ValidateBrandColors(defaults map[string]any) error {
+	for _, key := range brandColorKeys {
+		value, ok := defaults[key].(string)
+		if !ok || value == "" {
+			continue
+		}
+
+		if err := validator.HexColorValidator(value); err != nil {
+			return fmt.Errorf("%w: %s: %w", ErrInvalidBrandColor, key, err)
+		}
+	}
+
+	return nil
 }
 
 // overrideColor returns the override when it is a valid hex color, otherwise the fallback

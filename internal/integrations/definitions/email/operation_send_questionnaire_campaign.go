@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
 
 	"github.com/theopenlane/iam/tokens"
@@ -13,11 +15,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/jsonx"
 )
 
 // maxQuestionnaireTags is the pre-allocation capacity for per-message newman tags
@@ -38,14 +40,14 @@ var SendQuestionnaireCampaignOp = types.OperationPayloadOf[SendQuestionnaireCamp
 
 // questionnaireDispatch holds the campaign-wide state shared by every questionnaire send
 type questionnaireDispatch struct {
-	camp              *generated.Campaign
-	questionnaireName string
-	// orgName is the sending organization's name
-	orgName string
-	// content is the linked template's authored text and branding, empty when the campaign uses the default wording
-	content QuestionnaireEmailContent
+	camp       *generated.Campaign
+	dispatcher Dispatcher
+	// defaults are the linked template's authored values, nil when the campaign uses the default wording
+	defaults map[string]any
 	// overlay is the campaign template context
 	overlay CampaignContext
+	// base carries the org and questionnaire names shared by every recipient
+	base QuestionnaireAuthEmail
 }
 
 // questionnaireCampaignEdges eager-loads the email template linked to a questionnaire campaign
@@ -99,10 +101,13 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 // newQuestionnaireDispatch resolves the campaign-wide send state, leaving content empty when no template is linked
 func newQuestionnaireDispatch(ctx context.Context, db *generated.Client, camp *generated.Campaign, questionnaireName string) (questionnaireDispatch, error) {
 	dispatch := questionnaireDispatch{
-		camp:              camp,
-		questionnaireName: questionnaireName,
-		orgName:           organizationDisplayName(ctx, db, camp.OwnerID),
-		overlay:           campaignOverlay(camp),
+		camp:       camp,
+		dispatcher: questionnaireAccess,
+		overlay:    campaignOverlay(camp),
+		base: QuestionnaireAuthEmail{
+			OrgName:        organizationDisplayName(ctx, db, camp.OwnerID),
+			AssessmentName: questionnaireName,
+		},
 	}
 
 	template := camp.Edges.EmailTemplate
@@ -110,13 +115,13 @@ func newQuestionnaireDispatch(ctx context.Context, db *generated.Client, camp *g
 		return dispatch, nil
 	}
 
-	if err := ValidateCampaignTemplateKey(camp.CampaignType, template.Key); err != nil {
+	dispatcher, err := campaignDispatcher(camp)
+	if err != nil {
 		return dispatch, err
 	}
 
-	if err := jsonx.RoundTrip(template.Defaults, &dispatch.content); err != nil {
-		return dispatch, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
-	}
+	dispatch.dispatcher = dispatcher
+	dispatch.defaults = template.Defaults
 
 	return dispatch, nil
 }
@@ -150,14 +155,18 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 		tags = append(tags, newman.Tag{Name: TagIsTest, Value: TagTrueValue})
 	}
 
-	input := QuestionnaireAuthEmail{
-		Email:          target.Email,
-		Tags:           tags,
-		AssessmentName: dispatch.questionnaireName,
-		AuthURL:        authURL,
+	input := dispatch.base
+	input.Email = target.Email
+	input.FirstName, input.LastName = splitFullName(target.FullName)
+	input.Tags = tags
+	input.AuthURL = authURL
+
+	payload, err := questionnairePayload(dispatch, input)
+	if err != nil {
+		return err
 	}
 
-	if err := dispatchQuestionnaireEmail(ctx, req, client, dispatch, target, input); err != nil {
+	if err := dispatch.dispatcher.SendByKey(ctx, req, client, payload); err != nil {
 		return err
 	}
 
@@ -168,22 +177,12 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 	return markCampaignTargetSent(ctx, req.DB, target.ID)
 }
 
-// dispatchQuestionnaireEmail sends the questionnaire access email, using the linked template's content when the campaign has one
-// the template only supplies the authored content, so it cannot change the recipient, questionnaire, or access link
-func dispatchQuestionnaireEmail(ctx context.Context, req types.OperationRequest, client *Client, dispatch questionnaireDispatch, target *generated.CampaignTarget, input QuestionnaireAuthEmail) error {
-	input.FirstName, input.LastName = splitFullName(target.FullName)
-	input.OrgName = dispatch.orgName
+// questionnairePayload merges the template defaults with the per-send fields
+// system keys are dropped from the defaults so a template cannot change the recipient, questionnaire, or access link
+func questionnairePayload(dispatch questionnaireDispatch, input QuestionnaireAuthEmail) (json.RawMessage, error) {
+	defaults := lo.OmitByKeys(dispatch.defaults, slices.Concat(baseSystemKeys, questionnaireAccess.SystemKeys))
 
-	payload, err := json.Marshal(QuestionnaireAccessRequest{
-		QuestionnaireAuthEmail:    input,
-		CampaignContext:           dispatch.overlay,
-		QuestionnaireEmailContent: dispatch.content,
-	})
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
-	}
-
-	return questionnaireAccess.SendByKey(ctx, req, client, payload)
+	return templatekit.BuildDispatchPayload(defaults, dispatch.overlay, input)
 }
 
 // questionnairePath is the product route serving questionnaire access links

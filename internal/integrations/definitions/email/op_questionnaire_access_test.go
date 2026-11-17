@@ -143,3 +143,28 @@ func TestQuestionnaireBodyAppliesHeaderLogoOverride(t *testing.T) {
 	assert.Assert(t, body.Header.Logo != nil)
 	assert.Check(t, is.Equal("https://acme.com/icon.png", body.Header.Logo.Src))
 }
+
+func TestQuestionnaireAccessRenderKeepsSystemFieldsLiteral(t *testing.T) {
+	d, ok := DispatcherByKey(questionnaireAccessKey)
+	assert.Assert(t, ok)
+
+	payload, err := json.Marshal(QuestionnaireAccessRequest{
+		QuestionnaireAuthEmail: QuestionnaireAuthEmail{
+			RecipientInfo:  RecipientInfo{Email: "vendor@example.com", FirstName: "Sam {{"},
+			OrgName:        "Acme {{ .companyName }}",
+			AssessmentName: "Review {{",
+			AuthURL:        "https://q.example.com/auth",
+		},
+		CampaignContext: CampaignContext{CampaignName: "Q4 {{"},
+		QuestionnaireEmailContent: QuestionnaireEmailContent{
+			Title: "Hi {{ .firstName }} from {{ .orgName }}",
+		},
+	})
+	assert.Assert(t, err)
+
+	msg, err := d.RenderMessage(context.Background(), &Client{Config: *MockRuntimeConfig()}, payload)
+	assert.Assert(t, err)
+
+	assert.Check(t, is.Equal("Access Review {{ Questionnaire from Acme {{ .companyName }}", msg.Subject))
+	assert.Check(t, is.Contains(msg.GetHTML(), "Hi Sam {{ from Acme {{ .companyName }}"))
+}

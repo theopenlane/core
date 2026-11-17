@@ -1,6 +1,8 @@
 package graphapi
 
 import (
+	"slices"
+
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/models"
@@ -10,7 +12,7 @@ import (
 
 // catalogVariables combines the shared template variables with one catalog entry's own variables
 func catalogVariables(shared, entry []models.TemplateVariable) []*model.TemplateVariable {
-	return lo.Map(append(append([]models.TemplateVariable{}, shared...), entry...), func(v models.TemplateVariable, _ int) *model.TemplateVariable {
+	return lo.Map(slices.Concat(shared, entry), func(v models.TemplateVariable, _ int) *model.TemplateVariable {
 		return &model.TemplateVariable{Name: v.Name, Description: v.Description}
 	})
 }

@@ -67,18 +67,11 @@ var questionnaireAccess = RegisterEmailOperation(Operation[QuestionnaireAccessRe
 	CustomerSelectable: new(true),
 	Example:            questionnaireAccessExample,
 	UISchema:           questionnaireAccessUISchema,
-	Variables: []OperationVariable[QuestionnaireAccessRequest]{
-		{
-			Name:        "orgName",
-			Description: "Name of the organization sending the questionnaire",
-			Value:       func(req QuestionnaireAccessRequest) string { return req.OrgName },
-		},
-		{
-			Name:        "questionnaireName",
-			Description: "Name of the questionnaire being sent",
-			Value:       func(req QuestionnaireAccessRequest) string { return req.AssessmentName },
-		},
+	Variables: []OperationVariable{
+		{Name: "orgName", Description: "Name of the organization sending the questionnaire", PayloadKey: "org_name"},
+		{Name: "questionnaireName", Description: "Name of the questionnaire being sent", PayloadKey: "assessment_name"},
 	},
+	SystemKeys: payloadKeys[QuestionnaireAuthEmail](),
 	Subject: func(_ RuntimeEmailConfig, req QuestionnaireAccessRequest) string {
 		return questionnaireSubject(req.QuestionnaireAuthEmail, req.QuestionnaireEmailContent)
 	},
@@ -86,7 +79,7 @@ var questionnaireAccess = RegisterEmailOperation(Operation[QuestionnaireAccessRe
 		return questionnaireBody(cfg, req.QuestionnaireAuthEmail, req.QuestionnaireEmailContent)
 	},
 	Config: func(cfg RuntimeEmailConfig, req QuestionnaireAccessRequest) RuntimeEmailConfig {
-		return req.apply(cfg)
+		return questionnaireConfig(cfg, req.QuestionnaireEmailContent)
 	},
 	MessageOptions: func(cfg RuntimeEmailConfig, _ QuestionnaireAccessRequest) []newman.MessageOption {
 		return questionnaireFromOption(cfg)
@@ -100,9 +93,7 @@ func questionnaireSubject(req QuestionnaireAuthEmail, content QuestionnaireEmail
 
 // questionnaireBody builds the questionnaire access email body, using custom text where set and always linking the button to the auth URL
 func questionnaireBody(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail, content QuestionnaireEmailContent) render.ContentBody {
-	cfg.ButtonColor = tcButtonColor
-	cfg.ButtonTextColor = tcButtonTextColor
-	cfg = content.apply(cfg)
+	cfg = questionnaireConfig(cfg, content)
 
 	intros := content.Intros
 	if len(intros) == 0 {
@@ -123,6 +114,14 @@ func questionnaireBody(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail, conte
 			},
 		}},
 	}
+}
+
+// questionnaireConfig applies the questionnaire button colors and then the authored brand overrides
+func questionnaireConfig(cfg RuntimeEmailConfig, content QuestionnaireEmailContent) RuntimeEmailConfig {
+	cfg.ButtonColor = tcButtonColor
+	cfg.ButtonTextColor = tcButtonTextColor
+
+	return content.apply(cfg)
 }
 
 // questionnaireFromOption returns the questionnaire from address override when one is configured

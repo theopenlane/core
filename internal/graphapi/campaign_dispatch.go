@@ -74,7 +74,7 @@ func (r *mutationResolver) initCampaignDispatch(ctx context.Context, campaignID 
 		return nil, rout.NewMissingRequiredFieldError("campaignID")
 	}
 
-	campaignObj, err := withTransactionalMutation(ctx).Campaign.Query().Where(campaign.ID(campaignID)).Only(ctx)
+	campaignObj, err := withTransactionalMutation(ctx).Campaign.Query().Where(campaign.ID(campaignID)).WithEmailTemplate(selectEmailTemplateKey).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
 	}
@@ -125,7 +125,7 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 		return err
 	}
 
-	return validateCampaignContentSource(ctx, campaignObj)
+	return validateCampaignContentSource(campaignObj)
 }
 
 // ensureCampaignAssessment backfills the assessment for questionnaire campaigns created with only a
@@ -168,7 +168,7 @@ func ensureCampaignAssessment(ctx context.Context, campaignObj *generated.Campai
 }
 
 // validateCampaignContentSource ensures the campaign references the content source its type renders from
-func validateCampaignContentSource(ctx context.Context, campaignObj *generated.Campaign) error {
+func validateCampaignContentSource(campaignObj *generated.Campaign) error {
 	switch campaignObj.CampaignType {
 	case enums.CampaignTypeQuestionnaire:
 		if campaignObj.AssessmentID == "" {
@@ -186,21 +186,19 @@ func validateCampaignContentSource(ctx context.Context, campaignObj *generated.C
 		}
 	}
 
-	return validateCampaignEmailTemplate(ctx, campaignObj)
+	return validateCampaignEmailTemplate(campaignObj)
 }
 
-// validateCampaignEmailTemplate ensures a linked email template fits the campaign type
-func validateCampaignEmailTemplate(ctx context.Context, campaignObj *generated.Campaign) error {
-	if campaignObj.EmailTemplateID == "" || campaignObj.CampaignType == enums.CampaignTypeTrustCenterUpdate {
-		return nil
-	}
+// selectEmailTemplateKey limits an eager-loaded email template to its key
+func selectEmailTemplateKey(q *generated.EmailTemplateQuery) {
+	q.Select(emailtemplate.FieldKey)
+}
 
-	templateObj, err := withTransactionalMutation(ctx).EmailTemplate.Query().
-		Where(emailtemplate.ID(campaignObj.EmailTemplateID)).
-		Select(emailtemplate.FieldKey).
-		Only(ctx)
-	if err != nil {
-		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailtemplate"})
+// validateCampaignEmailTemplate ensures the eager-loaded email template fits the campaign type
+func validateCampaignEmailTemplate(campaignObj *generated.Campaign) error {
+	templateObj := campaignObj.Edges.EmailTemplate
+	if templateObj == nil || campaignObj.CampaignType == enums.CampaignTypeTrustCenterUpdate {
+		return nil
 	}
 
 	return emaildef.ValidateCampaignTemplateKey(campaignObj.CampaignType, templateObj.Key)

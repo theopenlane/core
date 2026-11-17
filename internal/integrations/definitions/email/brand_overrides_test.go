@@ -43,3 +43,22 @@ func TestBrandOverridesApplyIgnoresInvalidColors(t *testing.T) {
 	assert.Check(t, is.Equal("#0f3d3a", out.HeadingColor))
 	assert.Check(t, is.Equal("#ffffff", out.CardBackgroundColor))
 }
+
+func TestBrandColorKeysFromSchema(t *testing.T) {
+	assert.Check(t, is.DeepEqual([]string{
+		"primaryColor",
+		"bodyBackgroundColor",
+		"cardBackgroundColor",
+		"heroBackgroundColor",
+		"buttonColor",
+		"buttonTextColor",
+		"textColor",
+		"footerTextColor",
+	}, brandColorKeys))
+}
+
+func TestValidateBrandColors(t *testing.T) {
+	assert.Check(t, ValidateBrandColors(map[string]any{"buttonColor": "#000000", "title": "red"}))
+	assert.Check(t, ValidateBrandColors(map[string]any{"buttonColor": ""}))
+	assert.Check(t, is.ErrorIs(ValidateBrandColors(map[string]any{"buttonColor": "red"}), ErrInvalidBrandColor))
+}

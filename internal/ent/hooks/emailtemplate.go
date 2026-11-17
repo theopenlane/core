@@ -18,6 +18,10 @@ func HookEmailTemplateSanitize() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.EmailTemplateFunc(func(ctx context.Context, m *generated.EmailTemplateMutation) (generated.Value, error) {
 			if defaults, ok := m.Defaults(); ok && len(defaults) > 0 {
+				if err := emaildef.ValidateBrandColors(defaults); err != nil {
+					return nil, err
+				}
+
 				m.SetDefaults(scrubMapStrings(defaults))
 			}
 

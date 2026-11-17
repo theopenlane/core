@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/render"
 
@@ -47,14 +48,14 @@ type Dispatcher interface {
 	TemplateVariables() []models.TemplateVariable
 }
 
-// OperationVariable is an operation-specific template variable resolved from the typed input at render time
-type OperationVariable[T any] struct {
+// OperationVariable exposes an operation payload field to templates under an author-facing name
+type OperationVariable struct {
 	// Name is the variable name used in templates, e.g. orgName for {{ .orgName }}
 	Name string
 	// Description is shown to template authors in the variable picker
 	Description string
-	// Value resolves the variable from the typed input
-	Value func(input T) string
+	// PayloadKey is the JSON key in the operation payload that holds the value
+	PayloadKey string
 }
 
 // RecipientInfo holds recipient addressing fields embedded in every email operation input
@@ -127,8 +128,10 @@ type Operation[T Recipient] struct {
 	MessageOptions func(cfg RuntimeEmailConfig, input T) []newman.MessageOption
 	// PreHook is an optional hook invoked before rendering to resolve dynamic fields
 	PreHook func(ctx context.Context, req types.OperationRequest, cfg RuntimeEmailConfig, input *T) error
-	// Variables are optional operation-specific template variables resolved from the typed input
-	Variables []OperationVariable[T]
+	// Variables are optional operation-specific template variables read from the payload
+	Variables []OperationVariable
+	// SystemKeys are operation-specific payload keys set by the system per send, which render literally and are never taken from template defaults
+	SystemKeys []string
 }
 
 // Name returns the catalog key for the operation, satisfying the Dispatcher interface
@@ -153,31 +156,9 @@ func (e Operation[T]) BuilderUISchema() json.RawMessage {
 
 // TemplateVariables returns the operation-specific template variables, satisfying the Dispatcher interface
 func (e Operation[T]) TemplateVariables() []models.TemplateVariable {
-	variables := make([]models.TemplateVariable, 0, len(e.Variables))
-	for _, v := range e.Variables {
-		variables = append(variables, models.TemplateVariable{Name: v.Name, Description: v.Description})
-	}
-
-	return variables
-}
-
-// variableValues decodes the raw payload into T and resolves the operation-specific template variables from it
-func (e Operation[T]) variableValues(payload json.RawMessage) (map[string]any, error) {
-	if len(e.Variables) == 0 {
-		return nil, nil
-	}
-
-	var input T
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
-	}
-
-	values := make(map[string]any, len(e.Variables))
-	for _, v := range e.Variables {
-		values[v.Name] = v.Value(input)
-	}
-
-	return values, nil
+	return lo.Map(e.Variables, func(v OperationVariable, _ int) models.TemplateVariable {
+		return models.TemplateVariable{Name: v.Name, Description: v.Description}
+	})
 }
 
 // decodePayload interpolates template expressions in the raw JSON and unmarshals into T
@@ -187,12 +168,7 @@ func (e Operation[T]) decodePayload(client *Client, payload json.RawMessage) (T,
 		return input, nil
 	}
 
-	operationVars, err := e.variableValues(payload)
-	if err != nil {
-		return input, err
-	}
-
-	resolved, err := interpolatePayload(client, payload, operationVars)
+	resolved, err := interpolatePayload(client, payload, e.Variables, e.SystemKeys)
 	if err != nil {
 		return input, err
 	}
