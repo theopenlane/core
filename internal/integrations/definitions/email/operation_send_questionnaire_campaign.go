@@ -155,6 +155,7 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 		tags = append(tags, newman.Tag{Name: TagIsTest, Value: TagTrueValue})
 	}
 
+	// set the base settings and then the defaults
 	input := dispatch.base
 	input.Email = target.Email
 	input.FirstName, input.LastName = splitFullName(target.FullName)
