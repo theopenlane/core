@@ -70,14 +70,14 @@ func init() {
 
 	sendCmd.Flags().String("to", "", "recipient email address (required)")
 	sendCmd.Flags().String("name", "", "dispatcher name to send (required)")
-	sendCmd.Flags().String("branding", "", "trust center branding variant for trust-center emails: default (Openlane fallback) or trustcenter (default)")
+	sendCmd.Flags().String("branding", "", "branding variant for brandable emails: default (Openlane fallback) or branded (default)")
 
 	sendAllCmd.Flags().String("to", "", "recipient email address (required)")
-	sendAllCmd.Flags().String("branding", "", "trust center branding variant for trust-center emails: default (Openlane fallback) or trustcenter (default)")
+	sendAllCmd.Flags().String("branding", "", "branding variant for brandable emails: default (Openlane fallback) or branded (default)")
 }
 
 // sendTestEmail calls the server's email-test/send endpoint.
-// When name is empty, all dispatchers are sent. branding selects the trust center branding variant
+// When name is empty, all dispatchers are sent. branding selects the branding variant
 func sendTestEmail(ctx context.Context, toEmail, name, branding string) error {
 	if toEmail == "" {
 		return ErrRecipientRequired
