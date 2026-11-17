@@ -6840,7 +6840,8 @@ func init() {
 	sharelinkInters := schema.ShareLink{}.Interceptors()
 	sharelink.Interceptors[0] = sharelinkMixinInters3[0]
 	sharelink.Interceptors[1] = sharelinkMixinInters6[0]
-	sharelink.Interceptors[2] = sharelinkInters[0]
+	sharelink.Interceptors[2] = sharelinkMixinInters6[1]
+	sharelink.Interceptors[3] = sharelinkInters[0]
 	sharelinkMixinFields0 := sharelinkMixin[0].Fields()
 	_ = sharelinkMixinFields0
 	sharelinkMixinFields4 := sharelinkMixin[4].Fields()
@@ -6923,6 +6924,7 @@ func init() {
 	sharelinkaccesseventMixinInters6 := sharelinkaccesseventMixin[6].Interceptors()
 	sharelinkaccessevent.Interceptors[0] = sharelinkaccesseventMixinInters3[0]
 	sharelinkaccessevent.Interceptors[1] = sharelinkaccesseventMixinInters6[0]
+	sharelinkaccessevent.Interceptors[2] = sharelinkaccesseventMixinInters6[1]
 	sharelinkaccesseventMixinFields0 := sharelinkaccesseventMixin[0].Fields()
 	_ = sharelinkaccesseventMixinFields0
 	sharelinkaccesseventMixinFields4 := sharelinkaccesseventMixin[4].Fields()

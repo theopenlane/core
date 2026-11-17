@@ -14144,6 +14144,14 @@ func init() {
 			AddField:    "add_secret_ids",
 		},
 		{
+			Name:        "share_links",
+			Label:       "ShareLinks",
+			Target:      SchemaShareLink,
+			TargetType:  "ShareLink",
+			CreateField: "share_link_ids",
+			AddField:    "add_share_link_ids",
+		},
+		{
 			Name:        "standard_logo",
 			Label:       "StandardLogo",
 			Target:      SchemaStandard,
@@ -14158,14 +14166,6 @@ func init() {
 			TargetType:  "Subprocessor",
 			CreateField: "subprocessor_logo_ids",
 			AddField:    "add_subprocessor_logo_ids",
-		},
-		{
-			Name:        "share_links",
-			Label:       "ShareLinks",
-			Target:      SchemaShareLink,
-			TargetType:  "ShareLink",
-			CreateField: "share_link_ids",
-			AddField:    "add_share_link_ids",
 		},
 		{
 			Name:        "template",
