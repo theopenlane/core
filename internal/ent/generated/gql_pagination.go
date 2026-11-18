@@ -44308,6 +44308,48 @@ func (_q *FileQuery) clonePage() *FileQuery {
 			c.withNamedOriginalTrustCenterDoc[name] = q.clonePage()
 		}
 	}
+	c.withTrustCenterSettingLogo = _q.withTrustCenterSettingLogo.clonePage()
+	if _q.withNamedTrustCenterSettingLogo != nil {
+		c.withNamedTrustCenterSettingLogo = make(map[string]*TrustCenterSettingQuery, len(_q.withNamedTrustCenterSettingLogo))
+		for name, q := range _q.withNamedTrustCenterSettingLogo {
+			c.withNamedTrustCenterSettingLogo[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterSettingFavicon = _q.withTrustCenterSettingFavicon.clonePage()
+	if _q.withNamedTrustCenterSettingFavicon != nil {
+		c.withNamedTrustCenterSettingFavicon = make(map[string]*TrustCenterSettingQuery, len(_q.withNamedTrustCenterSettingFavicon))
+		for name, q := range _q.withNamedTrustCenterSettingFavicon {
+			c.withNamedTrustCenterSettingFavicon[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterSettingHeroImage = _q.withTrustCenterSettingHeroImage.clonePage()
+	if _q.withNamedTrustCenterSettingHeroImage != nil {
+		c.withNamedTrustCenterSettingHeroImage = make(map[string]*TrustCenterSettingQuery, len(_q.withNamedTrustCenterSettingHeroImage))
+		for name, q := range _q.withNamedTrustCenterSettingHeroImage {
+			c.withNamedTrustCenterSettingHeroImage[name] = q.clonePage()
+		}
+	}
+	c.withTrustCenterEntityLogo = _q.withTrustCenterEntityLogo.clonePage()
+	if _q.withNamedTrustCenterEntityLogo != nil {
+		c.withNamedTrustCenterEntityLogo = make(map[string]*TrustCenterEntityQuery, len(_q.withNamedTrustCenterEntityLogo))
+		for name, q := range _q.withNamedTrustCenterEntityLogo {
+			c.withNamedTrustCenterEntityLogo[name] = q.clonePage()
+		}
+	}
+	c.withSubprocessorLogo = _q.withSubprocessorLogo.clonePage()
+	if _q.withNamedSubprocessorLogo != nil {
+		c.withNamedSubprocessorLogo = make(map[string]*SubprocessorQuery, len(_q.withNamedSubprocessorLogo))
+		for name, q := range _q.withNamedSubprocessorLogo {
+			c.withNamedSubprocessorLogo[name] = q.clonePage()
+		}
+	}
+	c.withStandardLogo = _q.withStandardLogo.clonePage()
+	if _q.withNamedStandardLogo != nil {
+		c.withNamedStandardLogo = make(map[string]*StandardQuery, len(_q.withNamedStandardLogo))
+		for name, q := range _q.withNamedStandardLogo {
+			c.withNamedStandardLogo[name] = q.clonePage()
+		}
+	}
 	c.loadTotal = _q.loadTotal
 	return c
 }

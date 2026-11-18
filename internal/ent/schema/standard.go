@@ -173,7 +173,7 @@ func (s Standard) Mixin() []ent.Mixin {
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s,
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterScope(interceptors.AnonScopeStandard),
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},

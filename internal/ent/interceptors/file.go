@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
@@ -72,6 +73,23 @@ func InterceptorFile() ent.Interceptor {
 
 		return nil
 	})
+}
+
+// AnonScopeFile limits anonymous trust center callers to the files displayed by rows they can see
+func AnonScopeFile(trustCenterID string) func(*sql.Selector) {
+	inTrustCenter := AnonScopeTrustCenterID(trustCenterID)
+
+	return file.Or(
+		file.HasTemplateWith(inTrustCenter),
+		file.HasTrustCenterDocWith(inTrustCenter),
+		file.HasOriginalTrustCenterDocWith(inTrustCenter),
+		file.HasTrustCenterSettingLogoWith(inTrustCenter),
+		file.HasTrustCenterSettingFaviconWith(inTrustCenter),
+		file.HasTrustCenterSettingHeroImageWith(inTrustCenter),
+		file.HasTrustCenterEntityLogoWith(inTrustCenter),
+		file.HasSubprocessorLogoWith(AnonScopeSubprocessor(trustCenterID)),
+		file.HasStandardLogoWith(AnonScopeStandard(trustCenterID)),
+	)
 }
 
 // InterceptorPresignedURL is an ent interceptor that sets the presignedURL field on the file query

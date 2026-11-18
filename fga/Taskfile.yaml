@@ -66,6 +66,13 @@ tasks:
           echo "$result" | jq .error
           exit 1
         fi
+      - |
+        result=$({{.FGA}} model validate --file model/fga.mod --weighted-graph)
+        if [ "$(echo "$result" | jq .is_valid)" != "true" ]; then
+          echo "Weighted graph validation failed:"
+          echo "$result" | jq .error
+          exit 1
+        fi
 
   test:
     desc: runs the fga model tests

@@ -37,15 +37,6 @@ func (r *mutationResolver) CreateBulkReportMembership(ctx context.Context, input
 	return r.bulkCreateReportMembership(ctx, input)
 }
 
-// UpdateBulkReportMembership is the resolver for the updateBulkReportMembership field.
-func (r *mutationResolver) UpdateBulkReportMembership(ctx context.Context, ids []string, input generated.UpdateReportMembershipInput) (*model.ReportMembershipBulkUpdatePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkUpdateReportMembership(ctx, ids, input)
-}
-
 // UpdateReportMembership is the resolver for the updateReportMembership field.
 func (r *mutationResolver) UpdateReportMembership(ctx context.Context, id string, input generated.UpdateReportMembershipInput) (*model.ReportMembershipUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ReportMembership.Get(ctx, id)
@@ -81,15 +72,6 @@ func (r *mutationResolver) DeleteReportMembership(ctx context.Context, id string
 	return &model.ReportMembershipDeletePayload{
 		DeletedID: id,
 	}, nil
-}
-
-// DeleteBulkReportMembership is the resolver for the deleteBulkReportMembership field.
-func (r *mutationResolver) DeleteBulkReportMembership(ctx context.Context, ids []string) (*model.ReportMembershipBulkDeletePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkDeleteReportMembership(ctx, ids)
 }
 
 // ReportMembership is the resolver for the reportMembership field.

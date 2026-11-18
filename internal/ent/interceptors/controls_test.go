@@ -42,22 +42,28 @@ func TestInterceptorTrustCenterControlAnonymousFilter(t *testing.T) {
 			ctx = auth.WithCaller(ctx, auth.NewTrustCenterCaller(orgID, ulids.New().String(), "Anonymous User", ""))
 			ctx = auth.ActiveTrustCenterIDKey.Set(ctx, ulids.New().String())
 
-			traverse, ok := InterceptorTrustCenterControl().(intercept.TraverseFunc)
+			controlTraverse, ok := InterceptorTrustCenterControl().(intercept.TraverseFunc)
+			assert.Assert(t, ok)
+
+			controlQuery := &mockQuery{typ: generated.TypeControl}
+			assert.NilError(t, controlTraverse(ctx, controlQuery))
+			assert.Check(t, is.Len(controlQuery.predicates, 0))
+
+			anonTraverse, ok := InterceptorAnonTrustCenter(AnonScopeTrustCenterControl).(intercept.TraverseFunc)
 			assert.Assert(t, ok)
 
 			query := &mockQuery{typ: generated.TypeControl}
-			assert.NilError(t, traverse(ctx, query))
+			assert.NilError(t, anonTraverse(ctx, query))
 
 			selector := sql.Select("*").From(sql.Table(control.Table))
 			for _, p := range query.predicates {
 				p(selector)
 			}
 
-			stmt, args := selector.Query()
+			stmt, _ := selector.Query()
 			assert.Check(t, is.Contains(stmt, control.FieldIsTrustCenterControl))
 			assert.Check(t, is.Contains(stmt, control.FieldTrustCenterVisibility))
 			assert.Check(t, is.Contains(stmt, control.FieldOwnerID))
-			assert.Check(t, is.Contains(args, any(orgID)))
 		})
 	}
 }

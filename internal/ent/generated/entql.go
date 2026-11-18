@@ -8562,6 +8562,78 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TrustCenterDoc",
 	)
 	graph.MustAddE(
+		"trust_center_setting_logo",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingLogoTable,
+			Columns: []string{file.TrustCenterSettingLogoColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterSetting",
+	)
+	graph.MustAddE(
+		"trust_center_setting_favicon",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingFaviconTable,
+			Columns: []string{file.TrustCenterSettingFaviconColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterSetting",
+	)
+	graph.MustAddE(
+		"trust_center_setting_hero_image",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingHeroImageTable,
+			Columns: []string{file.TrustCenterSettingHeroImageColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterSetting",
+	)
+	graph.MustAddE(
+		"trust_center_entity_logo",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterEntityLogoTable,
+			Columns: []string{file.TrustCenterEntityLogoColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterEntity",
+	)
+	graph.MustAddE(
+		"subprocessor_logo",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.SubprocessorLogoTable,
+			Columns: []string{file.SubprocessorLogoColumn},
+			Bidi:    false,
+		},
+		"File",
+		"Subprocessor",
+	)
+	graph.MustAddE(
+		"standard_logo",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.StandardLogoTable,
+			Columns: []string{file.StandardLogoColumn},
+			Bidi:    false,
+		},
+		"File",
+		"Standard",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -30810,6 +30882,90 @@ func (f *FileFilter) WhereHasOriginalTrustCenterDoc() {
 // WhereHasOriginalTrustCenterDocWith applies a predicate to check if query has an edge original_trust_center_doc with a given conditions (other predicates).
 func (f *FileFilter) WhereHasOriginalTrustCenterDocWith(preds ...predicate.TrustCenterDoc) {
 	f.Where(entql.HasEdgeWith("original_trust_center_doc", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSettingLogo applies a predicate to check if query has an edge trust_center_setting_logo.
+func (f *FileFilter) WhereHasTrustCenterSettingLogo() {
+	f.Where(entql.HasEdge("trust_center_setting_logo"))
+}
+
+// WhereHasTrustCenterSettingLogoWith applies a predicate to check if query has an edge trust_center_setting_logo with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterSettingLogoWith(preds ...predicate.TrustCenterSetting) {
+	f.Where(entql.HasEdgeWith("trust_center_setting_logo", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSettingFavicon applies a predicate to check if query has an edge trust_center_setting_favicon.
+func (f *FileFilter) WhereHasTrustCenterSettingFavicon() {
+	f.Where(entql.HasEdge("trust_center_setting_favicon"))
+}
+
+// WhereHasTrustCenterSettingFaviconWith applies a predicate to check if query has an edge trust_center_setting_favicon with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterSettingFaviconWith(preds ...predicate.TrustCenterSetting) {
+	f.Where(entql.HasEdgeWith("trust_center_setting_favicon", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSettingHeroImage applies a predicate to check if query has an edge trust_center_setting_hero_image.
+func (f *FileFilter) WhereHasTrustCenterSettingHeroImage() {
+	f.Where(entql.HasEdge("trust_center_setting_hero_image"))
+}
+
+// WhereHasTrustCenterSettingHeroImageWith applies a predicate to check if query has an edge trust_center_setting_hero_image with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterSettingHeroImageWith(preds ...predicate.TrustCenterSetting) {
+	f.Where(entql.HasEdgeWith("trust_center_setting_hero_image", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterEntityLogo applies a predicate to check if query has an edge trust_center_entity_logo.
+func (f *FileFilter) WhereHasTrustCenterEntityLogo() {
+	f.Where(entql.HasEdge("trust_center_entity_logo"))
+}
+
+// WhereHasTrustCenterEntityLogoWith applies a predicate to check if query has an edge trust_center_entity_logo with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterEntityLogoWith(preds ...predicate.TrustCenterEntity) {
+	f.Where(entql.HasEdgeWith("trust_center_entity_logo", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubprocessorLogo applies a predicate to check if query has an edge subprocessor_logo.
+func (f *FileFilter) WhereHasSubprocessorLogo() {
+	f.Where(entql.HasEdge("subprocessor_logo"))
+}
+
+// WhereHasSubprocessorLogoWith applies a predicate to check if query has an edge subprocessor_logo with a given conditions (other predicates).
+func (f *FileFilter) WhereHasSubprocessorLogoWith(preds ...predicate.Subprocessor) {
+	f.Where(entql.HasEdgeWith("subprocessor_logo", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStandardLogo applies a predicate to check if query has an edge standard_logo.
+func (f *FileFilter) WhereHasStandardLogo() {
+	f.Where(entql.HasEdge("standard_logo"))
+}
+
+// WhereHasStandardLogoWith applies a predicate to check if query has an edge standard_logo with a given conditions (other predicates).
+func (f *FileFilter) WhereHasStandardLogoWith(preds ...predicate.Standard) {
+	f.Where(entql.HasEdgeWith("standard_logo", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -60,7 +60,7 @@ func (r *mutationResolver) initTestEmailState(ctx context.Context, input model.S
 
 	client := withTransactionalMutation(ctx)
 
-	campaignObj, err := client.Campaign.Get(ctx, input.CampaignID)
+	campaignObj, err := client.Campaign.Query().Where(campaign.ID(input.CampaignID)).WithEmailTemplate(selectEmailTemplateKey).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
 	}

@@ -60,37 +60,6 @@ extend type Mutation{
         """
         id: ID!
     ): ProgramMembershipDeletePayload!
-    """
-    Delete multiple programMemberships
-    """
-    deleteBulkProgramMembership(
-        """
-        IDs of the programMemberships to delete
-        """
-        ids: [ID!]!
-    ): ProgramMembershipBulkDeletePayload!
-    """
-    Update multiple existing programMemberships
-    """
-    updateBulkProgramMembership(
-        """
-        IDs of the programMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the programMemberships with
-        """
-        input: UpdateProgramMembershipInput!
-    ): ProgramMembershipBulkUpdatePayload!
-    """
-    Update multiple existing programMemberships via file upload
-    """
-    updateBulkCSVProgramMembership(
-        """
-        csv file containing values of the programMembership, must include ID column
-        """
-        input: Upload!
-    ): ProgramMembershipBulkUpdatePayload!
 }
 
 """
@@ -133,42 +102,3 @@ type ProgramMembershipBulkCreatePayload {
     programMemberships: [ProgramMembership!]
 }
 
-"""
-Return response for deleteBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkDeletePayload {
-    """
-    Deleted programMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkUpdatePayload {
-    """
-    Updated programMemberships
-    """
-    programMemberships: [ProgramMembership!]
-    """
-    IDs of the updated programMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}

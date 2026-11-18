@@ -977,6 +977,118 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+  - name: parent blocked
+    description: users blocked on a parent object must not inherit access to child tasks, action plans, or reviews
+    tuple_file: tests/tuples/parent_blocked.yaml
+    check:
+      - user: user:ulid-pb-group-editor # editor via group but blocked on the control
+        object: control:control-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-group-editor # editor via group but blocked on the control
+        object: task:task-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-group-editor # editor via group but blocked on the control
+        object: action_plan:action-plan-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-group-editor # editor via group but blocked on the control
+        object: review:review-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-group-editor # editor via group but blocked on the control
+        object: task:task-pb-2
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-org-editor # org can_edit_control grant but blocked on the control
+        object: control:control-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-org-editor # org can_edit_control grant but blocked on the control
+        object: task:task-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-org-editor # org can_edit_control grant but blocked on the control
+        object: action_plan:action-plan-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-org-editor # org can_edit_control grant but blocked on the control
+        object: review:review-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-org-editor # org can_edit_control grant but blocked on the control
+        object: task:task-pb-2
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-unblocked # unblocked member of the editor group keeps inherited access
+        object: control:control-pb-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-pb-unblocked # unblocked member of the editor group keeps inherited access
+        object: task:task-pb-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-pb-unblocked # unblocked member of the editor group keeps inherited access
+        object: action_plan:action-plan-pb-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-pb-unblocked # unblocked member of the editor group keeps inherited access
+        object: review:review-pb-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-pb-unblocked # unblocked member of the editor group keeps inherited access
+        object: task:task-pb-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-pb-program-admin # program admin but blocked on the program
+        object: program:program-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-pb-program-editor # org can_edit_program grant but blocked on the program
+        object: program:program-pb-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # unblocked org owner keeps full access to the program
+        object: program:program-pb-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: procedures
     description: procedures are associated with an organization and by default all user in the organization can view them. edit access is provided by groups.
     tuple_file: tests/tuples/procedures.yaml
@@ -1253,6 +1365,17 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+      - user: user:ulid-vuln-view-only # org level view grant on vulnerabilities must not allow edit or delete
+        object: vulnerability:vulnerability-org-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-vuln-edit # org level edit grant on vulnerabilities allows edit
+        object: vulnerability:vulnerability-org-1
+        assertions:
+          can_view: true
+          can_edit: true
   - name: remediation
     description: remediations can be associated with organizations or findings and permissions are inherited accordingly
     tuple_file: tests/tuples/remediations.yaml

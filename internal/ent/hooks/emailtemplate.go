@@ -17,7 +17,19 @@ import (
 func HookEmailTemplateSanitize() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.EmailTemplateFunc(func(ctx context.Context, m *generated.EmailTemplateMutation) (generated.Value, error) {
-			if defaults, ok := m.Defaults(); ok && len(defaults) > 0 {
+			defaults, hasDefaults := m.Defaults()
+			if hasDefaults || m.Op().Is(ent.OpCreate) {
+				key, err := emailTemplateKey(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+
+				if err := emaildef.ValidateTemplateDefaults(key, defaults); err != nil {
+					return nil, err
+				}
+			}
+
+			if len(defaults) > 0 {
 				m.SetDefaults(scrubMapStrings(defaults))
 			}
 
@@ -32,6 +44,19 @@ func HookEmailTemplateSanitize() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
+
+// emailTemplateKey returns the catalog key being set, or the stored key for a single-row update
+func emailTemplateKey(ctx context.Context, m *generated.EmailTemplateMutation) (string, error) {
+	if key, ok := m.Key(); ok {
+		return key, nil
+	}
+
+	if !m.Op().Is(ent.OpUpdateOne) {
+		return "", nil
+	}
+
+	return m.OldKey(ctx)
 }
 
 // scrubMapStrings recursively scrubs all string values in a map using the email

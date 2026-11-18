@@ -5,5 +5,7 @@ type export
     define can_view: [user, service] or can_edit
     define can_edit: [service] or system_admin from system
     define can_delete: system_admin from system
+    define can_view_org: can_view
+    define audit_log_viewer: can_view
     define system: [system]
 

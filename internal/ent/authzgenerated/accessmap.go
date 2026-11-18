@@ -471,7 +471,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "assessment": {
 	ObjectType:          "assessment",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "template": {
 	ObjectType:          "template",
@@ -1850,6 +1850,36 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "trust_center_setting_logo": {
+	ObjectType:          "trust_center_setting",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "trust_center_setting_favicon": {
+	ObjectType:          "trust_center_setting",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "trust_center_setting_hero_image": {
+	ObjectType:          "trust_center_setting",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "trust_center_entity_logo": {
+	ObjectType:          "trust_center_entity",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "subprocessor_logo": {
+	ObjectType:          "subprocessor",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "standard_logo": {
+	ObjectType:          "standard",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 },
 }, "file_download_token": {"owner": {
 	ObjectType:          "user",

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -95,7 +96,7 @@ func (CustomDomain) Fields() []ent.Field {
 func (e CustomDomain) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(e, withAllowAnonymousTrustCenterAccess(true)),
+			newOrgOwnedMixin(e, withAnonymousTrustCenterScope(interceptors.AnonScopeCustomDomain)),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(e)
