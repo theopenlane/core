@@ -16,8 +16,8 @@ require (
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/rs/zerolog v1.35.1
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core/common v1.2.3
-	github.com/theopenlane/core/v2 v2.17.4
+	github.com/theopenlane/core/common v1.2.4
+	github.com/theopenlane/core/v2 v2.17.5
 	github.com/theopenlane/go-client v0.17.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.42.2
@@ -84,7 +84,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/redis/go-redis/v9 v9.23.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
-	github.com/rogpeppe/go-internal v1.15.0 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/spf13/pflag v1.1.0 // indirect

@@ -114,7 +114,7 @@ require (
 	github.com/stripe/stripe-go/v86 v86.4.2
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
 	github.com/testcontainers/testcontainers-go v0.45.0
-	github.com/theopenlane/core/common v1.2.3
+	github.com/theopenlane/core/common v1.2.4
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
