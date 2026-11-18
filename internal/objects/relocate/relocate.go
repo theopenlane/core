@@ -2,6 +2,7 @@ package relocate
 
 import (
 	"context"
+	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -178,7 +179,7 @@ func (r *relocator) page(ctx context.Context, page []*ent.File) {
 		if err := r.row(ctx, f, lo.HasKey(current, f.ID)); err != nil {
 			r.stats.errors++
 
-			logx.FromContext(ctx).Error().Err(err).Str("file_id", f.ID).Msg("relocate files: failed to handle file")
+			logx.FromContext(ctx).Error().Err(err).Str("file_id", f.ID).Str("provider", f.StorageProvider).Str("bucket", f.StorageVolume).Str("key", f.StoragePath).Str("uri", f.URI).Msg("relocate files: failed to handle file")
 		}
 	}
 }
@@ -220,7 +221,7 @@ func (r *relocator) copy(ctx context.Context, f *ent.File) error {
 	}
 
 	if err := copier.Copy(ctx, interceptors.StorageFileFromEnt(f), &storage.CopyOptions{Bucket: r.bucket, Key: f.StoragePath}); err != nil {
-		return err
+		return fmt.Errorf("%w: %w", ErrCopyFailed, err)
 	}
 
 	return r.land(ctx, f, &r.stats.copied)
@@ -234,7 +235,7 @@ func (r *relocator) pull(ctx context.Context, f *ent.File) error {
 	}
 
 	if err := toucher.Touch(ctx, storedFile(r.plan.Target, f.StoragePath, r.bucket)); err != nil {
-		return err
+		return fmt.Errorf("%w: %w", ErrPullFailed, err)
 	}
 
 	return r.land(ctx, f, &r.stats.pulled)
@@ -248,7 +249,7 @@ func (r *relocator) transfer(ctx context.Context, f *ent.File, source storage.Pr
 
 	sourceProvider, _, err := r.client.ObjectManager.ResolveProvider(ctx, from)
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %w", ErrResolveSourceFailed, err)
 	}
 
 	opener, ok := sourceProvider.(storage.Opener)
@@ -259,14 +260,14 @@ func (r *relocator) transfer(ctx context.Context, f *ent.File, source storage.Pr
 	// the body streams into the upload, which spools anything over objects.MaxInMemorySize to disk
 	body, err := opener.Open(ctx, from)
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %w", ErrOpenSourceFailed, err)
 	}
 
 	defer body.Close()
 
 	uploaded, err := r.provider.Upload(ctx, body, &storage.UploadOptions{FileName: f.StoragePath, ContentType: f.DetectedContentType})
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %w", ErrUploadFailed, err)
 	}
 
 	if uploaded.Key != "" && uploaded.Key != f.StoragePath {
@@ -280,7 +281,7 @@ func (r *relocator) transfer(ctx context.Context, f *ent.File, source storage.Pr
 func (r *relocator) land(ctx context.Context, f *ent.File, counter *int) error {
 	keys, err := r.provider.ListObjects(ctx, f.StoragePath, listLimit)
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %w", ErrConfirmFailed, err)
 	}
 
 	if !lo.Contains(keys, f.StoragePath) {
@@ -308,15 +309,19 @@ func (r *relocator) land(ctx context.Context, f *ent.File, counter *int) error {
 	if statter, ok := r.provider.(storage.Statter); ok {
 		info, err := statter.Stat(ctx, storedFile(r.plan.Target, f.StoragePath, r.bucket))
 		if err != nil {
-			return err
+			return fmt.Errorf("%w: %w", ErrStatFailed, err)
 		}
 
 		filled = fillMetadata(ctx, update, f, info)
 	}
 
 	n, err := update.Save(ctx)
-	if err != nil || n == 0 {
-		return err
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrRepointFailed, err)
+	}
+
+	if n == 0 {
+		return nil
 	}
 
 	*counter++

@@ -471,7 +471,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "assessment": {
 	ObjectType:          "assessment",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "template": {
 	ObjectType:          "template",
