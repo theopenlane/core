@@ -14,36 +14,28 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	"github.com/theopenlane/logx"
 )
+
+// AnonScopeTrustCenterControl limits anonymous trust center callers to publicly visible trust center controls
+func AnonScopeTrustCenterControl(_ string) func(*sql.Selector) {
+	return sql.AndPredicates(
+		sql.FieldEQ(control.FieldIsTrustCenterControl, true),
+		sql.FieldEQ(control.FieldTrustCenterVisibility, enums.TrustCenterControlVisibilityPubliclyVisible),
+		sql.FieldNotNull(control.FieldOwnerID),
+	)
+}
 
 // InterceptorTrustCenterControl is middleware that filters control queries based on user context:
 // - anonymous trust center users only see publicly visible trust center controls
 // - authenticated users with only the trust center module (not compliance) only see trust center controls
 func InterceptorTrustCenterControl() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		// anonymous trust center users can only see controls that are:
-		// 1. marked as trust center controls (cloned from the trust center standard)
-		// 2. have public visibility
-		// 3. owned by the trust center's organization
+		// anonymous trust center users are scoped by AnonScopeTrustCenterControl in the object owned mixin
 		if auth.IsTrustCenterFromContext(ctx) {
-			orgID, err := auth.GetOrganizationIDFromContext(ctx)
-			if err != nil {
-				logx.FromContext(ctx).Err(err).Msg("failed to get organization ID from context for trust center control query")
-				return err
-			}
-
-			q.WhereP(
-				sql.FieldEQ(control.FieldIsTrustCenterControl, true),
-				sql.FieldEQ(control.FieldTrustCenterVisibility, enums.TrustCenterControlVisibilityPubliclyVisible),
-				sql.FieldEQ(control.FieldOwnerID, orgID),
-			)
-
 			return nil
 		}
 
-		// skip if modules are not enabled after the filter for anon users
-		// doing this first would skip the filter when modules are off
+		// skip if modules are not enabled
 		client := generated.FromContext(ctx)
 		if !utils.ModulesEnabled(client) {
 			return nil

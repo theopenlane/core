@@ -11,6 +11,7 @@ type group
     define can_view: viewer
     define can_edit: editor
     define can_delete: editor
+    define can_view_org: can_view
 
     # base roles for the group
     define admin: [user]

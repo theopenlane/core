@@ -10,7 +10,9 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	entfinding "github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
@@ -592,6 +594,72 @@ func TestQueryNote(t *testing.T) {
 	assert.Assert(t, len(createResp.UpdateTask.Task.Comments.Edges) != 0)
 	noteID := createResp.UpdateTask.Task.Comments.Edges[0].Node.ID
 
+	trustCenter := (&th.TrustCenterBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.TrustCenterDeleteOne]{Client: suite.Client.DB.TrustCenter, ID: trustCenter.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	publicControl, err := suite.Client.DB.Control.Create().
+		SetRefCode("OTS-TEST-" + ulids.New().String()).
+		SetTitle("Trust Center Public Control").
+		SetSource(enums.ControlSourceUserDefined).
+		SetIsTrustCenterControl(true).
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
+		Save(th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB))
+	assert.NilError(t, err)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: publicControl.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	controlResp, err := suite.Client.API.UpdateControl(th.SharedTestUser1.UserCtx, publicControl.ID, testclient.UpdateControlInput{
+		TrustCenterVisibility: &enums.TrustCenterControlVisibilityPubliclyVisible,
+		AddComment: &testclient.CreateNoteInput{
+			Text: "Note for querying",
+		},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, len(controlResp.UpdateControl.Control.Comments.Edges) != 0)
+	publicControlNoteID := controlResp.UpdateControl.Control.Comments.Edges[0].Node.ID
+
+	linkedTask := (&th.TaskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.TaskDeleteOne]{Client: suite.Client.DB.Task, ID: linkedTask.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	linkedTaskResp, err := suite.Client.API.UpdateTask(th.SharedTestUser1.UserCtx, linkedTask.ID, testclient.UpdateTaskInput{
+		AddControlIDs: []string{publicControl.ID},
+		AddComment: &testclient.CreateNoteInput{
+			Text: "Note for querying",
+		},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, len(linkedTaskResp.UpdateTask.Task.Comments.Edges) != 0)
+	linkedTaskNoteID := linkedTaskResp.UpdateTask.Task.Comments.Edges[0].Node.ID
+
+	publicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: publicStandard.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	})
+
+	standardControl := (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: standardControl.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	standardControlResp, err := suite.Client.API.UpdateControl(th.SharedTestUser1.UserCtx, standardControl.ID, testclient.UpdateControlInput{
+		AddComment: &testclient.CreateNoteInput{
+			Text: "Note for querying",
+		},
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, len(standardControlResp.UpdateControl.Control.Comments.Edges) != 0)
+	standardControlNoteID := standardControlResp.UpdateControl.Control.Comments.Edges[0].Node.ID
+
+	anonCtx := th.CreateAnonymousTrustCenterContext(trustCenter.ID, th.SharedTestUser1.OrganizationID)
+
+	_, err = suite.Client.API.GetTrustCenterControlByID(anonCtx, publicControl.ID)
+	assert.NilError(t, err)
+
 	testCases := []struct {
 		name        string
 		noteID      string
@@ -623,6 +691,45 @@ func TestQueryNote(t *testing.T) {
 			noteID:      noteID,
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: "note not found",
+		},
+		{
+			name:   "owner can view note on public trust center control",
+			noteID: publicControlNoteID,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:   "owner can view note on task linked to public trust center control",
+			noteID: linkedTaskNoteID,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:        "anonymous trust center user cannot view note on public trust center control",
+			noteID:      publicControlNoteID,
+			client:      suite.Client.API,
+			ctx:         anonCtx,
+			expectedErr: "note not found",
+		},
+		{
+			name:        "anonymous trust center user cannot view note on task linked to public trust center control",
+			noteID:      linkedTaskNoteID,
+			client:      suite.Client.API,
+			ctx:         anonCtx,
+			expectedErr: "note not found",
+		},
+		{
+			name:   "owner can view note on control linked to public standard",
+			noteID: standardControlNoteID,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
+		},
+		{
+			name:        "anonymous trust center user cannot view note on control linked to public standard",
+			noteID:      standardControlNoteID,
+			client:      suite.Client.API,
+			ctx:         anonCtx,
 			expectedErr: "note not found",
 		},
 	}

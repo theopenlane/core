@@ -98,7 +98,7 @@ func (t TrustCenter) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(t,
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterScope(interceptors.AnonScopeTrustCenter),
 				withSkipForSystemAdmin(),
 			),
 			// allow for group group permissions to be assigned to trust centers, to give users full edit access

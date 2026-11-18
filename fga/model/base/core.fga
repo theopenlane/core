@@ -10,6 +10,13 @@ type user
     define can_view: _self
     define can_edit: _self
     define can_delete: _self
+    define viewer: _self
+    define editor: _self
+    define can_view_org: _self
+    define audit_log_viewer: _self
+    # always empty, a user or service is never blocked on itself, defined so `blocked from parent`
+    # resolves when a user or service is the parent of an object (weighted graph requires it on every parent type)
+    define blocked: _self but not _self
 
 # service is not associated to a particular user, but instead to an organization
 # the _self relation is used for when the service is the parent of another object
@@ -19,6 +26,12 @@ type service
     define can_view: _self
     define can_edit: _self
     define can_delete: _self
+    define viewer: _self
+    define editor: _self
+    define audit_log_viewer: _self
+    # always empty, a user or service is never blocked on itself, defined so `blocked from parent`
+    # resolves when a user or service is the parent of an object (weighted graph requires it on every parent type)
+    define blocked: _self but not _self
 
 # search access for the admin search
 type search

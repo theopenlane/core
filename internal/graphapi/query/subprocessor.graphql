@@ -119,6 +119,21 @@ query GetAllSubprocessors {
 		}
 	}
 }
+query GetPublicSubprocessors ($where: SubprocessorWhereInput) {
+	subprocessors(where: $where) {
+		totalCount
+		edges {
+			node {
+				id
+				name
+				logoFileID
+				logoFile {
+					presignedURL
+				}
+			}
+		}
+	}
+}
 query GetSubprocessorByID ($subprocessorId: ID!) {
 	subprocessor(id: $subprocessorId) {
 		createdAt

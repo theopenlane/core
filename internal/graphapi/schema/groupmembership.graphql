@@ -60,37 +60,6 @@ extend type Mutation{
         """
         id: ID!
     ): GroupMembershipDeletePayload!
-    """
-    Delete multiple groupMemberships
-    """
-    deleteBulkGroupMembership(
-        """
-        IDs of the groupMemberships to delete
-        """
-        ids: [ID!]!
-    ): GroupMembershipBulkDeletePayload!
-    """
-    Update multiple existing groupMemberships
-    """
-    updateBulkGroupMembership(
-        """
-        IDs of the groupMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the groupMemberships with
-        """
-        input: UpdateGroupMembershipInput!
-    ): GroupMembershipBulkUpdatePayload!
-    """
-    Update multiple existing groupMemberships via file upload
-    """
-    updateBulkCSVGroupMembership(
-        """
-        csv file containing values of the groupMembership, must include ID column
-        """
-        input: Upload!
-    ): GroupMembershipBulkUpdatePayload!
 }
 
 """
@@ -133,42 +102,3 @@ type GroupMembershipBulkCreatePayload {
     groupMemberships: [GroupMembership!]
 }
 
-"""
-Return response for deleteBulkGroupMembership mutation
-"""
-type GroupMembershipBulkDeletePayload {
-    """
-    Deleted groupMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkGroupMembership mutation
-"""
-type GroupMembershipBulkUpdatePayload {
-    """
-    Updated groupMemberships
-    """
-    groupMemberships: [GroupMembership!]
-    """
-    IDs of the updated groupMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}

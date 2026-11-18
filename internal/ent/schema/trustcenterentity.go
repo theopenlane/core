@@ -86,7 +86,7 @@ func (t TrustCenterEntity) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterEntity](t,
 				withParents(TrustCenter{}),
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterAccess(),
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},

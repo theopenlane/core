@@ -31,6 +31,7 @@ type trust_center_setting
     define can_view: (viewer but not blocked)
     define can_edit: (editor but not blocked) or can_delete
     define can_delete: (editor but not blocked)
+    define can_view_org: can_view
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: [user, service, group#member] or parent_editor
@@ -68,6 +69,7 @@ type subprocessor
     define can_view: [user:*, service:*] or (viewer but not blocked)
     define can_edit: (editor but not blocked) or can_delete
     define can_delete: (editor but not blocked)
+    define can_view_org: can_view
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: [user, service, group#member] or parent_editor or system_admin from system
@@ -88,6 +90,7 @@ type trust_center_subprocessor
     define can_view: (viewer but not blocked)
     define can_edit: (editor but not blocked) or can_delete
     define can_delete: (editor but not blocked)
+    define can_view_org: can_view
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: [user, service, group#member] or parent_editor
@@ -134,6 +137,7 @@ type trust_center_entity
     define can_view: (viewer but not blocked)
     define can_edit: (editor but not blocked) or can_delete
     define can_delete: (editor but not blocked)
+    define can_view_org: can_view
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: [user, service, group#member] or parent_editor
@@ -188,6 +192,7 @@ type trust_center_watermark_config
     define can_view: (viewer but not blocked)
     define can_edit: (editor but not blocked) or can_delete
     define can_delete: (editor but not blocked)
+    define can_view_org: can_view
 
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: [user, service, group#member] or parent_editor

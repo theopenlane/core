@@ -122,7 +122,7 @@ func ValidColumn(column string) bool {
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
 	Hooks        [8]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -153,7 +153,7 @@ const DefaultFormat enums.ExportFormat = "CSV"
 // FormatValidator is a validator for the "format" field enum values. It is called by the builders before save.
 func FormatValidator(f enums.ExportFormat) error {
 	switch f.String() {
-	case "CSV", "MARKDOWN", "DOCX", "PDF":
+	case "CSV", "MARKDOWN", "HTML", "DOCX", "PDF":
 		return nil
 	default:
 		return fmt.Errorf("export: invalid enum value for format field: %q", f)

@@ -31159,6 +31159,7 @@ ExportExportFormat is enum for the field format
 enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/common/enums.ExportFormat") {
 	CSV
 	MARKDOWN
+	HTML
 	DOCX
 	PDF
 }
@@ -36786,44 +36787,6 @@ type GroupMembershipBulkCreatePayload {
 	Created groupMemberships
 	"""
 	groupMemberships: [GroupMembership!]
-}
-"""
-Return response for deleteBulkGroupMembership mutation
-"""
-type GroupMembershipBulkDeletePayload {
-	"""
-	Deleted groupMembership IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkGroupMembership mutation
-"""
-type GroupMembershipBulkUpdatePayload {
-	"""
-	Updated groupMemberships
-	"""
-	groupMemberships: [GroupMembership!]
-	"""
-	IDs of the updated groupMemberships
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
 }
 """
 A connection to a list of items.
@@ -48034,38 +47997,6 @@ type Mutation {
 		id: ID!
 	): GroupMembershipDeletePayload!
 	"""
-	Delete multiple groupMemberships
-	"""
-	deleteBulkGroupMembership(
-		"""
-		IDs of the groupMemberships to delete
-		"""
-		ids: [ID!]!
-	): GroupMembershipBulkDeletePayload!
-	"""
-	Update multiple existing groupMemberships
-	"""
-	updateBulkGroupMembership(
-		"""
-		IDs of the groupMemberships to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the groupMemberships with
-		"""
-		input: UpdateGroupMembershipInput!
-	): GroupMembershipBulkUpdatePayload!
-	"""
-	Update multiple existing groupMemberships via file upload
-	"""
-	updateBulkCSVGroupMembership(
-		"""
-		csv file containing values of the groupMembership, must include ID column
-		"""
-		input: Upload!
-	): GroupMembershipBulkUpdatePayload!
-	"""
 	Create a new groupSetting
 	"""
 	createGroupSetting(
@@ -49741,38 +49672,6 @@ type Mutation {
 		id: ID!
 	): ProgramMembershipDeletePayload!
 	"""
-	Delete multiple programMemberships
-	"""
-	deleteBulkProgramMembership(
-		"""
-		IDs of the programMemberships to delete
-		"""
-		ids: [ID!]!
-	): ProgramMembershipBulkDeletePayload!
-	"""
-	Update multiple existing programMemberships
-	"""
-	updateBulkProgramMembership(
-		"""
-		IDs of the programMemberships to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the programMemberships with
-		"""
-		input: UpdateProgramMembershipInput!
-	): ProgramMembershipBulkUpdatePayload!
-	"""
-	Update multiple existing programMemberships via file upload
-	"""
-	updateBulkCSVProgramMembership(
-		"""
-		csv file containing values of the programMembership, must include ID column
-		"""
-		input: Upload!
-	): ProgramMembershipBulkUpdatePayload!
-	"""
 	Create a new remediation
 	"""
 	createRemediation(
@@ -49915,20 +49814,6 @@ type Mutation {
 		input: [CreateReportMembershipInput!]
 	): ReportMembershipBulkCreatePayload!
 	"""
-	Update multiple existing reportMemberships
-	"""
-	updateBulkReportMembership(
-		"""
-		IDs of the reportMemberships to update
-		"""
-		ids: [ID!]!
-
-		"""
-		values to update the reportMemberships with
-		"""
-		input: UpdateReportMembershipInput!
-	): ReportMembershipBulkUpdatePayload!
-	"""
 	Update an existing reportMembership
 	"""
 	updateReportMembership(
@@ -49951,15 +49836,6 @@ type Mutation {
 		"""
 		id: ID!
 	): ReportMembershipDeletePayload!
-	"""
-	Delete multiple reportMemberships
-	"""
-	deleteBulkReportMembership(
-		"""
-		IDs of the reportMemberships to delete
-		"""
-		ids: [ID!]!
-	): ReportMembershipBulkDeletePayload!
 	"""
 	Create a new review
 	"""
@@ -65103,44 +64979,6 @@ type ProgramMembershipBulkCreatePayload {
 	programMemberships: [ProgramMembership!]
 }
 """
-Return response for deleteBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkDeletePayload {
-	"""
-	Deleted programMembership IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	IDs that were not deleted
-	"""
-	notDeletedIDs: [ID!]!
-	"""
-	Error message when the bulk delete did not apply to every requested ID
-	"""
-	error: String
-}
-"""
-Return response for updateBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkUpdatePayload {
-	"""
-	Updated programMemberships
-	"""
-	programMemberships: [ProgramMembership!]
-	"""
-	IDs of the updated programMemberships
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
-}
-"""
 A connection to a list of items.
 """
 type ProgramMembershipConnection {
@@ -72973,44 +72811,6 @@ type ReportMembershipBulkCreatePayload {
 	Created reportMemberships
 	"""
 	reportMemberships: [ReportMembership!]
-}
-"""
-Return response for deleteBulkReportMembership mutation
-"""
-type ReportMembershipBulkDeletePayload {
-	"""
-	Deleted reportMembership IDs
-	"""
-	deletedIDs: [ID!]!
-	"""
-	Error returned when the bulk delete is only partially applied
-	"""
-	error: String
-	"""
-	IDs of reportMemberships that were not deleted
-	"""
-	notDeletedIDs: [ID!]
-}
-"""
-Return response for updateBulkReportMembership mutation
-"""
-type ReportMembershipBulkUpdatePayload {
-	"""
-	Updated reportMemberships
-	"""
-	reportMemberships: [ReportMembership!]
-	"""
-	IDs of the updated reportMemberships
-	"""
-	updatedIDs: [ID!]
-	"""
-	IDs that were not updated
-	"""
-	notUpdatedIDs: [ID!]!
-	"""
-	Error message when the bulk update did not apply to every requested ID
-	"""
-	error: String
 }
 """
 A connection to a list of items.
