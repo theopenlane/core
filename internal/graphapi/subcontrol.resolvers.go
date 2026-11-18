@@ -87,12 +87,7 @@ func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input gr
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateSubcontrolInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateSubcontrol(ctx, inputs)
+	return r.bulkCreateCSVSubcontrol(ctx, data)
 }
 
 // UpdateSubcontrol is the resolver for the updateSubcontrol field.

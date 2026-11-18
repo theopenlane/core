@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/render"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/urlx"
@@ -42,6 +44,18 @@ type Dispatcher interface {
 	ExamplePayload() json.RawMessage
 	// BuilderUISchema returns the RJSF-style UI schema describing how the configurable fields render as a form, or nil when none is defined
 	BuilderUISchema() json.RawMessage
+	// TemplateVariables returns the operation-specific template variables available to authors of this entry
+	TemplateVariables() []models.TemplateVariable
+}
+
+// OperationVariable exposes an operation payload field to templates under an author-facing name
+type OperationVariable struct {
+	// Name is the variable name used in templates, e.g. orgName for {{ .orgName }}
+	Name string
+	// Description is shown to template authors in the variable picker
+	Description string
+	// PayloadKey is the JSON key in the operation payload that holds the value
+	PayloadKey string
 }
 
 // RecipientInfo holds recipient addressing fields embedded in every email operation input
@@ -114,6 +128,10 @@ type Operation[T Recipient] struct {
 	MessageOptions func(cfg RuntimeEmailConfig, input T) []newman.MessageOption
 	// PreHook is an optional hook invoked before rendering to resolve dynamic fields
 	PreHook func(ctx context.Context, req types.OperationRequest, cfg RuntimeEmailConfig, input *T) error
+	// Variables are optional operation-specific template variables read from the payload
+	Variables []OperationVariable
+	// SystemKeys are operation-specific payload keys set by the system per send, which render literally and are never taken from template defaults
+	SystemKeys []string
 }
 
 // Name returns the catalog key for the operation, satisfying the Dispatcher interface
@@ -136,14 +154,21 @@ func (e Operation[T]) BuilderUISchema() json.RawMessage {
 	return e.UISchema
 }
 
+// TemplateVariables returns the operation-specific template variables, satisfying the Dispatcher interface
+func (e Operation[T]) TemplateVariables() []models.TemplateVariable {
+	return lo.Map(e.Variables, func(v OperationVariable, _ int) models.TemplateVariable {
+		return models.TemplateVariable{Name: v.Name, Description: v.Description}
+	})
+}
+
 // decodePayload interpolates template expressions in the raw JSON and unmarshals into T
-func decodePayload[T Recipient](client *Client, payload json.RawMessage) (T, error) {
+func (e Operation[T]) decodePayload(client *Client, payload json.RawMessage) (T, error) {
 	var input T
 	if len(payload) == 0 {
 		return input, nil
 	}
 
-	resolved, err := interpolatePayload(client, payload)
+	resolved, err := interpolatePayload(client, payload, e.Variables, e.SystemKeys)
 	if err != nil {
 		return input, err
 	}
@@ -157,7 +182,7 @@ func decodePayload[T Recipient](client *Client, payload json.RawMessage) (T, err
 
 // SendByKey decodes the payload into T and dispatches through the shared render pipeline
 func (e Operation[T]) SendByKey(ctx context.Context, req types.OperationRequest, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) error {
-	input, err := decodePayload[T](client, payload)
+	input, err := e.decodePayload(client, payload)
 	if err != nil {
 		return err
 	}
@@ -167,7 +192,7 @@ func (e Operation[T]) SendByKey(ctx context.Context, req types.OperationRequest,
 
 // RenderMessage decodes the payload and renders the email into a newman message without sending it
 func (e Operation[T]) RenderMessage(_ context.Context, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
-	input, err := decodePayload[T](client, payload)
+	input, err := e.decodePayload(client, payload)
 	if err != nil {
 		return nil, err
 	}

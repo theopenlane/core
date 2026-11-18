@@ -27,9 +27,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 )
 
 // FileCreate is the builder for creating a File entity.
@@ -794,6 +797,96 @@ func (_c *FileCreate) AddOriginalTrustCenterDoc(v ...*TrustCenterDoc) *FileCreat
 	return _c.AddOriginalTrustCenterDocIDs(ids...)
 }
 
+// AddTrustCenterSettingLogoIDs adds the "trust_center_setting_logo" edge to the TrustCenterSetting entity by IDs.
+func (_c *FileCreate) AddTrustCenterSettingLogoIDs(ids ...string) *FileCreate {
+	_c.mutation.AddTrustCenterSettingLogoIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterSettingLogo adds the "trust_center_setting_logo" edges to the TrustCenterSetting entity.
+func (_c *FileCreate) AddTrustCenterSettingLogo(v ...*TrustCenterSetting) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterSettingLogoIDs(ids...)
+}
+
+// AddTrustCenterSettingFaviconIDs adds the "trust_center_setting_favicon" edge to the TrustCenterSetting entity by IDs.
+func (_c *FileCreate) AddTrustCenterSettingFaviconIDs(ids ...string) *FileCreate {
+	_c.mutation.AddTrustCenterSettingFaviconIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterSettingFavicon adds the "trust_center_setting_favicon" edges to the TrustCenterSetting entity.
+func (_c *FileCreate) AddTrustCenterSettingFavicon(v ...*TrustCenterSetting) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterSettingFaviconIDs(ids...)
+}
+
+// AddTrustCenterSettingHeroImageIDs adds the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity by IDs.
+func (_c *FileCreate) AddTrustCenterSettingHeroImageIDs(ids ...string) *FileCreate {
+	_c.mutation.AddTrustCenterSettingHeroImageIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterSettingHeroImage adds the "trust_center_setting_hero_image" edges to the TrustCenterSetting entity.
+func (_c *FileCreate) AddTrustCenterSettingHeroImage(v ...*TrustCenterSetting) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterSettingHeroImageIDs(ids...)
+}
+
+// AddTrustCenterEntityLogoIDs adds the "trust_center_entity_logo" edge to the TrustCenterEntity entity by IDs.
+func (_c *FileCreate) AddTrustCenterEntityLogoIDs(ids ...string) *FileCreate {
+	_c.mutation.AddTrustCenterEntityLogoIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterEntityLogo adds the "trust_center_entity_logo" edges to the TrustCenterEntity entity.
+func (_c *FileCreate) AddTrustCenterEntityLogo(v ...*TrustCenterEntity) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterEntityLogoIDs(ids...)
+}
+
+// AddSubprocessorLogoIDs adds the "subprocessor_logo" edge to the Subprocessor entity by IDs.
+func (_c *FileCreate) AddSubprocessorLogoIDs(ids ...string) *FileCreate {
+	_c.mutation.AddSubprocessorLogoIDs(ids...)
+	return _c
+}
+
+// AddSubprocessorLogo adds the "subprocessor_logo" edges to the Subprocessor entity.
+func (_c *FileCreate) AddSubprocessorLogo(v ...*Subprocessor) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSubprocessorLogoIDs(ids...)
+}
+
+// AddStandardLogoIDs adds the "standard_logo" edge to the Standard entity by IDs.
+func (_c *FileCreate) AddStandardLogoIDs(ids ...string) *FileCreate {
+	_c.mutation.AddStandardLogoIDs(ids...)
+	return _c
+}
+
+// AddStandardLogo adds the "standard_logo" edges to the Standard entity.
+func (_c *FileCreate) AddStandardLogo(v ...*Standard) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddStandardLogoIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_c *FileCreate) Mutation() *FileMutation {
 	return _c.mutation
@@ -1383,6 +1476,102 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterSettingLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingLogoTable,
+			Columns: []string{file.TrustCenterSettingLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterSettingFaviconIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingFaviconTable,
+			Columns: []string{file.TrustCenterSettingFaviconColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterSettingHeroImageIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingHeroImageTable,
+			Columns: []string{file.TrustCenterSettingHeroImageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterEntityLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterEntityLogoTable,
+			Columns: []string{file.TrustCenterEntityLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubprocessorLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.SubprocessorLogoTable,
+			Columns: []string{file.SubprocessorLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.StandardLogoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.StandardLogoTable,
+			Columns: []string{file.StandardLogoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

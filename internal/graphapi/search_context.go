@@ -8,10 +8,9 @@ import (
 	"sync"
 
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
-	goldmarkparser "github.com/yuin/goldmark/parser"
-	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark/v2/extension"
+	goldmarkparser "github.com/yuin/goldmark/v2/parser"
+	goldmarkhtml "github.com/yuin/goldmark/v2/renderer/html"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -22,10 +21,15 @@ const (
 	maxSnippetLength = 100
 )
 
-var snippetMarkdown = goldmark.New(
-	goldmark.WithExtensions(extension.Table),
-	goldmark.WithParserOptions(goldmarkparser.WithAutoHeadingID()),
-	goldmark.WithRendererOptions(goldmarkhtml.WithUnsafe()),
+var (
+	snippetMarkdownParser = goldmarkparser.New(
+		goldmarkparser.WithAutoHeadingID(),
+		goldmarkparser.WithExtensions(extension.NewTableParser()),
+	)
+	snippetMarkdownRenderer = goldmarkhtml.New(
+		goldmarkhtml.WithUnsafe(),
+		goldmarkhtml.WithExtensions(extension.NewTableHTMLRenderer()),
+	)
 )
 
 var searchSanitizer = bluemonday.StrictPolicy()
@@ -139,8 +143,10 @@ func sanitizeContent(text string) string {
 		return ""
 	}
 
+	source := []byte(text)
+
 	var b bytes.Buffer
-	if err := snippetMarkdown.Convert([]byte(text), &b); err != nil {
+	if err := snippetMarkdownRenderer.Render(&b, source, snippetMarkdownParser.Parse(source)); err != nil {
 		return text
 	}
 

@@ -10,6 +10,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
@@ -139,6 +140,9 @@ func (w Webauthn) Annotations() []schema.Annotation {
 
 		entgql.Skip(entgql.SkipMutationCreateInput |
 			entgql.SkipMutationUpdateInput),
+
+		// user owned, no organization crud scopes
+		entx.FGACrudSkip(entx.SkipAll),
 
 		history.Annotations{
 			Exclude: true,

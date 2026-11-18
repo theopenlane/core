@@ -7,10 +7,9 @@ import (
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
-	goldmarkparser "github.com/yuin/goldmark/parser"
-	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark/v2/extension"
+	goldmarkparser "github.com/yuin/goldmark/v2/parser"
+	goldmarkhtml "github.com/yuin/goldmark/v2/renderer/html"
 )
 
 type summarizer interface {
@@ -73,18 +72,17 @@ func (s *Client) Summarize(ctx context.Context, sentence string) (string, error)
 }
 
 func mdToHTML(md []byte) []byte {
-	gm := goldmark.New(
-		goldmark.WithExtensions(extension.Table),
-		goldmark.WithParserOptions(
-			goldmarkparser.WithAutoHeadingID(),
-		),
-		goldmark.WithRendererOptions(
-			goldmarkhtml.WithUnsafe(),
-		),
+	p := goldmarkparser.New(
+		goldmarkparser.WithAutoHeadingID(),
+		goldmarkparser.WithExtensions(extension.NewTableParser()),
+	)
+	r := goldmarkhtml.New(
+		goldmarkhtml.WithUnsafe(),
+		goldmarkhtml.WithExtensions(extension.NewTableHTMLRenderer()),
 	)
 
 	var buf bytes.Buffer
-	if err := gm.Convert(md, &buf); err != nil {
+	if err := r.Render(&buf, md, p.Parse(md)); err != nil {
 		return md
 	}
 

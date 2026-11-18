@@ -24735,6 +24735,8 @@ type ControlHistoryMutation struct {
 	system_internal_id            *string
 	control_kind_name             *string
 	control_kind_id               *string
+	control_origin_name           *string
+	control_origin_id             *string
 	environment_name              *string
 	environment_id                *string
 	scope_name                    *string
@@ -27702,6 +27704,104 @@ func (m *ControlHistoryMutation) ResetControlKindID() {
 	delete(m.clearedFields, controlhistory.FieldControlKindID)
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (m *ControlHistoryMutation) SetControlOriginName(s string) {
+	m.control_origin_name = &s
+}
+
+// ControlOriginName returns the value of the "control_origin_name" field in the mutation.
+func (m *ControlHistoryMutation) ControlOriginName() (r string, exists bool) {
+	v := m.control_origin_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldControlOriginName returns the old "control_origin_name" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldControlOriginName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldControlOriginName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldControlOriginName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldControlOriginName: %w", err)
+	}
+	return oldValue.ControlOriginName, nil
+}
+
+// ClearControlOriginName clears the value of the "control_origin_name" field.
+func (m *ControlHistoryMutation) ClearControlOriginName() {
+	m.control_origin_name = nil
+	m.clearedFields[controlhistory.FieldControlOriginName] = struct{}{}
+}
+
+// ControlOriginNameCleared returns if the "control_origin_name" field was cleared in this mutation.
+func (m *ControlHistoryMutation) ControlOriginNameCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldControlOriginName]
+	return ok
+}
+
+// ResetControlOriginName resets all changes to the "control_origin_name" field.
+func (m *ControlHistoryMutation) ResetControlOriginName() {
+	m.control_origin_name = nil
+	delete(m.clearedFields, controlhistory.FieldControlOriginName)
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (m *ControlHistoryMutation) SetControlOriginID(s string) {
+	m.control_origin_id = &s
+}
+
+// ControlOriginID returns the value of the "control_origin_id" field in the mutation.
+func (m *ControlHistoryMutation) ControlOriginID() (r string, exists bool) {
+	v := m.control_origin_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldControlOriginID returns the old "control_origin_id" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldControlOriginID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldControlOriginID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldControlOriginID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldControlOriginID: %w", err)
+	}
+	return oldValue.ControlOriginID, nil
+}
+
+// ClearControlOriginID clears the value of the "control_origin_id" field.
+func (m *ControlHistoryMutation) ClearControlOriginID() {
+	m.control_origin_id = nil
+	m.clearedFields[controlhistory.FieldControlOriginID] = struct{}{}
+}
+
+// ControlOriginIDCleared returns if the "control_origin_id" field was cleared in this mutation.
+func (m *ControlHistoryMutation) ControlOriginIDCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldControlOriginID]
+	return ok
+}
+
+// ResetControlOriginID resets all changes to the "control_origin_id" field.
+func (m *ControlHistoryMutation) ResetControlOriginID() {
+	m.control_origin_id = nil
+	delete(m.clearedFields, controlhistory.FieldControlOriginID)
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (m *ControlHistoryMutation) SetEnvironmentName(s string) {
 	m.environment_name = &s
@@ -28164,7 +28264,7 @@ func (m *ControlHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 64)
+	fields := make([]string, 0, 66)
 	if m.history_time != nil {
 		fields = append(fields, controlhistory.FieldHistoryTime)
 	}
@@ -28330,6 +28430,12 @@ func (m *ControlHistoryMutation) Fields() []string {
 	if m.control_kind_id != nil {
 		fields = append(fields, controlhistory.FieldControlKindID)
 	}
+	if m.control_origin_name != nil {
+		fields = append(fields, controlhistory.FieldControlOriginName)
+	}
+	if m.control_origin_id != nil {
+		fields = append(fields, controlhistory.FieldControlOriginID)
+	}
 	if m.environment_name != nil {
 		fields = append(fields, controlhistory.FieldEnvironmentName)
 	}
@@ -28475,6 +28581,10 @@ func (m *ControlHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ControlKindName()
 	case controlhistory.FieldControlKindID:
 		return m.ControlKindID()
+	case controlhistory.FieldControlOriginName:
+		return m.ControlOriginName()
+	case controlhistory.FieldControlOriginID:
+		return m.ControlOriginID()
 	case controlhistory.FieldEnvironmentName:
 		return m.EnvironmentName()
 	case controlhistory.FieldEnvironmentID:
@@ -28612,6 +28722,10 @@ func (m *ControlHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldControlKindName(ctx)
 	case controlhistory.FieldControlKindID:
 		return m.OldControlKindID(ctx)
+	case controlhistory.FieldControlOriginName:
+		return m.OldControlOriginName(ctx)
+	case controlhistory.FieldControlOriginID:
+		return m.OldControlOriginID(ctx)
 	case controlhistory.FieldEnvironmentName:
 		return m.OldEnvironmentName(ctx)
 	case controlhistory.FieldEnvironmentID:
@@ -29024,6 +29138,20 @@ func (m *ControlHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetControlKindID(v)
 		return nil
+	case controlhistory.FieldControlOriginName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetControlOriginName(v)
+		return nil
+	case controlhistory.FieldControlOriginID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetControlOriginID(v)
+		return nil
 	case controlhistory.FieldEnvironmentName:
 		v, ok := value.(string)
 		if !ok {
@@ -29273,6 +29401,12 @@ func (m *ControlHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlhistory.FieldControlKindID) {
 		fields = append(fields, controlhistory.FieldControlKindID)
 	}
+	if m.FieldCleared(controlhistory.FieldControlOriginName) {
+		fields = append(fields, controlhistory.FieldControlOriginName)
+	}
+	if m.FieldCleared(controlhistory.FieldControlOriginID) {
+		fields = append(fields, controlhistory.FieldControlOriginID)
+	}
 	if m.FieldCleared(controlhistory.FieldEnvironmentName) {
 		fields = append(fields, controlhistory.FieldEnvironmentName)
 	}
@@ -29466,6 +29600,12 @@ func (m *ControlHistoryMutation) ClearField(name string) error {
 		return nil
 	case controlhistory.FieldControlKindID:
 		m.ClearControlKindID()
+		return nil
+	case controlhistory.FieldControlOriginName:
+		m.ClearControlOriginName()
+		return nil
+	case controlhistory.FieldControlOriginID:
+		m.ClearControlOriginID()
 		return nil
 	case controlhistory.FieldEnvironmentName:
 		m.ClearEnvironmentName()
@@ -29663,6 +29803,12 @@ func (m *ControlHistoryMutation) ResetField(name string) error {
 		return nil
 	case controlhistory.FieldControlKindID:
 		m.ResetControlKindID()
+		return nil
+	case controlhistory.FieldControlOriginName:
+		m.ResetControlOriginName()
+		return nil
+	case controlhistory.FieldControlOriginID:
+		m.ResetControlOriginID()
 		return nil
 	case controlhistory.FieldEnvironmentName:
 		m.ResetEnvironmentName()
@@ -131625,6 +131771,8 @@ type SubcontrolHistoryMutation struct {
 	system_internal_id            *string
 	subcontrol_kind_name          *string
 	subcontrol_kind_id            *string
+	control_origin_name           *string
+	control_origin_id             *string
 	workflow_eligible_marker      *bool
 	ref_code                      *string
 	control_id                    *string
@@ -134586,6 +134734,104 @@ func (m *SubcontrolHistoryMutation) ResetSubcontrolKindID() {
 	delete(m.clearedFields, subcontrolhistory.FieldSubcontrolKindID)
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (m *SubcontrolHistoryMutation) SetControlOriginName(s string) {
+	m.control_origin_name = &s
+}
+
+// ControlOriginName returns the value of the "control_origin_name" field in the mutation.
+func (m *SubcontrolHistoryMutation) ControlOriginName() (r string, exists bool) {
+	v := m.control_origin_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldControlOriginName returns the old "control_origin_name" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldControlOriginName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldControlOriginName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldControlOriginName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldControlOriginName: %w", err)
+	}
+	return oldValue.ControlOriginName, nil
+}
+
+// ClearControlOriginName clears the value of the "control_origin_name" field.
+func (m *SubcontrolHistoryMutation) ClearControlOriginName() {
+	m.control_origin_name = nil
+	m.clearedFields[subcontrolhistory.FieldControlOriginName] = struct{}{}
+}
+
+// ControlOriginNameCleared returns if the "control_origin_name" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) ControlOriginNameCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldControlOriginName]
+	return ok
+}
+
+// ResetControlOriginName resets all changes to the "control_origin_name" field.
+func (m *SubcontrolHistoryMutation) ResetControlOriginName() {
+	m.control_origin_name = nil
+	delete(m.clearedFields, subcontrolhistory.FieldControlOriginName)
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (m *SubcontrolHistoryMutation) SetControlOriginID(s string) {
+	m.control_origin_id = &s
+}
+
+// ControlOriginID returns the value of the "control_origin_id" field in the mutation.
+func (m *SubcontrolHistoryMutation) ControlOriginID() (r string, exists bool) {
+	v := m.control_origin_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldControlOriginID returns the old "control_origin_id" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldControlOriginID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldControlOriginID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldControlOriginID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldControlOriginID: %w", err)
+	}
+	return oldValue.ControlOriginID, nil
+}
+
+// ClearControlOriginID clears the value of the "control_origin_id" field.
+func (m *SubcontrolHistoryMutation) ClearControlOriginID() {
+	m.control_origin_id = nil
+	m.clearedFields[subcontrolhistory.FieldControlOriginID] = struct{}{}
+}
+
+// ControlOriginIDCleared returns if the "control_origin_id" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) ControlOriginIDCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldControlOriginID]
+	return ok
+}
+
+// ResetControlOriginID resets all changes to the "control_origin_id" field.
+func (m *SubcontrolHistoryMutation) ResetControlOriginID() {
+	m.control_origin_id = nil
+	delete(m.clearedFields, subcontrolhistory.FieldControlOriginID)
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (m *SubcontrolHistoryMutation) SetWorkflowEligibleMarker(b bool) {
 	m.workflow_eligible_marker = &b
@@ -134741,7 +134987,7 @@ func (m *SubcontrolHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubcontrolHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 58)
+	fields := make([]string, 0, 60)
 	if m.history_time != nil {
 		fields = append(fields, subcontrolhistory.FieldHistoryTime)
 	}
@@ -134907,6 +135153,12 @@ func (m *SubcontrolHistoryMutation) Fields() []string {
 	if m.subcontrol_kind_id != nil {
 		fields = append(fields, subcontrolhistory.FieldSubcontrolKindID)
 	}
+	if m.control_origin_name != nil {
+		fields = append(fields, subcontrolhistory.FieldControlOriginName)
+	}
+	if m.control_origin_id != nil {
+		fields = append(fields, subcontrolhistory.FieldControlOriginID)
+	}
 	if m.workflow_eligible_marker != nil {
 		fields = append(fields, subcontrolhistory.FieldWorkflowEligibleMarker)
 	}
@@ -135034,6 +135286,10 @@ func (m *SubcontrolHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.SubcontrolKindName()
 	case subcontrolhistory.FieldSubcontrolKindID:
 		return m.SubcontrolKindID()
+	case subcontrolhistory.FieldControlOriginName:
+		return m.ControlOriginName()
+	case subcontrolhistory.FieldControlOriginID:
+		return m.ControlOriginID()
 	case subcontrolhistory.FieldWorkflowEligibleMarker:
 		return m.WorkflowEligibleMarker()
 	case subcontrolhistory.FieldRefCode:
@@ -135159,6 +135415,10 @@ func (m *SubcontrolHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldSubcontrolKindName(ctx)
 	case subcontrolhistory.FieldSubcontrolKindID:
 		return m.OldSubcontrolKindID(ctx)
+	case subcontrolhistory.FieldControlOriginName:
+		return m.OldControlOriginName(ctx)
+	case subcontrolhistory.FieldControlOriginID:
+		return m.OldControlOriginID(ctx)
 	case subcontrolhistory.FieldWorkflowEligibleMarker:
 		return m.OldWorkflowEligibleMarker(ctx)
 	case subcontrolhistory.FieldRefCode:
@@ -135559,6 +135819,20 @@ func (m *SubcontrolHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetSubcontrolKindID(v)
 		return nil
+	case subcontrolhistory.FieldControlOriginName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetControlOriginName(v)
+		return nil
+	case subcontrolhistory.FieldControlOriginID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetControlOriginID(v)
+		return nil
 	case subcontrolhistory.FieldWorkflowEligibleMarker:
 		v, ok := value.(bool)
 		if !ok {
@@ -135766,6 +136040,12 @@ func (m *SubcontrolHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrolhistory.FieldSubcontrolKindID) {
 		fields = append(fields, subcontrolhistory.FieldSubcontrolKindID)
 	}
+	if m.FieldCleared(subcontrolhistory.FieldControlOriginName) {
+		fields = append(fields, subcontrolhistory.FieldControlOriginName)
+	}
+	if m.FieldCleared(subcontrolhistory.FieldControlOriginID) {
+		fields = append(fields, subcontrolhistory.FieldControlOriginID)
+	}
 	if m.FieldCleared(subcontrolhistory.FieldWorkflowEligibleMarker) {
 		fields = append(fields, subcontrolhistory.FieldWorkflowEligibleMarker)
 	}
@@ -135938,6 +136218,12 @@ func (m *SubcontrolHistoryMutation) ClearField(name string) error {
 		return nil
 	case subcontrolhistory.FieldSubcontrolKindID:
 		m.ClearSubcontrolKindID()
+		return nil
+	case subcontrolhistory.FieldControlOriginName:
+		m.ClearControlOriginName()
+		return nil
+	case subcontrolhistory.FieldControlOriginID:
+		m.ClearControlOriginID()
 		return nil
 	case subcontrolhistory.FieldWorkflowEligibleMarker:
 		m.ClearWorkflowEligibleMarker()
@@ -136114,6 +136400,12 @@ func (m *SubcontrolHistoryMutation) ResetField(name string) error {
 		return nil
 	case subcontrolhistory.FieldSubcontrolKindID:
 		m.ResetSubcontrolKindID()
+		return nil
+	case subcontrolhistory.FieldControlOriginName:
+		m.ResetControlOriginName()
+		return nil
+	case subcontrolhistory.FieldControlOriginID:
+		m.ResetControlOriginID()
 		return nil
 	case subcontrolhistory.FieldWorkflowEligibleMarker:
 		m.ResetWorkflowEligibleMarker()

@@ -99,12 +99,7 @@ func (r *mutationResolver) CreateBulkCSVFinding(ctx context.Context, input graph
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateFindingInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateFinding(ctx, inputs)
+	return r.bulkCreateCSVFinding(ctx, data)
 }
 
 // UpdateFinding is the resolver for the updateFinding field.

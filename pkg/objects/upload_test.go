@@ -3,12 +3,15 @@ package objects
 import (
 	"bytes"
 	"context"
+	"errors"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
+	"os"
 	"strings"
 	"testing"
+	"testing/iotest"
 
 	"github.com/99designs/gqlgen/graphql"
 	"gotest.tools/v3/assert"
@@ -757,4 +760,80 @@ func TestReaderToSeeker(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(br, result))
 	})
+
+	t.Run("reader at the in-memory limit stays in memory", func(t *testing.T) {
+		result, err := ReaderToSeeker(io.NopCloser(patternReader(MaxInMemorySize)))
+		assert.NilError(t, err)
+
+		sized, ok := result.(SizedReader)
+		assert.Assert(t, ok)
+		assert.Check(t, is.Equal(int64(MaxInMemorySize), sized.Size()))
+	})
+
+	t.Run("large reader spools to a file with the head and the rest in order", func(t *testing.T) {
+		result, err := ReaderToSeeker(io.NopCloser(patternReader(MaxInMemorySize + 1)))
+		assert.NilError(t, err)
+
+		spool, ok := result.(*spoolFile)
+		assert.Assert(t, ok)
+
+		t.Cleanup(func() { ReleaseSeeker(result) })
+
+		content, err := io.ReadAll(spool)
+		assert.NilError(t, err)
+		assert.Check(t, bytes.Equal(patternBytes(MaxInMemorySize+1), content), "spool content differs from the input")
+
+		// the uploader seeks to measure and rewind
+		end, err := spool.Seek(0, io.SeekEnd)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(int64(MaxInMemorySize+1), end))
+
+		start, err := spool.Seek(0, io.SeekStart)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(int64(0), start))
+	})
+
+	t.Run("release removes the spool file", func(t *testing.T) {
+		result, err := ReaderToSeeker(io.NopCloser(patternReader(MaxInMemorySize + 1)))
+		assert.NilError(t, err)
+
+		spool, ok := result.(*spoolFile)
+		assert.Assert(t, ok)
+
+		ReleaseSeeker(result)
+
+		_, err = os.Stat(spool.Name())
+		assert.Check(t, os.IsNotExist(err))
+	})
+
+	t.Run("release leaves other seekers alone", func(t *testing.T) {
+		reader := bytes.NewReader([]byte("test data"))
+
+		ReleaseSeeker(reader)
+
+		_, err := reader.Seek(0, io.SeekStart)
+		assert.NilError(t, err)
+	})
+
+	t.Run("failing reader reports the read error", func(t *testing.T) {
+		_, err := ReaderToSeeker(io.NopCloser(iotest.ErrReader(errors.New("boom"))))
+		assert.ErrorIs(t, err, ErrFailedToReadData)
+	})
+}
+
+// patternReader yields n bytes counting 0 to 250 over and over, so a lost or reordered chunk changes the content, not just its length
+func patternReader(n int) io.Reader {
+	return bytes.NewReader(patternBytes(n))
+}
+
+// patternBytes is the content patternReader yields
+func patternBytes(n int) []byte {
+	const prime = 251
+
+	out := make([]byte, n)
+	for i := range out {
+		out[i] = byte(i % prime)
+	}
+
+	return out
 }

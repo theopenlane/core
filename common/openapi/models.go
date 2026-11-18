@@ -402,13 +402,6 @@ var ExampleUserInfoSuccessResponse = UserInfoResponse{
 	Sub:             "user123",
 }
 
-// Helper function for string pointer
-//
-//go:fix inline
-func stringPtr(s string) *string {
-	return new(s)
-}
-
 // =========
 // REGISTER
 // =========

@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graph
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateContactInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateContact(ctx, inputs)
+	return r.bulkCreateCSVContact(ctx, data)
 }
 
 // UpdateBulkContact is the resolver for the updateBulkContact field.

@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphq
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateInviteInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateInvite(ctx, inputs)
+	return r.bulkCreateCSVInvite(ctx, data)
 }
 
 // UpdateInvite is the resolver for the updateInvite field.

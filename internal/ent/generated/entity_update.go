@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
@@ -1920,6 +1921,21 @@ func (_u *EntityUpdate) AddFindings(v ...*Finding) *EntityUpdate {
 	return _u.AddFindingIDs(ids...)
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (_u *EntityUpdate) AddRiskIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (_u *EntityUpdate) AddRisks(v ...*Risk) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRiskIDs(ids...)
+}
+
 // AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
 func (_u *EntityUpdate) AddVulnerabilityIDs(ids ...string) *EntityUpdate {
 	_u.mutation.AddVulnerabilityIDs(ids...)
@@ -2572,6 +2588,27 @@ func (_u *EntityUpdate) RemoveFindings(v ...*Finding) *EntityUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (_u *EntityUpdate) ClearRisks() *EntityUpdate {
+	_u.mutation.ClearRisks()
+	return _u
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (_u *EntityUpdate) RemoveRiskIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (_u *EntityUpdate) RemoveRisks(v ...*Risk) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
@@ -4585,6 +4622,51 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RisksTable,
+			Columns: entity.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RisksTable,
+			Columns: entity.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RisksTable,
+			Columns: entity.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -6849,6 +6931,21 @@ func (_u *EntityUpdateOne) AddFindings(v ...*Finding) *EntityUpdateOne {
 	return _u.AddFindingIDs(ids...)
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (_u *EntityUpdateOne) AddRiskIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (_u *EntityUpdateOne) AddRisks(v ...*Risk) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRiskIDs(ids...)
+}
+
 // AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
 func (_u *EntityUpdateOne) AddVulnerabilityIDs(ids ...string) *EntityUpdateOne {
 	_u.mutation.AddVulnerabilityIDs(ids...)
@@ -7501,6 +7598,27 @@ func (_u *EntityUpdateOne) RemoveFindings(v ...*Finding) *EntityUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (_u *EntityUpdateOne) ClearRisks() *EntityUpdateOne {
+	_u.mutation.ClearRisks()
+	return _u
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (_u *EntityUpdateOne) RemoveRiskIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (_u *EntityUpdateOne) RemoveRisks(v ...*Risk) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRiskIDs(ids...)
 }
 
 // ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
@@ -9544,6 +9662,51 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RisksTable,
+			Columns: entity.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RisksTable,
+			Columns: entity.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RisksTable,
+			Columns: entity.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

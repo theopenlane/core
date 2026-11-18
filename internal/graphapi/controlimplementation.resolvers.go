@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Contex
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateControlImplementationInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateControlImplementation(ctx, inputs)
+	return r.bulkCreateCSVControlImplementation(ctx, data)
 }
 
 // UpdateControlImplementation is the resolver for the updateControlImplementation field.

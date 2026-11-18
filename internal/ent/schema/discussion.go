@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
@@ -80,6 +81,7 @@ func (d Discussion) Edges() []ent.Edge {
 			comment:    "the comments in the discussion",
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
+				entx.CSVRef().FromColumn("Comment").CreateChild("text"),
 			},
 			// deleting a discussion should delete its comments
 			cascadeDelete: "Discussion",

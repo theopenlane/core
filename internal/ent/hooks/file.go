@@ -4,13 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"maps"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/logx"
@@ -43,6 +42,7 @@ func HookFileDelete() ent.Hook {
 				files, err := m.Client().File.Query().Where(file.IDIn(ids...)).
 					Select(
 						file.FieldID,
+						file.FieldProvidedFileName,
 						file.FieldStoragePath,
 						file.FieldStorageProvider,
 						file.FieldDetectedContentType,
@@ -50,6 +50,7 @@ func HookFileDelete() ent.Hook {
 						file.FieldMetadata,
 						file.FieldStorageVolume,
 						file.FieldStorageRegion,
+						file.FieldURI,
 						file.FieldBackupState,
 					).All(ctx)
 				if err != nil {
@@ -65,30 +66,8 @@ func HookFileDelete() ent.Hook {
 
 				for _, f := range files {
 					if f.StoragePath != "" && m.ObjectManager != nil {
-						// Convert ent File to storagetypes.File
-						storageFile := &storagetypes.File{
-							ID:            f.ID,
-							OriginalName:  f.ProvidedFileName,
-							Key:           f.StoragePath,
-							ContentType:   f.DetectedContentType,
-							Size:          f.PersistedFileSize,
-							Bucket:        f.StorageVolume,
-							Region:        f.StorageRegion,
-							ProviderHints: &storagetypes.ProviderHints{},
-						}
-
-						if f.Metadata != nil {
-							metadata := make(map[string]any)
-							maps.Copy(metadata, f.Metadata)
-							storageFile.Metadata = metadata
-						}
-
-						// Set provider-specific fields if available
-						if f.StorageProvider != "" {
-							storageFile.ProviderType = storagetypes.ProviderType(f.StorageProvider)
-						}
-
-						storageFile.BackupLocation = f.BackupState.Location()
+						// resolve the delete through the provider and bucket recorded on the row
+						storageFile := interceptors.StorageFileFromEnt(f)
 
 						// during a disaster recovery event the source storage is presumed lost, so the
 						// replica is the only remaining copy and deleting the source would only fail

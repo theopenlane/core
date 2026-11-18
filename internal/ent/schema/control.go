@@ -214,13 +214,14 @@ func (c Control) Mixin() []ent.Mixin {
 				// skip the interceptor
 				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 				withWorkflowOwnedEdges(),
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterScope(interceptors.AnonScopeTrustCenterControl),
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			// add groups permissions with editor, and blocked groups
 			// skip view because controls are automatically viewable by all users in the organization
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),
 			newCustomEnumMixin(c, withWorkflowEnumEdges()),
+			newCustomEnumMixin(c, withEnumFieldName("control_origin"), withGlobalEnum()),
 			newCustomEnumMixin(c, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(c, withEnumFieldName("scope"), withGlobalEnum()),
 			WorkflowApprovalMixin{},

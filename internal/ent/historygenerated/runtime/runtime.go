@@ -503,11 +503,11 @@ func init() {
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
 	// controlhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[60].Descriptor()
+	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[62].Descriptor()
 	// controlhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	controlhistory.DefaultWorkflowEligibleMarker = controlhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// controlhistoryDescIsTrustCenterControl is the schema descriptor for is_trust_center_control field.
-	controlhistoryDescIsTrustCenterControl := controlhistoryFields[64].Descriptor()
+	controlhistoryDescIsTrustCenterControl := controlhistoryFields[66].Descriptor()
 	// controlhistory.DefaultIsTrustCenterControl holds the default value on creation for the is_trust_center_control field.
 	controlhistory.DefaultIsTrustCenterControl = controlhistoryDescIsTrustCenterControl.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
@@ -2215,7 +2215,7 @@ func init() {
 	// subcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrolhistory.DefaultSystemOwned = subcontrolhistoryDescSystemOwned.Default.(bool)
 	// subcontrolhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	subcontrolhistoryDescWorkflowEligibleMarker := subcontrolhistoryFields[56].Descriptor()
+	subcontrolhistoryDescWorkflowEligibleMarker := subcontrolhistoryFields[58].Descriptor()
 	// subcontrolhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	subcontrolhistory.DefaultWorkflowEligibleMarker = subcontrolhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// subcontrolhistoryDescID is the schema descriptor for id field.

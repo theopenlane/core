@@ -87,12 +87,7 @@ func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateRiskInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateRisk(ctx, inputs)
+	return r.bulkCreateCSVRisk(ctx, data)
 }
 
 // UpdateBulkRisk is the resolver for the updateBulkRisk field.

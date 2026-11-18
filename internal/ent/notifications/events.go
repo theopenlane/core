@@ -130,7 +130,14 @@ func Listeners() []gala.Registration {
 			Concern:    entityops.MutationConcernNotification,
 			Schema:     entityops.SchemaReportMembership,
 			Operations: []string{entityops.OpCreate},
-			Caller:     notificationCaller,
+			RowMatch: []entityops.FieldMatch{
+				{
+					Field:  reportmembership.FieldRole,
+					In:     []string{string(enums.RoleOwner)},
+					Negate: true,
+				},
+			},
+			Caller: notificationCaller,
 			Notify: &entityops.NotifySpec{
 				Recipients: entityops.RecipientsFromField(reportmembership.FieldUserID),
 				Content: entityops.NotificationContent{

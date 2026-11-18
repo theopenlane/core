@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVVendorRiskScore(ctx context.Context, inp
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateVendorRiskScoreInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateVendorRiskScore(ctx, inputs)
+	return r.bulkCreateCSVVendorRiskScore(ctx, data)
 }
 
 // UpdateBulkVendorRiskScore is the resolver for the updateBulkVendorRiskScore field.

@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graph
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateProgramInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateProgram(ctx, inputs)
+	return r.bulkCreateCSVProgram(ctx, data)
 }
 
 // UpdateProgram is the resolver for the updateProgram field.

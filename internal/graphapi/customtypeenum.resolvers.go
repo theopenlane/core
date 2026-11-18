@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVCustomTypeEnum(ctx context.Context, inpu
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateCustomTypeEnumInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateCustomTypeEnum(ctx, inputs)
+	return r.bulkCreateCSVCustomTypeEnum(ctx, data)
 }
 
 // UpdateCustomTypeEnum is the resolver for the updateCustomTypeEnum field.

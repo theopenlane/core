@@ -19,10 +19,10 @@ func getPrePolicies(skipDenyOrgRule bool, beforeScope privacy.MutationPolicy) pr
 			history.AllowIfHistoryRequest(),
 		},
 		Mutation: privacy.MutationPolicy{
-			// allow internal operations (system code paths with CapInternalOperation) to proceed to mutate tables
-			rule.AllowIfInternalRequest(),
 			// deny mutation if missing all modules
 			rule.DenyIfMissingAllModules(),
+			// allow internal operations (system code paths with CapInternalOperation) to proceed to mutate tables
+			rule.AllowIfInternalRequest(),
 		},
 	}
 

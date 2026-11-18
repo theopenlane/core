@@ -1,7 +1,7 @@
 package email
 
 import (
-	"github.com/resend/resend-go/v3"
+	"github.com/resend/resend-go/v4"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/utils/jsonx"

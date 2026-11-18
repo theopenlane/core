@@ -357,6 +357,7 @@ func (f Finding) Edges() []ent.Edge {
 			comment:    "discussion threads associated with the finding",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.CSVRef().FromColumn("Comment").CreateChild("text"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{

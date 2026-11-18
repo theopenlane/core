@@ -3,6 +3,9 @@
 package main
 
 import (
+	"os"
+	"strings"
+
 	"github.com/99designs/gqlgen/api"
 	"github.com/99designs/gqlgen/codegen/config"
 	"github.com/rs/zerolog/log"
@@ -50,6 +53,11 @@ var (
 
 func main() {
 	genhelpers.SetupLogging()
+
+	// plugins load the ent schema with go list, so the codegen tag keeps them off the stale graphql output
+	if err := os.Setenv("GOFLAGS", strings.TrimSpace(os.Getenv("GOFLAGS")+" -tags=codegen")); err != nil {
+		log.Fatal().Err(err).Msg("failed to set GOFLAGS")
+	}
 
 	// change to the root of the repo so that the config hierarchy is correct
 	genhelpers.ChangeToRootDir("../../../")

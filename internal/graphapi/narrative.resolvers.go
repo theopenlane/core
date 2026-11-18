@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input gra
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateNarrativeInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateNarrative(ctx, inputs)
+	return r.bulkCreateCSVNarrative(ctx, data)
 }
 
 // UpdateNarrative is the resolver for the updateNarrative field.

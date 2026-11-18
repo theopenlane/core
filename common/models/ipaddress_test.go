@@ -19,9 +19,9 @@ func TestValidateIP(t *testing.T) {
 			hasError: true,
 		},
 		{
-			name:     "127.0.0.1 not allowed",
+			name:     "127.0.0.1 allowed (loopback)",
 			ip:       "127.0.0.1",
-			hasError: true,
+			hasError: false,
 		},
 		{
 			name:     "0.0.0.0 not allowed",
@@ -34,9 +34,9 @@ func TestValidateIP(t *testing.T) {
 			hasError: false,
 		},
 		{
-			name:     "::1 not allowed (loopback IPv6)",
+			name:     "::1 allowed (loopback IPv6)",
 			ip:       "::1",
-			hasError: true,
+			hasError: false,
 		},
 		{
 			name:     ":: (unspecified IPv6) not allowed",

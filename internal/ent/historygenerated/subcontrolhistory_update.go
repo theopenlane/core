@@ -226,6 +226,12 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.SubcontrolKindIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString)
 	}
+	if _u.mutation.ControlOriginNameCleared() {
+		_spec.ClearField(subcontrolhistory.FieldControlOriginName, field.TypeString)
+	}
+	if _u.mutation.ControlOriginIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldControlOriginID, field.TypeString)
+	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(subcontrolhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
@@ -475,6 +481,12 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	}
 	if _u.mutation.SubcontrolKindIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString)
+	}
+	if _u.mutation.ControlOriginNameCleared() {
+		_spec.ClearField(subcontrolhistory.FieldControlOriginName, field.TypeString)
+	}
+	if _u.mutation.ControlOriginIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldControlOriginID, field.TypeString)
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(subcontrolhistory.FieldWorkflowEligibleMarker, field.TypeBool)

@@ -1,0 +1,15 @@
+query GetAllIntegrationRuns ($where: IntegrationRunWhereInput) {
+	integrationRuns(where: $where) {
+		totalCount
+		edges {
+			node {
+				id
+				integrationID
+				ownerID
+				operationName
+				status
+				createdAt
+			}
+		}
+	}
+}

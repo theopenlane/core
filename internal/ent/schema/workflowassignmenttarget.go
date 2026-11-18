@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -130,5 +131,6 @@ func (WorkflowAssignmentTarget) Policy() ent.Policy {
 func (WorkflowAssignmentTarget) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+		entx.FGACrudSkip(entx.SkipAll),
 	}
 }

@@ -226,6 +226,12 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ControlKindIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
 	}
+	if _u.mutation.ControlOriginNameCleared() {
+		_spec.ClearField(controlhistory.FieldControlOriginName, field.TypeString)
+	}
+	if _u.mutation.ControlOriginIDCleared() {
+		_spec.ClearField(controlhistory.FieldControlOriginID, field.TypeString)
+	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(controlhistory.FieldEnvironmentName, field.TypeString)
 	}
@@ -496,6 +502,12 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.ControlKindIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
+	}
+	if _u.mutation.ControlOriginNameCleared() {
+		_spec.ClearField(controlhistory.FieldControlOriginName, field.TypeString)
+	}
+	if _u.mutation.ControlOriginIDCleared() {
+		_spec.ClearField(controlhistory.FieldControlOriginID, field.TypeString)
 	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(controlhistory.FieldEnvironmentName, field.TypeString)

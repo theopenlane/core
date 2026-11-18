@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/resend/resend-go/v3"
+	"github.com/resend/resend-go/v4"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 

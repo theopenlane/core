@@ -678,6 +678,34 @@ func (_c *ControlCreate) SetNillableControlKindID(v *string) *ControlCreate {
 	return _c
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (_c *ControlCreate) SetControlOriginName(v string) *ControlCreate {
+	_c.mutation.SetControlOriginName(v)
+	return _c
+}
+
+// SetNillableControlOriginName sets the "control_origin_name" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableControlOriginName(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetControlOriginName(*v)
+	}
+	return _c
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (_c *ControlCreate) SetControlOriginID(v string) *ControlCreate {
+	_c.mutation.SetControlOriginID(v)
+	return _c
+}
+
+// SetNillableControlOriginID sets the "control_origin_id" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableControlOriginID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetControlOriginID(*v)
+	}
+	return _c
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_c *ControlCreate) SetEnvironmentName(v string) *ControlCreate {
 	_c.mutation.SetEnvironmentName(v)
@@ -1073,6 +1101,11 @@ func (_c *ControlCreate) AddEditors(v ...*Group) *ControlCreate {
 // SetControlKind sets the "control_kind" edge to the CustomTypeEnum entity.
 func (_c *ControlCreate) SetControlKind(v *CustomTypeEnum) *ControlCreate {
 	return _c.SetControlKindID(v.ID)
+}
+
+// SetControlOrigin sets the "control_origin" edge to the CustomTypeEnum entity.
+func (_c *ControlCreate) SetControlOrigin(v *CustomTypeEnum) *ControlCreate {
+	return _c.SetControlOriginID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -1679,6 +1712,10 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldControlKindName, field.TypeString, value)
 		_node.ControlKindName = value
 	}
+	if value, ok := _c.mutation.ControlOriginName(); ok {
+		_spec.SetField(control.FieldControlOriginName, field.TypeString, value)
+		_node.ControlOriginName = value
+	}
 	if value, ok := _c.mutation.EnvironmentName(); ok {
 		_spec.SetField(control.FieldEnvironmentName, field.TypeString, value)
 		_node.EnvironmentName = value
@@ -2042,6 +2079,23 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ControlKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlOriginIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlOriginTable,
+			Columns: []string{control.ControlOriginColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ControlOriginID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {

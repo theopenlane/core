@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
@@ -88,6 +89,7 @@ type EntityQuery struct {
 	withControls                          *ControlQuery
 	withSubcontrols                       *SubcontrolQuery
 	withFindings                          *FindingQuery
+	withRisks                             *RiskQuery
 	withVulnerabilities                   *VulnerabilityQuery
 	withReviews                           *ReviewQuery
 	withRemediations                      *RemediationQuery
@@ -122,6 +124,7 @@ type EntityQuery struct {
 	withNamedControls                     map[string]*ControlQuery
 	withNamedSubcontrols                  map[string]*SubcontrolQuery
 	withNamedFindings                     map[string]*FindingQuery
+	withNamedRisks                        map[string]*RiskQuery
 	withNamedVulnerabilities              map[string]*VulnerabilityQuery
 	withNamedReviews                      map[string]*ReviewQuery
 	withNamedRemediations                 map[string]*RemediationQuery
@@ -935,6 +938,28 @@ func (_q *EntityQuery) QueryFindings() *FindingQuery {
 	return query
 }
 
+// QueryRisks chains the current query on the "risks" edge.
+func (_q *EntityQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.RisksTable, entity.RisksPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
 func (_q *EntityQuery) QueryVulnerabilities() *VulnerabilityQuery {
 	query := (&VulnerabilityClient{config: _q.config}).Query()
@@ -1360,6 +1385,7 @@ func (_q *EntityQuery) Clone() *EntityQuery {
 		withControls:                          _q.withControls.Clone(),
 		withSubcontrols:                       _q.withSubcontrols.Clone(),
 		withFindings:                          _q.withFindings.Clone(),
+		withRisks:                             _q.withRisks.Clone(),
 		withVulnerabilities:                   _q.withVulnerabilities.Clone(),
 		withReviews:                           _q.withReviews.Clone(),
 		withRemediations:                      _q.withRemediations.Clone(),
@@ -1761,6 +1787,17 @@ func (_q *EntityQuery) WithFindings(opts ...func(*FindingQuery)) *EntityQuery {
 	return _q
 }
 
+// WithRisks tells the query-builder to eager-load the nodes that are connected to
+// the "risks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithRisks(opts ...func(*RiskQuery)) *EntityQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRisks = query
+	return _q
+}
+
 // WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
 // the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *EntityQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *EntityQuery {
@@ -1945,7 +1982,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [44]bool{
+		loadedTypes = [45]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
@@ -1981,6 +2018,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withFindings != nil,
+			_q.withRisks != nil,
 			_q.withVulnerabilities != nil,
 			_q.withReviews != nil,
 			_q.withRemediations != nil,
@@ -2252,6 +2290,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	if query := _q.withRisks; query != nil {
+		if err := _q.loadRisks(ctx, query, nodes,
+			func(n *Entity) { n.Edges.Risks = []*Risk{} },
+			func(n *Entity, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withVulnerabilities; query != nil {
 		if err := _q.loadVulnerabilities(ctx, query, nodes,
 			func(n *Entity) { n.Edges.Vulnerabilities = []*Vulnerability{} },
@@ -2464,6 +2509,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		if err := _q.loadFindings(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedFindings(name) },
 			func(n *Entity, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRisks {
+		if err := _q.loadRisks(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedRisks(name) },
+			func(n *Entity, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4030,6 +4082,67 @@ func (_q *EntityQuery) loadFindings(ctx context.Context, query *FindingQuery, no
 	}
 	return nil
 }
+func (_q *EntityQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Risk)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.RisksTable)
+		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(entity.RisksPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(entity.RisksPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.RisksPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Risk](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "risks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *EntityQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Vulnerability)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Entity)
@@ -4963,6 +5076,20 @@ func (_q *EntityQuery) WithNamedFindings(name string, opts ...func(*FindingQuery
 		_q.withNamedFindings = make(map[string]*FindingQuery)
 	}
 	_q.withNamedFindings[name] = query
+	return _q
+}
+
+// WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *EntityQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRisks == nil {
+		_q.withNamedRisks = make(map[string]*RiskQuery)
+	}
+	_q.withNamedRisks[name] = query
 	return _q
 }
 

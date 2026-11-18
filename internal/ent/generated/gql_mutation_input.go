@@ -3657,6 +3657,7 @@ type CreateControlInput struct {
 	InternalNotes              *string                             `json:"internal_notes,omitempty"`
 	SystemInternalID           *string                             `json:"system_internal_id,omitempty"`
 	ControlKindName            *string                             `json:"control_kind_name,omitempty"`
+	ControlOriginName          *string                             `json:"control_origin_name,omitempty"`
 	EnvironmentName            *string                             `json:"environment_name,omitempty"`
 	ScopeName                  *string                             `json:"scope_name,omitempty"`
 	WorkflowEligibleMarker     *bool                               `json:"workflow_eligible_marker,omitempty"`
@@ -3683,6 +3684,7 @@ type CreateControlInput struct {
 	BlockedGroupIDs            []string                            `json:"blocked_group_ids,omitempty"`
 	EditorIDs                  []string                            `json:"editor_ids,omitempty"`
 	ControlKindID              *string                             `json:"control_kind_id,omitempty"`
+	ControlOriginID            *string                             `json:"control_origin_id,omitempty"`
 	EnvironmentID              *string                             `json:"environment_id,omitempty"`
 	ScopeID                    *string                             `json:"scope_id,omitempty"`
 	StandardID                 *string                             `json:"standard_id,omitempty"`
@@ -3797,6 +3799,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ControlKindName; v != nil {
 		m.SetControlKindName(*v)
 	}
+	if v := i.ControlOriginName; v != nil {
+		m.SetControlOriginName(*v)
+	}
 	if v := i.EnvironmentName; v != nil {
 		m.SetEnvironmentName(*v)
 	}
@@ -3872,6 +3877,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.ControlKindID; v != nil {
 		m.SetControlKindID(*v)
+	}
+	if v := i.ControlOriginID; v != nil {
+		m.SetControlOriginID(*v)
 	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
@@ -3999,6 +4007,8 @@ type UpdateControlInput struct {
 	SystemInternalID                *string `json:"system_internal_id,omitempty"`
 	ClearControlKindName            bool
 	ControlKindName                 *string `json:"control_kind_name,omitempty"`
+	ClearControlOriginName          bool
+	ControlOriginName               *string `json:"control_origin_name,omitempty"`
 	ClearEnvironmentName            bool
 	EnvironmentName                 *string `json:"environment_name,omitempty"`
 	ClearScopeName                  bool
@@ -4064,6 +4074,8 @@ type UpdateControlInput struct {
 	RemoveEditorIDs                 []string `json:"remove_editor_ids,omitempty"`
 	ClearControlKind                bool
 	ControlKindID                   *string `json:"control_kind_id,omitempty"`
+	ClearControlOrigin              bool
+	ControlOriginID                 *string `json:"control_origin_id,omitempty"`
 	ClearEnvironment                bool
 	EnvironmentID                   *string `json:"environment_id,omitempty"`
 	ClearScope                      bool
@@ -4329,6 +4341,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ControlKindName; v != nil {
 		m.SetControlKindName(*v)
 	}
+	if i.ClearControlOriginName {
+		m.ClearControlOriginName()
+	}
+	if v := i.ControlOriginName; v != nil {
+		m.SetControlOriginName(*v)
+	}
 	if i.ClearEnvironmentName {
 		m.ClearEnvironmentName()
 	}
@@ -4523,6 +4541,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.ControlKindID; v != nil {
 		m.SetControlKindID(*v)
+	}
+	if i.ClearControlOrigin {
+		m.ClearControlOrigin()
+	}
+	if v := i.ControlOriginID; v != nil {
+		m.SetControlOriginID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -7699,6 +7723,7 @@ type CreateEntityInput struct {
 	ControlIDs                            []string               `json:"control_ids,omitempty"`
 	SubcontrolIDs                         []string               `json:"subcontrol_ids,omitempty"`
 	FindingIDs                            []string               `json:"finding_ids,omitempty"`
+	RiskIDs                               []string               `json:"risk_ids,omitempty"`
 	VulnerabilityIDs                      []string               `json:"vulnerability_ids,omitempty"`
 	ReviewIDs                             []string               `json:"review_ids,omitempty"`
 	RemediationIDs                        []string               `json:"remediation_ids,omitempty"`
@@ -7952,6 +7977,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.FindingIDs; len(v) > 0 {
 		m.AddFindingIDs(v...)
 	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
 	if v := i.VulnerabilityIDs; len(v) > 0 {
 		m.AddVulnerabilityIDs(v...)
 	}
@@ -8174,6 +8202,9 @@ type UpdateEntityInput struct {
 	ClearFindings                              bool
 	AddFindingIDs                              []string `json:"add_finding_ids,omitempty"`
 	RemoveFindingIDs                           []string `json:"remove_finding_ids,omitempty"`
+	ClearRisks                                 bool
+	AddRiskIDs                                 []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                              []string `json:"remove_risk_ids,omitempty"`
 	ClearVulnerabilities                       bool
 	AddVulnerabilityIDs                        []string `json:"add_vulnerability_ids,omitempty"`
 	RemoveVulnerabilityIDs                     []string `json:"remove_vulnerability_ids,omitempty"`
@@ -8757,6 +8788,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveFindingIDs; len(v) > 0 {
 		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
 	}
 	if i.ClearVulnerabilities {
 		m.ClearVulnerabilities()
@@ -16465,14 +16505,15 @@ type CreateOrganizationInput struct {
 	VendorScoringConfigCreatorIDs        []string   `json:"vendor_scoring_config_creator_ids,omitempty"`
 	VulnerabilityCreatorIDs              []string   `json:"vulnerability_creator_ids,omitempty"`
 	WorkflowDefinitionCreatorIDs         []string   `json:"workflow_definition_creator_ids,omitempty"`
-	CampaignsManagerIDs                  []string   `json:"campaigns_manager_ids,omitempty"`
+	CampaignManagerIDs                   []string   `json:"campaign_manager_ids,omitempty"`
 	ComplianceManagerIDs                 []string   `json:"compliance_manager_ids,omitempty"`
 	GroupManagerIDs                      []string   `json:"group_manager_ids,omitempty"`
-	PoliciesManagerIDs                   []string   `json:"policies_manager_ids,omitempty"`
+	IntegrationManagerIDs                []string   `json:"integration_manager_ids,omitempty"`
+	PolicyManagerIDs                     []string   `json:"policy_manager_ids,omitempty"`
 	RegistryManagerIDs                   []string   `json:"registry_manager_ids,omitempty"`
 	RiskManagerIDs                       []string   `json:"risk_manager_ids,omitempty"`
 	TrustCenterManagerIDs                []string   `json:"trust_center_manager_ids,omitempty"`
-	WorkflowsManagerIDs                  []string   `json:"workflows_manager_ids,omitempty"`
+	WorkflowManagerIDs                   []string   `json:"workflow_manager_ids,omitempty"`
 	ParentID                             *string    `json:"parent_id,omitempty"`
 	SettingID                            *string    `json:"setting_id,omitempty"`
 	PersonalAccessTokenIDs               []string   `json:"personal_access_token_ids,omitempty"`
@@ -16713,8 +16754,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.WorkflowDefinitionCreatorIDs; len(v) > 0 {
 		m.AddWorkflowDefinitionCreatorIDs(v...)
 	}
-	if v := i.CampaignsManagerIDs; len(v) > 0 {
-		m.AddCampaignsManagerIDs(v...)
+	if v := i.CampaignManagerIDs; len(v) > 0 {
+		m.AddCampaignManagerIDs(v...)
 	}
 	if v := i.ComplianceManagerIDs; len(v) > 0 {
 		m.AddComplianceManagerIDs(v...)
@@ -16722,8 +16763,11 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.GroupManagerIDs; len(v) > 0 {
 		m.AddGroupManagerIDs(v...)
 	}
-	if v := i.PoliciesManagerIDs; len(v) > 0 {
-		m.AddPoliciesManagerIDs(v...)
+	if v := i.IntegrationManagerIDs; len(v) > 0 {
+		m.AddIntegrationManagerIDs(v...)
+	}
+	if v := i.PolicyManagerIDs; len(v) > 0 {
+		m.AddPolicyManagerIDs(v...)
 	}
 	if v := i.RegistryManagerIDs; len(v) > 0 {
 		m.AddRegistryManagerIDs(v...)
@@ -16734,8 +16778,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.TrustCenterManagerIDs; len(v) > 0 {
 		m.AddTrustCenterManagerIDs(v...)
 	}
-	if v := i.WorkflowsManagerIDs; len(v) > 0 {
-		m.AddWorkflowsManagerIDs(v...)
+	if v := i.WorkflowManagerIDs; len(v) > 0 {
+		m.AddWorkflowManagerIDs(v...)
 	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
@@ -16994,18 +17038,21 @@ type UpdateOrganizationInput struct {
 	ClearWorkflowDefinitionCreators            bool
 	AddWorkflowDefinitionCreatorIDs            []string `json:"add_workflow_definition_creator_ids,omitempty"`
 	RemoveWorkflowDefinitionCreatorIDs         []string `json:"remove_workflow_definition_creator_ids,omitempty"`
-	ClearCampaignsManager                      bool
-	AddCampaignsManagerIDs                     []string `json:"add_campaigns_manager_ids,omitempty"`
-	RemoveCampaignsManagerIDs                  []string `json:"remove_campaigns_manager_ids,omitempty"`
+	ClearCampaignManager                       bool
+	AddCampaignManagerIDs                      []string `json:"add_campaign_manager_ids,omitempty"`
+	RemoveCampaignManagerIDs                   []string `json:"remove_campaign_manager_ids,omitempty"`
 	ClearComplianceManager                     bool
 	AddComplianceManagerIDs                    []string `json:"add_compliance_manager_ids,omitempty"`
 	RemoveComplianceManagerIDs                 []string `json:"remove_compliance_manager_ids,omitempty"`
 	ClearGroupManager                          bool
 	AddGroupManagerIDs                         []string `json:"add_group_manager_ids,omitempty"`
 	RemoveGroupManagerIDs                      []string `json:"remove_group_manager_ids,omitempty"`
-	ClearPoliciesManager                       bool
-	AddPoliciesManagerIDs                      []string `json:"add_policies_manager_ids,omitempty"`
-	RemovePoliciesManagerIDs                   []string `json:"remove_policies_manager_ids,omitempty"`
+	ClearIntegrationManager                    bool
+	AddIntegrationManagerIDs                   []string `json:"add_integration_manager_ids,omitempty"`
+	RemoveIntegrationManagerIDs                []string `json:"remove_integration_manager_ids,omitempty"`
+	ClearPolicyManager                         bool
+	AddPolicyManagerIDs                        []string `json:"add_policy_manager_ids,omitempty"`
+	RemovePolicyManagerIDs                     []string `json:"remove_policy_manager_ids,omitempty"`
 	ClearRegistryManager                       bool
 	AddRegistryManagerIDs                      []string `json:"add_registry_manager_ids,omitempty"`
 	RemoveRegistryManagerIDs                   []string `json:"remove_registry_manager_ids,omitempty"`
@@ -17015,9 +17062,9 @@ type UpdateOrganizationInput struct {
 	ClearTrustCenterManager                    bool
 	AddTrustCenterManagerIDs                   []string `json:"add_trust_center_manager_ids,omitempty"`
 	RemoveTrustCenterManagerIDs                []string `json:"remove_trust_center_manager_ids,omitempty"`
-	ClearWorkflowsManager                      bool
-	AddWorkflowsManagerIDs                     []string `json:"add_workflows_manager_ids,omitempty"`
-	RemoveWorkflowsManagerIDs                  []string `json:"remove_workflows_manager_ids,omitempty"`
+	ClearWorkflowManager                       bool
+	AddWorkflowManagerIDs                      []string `json:"add_workflow_manager_ids,omitempty"`
+	RemoveWorkflowManagerIDs                   []string `json:"remove_workflow_manager_ids,omitempty"`
 	ClearSetting                               bool
 	SettingID                                  *string `json:"setting_id,omitempty"`
 	ClearPersonalAccessTokens                  bool
@@ -17697,14 +17744,14 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveWorkflowDefinitionCreatorIDs; len(v) > 0 {
 		m.RemoveWorkflowDefinitionCreatorIDs(v...)
 	}
-	if i.ClearCampaignsManager {
-		m.ClearCampaignsManager()
+	if i.ClearCampaignManager {
+		m.ClearCampaignManager()
 	}
-	if v := i.AddCampaignsManagerIDs; len(v) > 0 {
-		m.AddCampaignsManagerIDs(v...)
+	if v := i.AddCampaignManagerIDs; len(v) > 0 {
+		m.AddCampaignManagerIDs(v...)
 	}
-	if v := i.RemoveCampaignsManagerIDs; len(v) > 0 {
-		m.RemoveCampaignsManagerIDs(v...)
+	if v := i.RemoveCampaignManagerIDs; len(v) > 0 {
+		m.RemoveCampaignManagerIDs(v...)
 	}
 	if i.ClearComplianceManager {
 		m.ClearComplianceManager()
@@ -17724,14 +17771,23 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveGroupManagerIDs; len(v) > 0 {
 		m.RemoveGroupManagerIDs(v...)
 	}
-	if i.ClearPoliciesManager {
-		m.ClearPoliciesManager()
+	if i.ClearIntegrationManager {
+		m.ClearIntegrationManager()
 	}
-	if v := i.AddPoliciesManagerIDs; len(v) > 0 {
-		m.AddPoliciesManagerIDs(v...)
+	if v := i.AddIntegrationManagerIDs; len(v) > 0 {
+		m.AddIntegrationManagerIDs(v...)
 	}
-	if v := i.RemovePoliciesManagerIDs; len(v) > 0 {
-		m.RemovePoliciesManagerIDs(v...)
+	if v := i.RemoveIntegrationManagerIDs; len(v) > 0 {
+		m.RemoveIntegrationManagerIDs(v...)
+	}
+	if i.ClearPolicyManager {
+		m.ClearPolicyManager()
+	}
+	if v := i.AddPolicyManagerIDs; len(v) > 0 {
+		m.AddPolicyManagerIDs(v...)
+	}
+	if v := i.RemovePolicyManagerIDs; len(v) > 0 {
+		m.RemovePolicyManagerIDs(v...)
 	}
 	if i.ClearRegistryManager {
 		m.ClearRegistryManager()
@@ -17760,14 +17816,14 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveTrustCenterManagerIDs; len(v) > 0 {
 		m.RemoveTrustCenterManagerIDs(v...)
 	}
-	if i.ClearWorkflowsManager {
-		m.ClearWorkflowsManager()
+	if i.ClearWorkflowManager {
+		m.ClearWorkflowManager()
 	}
-	if v := i.AddWorkflowsManagerIDs; len(v) > 0 {
-		m.AddWorkflowsManagerIDs(v...)
+	if v := i.AddWorkflowManagerIDs; len(v) > 0 {
+		m.AddWorkflowManagerIDs(v...)
 	}
-	if v := i.RemoveWorkflowsManagerIDs; len(v) > 0 {
-		m.RemoveWorkflowsManagerIDs(v...)
+	if v := i.RemoveWorkflowManagerIDs; len(v) > 0 {
+		m.RemoveWorkflowManagerIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()
@@ -22593,6 +22649,7 @@ type CreateRiskInput struct {
 	TaskIDs                     []string              `json:"task_ids,omitempty"`
 	AssetIDs                    []string              `json:"asset_ids,omitempty"`
 	EntityIDs                   []string              `json:"entity_ids,omitempty"`
+	LegacyEntityIDs             []string              `json:"legacy_entity_ids,omitempty"`
 	ScanIDs                     []string              `json:"scan_ids,omitempty"`
 	StakeholderID               *string               `json:"stakeholder_id,omitempty"`
 	DelegateID                  *string               `json:"delegate_id,omitempty"`
@@ -22773,6 +22830,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
+	if v := i.LegacyEntityIDs; len(v) > 0 {
+		m.AddLegacyEntityIDs(v...)
+	}
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
@@ -22940,6 +23000,9 @@ type UpdateRiskInput struct {
 	ClearEntities                  bool
 	AddEntityIDs                   []string `json:"add_entity_ids,omitempty"`
 	RemoveEntityIDs                []string `json:"remove_entity_ids,omitempty"`
+	ClearLegacyEntities            bool
+	AddLegacyEntityIDs             []string `json:"add_legacy_entity_ids,omitempty"`
+	RemoveLegacyEntityIDs          []string `json:"remove_legacy_entity_ids,omitempty"`
 	ClearScans                     bool
 	AddScanIDs                     []string `json:"add_scan_ids,omitempty"`
 	RemoveScanIDs                  []string `json:"remove_scan_ids,omitempty"`
@@ -23352,6 +23415,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearLegacyEntities {
+		m.ClearLegacyEntities()
+	}
+	if v := i.AddLegacyEntityIDs; len(v) > 0 {
+		m.AddLegacyEntityIDs(v...)
+	}
+	if v := i.RemoveLegacyEntityIDs; len(v) > 0 {
+		m.RemoveLegacyEntityIDs(v...)
 	}
 	if i.ClearScans {
 		m.ClearScans()
@@ -24521,6 +24593,7 @@ type CreateSubcontrolInput struct {
 	InternalNotes              *string                            `json:"internal_notes,omitempty"`
 	SystemInternalID           *string                            `json:"system_internal_id,omitempty"`
 	SubcontrolKindName         *string                            `json:"subcontrol_kind_name,omitempty"`
+	ControlOriginName          *string                            `json:"control_origin_name,omitempty"`
 	WorkflowEligibleMarker     *bool                              `json:"workflow_eligible_marker,omitempty"`
 	RefCode                    string                             `json:"ref_code,omitempty"`
 	IntegrationRunIDs          []string                           `json:"integration_run_ids,omitempty"`
@@ -24542,6 +24615,7 @@ type CreateSubcontrolInput struct {
 	ScanIDs                    []string                           `json:"scan_ids,omitempty"`
 	OwnerID                    *string                            `json:"owner_id,omitempty"`
 	SubcontrolKindID           *string                            `json:"subcontrol_kind_id,omitempty"`
+	ControlOriginID            *string                            `json:"control_origin_id,omitempty"`
 	ControlID                  string                             `json:"control_id,omitempty"`
 	ControlImplementationIDs   []string                           `json:"control_implementation_ids,omitempty"`
 	WorkflowObjectRefIDs       []string                           `json:"workflow_object_ref_ids,omitempty"`
@@ -24650,6 +24724,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.SubcontrolKindName; v != nil {
 		m.SetSubcontrolKindName(*v)
 	}
+	if v := i.ControlOriginName; v != nil {
+		m.SetControlOriginName(*v)
+	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
 	}
@@ -24710,6 +24787,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.SubcontrolKindID; v != nil {
 		m.SetSubcontrolKindID(*v)
+	}
+	if v := i.ControlOriginID; v != nil {
+		m.SetControlOriginID(*v)
 	}
 	m.SetControlID(i.ControlID)
 	if v := i.ControlImplementationIDs; len(v) > 0 {
@@ -24817,6 +24897,8 @@ type UpdateSubcontrolInput struct {
 	SystemInternalID                *string `json:"system_internal_id,omitempty"`
 	ClearSubcontrolKindName         bool
 	SubcontrolKindName              *string `json:"subcontrol_kind_name,omitempty"`
+	ClearControlOriginName          bool
+	ControlOriginName               *string `json:"control_origin_name,omitempty"`
 	ClearWorkflowEligibleMarker     bool
 	WorkflowEligibleMarker          *bool   `json:"workflow_eligible_marker,omitempty"`
 	RefCode                         *string `json:"ref_code,omitempty"`
@@ -24870,6 +24952,8 @@ type UpdateSubcontrolInput struct {
 	RemoveScanIDs                   []string `json:"remove_scan_ids,omitempty"`
 	ClearSubcontrolKind             bool
 	SubcontrolKindID                *string `json:"subcontrol_kind_id,omitempty"`
+	ClearControlOrigin              bool
+	ControlOriginID                 *string `json:"control_origin_id,omitempty"`
 	ControlID                       *string `json:"control_id,omitempty"`
 	ClearControlImplementations     bool
 	AddControlImplementationIDs     []string `json:"add_control_implementation_ids,omitempty"`
@@ -25118,6 +25202,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.SubcontrolKindName; v != nil {
 		m.SetSubcontrolKindName(*v)
 	}
+	if i.ClearControlOriginName {
+		m.ClearControlOriginName()
+	}
+	if v := i.ControlOriginName; v != nil {
+		m.SetControlOriginName(*v)
+	}
 	if i.ClearWorkflowEligibleMarker {
 		m.ClearWorkflowEligibleMarker()
 	}
@@ -25276,6 +25366,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.SubcontrolKindID; v != nil {
 		m.SetSubcontrolKindID(*v)
+	}
+	if i.ClearControlOrigin {
+		m.ClearControlOrigin()
+	}
+	if v := i.ControlOriginID; v != nil {
+		m.SetControlOriginID(*v)
 	}
 	if v := i.ControlID; v != nil {
 		m.SetControlID(*v)

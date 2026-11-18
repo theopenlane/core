@@ -72,7 +72,7 @@ func main() {
 		fgaType := strcase.SnakeCase(si.Name)
 
 		canViewRelations := []string{}
-		if !si.OnlyAllowCreate {
+		if !si.OnlyAllowCreate && !si.ViewOnly {
 			canViewRelations = append(canViewRelations, getCrudRelation(canEditPrefix, fgaType))
 		}
 
@@ -114,6 +114,16 @@ func main() {
 		slices.Sort(creatorRelations)
 
 		buf.WriteString(getEntry(canViewPrefix, si, canViewRelations...))
+
+		if si.ViewOnly {
+			if i < len(schemas)-1 {
+				buf.WriteString("\n")
+			}
+
+			count++
+
+			continue
+		}
 
 		if !si.OnlyAllowCreate {
 			buf.WriteString(getEntry(canEditPrefix, si, canEditRelations...))

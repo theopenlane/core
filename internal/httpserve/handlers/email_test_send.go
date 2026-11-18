@@ -19,9 +19,9 @@ type EmailTestSendRequest struct {
 	To string `json:"to" jsonschema:"required,description=Recipient email address"`
 	// Name filters to a single dispatcher; empty sends all registered dispatchers
 	Name string `json:"name,omitempty" jsonschema:"description=Dispatcher name to send (empty sends all)"`
-	// Branding selects the trust center branding variant for trust-center emails: "default" renders the
-	// Openlane fallback (no configured branding); any other value renders the configured trust center branding
-	Branding string `json:"branding,omitempty" jsonschema:"description=Trust center branding variant: default or trustcenter"`
+	// Branding selects the branding variant for brandable emails: "default" renders the Openlane fallback
+	// and any other value renders the configured branding
+	Branding string `json:"branding,omitempty" jsonschema:"description=Branding variant: default or branded"`
 }
 
 // EmailTestSendResult is the per-dispatcher outcome in the response

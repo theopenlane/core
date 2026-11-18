@@ -114,13 +114,49 @@ func TestQuerySubprocessorByID(t *testing.T) {
 
 func TestQuerySubprocessors(t *testing.T) {
 	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+	})
+
 	testUser := localTestOrg.Owner
 	viewUser := localTestOrg.Member
 
 	subprocessor1 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
 	(&th.SubprocessorBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
 	subprocessor3 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
-	subprocessor4 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor3.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	})
+
+	logoFile := th.UploadFile(t, th.LogoFilePath)
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*logoFile})
+
+	subprocessor4Resp, err := suite.Client.API.CreateSubprocessor(th.SharedSystemAdminUser.UserCtx, testclient.CreateSubprocessorInput{
+		Name: "system subprocessor" + ulids.New().String(),
+	}, logoFile, nil)
+	assert.NilError(t, err)
+
+	subprocessor4 := subprocessor4Resp.CreateSubprocessor.Subprocessor
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor4.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	})
+
+	trustCenter := (&th.TrustCenterBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
+
+	kind := (&th.CustomTypeEnumBuilder{
+		Client:     suite.Client,
+		ObjectType: "trust_center_subprocessor",
+	}).MustNew(testUser.UserCtx, t)
+
+	for _, id := range []string{subprocessor1.ID, subprocessor4.ID} {
+		_, err := suite.Client.API.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
+			SubprocessorID:                  id,
+			TrustCenterID:                   &trustCenter.ID,
+			TrustCenterSubprocessorKindName: &kind.Name,
+			Countries:                       []string{"US"},
+		})
+		assert.NilError(t, err)
+	}
 
 	nonExistentName := "nonexistent-subprocessor"
 
@@ -130,6 +166,7 @@ func TestQuerySubprocessors(t *testing.T) {
 		ctx             context.Context
 		expectedResults int64
 		where           *testclient.SubprocessorWhereInput
+		anonymous       bool
 	}{
 		{
 			name:            "return all",
@@ -161,10 +198,38 @@ func TestQuerySubprocessors(t *testing.T) {
 			},
 			expectedResults: 0,
 		},
+		{
+			name:            "anonymous trust center user only sees linked subprocessors",
+			client:          suite.Client.API,
+			ctx:             th.CreateAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID),
+			expectedResults: 2,
+			anonymous:       true,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
+			if tc.anonymous {
+				resp, err := tc.client.GetPublicSubprocessors(tc.ctx, tc.where)
+				assert.NilError(t, err)
+				assert.Assert(t, resp != nil)
+				assert.Check(t, is.Equal(tc.expectedResults, resp.Subprocessors.TotalCount))
+
+				ids := []string{}
+				for _, edge := range resp.Subprocessors.Edges {
+					ids = append(ids, edge.Node.ID)
+
+					if edge.Node.ID == subprocessor4.ID {
+						assert.Check(t, edge.Node.LogoFile != nil)
+					}
+				}
+
+				assert.Check(t, is.Contains(ids, subprocessor1.ID))
+				assert.Check(t, is.Contains(ids, subprocessor4.ID))
+
+				return
+			}
+
 			resp, err := tc.client.GetSubprocessors(tc.ctx, nil, nil, tc.where)
 
 			assert.NilError(t, err)
@@ -182,10 +247,6 @@ func TestQuerySubprocessors(t *testing.T) {
 			}
 		})
 	}
-
-	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor3.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
-	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor4.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
-	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
 }
 
 func TestMutationCreateSubprocessor(t *testing.T) {

@@ -11,6 +11,9 @@ import (
 	"strings"
 	"text/template"
 
+	"entgo.io/ent/entc/gen"
+	"github.com/theopenlane/entx"
+
 	"github.com/rs/zerolog/log"
 	"golang.org/x/tools/imports"
 
@@ -84,7 +87,7 @@ func ParseSchemaModules(schemaPath string) (map[string][]models.OrgModule, error
 
 // GenerateModulePerSchema walks through the schema files, parses them
 // and generates a static file containing the schema and it's associated modules
-func GenerateModulePerSchema(schemaPath, featureMapDir string) error {
+func GenerateModulePerSchema(schemaPath, featureMapDir string, graph *gen.Graph) error {
 	if err := os.MkdirAll(featureMapDir, defaultPerm); err != nil {
 		return fmt.Errorf("creating feature map directory: %w", err)
 	}
@@ -96,6 +99,9 @@ func GenerateModulePerSchema(schemaPath, featureMapDir string) error {
 
 	funcMap := template.FuncMap{
 		"quote": func(s string) string { return fmt.Sprintf("%q", s) },
+		"skipQueryCheckForModule": func(node *gen.Type) bool {
+			return entx.HasAnnotation[entx.SkipQueryCheckForModuleAnnotation](node)
+		},
 	}
 
 	tmpl, err := template.New("featuremap").Funcs(funcMap).Parse(featureMapTemplate)
@@ -107,8 +113,10 @@ func GenerateModulePerSchema(schemaPath, featureMapDir string) error {
 
 	data := struct {
 		Entries []ModuleEntry
+		Nodes   []*gen.Type
 	}{
 		Entries: entries,
+		Nodes:   graph.Nodes,
 	}
 
 	var buf bytes.Buffer
@@ -216,6 +224,14 @@ import "github.com/theopenlane/core/common/models"
 var FeatureOfType = map[string][]models.OrgModule{
 {{- range .Entries }}
 	{{ .SchemaName | quote }}: { {{- range $i, $module := .Modules }}{{if $i}}, {{end}}models.{{ $module }}{{- end }} },
+{{- end }}
+}
+
+var SkipQueryCheckForModule = map[string]bool{
+{{- range .Nodes }}
+{{- if skipQueryCheckForModule . }}
+	{{ .Name | quote }}: true,
+{{- end }}
 {{- end }}
 }
 `

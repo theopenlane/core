@@ -978,6 +978,9 @@ type ComplexityRoot struct {
 		ControlKindName            func(childComplexity int) int
 		ControlMappings            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
 		ControlObjectives          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlOrigin              func(childComplexity int) int
+		ControlOriginID            func(childComplexity int) int
+		ControlOriginName          func(childComplexity int) int
 		ControlOwner               func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
@@ -2096,6 +2099,7 @@ type ComplexityRoot struct {
 		RiskRating                            func(childComplexity int) int
 		RiskScore                             func(childComplexity int) int
 		RiskScoreCoverage                     func(childComplexity int) int
+		Risks                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		SSOEnforced                           func(childComplexity int) int
 		Scans                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Scope                                 func(childComplexity int) int
@@ -2877,19 +2881,6 @@ type ComplexityRoot struct {
 
 	GroupMembershipBulkCreatePayload struct {
 		GroupMemberships func(childComplexity int) int
-	}
-
-	GroupMembershipBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	GroupMembershipBulkUpdatePayload struct {
-		Error            func(childComplexity int) int
-		GroupMemberships func(childComplexity int) int
-		NotUpdatedIDs    func(childComplexity int) int
-		UpdatedIDs       func(childComplexity int) int
 	}
 
 	GroupMembershipConnection struct {
@@ -3862,7 +3853,6 @@ type ComplexityRoot struct {
 		DeleteBulkFinding                        func(childComplexity int, ids []string) int
 		DeleteBulkFindingControl                 func(childComplexity int, ids []string) int
 		DeleteBulkGroup                          func(childComplexity int, ids []string) int
-		DeleteBulkGroupMembership                func(childComplexity int, ids []string) int
 		DeleteBulkGroupSetting                   func(childComplexity int, ids []string) int
 		DeleteBulkHush                           func(childComplexity int, ids []string) int
 		DeleteBulkIdentityHolder                 func(childComplexity int, ids []string) int
@@ -3876,9 +3866,7 @@ type ComplexityRoot struct {
 		DeleteBulkOrganizationBrandingSetting    func(childComplexity int, ids []string) int
 		DeleteBulkProcedure                      func(childComplexity int, ids []string) int
 		DeleteBulkProgram                        func(childComplexity int, ids []string) int
-		DeleteBulkProgramMembership              func(childComplexity int, ids []string) int
 		DeleteBulkRemediation                    func(childComplexity int, ids []string) int
-		DeleteBulkReportMembership               func(childComplexity int, ids []string) int
 		DeleteBulkReview                         func(childComplexity int, ids []string) int
 		DeleteBulkRisk                           func(childComplexity int, ids []string) int
 		DeleteBulkSLADefinition                  func(childComplexity int, ids []string) int
@@ -4019,7 +4007,6 @@ type ComplexityRoot struct {
 		UpdateBulkCSVEvidence                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVFinding                     func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroup                       func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVGroupMembership             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroupSetting                func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVIdentityHolder              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInternalPolicy              func(childComplexity int, input graphql.Upload) int
@@ -4032,7 +4019,6 @@ type ComplexityRoot struct {
 		UpdateBulkCSVOrganizationBrandingSetting func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProcedure                   func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProgram                     func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVProgramMembership           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVRemediation                 func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVReview                      func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVRisk                        func(childComplexity int, input graphql.Upload) int
@@ -4064,7 +4050,6 @@ type ComplexityRoot struct {
 		UpdateBulkEvidence                       func(childComplexity int, ids []string, input generated.UpdateEvidenceInput) int
 		UpdateBulkFinding                        func(childComplexity int, ids []string, input generated.UpdateFindingInput) int
 		UpdateBulkGroup                          func(childComplexity int, ids []string, input generated.UpdateGroupInput) int
-		UpdateBulkGroupMembership                func(childComplexity int, ids []string, input generated.UpdateGroupMembershipInput) int
 		UpdateBulkGroupSetting                   func(childComplexity int, ids []string, input generated.UpdateGroupSettingInput) int
 		UpdateBulkHush                           func(childComplexity int, ids []string, input generated.UpdateHushInput) int
 		UpdateBulkIdentityHolder                 func(childComplexity int, ids []string, input generated.UpdateIdentityHolderInput) int
@@ -4078,9 +4063,7 @@ type ComplexityRoot struct {
 		UpdateBulkOrganizationBrandingSetting    func(childComplexity int, ids []string, input generated.UpdateOrganizationBrandingSettingInput) int
 		UpdateBulkProcedure                      func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
 		UpdateBulkProgram                        func(childComplexity int, ids []string, input generated.UpdateProgramInput) int
-		UpdateBulkProgramMembership              func(childComplexity int, ids []string, input generated.UpdateProgramMembershipInput) int
 		UpdateBulkRemediation                    func(childComplexity int, ids []string, input generated.UpdateRemediationInput) int
-		UpdateBulkReportMembership               func(childComplexity int, ids []string, input generated.UpdateReportMembershipInput) int
 		UpdateBulkReview                         func(childComplexity int, ids []string, input generated.UpdateReviewInput) int
 		UpdateBulkRisk                           func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
 		UpdateBulkSLADefinition                  func(childComplexity int, ids []string, input generated.UpdateSLADefinitionInput) int
@@ -4638,8 +4621,8 @@ type ComplexityRoot struct {
 		AvatarUpdatedAt                    func(childComplexity int) int
 		BrandingSetting                    func(childComplexity int) int
 		CampaignCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CampaignManager                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CampaignTargetCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CampaignsManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CheckResultCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Children                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		ComplianceManager                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -4674,6 +4657,7 @@ type ComplexityRoot struct {
 		HushCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                                 func(childComplexity int) int
 		IdentityHolderCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		IntegrationManager                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		InternalPolicyCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		InviteCreators                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Invites                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
@@ -4689,7 +4673,7 @@ type ComplexityRoot struct {
 		PersonalAccessTokens               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		PersonalOrg                        func(childComplexity int) int
 		PlatformCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		PoliciesManager                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		PolicyManager                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ProcedureCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ProgramCreators                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ProgramMembershipCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -4731,7 +4715,7 @@ type ComplexityRoot struct {
 		VendorScoringConfigCreators        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		VulnerabilityCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		WorkflowDefinitionCreators         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		WorkflowsManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		WorkflowManager                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	OrganizationBrandingSetting struct {
@@ -5339,19 +5323,6 @@ type ComplexityRoot struct {
 		ProgramMemberships func(childComplexity int) int
 	}
 
-	ProgramMembershipBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	ProgramMembershipBulkUpdatePayload struct {
-		Error              func(childComplexity int) int
-		NotUpdatedIDs      func(childComplexity int) int
-		ProgramMemberships func(childComplexity int) int
-		UpdatedIDs         func(childComplexity int) int
-	}
-
 	ProgramMembershipConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -5822,19 +5793,6 @@ type ComplexityRoot struct {
 		ReportMemberships func(childComplexity int) int
 	}
 
-	ReportMembershipBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	ReportMembershipBulkUpdatePayload struct {
-		Error             func(childComplexity int) int
-		NotUpdatedIDs     func(childComplexity int) int
-		ReportMemberships func(childComplexity int) int
-		UpdatedIDs        func(childComplexity int) int
-	}
-
 	ReportMembershipConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -6009,6 +5967,7 @@ type ComplexityRoot struct {
 		IntegrationRuns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		InternalPolicies            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		LastReviewedAt              func(childComplexity int) int
+		LegacyEntities              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Likelihood                  func(childComplexity int) int
 		ManagedBy                   func(childComplexity int) int
 		MitigatedAt                 func(childComplexity int) int
@@ -6414,6 +6373,9 @@ type ComplexityRoot struct {
 		ControlID                  func(childComplexity int) int
 		ControlImplementations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlOrigin              func(childComplexity int) int
+		ControlOriginID            func(childComplexity int) int
+		ControlOriginName          func(childComplexity int) int
 		ControlOwner               func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
@@ -12759,6 +12721,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
+	case "Control.controlOrigin":
+		if e.ComplexityRoot.Control.ControlOrigin == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ControlOrigin(childComplexity), true
+	case "Control.controlOriginID":
+		if e.ComplexityRoot.Control.ControlOriginID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ControlOriginID(childComplexity), true
+	case "Control.controlOriginName":
+		if e.ComplexityRoot.Control.ControlOriginName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ControlOriginName(childComplexity), true
 	case "Control.controlOwner":
 		if e.ComplexityRoot.Control.ControlOwner == nil {
 			break
@@ -17997,6 +17977,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.RiskScoreCoverage(childComplexity), true
+	case "Entity.risks":
+		if e.ComplexityRoot.Entity.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Entity.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 	case "Entity.ssoEnforced":
 		if e.ComplexityRoot.Entity.SSOEnforced == nil {
 			break
@@ -22018,50 +22009,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupMembershipBulkCreatePayload.GroupMemberships(childComplexity), true
-
-	case "GroupMembershipBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "GroupMembershipBulkDeletePayload.error":
-		if e.ComplexityRoot.GroupMembershipBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.Error(childComplexity), true
-	case "GroupMembershipBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "GroupMembershipBulkUpdatePayload.error":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.Error(childComplexity), true
-	case "GroupMembershipBulkUpdatePayload.groupMemberships":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.GroupMemberships == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.GroupMemberships(childComplexity), true
-	case "GroupMembershipBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "GroupMembershipBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "GroupMembershipConnection.edges":
 		if e.ComplexityRoot.GroupMembershipConnection.Edges == nil {
@@ -28345,17 +28292,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkGroup(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkGroupMembership":
-		if e.ComplexityRoot.Mutation.DeleteBulkGroupMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkGroupMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkGroupMembership(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkGroupSetting":
 		if e.ComplexityRoot.Mutation.DeleteBulkGroupSetting == nil {
 			break
@@ -28499,17 +28435,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkProgram(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkProgramMembership":
-		if e.ComplexityRoot.Mutation.DeleteBulkProgramMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkProgramMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkProgramMembership(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkRemediation":
 		if e.ComplexityRoot.Mutation.DeleteBulkRemediation == nil {
 			break
@@ -28521,17 +28446,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkRemediation(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkReportMembership":
-		if e.ComplexityRoot.Mutation.DeleteBulkReportMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkReportMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkReportMembership(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkReview":
 		if e.ComplexityRoot.Mutation.DeleteBulkReview == nil {
 			break
@@ -30067,17 +29981,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVGroup(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVGroupMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVGroupMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVGroupMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVGroupMembership(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVGroupSetting":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVGroupSetting == nil {
 			break
@@ -30210,17 +30113,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVProgram(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVProgramMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVProgramMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVProgramMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVProgramMembership(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVRemediation":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVRemediation == nil {
 			break
@@ -30562,17 +30454,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkGroup(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateGroupInput)), true
-	case "Mutation.updateBulkGroupMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkGroupMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkGroupMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkGroupMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateGroupMembershipInput)), true
 	case "Mutation.updateBulkGroupSetting":
 		if e.ComplexityRoot.Mutation.UpdateBulkGroupSetting == nil {
 			break
@@ -30716,17 +30597,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkProgram(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateProgramInput)), true
-	case "Mutation.updateBulkProgramMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkProgramMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkProgramMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkProgramMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateProgramMembershipInput)), true
 	case "Mutation.updateBulkRemediation":
 		if e.ComplexityRoot.Mutation.UpdateBulkRemediation == nil {
 			break
@@ -30738,17 +30608,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkRemediation(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateRemediationInput)), true
-	case "Mutation.updateBulkReportMembership":
-		if e.ComplexityRoot.Mutation.UpdateBulkReportMembership == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkReportMembership_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkReportMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateReportMembershipInput)), true
 	case "Mutation.updateBulkReview":
 		if e.ComplexityRoot.Mutation.UpdateBulkReview == nil {
 			break
@@ -33864,6 +33723,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.CampaignCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.campaignManager":
+		if e.ComplexityRoot.Organization.CampaignManager == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_campaignManager_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.CampaignManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.campaignTargetCreators":
 		if e.ComplexityRoot.Organization.CampaignTargetCreators == nil {
 			break
@@ -33875,17 +33745,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.CampaignTargetCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.campaignsManager":
-		if e.ComplexityRoot.Organization.CampaignsManager == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_campaignsManager_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.CampaignsManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.checkResultCreators":
 		if e.ComplexityRoot.Organization.CheckResultCreators == nil {
 			break
@@ -34235,6 +34094,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.IdentityHolderCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.integrationManager":
+		if e.ComplexityRoot.Organization.IntegrationManager == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_integrationManager_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.IntegrationManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.internalPolicyCreators":
 		if e.ComplexityRoot.Organization.InternalPolicyCreators == nil {
 			break
@@ -34380,17 +34250,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.PlatformCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.policiesManager":
-		if e.ComplexityRoot.Organization.PoliciesManager == nil {
+	case "Organization.policyManager":
+		if e.ComplexityRoot.Organization.PolicyManager == nil {
 			break
 		}
 
-		args, err := ec.field_Organization_policiesManager_args(ctx, rawArgs)
+		args, err := ec.field_Organization_policyManager_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Organization.PoliciesManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+		return e.ComplexityRoot.Organization.PolicyManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.procedureCreators":
 		if e.ComplexityRoot.Organization.ProcedureCreators == nil {
 			break
@@ -34807,17 +34677,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.WorkflowDefinitionCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.workflowsManager":
-		if e.ComplexityRoot.Organization.WorkflowsManager == nil {
+	case "Organization.workflowManager":
+		if e.ComplexityRoot.Organization.WorkflowManager == nil {
 			break
 		}
 
-		args, err := ec.field_Organization_workflowsManager_args(ctx, rawArgs)
+		args, err := ec.field_Organization_workflowManager_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Organization.WorkflowsManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+		return e.ComplexityRoot.Organization.WorkflowManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "OrganizationBrandingSetting.backgroundColor":
 		if e.ComplexityRoot.OrganizationBrandingSetting.BackgroundColor == nil {
@@ -37829,50 +37699,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramMembershipBulkCreatePayload.ProgramMemberships(childComplexity), true
-
-	case "ProgramMembershipBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "ProgramMembershipBulkDeletePayload.error":
-		if e.ComplexityRoot.ProgramMembershipBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.Error(childComplexity), true
-	case "ProgramMembershipBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "ProgramMembershipBulkUpdatePayload.error":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.Error(childComplexity), true
-	case "ProgramMembershipBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "ProgramMembershipBulkUpdatePayload.programMemberships":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.ProgramMemberships == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.ProgramMemberships(childComplexity), true
-	case "ProgramMembershipBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "ProgramMembershipConnection.edges":
 		if e.ComplexityRoot.ProgramMembershipConnection.Edges == nil {
@@ -41551,50 +41377,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ReportMembershipBulkCreatePayload.ReportMemberships(childComplexity), true
 
-	case "ReportMembershipBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "ReportMembershipBulkDeletePayload.error":
-		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.Error(childComplexity), true
-	case "ReportMembershipBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "ReportMembershipBulkUpdatePayload.error":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.Error(childComplexity), true
-	case "ReportMembershipBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "ReportMembershipBulkUpdatePayload.reportMemberships":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.ReportMemberships == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.ReportMemberships(childComplexity), true
-	case "ReportMembershipBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
-
 	case "ReportMembershipConnection.edges":
 		if e.ComplexityRoot.ReportMembershipConnection.Edges == nil {
 			break
@@ -42523,6 +42305,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.LastReviewedAt(childComplexity), true
+	case "Risk.legacyEntities":
+		if e.ComplexityRoot.Risk.LegacyEntities == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_legacyEntities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Risk.LegacyEntities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Risk.likelihood":
 		if e.ComplexityRoot.Risk.Likelihood == nil {
 			break
@@ -44497,6 +44290,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Subcontrol.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
+	case "Subcontrol.controlOrigin":
+		if e.ComplexityRoot.Subcontrol.ControlOrigin == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.ControlOrigin(childComplexity), true
+	case "Subcontrol.controlOriginID":
+		if e.ComplexityRoot.Subcontrol.ControlOriginID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.ControlOriginID(childComplexity), true
+	case "Subcontrol.controlOriginName":
+		if e.ComplexityRoot.Subcontrol.ControlOriginName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.ControlOriginName(childComplexity), true
 	case "Subcontrol.controlOwner":
 		if e.ComplexityRoot.Subcontrol.ControlOwner == nil {
 			break
@@ -67368,7 +67179,7 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -67457,6 +67268,14 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
   the kind of the control
   """
   controlKindID: ID
+  """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  """
+  the control_origin of the control
+  """
+  controlOriginID: ID
   """
   the environment of the control
   """
@@ -68003,6 +67822,7 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
     where: GroupWhereInput
   ): GroupConnection!
   controlKind: CustomTypeEnum
+  controlOrigin: CustomTypeEnum
   environment: CustomTypeEnum
   scope: CustomTypeEnum
   standard: Standard
@@ -70707,6 +70527,34 @@ input ControlWhereInput {
   controlKindIDEqualFold: ID
   controlKindIDContainsFold: ID
   """
+  control_origin_name field predicates
+  """
+  controlOriginName: String
+  controlOriginNameNEQ: String
+  controlOriginNameIn: [String!]
+  controlOriginNameNotIn: [String!]
+  controlOriginNameContains: String
+  controlOriginNameHasPrefix: String
+  controlOriginNameHasSuffix: String
+  controlOriginNameIsNil: Boolean
+  controlOriginNameNotNil: Boolean
+  controlOriginNameEqualFold: String
+  controlOriginNameContainsFold: String
+  """
+  control_origin_id field predicates
+  """
+  controlOriginID: ID
+  controlOriginIDNEQ: ID
+  controlOriginIDIn: [ID!]
+  controlOriginIDNotIn: [ID!]
+  controlOriginIDContains: ID
+  controlOriginIDHasPrefix: ID
+  controlOriginIDHasSuffix: ID
+  controlOriginIDIsNil: Boolean
+  controlOriginIDNotNil: Boolean
+  controlOriginIDEqualFold: ID
+  controlOriginIDContainsFold: ID
+  """
   environment_name field predicates
   """
   environmentName: String
@@ -70916,6 +70764,11 @@ input ControlWhereInput {
   """
   hasControlKind: Boolean
   hasControlKindWith: [CustomTypeEnumWhereInput!]
+  """
+  control_origin edge predicates
+  """
+  hasControlOrigin: Boolean
+  hasControlOriginWith: [CustomTypeEnumWhereInput!]
   """
   environment edge predicates
   """
@@ -71973,6 +71826,10 @@ input CreateControlInput {
   """
   controlKindName: String
   """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  """
   the environment of the control
   """
   environmentName: String
@@ -72013,6 +71870,7 @@ input CreateControlInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   controlKindID: ID
+  controlOriginID: ID
   environmentID: ID
   scopeID: ID
   standardID: ID
@@ -72873,6 +72731,7 @@ input CreateEntityInput {
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   findingIDs: [ID!]
+  riskIDs: [ID!]
   vulnerabilityIDs: [ID!]
   reviewIDs: [ID!]
   remediationIDs: [ID!]
@@ -74500,14 +74359,15 @@ input CreateOrganizationInput {
   vendorScoringConfigCreatorIDs: [ID!]
   vulnerabilityCreatorIDs: [ID!]
   workflowDefinitionCreatorIDs: [ID!]
-  campaignsManagerIDs: [ID!]
+  campaignManagerIDs: [ID!]
   complianceManagerIDs: [ID!]
   groupManagerIDs: [ID!]
-  policiesManagerIDs: [ID!]
+  integrationManagerIDs: [ID!]
+  policyManagerIDs: [ID!]
   registryManagerIDs: [ID!]
   riskManagerIDs: [ID!]
   trustCenterManagerIDs: [ID!]
-  workflowsManagerIDs: [ID!]
+  workflowManagerIDs: [ID!]
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
@@ -75544,6 +75404,7 @@ input CreateRiskInput {
   taskIDs: [ID!]
   assetIDs: [ID!]
   entityIDs: [ID!]
+  legacyEntityIDs: [ID!]
   scanIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
@@ -75887,6 +75748,10 @@ input CreateSubcontrolInput {
   """
   subcontrolKindName: String
   """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -75913,6 +75778,7 @@ input CreateSubcontrolInput {
   scanIDs: [ID!]
   ownerID: ID
   subcontrolKindID: ID
+  controlOriginID: ID
   controlID: ID!
   controlImplementationIDs: [ID!]
   workflowObjectRefIDs: [ID!]
@@ -83664,6 +83530,37 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
     """
     where: FindingWhereInput
   ): FindingConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
   vulnerabilities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -85299,6 +85196,11 @@ input EntityWhereInput {
   """
   hasFindings: Boolean
   hasFindingsWith: [FindingWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
   """
   vulnerabilities edge predicates
   """
@@ -87259,6 +87161,7 @@ ExportExportFormat is enum for the field format
 enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/common/enums.ExportFormat") {
   CSV
   MARKDOWN
+  HTML
   DOCX
   PDF
 }
@@ -105908,7 +105811,7 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  campaignsManager(
+  campaignManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -106001,7 +105904,38 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  policiesManager(
+  integrationManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  policyManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -106125,7 +106059,7 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  workflowsManager(
+  workflowManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -107797,10 +107731,10 @@ input OrganizationWhereInput {
   hasWorkflowDefinitionCreators: Boolean
   hasWorkflowDefinitionCreatorsWith: [GroupWhereInput!]
   """
-  campaigns_manager edge predicates
+  campaign_manager edge predicates
   """
-  hasCampaignsManager: Boolean
-  hasCampaignsManagerWith: [GroupWhereInput!]
+  hasCampaignManager: Boolean
+  hasCampaignManagerWith: [GroupWhereInput!]
   """
   compliance_manager edge predicates
   """
@@ -107812,10 +107746,15 @@ input OrganizationWhereInput {
   hasGroupManager: Boolean
   hasGroupManagerWith: [GroupWhereInput!]
   """
-  policies_manager edge predicates
+  integration_manager edge predicates
   """
-  hasPoliciesManager: Boolean
-  hasPoliciesManagerWith: [GroupWhereInput!]
+  hasIntegrationManager: Boolean
+  hasIntegrationManagerWith: [GroupWhereInput!]
+  """
+  policy_manager edge predicates
+  """
+  hasPolicyManager: Boolean
+  hasPolicyManagerWith: [GroupWhereInput!]
   """
   registry_manager edge predicates
   """
@@ -107832,10 +107771,10 @@ input OrganizationWhereInput {
   hasTrustCenterManager: Boolean
   hasTrustCenterManagerWith: [GroupWhereInput!]
   """
-  workflows_manager edge predicates
+  workflow_manager edge predicates
   """
-  hasWorkflowsManager: Boolean
-  hasWorkflowsManagerWith: [GroupWhereInput!]
+  hasWorkflowManager: Boolean
+  hasWorkflowManagerWith: [GroupWhereInput!]
   """
   parent edge predicates
   """
@@ -120631,6 +120570,37 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
     """
     where: EntityWhereInput
   ): EntityConnection!
+  legacyEntities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection! @deprecated(reason: "use entities instead")
   scans(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -121802,6 +121772,11 @@ input RiskWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  legacy_entities edge predicates
+  """
+  hasLegacyEntities: Boolean
+  hasLegacyEntitiesWith: [EntityWhereInput!]
   """
   scans edge predicates
   """
@@ -124224,7 +124199,7 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   """
   name of the source of the controls if not directly from a standard
   """
-  sourceName: String
+  sourceName: String @deprecated(reason: "use control_origin_name instead")
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -124313,6 +124288,14 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   the kind of the subcontrol
   """
   subcontrolKindID: ID
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  """
+  the control_origin of the subcontrol
+  """
+  controlOriginID: ID
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -124773,6 +124756,7 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   ): ScanConnection!
   owner: Organization
   subcontrolKind: CustomTypeEnum
+  controlOrigin: CustomTypeEnum
   control: Control!
   controlImplementations(
     """
@@ -125603,6 +125587,34 @@ input SubcontrolWhereInput {
   subcontrolKindIDEqualFold: ID
   subcontrolKindIDContainsFold: ID
   """
+  control_origin_name field predicates
+  """
+  controlOriginName: String
+  controlOriginNameNEQ: String
+  controlOriginNameIn: [String!]
+  controlOriginNameNotIn: [String!]
+  controlOriginNameContains: String
+  controlOriginNameHasPrefix: String
+  controlOriginNameHasSuffix: String
+  controlOriginNameIsNil: Boolean
+  controlOriginNameNotNil: Boolean
+  controlOriginNameEqualFold: String
+  controlOriginNameContainsFold: String
+  """
+  control_origin_id field predicates
+  """
+  controlOriginID: ID
+  controlOriginIDNEQ: ID
+  controlOriginIDIn: [ID!]
+  controlOriginIDNotIn: [ID!]
+  controlOriginIDContains: ID
+  controlOriginIDHasPrefix: ID
+  controlOriginIDHasSuffix: ID
+  controlOriginIDIsNil: Boolean
+  controlOriginIDNotNil: Boolean
+  controlOriginIDEqualFold: ID
+  controlOriginIDContainsFold: ID
+  """
   workflow_eligible_marker field predicates
   """
   workflowEligibleMarker: Boolean
@@ -125728,6 +125740,11 @@ input SubcontrolWhereInput {
   """
   hasSubcontrolKind: Boolean
   hasSubcontrolKindWith: [CustomTypeEnumWhereInput!]
+  """
+  control_origin edge predicates
+  """
+  hasControlOrigin: Boolean
+  hasControlOriginWith: [CustomTypeEnumWhereInput!]
   """
   control edge predicates
   """
@@ -135395,6 +135412,11 @@ input UpdateControlInput {
   controlKindName: String
   clearControlKindName: Boolean
   """
+  the control_origin of the control
+  """
+  controlOriginName: String
+  clearControlOriginName: Boolean
+  """
   the environment of the control
   """
   environmentName: String
@@ -135474,6 +135496,8 @@ input UpdateControlInput {
   clearEditors: Boolean
   controlKindID: ID
   clearControlKind: Boolean
+  controlOriginID: ID
+  clearControlOrigin: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -136621,6 +136645,9 @@ input UpdateEntityInput {
   addFindingIDs: [ID!]
   removeFindingIDs: [ID!]
   clearFindings: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
   addVulnerabilityIDs: [ID!]
   removeVulnerabilityIDs: [ID!]
   clearVulnerabilities: Boolean
@@ -138968,18 +138995,21 @@ input UpdateOrganizationInput {
   addWorkflowDefinitionCreatorIDs: [ID!]
   removeWorkflowDefinitionCreatorIDs: [ID!]
   clearWorkflowDefinitionCreators: Boolean
-  addCampaignsManagerIDs: [ID!]
-  removeCampaignsManagerIDs: [ID!]
-  clearCampaignsManager: Boolean
+  addCampaignManagerIDs: [ID!]
+  removeCampaignManagerIDs: [ID!]
+  clearCampaignManager: Boolean
   addComplianceManagerIDs: [ID!]
   removeComplianceManagerIDs: [ID!]
   clearComplianceManager: Boolean
   addGroupManagerIDs: [ID!]
   removeGroupManagerIDs: [ID!]
   clearGroupManager: Boolean
-  addPoliciesManagerIDs: [ID!]
-  removePoliciesManagerIDs: [ID!]
-  clearPoliciesManager: Boolean
+  addIntegrationManagerIDs: [ID!]
+  removeIntegrationManagerIDs: [ID!]
+  clearIntegrationManager: Boolean
+  addPolicyManagerIDs: [ID!]
+  removePolicyManagerIDs: [ID!]
+  clearPolicyManager: Boolean
   addRegistryManagerIDs: [ID!]
   removeRegistryManagerIDs: [ID!]
   clearRegistryManager: Boolean
@@ -138989,9 +139019,9 @@ input UpdateOrganizationInput {
   addTrustCenterManagerIDs: [ID!]
   removeTrustCenterManagerIDs: [ID!]
   clearTrustCenterManager: Boolean
-  addWorkflowsManagerIDs: [ID!]
-  removeWorkflowsManagerIDs: [ID!]
-  clearWorkflowsManager: Boolean
+  addWorkflowManagerIDs: [ID!]
+  removeWorkflowManagerIDs: [ID!]
+  clearWorkflowManager: Boolean
   settingID: ID
   clearSetting: Boolean
   addPersonalAccessTokenIDs: [ID!]
@@ -140532,6 +140562,9 @@ input UpdateRiskInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
+  addLegacyEntityIDs: [ID!]
+  removeLegacyEntityIDs: [ID!]
+  clearLegacyEntities: Boolean
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
@@ -141023,6 +141056,11 @@ input UpdateSubcontrolInput {
   subcontrolKindName: String
   clearSubcontrolKindName: Boolean
   """
+  the control_origin of the subcontrol
+  """
+  controlOriginName: String
+  clearControlOriginName: Boolean
+  """
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
@@ -141081,6 +141119,8 @@ input UpdateSubcontrolInput {
   clearScans: Boolean
   subcontrolKindID: ID
   clearSubcontrolKind: Boolean
+  controlOriginID: ID
+  clearControlOrigin: Boolean
   controlID: ID
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
@@ -152646,37 +152686,6 @@ extend type Mutation{
         """
         id: ID!
     ): GroupMembershipDeletePayload!
-    """
-    Delete multiple groupMemberships
-    """
-    deleteBulkGroupMembership(
-        """
-        IDs of the groupMemberships to delete
-        """
-        ids: [ID!]!
-    ): GroupMembershipBulkDeletePayload!
-    """
-    Update multiple existing groupMemberships
-    """
-    updateBulkGroupMembership(
-        """
-        IDs of the groupMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the groupMemberships with
-        """
-        input: UpdateGroupMembershipInput!
-    ): GroupMembershipBulkUpdatePayload!
-    """
-    Update multiple existing groupMemberships via file upload
-    """
-    updateBulkCSVGroupMembership(
-        """
-        csv file containing values of the groupMembership, must include ID column
-        """
-        input: Upload!
-    ): GroupMembershipBulkUpdatePayload!
 }
 
 """
@@ -152719,45 +152728,6 @@ type GroupMembershipBulkCreatePayload {
     groupMemberships: [GroupMembership!]
 }
 
-"""
-Return response for deleteBulkGroupMembership mutation
-"""
-type GroupMembershipBulkDeletePayload {
-    """
-    Deleted groupMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkGroupMembership mutation
-"""
-type GroupMembershipBulkUpdatePayload {
-    """
-    Updated groupMemberships
-    """
-    groupMemberships: [GroupMembership!]
-    """
-    IDs of the updated groupMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
 `, BuiltIn: false},
 	{Name: "../schema/groupsetting.graphql", Input: `extend type Query {
     """
@@ -156362,37 +156332,6 @@ extend type Mutation{
         """
         id: ID!
     ): ProgramMembershipDeletePayload!
-    """
-    Delete multiple programMemberships
-    """
-    deleteBulkProgramMembership(
-        """
-        IDs of the programMemberships to delete
-        """
-        ids: [ID!]!
-    ): ProgramMembershipBulkDeletePayload!
-    """
-    Update multiple existing programMemberships
-    """
-    updateBulkProgramMembership(
-        """
-        IDs of the programMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the programMemberships with
-        """
-        input: UpdateProgramMembershipInput!
-    ): ProgramMembershipBulkUpdatePayload!
-    """
-    Update multiple existing programMemberships via file upload
-    """
-    updateBulkCSVProgramMembership(
-        """
-        csv file containing values of the programMembership, must include ID column
-        """
-        input: Upload!
-    ): ProgramMembershipBulkUpdatePayload!
 }
 
 """
@@ -156435,45 +156374,6 @@ type ProgramMembershipBulkCreatePayload {
     programMemberships: [ProgramMembership!]
 }
 
-"""
-Return response for deleteBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkDeletePayload {
-    """
-    Deleted programMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkProgramMembership mutation
-"""
-type ProgramMembershipBulkUpdatePayload {
-    """
-    Updated programMemberships
-    """
-    programMemberships: [ProgramMembership!]
-    """
-    IDs of the updated programMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
 `, BuiltIn: false},
 	{Name: "../schema/remediation.graphql", Input: `extend type Remediation {
     """
@@ -156794,19 +156694,6 @@ extend type Mutation{
         input: [CreateReportMembershipInput!]
     ): ReportMembershipBulkCreatePayload!
     """
-    Update multiple existing reportMemberships
-    """
-    updateBulkReportMembership(
-        """
-        IDs of the reportMemberships to update
-        """
-        ids: [ID!]!
-        """
-        values to update the reportMemberships with
-        """
-        input: UpdateReportMembershipInput!
-    ): ReportMembershipBulkUpdatePayload!
-    """
     Update an existing reportMembership
     """
     updateReportMembership(
@@ -156828,15 +156715,6 @@ extend type Mutation{
         """
         id: ID!
     ): ReportMembershipDeletePayload!
-    """
-    Delete multiple reportMemberships
-    """
-    deleteBulkReportMembership(
-        """
-        IDs of the reportMemberships to delete
-        """
-        ids: [ID!]!
-    ): ReportMembershipBulkDeletePayload!
 }
 
 """
@@ -156879,45 +156757,6 @@ type ReportMembershipBulkCreatePayload {
     reportMemberships: [ReportMembership!]
 }
 
-"""
-Return response for updateBulkReportMembership mutation
-"""
-type ReportMembershipBulkUpdatePayload {
-    """
-    Updated reportMemberships
-    """
-    reportMemberships: [ReportMembership!]
-    """
-    IDs of the updated reportMemberships
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for deleteBulkReportMembership mutation
-"""
-type ReportMembershipBulkDeletePayload {
-    """
-    Deleted reportMembership IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    Error returned when the bulk delete is only partially applied
-    """
-    error: String
-    """
-    IDs of reportMemberships that were not deleted
-    """
-    notDeletedIDs: [ID!]
-}
 `, BuiltIn: false},
 	{Name: "../schema/review.graphql", Input: `extend type Query {
     """
@@ -165108,6 +164947,10 @@ func (ec *executionContext) childFields_Control(ctx context.Context, field graph
 		return ec.fieldContext_Control_controlKindName(ctx, field)
 	case "controlKindID":
 		return ec.fieldContext_Control_controlKindID(ctx, field)
+	case "controlOriginName":
+		return ec.fieldContext_Control_controlOriginName(ctx, field)
+	case "controlOriginID":
+		return ec.fieldContext_Control_controlOriginID(ctx, field)
 	case "environmentName":
 		return ec.fieldContext_Control_environmentName(ctx, field)
 	case "environmentID":
@@ -165168,6 +165011,8 @@ func (ec *executionContext) childFields_Control(ctx context.Context, field graph
 		return ec.fieldContext_Control_editors(ctx, field)
 	case "controlKind":
 		return ec.fieldContext_Control_controlKind(ctx, field)
+	case "controlOrigin":
+		return ec.fieldContext_Control_controlOrigin(ctx, field)
 	case "environment":
 		return ec.fieldContext_Control_environment(ctx, field)
 	case "scope":
@@ -167306,6 +167151,8 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_subcontrols(ctx, field)
 	case "findings":
 		return ec.fieldContext_Entity_findings(ctx, field)
+	case "risks":
+		return ec.fieldContext_Entity_risks(ctx, field)
 	case "vulnerabilities":
 		return ec.fieldContext_Entity_vulnerabilities(ctx, field)
 	case "reviews":
@@ -168824,32 +168671,6 @@ func (ec *executionContext) childFields_GroupMembershipBulkCreatePayload(ctx con
 		return ec.fieldContext_GroupMembershipBulkCreatePayload_groupMemberships(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_GroupMembershipBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_GroupMembershipBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_GroupMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_GroupMembershipBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_GroupMembershipBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "groupMemberships":
-		return ec.fieldContext_GroupMembershipBulkUpdatePayload_groupMemberships(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_GroupMembershipBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_GroupMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_GroupMembershipBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipBulkUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_GroupMembershipConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -171306,22 +171127,24 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_vulnerabilityCreators(ctx, field)
 	case "workflowDefinitionCreators":
 		return ec.fieldContext_Organization_workflowDefinitionCreators(ctx, field)
-	case "campaignsManager":
-		return ec.fieldContext_Organization_campaignsManager(ctx, field)
+	case "campaignManager":
+		return ec.fieldContext_Organization_campaignManager(ctx, field)
 	case "complianceManager":
 		return ec.fieldContext_Organization_complianceManager(ctx, field)
 	case "groupManager":
 		return ec.fieldContext_Organization_groupManager(ctx, field)
-	case "policiesManager":
-		return ec.fieldContext_Organization_policiesManager(ctx, field)
+	case "integrationManager":
+		return ec.fieldContext_Organization_integrationManager(ctx, field)
+	case "policyManager":
+		return ec.fieldContext_Organization_policyManager(ctx, field)
 	case "registryManager":
 		return ec.fieldContext_Organization_registryManager(ctx, field)
 	case "riskManager":
 		return ec.fieldContext_Organization_riskManager(ctx, field)
 	case "trustCenterManager":
 		return ec.fieldContext_Organization_trustCenterManager(ctx, field)
-	case "workflowsManager":
-		return ec.fieldContext_Organization_workflowsManager(ctx, field)
+	case "workflowManager":
+		return ec.fieldContext_Organization_workflowManager(ctx, field)
 	case "parent":
 		return ec.fieldContext_Organization_parent(ctx, field)
 	case "children":
@@ -172544,32 +172367,6 @@ func (ec *executionContext) childFields_ProgramMembershipBulkCreatePayload(ctx c
 	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipBulkCreatePayload", field.Name)
 }
 
-func (ec *executionContext) childFields_ProgramMembershipBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_ProgramMembershipBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_ProgramMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ProgramMembershipBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ProgramMembershipBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "programMemberships":
-		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_programMemberships(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipBulkUpdatePayload", field.Name)
-}
-
 func (ec *executionContext) childFields_ProgramMembershipConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "edges":
@@ -172994,32 +172791,6 @@ func (ec *executionContext) childFields_ReportMembershipBulkCreatePayload(ctx co
 		return ec.fieldContext_ReportMembershipBulkCreatePayload_reportMemberships(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ReportMembershipBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_ReportMembershipBulkDeletePayload_deletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ReportMembershipBulkDeletePayload_error(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_ReportMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ReportMembershipBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "reportMemberships":
-		return ec.fieldContext_ReportMembershipBulkUpdatePayload_reportMemberships(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_ReportMembershipBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_ReportMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ReportMembershipBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipBulkUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_ReportMembershipConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -173452,6 +173223,8 @@ func (ec *executionContext) childFields_Risk(ctx context.Context, field graphql.
 		return ec.fieldContext_Risk_assets(ctx, field)
 	case "entities":
 		return ec.fieldContext_Risk_entities(ctx, field)
+	case "legacyEntities":
+		return ec.fieldContext_Risk_legacyEntities(ctx, field)
 	case "scans":
 		return ec.fieldContext_Risk_scans(ctx, field)
 	case "stakeholder":
@@ -174246,6 +174019,10 @@ func (ec *executionContext) childFields_Subcontrol(ctx context.Context, field gr
 		return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
 	case "subcontrolKindID":
 		return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
+	case "controlOriginName":
+		return ec.fieldContext_Subcontrol_controlOriginName(ctx, field)
+	case "controlOriginID":
+		return ec.fieldContext_Subcontrol_controlOriginID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_Subcontrol_workflowEligibleMarker(ctx, field)
 	case "refCode":
@@ -174290,6 +174067,8 @@ func (ec *executionContext) childFields_Subcontrol(ctx context.Context, field gr
 		return ec.fieldContext_Subcontrol_owner(ctx, field)
 	case "subcontrolKind":
 		return ec.fieldContext_Subcontrol_subcontrolKind(ctx, field)
+	case "controlOrigin":
+		return ec.fieldContext_Subcontrol_controlOrigin(ctx, field)
 	case "control":
 		return ec.fieldContext_Subcontrol_control(ctx, field)
 	case "controlImplementations":

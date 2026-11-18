@@ -624,14 +624,15 @@ var ForeignKeys = []string{
 	"organization_vendor_scoring_config_creators",
 	"organization_vulnerability_creators",
 	"organization_workflow_definition_creators",
-	"organization_campaigns_manager",
+	"organization_campaign_manager",
 	"organization_compliance_manager",
 	"organization_group_manager",
-	"organization_policies_manager",
+	"organization_integration_manager",
+	"organization_policy_manager",
 	"organization_registry_manager",
 	"organization_risk_manager",
 	"organization_trust_center_manager",
-	"organization_workflows_manager",
+	"organization_workflow_manager",
 	"sla_definition_blocked_groups",
 	"sla_definition_editors",
 	"trust_center_blocked_groups",
@@ -839,7 +840,7 @@ func ValidColumn(column string) bool {
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
 	Hooks        [12]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time

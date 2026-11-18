@@ -64,12 +64,7 @@ func (r *mutationResolver) CreateBulkCSVGroupSetting(ctx context.Context, input 
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateGroupSettingInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateGroupSetting(ctx, inputs)
+	return r.bulkCreateCSVGroupSetting(ctx, data)
 }
 
 // UpdateGroupSetting is the resolver for the updateGroupSetting field.

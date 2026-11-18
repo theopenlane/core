@@ -278,36 +278,6 @@ func TestValidateTokenAuthorization_NoAuthUser(t *testing.T) {
 	assert.Check(t, is.ErrorIs(err, ErrUnauthorized))
 }
 
-func TestBuildStorageFile(t *testing.T) {
-	fileID := ulids.New().String()
-	fileName := "test-file.txt"
-	storagePath := "/path/to/file"
-	storageVolume := "test-bucket"
-	contentType := "text/plain"
-	provider := "database"
-
-	entFile := &ent.File{
-		ID:                  fileID,
-		ProvidedFileName:    fileName,
-		StoragePath:         storagePath,
-		StorageVolume:       storageVolume,
-		DetectedContentType: contentType,
-		StorageProvider:     provider,
-	}
-
-	result := buildStorageFile(entFile)
-
-	assert.Check(t, result != nil)
-	assert.Check(t, is.DeepEqual(fileID, result.ID))
-	assert.Check(t, is.DeepEqual(fileName, result.OriginalName))
-	assert.Check(t, is.DeepEqual(storagetypes.ProviderType(provider), result.ProviderType))
-	assert.Check(t, is.DeepEqual(storagePath, result.FileMetadata.Key))
-	assert.Check(t, is.DeepEqual(storageVolume, result.FileMetadata.Bucket))
-	assert.Check(t, is.DeepEqual(contentType, result.FileMetadata.ContentType))
-	assert.Check(t, result.FileMetadata.ProviderHints != nil)
-	assert.Check(t, is.DeepEqual(storagetypes.ProviderType(provider), result.FileMetadata.ProviderHints.KnownProvider))
-}
-
 func TestBuildObjectURI_FromEntFile(t *testing.T) {
 	uri := "s3://bucket/path/to/file"
 	entFile := &ent.File{

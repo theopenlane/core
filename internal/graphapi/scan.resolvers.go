@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVScan(ctx context.Context, input graphql.
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateScanInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateScan(ctx, inputs)
+	return r.bulkCreateCSVScan(ctx, data)
 }
 
 // UpdateBulkScan is the resolver for the updateBulkScan field.

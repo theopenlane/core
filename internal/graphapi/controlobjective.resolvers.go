@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, in
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateControlObjectiveInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateControlObjective(ctx, inputs)
+	return r.bulkCreateCSVControlObjective(ctx, data)
 }
 
 // UpdateControlObjective is the resolver for the updateControlObjective field.

@@ -32,6 +32,35 @@ func TestNormalizeScope(t *testing.T) {
 	assert.Equal(t, "can_edit_api_token", NormalizeScope("api_token:write"))
 }
 
+func TestOrganizationRolesExistInModel(t *testing.T) {
+	roles, err := OrganizationRoles()
+	assert.NilError(t, err)
+	assert.Assert(t, len(roles) > 0)
+
+	model, err := GetRolesAuthorizationModel()
+	assert.NilError(t, err)
+
+	relations := map[string]struct{}{}
+
+	for _, td := range model.GetTypeDefinitions() {
+		if td.GetType() != "organization" || td.Metadata == nil || td.Metadata.Relations == nil {
+			continue
+		}
+
+		for rel := range *td.Metadata.Relations {
+			relations[rel] = struct{}{}
+		}
+	}
+
+	for _, role := range roles {
+		_, ok := relations[role.ID]
+		assert.Check(t, ok, "@role %q is annotated on %s, which is not an organization relation", role.Name, role.ID)
+	}
+
+	assert.Check(t, is.Contains(relations, "campaign_manager"))
+	assert.Check(t, is.Contains(relations, "integration_manager"))
+}
+
 func TestScopeOptions(t *testing.T) {
 	opts, err := ScopeOptions()
 	assert.NilError(t, err)

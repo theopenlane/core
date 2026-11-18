@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterDoc(ctx context.Context, inpu
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateTrustCenterDocInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateTrustCenterDoc(ctx, inputs)
+	return r.bulkCreateCSVTrustCenterDoc(ctx, data)
 }
 
 // UpdateTrustCenterDoc is the resolver for the updateTrustCenterDoc field.

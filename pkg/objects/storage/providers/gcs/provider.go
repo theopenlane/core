@@ -130,6 +130,11 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 	}, nil
 }
 
+// Open implements storage.Opener by streaming the object body
+func (p *Provider) Open(ctx context.Context, file *storagetypes.File) (io.ReadCloser, error) {
+	return p.client.Bucket(p.options.BucketFor(file.StoredBucket())).Object(file.Key).NewReader(ctx)
+}
+
 // Download implements storagetypes.Provider
 func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
 	r, err := p.client.Bucket(p.options.BucketFor(file.StoredBucket())).Object(file.Key).NewReader(ctx)

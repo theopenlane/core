@@ -138,12 +138,7 @@ func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input gr
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateActionPlanInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateActionPlan(ctx, inputs)
+	return r.bulkCreateCSVActionPlan(ctx, data)
 }
 
 // UpdateBulkActionPlan is the resolver for the updateBulkActionPlan field.

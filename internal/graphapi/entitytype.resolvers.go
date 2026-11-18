@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVEntityType(ctx context.Context, input gr
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateEntityTypeInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateEntityType(ctx, inputs)
+	return r.bulkCreateCSVEntityType(ctx, data)
 }
 
 // UpdateEntityType is the resolver for the updateEntityType field.

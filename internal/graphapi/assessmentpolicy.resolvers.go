@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVAssessmentPolicy(ctx context.Context, in
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateAssessmentPolicyInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateAssessmentPolicy(ctx, inputs)
+	return r.bulkCreateCSVAssessmentPolicy(ctx, data)
 }
 
 // UpdateBulkAssessmentPolicy is the resolver for the updateBulkAssessmentPolicy field.

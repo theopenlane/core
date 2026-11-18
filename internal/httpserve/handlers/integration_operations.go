@@ -48,6 +48,12 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 		return h.Unauthorized(ctx, err)
 	}
 
+	if err := rule.CheckCurrentOrgAccess(requestCtx, nil, rule.CanManageIntegrationsRelation); !errors.Is(err, privacy.Allow) {
+		logx.FromContext(requestCtx).Info().Err(err).Msg("caller cannot run integration operations")
+
+		return h.Forbidden(ctx, ErrUnauthorized)
+	}
+
 	if req.IntegrationID == "" || req.Body.Operation == "" {
 		// not terribly concerned about distinct error responses here since this isn't intended to be used as a primary execution method
 		logx.FromContext(requestCtx).Error().Err(ErrIntegrationIDRequired).Msg("missing integrationID or Operation in request")

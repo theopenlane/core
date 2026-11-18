@@ -49,6 +49,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 	campaignObj, err := suite.Client.DB.Campaign.Create().
 		SetName("Dispatch Integration Test Campaign").
 		SetDescription("Testing email dispatch pipeline").
+		SetCampaignType(enums.CampaignTypeCustom).
 		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
@@ -211,6 +212,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 
 	campaignObj, err := suite.Client.DB.Campaign.Create().
 		SetName("Skip Sent Test Campaign").
+		SetCampaignType(enums.CampaignTypeCustom).
 		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
@@ -303,6 +305,7 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 
 	campaignObj, err := suite.Client.DB.Campaign.Create().
 		SetName("No Branding Campaign").
+		SetCampaignType(enums.CampaignTypeCustom).
 		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
@@ -767,6 +770,7 @@ func TestCampaignEmailDispatchWithoutTrustCenterModule(t *testing.T) {
 
 	campaignObj, err := suite.Client.DB.Campaign.Create().
 		SetName("No Trust Center Module Campaign").
+		SetCampaignType(enums.CampaignTypeCustom).
 		SetOwnerID(user.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).

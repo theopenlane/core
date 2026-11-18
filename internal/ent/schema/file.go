@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
@@ -148,6 +149,48 @@ func (f File) Edges() []ent.Edge {
 			t:          TrustCenterDoc.Type,
 			name:       "original_trust_center_doc",
 		}),
+		nonUniqueEdgeFrom(&edgeDefinition{
+			fromSchema:  f,
+			ref:         "logo_file",
+			t:           TrustCenterSetting.Type,
+			name:        "trust_center_setting_logo",
+			annotations: []schema.Annotation{entgql.Skip(entgql.SkipAll)},
+		}),
+		nonUniqueEdgeFrom(&edgeDefinition{
+			fromSchema:  f,
+			ref:         "favicon_file",
+			t:           TrustCenterSetting.Type,
+			name:        "trust_center_setting_favicon",
+			annotations: []schema.Annotation{entgql.Skip(entgql.SkipAll)},
+		}),
+		nonUniqueEdgeFrom(&edgeDefinition{
+			fromSchema:  f,
+			ref:         "hero_image_file",
+			t:           TrustCenterSetting.Type,
+			name:        "trust_center_setting_hero_image",
+			annotations: []schema.Annotation{entgql.Skip(entgql.SkipAll)},
+		}),
+		nonUniqueEdgeFrom(&edgeDefinition{
+			fromSchema:  f,
+			ref:         "logo_file",
+			t:           TrustCenterEntity.Type,
+			name:        "trust_center_entity_logo",
+			annotations: []schema.Annotation{entgql.Skip(entgql.SkipAll)},
+		}),
+		nonUniqueEdgeFrom(&edgeDefinition{
+			fromSchema:  f,
+			ref:         "logo_file",
+			t:           Subprocessor.Type,
+			name:        "subprocessor_logo",
+			annotations: []schema.Annotation{entgql.Skip(entgql.SkipAll)},
+		}),
+		nonUniqueEdgeFrom(&edgeDefinition{
+			fromSchema:  f,
+			ref:         "logo_file",
+			t:           Standard.Type,
+			name:        "standard_logo",
+			annotations: []schema.Annotation{entgql.Skip(entgql.SkipAll)},
+		}),
 	}
 }
 
@@ -173,7 +216,7 @@ func (f File) Mixin() []ent.Mixin {
 					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{},
 					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}, Entity{}, IdentityHolder{}, Contact{}, Review{}),
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
-				withAllowAnonymousTrustCenterAccess(true),
+				withAnonymousTrustCenterScope(interceptors.AnonScopeFile),
 				withSkipperFunc(skipInterceptorForSystemAdmins),
 				withForceFilter(), // files are not all org-owned; scope check cannot short-circuit filtering
 			),
@@ -195,6 +238,7 @@ func (File) Modules() []models.OrgModule {
 func (f File) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.SkipQueryCheckForModule(),
 	}
 }
 

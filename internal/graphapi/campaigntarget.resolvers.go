@@ -107,12 +107,7 @@ func (r *mutationResolver) CreateBulkCSVCampaignTarget(ctx context.Context, inpu
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateCampaignTargetInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateCampaignTarget(ctx, inputs)
+	return r.bulkCreateCSVCampaignTarget(ctx, data)
 }
 
 // UpdateCampaignTarget is the resolver for the updateCampaignTarget field.

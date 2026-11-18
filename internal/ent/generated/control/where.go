@@ -251,6 +251,16 @@ func ControlKindID(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldControlKindID, v))
 }
 
+// ControlOriginName applies equality check predicate on the "control_origin_name" field. It's identical to ControlOriginNameEQ.
+func ControlOriginName(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldControlOriginName, v))
+}
+
+// ControlOriginID applies equality check predicate on the "control_origin_id" field. It's identical to ControlOriginIDEQ.
+func ControlOriginID(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldControlOriginID, v))
+}
+
 // EnvironmentName applies equality check predicate on the "environment_name" field. It's identical to EnvironmentNameEQ.
 func EnvironmentName(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldEnvironmentName, v))
@@ -3166,6 +3176,156 @@ func ControlKindIDContainsFold(v string) predicate.Control {
 	return predicate.Control(sql.FieldContainsFold(FieldControlKindID, v))
 }
 
+// ControlOriginNameEQ applies the EQ predicate on the "control_origin_name" field.
+func ControlOriginNameEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldControlOriginName, v))
+}
+
+// ControlOriginNameNEQ applies the NEQ predicate on the "control_origin_name" field.
+func ControlOriginNameNEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldNEQ(FieldControlOriginName, v))
+}
+
+// ControlOriginNameIn applies the In predicate on the "control_origin_name" field.
+func ControlOriginNameIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldIn(FieldControlOriginName, vs...))
+}
+
+// ControlOriginNameNotIn applies the NotIn predicate on the "control_origin_name" field.
+func ControlOriginNameNotIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldNotIn(FieldControlOriginName, vs...))
+}
+
+// ControlOriginNameGT applies the GT predicate on the "control_origin_name" field.
+func ControlOriginNameGT(v string) predicate.Control {
+	return predicate.Control(sql.FieldGT(FieldControlOriginName, v))
+}
+
+// ControlOriginNameGTE applies the GTE predicate on the "control_origin_name" field.
+func ControlOriginNameGTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldGTE(FieldControlOriginName, v))
+}
+
+// ControlOriginNameLT applies the LT predicate on the "control_origin_name" field.
+func ControlOriginNameLT(v string) predicate.Control {
+	return predicate.Control(sql.FieldLT(FieldControlOriginName, v))
+}
+
+// ControlOriginNameLTE applies the LTE predicate on the "control_origin_name" field.
+func ControlOriginNameLTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldLTE(FieldControlOriginName, v))
+}
+
+// ControlOriginNameContains applies the Contains predicate on the "control_origin_name" field.
+func ControlOriginNameContains(v string) predicate.Control {
+	return predicate.Control(sql.FieldContains(FieldControlOriginName, v))
+}
+
+// ControlOriginNameHasPrefix applies the HasPrefix predicate on the "control_origin_name" field.
+func ControlOriginNameHasPrefix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasPrefix(FieldControlOriginName, v))
+}
+
+// ControlOriginNameHasSuffix applies the HasSuffix predicate on the "control_origin_name" field.
+func ControlOriginNameHasSuffix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasSuffix(FieldControlOriginName, v))
+}
+
+// ControlOriginNameIsNil applies the IsNil predicate on the "control_origin_name" field.
+func ControlOriginNameIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldControlOriginName))
+}
+
+// ControlOriginNameNotNil applies the NotNil predicate on the "control_origin_name" field.
+func ControlOriginNameNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldControlOriginName))
+}
+
+// ControlOriginNameEqualFold applies the EqualFold predicate on the "control_origin_name" field.
+func ControlOriginNameEqualFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldEqualFold(FieldControlOriginName, v))
+}
+
+// ControlOriginNameContainsFold applies the ContainsFold predicate on the "control_origin_name" field.
+func ControlOriginNameContainsFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldContainsFold(FieldControlOriginName, v))
+}
+
+// ControlOriginIDEQ applies the EQ predicate on the "control_origin_id" field.
+func ControlOriginIDEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldControlOriginID, v))
+}
+
+// ControlOriginIDNEQ applies the NEQ predicate on the "control_origin_id" field.
+func ControlOriginIDNEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldNEQ(FieldControlOriginID, v))
+}
+
+// ControlOriginIDIn applies the In predicate on the "control_origin_id" field.
+func ControlOriginIDIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldIn(FieldControlOriginID, vs...))
+}
+
+// ControlOriginIDNotIn applies the NotIn predicate on the "control_origin_id" field.
+func ControlOriginIDNotIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldNotIn(FieldControlOriginID, vs...))
+}
+
+// ControlOriginIDGT applies the GT predicate on the "control_origin_id" field.
+func ControlOriginIDGT(v string) predicate.Control {
+	return predicate.Control(sql.FieldGT(FieldControlOriginID, v))
+}
+
+// ControlOriginIDGTE applies the GTE predicate on the "control_origin_id" field.
+func ControlOriginIDGTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldGTE(FieldControlOriginID, v))
+}
+
+// ControlOriginIDLT applies the LT predicate on the "control_origin_id" field.
+func ControlOriginIDLT(v string) predicate.Control {
+	return predicate.Control(sql.FieldLT(FieldControlOriginID, v))
+}
+
+// ControlOriginIDLTE applies the LTE predicate on the "control_origin_id" field.
+func ControlOriginIDLTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldLTE(FieldControlOriginID, v))
+}
+
+// ControlOriginIDContains applies the Contains predicate on the "control_origin_id" field.
+func ControlOriginIDContains(v string) predicate.Control {
+	return predicate.Control(sql.FieldContains(FieldControlOriginID, v))
+}
+
+// ControlOriginIDHasPrefix applies the HasPrefix predicate on the "control_origin_id" field.
+func ControlOriginIDHasPrefix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasPrefix(FieldControlOriginID, v))
+}
+
+// ControlOriginIDHasSuffix applies the HasSuffix predicate on the "control_origin_id" field.
+func ControlOriginIDHasSuffix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasSuffix(FieldControlOriginID, v))
+}
+
+// ControlOriginIDIsNil applies the IsNil predicate on the "control_origin_id" field.
+func ControlOriginIDIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldControlOriginID))
+}
+
+// ControlOriginIDNotNil applies the NotNil predicate on the "control_origin_id" field.
+func ControlOriginIDNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldControlOriginID))
+}
+
+// ControlOriginIDEqualFold applies the EqualFold predicate on the "control_origin_id" field.
+func ControlOriginIDEqualFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldEqualFold(FieldControlOriginID, v))
+}
+
+// ControlOriginIDContainsFold applies the ContainsFold predicate on the "control_origin_id" field.
+func ControlOriginIDContainsFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldContainsFold(FieldControlOriginID, v))
+}
+
 // EnvironmentNameEQ applies the EQ predicate on the "environment_name" field.
 func EnvironmentNameEQ(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldEnvironmentName, v))
@@ -4161,6 +4321,29 @@ func HasControlKind() predicate.Control {
 func HasControlKindWith(preds ...predicate.CustomTypeEnum) predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {
 		step := newControlKindStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControlOrigin applies the HasEdge predicate on the "control_origin" edge.
+func HasControlOrigin() predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ControlOriginTable, ControlOriginColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlOriginWith applies the HasEdge predicate on the "control_origin" edge with a given conditions (other predicates).
+func HasControlOriginWith(preds ...predicate.CustomTypeEnum) predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := newControlOriginStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

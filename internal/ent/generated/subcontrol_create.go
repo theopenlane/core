@@ -672,6 +672,34 @@ func (_c *SubcontrolCreate) SetNillableSubcontrolKindID(v *string) *SubcontrolCr
 	return _c
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (_c *SubcontrolCreate) SetControlOriginName(v string) *SubcontrolCreate {
+	_c.mutation.SetControlOriginName(v)
+	return _c
+}
+
+// SetNillableControlOriginName sets the "control_origin_name" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableControlOriginName(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetControlOriginName(*v)
+	}
+	return _c
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (_c *SubcontrolCreate) SetControlOriginID(v string) *SubcontrolCreate {
+	_c.mutation.SetControlOriginID(v)
+	return _c
+}
+
+// SetNillableControlOriginID sets the "control_origin_id" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableControlOriginID(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetControlOriginID(*v)
+	}
+	return _c
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_c *SubcontrolCreate) SetWorkflowEligibleMarker(v bool) *SubcontrolCreate {
 	_c.mutation.SetWorkflowEligibleMarker(v)
@@ -945,6 +973,11 @@ func (_c *SubcontrolCreate) SetOwner(v *Organization) *SubcontrolCreate {
 // SetSubcontrolKind sets the "subcontrol_kind" edge to the CustomTypeEnum entity.
 func (_c *SubcontrolCreate) SetSubcontrolKind(v *CustomTypeEnum) *SubcontrolCreate {
 	return _c.SetSubcontrolKindID(v.ID)
+}
+
+// SetControlOrigin sets the "control_origin" edge to the CustomTypeEnum entity.
+func (_c *SubcontrolCreate) SetControlOrigin(v *CustomTypeEnum) *SubcontrolCreate {
+	return _c.SetControlOriginID(v.ID)
 }
 
 // SetControl sets the "control" edge to the Control entity.
@@ -1449,6 +1482,10 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldSubcontrolKindName, field.TypeString, value)
 		_node.SubcontrolKindName = value
 	}
+	if value, ok := _c.mutation.ControlOriginName(); ok {
+		_spec.SetField(subcontrol.FieldControlOriginName, field.TypeString, value)
+		_node.ControlOriginName = value
+	}
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(subcontrol.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
@@ -1764,6 +1801,23 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.SubcontrolKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlOriginIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ControlOriginTable,
+			Columns: []string{subcontrol.ControlOriginColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ControlOriginID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlIDs(); len(nodes) > 0 {

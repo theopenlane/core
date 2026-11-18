@@ -5088,6 +5088,22 @@ func (c *ControlClient) QueryControlKind(_m *Control) *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryControlOrigin queries the control_origin edge of a Control.
+func (c *ControlClient) QueryControlOrigin(_m *Control) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, control.ControlOriginTable, control.ControlOriginColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEnvironment queries the environment edge of a Control.
 func (c *ControlClient) QueryEnvironment(_m *Control) *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: c.config}).Query()
@@ -9227,6 +9243,22 @@ func (c *EntityClient) QueryFindings(_m *Entity) *FindingQuery {
 	return query
 }
 
+// QueryRisks queries the risks edge of a Entity.
+func (c *EntityClient) QueryRisks(_m *Entity) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.RisksTable, entity.RisksPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryVulnerabilities queries the vulnerabilities edge of a Entity.
 func (c *EntityClient) QueryVulnerabilities(_m *Entity) *VulnerabilityQuery {
 	query := (&VulnerabilityClient{config: c.config}).Query()
@@ -10918,6 +10950,102 @@ func (c *FileClient) QueryOriginalTrustCenterDoc(_m *File) *TrustCenterDocQuery 
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, file.OriginalTrustCenterDocTable, file.OriginalTrustCenterDocColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenterSettingLogo queries the trust_center_setting_logo edge of a File.
+func (c *FileClient) QueryTrustCenterSettingLogo(_m *File) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.TrustCenterSettingLogoTable, file.TrustCenterSettingLogoColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenterSettingFavicon queries the trust_center_setting_favicon edge of a File.
+func (c *FileClient) QueryTrustCenterSettingFavicon(_m *File) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.TrustCenterSettingFaviconTable, file.TrustCenterSettingFaviconColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenterSettingHeroImage queries the trust_center_setting_hero_image edge of a File.
+func (c *FileClient) QueryTrustCenterSettingHeroImage(_m *File) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.TrustCenterSettingHeroImageTable, file.TrustCenterSettingHeroImageColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenterEntityLogo queries the trust_center_entity_logo edge of a File.
+func (c *FileClient) QueryTrustCenterEntityLogo(_m *File) *TrustCenterEntityQuery {
+	query := (&TrustCenterEntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcenterentity.Table, trustcenterentity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.TrustCenterEntityLogoTable, file.TrustCenterEntityLogoColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubprocessorLogo queries the subprocessor_logo edge of a File.
+func (c *FileClient) QuerySubprocessorLogo(_m *File) *SubprocessorQuery {
+	query := (&SubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.SubprocessorLogoTable, file.SubprocessorLogoColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStandardLogo queries the standard_logo edge of a File.
+func (c *FileClient) QueryStandardLogo(_m *File) *StandardQuery {
+	query := (&StandardClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, file.StandardLogoTable, file.StandardLogoColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -20241,15 +20369,15 @@ func (c *OrganizationClient) QueryWorkflowDefinitionCreators(_m *Organization) *
 	return query
 }
 
-// QueryCampaignsManager queries the campaigns_manager edge of a Organization.
-func (c *OrganizationClient) QueryCampaignsManager(_m *Organization) *GroupQuery {
+// QueryCampaignManager queries the campaign_manager edge of a Organization.
+func (c *OrganizationClient) QueryCampaignManager(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignsManagerTable, organization.CampaignsManagerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignManagerTable, organization.CampaignManagerColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -20289,15 +20417,31 @@ func (c *OrganizationClient) QueryGroupManager(_m *Organization) *GroupQuery {
 	return query
 }
 
-// QueryPoliciesManager queries the policies_manager edge of a Organization.
-func (c *OrganizationClient) QueryPoliciesManager(_m *Organization) *GroupQuery {
+// QueryIntegrationManager queries the integration_manager edge of a Organization.
+func (c *OrganizationClient) QueryIntegrationManager(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.PoliciesManagerTable, organization.PoliciesManagerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationManagerTable, organization.IntegrationManagerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPolicyManager queries the policy_manager edge of a Organization.
+func (c *OrganizationClient) QueryPolicyManager(_m *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PolicyManagerTable, organization.PolicyManagerColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -20353,15 +20497,15 @@ func (c *OrganizationClient) QueryTrustCenterManager(_m *Organization) *GroupQue
 	return query
 }
 
-// QueryWorkflowsManager queries the workflows_manager edge of a Organization.
-func (c *OrganizationClient) QueryWorkflowsManager(_m *Organization) *GroupQuery {
+// QueryWorkflowManager queries the workflow_manager edge of a Organization.
+func (c *OrganizationClient) QueryWorkflowManager(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowsManagerTable, organization.WorkflowsManagerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowManagerTable, organization.WorkflowManagerColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -26484,7 +26628,23 @@ func (c *RiskClient) QueryEntities(_m *Risk) *EntityQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(risk.Table, risk.FieldID, id),
 			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, risk.EntitiesTable, risk.EntitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, risk.EntitiesTable, risk.EntitiesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLegacyEntities queries the legacy_entities edge of a Risk.
+func (c *RiskClient) QueryLegacyEntities(_m *Risk) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.LegacyEntitiesTable, risk.LegacyEntitiesColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -28065,6 +28225,22 @@ func (c *SubcontrolClient) QuerySubcontrolKind(_m *Subcontrol) *CustomTypeEnumQu
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.SubcontrolKindTable, subcontrol.SubcontrolKindColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlOrigin queries the control_origin edge of a Subcontrol.
+func (c *SubcontrolClient) QueryControlOrigin(_m *Subcontrol) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.ControlOriginTable, subcontrol.ControlOriginColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

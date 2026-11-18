@@ -165,19 +165,12 @@ func (r *mutationResolver) SetupTrustCenterDomains(ctx context.Context, trustCen
 		return nil, parseRequestError(ctx, common.ErrTrustCenterDomainAlreadyExists, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
 	}
 
-	setting, err := withTransactionalMutation(ctx).TrustCenterSetting.
-		Query().
+	err = withTransactionalMutation(ctx).TrustCenterSetting.Update().
 		Where(
 			trustcentersetting.TrustCenterID(trustCenterID),
-			trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentPreview),
 		).
-		Only(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcentersetting"})
-	}
-
-	_, err = setting.Update().SetDisableDefaultDomain(false).
-		Save(ctx)
+		SetDisableDefaultDomain(false).
+		Exec(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}

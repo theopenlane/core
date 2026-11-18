@@ -158,12 +158,24 @@
       "csvColumn": "RiskNames",
       "targetField": "RiskIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
+      "isSlice": false
     }
   ],
   "DirectoryAccount": [
     {
       "csvColumn": "DirectoryAccountIdentityHolderEmail",
       "targetField": "IdentityHolderID",
+      "isSlice": false
+    }
+  ],
+  "Discussion": [
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
       "isSlice": false
     }
   ],
@@ -204,6 +216,11 @@
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
+      "isSlice": false
     }
   ],
   "Finding": [
@@ -251,6 +268,11 @@
       "csvColumn": "ReviewedByUserEmail",
       "targetField": "ReviewedByUserID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
+      "isSlice": false
     }
   ],
   "IdentityHolder": [
@@ -294,6 +316,11 @@
     {
       "csvColumn": "DocumentDelegateGroupName",
       "targetField": "DelegateID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
       "isSlice": false
     }
   ],
@@ -399,6 +426,11 @@
       "csvColumn": "DocumentDelegateGroupName",
       "targetField": "DelegateID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
+      "isSlice": false
     }
   ],
   "Program": [
@@ -437,6 +469,11 @@
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
+      "isSlice": false
     }
   ],
   "Risk": [
@@ -504,6 +541,11 @@
       "csvColumn": "SubcontrolRefCodes",
       "targetField": "SubcontrolIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
+      "isSlice": false
     }
   ],
   "Scan": [
@@ -593,6 +635,11 @@
       "csvColumn": "RiskNames",
       "targetField": "RiskIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
+      "isSlice": false
     }
   ],
   "Task": [
@@ -610,6 +657,11 @@
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
+      "isSlice": false
     }
   ],
   "VendorRiskScore": [
@@ -668,6 +720,11 @@
     {
       "csvColumn": "ReviewedByUserEmail",
       "targetField": "ReviewedByUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
       "isSlice": false
     }
   ]

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/logx"
@@ -120,17 +121,7 @@ func replicateFileToBackup(ctx context.Context, client *generated.Client, fileID
 		return nil
 	}
 
-	storageFile := &storagetypes.File{
-		ID:           f.ID,
-		ProviderType: source,
-		Key:          f.StoragePath,
-		Bucket:       f.StorageVolume,
-		Region:       f.StorageRegion,
-		ContentType:  f.DetectedContentType,
-		ProviderHints: &storagetypes.ProviderHints{
-			KnownProvider: source,
-		},
-	}
+	storageFile := interceptors.StorageFileFromEnt(f)
 
 	destination := ""
 	if dest, hasDest := svc.BackupProviderFor(source); hasDest {

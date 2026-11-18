@@ -56,12 +56,7 @@ func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateEventInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateEvent(ctx, inputs)
+	return r.bulkCreateCSVEvent(ctx, data)
 }
 
 // UpdateEvent is the resolver for the updateEvent field.

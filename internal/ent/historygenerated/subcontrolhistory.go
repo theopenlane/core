@@ -133,6 +133,10 @@ type SubcontrolHistory struct {
 	SubcontrolKindName string `json:"subcontrol_kind_name,omitempty"`
 	// the kind of the subcontrol
 	SubcontrolKindID string `json:"subcontrol_kind_id,omitempty"`
+	// the control_origin of the subcontrol
+	ControlOriginName string `json:"control_origin_name,omitempty"`
+	// the control_origin of the subcontrol
+	ControlOriginID string `json:"control_origin_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	// the unique reference code for the control
@@ -153,7 +157,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case subcontrolhistory.FieldSystemOwned, subcontrolhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldUpdatedByImpersonator, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldSourceDefinitionID, subcontrolhistory.FieldSourceDefinitionVersion, subcontrolhistory.FieldSourceInstanceID, subcontrolhistory.FieldManagedBy, subcontrolhistory.FieldIntegrationRunID, subcontrolhistory.FieldSourceKey, subcontrolhistory.FieldExternalID, subcontrolhistory.FieldExternalUUID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationDescription, subcontrolhistory.FieldPublicRepresentation, subcontrolhistory.FieldSource, subcontrolhistory.FieldSourceName, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldReferenceFrameworkRevision, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldSubcontrolKindName, subcontrolhistory.FieldSubcontrolKindID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldUpdatedByImpersonator, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldSourceDefinitionID, subcontrolhistory.FieldSourceDefinitionVersion, subcontrolhistory.FieldSourceInstanceID, subcontrolhistory.FieldManagedBy, subcontrolhistory.FieldIntegrationRunID, subcontrolhistory.FieldSourceKey, subcontrolhistory.FieldExternalID, subcontrolhistory.FieldExternalUUID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationDescription, subcontrolhistory.FieldPublicRepresentation, subcontrolhistory.FieldSource, subcontrolhistory.FieldSourceName, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldReferenceFrameworkRevision, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldSubcontrolKindName, subcontrolhistory.FieldSubcontrolKindID, subcontrolhistory.FieldControlOriginName, subcontrolhistory.FieldControlOriginID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -540,6 +544,18 @@ func (_m *SubcontrolHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.SubcontrolKindID = value.String
 			}
+		case subcontrolhistory.FieldControlOriginName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_origin_name", values[i])
+			} else if value.Valid {
+				_m.ControlOriginName = value.String
+			}
+		case subcontrolhistory.FieldControlOriginID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_origin_id", values[i])
+			} else if value.Valid {
+				_m.ControlOriginID = value.String
+			}
 		case subcontrolhistory.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
@@ -774,6 +790,12 @@ func (_m *SubcontrolHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("subcontrol_kind_id=")
 	builder.WriteString(_m.SubcontrolKindID)
+	builder.WriteString(", ")
+	builder.WriteString("control_origin_name=")
+	builder.WriteString(_m.ControlOriginName)
+	builder.WriteString(", ")
+	builder.WriteString("control_origin_id=")
+	builder.WriteString(_m.ControlOriginID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))

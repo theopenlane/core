@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVSystemDetail(ctx context.Context, input 
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateSystemDetailInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateSystemDetail(ctx, inputs)
+	return r.bulkCreateCSVSystemDetail(ctx, data)
 }
 
 // UpdateBulkSystemDetail is the resolver for the updateBulkSystemDetail field.

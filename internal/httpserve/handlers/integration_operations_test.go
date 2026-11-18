@@ -19,6 +19,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
@@ -34,7 +35,7 @@ func TestRunIntegrationOperationHealthCheckInline(t *testing.T) {
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
@@ -71,35 +72,59 @@ func TestRunIntegrationOperationInlinePolicy(t *testing.T) {
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestInlineDefinitionID, true)})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+	admin := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleAdmin)
+	workflowManager := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember, "workflow_manager")
+	integrationManager := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember, "integration_manager")
+	member := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember)
 
 	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestInlineDefinitionID)
 
-	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
-		IntegrationID: integrationID,
-		Body: handlers.RunIntegrationOperationBody{
-			Operation: opTestRepoSyncOperation.Name(),
-		},
-	})
-	assert.NilError(t, err)
+	testCases := []struct {
+		name           string
+		ctx            context.Context
+		expectedStatus int
+	}{
+		{name: "owner can run inline operation", ctx: testUser.UserCtx, expectedStatus: http.StatusOK},
+		{name: "admin can run inline operation", ctx: admin.UserCtx, expectedStatus: http.StatusOK},
+		{name: "workflow manager can run inline operation", ctx: workflowManager.UserCtx, expectedStatus: http.StatusOK},
+		{name: "integration manager can run inline operation", ctx: integrationManager.UserCtx, expectedStatus: http.StatusOK},
+		{name: "member cannot run inline operation", ctx: member.UserCtx, expectedStatus: http.StatusForbidden},
+	}
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestInlineDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+				IntegrationID: integrationID,
+				Body: handlers.RunIntegrationOperationBody{
+					Operation: opTestRepoSyncOperation.Name(),
+				},
+			})
+			assert.NilError(t, err)
 
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+			req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestInlineDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
+			req.Header.Set("Content-Type", "application/json")
 
-	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
+			rec := httptest.NewRecorder()
+			suite.e.ServeHTTP(rec, req.WithContext(tc.ctx))
 
-	var resp handlers.RunIntegrationOperationResponse
-	assert.NilError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-	assert.Check(t, resp.Success)
-	assert.Check(t, is.Equal("ok", resp.Status))
-	assert.Check(t, is.DeepEqual(opTestRepoSyncOperation.Name(), resp.Operation))
-	assert.Check(t, is.Contains(resp.Summary, "Integration operation completed"))
+			assert.Assert(t, is.Equal(tc.expectedStatus, rec.Code))
+
+			if tc.expectedStatus != http.StatusOK {
+				return
+			}
+
+			var resp handlers.RunIntegrationOperationResponse
+			assert.NilError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+			assert.Check(t, resp.Success)
+			assert.Check(t, is.Equal("ok", resp.Status))
+			assert.Check(t, is.DeepEqual(opTestRepoSyncOperation.Name(), resp.Operation))
+			assert.Check(t, is.Contains(resp.Summary, "Integration operation completed"))
+		})
+	}
 }
 
 func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
@@ -108,36 +133,70 @@ func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+	admin := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleAdmin)
+	workflowManager := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember, "workflow_manager")
+	integrationManager := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember, "integration_manager")
+	member := suite.orgMemberBuilder(t, reqCtx, testUser, enums.RoleMember)
 
 	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
 
-	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
-		IntegrationID: integrationID,
-		Body: handlers.RunIntegrationOperationBody{
-			Operation: opTestRepoSyncOperation.Name(),
-		},
-	})
-	assert.NilError(t, err)
+	testCases := []struct {
+		name             string
+		user             testUserDetails
+		expectedStatus   int
+		expectedRunCount int
+	}{
+		{name: "owner can queue operation", user: testUser, expectedStatus: http.StatusOK, expectedRunCount: 1},
+		{name: "admin can queue operation", user: admin, expectedStatus: http.StatusOK, expectedRunCount: 1},
+		{name: "workflow manager can queue operation", user: workflowManager, expectedStatus: http.StatusOK, expectedRunCount: 1},
+		{name: "integration manager can queue operation", user: integrationManager, expectedStatus: http.StatusOK, expectedRunCount: 1},
+		{name: "member cannot queue operation", user: member, expectedStatus: http.StatusForbidden},
+	}
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+				IntegrationID: integrationID,
+				Body: handlers.RunIntegrationOperationBody{
+					Operation: opTestRepoSyncOperation.Name(),
+				},
+			})
+			assert.NilError(t, err)
 
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+			req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
+			req.Header.Set("Content-Type", "application/json")
 
-	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
+			rec := httptest.NewRecorder()
+			suite.e.ServeHTTP(rec, req.WithContext(tc.user.UserCtx))
 
-	var resp handlers.RunIntegrationOperationResponse
-	assert.NilError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-	assert.Check(t, resp.Success)
-	assert.Check(t, is.Equal("queued", resp.Status))
-	assert.Check(t, is.DeepEqual(opTestRepoSyncOperation.Name(), resp.Operation))
-	assert.Check(t, is.Contains(resp.Summary, "queued"))
-	assert.Check(t, len(resp.Details) > 0)
+			assert.Assert(t, is.Equal(tc.expectedStatus, rec.Code))
+
+			runCount, err := suite.db.IntegrationRun.Query().
+				Where(
+					integrationrun.IntegrationIDEQ(integrationID),
+					integrationrun.CreatedByEQ(tc.user.ID),
+				).
+				Count(testUser.UserCtx)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.expectedRunCount, runCount))
+
+			if tc.expectedStatus != http.StatusOK {
+				return
+			}
+
+			var resp handlers.RunIntegrationOperationResponse
+			assert.NilError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+			assert.Check(t, resp.Success)
+			assert.Check(t, is.Equal("queued", resp.Status))
+			assert.Check(t, is.DeepEqual(opTestRepoSyncOperation.Name(), resp.Operation))
+			assert.Check(t, is.Contains(resp.Summary, "queued"))
+			assert.Check(t, len(resp.Details) > 0)
+		})
+	}
 }
 
 func TestRunIntegrationOperationUnauthorized(t *testing.T) {
@@ -191,7 +250,7 @@ func TestRunIntegrationOperationMissingOperationName(t *testing.T) {
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
@@ -216,7 +275,7 @@ func TestRunIntegrationOperationUnknownOperation(t *testing.T) {
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
@@ -243,7 +302,7 @@ func TestRunIntegrationOperationInvalidConfig(t *testing.T) {
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
@@ -274,7 +333,7 @@ func TestRunIntegrationOperationInstallationNotFound(t *testing.T) {
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
@@ -301,7 +360,7 @@ func TestRunIntegrationOperationOtherOrgInstallationNotFound(t *testing.T) {
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
@@ -333,7 +392,7 @@ func TestRunIntegrationOperationNoActiveOrgUnauthorized(t *testing.T) {
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
@@ -370,7 +429,7 @@ func TestRunIntegrationOperationAnonymousTokenUnauthorized(t *testing.T) {
 		operationTestDefinitionBuilder(operationTestInlineDefinitionID, true),
 		operationTestDefinitionBuilder(operationTestDefinitionID, false),
 	})
-	defer restore()
+	t.Cleanup(restore)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})

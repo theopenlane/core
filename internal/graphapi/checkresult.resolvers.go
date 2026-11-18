@@ -56,12 +56,7 @@ func (r *mutationResolver) CreateBulkCSVCheckResult(ctx context.Context, input g
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateCheckResultInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateCheckResult(ctx, inputs)
+	return r.bulkCreateCSVCheckResult(ctx, data)
 }
 
 // UpdateBulkCheckResult is the resolver for the updateBulkCheckResult field.

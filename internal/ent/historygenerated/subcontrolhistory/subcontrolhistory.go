@@ -130,6 +130,10 @@ const (
 	FieldSubcontrolKindName = "subcontrol_kind_name"
 	// FieldSubcontrolKindID holds the string denoting the subcontrol_kind_id field in the database.
 	FieldSubcontrolKindID = "subcontrol_kind_id"
+	// FieldControlOriginName holds the string denoting the control_origin_name field in the database.
+	FieldControlOriginName = "control_origin_name"
+	// FieldControlOriginID holds the string denoting the control_origin_id field in the database.
+	FieldControlOriginID = "control_origin_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldRefCode holds the string denoting the ref_code field in the database.
@@ -198,6 +202,8 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldSubcontrolKindName,
 	FieldSubcontrolKindID,
+	FieldControlOriginName,
+	FieldControlOriginID,
 	FieldWorkflowEligibleMarker,
 	FieldRefCode,
 	FieldControlID,
@@ -505,6 +511,16 @@ func BySubcontrolKindName(opts ...sql.OrderTermOption) OrderOption {
 // BySubcontrolKindID orders the results by the subcontrol_kind_id field.
 func BySubcontrolKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubcontrolKindID, opts...).ToFunc()
+}
+
+// ByControlOriginName orders the results by the control_origin_name field.
+func ByControlOriginName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlOriginName, opts...).ToFunc()
+}
+
+// ByControlOriginID orders the results by the control_origin_id field.
+func ByControlOriginID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlOriginID, opts...).ToFunc()
 }
 
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.

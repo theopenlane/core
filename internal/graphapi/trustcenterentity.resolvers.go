@@ -70,12 +70,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterEntity(ctx context.Context, i
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateTrustCenterEntityInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateTrustCenterEntity(ctx, inputs)
+	return r.bulkCreateCSVTrustCenterEntity(ctx, data)
 }
 
 // UpdateTrustCenterEntity is the resolver for the updateTrustCenterEntity field.

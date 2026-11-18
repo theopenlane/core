@@ -59,4 +59,6 @@ type Config struct {
 	OrganizationDelete system.OrganizationDeleteConfig `json:"organizationdelete" koanf:"organizationdelete"`
 	// IntegrationLifecycle configures the scheduled integration lifecycle sweep
 	IntegrationLifecycle system.IntegrationLifecycleConfig `json:"integrationlifecycle" koanf:"integrationlifecycle"`
+	// FileOrphan configures the file orphan sweep
+	FileOrphan system.FileOrphanConfig `json:"fileorphan" koanf:"fileorphan"`
 }

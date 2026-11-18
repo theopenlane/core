@@ -114,6 +114,21 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	// invalidate every token issued before the reset and every server-side session of the account; a
+	// failure is returned as an error so the transaction rolls back the password change and the consumed
+	// reset token, leaving the reset retryable rather than applied with the old credentials still valid
+	if err := h.TokenManager.RevokeUserTokensIssuedBefore(userCtx, entUser.ID, time.Now()); err != nil && !errors.Is(err, tokens.ErrRevocationNotConfigured) {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error revoking user tokens after password reset")
+
+		return ErrProcessingRequest
+	}
+
+	if err := h.SessionConfig.DestroyUserSessions(userCtx, entUser.ID); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error destroying user sessions after password reset")
+
+		return ErrProcessingRequest
+	}
+
 	if err := h.sendEmail(userCtx, email.ResetSuccessOp.Name(), email.PasswordResetSuccessRequest{
 		Email:     entUser.Email,
 		FirstName: entUser.FirstName,

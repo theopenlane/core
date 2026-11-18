@@ -319,15 +319,36 @@ func (s *Service) resolveUploadProvider(ctx context.Context, opts *storage.Uploa
 	return client.MustGet(), nil
 }
 
-// resolveProviderForFile resolves a storage provider for file operations (download, delete, presigned URL)
+// resolveDownloadProvider resolves a storage provider for file operations (download, delete, presigned URL)
 func (s *Service) resolveDownloadProvider(ctx context.Context, file *storagetypes.File) (storage.Provider, error) {
+	provider, _, err := s.resolveFileProvider(ctx, file)
+
+	return provider, err
+}
+
+// ResolveProvider returns the provider a file's reads resolve to and its configured options, using the same resolution as Download
+func (s *Service) ResolveProvider(ctx context.Context, file *storagetypes.File) (storage.Provider, *storage.ProviderOptions, error) {
+	provider, options, err := s.resolveFileProvider(ctx, file)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if provider == nil {
+		return nil, nil, ErrProviderResolutionFailed
+	}
+
+	return provider, options, nil
+}
+
+// resolveFileProvider resolves the storage provider and its options for a file
+func (s *Service) resolveFileProvider(ctx context.Context, file *storagetypes.File) (storage.Provider, *storage.ProviderOptions, error) {
 	enrichedCtx := s.buildResolutionContextForFile(ctx, file)
 	result := s.resolver.Resolve(enrichedCtx)
 
 	res, hasResult := result.Get()
 	if !hasResult {
 		logx.FromContext(ctx).Error().Msgf("storage provider resolution failed for file %s", file.ID)
-		return nil, ErrProviderResolutionFailed
+		return nil, nil, ErrProviderResolutionFailed
 	}
 
 	// Build ProviderCacheKey using file metadata with auth context as backup
@@ -338,8 +359,10 @@ func (s *Service) resolveDownloadProvider(ctx context.Context, file *storagetype
 		IntegrationType: res.Builder.ProviderType(),
 	}
 
-	return s.clientService.GetClient(ctx, cacheKey, res.Builder, res.Output, res.Config).
-		OrElse(nil), nil
+	provider := s.clientService.GetClient(ctx, cacheKey, res.Builder, res.Output, res.Config).
+		OrElse(nil)
+
+	return provider, res.Config, nil
 }
 
 // buildResolutionContext builds context for provider resolution from upload options

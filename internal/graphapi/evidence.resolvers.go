@@ -107,12 +107,7 @@ func (r *mutationResolver) CreateBulkCSVEvidence(ctx context.Context, input grap
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateEvidenceInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateEvidence(ctx, inputs)
+	return r.bulkCreateCSVEvidence(ctx, data)
 }
 
 // UpdateBulkEvidence is the resolver for the updateBulkEvidence field.

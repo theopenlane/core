@@ -79,12 +79,7 @@ func (r *mutationResolver) CreateBulkCSVRemediation(ctx context.Context, input g
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateRemediationInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateRemediation(ctx, inputs)
+	return r.bulkCreateCSVRemediation(ctx, data)
 }
 
 // UpdateRemediation is the resolver for the updateRemediation field.

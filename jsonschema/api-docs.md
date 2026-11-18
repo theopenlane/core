@@ -201,6 +201,11 @@ Config contains the configuration for the core server
             "enabled": true,
             "dryrun": true,
             "maxperrun": 100
+        },
+        "fileorphan": {
+            "enabled": true,
+            "dryrun": true,
+            "maxperrun": 500
         }
     },
     "workflows": {
@@ -1887,6 +1892,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**paymentreminder**](#defssystempaymentreminderconfig)|`object`|||
 |[**organizationdelete**](#defssystemorganizationdeleteconfig)|`object`|||
 |[**integrationlifecycle**](#defssystemintegrationlifecycleconfig)|`object`|||
+|[**fileorphan**](#defssystemfileorphanconfig)|`object`|||
 
 **Additional Properties:** not allowed   
 **Example**
@@ -1955,6 +1961,11 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
         "enabled": true,
         "dryrun": true,
         "maxperrun": 100
+    },
+    "fileorphan": {
+        "enabled": true,
+        "dryrun": true,
+        "maxperrun": 500
     }
 }
 ```
@@ -2763,6 +2774,29 @@ supplies the region, endpoint, and credentials
     "enabled": true,
     "dryrun": true,
     "maxperrun": 100
+}
+```
+
+   
+<a name="defssystemfileorphanconfig"></a>
+### $defs/system\.FileOrphanConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Whether the file orphan sweep is enabled<br/>Default: `true`<br/>||
+|**dryrun**|`boolean`|If true only log file IDs that would be deleted<br/>Default: `true`<br/>||
+|**maxperrun**|`integer`|Maximum orphaned files to delete per run<br/>Default: `500`<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "enabled": true,
+    "dryrun": true,
+    "maxperrun": 500
 }
 ```
 

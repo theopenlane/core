@@ -87,12 +87,7 @@ func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateTaskInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateTask(ctx, inputs)
+	return r.bulkCreateCSVTask(ctx, data)
 }
 
 // UpdateBulkTask is the resolver for the updateBulkTask field.

@@ -2958,6 +2958,144 @@ func HasOriginalTrustCenterDocWith(preds ...predicate.TrustCenterDoc) predicate.
 	})
 }
 
+// HasTrustCenterSettingLogo applies the HasEdge predicate on the "trust_center_setting_logo" edge.
+func HasTrustCenterSettingLogo() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterSettingLogoTable, TrustCenterSettingLogoColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterSettingLogoWith applies the HasEdge predicate on the "trust_center_setting_logo" edge with a given conditions (other predicates).
+func HasTrustCenterSettingLogoWith(preds ...predicate.TrustCenterSetting) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newTrustCenterSettingLogoStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustCenterSettingFavicon applies the HasEdge predicate on the "trust_center_setting_favicon" edge.
+func HasTrustCenterSettingFavicon() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterSettingFaviconTable, TrustCenterSettingFaviconColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterSettingFaviconWith applies the HasEdge predicate on the "trust_center_setting_favicon" edge with a given conditions (other predicates).
+func HasTrustCenterSettingFaviconWith(preds ...predicate.TrustCenterSetting) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newTrustCenterSettingFaviconStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustCenterSettingHeroImage applies the HasEdge predicate on the "trust_center_setting_hero_image" edge.
+func HasTrustCenterSettingHeroImage() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterSettingHeroImageTable, TrustCenterSettingHeroImageColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterSettingHeroImageWith applies the HasEdge predicate on the "trust_center_setting_hero_image" edge with a given conditions (other predicates).
+func HasTrustCenterSettingHeroImageWith(preds ...predicate.TrustCenterSetting) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newTrustCenterSettingHeroImageStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustCenterEntityLogo applies the HasEdge predicate on the "trust_center_entity_logo" edge.
+func HasTrustCenterEntityLogo() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterEntityLogoTable, TrustCenterEntityLogoColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterEntityLogoWith applies the HasEdge predicate on the "trust_center_entity_logo" edge with a given conditions (other predicates).
+func HasTrustCenterEntityLogoWith(preds ...predicate.TrustCenterEntity) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newTrustCenterEntityLogoStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubprocessorLogo applies the HasEdge predicate on the "subprocessor_logo" edge.
+func HasSubprocessorLogo() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, SubprocessorLogoTable, SubprocessorLogoColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubprocessorLogoWith applies the HasEdge predicate on the "subprocessor_logo" edge with a given conditions (other predicates).
+func HasSubprocessorLogoWith(preds ...predicate.Subprocessor) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newSubprocessorLogoStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasStandardLogo applies the HasEdge predicate on the "standard_logo" edge.
+func HasStandardLogo() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, StandardLogoTable, StandardLogoColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStandardLogoWith applies the HasEdge predicate on the "standard_logo" edge with a given conditions (other predicates).
+func HasStandardLogoWith(preds ...predicate.Standard) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newStandardLogoStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.File) predicate.File {
 	return predicate.File(sql.AndPredicates(predicates...))

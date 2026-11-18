@@ -110,6 +110,7 @@ func (p Procedure) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("Comment").CreateChild("text"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{

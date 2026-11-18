@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVVendorScoringConfig(ctx context.Context,
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateVendorScoringConfigInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateVendorScoringConfig(ctx, inputs)
+	return r.bulkCreateCSVVendorScoringConfig(ctx, data)
 }
 
 // UpdateBulkVendorScoringConfig is the resolver for the updateBulkVendorScoringConfig field.

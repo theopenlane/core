@@ -17,7 +17,7 @@ type sweeper interface {
 }
 
 // Builder returns the system definition hosting the scheduled runtime sweeps
-func Builder(paymentReminder PaymentReminderConfig, organizationDelete OrganizationDeleteConfig, integrationLifecycle IntegrationLifecycleConfig) registry.Builder {
+func Builder(paymentReminder PaymentReminderConfig, organizationDelete OrganizationDeleteConfig, integrationLifecycle IntegrationLifecycleConfig, fileOrphan FileOrphanConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		paymentReminderOp := PaymentReminderOp.
 			HandlesRequest(sweepHandler(paymentReminder.Sweep())).
@@ -31,6 +31,10 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 			HandlesRequest(sweepHandler(integrationLifecycle.Sweep())).
 			DisabledForAll(!integrationLifecycle.Enabled)
 
+		fileOrphanOp := FileOrphanOp.
+			HandlesRequest(sweepHandler(fileOrphan.Sweep())).
+			DisabledForAll(!fileOrphan.Enabled)
+
 		return types.Definition{
 			ID:          DefinitionID.ID(),
 			Family:      "Openlane",
@@ -43,6 +47,7 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 				paymentReminderOp.Description("Mark canceled organizations for deletion and dispatch deletion notice emails").Registration(),
 				organizationDeleteOp.Description("Delete overdue organizations that still have no active or trialing subscription").Registration(),
 				integrationLifecycleOp.Description("Reap expired integration installations that never connected").Registration(),
+				fileOrphanOp.Description("Hard delete file records and their objects once nothing references them and they are older than the grace period").Registration(),
 			},
 		}, nil
 	})

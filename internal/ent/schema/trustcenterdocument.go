@@ -97,6 +97,7 @@ func (t TrustCenterDoc) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.TrustCenterDoc](t,
 				withParents(TrustCenter{}),
 				withSkipperFunc(skipInterceptorForSystemAdmins),
+				withAnonymousTrustCenterAccess(),
 			),
 			newCustomEnumMixin(t),
 			newGroupPermissionsMixin(withSkipViewPermissions()),

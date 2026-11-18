@@ -88,7 +88,8 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, operations.ErrOperationDisabled
 	}
 
-	runRecord, err := operations.CreatePendingRun(ctx, db, installation, operation, enums.IntegrationRunTypeReconcile, nil)
+	// scheduled cycles were authorized when the loop was seeded, so the run record is an internal write
+	runRecord, err := operations.CreatePendingRun(auth.WithInternalOperationContext(ctx), db, installation, operation, enums.IntegrationRunTypeReconcile, nil)
 	if err != nil {
 		return 0, err
 	}
@@ -407,13 +408,14 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 func (r *Runtime) resumeTrackedRun(ctx context.Context, oc *gala.OperationContext, src *types.IntegrationSource) (context.Context, error) {
 	db := r.DB()
 
-	run, err := db.IntegrationRun.Get(ctx, src.RunID)
+	run, err := db.IntegrationRun.Get(auth.WithInternalReadContext(ctx), src.RunID)
 	if err != nil {
 		return ctx, err
 	}
 
 	if run.Status != enums.IntegrationRunStatusPending {
-		retry, err := operations.RetryRun(ctx, db, run)
+		// retries continue an already authorized run, so the new run record is an internal write
+		retry, err := operations.RetryRun(auth.WithInternalOperationContext(ctx), db, run)
 		if err != nil {
 			return ctx, err
 		}
@@ -482,7 +484,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	if db := r.DB(); db != nil && db.IntegrationRun != nil && integration != nil {
 		var lastRunErr error
 
-		lastRunAt, lastRunErr = operations.LastSuccessfulRunAt(ctx, db, integration.ID, operation.Name)
+		lastRunAt, lastRunErr = operations.LastSuccessfulRunAt(auth.WithInternalReadContext(ctx), db, integration.ID, operation.Name)
 		if lastRunErr != nil {
 			logx.FromContext(ctx).Warn().Err(lastRunErr).Msg("could not resolve last successful run time, proceeding without incremental filter")
 		}

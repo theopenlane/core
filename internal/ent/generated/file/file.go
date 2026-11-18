@@ -129,6 +129,18 @@ const (
 	EdgeTrustCenterDoc = "trust_center_doc"
 	// EdgeOriginalTrustCenterDoc holds the string denoting the original_trust_center_doc edge name in mutations.
 	EdgeOriginalTrustCenterDoc = "original_trust_center_doc"
+	// EdgeTrustCenterSettingLogo holds the string denoting the trust_center_setting_logo edge name in mutations.
+	EdgeTrustCenterSettingLogo = "trust_center_setting_logo"
+	// EdgeTrustCenterSettingFavicon holds the string denoting the trust_center_setting_favicon edge name in mutations.
+	EdgeTrustCenterSettingFavicon = "trust_center_setting_favicon"
+	// EdgeTrustCenterSettingHeroImage holds the string denoting the trust_center_setting_hero_image edge name in mutations.
+	EdgeTrustCenterSettingHeroImage = "trust_center_setting_hero_image"
+	// EdgeTrustCenterEntityLogo holds the string denoting the trust_center_entity_logo edge name in mutations.
+	EdgeTrustCenterEntityLogo = "trust_center_entity_logo"
+	// EdgeSubprocessorLogo holds the string denoting the subprocessor_logo edge name in mutations.
+	EdgeSubprocessorLogo = "subprocessor_logo"
+	// EdgeStandardLogo holds the string denoting the standard_logo edge name in mutations.
+	EdgeStandardLogo = "standard_logo"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// EnvironmentTable is the table that holds the environment relation/edge.
@@ -250,6 +262,48 @@ const (
 	OriginalTrustCenterDocInverseTable = "trust_center_docs"
 	// OriginalTrustCenterDocColumn is the table column denoting the original_trust_center_doc relation/edge.
 	OriginalTrustCenterDocColumn = "original_file_id"
+	// TrustCenterSettingLogoTable is the table that holds the trust_center_setting_logo relation/edge.
+	TrustCenterSettingLogoTable = "trust_center_settings"
+	// TrustCenterSettingLogoInverseTable is the table name for the TrustCenterSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
+	TrustCenterSettingLogoInverseTable = "trust_center_settings"
+	// TrustCenterSettingLogoColumn is the table column denoting the trust_center_setting_logo relation/edge.
+	TrustCenterSettingLogoColumn = "logo_local_file_id"
+	// TrustCenterSettingFaviconTable is the table that holds the trust_center_setting_favicon relation/edge.
+	TrustCenterSettingFaviconTable = "trust_center_settings"
+	// TrustCenterSettingFaviconInverseTable is the table name for the TrustCenterSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
+	TrustCenterSettingFaviconInverseTable = "trust_center_settings"
+	// TrustCenterSettingFaviconColumn is the table column denoting the trust_center_setting_favicon relation/edge.
+	TrustCenterSettingFaviconColumn = "favicon_local_file_id"
+	// TrustCenterSettingHeroImageTable is the table that holds the trust_center_setting_hero_image relation/edge.
+	TrustCenterSettingHeroImageTable = "trust_center_settings"
+	// TrustCenterSettingHeroImageInverseTable is the table name for the TrustCenterSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
+	TrustCenterSettingHeroImageInverseTable = "trust_center_settings"
+	// TrustCenterSettingHeroImageColumn is the table column denoting the trust_center_setting_hero_image relation/edge.
+	TrustCenterSettingHeroImageColumn = "hero_image_local_file_id"
+	// TrustCenterEntityLogoTable is the table that holds the trust_center_entity_logo relation/edge.
+	TrustCenterEntityLogoTable = "trust_center_entities"
+	// TrustCenterEntityLogoInverseTable is the table name for the TrustCenterEntity entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterentity" package.
+	TrustCenterEntityLogoInverseTable = "trust_center_entities"
+	// TrustCenterEntityLogoColumn is the table column denoting the trust_center_entity_logo relation/edge.
+	TrustCenterEntityLogoColumn = "logo_file_id"
+	// SubprocessorLogoTable is the table that holds the subprocessor_logo relation/edge.
+	SubprocessorLogoTable = "subprocessors"
+	// SubprocessorLogoInverseTable is the table name for the Subprocessor entity.
+	// It exists in this package in order to avoid circular dependency with the "subprocessor" package.
+	SubprocessorLogoInverseTable = "subprocessors"
+	// SubprocessorLogoColumn is the table column denoting the subprocessor_logo relation/edge.
+	SubprocessorLogoColumn = "logo_file_id"
+	// StandardLogoTable is the table that holds the standard_logo relation/edge.
+	StandardLogoTable = "standards"
+	// StandardLogoInverseTable is the table name for the Standard entity.
+	// It exists in this package in order to avoid circular dependency with the "standard" package.
+	StandardLogoInverseTable = "standards"
+	// StandardLogoColumn is the table column denoting the standard_logo relation/edge.
+	StandardLogoColumn = "logo_file_id"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -376,7 +430,7 @@ func ValidColumn(column string) bool {
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
 	Hooks        [10]ent.Hook
-	Interceptors [4]ent.Interceptor
+	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -836,6 +890,90 @@ func ByOriginalTrustCenterDoc(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 		sqlgraph.OrderByNeighborTerms(s, newOriginalTrustCenterDocStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterSettingLogoCount orders the results by trust_center_setting_logo count.
+func ByTrustCenterSettingLogoCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSettingLogoStep(), opts...)
+	}
+}
+
+// ByTrustCenterSettingLogo orders the results by trust_center_setting_logo terms.
+func ByTrustCenterSettingLogo(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSettingLogoStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTrustCenterSettingFaviconCount orders the results by trust_center_setting_favicon count.
+func ByTrustCenterSettingFaviconCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSettingFaviconStep(), opts...)
+	}
+}
+
+// ByTrustCenterSettingFavicon orders the results by trust_center_setting_favicon terms.
+func ByTrustCenterSettingFavicon(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSettingFaviconStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTrustCenterSettingHeroImageCount orders the results by trust_center_setting_hero_image count.
+func ByTrustCenterSettingHeroImageCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSettingHeroImageStep(), opts...)
+	}
+}
+
+// ByTrustCenterSettingHeroImage orders the results by trust_center_setting_hero_image terms.
+func ByTrustCenterSettingHeroImage(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSettingHeroImageStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTrustCenterEntityLogoCount orders the results by trust_center_entity_logo count.
+func ByTrustCenterEntityLogoCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterEntityLogoStep(), opts...)
+	}
+}
+
+// ByTrustCenterEntityLogo orders the results by trust_center_entity_logo terms.
+func ByTrustCenterEntityLogo(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterEntityLogoStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySubprocessorLogoCount orders the results by subprocessor_logo count.
+func BySubprocessorLogoCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubprocessorLogoStep(), opts...)
+	}
+}
+
+// BySubprocessorLogo orders the results by subprocessor_logo terms.
+func BySubprocessorLogo(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubprocessorLogoStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByStandardLogoCount orders the results by standard_logo count.
+func ByStandardLogoCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newStandardLogoStep(), opts...)
+	}
+}
+
+// ByStandardLogo orders the results by standard_logo terms.
+func ByStandardLogo(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStandardLogoStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newEnvironmentStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -981,5 +1119,47 @@ func newOriginalTrustCenterDocStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OriginalTrustCenterDocInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, OriginalTrustCenterDocTable, OriginalTrustCenterDocColumn),
+	)
+}
+func newTrustCenterSettingLogoStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterSettingLogoInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterSettingLogoTable, TrustCenterSettingLogoColumn),
+	)
+}
+func newTrustCenterSettingFaviconStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterSettingFaviconInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterSettingFaviconTable, TrustCenterSettingFaviconColumn),
+	)
+}
+func newTrustCenterSettingHeroImageStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterSettingHeroImageInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterSettingHeroImageTable, TrustCenterSettingHeroImageColumn),
+	)
+}
+func newTrustCenterEntityLogoStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterEntityLogoInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterEntityLogoTable, TrustCenterEntityLogoColumn),
+	)
+}
+func newSubprocessorLogoStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubprocessorLogoInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, SubprocessorLogoTable, SubprocessorLogoColumn),
+	)
+}
+func newStandardLogoStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StandardLogoInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, StandardLogoTable, StandardLogoColumn),
 	)
 }

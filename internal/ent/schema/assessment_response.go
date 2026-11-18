@@ -297,6 +297,7 @@ func (AssessmentResponse) Annotations() []schema.Annotation {
 		entgql.Skip(
 			entgql.SkipMutationUpdateInput,
 		),
+		entx.FGACrudSkip(entx.SkipAll),
 	}
 }
 

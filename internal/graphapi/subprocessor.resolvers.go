@@ -78,12 +78,7 @@ func (r *mutationResolver) CreateBulkCSVSubprocessor(ctx context.Context, input 
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateSubprocessorInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateSubprocessor(ctx, inputs)
+	return r.bulkCreateCSVSubprocessor(ctx, data)
 }
 
 // UpdateSubprocessor is the resolver for the updateSubprocessor field.

@@ -637,6 +637,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldSystemInternalID:           {Type: field.TypeString, Column: control.FieldSystemInternalID},
 			control.FieldControlKindName:            {Type: field.TypeString, Column: control.FieldControlKindName},
 			control.FieldControlKindID:              {Type: field.TypeString, Column: control.FieldControlKindID},
+			control.FieldControlOriginName:          {Type: field.TypeString, Column: control.FieldControlOriginName},
+			control.FieldControlOriginID:            {Type: field.TypeString, Column: control.FieldControlOriginID},
 			control.FieldEnvironmentName:            {Type: field.TypeString, Column: control.FieldEnvironmentName},
 			control.FieldEnvironmentID:              {Type: field.TypeString, Column: control.FieldEnvironmentID},
 			control.FieldScopeName:                  {Type: field.TypeString, Column: control.FieldScopeName},
@@ -3151,6 +3153,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldSystemInternalID:           {Type: field.TypeString, Column: subcontrol.FieldSystemInternalID},
 			subcontrol.FieldSubcontrolKindName:         {Type: field.TypeString, Column: subcontrol.FieldSubcontrolKindName},
 			subcontrol.FieldSubcontrolKindID:           {Type: field.TypeString, Column: subcontrol.FieldSubcontrolKindID},
+			subcontrol.FieldControlOriginName:          {Type: field.TypeString, Column: subcontrol.FieldControlOriginName},
+			subcontrol.FieldControlOriginID:            {Type: field.TypeString, Column: subcontrol.FieldControlOriginID},
 			subcontrol.FieldWorkflowEligibleMarker:     {Type: field.TypeBool, Column: subcontrol.FieldWorkflowEligibleMarker},
 			subcontrol.FieldRefCode:                    {Type: field.TypeString, Column: subcontrol.FieldRefCode},
 			subcontrol.FieldControlID:                  {Type: field.TypeString, Column: subcontrol.FieldControlID},
@@ -5978,6 +5982,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"CustomTypeEnum",
 	)
 	graph.MustAddE(
+		"control_origin",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   control.ControlOriginTable,
+			Columns: []string{control.ControlOriginColumn},
+			Bidi:    false,
+		},
+		"Control",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
 		"environment",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -7766,6 +7782,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Finding",
 	)
 	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RisksTable,
+			Columns: entity.RisksPrimaryKey,
+			Bidi:    false,
+		},
+		"Entity",
+		"Risk",
+	)
+	graph.MustAddE(
 		"vulnerabilities",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -8532,6 +8560,78 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"File",
 		"TrustCenterDoc",
+	)
+	graph.MustAddE(
+		"trust_center_setting_logo",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingLogoTable,
+			Columns: []string{file.TrustCenterSettingLogoColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterSetting",
+	)
+	graph.MustAddE(
+		"trust_center_setting_favicon",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingFaviconTable,
+			Columns: []string{file.TrustCenterSettingFaviconColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterSetting",
+	)
+	graph.MustAddE(
+		"trust_center_setting_hero_image",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingHeroImageTable,
+			Columns: []string{file.TrustCenterSettingHeroImageColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterSetting",
+	)
+	graph.MustAddE(
+		"trust_center_entity_logo",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterEntityLogoTable,
+			Columns: []string{file.TrustCenterEntityLogoColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterEntity",
+	)
+	graph.MustAddE(
+		"subprocessor_logo",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.SubprocessorLogoTable,
+			Columns: []string{file.SubprocessorLogoColumn},
+			Bidi:    false,
+		},
+		"File",
+		"Subprocessor",
+	)
+	graph.MustAddE(
+		"standard_logo",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.StandardLogoTable,
+			Columns: []string{file.StandardLogoColumn},
+			Bidi:    false,
+		},
+		"File",
+		"Standard",
 	)
 	graph.MustAddE(
 		"owner",
@@ -12686,12 +12786,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
-		"campaigns_manager",
+		"campaign_manager",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.CampaignsManagerTable,
-			Columns: []string{organization.CampaignsManagerColumn},
+			Table:   organization.CampaignManagerTable,
+			Columns: []string{organization.CampaignManagerColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -12722,12 +12822,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
-		"policies_manager",
+		"integration_manager",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.PoliciesManagerTable,
-			Columns: []string{organization.PoliciesManagerColumn},
+			Table:   organization.IntegrationManagerTable,
+			Columns: []string{organization.IntegrationManagerColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
+		"policy_manager",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PolicyManagerTable,
+			Columns: []string{organization.PolicyManagerColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -12770,12 +12882,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
-		"workflows_manager",
+		"workflow_manager",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.WorkflowsManagerTable,
-			Columns: []string{organization.WorkflowsManagerColumn},
+			Table:   organization.WorkflowManagerTable,
+			Columns: []string{organization.WorkflowManagerColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -16048,10 +16160,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"entities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   risk.EntitiesTable,
-			Columns: []string{risk.EntitiesColumn},
+			Columns: risk.EntitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Entity",
+	)
+	graph.MustAddE(
+		"legacy_entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.LegacyEntitiesTable,
+			Columns: []string{risk.LegacyEntitiesColumn},
 			Bidi:    false,
 		},
 		"Risk",
@@ -16832,6 +16956,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   subcontrol.SubcontrolKindTable,
 			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
+		"control_origin",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ControlOriginTable,
+			Columns: []string{subcontrol.ControlOriginColumn},
 			Bidi:    false,
 		},
 		"Subcontrol",
@@ -24233,6 +24369,16 @@ func (f *ControlFilter) WhereControlKindID(p entql.StringP) {
 	f.Where(p.Field(control.FieldControlKindID))
 }
 
+// WhereControlOriginName applies the entql string predicate on the control_origin_name field.
+func (f *ControlFilter) WhereControlOriginName(p entql.StringP) {
+	f.Where(p.Field(control.FieldControlOriginName))
+}
+
+// WhereControlOriginID applies the entql string predicate on the control_origin_id field.
+func (f *ControlFilter) WhereControlOriginID(p entql.StringP) {
+	f.Where(p.Field(control.FieldControlOriginID))
+}
+
 // WhereEnvironmentName applies the entql string predicate on the environment_name field.
 func (f *ControlFilter) WhereEnvironmentName(p entql.StringP) {
 	f.Where(p.Field(control.FieldEnvironmentName))
@@ -24566,6 +24712,20 @@ func (f *ControlFilter) WhereHasControlKind() {
 // WhereHasControlKindWith applies a predicate to check if query has an edge control_kind with a given conditions (other predicates).
 func (f *ControlFilter) WhereHasControlKindWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("control_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControlOrigin applies a predicate to check if query has an edge control_origin.
+func (f *ControlFilter) WhereHasControlOrigin() {
+	f.Where(entql.HasEdge("control_origin"))
+}
+
+// WhereHasControlOriginWith applies a predicate to check if query has an edge control_origin with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasControlOriginWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("control_origin", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -29073,6 +29233,20 @@ func (f *EntityFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
 	})))
 }
 
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *EntityFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
 func (f *EntityFilter) WhereHasVulnerabilities() {
 	f.Where(entql.HasEdge("vulnerabilities"))
@@ -30708,6 +30882,90 @@ func (f *FileFilter) WhereHasOriginalTrustCenterDoc() {
 // WhereHasOriginalTrustCenterDocWith applies a predicate to check if query has an edge original_trust_center_doc with a given conditions (other predicates).
 func (f *FileFilter) WhereHasOriginalTrustCenterDocWith(preds ...predicate.TrustCenterDoc) {
 	f.Where(entql.HasEdgeWith("original_trust_center_doc", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSettingLogo applies a predicate to check if query has an edge trust_center_setting_logo.
+func (f *FileFilter) WhereHasTrustCenterSettingLogo() {
+	f.Where(entql.HasEdge("trust_center_setting_logo"))
+}
+
+// WhereHasTrustCenterSettingLogoWith applies a predicate to check if query has an edge trust_center_setting_logo with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterSettingLogoWith(preds ...predicate.TrustCenterSetting) {
+	f.Where(entql.HasEdgeWith("trust_center_setting_logo", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSettingFavicon applies a predicate to check if query has an edge trust_center_setting_favicon.
+func (f *FileFilter) WhereHasTrustCenterSettingFavicon() {
+	f.Where(entql.HasEdge("trust_center_setting_favicon"))
+}
+
+// WhereHasTrustCenterSettingFaviconWith applies a predicate to check if query has an edge trust_center_setting_favicon with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterSettingFaviconWith(preds ...predicate.TrustCenterSetting) {
+	f.Where(entql.HasEdgeWith("trust_center_setting_favicon", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSettingHeroImage applies a predicate to check if query has an edge trust_center_setting_hero_image.
+func (f *FileFilter) WhereHasTrustCenterSettingHeroImage() {
+	f.Where(entql.HasEdge("trust_center_setting_hero_image"))
+}
+
+// WhereHasTrustCenterSettingHeroImageWith applies a predicate to check if query has an edge trust_center_setting_hero_image with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterSettingHeroImageWith(preds ...predicate.TrustCenterSetting) {
+	f.Where(entql.HasEdgeWith("trust_center_setting_hero_image", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterEntityLogo applies a predicate to check if query has an edge trust_center_entity_logo.
+func (f *FileFilter) WhereHasTrustCenterEntityLogo() {
+	f.Where(entql.HasEdge("trust_center_entity_logo"))
+}
+
+// WhereHasTrustCenterEntityLogoWith applies a predicate to check if query has an edge trust_center_entity_logo with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterEntityLogoWith(preds ...predicate.TrustCenterEntity) {
+	f.Where(entql.HasEdgeWith("trust_center_entity_logo", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubprocessorLogo applies a predicate to check if query has an edge subprocessor_logo.
+func (f *FileFilter) WhereHasSubprocessorLogo() {
+	f.Where(entql.HasEdge("subprocessor_logo"))
+}
+
+// WhereHasSubprocessorLogoWith applies a predicate to check if query has an edge subprocessor_logo with a given conditions (other predicates).
+func (f *FileFilter) WhereHasSubprocessorLogoWith(preds ...predicate.Subprocessor) {
+	f.Where(entql.HasEdgeWith("subprocessor_logo", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStandardLogo applies a predicate to check if query has an edge standard_logo.
+func (f *FileFilter) WhereHasStandardLogo() {
+	f.Where(entql.HasEdge("standard_logo"))
+}
+
+// WhereHasStandardLogoWith applies a predicate to check if query has an edge standard_logo with a given conditions (other predicates).
+func (f *FileFilter) WhereHasStandardLogoWith(preds ...predicate.Standard) {
+	f.Where(entql.HasEdgeWith("standard_logo", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -39918,14 +40176,14 @@ func (f *OrganizationFilter) WhereHasWorkflowDefinitionCreatorsWith(preds ...pre
 	})))
 }
 
-// WhereHasCampaignsManager applies a predicate to check if query has an edge campaigns_manager.
-func (f *OrganizationFilter) WhereHasCampaignsManager() {
-	f.Where(entql.HasEdge("campaigns_manager"))
+// WhereHasCampaignManager applies a predicate to check if query has an edge campaign_manager.
+func (f *OrganizationFilter) WhereHasCampaignManager() {
+	f.Where(entql.HasEdge("campaign_manager"))
 }
 
-// WhereHasCampaignsManagerWith applies a predicate to check if query has an edge campaigns_manager with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasCampaignsManagerWith(preds ...predicate.Group) {
-	f.Where(entql.HasEdgeWith("campaigns_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasCampaignManagerWith applies a predicate to check if query has an edge campaign_manager with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasCampaignManagerWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("campaign_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -39960,14 +40218,28 @@ func (f *OrganizationFilter) WhereHasGroupManagerWith(preds ...predicate.Group) 
 	})))
 }
 
-// WhereHasPoliciesManager applies a predicate to check if query has an edge policies_manager.
-func (f *OrganizationFilter) WhereHasPoliciesManager() {
-	f.Where(entql.HasEdge("policies_manager"))
+// WhereHasIntegrationManager applies a predicate to check if query has an edge integration_manager.
+func (f *OrganizationFilter) WhereHasIntegrationManager() {
+	f.Where(entql.HasEdge("integration_manager"))
 }
 
-// WhereHasPoliciesManagerWith applies a predicate to check if query has an edge policies_manager with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasPoliciesManagerWith(preds ...predicate.Group) {
-	f.Where(entql.HasEdgeWith("policies_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasIntegrationManagerWith applies a predicate to check if query has an edge integration_manager with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasIntegrationManagerWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("integration_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPolicyManager applies a predicate to check if query has an edge policy_manager.
+func (f *OrganizationFilter) WhereHasPolicyManager() {
+	f.Where(entql.HasEdge("policy_manager"))
+}
+
+// WhereHasPolicyManagerWith applies a predicate to check if query has an edge policy_manager with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasPolicyManagerWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("policy_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -40016,14 +40288,14 @@ func (f *OrganizationFilter) WhereHasTrustCenterManagerWith(preds ...predicate.G
 	})))
 }
 
-// WhereHasWorkflowsManager applies a predicate to check if query has an edge workflows_manager.
-func (f *OrganizationFilter) WhereHasWorkflowsManager() {
-	f.Where(entql.HasEdge("workflows_manager"))
+// WhereHasWorkflowManager applies a predicate to check if query has an edge workflow_manager.
+func (f *OrganizationFilter) WhereHasWorkflowManager() {
+	f.Where(entql.HasEdge("workflow_manager"))
 }
 
-// WhereHasWorkflowsManagerWith applies a predicate to check if query has an edge workflows_manager with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasWorkflowsManagerWith(preds ...predicate.Group) {
-	f.Where(entql.HasEdgeWith("workflows_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasWorkflowManagerWith applies a predicate to check if query has an edge workflow_manager with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasWorkflowManagerWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("workflow_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -46452,6 +46724,20 @@ func (f *RiskFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
 	})))
 }
 
+// WhereHasLegacyEntities applies a predicate to check if query has an edge legacy_entities.
+func (f *RiskFilter) WhereHasLegacyEntities() {
+	f.Where(entql.HasEdge("legacy_entities"))
+}
+
+// WhereHasLegacyEntitiesWith applies a predicate to check if query has an edge legacy_entities with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasLegacyEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("legacy_entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasScans applies a predicate to check if query has an edge scans.
 func (f *RiskFilter) WhereHasScans() {
 	f.Where(entql.HasEdge("scans"))
@@ -47926,6 +48212,16 @@ func (f *SubcontrolFilter) WhereSubcontrolKindID(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldSubcontrolKindID))
 }
 
+// WhereControlOriginName applies the entql string predicate on the control_origin_name field.
+func (f *SubcontrolFilter) WhereControlOriginName(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldControlOriginName))
+}
+
+// WhereControlOriginID applies the entql string predicate on the control_origin_id field.
+func (f *SubcontrolFilter) WhereControlOriginID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldControlOriginID))
+}
+
 // WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
 func (f *SubcontrolFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(subcontrol.FieldWorkflowEligibleMarker))
@@ -48201,6 +48497,20 @@ func (f *SubcontrolFilter) WhereHasSubcontrolKind() {
 // WhereHasSubcontrolKindWith applies a predicate to check if query has an edge subcontrol_kind with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasSubcontrolKindWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("subcontrol_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControlOrigin applies a predicate to check if query has an edge control_origin.
+func (f *SubcontrolFilter) WhereHasControlOrigin() {
+	f.Where(entql.HasEdge("control_origin"))
+}
+
+// WhereHasControlOriginWith applies a predicate to check if query has an edge control_origin with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasControlOriginWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("control_origin", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

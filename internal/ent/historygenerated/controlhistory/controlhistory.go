@@ -130,6 +130,10 @@ const (
 	FieldControlKindName = "control_kind_name"
 	// FieldControlKindID holds the string denoting the control_kind_id field in the database.
 	FieldControlKindID = "control_kind_id"
+	// FieldControlOriginName holds the string denoting the control_origin_name field in the database.
+	FieldControlOriginName = "control_origin_name"
+	// FieldControlOriginID holds the string denoting the control_origin_id field in the database.
+	FieldControlOriginID = "control_origin_id"
 	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
 	FieldEnvironmentName = "environment_name"
 	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
@@ -210,6 +214,8 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldControlKindName,
 	FieldControlKindID,
+	FieldControlOriginName,
+	FieldControlOriginID,
 	FieldEnvironmentName,
 	FieldEnvironmentID,
 	FieldScopeName,
@@ -537,6 +543,16 @@ func ByControlKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByControlKindID orders the results by the control_kind_id field.
 func ByControlKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldControlKindID, opts...).ToFunc()
+}
+
+// ByControlOriginName orders the results by the control_origin_name field.
+func ByControlOriginName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlOriginName, opts...).ToFunc()
+}
+
+// ByControlOriginID orders the results by the control_origin_id field.
+func ByControlOriginID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlOriginID, opts...).ToFunc()
 }
 
 // ByEnvironmentName orders the results by the environment_name field.

@@ -965,6 +965,46 @@ func (_u *SubcontrolUpdate) ClearSubcontrolKindID() *SubcontrolUpdate {
 	return _u
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (_u *SubcontrolUpdate) SetControlOriginName(v string) *SubcontrolUpdate {
+	_u.mutation.SetControlOriginName(v)
+	return _u
+}
+
+// SetNillableControlOriginName sets the "control_origin_name" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableControlOriginName(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetControlOriginName(*v)
+	}
+	return _u
+}
+
+// ClearControlOriginName clears the value of the "control_origin_name" field.
+func (_u *SubcontrolUpdate) ClearControlOriginName() *SubcontrolUpdate {
+	_u.mutation.ClearControlOriginName()
+	return _u
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (_u *SubcontrolUpdate) SetControlOriginID(v string) *SubcontrolUpdate {
+	_u.mutation.SetControlOriginID(v)
+	return _u
+}
+
+// SetNillableControlOriginID sets the "control_origin_id" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableControlOriginID(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetControlOriginID(*v)
+	}
+	return _u
+}
+
+// ClearControlOriginID clears the value of the "control_origin_id" field.
+func (_u *SubcontrolUpdate) ClearControlOriginID() *SubcontrolUpdate {
+	_u.mutation.ClearControlOriginID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *SubcontrolUpdate) SetWorkflowEligibleMarker(v bool) *SubcontrolUpdate {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -1241,6 +1281,11 @@ func (_u *SubcontrolUpdate) AddScans(v ...*Scan) *SubcontrolUpdate {
 // SetSubcontrolKind sets the "subcontrol_kind" edge to the CustomTypeEnum entity.
 func (_u *SubcontrolUpdate) SetSubcontrolKind(v *CustomTypeEnum) *SubcontrolUpdate {
 	return _u.SetSubcontrolKindID(v.ID)
+}
+
+// SetControlOrigin sets the "control_origin" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdate) SetControlOrigin(v *CustomTypeEnum) *SubcontrolUpdate {
+	return _u.SetControlOriginID(v.ID)
 }
 
 // SetControl sets the "control" edge to the Control entity.
@@ -1703,6 +1748,12 @@ func (_u *SubcontrolUpdate) RemoveScans(v ...*Scan) *SubcontrolUpdate {
 // ClearSubcontrolKind clears the "subcontrol_kind" edge to the CustomTypeEnum entity.
 func (_u *SubcontrolUpdate) ClearSubcontrolKind() *SubcontrolUpdate {
 	_u.mutation.ClearSubcontrolKind()
+	return _u
+}
+
+// ClearControlOrigin clears the "control_origin" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdate) ClearControlOrigin() *SubcontrolUpdate {
+	_u.mutation.ClearControlOrigin()
 	return _u
 }
 
@@ -2325,6 +2376,12 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.SubcontrolKindNameCleared() {
 		_spec.ClearField(subcontrol.FieldSubcontrolKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ControlOriginName(); ok {
+		_spec.SetField(subcontrol.FieldControlOriginName, field.TypeString, value)
+	}
+	if _u.mutation.ControlOriginNameCleared() {
+		_spec.ClearField(subcontrol.FieldControlOriginName, field.TypeString)
 	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(subcontrol.FieldWorkflowEligibleMarker, field.TypeBool, value)
@@ -3071,6 +3128,35 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Inverse: false,
 			Table:   subcontrol.SubcontrolKindTable,
 			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlOriginCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ControlOriginTable,
+			Columns: []string{subcontrol.ControlOriginColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlOriginIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ControlOriginTable,
+			Columns: []string{subcontrol.ControlOriginColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -4445,6 +4531,46 @@ func (_u *SubcontrolUpdateOne) ClearSubcontrolKindID() *SubcontrolUpdateOne {
 	return _u
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (_u *SubcontrolUpdateOne) SetControlOriginName(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetControlOriginName(v)
+	return _u
+}
+
+// SetNillableControlOriginName sets the "control_origin_name" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableControlOriginName(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetControlOriginName(*v)
+	}
+	return _u
+}
+
+// ClearControlOriginName clears the value of the "control_origin_name" field.
+func (_u *SubcontrolUpdateOne) ClearControlOriginName() *SubcontrolUpdateOne {
+	_u.mutation.ClearControlOriginName()
+	return _u
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (_u *SubcontrolUpdateOne) SetControlOriginID(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetControlOriginID(v)
+	return _u
+}
+
+// SetNillableControlOriginID sets the "control_origin_id" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableControlOriginID(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetControlOriginID(*v)
+	}
+	return _u
+}
+
+// ClearControlOriginID clears the value of the "control_origin_id" field.
+func (_u *SubcontrolUpdateOne) ClearControlOriginID() *SubcontrolUpdateOne {
+	_u.mutation.ClearControlOriginID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *SubcontrolUpdateOne) SetWorkflowEligibleMarker(v bool) *SubcontrolUpdateOne {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -4721,6 +4847,11 @@ func (_u *SubcontrolUpdateOne) AddScans(v ...*Scan) *SubcontrolUpdateOne {
 // SetSubcontrolKind sets the "subcontrol_kind" edge to the CustomTypeEnum entity.
 func (_u *SubcontrolUpdateOne) SetSubcontrolKind(v *CustomTypeEnum) *SubcontrolUpdateOne {
 	return _u.SetSubcontrolKindID(v.ID)
+}
+
+// SetControlOrigin sets the "control_origin" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdateOne) SetControlOrigin(v *CustomTypeEnum) *SubcontrolUpdateOne {
+	return _u.SetControlOriginID(v.ID)
 }
 
 // SetControl sets the "control" edge to the Control entity.
@@ -5183,6 +5314,12 @@ func (_u *SubcontrolUpdateOne) RemoveScans(v ...*Scan) *SubcontrolUpdateOne {
 // ClearSubcontrolKind clears the "subcontrol_kind" edge to the CustomTypeEnum entity.
 func (_u *SubcontrolUpdateOne) ClearSubcontrolKind() *SubcontrolUpdateOne {
 	_u.mutation.ClearSubcontrolKind()
+	return _u
+}
+
+// ClearControlOrigin clears the "control_origin" edge to the CustomTypeEnum entity.
+func (_u *SubcontrolUpdateOne) ClearControlOrigin() *SubcontrolUpdateOne {
+	_u.mutation.ClearControlOrigin()
 	return _u
 }
 
@@ -5835,6 +5972,12 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 	}
 	if _u.mutation.SubcontrolKindNameCleared() {
 		_spec.ClearField(subcontrol.FieldSubcontrolKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ControlOriginName(); ok {
+		_spec.SetField(subcontrol.FieldControlOriginName, field.TypeString, value)
+	}
+	if _u.mutation.ControlOriginNameCleared() {
+		_spec.ClearField(subcontrol.FieldControlOriginName, field.TypeString)
 	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(subcontrol.FieldWorkflowEligibleMarker, field.TypeBool, value)
@@ -6581,6 +6724,35 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 			Inverse: false,
 			Table:   subcontrol.SubcontrolKindTable,
 			Columns: []string{subcontrol.SubcontrolKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlOriginCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ControlOriginTable,
+			Columns: []string{subcontrol.ControlOriginColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlOriginIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subcontrol.ControlOriginTable,
+			Columns: []string{subcontrol.ControlOriginColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),

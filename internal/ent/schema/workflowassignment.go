@@ -171,6 +171,7 @@ func (WorkflowAssignment) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+		entx.FGACrudSkip(entx.SkipAll),
 	}
 }
 

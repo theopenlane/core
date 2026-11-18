@@ -133,6 +133,10 @@ type ControlHistory struct {
 	ControlKindName string `json:"control_kind_name,omitempty"`
 	// the kind of the control
 	ControlKindID string `json:"control_kind_id,omitempty"`
+	// the control_origin of the control
+	ControlOriginName string `json:"control_origin_name,omitempty"`
+	// the control_origin of the control
+	ControlOriginID string `json:"control_origin_id,omitempty"`
 	// the environment of the control
 	EnvironmentName string `json:"environment_name,omitempty"`
 	// the environment of the control
@@ -165,7 +169,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case controlhistory.FieldSystemOwned, controlhistory.FieldWorkflowEligibleMarker, controlhistory.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldUpdatedByImpersonator, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldSourceDefinitionID, controlhistory.FieldSourceDefinitionVersion, controlhistory.FieldSourceInstanceID, controlhistory.FieldManagedBy, controlhistory.FieldIntegrationRunID, controlhistory.FieldSourceKey, controlhistory.FieldExternalID, controlhistory.FieldExternalUUID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldImplementationStatus, controlhistory.FieldImplementationDescription, controlhistory.FieldPublicRepresentation, controlhistory.FieldSource, controlhistory.FieldSourceName, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldUpdatedByImpersonator, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldSourceDefinitionID, controlhistory.FieldSourceDefinitionVersion, controlhistory.FieldSourceInstanceID, controlhistory.FieldManagedBy, controlhistory.FieldIntegrationRunID, controlhistory.FieldSourceKey, controlhistory.FieldExternalID, controlhistory.FieldExternalUUID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldImplementationStatus, controlhistory.FieldImplementationDescription, controlhistory.FieldPublicRepresentation, controlhistory.FieldSource, controlhistory.FieldSourceName, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldControlOriginName, controlhistory.FieldControlOriginID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -552,6 +556,18 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ControlKindID = value.String
 			}
+		case controlhistory.FieldControlOriginName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_origin_name", values[i])
+			} else if value.Valid {
+				_m.ControlOriginName = value.String
+			}
+		case controlhistory.FieldControlOriginID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_origin_id", values[i])
+			} else if value.Valid {
+				_m.ControlOriginID = value.String
+			}
 		case controlhistory.FieldEnvironmentName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
@@ -822,6 +838,12 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("control_kind_id=")
 	builder.WriteString(_m.ControlKindID)
+	builder.WriteString(", ")
+	builder.WriteString("control_origin_name=")
+	builder.WriteString(_m.ControlOriginName)
+	builder.WriteString(", ")
+	builder.WriteString("control_origin_id=")
+	builder.WriteString(_m.ControlOriginID)
 	builder.WriteString(", ")
 	builder.WriteString("environment_name=")
 	builder.WriteString(_m.EnvironmentName)

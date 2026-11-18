@@ -2514,6 +2514,16 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldControlKindID)
 				fieldSeen[controlhistory.FieldControlKindID] = struct{}{}
 			}
+		case "controlOriginName":
+			if _, ok := fieldSeen[controlhistory.FieldControlOriginName]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldControlOriginName)
+				fieldSeen[controlhistory.FieldControlOriginName] = struct{}{}
+			}
+		case "controlOriginID":
+			if _, ok := fieldSeen[controlhistory.FieldControlOriginID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldControlOriginID)
+				fieldSeen[controlhistory.FieldControlOriginID] = struct{}{}
+			}
 		case "environmentName":
 			if _, ok := fieldSeen[controlhistory.FieldEnvironmentName]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldEnvironmentName)
@@ -12118,6 +12128,16 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldSubcontrolKindID]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldSubcontrolKindID)
 				fieldSeen[subcontrolhistory.FieldSubcontrolKindID] = struct{}{}
+			}
+		case "controlOriginName":
+			if _, ok := fieldSeen[subcontrolhistory.FieldControlOriginName]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldControlOriginName)
+				fieldSeen[subcontrolhistory.FieldControlOriginName] = struct{}{}
+			}
+		case "controlOriginID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldControlOriginID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldControlOriginID)
+				fieldSeen[subcontrolhistory.FieldControlOriginID] = struct{}{}
 			}
 		case "workflowEligibleMarker":
 			if _, ok := fieldSeen[subcontrolhistory.FieldWorkflowEligibleMarker]; !ok {

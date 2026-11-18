@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVDirectoryGroup(ctx context.Context, inpu
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateDirectoryGroupInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateDirectoryGroup(ctx, inputs)
+	return r.bulkCreateCSVDirectoryGroup(ctx, data)
 }
 
 // UpdateDirectoryGroup is the resolver for the updateDirectoryGroup field.

@@ -9,6 +9,7 @@ import (
 	"slices"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
@@ -307,7 +308,7 @@ func renameRetiredRows(ctx context.Context, tx *ent.Tx, installationID string, d
 		if err := tx.IntegrationRun.Update().
 			Where(integrationrun.IntegrationIDEQ(installationID), integrationrun.OperationNameIn(operation.Replaces...)).
 			SetOperationName(operation.Name).
-			Exec(ctx); err != nil {
+			Exec(auth.WithInternalOperationContext(ctx)); err != nil {
 
 			logx.FromContext(ctx).Error().Err(err).Msg("failed renaming retired run rows")
 

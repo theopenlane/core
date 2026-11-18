@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVDirectoryMembership(ctx context.Context,
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateDirectoryMembershipInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateDirectoryMembership(ctx, inputs)
+	return r.bulkCreateCSVDirectoryMembership(ctx, data)
 }
 
 // UpdateDirectoryMembership is the resolver for the updateDirectoryMembership field.

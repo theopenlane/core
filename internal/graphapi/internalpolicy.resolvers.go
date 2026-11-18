@@ -137,12 +137,7 @@ func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, inpu
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateInternalPolicyInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateInternalPolicy(ctx, inputs)
+	return r.bulkCreateCSVInternalPolicy(ctx, data)
 }
 
 // UpdateBulkInternalPolicy is the resolver for the updateBulkInternalPolicy field.

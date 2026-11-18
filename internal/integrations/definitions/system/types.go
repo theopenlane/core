@@ -31,6 +31,16 @@ const (
 	IntegrationLifecycleMinInterval = 6 * time.Hour
 	// IntegrationLifecycleMaxInterval is the maximum polling interval for integration lifecycle sweeps
 	IntegrationLifecycleMaxInterval = 24 * time.Hour
+	// defaultFileOrphanMaxPerRun is the default orphaned files deleted per sweep
+	defaultFileOrphanMaxPerRun = 500
+	// FileOrphanMinAge keeps uploads not yet attached to a parent out of the sweep
+	FileOrphanMinAge = 7 * 24 * time.Hour
+	// fileOrphanMinInterval is the minimum file orphan sweep interval
+	fileOrphanMinInterval = 6 * time.Hour
+	// fileOrphanMaxInterval is the maximum file orphan sweep interval
+	fileOrphanMaxInterval = 24 * time.Hour
+	// fileOrphanPageSize is the file records classified per query
+	fileOrphanPageSize = 200
 )
 
 // PaymentReminderConfig contains the operator configuration for the payment reminder sweep
@@ -61,6 +71,24 @@ type IntegrationLifecycleConfig struct {
 	DryRun bool `json:"dryrun" koanf:"dryrun" default:"true" jsonschema:"default=true,description=If true only log integration IDs and actions that would be dispatched"`
 	// MaxPerRun caps how many integrations are evaluated per sweep
 	MaxPerRun int `json:"maxperrun" koanf:"maxperrun" default:"100" jsonschema:"default=100,description=Maximum integrations to evaluate per run"`
+}
+
+// FileOrphanConfig configures the file orphan sweep
+type FileOrphanConfig struct {
+	// Enabled turns the sweep on
+	Enabled bool `json:"enabled" koanf:"enabled" default:"true" jsonschema:"default=true,description=Whether the file orphan sweep is enabled"`
+	// DryRun only logs the files that would be deleted
+	DryRun bool `json:"dryrun" koanf:"dryrun" default:"true" jsonschema:"default=true,description=If true only log file IDs that would be deleted"`
+	// MaxPerRun caps deletions per sweep
+	MaxPerRun int `json:"maxperrun" koanf:"maxperrun" default:"500" jsonschema:"default=500,description=Maximum orphaned files to delete per run"`
+}
+
+// Sweep maps the operator configuration to its sweep defaults
+func (c FileOrphanConfig) Sweep() FileOrphanSweep {
+	return FileOrphanSweep{
+		DryRun:    c.DryRun,
+		MaxPerRun: c.MaxPerRun,
+	}
 }
 
 // Sweep maps the operator configuration to its sweep defaults
@@ -109,6 +137,14 @@ type IntegrationLifecycleSweep struct {
 	MaxPerRun int `json:"maxPerRun,omitempty"`
 }
 
+// FileOrphanSweep is one file orphan sweep cycle
+type FileOrphanSweep struct {
+	// DryRun only logs the files that would be deleted
+	DryRun bool `json:"dryRun,omitempty"`
+	// MaxPerRun caps deletions in the cycle
+	MaxPerRun int `json:"maxPerRun,omitempty"`
+}
+
 var (
 	// PaymentReminderOp is the operation ref for the payment reminder sweep
 	PaymentReminderOp = types.OperationPayloadOf[PaymentReminderSweep]().
@@ -128,4 +164,10 @@ var (
 				Schedule(&gala.Schedule{MinInterval: IntegrationLifecycleMinInterval, MaxInterval: IntegrationLifecycleMaxInterval}).
 				CustomerSelectable(false).
 				SkipDefaultLookback()
+	// FileOrphanOp is the operation ref for the file orphan sweep
+	FileOrphanOp = types.OperationPayloadOf[FileOrphanSweep]().
+			Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).
+			Schedule(&gala.Schedule{MinInterval: fileOrphanMinInterval, MaxInterval: fileOrphanMaxInterval}).
+			CustomerSelectable(false).
+			SkipDefaultLookback()
 )

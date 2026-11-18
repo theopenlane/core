@@ -5642,6 +5642,29 @@ func HasFindingsWith(preds ...predicate.Finding) predicate.Entity {
 	})
 }
 
+// HasRisks applies the HasEdge predicate on the "risks" edge.
+func HasRisks() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RisksTable, RisksPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRisksWith applies the HasEdge predicate on the "risks" edge with a given conditions (other predicates).
+func HasRisksWith(preds ...predicate.Risk) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newRisksStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasVulnerabilities applies the HasEdge predicate on the "vulnerabilities" edge.
 func HasVulnerabilities() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {

@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
@@ -305,6 +306,13 @@ func (r Risk) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Entity{}.Name()),
 			},
 		}),
+		edge.To("legacy_entities", Entity.Type).
+			StorageKey(edge.Column("risk_entities"), edge.Symbol("entities_risks_entities")).
+			Annotations(
+				entgql.RelayConnection(),
+				accessmap.EdgeViewCheck(Entity{}.Name()),
+				entgql.Directives(entgql.Deprecated("use entities instead")),
+			),
 		defaultEdgeToWithPagination(r, Scan{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,
@@ -335,6 +343,7 @@ func (r Risk) Edges() []ent.Edge {
 			comment:    "conversations related to the risk",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.CSVRef().FromColumn("Comment").CreateChild("text"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -399,13 +408,13 @@ func (Risk) Hooks() []ent.Hook {
 			hooks.HookRelationTuples(map[string]string{
 				"stakeholder": "group",
 			}, "stakeholder"),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 		hook.On(
 			hooks.HookRelationTuples(map[string]string{
 				"delegate": "group",
 			}, "delegate"),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 		hooks.HookSlateJSON(),
 		hooks.HookRisks(),

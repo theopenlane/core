@@ -35554,6 +35554,7 @@ type ControlMutation struct {
 	internal_notes                 *string
 	system_internal_id             *string
 	control_kind_name              *string
+	control_origin_name            *string
 	environment_name               *string
 	scope_name                     *string
 	workflow_eligible_marker       *bool
@@ -35619,6 +35620,8 @@ type ControlMutation struct {
 	clearededitors                 bool
 	control_kind                   *string
 	clearedcontrol_kind            bool
+	control_origin                 *string
+	clearedcontrol_origin          bool
 	environment                    *string
 	clearedenvironment             bool
 	scope                          *string
@@ -38506,6 +38509,104 @@ func (m *ControlMutation) ResetControlKindID() {
 	delete(m.clearedFields, control.FieldControlKindID)
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (m *ControlMutation) SetControlOriginName(s string) {
+	m.control_origin_name = &s
+}
+
+// ControlOriginName returns the value of the "control_origin_name" field in the mutation.
+func (m *ControlMutation) ControlOriginName() (r string, exists bool) {
+	v := m.control_origin_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldControlOriginName returns the old "control_origin_name" field's value of the Control entity.
+// If the Control object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlMutation) OldControlOriginName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldControlOriginName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldControlOriginName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldControlOriginName: %w", err)
+	}
+	return oldValue.ControlOriginName, nil
+}
+
+// ClearControlOriginName clears the value of the "control_origin_name" field.
+func (m *ControlMutation) ClearControlOriginName() {
+	m.control_origin_name = nil
+	m.clearedFields[control.FieldControlOriginName] = struct{}{}
+}
+
+// ControlOriginNameCleared returns if the "control_origin_name" field was cleared in this mutation.
+func (m *ControlMutation) ControlOriginNameCleared() bool {
+	_, ok := m.clearedFields[control.FieldControlOriginName]
+	return ok
+}
+
+// ResetControlOriginName resets all changes to the "control_origin_name" field.
+func (m *ControlMutation) ResetControlOriginName() {
+	m.control_origin_name = nil
+	delete(m.clearedFields, control.FieldControlOriginName)
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (m *ControlMutation) SetControlOriginID(s string) {
+	m.control_origin = &s
+}
+
+// ControlOriginID returns the value of the "control_origin_id" field in the mutation.
+func (m *ControlMutation) ControlOriginID() (r string, exists bool) {
+	v := m.control_origin
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldControlOriginID returns the old "control_origin_id" field's value of the Control entity.
+// If the Control object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlMutation) OldControlOriginID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldControlOriginID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldControlOriginID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldControlOriginID: %w", err)
+	}
+	return oldValue.ControlOriginID, nil
+}
+
+// ClearControlOriginID clears the value of the "control_origin_id" field.
+func (m *ControlMutation) ClearControlOriginID() {
+	m.control_origin = nil
+	m.clearedFields[control.FieldControlOriginID] = struct{}{}
+}
+
+// ControlOriginIDCleared returns if the "control_origin_id" field was cleared in this mutation.
+func (m *ControlMutation) ControlOriginIDCleared() bool {
+	_, ok := m.clearedFields[control.FieldControlOriginID]
+	return ok
+}
+
+// ResetControlOriginID resets all changes to the "control_origin_id" field.
+func (m *ControlMutation) ResetControlOriginID() {
+	m.control_origin = nil
+	delete(m.clearedFields, control.FieldControlOriginID)
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (m *ControlMutation) SetEnvironmentName(s string) {
 	m.environment_name = &s
@@ -39933,6 +40034,33 @@ func (m *ControlMutation) ResetControlKind() {
 	m.clearedcontrol_kind = false
 }
 
+// ClearControlOrigin clears the "control_origin" edge to the CustomTypeEnum entity.
+func (m *ControlMutation) ClearControlOrigin() {
+	m.clearedcontrol_origin = true
+	m.clearedFields[control.FieldControlOriginID] = struct{}{}
+}
+
+// ControlOriginCleared reports if the "control_origin" edge to the CustomTypeEnum entity was cleared.
+func (m *ControlMutation) ControlOriginCleared() bool {
+	return m.ControlOriginIDCleared() || m.clearedcontrol_origin
+}
+
+// ControlOriginIDs returns the "control_origin" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ControlOriginID instead. It exists only for internal usage by the builders.
+func (m *ControlMutation) ControlOriginIDs() (ids []string) {
+	if id := m.control_origin; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetControlOrigin resets all changes to the "control_origin" edge.
+func (m *ControlMutation) ResetControlOrigin() {
+	m.control_origin = nil
+	m.clearedcontrol_origin = false
+}
+
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
 func (m *ControlMutation) ClearEnvironment() {
 	m.clearedenvironment = true
@@ -40858,7 +40986,7 @@ func (m *ControlMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlMutation) Fields() []string {
-	fields := make([]string, 0, 61)
+	fields := make([]string, 0, 63)
 	if m.created_at != nil {
 		fields = append(fields, control.FieldCreatedAt)
 	}
@@ -41015,6 +41143,12 @@ func (m *ControlMutation) Fields() []string {
 	if m.control_kind != nil {
 		fields = append(fields, control.FieldControlKindID)
 	}
+	if m.control_origin_name != nil {
+		fields = append(fields, control.FieldControlOriginName)
+	}
+	if m.control_origin != nil {
+		fields = append(fields, control.FieldControlOriginID)
+	}
 	if m.environment_name != nil {
 		fields = append(fields, control.FieldEnvironmentName)
 	}
@@ -41154,6 +41288,10 @@ func (m *ControlMutation) Field(name string) (ent.Value, bool) {
 		return m.ControlKindName()
 	case control.FieldControlKindID:
 		return m.ControlKindID()
+	case control.FieldControlOriginName:
+		return m.ControlOriginName()
+	case control.FieldControlOriginID:
+		return m.ControlOriginID()
 	case control.FieldEnvironmentName:
 		return m.EnvironmentName()
 	case control.FieldEnvironmentID:
@@ -41285,6 +41423,10 @@ func (m *ControlMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldControlKindName(ctx)
 	case control.FieldControlKindID:
 		return m.OldControlKindID(ctx)
+	case control.FieldControlOriginName:
+		return m.OldControlOriginName(ctx)
+	case control.FieldControlOriginID:
+		return m.OldControlOriginID(ctx)
 	case control.FieldEnvironmentName:
 		return m.OldEnvironmentName(ctx)
 	case control.FieldEnvironmentID:
@@ -41676,6 +41818,20 @@ func (m *ControlMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetControlKindID(v)
 		return nil
+	case control.FieldControlOriginName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetControlOriginName(v)
+		return nil
+	case control.FieldControlOriginID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetControlOriginID(v)
+		return nil
 	case control.FieldEnvironmentName:
 		v, ok := value.(string)
 		if !ok {
@@ -41922,6 +42078,12 @@ func (m *ControlMutation) ClearedFields() []string {
 	if m.FieldCleared(control.FieldControlKindID) {
 		fields = append(fields, control.FieldControlKindID)
 	}
+	if m.FieldCleared(control.FieldControlOriginName) {
+		fields = append(fields, control.FieldControlOriginName)
+	}
+	if m.FieldCleared(control.FieldControlOriginID) {
+		fields = append(fields, control.FieldControlOriginID)
+	}
 	if m.FieldCleared(control.FieldEnvironmentName) {
 		fields = append(fields, control.FieldEnvironmentName)
 	}
@@ -42113,6 +42275,12 @@ func (m *ControlMutation) ClearField(name string) error {
 	case control.FieldControlKindID:
 		m.ClearControlKindID()
 		return nil
+	case control.FieldControlOriginName:
+		m.ClearControlOriginName()
+		return nil
+	case control.FieldControlOriginID:
+		m.ClearControlOriginID()
+		return nil
 	case control.FieldEnvironmentName:
 		m.ClearEnvironmentName()
 		return nil
@@ -42301,6 +42469,12 @@ func (m *ControlMutation) ResetField(name string) error {
 	case control.FieldControlKindID:
 		m.ResetControlKindID()
 		return nil
+	case control.FieldControlOriginName:
+		m.ResetControlOriginName()
+		return nil
+	case control.FieldControlOriginID:
+		m.ResetControlOriginID()
+		return nil
 	case control.FieldEnvironmentName:
 		m.ResetEnvironmentName()
 		return nil
@@ -42334,7 +42508,7 @@ func (m *ControlMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlMutation) AddedEdges() []string {
-	edges := make([]string, 0, 39)
+	edges := make([]string, 0, 40)
 	if m.integration_runs != nil {
 		edges = append(edges, control.EdgeIntegrationRuns)
 	}
@@ -42397,6 +42571,9 @@ func (m *ControlMutation) AddedEdges() []string {
 	}
 	if m.control_kind != nil {
 		edges = append(edges, control.EdgeControlKind)
+	}
+	if m.control_origin != nil {
+		edges = append(edges, control.EdgeControlOrigin)
 	}
 	if m.environment != nil {
 		edges = append(edges, control.EdgeEnvironment)
@@ -42575,6 +42752,10 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 		if id := m.control_kind; id != nil {
 			return []ent.Value{*id}
 		}
+	case control.EdgeControlOrigin:
+		if id := m.control_origin; id != nil {
+			return []ent.Value{*id}
+		}
 	case control.EdgeEnvironment:
 		if id := m.environment; id != nil {
 			return []ent.Value{*id}
@@ -42683,7 +42864,7 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 39)
+	edges := make([]string, 0, 40)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, control.EdgeIntegrationRuns)
 	}
@@ -42976,7 +43157,7 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 39)
+	edges := make([]string, 0, 40)
 	if m.clearedintegration_runs {
 		edges = append(edges, control.EdgeIntegrationRuns)
 	}
@@ -43039,6 +43220,9 @@ func (m *ControlMutation) ClearedEdges() []string {
 	}
 	if m.clearedcontrol_kind {
 		edges = append(edges, control.EdgeControlKind)
+	}
+	if m.clearedcontrol_origin {
+		edges = append(edges, control.EdgeControlOrigin)
 	}
 	if m.clearedenvironment {
 		edges = append(edges, control.EdgeEnvironment)
@@ -43143,6 +43327,8 @@ func (m *ControlMutation) EdgeCleared(name string) bool {
 		return m.clearededitors
 	case control.EdgeControlKind:
 		return m.clearedcontrol_kind
+	case control.EdgeControlOrigin:
+		return m.clearedcontrol_origin
 	case control.EdgeEnvironment:
 		return m.clearedenvironment
 	case control.EdgeScope:
@@ -43201,6 +43387,9 @@ func (m *ControlMutation) ClearEdge(name string) error {
 		return nil
 	case control.EdgeControlKind:
 		m.ClearControlKind()
+		return nil
+	case control.EdgeControlOrigin:
+		m.ClearControlOrigin()
 		return nil
 	case control.EdgeEnvironment:
 		m.ClearEnvironment()
@@ -43281,6 +43470,9 @@ func (m *ControlMutation) ResetEdge(name string) error {
 		return nil
 	case control.EdgeControlKind:
 		m.ResetControlKind()
+		return nil
+	case control.EdgeControlOrigin:
+		m.ResetControlOrigin()
 		return nil
 	case control.EdgeEnvironment:
 		m.ResetEnvironment()
@@ -74910,6 +75102,9 @@ type EntityMutation struct {
 	findings                                    map[string]struct{}
 	removedfindings                             map[string]struct{}
 	clearedfindings                             bool
+	risks                                       map[string]struct{}
+	removedrisks                                map[string]struct{}
+	clearedrisks                                bool
 	vulnerabilities                             map[string]struct{}
 	removedvulnerabilities                      map[string]struct{}
 	clearedvulnerabilities                      bool
@@ -80585,6 +80780,60 @@ func (m *EntityMutation) ResetFindings() {
 	m.removedfindings = nil
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by ids.
+func (m *EntityMutation) AddRiskIDs(ids ...string) {
+	if m.risks == nil {
+		m.risks = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.risks[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRisks clears the "risks" edge to the Risk entity.
+func (m *EntityMutation) ClearRisks() {
+	m.clearedrisks = true
+}
+
+// RisksCleared reports if the "risks" edge to the Risk entity was cleared.
+func (m *EntityMutation) RisksCleared() bool {
+	return m.clearedrisks
+}
+
+// RemoveRiskIDs removes the "risks" edge to the Risk entity by IDs.
+func (m *EntityMutation) RemoveRiskIDs(ids ...string) {
+	if m.removedrisks == nil {
+		m.removedrisks = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.risks, ids[i])
+		m.removedrisks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRisks returns the removed IDs of the "risks" edge to the Risk entity.
+func (m *EntityMutation) RemovedRisksIDs() (ids []string) {
+	for id := range m.removedrisks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RisksIDs returns the "risks" edge IDs in the mutation.
+func (m *EntityMutation) RisksIDs() (ids []string) {
+	for id := range m.risks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRisks resets all changes to the "risks" edge.
+func (m *EntityMutation) ResetRisks() {
+	m.risks = nil
+	m.clearedrisks = false
+	m.removedrisks = nil
+}
+
 // AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by ids.
 func (m *EntityMutation) AddVulnerabilityIDs(ids ...string) {
 	if m.vulnerabilities == nil {
@@ -82981,7 +83230,7 @@ func (m *EntityMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *EntityMutation) AddedEdges() []string {
-	edges := make([]string, 0, 44)
+	edges := make([]string, 0, 45)
 	if m.integration_runs != nil {
 		edges = append(edges, entity.EdgeIntegrationRuns)
 	}
@@ -83086,6 +83335,9 @@ func (m *EntityMutation) AddedEdges() []string {
 	}
 	if m.findings != nil {
 		edges = append(edges, entity.EdgeFindings)
+	}
+	if m.risks != nil {
+		edges = append(edges, entity.EdgeRisks)
 	}
 	if m.vulnerabilities != nil {
 		edges = append(edges, entity.EdgeVulnerabilities)
@@ -83305,6 +83557,12 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case entity.EdgeRisks:
+		ids := make([]ent.Value, 0, len(m.risks))
+		for id := range m.risks {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgeVulnerabilities:
 		ids := make([]ent.Value, 0, len(m.vulnerabilities))
 		for id := range m.vulnerabilities {
@@ -83361,7 +83619,7 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *EntityMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 44)
+	edges := make([]string, 0, 45)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, entity.EdgeIntegrationRuns)
 	}
@@ -83427,6 +83685,9 @@ func (m *EntityMutation) RemovedEdges() []string {
 	}
 	if m.removedfindings != nil {
 		edges = append(edges, entity.EdgeFindings)
+	}
+	if m.removedrisks != nil {
+		edges = append(edges, entity.EdgeRisks)
 	}
 	if m.removedvulnerabilities != nil {
 		edges = append(edges, entity.EdgeVulnerabilities)
@@ -83588,6 +83849,12 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case entity.EdgeRisks:
+		ids := make([]ent.Value, 0, len(m.removedrisks))
+		for id := range m.removedrisks {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgeVulnerabilities:
 		ids := make([]ent.Value, 0, len(m.removedvulnerabilities))
 		for id := range m.removedvulnerabilities {
@@ -83636,7 +83903,7 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *EntityMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 44)
+	edges := make([]string, 0, 45)
 	if m.clearedintegration_runs {
 		edges = append(edges, entity.EdgeIntegrationRuns)
 	}
@@ -83742,6 +84009,9 @@ func (m *EntityMutation) ClearedEdges() []string {
 	if m.clearedfindings {
 		edges = append(edges, entity.EdgeFindings)
 	}
+	if m.clearedrisks {
+		edges = append(edges, entity.EdgeRisks)
+	}
 	if m.clearedvulnerabilities {
 		edges = append(edges, entity.EdgeVulnerabilities)
 	}
@@ -83846,6 +84116,8 @@ func (m *EntityMutation) EdgeCleared(name string) bool {
 		return m.clearedsubcontrols
 	case entity.EdgeFindings:
 		return m.clearedfindings
+	case entity.EdgeRisks:
+		return m.clearedrisks
 	case entity.EdgeVulnerabilities:
 		return m.clearedvulnerabilities
 	case entity.EdgeReviews:
@@ -84029,6 +84301,9 @@ func (m *EntityMutation) ResetEdge(name string) error {
 		return nil
 	case entity.EdgeFindings:
 		m.ResetFindings()
+		return nil
+	case entity.EdgeRisks:
+		m.ResetRisks()
 		return nil
 	case entity.EdgeVulnerabilities:
 		m.ResetVulnerabilities()
@@ -93091,109 +93366,127 @@ func (m *ExportMutation) ResetEdge(name string) error {
 // FileMutation represents an operation that mutates the File nodes in the graph.
 type FileMutation struct {
 	config
-	op                               Op
-	typ                              string
-	id                               *string
-	created_at                       *time.Time
-	updated_at                       *time.Time
-	created_by                       *string
-	updated_by                       *string
-	updated_by_impersonator          *string
-	deleted_at                       *time.Time
-	deleted_by                       *string
-	tags                             *[]string
-	appendtags                       []string
-	system_owned                     *bool
-	internal_notes                   *string
-	system_internal_id               *string
-	environment_name                 *string
-	scope_name                       *string
-	category_name                    *string
-	name                             *string
-	provided_file_name               *string
-	provided_file_extension          *string
-	provided_file_size               *int64
-	addprovided_file_size            *int64
-	persisted_file_size              *int64
-	addpersisted_file_size           *int64
-	detected_mime_type               *string
-	md5_hash                         *string
-	detected_content_type            *string
-	store_key                        *string
-	uri                              *string
-	storage_scheme                   *string
-	storage_volume                   *string
-	storage_path                     *string
-	file_contents                    *[]byte
-	metadata                         *map[string]interface{}
-	storage_region                   *string
-	storage_provider                 *string
-	backup_state                     *models.FileBackupState
-	last_accessed_at                 *time.Time
-	clearedFields                    map[string]struct{}
-	environment                      *string
-	clearedenvironment               bool
-	scope                            *string
-	clearedscope                     bool
-	category                         *string
-	clearedcategory                  bool
-	organization                     map[string]struct{}
-	removedorganization              map[string]struct{}
-	clearedorganization              bool
-	groups                           map[string]struct{}
-	removedgroups                    map[string]struct{}
-	clearedgroups                    bool
-	contact                          map[string]struct{}
-	removedcontact                   map[string]struct{}
-	clearedcontact                   bool
-	entity                           map[string]struct{}
-	removedentity                    map[string]struct{}
-	clearedentity                    bool
-	organization_setting             map[string]struct{}
-	removedorganization_setting      map[string]struct{}
-	clearedorganization_setting      bool
-	template                         map[string]struct{}
-	removedtemplate                  map[string]struct{}
-	clearedtemplate                  bool
-	document                         map[string]struct{}
-	removeddocument                  map[string]struct{}
-	cleareddocument                  bool
-	program                          map[string]struct{}
-	removedprogram                   map[string]struct{}
-	clearedprogram                   bool
-	platform                         map[string]struct{}
-	removedplatform                  map[string]struct{}
-	clearedplatform                  bool
-	evidence                         map[string]struct{}
-	removedevidence                  map[string]struct{}
-	clearedevidence                  bool
-	identity_holder                  map[string]struct{}
-	removedidentity_holder           map[string]struct{}
-	clearedidentity_holder           bool
-	scan                             map[string]struct{}
-	removedscan                      map[string]struct{}
-	clearedscan                      bool
-	events                           map[string]struct{}
-	removedevents                    map[string]struct{}
-	clearedevents                    bool
-	integrations                     map[string]struct{}
-	removedintegrations              map[string]struct{}
-	clearedintegrations              bool
-	secrets                          map[string]struct{}
-	removedsecrets                   map[string]struct{}
-	clearedsecrets                   bool
-	trust_center_entities            map[string]struct{}
-	removedtrust_center_entities     map[string]struct{}
-	clearedtrust_center_entities     bool
-	trust_center_doc                 map[string]struct{}
-	removedtrust_center_doc          map[string]struct{}
-	clearedtrust_center_doc          bool
-	original_trust_center_doc        map[string]struct{}
-	removedoriginal_trust_center_doc map[string]struct{}
-	clearedoriginal_trust_center_doc bool
-	done                             bool
-	oldValue                         func(context.Context) (*File, error)
-	predicates                       []predicate.File
+	op                                     Op
+	typ                                    string
+	id                                     *string
+	created_at                             *time.Time
+	updated_at                             *time.Time
+	created_by                             *string
+	updated_by                             *string
+	updated_by_impersonator                *string
+	deleted_at                             *time.Time
+	deleted_by                             *string
+	tags                                   *[]string
+	appendtags                             []string
+	system_owned                           *bool
+	internal_notes                         *string
+	system_internal_id                     *string
+	environment_name                       *string
+	scope_name                             *string
+	category_name                          *string
+	name                                   *string
+	provided_file_name                     *string
+	provided_file_extension                *string
+	provided_file_size                     *int64
+	addprovided_file_size                  *int64
+	persisted_file_size                    *int64
+	addpersisted_file_size                 *int64
+	detected_mime_type                     *string
+	md5_hash                               *string
+	detected_content_type                  *string
+	store_key                              *string
+	uri                                    *string
+	storage_scheme                         *string
+	storage_volume                         *string
+	storage_path                           *string
+	file_contents                          *[]byte
+	metadata                               *map[string]interface{}
+	storage_region                         *string
+	storage_provider                       *string
+	backup_state                           *models.FileBackupState
+	last_accessed_at                       *time.Time
+	clearedFields                          map[string]struct{}
+	environment                            *string
+	clearedenvironment                     bool
+	scope                                  *string
+	clearedscope                           bool
+	category                               *string
+	clearedcategory                        bool
+	organization                           map[string]struct{}
+	removedorganization                    map[string]struct{}
+	clearedorganization                    bool
+	groups                                 map[string]struct{}
+	removedgroups                          map[string]struct{}
+	clearedgroups                          bool
+	contact                                map[string]struct{}
+	removedcontact                         map[string]struct{}
+	clearedcontact                         bool
+	entity                                 map[string]struct{}
+	removedentity                          map[string]struct{}
+	clearedentity                          bool
+	organization_setting                   map[string]struct{}
+	removedorganization_setting            map[string]struct{}
+	clearedorganization_setting            bool
+	template                               map[string]struct{}
+	removedtemplate                        map[string]struct{}
+	clearedtemplate                        bool
+	document                               map[string]struct{}
+	removeddocument                        map[string]struct{}
+	cleareddocument                        bool
+	program                                map[string]struct{}
+	removedprogram                         map[string]struct{}
+	clearedprogram                         bool
+	platform                               map[string]struct{}
+	removedplatform                        map[string]struct{}
+	clearedplatform                        bool
+	evidence                               map[string]struct{}
+	removedevidence                        map[string]struct{}
+	clearedevidence                        bool
+	identity_holder                        map[string]struct{}
+	removedidentity_holder                 map[string]struct{}
+	clearedidentity_holder                 bool
+	scan                                   map[string]struct{}
+	removedscan                            map[string]struct{}
+	clearedscan                            bool
+	events                                 map[string]struct{}
+	removedevents                          map[string]struct{}
+	clearedevents                          bool
+	integrations                           map[string]struct{}
+	removedintegrations                    map[string]struct{}
+	clearedintegrations                    bool
+	secrets                                map[string]struct{}
+	removedsecrets                         map[string]struct{}
+	clearedsecrets                         bool
+	trust_center_entities                  map[string]struct{}
+	removedtrust_center_entities           map[string]struct{}
+	clearedtrust_center_entities           bool
+	trust_center_doc                       map[string]struct{}
+	removedtrust_center_doc                map[string]struct{}
+	clearedtrust_center_doc                bool
+	original_trust_center_doc              map[string]struct{}
+	removedoriginal_trust_center_doc       map[string]struct{}
+	clearedoriginal_trust_center_doc       bool
+	trust_center_setting_logo              map[string]struct{}
+	removedtrust_center_setting_logo       map[string]struct{}
+	clearedtrust_center_setting_logo       bool
+	trust_center_setting_favicon           map[string]struct{}
+	removedtrust_center_setting_favicon    map[string]struct{}
+	clearedtrust_center_setting_favicon    bool
+	trust_center_setting_hero_image        map[string]struct{}
+	removedtrust_center_setting_hero_image map[string]struct{}
+	clearedtrust_center_setting_hero_image bool
+	trust_center_entity_logo               map[string]struct{}
+	removedtrust_center_entity_logo        map[string]struct{}
+	clearedtrust_center_entity_logo        bool
+	subprocessor_logo                      map[string]struct{}
+	removedsubprocessor_logo               map[string]struct{}
+	clearedsubprocessor_logo               bool
+	standard_logo                          map[string]struct{}
+	removedstandard_logo                   map[string]struct{}
+	clearedstandard_logo                   bool
+	done                                   bool
+	oldValue                               func(context.Context) (*File, error)
+	predicates                             []predicate.File
 }
 
 var _ ent.Mutation = (*FileMutation)(nil)
@@ -96136,6 +96429,330 @@ func (m *FileMutation) ResetOriginalTrustCenterDoc() {
 	m.removedoriginal_trust_center_doc = nil
 }
 
+// AddTrustCenterSettingLogoIDs adds the "trust_center_setting_logo" edge to the TrustCenterSetting entity by ids.
+func (m *FileMutation) AddTrustCenterSettingLogoIDs(ids ...string) {
+	if m.trust_center_setting_logo == nil {
+		m.trust_center_setting_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.trust_center_setting_logo[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTrustCenterSettingLogo clears the "trust_center_setting_logo" edge to the TrustCenterSetting entity.
+func (m *FileMutation) ClearTrustCenterSettingLogo() {
+	m.clearedtrust_center_setting_logo = true
+}
+
+// TrustCenterSettingLogoCleared reports if the "trust_center_setting_logo" edge to the TrustCenterSetting entity was cleared.
+func (m *FileMutation) TrustCenterSettingLogoCleared() bool {
+	return m.clearedtrust_center_setting_logo
+}
+
+// RemoveTrustCenterSettingLogoIDs removes the "trust_center_setting_logo" edge to the TrustCenterSetting entity by IDs.
+func (m *FileMutation) RemoveTrustCenterSettingLogoIDs(ids ...string) {
+	if m.removedtrust_center_setting_logo == nil {
+		m.removedtrust_center_setting_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.trust_center_setting_logo, ids[i])
+		m.removedtrust_center_setting_logo[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTrustCenterSettingLogo returns the removed IDs of the "trust_center_setting_logo" edge to the TrustCenterSetting entity.
+func (m *FileMutation) RemovedTrustCenterSettingLogoIDs() (ids []string) {
+	for id := range m.removedtrust_center_setting_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TrustCenterSettingLogoIDs returns the "trust_center_setting_logo" edge IDs in the mutation.
+func (m *FileMutation) TrustCenterSettingLogoIDs() (ids []string) {
+	for id := range m.trust_center_setting_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTrustCenterSettingLogo resets all changes to the "trust_center_setting_logo" edge.
+func (m *FileMutation) ResetTrustCenterSettingLogo() {
+	m.trust_center_setting_logo = nil
+	m.clearedtrust_center_setting_logo = false
+	m.removedtrust_center_setting_logo = nil
+}
+
+// AddTrustCenterSettingFaviconIDs adds the "trust_center_setting_favicon" edge to the TrustCenterSetting entity by ids.
+func (m *FileMutation) AddTrustCenterSettingFaviconIDs(ids ...string) {
+	if m.trust_center_setting_favicon == nil {
+		m.trust_center_setting_favicon = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.trust_center_setting_favicon[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTrustCenterSettingFavicon clears the "trust_center_setting_favicon" edge to the TrustCenterSetting entity.
+func (m *FileMutation) ClearTrustCenterSettingFavicon() {
+	m.clearedtrust_center_setting_favicon = true
+}
+
+// TrustCenterSettingFaviconCleared reports if the "trust_center_setting_favicon" edge to the TrustCenterSetting entity was cleared.
+func (m *FileMutation) TrustCenterSettingFaviconCleared() bool {
+	return m.clearedtrust_center_setting_favicon
+}
+
+// RemoveTrustCenterSettingFaviconIDs removes the "trust_center_setting_favicon" edge to the TrustCenterSetting entity by IDs.
+func (m *FileMutation) RemoveTrustCenterSettingFaviconIDs(ids ...string) {
+	if m.removedtrust_center_setting_favicon == nil {
+		m.removedtrust_center_setting_favicon = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.trust_center_setting_favicon, ids[i])
+		m.removedtrust_center_setting_favicon[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTrustCenterSettingFavicon returns the removed IDs of the "trust_center_setting_favicon" edge to the TrustCenterSetting entity.
+func (m *FileMutation) RemovedTrustCenterSettingFaviconIDs() (ids []string) {
+	for id := range m.removedtrust_center_setting_favicon {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TrustCenterSettingFaviconIDs returns the "trust_center_setting_favicon" edge IDs in the mutation.
+func (m *FileMutation) TrustCenterSettingFaviconIDs() (ids []string) {
+	for id := range m.trust_center_setting_favicon {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTrustCenterSettingFavicon resets all changes to the "trust_center_setting_favicon" edge.
+func (m *FileMutation) ResetTrustCenterSettingFavicon() {
+	m.trust_center_setting_favicon = nil
+	m.clearedtrust_center_setting_favicon = false
+	m.removedtrust_center_setting_favicon = nil
+}
+
+// AddTrustCenterSettingHeroImageIDs adds the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity by ids.
+func (m *FileMutation) AddTrustCenterSettingHeroImageIDs(ids ...string) {
+	if m.trust_center_setting_hero_image == nil {
+		m.trust_center_setting_hero_image = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.trust_center_setting_hero_image[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTrustCenterSettingHeroImage clears the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity.
+func (m *FileMutation) ClearTrustCenterSettingHeroImage() {
+	m.clearedtrust_center_setting_hero_image = true
+}
+
+// TrustCenterSettingHeroImageCleared reports if the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity was cleared.
+func (m *FileMutation) TrustCenterSettingHeroImageCleared() bool {
+	return m.clearedtrust_center_setting_hero_image
+}
+
+// RemoveTrustCenterSettingHeroImageIDs removes the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity by IDs.
+func (m *FileMutation) RemoveTrustCenterSettingHeroImageIDs(ids ...string) {
+	if m.removedtrust_center_setting_hero_image == nil {
+		m.removedtrust_center_setting_hero_image = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.trust_center_setting_hero_image, ids[i])
+		m.removedtrust_center_setting_hero_image[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTrustCenterSettingHeroImage returns the removed IDs of the "trust_center_setting_hero_image" edge to the TrustCenterSetting entity.
+func (m *FileMutation) RemovedTrustCenterSettingHeroImageIDs() (ids []string) {
+	for id := range m.removedtrust_center_setting_hero_image {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TrustCenterSettingHeroImageIDs returns the "trust_center_setting_hero_image" edge IDs in the mutation.
+func (m *FileMutation) TrustCenterSettingHeroImageIDs() (ids []string) {
+	for id := range m.trust_center_setting_hero_image {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTrustCenterSettingHeroImage resets all changes to the "trust_center_setting_hero_image" edge.
+func (m *FileMutation) ResetTrustCenterSettingHeroImage() {
+	m.trust_center_setting_hero_image = nil
+	m.clearedtrust_center_setting_hero_image = false
+	m.removedtrust_center_setting_hero_image = nil
+}
+
+// AddTrustCenterEntityLogoIDs adds the "trust_center_entity_logo" edge to the TrustCenterEntity entity by ids.
+func (m *FileMutation) AddTrustCenterEntityLogoIDs(ids ...string) {
+	if m.trust_center_entity_logo == nil {
+		m.trust_center_entity_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.trust_center_entity_logo[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTrustCenterEntityLogo clears the "trust_center_entity_logo" edge to the TrustCenterEntity entity.
+func (m *FileMutation) ClearTrustCenterEntityLogo() {
+	m.clearedtrust_center_entity_logo = true
+}
+
+// TrustCenterEntityLogoCleared reports if the "trust_center_entity_logo" edge to the TrustCenterEntity entity was cleared.
+func (m *FileMutation) TrustCenterEntityLogoCleared() bool {
+	return m.clearedtrust_center_entity_logo
+}
+
+// RemoveTrustCenterEntityLogoIDs removes the "trust_center_entity_logo" edge to the TrustCenterEntity entity by IDs.
+func (m *FileMutation) RemoveTrustCenterEntityLogoIDs(ids ...string) {
+	if m.removedtrust_center_entity_logo == nil {
+		m.removedtrust_center_entity_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.trust_center_entity_logo, ids[i])
+		m.removedtrust_center_entity_logo[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTrustCenterEntityLogo returns the removed IDs of the "trust_center_entity_logo" edge to the TrustCenterEntity entity.
+func (m *FileMutation) RemovedTrustCenterEntityLogoIDs() (ids []string) {
+	for id := range m.removedtrust_center_entity_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TrustCenterEntityLogoIDs returns the "trust_center_entity_logo" edge IDs in the mutation.
+func (m *FileMutation) TrustCenterEntityLogoIDs() (ids []string) {
+	for id := range m.trust_center_entity_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTrustCenterEntityLogo resets all changes to the "trust_center_entity_logo" edge.
+func (m *FileMutation) ResetTrustCenterEntityLogo() {
+	m.trust_center_entity_logo = nil
+	m.clearedtrust_center_entity_logo = false
+	m.removedtrust_center_entity_logo = nil
+}
+
+// AddSubprocessorLogoIDs adds the "subprocessor_logo" edge to the Subprocessor entity by ids.
+func (m *FileMutation) AddSubprocessorLogoIDs(ids ...string) {
+	if m.subprocessor_logo == nil {
+		m.subprocessor_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.subprocessor_logo[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSubprocessorLogo clears the "subprocessor_logo" edge to the Subprocessor entity.
+func (m *FileMutation) ClearSubprocessorLogo() {
+	m.clearedsubprocessor_logo = true
+}
+
+// SubprocessorLogoCleared reports if the "subprocessor_logo" edge to the Subprocessor entity was cleared.
+func (m *FileMutation) SubprocessorLogoCleared() bool {
+	return m.clearedsubprocessor_logo
+}
+
+// RemoveSubprocessorLogoIDs removes the "subprocessor_logo" edge to the Subprocessor entity by IDs.
+func (m *FileMutation) RemoveSubprocessorLogoIDs(ids ...string) {
+	if m.removedsubprocessor_logo == nil {
+		m.removedsubprocessor_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.subprocessor_logo, ids[i])
+		m.removedsubprocessor_logo[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSubprocessorLogo returns the removed IDs of the "subprocessor_logo" edge to the Subprocessor entity.
+func (m *FileMutation) RemovedSubprocessorLogoIDs() (ids []string) {
+	for id := range m.removedsubprocessor_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SubprocessorLogoIDs returns the "subprocessor_logo" edge IDs in the mutation.
+func (m *FileMutation) SubprocessorLogoIDs() (ids []string) {
+	for id := range m.subprocessor_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSubprocessorLogo resets all changes to the "subprocessor_logo" edge.
+func (m *FileMutation) ResetSubprocessorLogo() {
+	m.subprocessor_logo = nil
+	m.clearedsubprocessor_logo = false
+	m.removedsubprocessor_logo = nil
+}
+
+// AddStandardLogoIDs adds the "standard_logo" edge to the Standard entity by ids.
+func (m *FileMutation) AddStandardLogoIDs(ids ...string) {
+	if m.standard_logo == nil {
+		m.standard_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.standard_logo[ids[i]] = struct{}{}
+	}
+}
+
+// ClearStandardLogo clears the "standard_logo" edge to the Standard entity.
+func (m *FileMutation) ClearStandardLogo() {
+	m.clearedstandard_logo = true
+}
+
+// StandardLogoCleared reports if the "standard_logo" edge to the Standard entity was cleared.
+func (m *FileMutation) StandardLogoCleared() bool {
+	return m.clearedstandard_logo
+}
+
+// RemoveStandardLogoIDs removes the "standard_logo" edge to the Standard entity by IDs.
+func (m *FileMutation) RemoveStandardLogoIDs(ids ...string) {
+	if m.removedstandard_logo == nil {
+		m.removedstandard_logo = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.standard_logo, ids[i])
+		m.removedstandard_logo[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedStandardLogo returns the removed IDs of the "standard_logo" edge to the Standard entity.
+func (m *FileMutation) RemovedStandardLogoIDs() (ids []string) {
+	for id := range m.removedstandard_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// StandardLogoIDs returns the "standard_logo" edge IDs in the mutation.
+func (m *FileMutation) StandardLogoIDs() (ids []string) {
+	for id := range m.standard_logo {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetStandardLogo resets all changes to the "standard_logo" edge.
+func (m *FileMutation) ResetStandardLogo() {
+	m.standard_logo = nil
+	m.clearedstandard_logo = false
+	m.removedstandard_logo = nil
+}
+
 // Where appends a list predicates to the FileMutation builder.
 func (m *FileMutation) Where(ps ...predicate.File) {
 	m.predicates = append(m.predicates, ps...)
@@ -97092,7 +97709,7 @@ func (m *FileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 27)
 	if m.environment != nil {
 		edges = append(edges, file.EdgeEnvironment)
 	}
@@ -97155,6 +97772,24 @@ func (m *FileMutation) AddedEdges() []string {
 	}
 	if m.original_trust_center_doc != nil {
 		edges = append(edges, file.EdgeOriginalTrustCenterDoc)
+	}
+	if m.trust_center_setting_logo != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingLogo)
+	}
+	if m.trust_center_setting_favicon != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingFavicon)
+	}
+	if m.trust_center_setting_hero_image != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingHeroImage)
+	}
+	if m.trust_center_entity_logo != nil {
+		edges = append(edges, file.EdgeTrustCenterEntityLogo)
+	}
+	if m.subprocessor_logo != nil {
+		edges = append(edges, file.EdgeSubprocessorLogo)
+	}
+	if m.standard_logo != nil {
+		edges = append(edges, file.EdgeStandardLogo)
 	}
 	return edges
 }
@@ -97283,13 +97918,49 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeTrustCenterSettingLogo:
+		ids := make([]ent.Value, 0, len(m.trust_center_setting_logo))
+		for id := range m.trust_center_setting_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterSettingFavicon:
+		ids := make([]ent.Value, 0, len(m.trust_center_setting_favicon))
+		for id := range m.trust_center_setting_favicon {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterSettingHeroImage:
+		ids := make([]ent.Value, 0, len(m.trust_center_setting_hero_image))
+		for id := range m.trust_center_setting_hero_image {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterEntityLogo:
+		ids := make([]ent.Value, 0, len(m.trust_center_entity_logo))
+		for id := range m.trust_center_entity_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeSubprocessorLogo:
+		ids := make([]ent.Value, 0, len(m.subprocessor_logo))
+		for id := range m.subprocessor_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeStandardLogo:
+		ids := make([]ent.Value, 0, len(m.standard_logo))
+		for id := range m.standard_logo {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 27)
 	if m.removedorganization != nil {
 		edges = append(edges, file.EdgeOrganization)
 	}
@@ -97343,6 +98014,24 @@ func (m *FileMutation) RemovedEdges() []string {
 	}
 	if m.removedoriginal_trust_center_doc != nil {
 		edges = append(edges, file.EdgeOriginalTrustCenterDoc)
+	}
+	if m.removedtrust_center_setting_logo != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingLogo)
+	}
+	if m.removedtrust_center_setting_favicon != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingFavicon)
+	}
+	if m.removedtrust_center_setting_hero_image != nil {
+		edges = append(edges, file.EdgeTrustCenterSettingHeroImage)
+	}
+	if m.removedtrust_center_entity_logo != nil {
+		edges = append(edges, file.EdgeTrustCenterEntityLogo)
+	}
+	if m.removedsubprocessor_logo != nil {
+		edges = append(edges, file.EdgeSubprocessorLogo)
+	}
+	if m.removedstandard_logo != nil {
+		edges = append(edges, file.EdgeStandardLogo)
 	}
 	return edges
 }
@@ -97459,13 +98148,49 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeTrustCenterSettingLogo:
+		ids := make([]ent.Value, 0, len(m.removedtrust_center_setting_logo))
+		for id := range m.removedtrust_center_setting_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterSettingFavicon:
+		ids := make([]ent.Value, 0, len(m.removedtrust_center_setting_favicon))
+		for id := range m.removedtrust_center_setting_favicon {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterSettingHeroImage:
+		ids := make([]ent.Value, 0, len(m.removedtrust_center_setting_hero_image))
+		for id := range m.removedtrust_center_setting_hero_image {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeTrustCenterEntityLogo:
+		ids := make([]ent.Value, 0, len(m.removedtrust_center_entity_logo))
+		for id := range m.removedtrust_center_entity_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeSubprocessorLogo:
+		ids := make([]ent.Value, 0, len(m.removedsubprocessor_logo))
+		for id := range m.removedsubprocessor_logo {
+			ids = append(ids, id)
+		}
+		return ids
+	case file.EdgeStandardLogo:
+		ids := make([]ent.Value, 0, len(m.removedstandard_logo))
+		for id := range m.removedstandard_logo {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 27)
 	if m.clearedenvironment {
 		edges = append(edges, file.EdgeEnvironment)
 	}
@@ -97529,6 +98254,24 @@ func (m *FileMutation) ClearedEdges() []string {
 	if m.clearedoriginal_trust_center_doc {
 		edges = append(edges, file.EdgeOriginalTrustCenterDoc)
 	}
+	if m.clearedtrust_center_setting_logo {
+		edges = append(edges, file.EdgeTrustCenterSettingLogo)
+	}
+	if m.clearedtrust_center_setting_favicon {
+		edges = append(edges, file.EdgeTrustCenterSettingFavicon)
+	}
+	if m.clearedtrust_center_setting_hero_image {
+		edges = append(edges, file.EdgeTrustCenterSettingHeroImage)
+	}
+	if m.clearedtrust_center_entity_logo {
+		edges = append(edges, file.EdgeTrustCenterEntityLogo)
+	}
+	if m.clearedsubprocessor_logo {
+		edges = append(edges, file.EdgeSubprocessorLogo)
+	}
+	if m.clearedstandard_logo {
+		edges = append(edges, file.EdgeStandardLogo)
+	}
 	return edges
 }
 
@@ -97578,6 +98321,18 @@ func (m *FileMutation) EdgeCleared(name string) bool {
 		return m.clearedtrust_center_doc
 	case file.EdgeOriginalTrustCenterDoc:
 		return m.clearedoriginal_trust_center_doc
+	case file.EdgeTrustCenterSettingLogo:
+		return m.clearedtrust_center_setting_logo
+	case file.EdgeTrustCenterSettingFavicon:
+		return m.clearedtrust_center_setting_favicon
+	case file.EdgeTrustCenterSettingHeroImage:
+		return m.clearedtrust_center_setting_hero_image
+	case file.EdgeTrustCenterEntityLogo:
+		return m.clearedtrust_center_entity_logo
+	case file.EdgeSubprocessorLogo:
+		return m.clearedsubprocessor_logo
+	case file.EdgeStandardLogo:
+		return m.clearedstandard_logo
 	}
 	return false
 }
@@ -97665,6 +98420,24 @@ func (m *FileMutation) ResetEdge(name string) error {
 		return nil
 	case file.EdgeOriginalTrustCenterDoc:
 		m.ResetOriginalTrustCenterDoc()
+		return nil
+	case file.EdgeTrustCenterSettingLogo:
+		m.ResetTrustCenterSettingLogo()
+		return nil
+	case file.EdgeTrustCenterSettingFavicon:
+		m.ResetTrustCenterSettingFavicon()
+		return nil
+	case file.EdgeTrustCenterSettingHeroImage:
+		m.ResetTrustCenterSettingHeroImage()
+		return nil
+	case file.EdgeTrustCenterEntityLogo:
+		m.ResetTrustCenterEntityLogo()
+		return nil
+	case file.EdgeSubprocessorLogo:
+		m.ResetSubprocessorLogo()
+		return nil
+	case file.EdgeStandardLogo:
+		m.ResetStandardLogo()
 		return nil
 	}
 	return fmt.Errorf("unknown File edge %s", name)
@@ -171242,18 +172015,21 @@ type OrganizationMutation struct {
 	workflow_definition_creators                  map[string]struct{}
 	removedworkflow_definition_creators           map[string]struct{}
 	clearedworkflow_definition_creators           bool
-	campaigns_manager                             map[string]struct{}
-	removedcampaigns_manager                      map[string]struct{}
-	clearedcampaigns_manager                      bool
+	campaign_manager                              map[string]struct{}
+	removedcampaign_manager                       map[string]struct{}
+	clearedcampaign_manager                       bool
 	compliance_manager                            map[string]struct{}
 	removedcompliance_manager                     map[string]struct{}
 	clearedcompliance_manager                     bool
 	group_manager                                 map[string]struct{}
 	removedgroup_manager                          map[string]struct{}
 	clearedgroup_manager                          bool
-	policies_manager                              map[string]struct{}
-	removedpolicies_manager                       map[string]struct{}
-	clearedpolicies_manager                       bool
+	integration_manager                           map[string]struct{}
+	removedintegration_manager                    map[string]struct{}
+	clearedintegration_manager                    bool
+	policy_manager                                map[string]struct{}
+	removedpolicy_manager                         map[string]struct{}
+	clearedpolicy_manager                         bool
 	registry_manager                              map[string]struct{}
 	removedregistry_manager                       map[string]struct{}
 	clearedregistry_manager                       bool
@@ -171263,9 +172039,9 @@ type OrganizationMutation struct {
 	trust_center_manager                          map[string]struct{}
 	removedtrust_center_manager                   map[string]struct{}
 	clearedtrust_center_manager                   bool
-	workflows_manager                             map[string]struct{}
-	removedworkflows_manager                      map[string]struct{}
-	clearedworkflows_manager                      bool
+	workflow_manager                              map[string]struct{}
+	removedworkflow_manager                       map[string]struct{}
+	clearedworkflow_manager                       bool
 	parent                                        *string
 	clearedparent                                 bool
 	children                                      map[string]struct{}
@@ -176227,58 +177003,58 @@ func (m *OrganizationMutation) ResetWorkflowDefinitionCreators() {
 	m.removedworkflow_definition_creators = nil
 }
 
-// AddCampaignsManagerIDs adds the "campaigns_manager" edge to the Group entity by ids.
-func (m *OrganizationMutation) AddCampaignsManagerIDs(ids ...string) {
-	if m.campaigns_manager == nil {
-		m.campaigns_manager = make(map[string]struct{})
+// AddCampaignManagerIDs adds the "campaign_manager" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddCampaignManagerIDs(ids ...string) {
+	if m.campaign_manager == nil {
+		m.campaign_manager = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.campaigns_manager[ids[i]] = struct{}{}
+		m.campaign_manager[ids[i]] = struct{}{}
 	}
 }
 
-// ClearCampaignsManager clears the "campaigns_manager" edge to the Group entity.
-func (m *OrganizationMutation) ClearCampaignsManager() {
-	m.clearedcampaigns_manager = true
+// ClearCampaignManager clears the "campaign_manager" edge to the Group entity.
+func (m *OrganizationMutation) ClearCampaignManager() {
+	m.clearedcampaign_manager = true
 }
 
-// CampaignsManagerCleared reports if the "campaigns_manager" edge to the Group entity was cleared.
-func (m *OrganizationMutation) CampaignsManagerCleared() bool {
-	return m.clearedcampaigns_manager
+// CampaignManagerCleared reports if the "campaign_manager" edge to the Group entity was cleared.
+func (m *OrganizationMutation) CampaignManagerCleared() bool {
+	return m.clearedcampaign_manager
 }
 
-// RemoveCampaignsManagerIDs removes the "campaigns_manager" edge to the Group entity by IDs.
-func (m *OrganizationMutation) RemoveCampaignsManagerIDs(ids ...string) {
-	if m.removedcampaigns_manager == nil {
-		m.removedcampaigns_manager = make(map[string]struct{})
+// RemoveCampaignManagerIDs removes the "campaign_manager" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemoveCampaignManagerIDs(ids ...string) {
+	if m.removedcampaign_manager == nil {
+		m.removedcampaign_manager = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.campaigns_manager, ids[i])
-		m.removedcampaigns_manager[ids[i]] = struct{}{}
+		delete(m.campaign_manager, ids[i])
+		m.removedcampaign_manager[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedCampaignsManager returns the removed IDs of the "campaigns_manager" edge to the Group entity.
-func (m *OrganizationMutation) RemovedCampaignsManagerIDs() (ids []string) {
-	for id := range m.removedcampaigns_manager {
+// RemovedCampaignManager returns the removed IDs of the "campaign_manager" edge to the Group entity.
+func (m *OrganizationMutation) RemovedCampaignManagerIDs() (ids []string) {
+	for id := range m.removedcampaign_manager {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// CampaignsManagerIDs returns the "campaigns_manager" edge IDs in the mutation.
-func (m *OrganizationMutation) CampaignsManagerIDs() (ids []string) {
-	for id := range m.campaigns_manager {
+// CampaignManagerIDs returns the "campaign_manager" edge IDs in the mutation.
+func (m *OrganizationMutation) CampaignManagerIDs() (ids []string) {
+	for id := range m.campaign_manager {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetCampaignsManager resets all changes to the "campaigns_manager" edge.
-func (m *OrganizationMutation) ResetCampaignsManager() {
-	m.campaigns_manager = nil
-	m.clearedcampaigns_manager = false
-	m.removedcampaigns_manager = nil
+// ResetCampaignManager resets all changes to the "campaign_manager" edge.
+func (m *OrganizationMutation) ResetCampaignManager() {
+	m.campaign_manager = nil
+	m.clearedcampaign_manager = false
+	m.removedcampaign_manager = nil
 }
 
 // AddComplianceManagerIDs adds the "compliance_manager" edge to the Group entity by ids.
@@ -176389,58 +177165,112 @@ func (m *OrganizationMutation) ResetGroupManager() {
 	m.removedgroup_manager = nil
 }
 
-// AddPoliciesManagerIDs adds the "policies_manager" edge to the Group entity by ids.
-func (m *OrganizationMutation) AddPoliciesManagerIDs(ids ...string) {
-	if m.policies_manager == nil {
-		m.policies_manager = make(map[string]struct{})
+// AddIntegrationManagerIDs adds the "integration_manager" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddIntegrationManagerIDs(ids ...string) {
+	if m.integration_manager == nil {
+		m.integration_manager = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.policies_manager[ids[i]] = struct{}{}
+		m.integration_manager[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPoliciesManager clears the "policies_manager" edge to the Group entity.
-func (m *OrganizationMutation) ClearPoliciesManager() {
-	m.clearedpolicies_manager = true
+// ClearIntegrationManager clears the "integration_manager" edge to the Group entity.
+func (m *OrganizationMutation) ClearIntegrationManager() {
+	m.clearedintegration_manager = true
 }
 
-// PoliciesManagerCleared reports if the "policies_manager" edge to the Group entity was cleared.
-func (m *OrganizationMutation) PoliciesManagerCleared() bool {
-	return m.clearedpolicies_manager
+// IntegrationManagerCleared reports if the "integration_manager" edge to the Group entity was cleared.
+func (m *OrganizationMutation) IntegrationManagerCleared() bool {
+	return m.clearedintegration_manager
 }
 
-// RemovePoliciesManagerIDs removes the "policies_manager" edge to the Group entity by IDs.
-func (m *OrganizationMutation) RemovePoliciesManagerIDs(ids ...string) {
-	if m.removedpolicies_manager == nil {
-		m.removedpolicies_manager = make(map[string]struct{})
+// RemoveIntegrationManagerIDs removes the "integration_manager" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemoveIntegrationManagerIDs(ids ...string) {
+	if m.removedintegration_manager == nil {
+		m.removedintegration_manager = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.policies_manager, ids[i])
-		m.removedpolicies_manager[ids[i]] = struct{}{}
+		delete(m.integration_manager, ids[i])
+		m.removedintegration_manager[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPoliciesManager returns the removed IDs of the "policies_manager" edge to the Group entity.
-func (m *OrganizationMutation) RemovedPoliciesManagerIDs() (ids []string) {
-	for id := range m.removedpolicies_manager {
+// RemovedIntegrationManager returns the removed IDs of the "integration_manager" edge to the Group entity.
+func (m *OrganizationMutation) RemovedIntegrationManagerIDs() (ids []string) {
+	for id := range m.removedintegration_manager {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PoliciesManagerIDs returns the "policies_manager" edge IDs in the mutation.
-func (m *OrganizationMutation) PoliciesManagerIDs() (ids []string) {
-	for id := range m.policies_manager {
+// IntegrationManagerIDs returns the "integration_manager" edge IDs in the mutation.
+func (m *OrganizationMutation) IntegrationManagerIDs() (ids []string) {
+	for id := range m.integration_manager {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPoliciesManager resets all changes to the "policies_manager" edge.
-func (m *OrganizationMutation) ResetPoliciesManager() {
-	m.policies_manager = nil
-	m.clearedpolicies_manager = false
-	m.removedpolicies_manager = nil
+// ResetIntegrationManager resets all changes to the "integration_manager" edge.
+func (m *OrganizationMutation) ResetIntegrationManager() {
+	m.integration_manager = nil
+	m.clearedintegration_manager = false
+	m.removedintegration_manager = nil
+}
+
+// AddPolicyManagerIDs adds the "policy_manager" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddPolicyManagerIDs(ids ...string) {
+	if m.policy_manager == nil {
+		m.policy_manager = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.policy_manager[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPolicyManager clears the "policy_manager" edge to the Group entity.
+func (m *OrganizationMutation) ClearPolicyManager() {
+	m.clearedpolicy_manager = true
+}
+
+// PolicyManagerCleared reports if the "policy_manager" edge to the Group entity was cleared.
+func (m *OrganizationMutation) PolicyManagerCleared() bool {
+	return m.clearedpolicy_manager
+}
+
+// RemovePolicyManagerIDs removes the "policy_manager" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemovePolicyManagerIDs(ids ...string) {
+	if m.removedpolicy_manager == nil {
+		m.removedpolicy_manager = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.policy_manager, ids[i])
+		m.removedpolicy_manager[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPolicyManager returns the removed IDs of the "policy_manager" edge to the Group entity.
+func (m *OrganizationMutation) RemovedPolicyManagerIDs() (ids []string) {
+	for id := range m.removedpolicy_manager {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PolicyManagerIDs returns the "policy_manager" edge IDs in the mutation.
+func (m *OrganizationMutation) PolicyManagerIDs() (ids []string) {
+	for id := range m.policy_manager {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPolicyManager resets all changes to the "policy_manager" edge.
+func (m *OrganizationMutation) ResetPolicyManager() {
+	m.policy_manager = nil
+	m.clearedpolicy_manager = false
+	m.removedpolicy_manager = nil
 }
 
 // AddRegistryManagerIDs adds the "registry_manager" edge to the Group entity by ids.
@@ -176605,58 +177435,58 @@ func (m *OrganizationMutation) ResetTrustCenterManager() {
 	m.removedtrust_center_manager = nil
 }
 
-// AddWorkflowsManagerIDs adds the "workflows_manager" edge to the Group entity by ids.
-func (m *OrganizationMutation) AddWorkflowsManagerIDs(ids ...string) {
-	if m.workflows_manager == nil {
-		m.workflows_manager = make(map[string]struct{})
+// AddWorkflowManagerIDs adds the "workflow_manager" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddWorkflowManagerIDs(ids ...string) {
+	if m.workflow_manager == nil {
+		m.workflow_manager = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.workflows_manager[ids[i]] = struct{}{}
+		m.workflow_manager[ids[i]] = struct{}{}
 	}
 }
 
-// ClearWorkflowsManager clears the "workflows_manager" edge to the Group entity.
-func (m *OrganizationMutation) ClearWorkflowsManager() {
-	m.clearedworkflows_manager = true
+// ClearWorkflowManager clears the "workflow_manager" edge to the Group entity.
+func (m *OrganizationMutation) ClearWorkflowManager() {
+	m.clearedworkflow_manager = true
 }
 
-// WorkflowsManagerCleared reports if the "workflows_manager" edge to the Group entity was cleared.
-func (m *OrganizationMutation) WorkflowsManagerCleared() bool {
-	return m.clearedworkflows_manager
+// WorkflowManagerCleared reports if the "workflow_manager" edge to the Group entity was cleared.
+func (m *OrganizationMutation) WorkflowManagerCleared() bool {
+	return m.clearedworkflow_manager
 }
 
-// RemoveWorkflowsManagerIDs removes the "workflows_manager" edge to the Group entity by IDs.
-func (m *OrganizationMutation) RemoveWorkflowsManagerIDs(ids ...string) {
-	if m.removedworkflows_manager == nil {
-		m.removedworkflows_manager = make(map[string]struct{})
+// RemoveWorkflowManagerIDs removes the "workflow_manager" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemoveWorkflowManagerIDs(ids ...string) {
+	if m.removedworkflow_manager == nil {
+		m.removedworkflow_manager = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.workflows_manager, ids[i])
-		m.removedworkflows_manager[ids[i]] = struct{}{}
+		delete(m.workflow_manager, ids[i])
+		m.removedworkflow_manager[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedWorkflowsManager returns the removed IDs of the "workflows_manager" edge to the Group entity.
-func (m *OrganizationMutation) RemovedWorkflowsManagerIDs() (ids []string) {
-	for id := range m.removedworkflows_manager {
+// RemovedWorkflowManager returns the removed IDs of the "workflow_manager" edge to the Group entity.
+func (m *OrganizationMutation) RemovedWorkflowManagerIDs() (ids []string) {
+	for id := range m.removedworkflow_manager {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// WorkflowsManagerIDs returns the "workflows_manager" edge IDs in the mutation.
-func (m *OrganizationMutation) WorkflowsManagerIDs() (ids []string) {
-	for id := range m.workflows_manager {
+// WorkflowManagerIDs returns the "workflow_manager" edge IDs in the mutation.
+func (m *OrganizationMutation) WorkflowManagerIDs() (ids []string) {
+	for id := range m.workflow_manager {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetWorkflowsManager resets all changes to the "workflows_manager" edge.
-func (m *OrganizationMutation) ResetWorkflowsManager() {
-	m.workflows_manager = nil
-	m.clearedworkflows_manager = false
-	m.removedworkflows_manager = nil
+// ResetWorkflowManager resets all changes to the "workflow_manager" edge.
+func (m *OrganizationMutation) ResetWorkflowManager() {
+	m.workflow_manager = nil
+	m.clearedworkflow_manager = false
+	m.removedworkflow_manager = nil
 }
 
 // SetParentID sets the "parent" edge to the Organization entity by id.
@@ -181766,7 +182596,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 163)
+	edges := make([]string, 0, 164)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -181974,8 +182804,8 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.workflow_definition_creators != nil {
 		edges = append(edges, organization.EdgeWorkflowDefinitionCreators)
 	}
-	if m.campaigns_manager != nil {
-		edges = append(edges, organization.EdgeCampaignsManager)
+	if m.campaign_manager != nil {
+		edges = append(edges, organization.EdgeCampaignManager)
 	}
 	if m.compliance_manager != nil {
 		edges = append(edges, organization.EdgeComplianceManager)
@@ -181983,8 +182813,11 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.group_manager != nil {
 		edges = append(edges, organization.EdgeGroupManager)
 	}
-	if m.policies_manager != nil {
-		edges = append(edges, organization.EdgePoliciesManager)
+	if m.integration_manager != nil {
+		edges = append(edges, organization.EdgeIntegrationManager)
+	}
+	if m.policy_manager != nil {
+		edges = append(edges, organization.EdgePolicyManager)
 	}
 	if m.registry_manager != nil {
 		edges = append(edges, organization.EdgeRegistryManager)
@@ -181995,8 +182828,8 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.trust_center_manager != nil {
 		edges = append(edges, organization.EdgeTrustCenterManager)
 	}
-	if m.workflows_manager != nil {
-		edges = append(edges, organization.EdgeWorkflowsManager)
+	if m.workflow_manager != nil {
+		edges = append(edges, organization.EdgeWorkflowManager)
 	}
 	if m.parent != nil {
 		edges = append(edges, organization.EdgeParent)
@@ -182677,9 +183510,9 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeCampaignsManager:
-		ids := make([]ent.Value, 0, len(m.campaigns_manager))
-		for id := range m.campaigns_manager {
+	case organization.EdgeCampaignManager:
+		ids := make([]ent.Value, 0, len(m.campaign_manager))
+		for id := range m.campaign_manager {
 			ids = append(ids, id)
 		}
 		return ids
@@ -182695,9 +183528,15 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgePoliciesManager:
-		ids := make([]ent.Value, 0, len(m.policies_manager))
-		for id := range m.policies_manager {
+	case organization.EdgeIntegrationManager:
+		ids := make([]ent.Value, 0, len(m.integration_manager))
+		for id := range m.integration_manager {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgePolicyManager:
+		ids := make([]ent.Value, 0, len(m.policy_manager))
+		for id := range m.policy_manager {
 			ids = append(ids, id)
 		}
 		return ids
@@ -182719,9 +183558,9 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeWorkflowsManager:
-		ids := make([]ent.Value, 0, len(m.workflows_manager))
-		for id := range m.workflows_manager {
+	case organization.EdgeWorkflowManager:
+		ids := make([]ent.Value, 0, len(m.workflow_manager))
+		for id := range m.workflow_manager {
 			ids = append(ids, id)
 		}
 		return ids
@@ -183239,7 +184078,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 163)
+	edges := make([]string, 0, 164)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -183447,8 +184286,8 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedworkflow_definition_creators != nil {
 		edges = append(edges, organization.EdgeWorkflowDefinitionCreators)
 	}
-	if m.removedcampaigns_manager != nil {
-		edges = append(edges, organization.EdgeCampaignsManager)
+	if m.removedcampaign_manager != nil {
+		edges = append(edges, organization.EdgeCampaignManager)
 	}
 	if m.removedcompliance_manager != nil {
 		edges = append(edges, organization.EdgeComplianceManager)
@@ -183456,8 +184295,11 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedgroup_manager != nil {
 		edges = append(edges, organization.EdgeGroupManager)
 	}
-	if m.removedpolicies_manager != nil {
-		edges = append(edges, organization.EdgePoliciesManager)
+	if m.removedintegration_manager != nil {
+		edges = append(edges, organization.EdgeIntegrationManager)
+	}
+	if m.removedpolicy_manager != nil {
+		edges = append(edges, organization.EdgePolicyManager)
 	}
 	if m.removedregistry_manager != nil {
 		edges = append(edges, organization.EdgeRegistryManager)
@@ -183468,8 +184310,8 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedtrust_center_manager != nil {
 		edges = append(edges, organization.EdgeTrustCenterManager)
 	}
-	if m.removedworkflows_manager != nil {
-		edges = append(edges, organization.EdgeWorkflowsManager)
+	if m.removedworkflow_manager != nil {
+		edges = append(edges, organization.EdgeWorkflowManager)
 	}
 	if m.removedchildren != nil {
 		edges = append(edges, organization.EdgeChildren)
@@ -184138,9 +184980,9 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeCampaignsManager:
-		ids := make([]ent.Value, 0, len(m.removedcampaigns_manager))
-		for id := range m.removedcampaigns_manager {
+	case organization.EdgeCampaignManager:
+		ids := make([]ent.Value, 0, len(m.removedcampaign_manager))
+		for id := range m.removedcampaign_manager {
 			ids = append(ids, id)
 		}
 		return ids
@@ -184156,9 +184998,15 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgePoliciesManager:
-		ids := make([]ent.Value, 0, len(m.removedpolicies_manager))
-		for id := range m.removedpolicies_manager {
+	case organization.EdgeIntegrationManager:
+		ids := make([]ent.Value, 0, len(m.removedintegration_manager))
+		for id := range m.removedintegration_manager {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgePolicyManager:
+		ids := make([]ent.Value, 0, len(m.removedpolicy_manager))
+		for id := range m.removedpolicy_manager {
 			ids = append(ids, id)
 		}
 		return ids
@@ -184180,9 +185028,9 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case organization.EdgeWorkflowsManager:
-		ids := make([]ent.Value, 0, len(m.removedworkflows_manager))
-		for id := range m.removedworkflows_manager {
+	case organization.EdgeWorkflowManager:
+		ids := make([]ent.Value, 0, len(m.removedworkflow_manager))
+		for id := range m.removedworkflow_manager {
 			ids = append(ids, id)
 		}
 		return ids
@@ -184684,7 +185532,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 163)
+	edges := make([]string, 0, 164)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -184892,8 +185740,8 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedworkflow_definition_creators {
 		edges = append(edges, organization.EdgeWorkflowDefinitionCreators)
 	}
-	if m.clearedcampaigns_manager {
-		edges = append(edges, organization.EdgeCampaignsManager)
+	if m.clearedcampaign_manager {
+		edges = append(edges, organization.EdgeCampaignManager)
 	}
 	if m.clearedcompliance_manager {
 		edges = append(edges, organization.EdgeComplianceManager)
@@ -184901,8 +185749,11 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedgroup_manager {
 		edges = append(edges, organization.EdgeGroupManager)
 	}
-	if m.clearedpolicies_manager {
-		edges = append(edges, organization.EdgePoliciesManager)
+	if m.clearedintegration_manager {
+		edges = append(edges, organization.EdgeIntegrationManager)
+	}
+	if m.clearedpolicy_manager {
+		edges = append(edges, organization.EdgePolicyManager)
 	}
 	if m.clearedregistry_manager {
 		edges = append(edges, organization.EdgeRegistryManager)
@@ -184913,8 +185764,8 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedtrust_center_manager {
 		edges = append(edges, organization.EdgeTrustCenterManager)
 	}
-	if m.clearedworkflows_manager {
-		edges = append(edges, organization.EdgeWorkflowsManager)
+	if m.clearedworkflow_manager {
+		edges = append(edges, organization.EdgeWorkflowManager)
 	}
 	if m.clearedparent {
 		edges = append(edges, organization.EdgeParent)
@@ -185319,22 +186170,24 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedvulnerability_creators
 	case organization.EdgeWorkflowDefinitionCreators:
 		return m.clearedworkflow_definition_creators
-	case organization.EdgeCampaignsManager:
-		return m.clearedcampaigns_manager
+	case organization.EdgeCampaignManager:
+		return m.clearedcampaign_manager
 	case organization.EdgeComplianceManager:
 		return m.clearedcompliance_manager
 	case organization.EdgeGroupManager:
 		return m.clearedgroup_manager
-	case organization.EdgePoliciesManager:
-		return m.clearedpolicies_manager
+	case organization.EdgeIntegrationManager:
+		return m.clearedintegration_manager
+	case organization.EdgePolicyManager:
+		return m.clearedpolicy_manager
 	case organization.EdgeRegistryManager:
 		return m.clearedregistry_manager
 	case organization.EdgeRiskManager:
 		return m.clearedrisk_manager
 	case organization.EdgeTrustCenterManager:
 		return m.clearedtrust_center_manager
-	case organization.EdgeWorkflowsManager:
-		return m.clearedworkflows_manager
+	case organization.EdgeWorkflowManager:
+		return m.clearedworkflow_manager
 	case organization.EdgeParent:
 		return m.clearedparent
 	case organization.EdgeChildren:
@@ -185742,8 +186595,8 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 	case organization.EdgeWorkflowDefinitionCreators:
 		m.ResetWorkflowDefinitionCreators()
 		return nil
-	case organization.EdgeCampaignsManager:
-		m.ResetCampaignsManager()
+	case organization.EdgeCampaignManager:
+		m.ResetCampaignManager()
 		return nil
 	case organization.EdgeComplianceManager:
 		m.ResetComplianceManager()
@@ -185751,8 +186604,11 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 	case organization.EdgeGroupManager:
 		m.ResetGroupManager()
 		return nil
-	case organization.EdgePoliciesManager:
-		m.ResetPoliciesManager()
+	case organization.EdgeIntegrationManager:
+		m.ResetIntegrationManager()
+		return nil
+	case organization.EdgePolicyManager:
+		m.ResetPolicyManager()
 		return nil
 	case organization.EdgeRegistryManager:
 		m.ResetRegistryManager()
@@ -185763,8 +186619,8 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 	case organization.EdgeTrustCenterManager:
 		m.ResetTrustCenterManager()
 		return nil
-	case organization.EdgeWorkflowsManager:
-		m.ResetWorkflowsManager()
+	case organization.EdgeWorkflowManager:
+		m.ResetWorkflowManager()
 		return nil
 	case organization.EdgeParent:
 		m.ResetParent()
@@ -227007,6 +227863,9 @@ type RiskMutation struct {
 	entities                           map[string]struct{}
 	removedentities                    map[string]struct{}
 	clearedentities                    bool
+	legacy_entities                    map[string]struct{}
+	removedlegacy_entities             map[string]struct{}
+	clearedlegacy_entities             bool
 	scans                              map[string]struct{}
 	removedscans                       map[string]struct{}
 	clearedscans                       bool
@@ -231119,6 +231978,60 @@ func (m *RiskMutation) ResetEntities() {
 	m.removedentities = nil
 }
 
+// AddLegacyEntityIDs adds the "legacy_entities" edge to the Entity entity by ids.
+func (m *RiskMutation) AddLegacyEntityIDs(ids ...string) {
+	if m.legacy_entities == nil {
+		m.legacy_entities = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.legacy_entities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearLegacyEntities clears the "legacy_entities" edge to the Entity entity.
+func (m *RiskMutation) ClearLegacyEntities() {
+	m.clearedlegacy_entities = true
+}
+
+// LegacyEntitiesCleared reports if the "legacy_entities" edge to the Entity entity was cleared.
+func (m *RiskMutation) LegacyEntitiesCleared() bool {
+	return m.clearedlegacy_entities
+}
+
+// RemoveLegacyEntityIDs removes the "legacy_entities" edge to the Entity entity by IDs.
+func (m *RiskMutation) RemoveLegacyEntityIDs(ids ...string) {
+	if m.removedlegacy_entities == nil {
+		m.removedlegacy_entities = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.legacy_entities, ids[i])
+		m.removedlegacy_entities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedLegacyEntities returns the removed IDs of the "legacy_entities" edge to the Entity entity.
+func (m *RiskMutation) RemovedLegacyEntitiesIDs() (ids []string) {
+	for id := range m.removedlegacy_entities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// LegacyEntitiesIDs returns the "legacy_entities" edge IDs in the mutation.
+func (m *RiskMutation) LegacyEntitiesIDs() (ids []string) {
+	for id := range m.legacy_entities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetLegacyEntities resets all changes to the "legacy_entities" edge.
+func (m *RiskMutation) ResetLegacyEntities() {
+	m.legacy_entities = nil
+	m.clearedlegacy_entities = false
+	m.removedlegacy_entities = nil
+}
+
 // AddScanIDs adds the "scans" edge to the Scan entity by ids.
 func (m *RiskMutation) AddScanIDs(ids ...string) {
 	if m.scans == nil {
@@ -233073,7 +233986,7 @@ func (m *RiskMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *RiskMutation) AddedEdges() []string {
-	edges := make([]string, 0, 35)
+	edges := make([]string, 0, 36)
 	if m.integration_runs != nil {
 		edges = append(edges, risk.EdgeIntegrationRuns)
 	}
@@ -233148,6 +234061,9 @@ func (m *RiskMutation) AddedEdges() []string {
 	}
 	if m.entities != nil {
 		edges = append(edges, risk.EdgeEntities)
+	}
+	if m.legacy_entities != nil {
+		edges = append(edges, risk.EdgeLegacyEntities)
 	}
 	if m.scans != nil {
 		edges = append(edges, risk.EdgeScans)
@@ -233314,6 +234230,12 @@ func (m *RiskMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case risk.EdgeLegacyEntities:
+		ids := make([]ent.Value, 0, len(m.legacy_entities))
+		for id := range m.legacy_entities {
+			ids = append(ids, id)
+		}
+		return ids
 	case risk.EdgeScans:
 		ids := make([]ent.Value, 0, len(m.scans))
 		for id := range m.scans {
@@ -233376,7 +234298,7 @@ func (m *RiskMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RiskMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 35)
+	edges := make([]string, 0, 36)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, risk.EdgeIntegrationRuns)
 	}
@@ -233418,6 +234340,9 @@ func (m *RiskMutation) RemovedEdges() []string {
 	}
 	if m.removedentities != nil {
 		edges = append(edges, risk.EdgeEntities)
+	}
+	if m.removedlegacy_entities != nil {
+		edges = append(edges, risk.EdgeLegacyEntities)
 	}
 	if m.removedscans != nil {
 		edges = append(edges, risk.EdgeScans)
@@ -233534,6 +234459,12 @@ func (m *RiskMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case risk.EdgeLegacyEntities:
+		ids := make([]ent.Value, 0, len(m.removedlegacy_entities))
+		for id := range m.removedlegacy_entities {
+			ids = append(ids, id)
+		}
+		return ids
 	case risk.EdgeScans:
 		ids := make([]ent.Value, 0, len(m.removedscans))
 		for id := range m.removedscans {
@@ -233588,7 +234519,7 @@ func (m *RiskMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *RiskMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 35)
+	edges := make([]string, 0, 36)
 	if m.clearedintegration_runs {
 		edges = append(edges, risk.EdgeIntegrationRuns)
 	}
@@ -233663,6 +234594,9 @@ func (m *RiskMutation) ClearedEdges() []string {
 	}
 	if m.clearedentities {
 		edges = append(edges, risk.EdgeEntities)
+	}
+	if m.clearedlegacy_entities {
+		edges = append(edges, risk.EdgeLegacyEntities)
 	}
 	if m.clearedscans {
 		edges = append(edges, risk.EdgeScans)
@@ -233751,6 +234685,8 @@ func (m *RiskMutation) EdgeCleared(name string) bool {
 		return m.clearedassets
 	case risk.EdgeEntities:
 		return m.clearedentities
+	case risk.EdgeLegacyEntities:
+		return m.clearedlegacy_entities
 	case risk.EdgeScans:
 		return m.clearedscans
 	case risk.EdgeStakeholder:
@@ -233900,6 +234836,9 @@ func (m *RiskMutation) ResetEdge(name string) error {
 		return nil
 	case risk.EdgeEntities:
 		m.ResetEntities()
+		return nil
+	case risk.EdgeLegacyEntities:
+		m.ResetLegacyEntities()
 		return nil
 	case risk.EdgeScans:
 		m.ResetScans()
@@ -243280,6 +244219,7 @@ type SubcontrolMutation struct {
 	internal_notes                 *string
 	system_internal_id             *string
 	subcontrol_kind_name           *string
+	control_origin_name            *string
 	workflow_eligible_marker       *bool
 	ref_code                       *string
 	clearedFields                  map[string]struct{}
@@ -243335,6 +244275,8 @@ type SubcontrolMutation struct {
 	clearedowner                   bool
 	subcontrol_kind                *string
 	clearedsubcontrol_kind         bool
+	control_origin                 *string
+	clearedcontrol_origin          bool
 	control                        *string
 	clearedcontrol                 bool
 	control_implementations        map[string]struct{}
@@ -246200,6 +247142,104 @@ func (m *SubcontrolMutation) ResetSubcontrolKindID() {
 	delete(m.clearedFields, subcontrol.FieldSubcontrolKindID)
 }
 
+// SetControlOriginName sets the "control_origin_name" field.
+func (m *SubcontrolMutation) SetControlOriginName(s string) {
+	m.control_origin_name = &s
+}
+
+// ControlOriginName returns the value of the "control_origin_name" field in the mutation.
+func (m *SubcontrolMutation) ControlOriginName() (r string, exists bool) {
+	v := m.control_origin_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldControlOriginName returns the old "control_origin_name" field's value of the Subcontrol entity.
+// If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolMutation) OldControlOriginName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldControlOriginName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldControlOriginName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldControlOriginName: %w", err)
+	}
+	return oldValue.ControlOriginName, nil
+}
+
+// ClearControlOriginName clears the value of the "control_origin_name" field.
+func (m *SubcontrolMutation) ClearControlOriginName() {
+	m.control_origin_name = nil
+	m.clearedFields[subcontrol.FieldControlOriginName] = struct{}{}
+}
+
+// ControlOriginNameCleared returns if the "control_origin_name" field was cleared in this mutation.
+func (m *SubcontrolMutation) ControlOriginNameCleared() bool {
+	_, ok := m.clearedFields[subcontrol.FieldControlOriginName]
+	return ok
+}
+
+// ResetControlOriginName resets all changes to the "control_origin_name" field.
+func (m *SubcontrolMutation) ResetControlOriginName() {
+	m.control_origin_name = nil
+	delete(m.clearedFields, subcontrol.FieldControlOriginName)
+}
+
+// SetControlOriginID sets the "control_origin_id" field.
+func (m *SubcontrolMutation) SetControlOriginID(s string) {
+	m.control_origin = &s
+}
+
+// ControlOriginID returns the value of the "control_origin_id" field in the mutation.
+func (m *SubcontrolMutation) ControlOriginID() (r string, exists bool) {
+	v := m.control_origin
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldControlOriginID returns the old "control_origin_id" field's value of the Subcontrol entity.
+// If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolMutation) OldControlOriginID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldControlOriginID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldControlOriginID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldControlOriginID: %w", err)
+	}
+	return oldValue.ControlOriginID, nil
+}
+
+// ClearControlOriginID clears the value of the "control_origin_id" field.
+func (m *SubcontrolMutation) ClearControlOriginID() {
+	m.control_origin = nil
+	m.clearedFields[subcontrol.FieldControlOriginID] = struct{}{}
+}
+
+// ControlOriginIDCleared returns if the "control_origin_id" field was cleared in this mutation.
+func (m *SubcontrolMutation) ControlOriginIDCleared() bool {
+	_, ok := m.clearedFields[subcontrol.FieldControlOriginID]
+	return ok
+}
+
+// ResetControlOriginID resets all changes to the "control_origin_id" field.
+func (m *SubcontrolMutation) ResetControlOriginID() {
+	m.control_origin = nil
+	delete(m.clearedFields, subcontrol.FieldControlOriginID)
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (m *SubcontrolMutation) SetWorkflowEligibleMarker(b bool) {
 	m.workflow_eligible_marker = &b
@@ -247212,6 +248252,33 @@ func (m *SubcontrolMutation) ResetSubcontrolKind() {
 	m.clearedsubcontrol_kind = false
 }
 
+// ClearControlOrigin clears the "control_origin" edge to the CustomTypeEnum entity.
+func (m *SubcontrolMutation) ClearControlOrigin() {
+	m.clearedcontrol_origin = true
+	m.clearedFields[subcontrol.FieldControlOriginID] = struct{}{}
+}
+
+// ControlOriginCleared reports if the "control_origin" edge to the CustomTypeEnum entity was cleared.
+func (m *SubcontrolMutation) ControlOriginCleared() bool {
+	return m.ControlOriginIDCleared() || m.clearedcontrol_origin
+}
+
+// ControlOriginIDs returns the "control_origin" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ControlOriginID instead. It exists only for internal usage by the builders.
+func (m *SubcontrolMutation) ControlOriginIDs() (ids []string) {
+	if id := m.control_origin; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetControlOrigin resets all changes to the "control_origin" edge.
+func (m *SubcontrolMutation) ResetControlOrigin() {
+	m.control_origin = nil
+	m.clearedcontrol_origin = false
+}
+
 // ClearControl clears the "control" edge to the Control entity.
 func (m *SubcontrolMutation) ClearControl() {
 	m.clearedcontrol = true
@@ -247759,7 +248826,7 @@ func (m *SubcontrolMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubcontrolMutation) Fields() []string {
-	fields := make([]string, 0, 55)
+	fields := make([]string, 0, 57)
 	if m.created_at != nil {
 		fields = append(fields, subcontrol.FieldCreatedAt)
 	}
@@ -247916,6 +248983,12 @@ func (m *SubcontrolMutation) Fields() []string {
 	if m.subcontrol_kind != nil {
 		fields = append(fields, subcontrol.FieldSubcontrolKindID)
 	}
+	if m.control_origin_name != nil {
+		fields = append(fields, subcontrol.FieldControlOriginName)
+	}
+	if m.control_origin != nil {
+		fields = append(fields, subcontrol.FieldControlOriginID)
+	}
 	if m.workflow_eligible_marker != nil {
 		fields = append(fields, subcontrol.FieldWorkflowEligibleMarker)
 	}
@@ -248037,6 +249110,10 @@ func (m *SubcontrolMutation) Field(name string) (ent.Value, bool) {
 		return m.SubcontrolKindName()
 	case subcontrol.FieldSubcontrolKindID:
 		return m.SubcontrolKindID()
+	case subcontrol.FieldControlOriginName:
+		return m.ControlOriginName()
+	case subcontrol.FieldControlOriginID:
+		return m.ControlOriginID()
 	case subcontrol.FieldWorkflowEligibleMarker:
 		return m.WorkflowEligibleMarker()
 	case subcontrol.FieldRefCode:
@@ -248156,6 +249233,10 @@ func (m *SubcontrolMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldSubcontrolKindName(ctx)
 	case subcontrol.FieldSubcontrolKindID:
 		return m.OldSubcontrolKindID(ctx)
+	case subcontrol.FieldControlOriginName:
+		return m.OldControlOriginName(ctx)
+	case subcontrol.FieldControlOriginID:
+		return m.OldControlOriginID(ctx)
 	case subcontrol.FieldWorkflowEligibleMarker:
 		return m.OldWorkflowEligibleMarker(ctx)
 	case subcontrol.FieldRefCode:
@@ -248535,6 +249616,20 @@ func (m *SubcontrolMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSubcontrolKindID(v)
 		return nil
+	case subcontrol.FieldControlOriginName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetControlOriginName(v)
+		return nil
+	case subcontrol.FieldControlOriginID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetControlOriginID(v)
+		return nil
 	case subcontrol.FieldWorkflowEligibleMarker:
 		v, ok := value.(bool)
 		if !ok {
@@ -248739,6 +249834,12 @@ func (m *SubcontrolMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrol.FieldSubcontrolKindID) {
 		fields = append(fields, subcontrol.FieldSubcontrolKindID)
 	}
+	if m.FieldCleared(subcontrol.FieldControlOriginName) {
+		fields = append(fields, subcontrol.FieldControlOriginName)
+	}
+	if m.FieldCleared(subcontrol.FieldControlOriginID) {
+		fields = append(fields, subcontrol.FieldControlOriginID)
+	}
 	if m.FieldCleared(subcontrol.FieldWorkflowEligibleMarker) {
 		fields = append(fields, subcontrol.FieldWorkflowEligibleMarker)
 	}
@@ -248909,6 +250010,12 @@ func (m *SubcontrolMutation) ClearField(name string) error {
 	case subcontrol.FieldSubcontrolKindID:
 		m.ClearSubcontrolKindID()
 		return nil
+	case subcontrol.FieldControlOriginName:
+		m.ClearControlOriginName()
+		return nil
+	case subcontrol.FieldControlOriginID:
+		m.ClearControlOriginID()
+		return nil
 	case subcontrol.FieldWorkflowEligibleMarker:
 		m.ClearWorkflowEligibleMarker()
 		return nil
@@ -249076,6 +250183,12 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 	case subcontrol.FieldSubcontrolKindID:
 		m.ResetSubcontrolKindID()
 		return nil
+	case subcontrol.FieldControlOriginName:
+		m.ResetControlOriginName()
+		return nil
+	case subcontrol.FieldControlOriginID:
+		m.ResetControlOriginID()
+		return nil
 	case subcontrol.FieldWorkflowEligibleMarker:
 		m.ResetWorkflowEligibleMarker()
 		return nil
@@ -249091,7 +250204,7 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SubcontrolMutation) AddedEdges() []string {
-	edges := make([]string, 0, 29)
+	edges := make([]string, 0, 30)
 	if m.integration_runs != nil {
 		edges = append(edges, subcontrol.EdgeIntegrationRuns)
 	}
@@ -249148,6 +250261,9 @@ func (m *SubcontrolMutation) AddedEdges() []string {
 	}
 	if m.subcontrol_kind != nil {
 		edges = append(edges, subcontrol.EdgeSubcontrolKind)
+	}
+	if m.control_origin != nil {
+		edges = append(edges, subcontrol.EdgeControlOrigin)
 	}
 	if m.control != nil {
 		edges = append(edges, subcontrol.EdgeControl)
@@ -249290,6 +250406,10 @@ func (m *SubcontrolMutation) AddedIDs(name string) []ent.Value {
 		if id := m.subcontrol_kind; id != nil {
 			return []ent.Value{*id}
 		}
+	case subcontrol.EdgeControlOrigin:
+		if id := m.control_origin; id != nil {
+			return []ent.Value{*id}
+		}
 	case subcontrol.EdgeControl:
 		if id := m.control; id != nil {
 			return []ent.Value{*id}
@@ -249354,7 +250474,7 @@ func (m *SubcontrolMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SubcontrolMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 29)
+	edges := make([]string, 0, 30)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, subcontrol.EdgeIntegrationRuns)
 	}
@@ -249575,7 +250695,7 @@ func (m *SubcontrolMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SubcontrolMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 29)
+	edges := make([]string, 0, 30)
 	if m.clearedintegration_runs {
 		edges = append(edges, subcontrol.EdgeIntegrationRuns)
 	}
@@ -249632,6 +250752,9 @@ func (m *SubcontrolMutation) ClearedEdges() []string {
 	}
 	if m.clearedsubcontrol_kind {
 		edges = append(edges, subcontrol.EdgeSubcontrolKind)
+	}
+	if m.clearedcontrol_origin {
+		edges = append(edges, subcontrol.EdgeControlOrigin)
 	}
 	if m.clearedcontrol {
 		edges = append(edges, subcontrol.EdgeControl)
@@ -249708,6 +250831,8 @@ func (m *SubcontrolMutation) EdgeCleared(name string) bool {
 		return m.clearedowner
 	case subcontrol.EdgeSubcontrolKind:
 		return m.clearedsubcontrol_kind
+	case subcontrol.EdgeControlOrigin:
+		return m.clearedcontrol_origin
 	case subcontrol.EdgeControl:
 		return m.clearedcontrol
 	case subcontrol.EdgeControlImplementations:
@@ -249750,6 +250875,9 @@ func (m *SubcontrolMutation) ClearEdge(name string) error {
 		return nil
 	case subcontrol.EdgeSubcontrolKind:
 		m.ClearSubcontrolKind()
+		return nil
+	case subcontrol.EdgeControlOrigin:
+		m.ClearControlOrigin()
 		return nil
 	case subcontrol.EdgeControl:
 		m.ClearControl()
@@ -249818,6 +250946,9 @@ func (m *SubcontrolMutation) ResetEdge(name string) error {
 		return nil
 	case subcontrol.EdgeSubcontrolKind:
 		m.ResetSubcontrolKind()
+		return nil
+	case subcontrol.EdgeControlOrigin:
+		m.ResetControlOrigin()
 		return nil
 	case subcontrol.EdgeControl:
 		m.ResetControl()

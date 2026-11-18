@@ -325,6 +325,7 @@ type TestGraphClient interface {
 	GetIntegrationByID(ctx context.Context, integrationID string, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationByID, error)
 	GetIntegrationByIDWithSecrets(ctx context.Context, integrationID string, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationByIDWithSecrets, error)
 	GetIntegrations(ctx context.Context, where *IntegrationWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetIntegrations, error)
+	GetAllIntegrationRuns(ctx context.Context, where *IntegrationRunWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAllIntegrationRuns, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVInternalPolicy, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
@@ -470,7 +471,6 @@ type TestGraphClient interface {
 	GetAllProgramMemberships(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramMemberships, error)
 	GetProgramMembershipByID(ctx context.Context, programMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipByID, error)
 	GetProgramMemberships(ctx context.Context, where *ProgramMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMemberships, error)
-	UpdateBulkProgramMembership(ctx context.Context, ids []string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProgramMembership, error)
 	UpdateProgramMembership(ctx context.Context, updateProgramMembershipID string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateProgramMembership, error)
 	CreateBulkCSVRemediation(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVRemediation, error)
 	CreateBulkRemediation(ctx context.Context, input []*CreateRemediationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkRemediation, error)
@@ -493,13 +493,11 @@ type TestGraphClient interface {
 	AddUserToReportWithRole(ctx context.Context, input CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*AddUserToReportWithRole, error)
 	CreateBulkReportMembership(ctx context.Context, input []*CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkReportMembership, error)
 	CreateReportMembership(ctx context.Context, input CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateReportMembership, error)
-	DeleteBulkReportMembership(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkReportMembership, error)
 	DeleteReportMembership(ctx context.Context, deleteReportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*DeleteReportMembership, error)
 	GetAllReportMemberships(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportMembershipOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllReportMemberships, error)
 	GetReportMembershipByID(ctx context.Context, reportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetReportMembershipByID, error)
 	GetReportMemberships(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportMembershipOrder, where *ReportMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetReportMemberships, error)
 	RemoveUserFromReport(ctx context.Context, deleteReportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*RemoveUserFromReport, error)
-	UpdateBulkReportMembership(ctx context.Context, ids []string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkReportMembership, error)
 	UpdateReportMembership(ctx context.Context, updateReportMembershipID string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateReportMembership, error)
 	CreateBulkCSVReview(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVReview, error)
 	CreateBulkReview(ctx context.Context, input []*CreateReviewInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkReview, error)
@@ -561,6 +559,7 @@ type TestGraphClient interface {
 	CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *FileMetadataInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error)
 	DeleteSubprocessor(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubprocessor, error)
 	GetAllSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessors, error)
+	GetPublicSubprocessors(ctx context.Context, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPublicSubprocessors, error)
 	GetSubprocessorByID(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorByID, error)
 	GetSubprocessors(ctx context.Context, first *int64, last *int64, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessors, error)
 	UpdateBulkSubprocessor(ctx context.Context, ids []string, input UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkSubprocessor, error)
@@ -20431,6 +20430,8 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	CategoryID                 *string                             "json:\"categoryID,omitempty\" graphql:\"categoryID\""
 	ControlKindID              *string                             "json:\"controlKindID,omitempty\" graphql:\"controlKindID\""
 	ControlKindName            *string                             "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
+	ControlOriginID            *string                             "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                             "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwnerID             *string                             "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                            "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	CreatedAt                  *time.Time                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -20532,6 +20533,18 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlKindName(
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
 	return t.ControlKindName
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlOriginID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ControlOriginID
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlOriginName() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.ControlOriginName
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlOwnerID() *string {
 	if t == nil {
@@ -20866,6 +20879,8 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	CategoryID                 *string                             "json:\"categoryID,omitempty\" graphql:\"categoryID\""
 	ControlKindID              *string                             "json:\"controlKindID,omitempty\" graphql:\"controlKindID\""
 	ControlKindName            *string                             "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
+	ControlOriginID            *string                             "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                             "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwnerID             *string                             "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                            "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	CreatedAt                  *time.Time                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -20967,6 +20982,18 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetControlKindName() *str
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
 	return t.ControlKindName
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetControlOriginID() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.ControlOriginID
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetControlOriginName() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.ControlOriginName
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetControlOwnerID() *string {
 	if t == nil {
@@ -21513,6 +21540,8 @@ type CreateControl_CreateControl_Control struct {
 	ControlImplementations     CreateControl_CreateControl_Control_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
 	ControlKindID              *string                                                    "json:\"controlKindID,omitempty\" graphql:\"controlKindID\""
 	ControlKindName            *string                                                    "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
+	ControlOriginID            *string                                                    "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                                    "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *CreateControl_CreateControl_Control_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                                    "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                                   "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -21630,6 +21659,18 @@ func (t *CreateControl_CreateControl_Control) GetControlKindName() *string {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.ControlKindName
+}
+func (t *CreateControl_CreateControl_Control) GetControlOriginID() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.ControlOriginID
+}
+func (t *CreateControl_CreateControl_Control) GetControlOriginName() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.ControlOriginName
 }
 func (t *CreateControl_CreateControl_Control) GetControlOwner() *CreateControl_CreateControl_Control_ControlOwner {
 	if t == nil {
@@ -22988,6 +23029,8 @@ type GetControlByID_Control struct {
 	ControlImplementations     GetControlByID_Control_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
 	ControlKindID              *string                                       "json:\"controlKindID,omitempty\" graphql:\"controlKindID\""
 	ControlKindName            *string                                       "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
+	ControlOriginID            *string                                       "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                       "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *GetControlByID_Control_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                       "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                      "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -23108,6 +23151,18 @@ func (t *GetControlByID_Control) GetControlKindName() *string {
 		t = &GetControlByID_Control{}
 	}
 	return t.ControlKindName
+}
+func (t *GetControlByID_Control) GetControlOriginID() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.ControlOriginID
+}
+func (t *GetControlByID_Control) GetControlOriginName() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.ControlOriginName
 }
 func (t *GetControlByID_Control) GetControlOwner() *GetControlByID_Control_ControlOwner {
 	if t == nil {
@@ -23796,6 +23851,8 @@ type GetControls_Controls_Edges_Node struct {
 	ControlImplementations     GetControls_Controls_Edges_Node_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
 	ControlKindID              *string                                                "json:\"controlKindID,omitempty\" graphql:\"controlKindID\""
 	ControlKindName            *string                                                "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
+	ControlOriginID            *string                                                "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                                "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *GetControls_Controls_Edges_Node_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                                "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                               "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -23915,6 +23972,18 @@ func (t *GetControls_Controls_Edges_Node) GetControlKindName() *string {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.ControlKindName
+}
+func (t *GetControls_Controls_Edges_Node) GetControlOriginID() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.ControlOriginID
+}
+func (t *GetControls_Controls_Edges_Node) GetControlOriginName() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.ControlOriginName
 }
 func (t *GetControls_Controls_Edges_Node) GetControlOwner() *GetControls_Controls_Edges_Node_ControlOwner {
 	if t == nil {
@@ -24724,6 +24793,8 @@ type UpdateBulkControl_UpdateBulkControl_Controls struct {
 	ControlImplementations     UpdateBulkControl_UpdateBulkControl_Controls_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
 	ControlKindID              *string                                                             "json:\"controlKindID,omitempty\" graphql:\"controlKindID\""
 	ControlKindName            *string                                                             "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
+	ControlOriginID            *string                                                             "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                                             "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *UpdateBulkControl_UpdateBulkControl_Controls_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                                             "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                                            "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -24841,6 +24912,18 @@ func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetControlKindName() *str
 		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
 	}
 	return t.ControlKindName
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetControlOriginID() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ControlOriginID
+}
+func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetControlOriginName() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl_Controls{}
+	}
+	return t.ControlOriginName
 }
 func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetControlOwner() *UpdateBulkControl_UpdateBulkControl_Controls_ControlOwner {
 	if t == nil {
@@ -25709,6 +25792,8 @@ type UpdateControl_UpdateControl_Control struct {
 	ControlImplementations     UpdateControl_UpdateControl_Control_ControlImplementations "json:\"controlImplementations\" graphql:\"controlImplementations\""
 	ControlKindID              *string                                                    "json:\"controlKindID,omitempty\" graphql:\"controlKindID\""
 	ControlKindName            *string                                                    "json:\"controlKindName,omitempty\" graphql:\"controlKindName\""
+	ControlOriginID            *string                                                    "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                                    "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *UpdateControl_UpdateControl_Control_ControlOwner          "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                                    "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                                   "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -25835,6 +25920,18 @@ func (t *UpdateControl_UpdateControl_Control) GetControlKindName() *string {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.ControlKindName
+}
+func (t *UpdateControl_UpdateControl_Control) GetControlOriginID() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.ControlOriginID
+}
+func (t *UpdateControl_UpdateControl_Control) GetControlOriginName() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.ControlOriginName
 }
 func (t *UpdateControl_UpdateControl_Control) GetControlOwner() *UpdateControl_UpdateControl_Control_ControlOwner {
 	if t == nil {
@@ -69526,6 +69623,81 @@ func (t *GetIntegrations_Integrations) GetEdges() []*GetIntegrations_Integration
 	return t.Edges
 }
 
+type GetAllIntegrationRuns_IntegrationRuns_Edges_Node struct {
+	CreatedAt     *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	ID            string                     "json:\"id\" graphql:\"id\""
+	IntegrationID *string                    "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	OperationName *string                    "json:\"operationName,omitempty\" graphql:\"operationName\""
+	OwnerID       *string                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status        enums.IntegrationRunStatus "json:\"status\" graphql:\"status\""
+}
+
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetIntegrationID() *string {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.IntegrationID
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetOperationName() *string {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.OperationName
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges_Node) GetStatus() *enums.IntegrationRunStatus {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges_Node{}
+	}
+	return &t.Status
+}
+
+type GetAllIntegrationRuns_IntegrationRuns_Edges struct {
+	Node *GetAllIntegrationRuns_IntegrationRuns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllIntegrationRuns_IntegrationRuns_Edges) GetNode() *GetAllIntegrationRuns_IntegrationRuns_Edges_Node {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllIntegrationRuns_IntegrationRuns struct {
+	Edges      []*GetAllIntegrationRuns_IntegrationRuns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllIntegrationRuns_IntegrationRuns) GetEdges() []*GetAllIntegrationRuns_IntegrationRuns_Edges {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns{}
+	}
+	return t.Edges
+}
+func (t *GetAllIntegrationRuns_IntegrationRuns) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllIntegrationRuns_IntegrationRuns{}
+	}
+	return t.TotalCount
+}
+
 type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies_Approver struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -104790,98 +104962,6 @@ func (t *GetProgramMemberships_ProgramMemberships) GetEdges() []*GetProgramMembe
 	return t.Edges
 }
 
-type UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships struct {
-	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                    string     "json:\"id\" graphql:\"id\""
-	ProgramID             string     "json:\"programID\" graphql:\"programID\""
-	Role                  enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	UserID                string     "json:\"userID\" graphql:\"userID\""
-}
-
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetID() string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.ID
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetProgramID() string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.ProgramID
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetRole() *enums.Role {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return &t.Role
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.UpdatedBy
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUserID() string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
-	}
-	return t.UserID
-}
-
-type UpdateBulkProgramMembership_UpdateBulkProgramMembership struct {
-	NotUpdatedIDs      []string                                                                      "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
-	ProgramMemberships []*UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships "json:\"programMemberships,omitempty\" graphql:\"programMemberships\""
-	UpdatedIDs         []string                                                                      "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
-}
-
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership) GetNotUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership{}
-	}
-	return t.NotUpdatedIDs
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership) GetProgramMemberships() []*UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership{}
-	}
-	return t.ProgramMemberships
-}
-func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership) GetUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership{}
-	}
-	return t.UpdatedIDs
-}
-
 type UpdateProgramMembership_UpdateProgramMembership_ProgramMembership struct {
 	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -109873,17 +109953,6 @@ func (t *CreateReportMembership_CreateReportMembership) GetReportMembership() *C
 	return &t.ReportMembership
 }
 
-type DeleteBulkReportMembership_DeleteBulkReportMembership struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
-}
-
-func (t *DeleteBulkReportMembership_DeleteBulkReportMembership) GetDeletedIDs() []string {
-	if t == nil {
-		t = &DeleteBulkReportMembership_DeleteBulkReportMembership{}
-	}
-	return t.DeletedIDs
-}
-
 type DeleteReportMembership_DeleteReportMembership struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -110241,91 +110310,6 @@ func (t *RemoveUserFromReport_DeleteReportMembership) GetDeletedID() string {
 		t = &RemoveUserFromReport_DeleteReportMembership{}
 	}
 	return t.DeletedID
-}
-
-type UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships struct {
-	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                    string     "json:\"id\" graphql:\"id\""
-	ReportID              string     "json:\"reportID\" graphql:\"reportID\""
-	Role                  enums.Role "json:\"role\" graphql:\"role\""
-	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	UserID                string     "json:\"userID\" graphql:\"userID\""
-}
-
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetID() string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.ID
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetReportID() string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.ReportID
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetRole() *enums.Role {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return &t.Role
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.UpdatedBy
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUserID() string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
-	}
-	return t.UserID
-}
-
-type UpdateBulkReportMembership_UpdateBulkReportMembership struct {
-	ReportMemberships []*UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships "json:\"reportMemberships,omitempty\" graphql:\"reportMemberships\""
-	UpdatedIDs        []string                                                                   "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
-}
-
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership) GetReportMemberships() []*UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership{}
-	}
-	return t.ReportMemberships
-}
-func (t *UpdateBulkReportMembership_UpdateBulkReportMembership) GetUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkReportMembership_UpdateBulkReportMembership{}
-	}
-	return t.UpdatedIDs
 }
 
 type UpdateReportMembership_UpdateReportMembership_ReportMembership struct {
@@ -127016,6 +127000,8 @@ type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	Category                   *string                                                                   "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID                 *string                                                                   "json:\"categoryID,omitempty\" graphql:\"categoryID\""
 	ControlID                  string                                                                    "json:\"controlID\" graphql:\"controlID\""
+	ControlOriginID            *string                                                                   "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                                                   "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_ControlOwner "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                                                   "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                                                  "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -127108,6 +127094,18 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetControl
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
 	return t.ControlID
+}
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetControlOriginID() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
+	}
+	return t.ControlOriginID
+}
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetControlOriginName() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
+	}
+	return t.ControlOriginName
 }
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetControlOwner() *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols_ControlOwner {
 	if t == nil {
@@ -127459,6 +127457,8 @@ type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	Category                   *string                                                             "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID                 *string                                                             "json:\"categoryID,omitempty\" graphql:\"categoryID\""
 	ControlID                  string                                                              "json:\"controlID\" graphql:\"controlID\""
+	ControlOriginID            *string                                                             "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                                             "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_ControlOwner "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                                             "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                                            "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -127551,6 +127551,18 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetControlID() s
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
 	return t.ControlID
+}
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetControlOriginID() *string {
+	if t == nil {
+		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
+	}
+	return t.ControlOriginID
+}
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetControlOriginName() *string {
+	if t == nil {
+		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
+	}
+	return t.ControlOriginName
 }
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetControlOwner() *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols_ControlOwner {
 	if t == nil {
@@ -127902,6 +127914,8 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	Category                   *string                                                    "json:\"category,omitempty\" graphql:\"category\""
 	CategoryID                 *string                                                    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
 	ControlID                  string                                                     "json:\"controlID\" graphql:\"controlID\""
+	ControlOriginID            *string                                                    "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                                    "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *CreateSubcontrol_CreateSubcontrol_Subcontrol_ControlOwner "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                                    "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                                   "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -127994,6 +128008,18 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetControlID() string {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
 	return t.ControlID
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetControlOriginID() *string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.ControlOriginID
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetControlOriginName() *string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.ControlOriginName
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetControlOwner() *CreateSubcontrol_CreateSubcontrol_Subcontrol_ControlOwner {
 	if t == nil {
@@ -128679,6 +128705,8 @@ type GetSubcontrolByID_Subcontrol struct {
 	CategoryID                 *string                                    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
 	Control                    GetSubcontrolByID_Subcontrol_Control       "json:\"control\" graphql:\"control\""
 	ControlID                  string                                     "json:\"controlID\" graphql:\"controlID\""
+	ControlOriginID            *string                                    "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                    "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *GetSubcontrolByID_Subcontrol_ControlOwner "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                    "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                   "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -128777,6 +128805,18 @@ func (t *GetSubcontrolByID_Subcontrol) GetControlID() string {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
 	return t.ControlID
+}
+func (t *GetSubcontrolByID_Subcontrol) GetControlOriginID() *string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.ControlOriginID
+}
+func (t *GetSubcontrolByID_Subcontrol) GetControlOriginName() *string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.ControlOriginName
 }
 func (t *GetSubcontrolByID_Subcontrol) GetControlOwner() *GetSubcontrolByID_Subcontrol_ControlOwner {
 	if t == nil {
@@ -129440,6 +129480,8 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	CategoryID                 *string                                                    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
 	Control                    UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Control       "json:\"control\" graphql:\"control\""
 	ControlID                  string                                                     "json:\"controlID\" graphql:\"controlID\""
+	ControlOriginID            *string                                                    "json:\"controlOriginID,omitempty\" graphql:\"controlOriginID\""
+	ControlOriginName          *string                                                    "json:\"controlOriginName,omitempty\" graphql:\"controlOriginName\""
 	ControlOwner               *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_ControlOwner "json:\"controlOwner,omitempty\" graphql:\"controlOwner\""
 	ControlOwnerID             *string                                                    "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions           []string                                                   "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
@@ -129538,6 +129580,18 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetControlID() string {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.ControlID
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetControlOriginID() *string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.ControlOriginID
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetControlOriginName() *string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.ControlOriginName
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetControlOwner() *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_ControlOwner {
 	if t == nil {
@@ -130526,6 +130580,78 @@ func (t *GetAllSubprocessors_Subprocessors) GetPageInfo() *GetAllSubprocessors_S
 func (t *GetAllSubprocessors_Subprocessors) GetTotalCount() int64 {
 	if t == nil {
 		t = &GetAllSubprocessors_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
+type GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetPublicSubprocessors_Subprocessors_Edges_Node struct {
+	ID         string                                                    "json:\"id\" graphql:\"id\""
+	LogoFile   *GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoFileID *string                                                   "json:\"logoFileID,omitempty\" graphql:\"logoFileID\""
+	Name       string                                                    "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node) GetLogoFile() *GetPublicSubprocessors_Subprocessors_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node) GetLogoFileID() *string {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoFileID
+}
+func (t *GetPublicSubprocessors_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetPublicSubprocessors_Subprocessors_Edges struct {
+	Node *GetPublicSubprocessors_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetPublicSubprocessors_Subprocessors_Edges) GetNode() *GetPublicSubprocessors_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetPublicSubprocessors_Subprocessors struct {
+	Edges      []*GetPublicSubprocessors_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetPublicSubprocessors_Subprocessors) GetEdges() []*GetPublicSubprocessors_Subprocessors_Edges {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetPublicSubprocessors_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetPublicSubprocessors_Subprocessors{}
 	}
 	return t.TotalCount
 }
@@ -180367,6 +180493,17 @@ func (t *GetIntegrations) GetIntegrations() *GetIntegrations_Integrations {
 	return &t.Integrations
 }
 
+type GetAllIntegrationRuns struct {
+	IntegrationRuns GetAllIntegrationRuns_IntegrationRuns "json:\"integrationRuns\" graphql:\"integrationRuns\""
+}
+
+func (t *GetAllIntegrationRuns) GetIntegrationRuns() *GetAllIntegrationRuns_IntegrationRuns {
+	if t == nil {
+		t = &GetAllIntegrationRuns{}
+	}
+	return &t.IntegrationRuns
+}
+
 type CreateBulkCSVInternalPolicy struct {
 	CreateBulkCSVInternalPolicy CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy "json:\"createBulkCSVInternalPolicy\" graphql:\"createBulkCSVInternalPolicy\""
 }
@@ -181962,17 +182099,6 @@ func (t *GetProgramMemberships) GetProgramMemberships() *GetProgramMemberships_P
 	return &t.ProgramMemberships
 }
 
-type UpdateBulkProgramMembership struct {
-	UpdateBulkProgramMembership UpdateBulkProgramMembership_UpdateBulkProgramMembership "json:\"updateBulkProgramMembership\" graphql:\"updateBulkProgramMembership\""
-}
-
-func (t *UpdateBulkProgramMembership) GetUpdateBulkProgramMembership() *UpdateBulkProgramMembership_UpdateBulkProgramMembership {
-	if t == nil {
-		t = &UpdateBulkProgramMembership{}
-	}
-	return &t.UpdateBulkProgramMembership
-}
-
 type UpdateProgramMembership struct {
 	UpdateProgramMembership UpdateProgramMembership_UpdateProgramMembership "json:\"updateProgramMembership\" graphql:\"updateProgramMembership\""
 }
@@ -182215,17 +182341,6 @@ func (t *CreateReportMembership) GetCreateReportMembership() *CreateReportMember
 	return &t.CreateReportMembership
 }
 
-type DeleteBulkReportMembership struct {
-	DeleteBulkReportMembership DeleteBulkReportMembership_DeleteBulkReportMembership "json:\"deleteBulkReportMembership\" graphql:\"deleteBulkReportMembership\""
-}
-
-func (t *DeleteBulkReportMembership) GetDeleteBulkReportMembership() *DeleteBulkReportMembership_DeleteBulkReportMembership {
-	if t == nil {
-		t = &DeleteBulkReportMembership{}
-	}
-	return &t.DeleteBulkReportMembership
-}
-
 type DeleteReportMembership struct {
 	DeleteReportMembership DeleteReportMembership_DeleteReportMembership "json:\"deleteReportMembership\" graphql:\"deleteReportMembership\""
 }
@@ -182279,17 +182394,6 @@ func (t *RemoveUserFromReport) GetDeleteReportMembership() *RemoveUserFromReport
 		t = &RemoveUserFromReport{}
 	}
 	return &t.DeleteReportMembership
-}
-
-type UpdateBulkReportMembership struct {
-	UpdateBulkReportMembership UpdateBulkReportMembership_UpdateBulkReportMembership "json:\"updateBulkReportMembership\" graphql:\"updateBulkReportMembership\""
-}
-
-func (t *UpdateBulkReportMembership) GetUpdateBulkReportMembership() *UpdateBulkReportMembership_UpdateBulkReportMembership {
-	if t == nil {
-		t = &UpdateBulkReportMembership{}
-	}
-	return &t.UpdateBulkReportMembership
 }
 
 type UpdateReportMembership struct {
@@ -182959,6 +183063,17 @@ type GetAllSubprocessors struct {
 func (t *GetAllSubprocessors) GetSubprocessors() *GetAllSubprocessors_Subprocessors {
 	if t == nil {
 		t = &GetAllSubprocessors{}
+	}
+	return &t.Subprocessors
+}
+
+type GetPublicSubprocessors struct {
+	Subprocessors GetPublicSubprocessors_Subprocessors "json:\"subprocessors\" graphql:\"subprocessors\""
+}
+
+func (t *GetPublicSubprocessors) GetSubprocessors() *GetPublicSubprocessors_Subprocessors {
+	if t == nil {
+		t = &GetPublicSubprocessors{}
 	}
 	return &t.Subprocessors
 }
@@ -190587,6 +190702,8 @@ const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upl
 			categoryID
 			controlKindID
 			controlKindName
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -190672,6 +190789,8 @@ const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateCo
 			categoryID
 			controlKindID
 			controlKindName
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -190757,6 +190876,8 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			categoryID
 			controlKindID
 			controlKindName
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -191051,6 +191172,8 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		categoryID
 		controlKindID
 		controlKindName
+		controlOriginID
+		controlOriginName
 		controlOwnerID
 		controlQuestions
 		createdAt
@@ -191209,6 +191332,8 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $after:
 				categoryID
 				controlKindID
 				controlKindName
+				controlOriginID
+				controlOriginName
 				controlOwnerID
 				controlQuestions
 				createdAt
@@ -191430,6 +191555,8 @@ const UpdateBulkControlDocument = `mutation UpdateBulkControl ($ids: [ID!]!, $in
 			categoryID
 			controlKindID
 			controlKindName
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -191561,6 +191688,8 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			categoryID
 			controlKindID
 			controlKindName
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -202935,6 +203064,40 @@ func (c *Client) GetIntegrations(ctx context.Context, where *IntegrationWhereInp
 	return &res, nil
 }
 
+const GetAllIntegrationRunsDocument = `query GetAllIntegrationRuns ($where: IntegrationRunWhereInput) {
+	integrationRuns(where: $where) {
+		totalCount
+		edges {
+			node {
+				id
+				integrationID
+				ownerID
+				operationName
+				status
+				createdAt
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllIntegrationRuns(ctx context.Context, where *IntegrationRunWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAllIntegrationRuns, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetAllIntegrationRuns
+	if err := c.Client.Post(ctx, "GetAllIntegrationRuns", GetAllIntegrationRunsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVInternalPolicyDocument = `mutation CreateBulkCSVInternalPolicy ($input: Upload!) {
 	createBulkCSVInternalPolicy(input: $input) {
 		internalPolicies {
@@ -211601,43 +211764,6 @@ func (c *Client) GetProgramMemberships(ctx context.Context, where *ProgramMember
 	return &res, nil
 }
 
-const UpdateBulkProgramMembershipDocument = `mutation UpdateBulkProgramMembership ($ids: [ID!]!, $input: UpdateProgramMembershipInput!) {
-	updateBulkProgramMembership(ids: $ids, input: $input) {
-		programMemberships {
-			createdAt
-			createdBy
-			id
-			programID
-			role
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			userID
-		}
-		updatedIDs
-		notUpdatedIDs
-	}
-}
-`
-
-func (c *Client) UpdateBulkProgramMembership(ctx context.Context, ids []string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProgramMembership, error) {
-	vars := map[string]any{
-		"ids":   ids,
-		"input": input,
-	}
-
-	var res UpdateBulkProgramMembership
-	if err := c.Client.Post(ctx, "UpdateBulkProgramMembership", UpdateBulkProgramMembershipDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const UpdateProgramMembershipDocument = `mutation UpdateProgramMembership ($updateProgramMembershipId: ID!, $input: UpdateProgramMembershipInput!) {
 	updateProgramMembership(id: $updateProgramMembershipId, input: $input) {
 		programMembership {
@@ -212896,30 +213022,6 @@ func (c *Client) CreateReportMembership(ctx context.Context, input CreateReportM
 	return &res, nil
 }
 
-const DeleteBulkReportMembershipDocument = `mutation DeleteBulkReportMembership ($ids: [ID!]!) {
-	deleteBulkReportMembership(ids: $ids) {
-		deletedIDs
-	}
-}
-`
-
-func (c *Client) DeleteBulkReportMembership(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkReportMembership, error) {
-	vars := map[string]any{
-		"ids": ids,
-	}
-
-	var res DeleteBulkReportMembership
-	if err := c.Client.Post(ctx, "DeleteBulkReportMembership", DeleteBulkReportMembershipDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const DeleteReportMembershipDocument = `mutation DeleteReportMembership ($deleteReportMembershipId: ID!) {
 	deleteReportMembership(id: $deleteReportMembershipId) {
 		deletedID
@@ -213085,42 +213187,6 @@ func (c *Client) RemoveUserFromReport(ctx context.Context, deleteReportMembershi
 
 	var res RemoveUserFromReport
 	if err := c.Client.Post(ctx, "RemoveUserFromReport", RemoveUserFromReportDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const UpdateBulkReportMembershipDocument = `mutation UpdateBulkReportMembership ($ids: [ID!]!, $input: UpdateReportMembershipInput!) {
-	updateBulkReportMembership(ids: $ids, input: $input) {
-		reportMemberships {
-			createdAt
-			createdBy
-			id
-			reportID
-			role
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			userID
-		}
-		updatedIDs
-	}
-}
-`
-
-func (c *Client) UpdateBulkReportMembership(ctx context.Context, ids []string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkReportMembership, error) {
-	vars := map[string]any{
-		"ids":   ids,
-		"input": input,
-	}
-
-	var res UpdateBulkReportMembership
-	if err := c.Client.Post(ctx, "UpdateBulkReportMembership", UpdateBulkReportMembershipDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -216766,6 +216832,8 @@ const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($inpu
 			category
 			categoryID
 			controlID
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -216853,6 +216921,8 @@ const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [Cr
 			category
 			categoryID
 			controlID
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -216940,6 +217010,8 @@ const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubco
 			category
 			categoryID
 			controlID
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -217114,6 +217186,8 @@ const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) 
 		category
 		categoryID
 		controlID
+		controlOriginID
+		controlOriginName
 		controlOwnerID
 		controlQuestions
 		createdAt
@@ -217272,6 +217346,8 @@ const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId
 			category
 			categoryID
 			controlID
+			controlOriginID
+			controlOriginName
 			controlOwnerID
 			controlQuestions
 			createdAt
@@ -217562,6 +217638,40 @@ func (c *Client) GetAllSubprocessors(ctx context.Context, interceptors ...client
 
 	var res GetAllSubprocessors
 	if err := c.Client.Post(ctx, "GetAllSubprocessors", GetAllSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetPublicSubprocessorsDocument = `query GetPublicSubprocessors ($where: SubprocessorWhereInput) {
+	subprocessors(where: $where) {
+		totalCount
+		edges {
+			node {
+				id
+				name
+				logoFileID
+				logoFile {
+					presignedURL
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetPublicSubprocessors(ctx context.Context, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPublicSubprocessors, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetPublicSubprocessors
+	if err := c.Client.Post(ctx, "GetPublicSubprocessors", GetPublicSubprocessorsDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -230350,6 +230460,7 @@ var DocumentOperationNames = map[string]string{
 	GetIntegrationByIDDocument:                          "GetIntegrationByID",
 	GetIntegrationByIDWithSecretsDocument:               "GetIntegrationByIDWithSecrets",
 	GetIntegrationsDocument:                             "GetIntegrations",
+	GetAllIntegrationRunsDocument:                       "GetAllIntegrationRuns",
 	CreateBulkCSVInternalPolicyDocument:                 "CreateBulkCSVInternalPolicy",
 	CreateBulkInternalPolicyDocument:                    "CreateBulkInternalPolicy",
 	CreateInternalPolicyDocument:                        "CreateInternalPolicy",
@@ -230495,7 +230606,6 @@ var DocumentOperationNames = map[string]string{
 	GetAllProgramMembershipsDocument:                    "GetAllProgramMemberships",
 	GetProgramMembershipByIDDocument:                    "GetProgramMembershipByID",
 	GetProgramMembershipsDocument:                       "GetProgramMemberships",
-	UpdateBulkProgramMembershipDocument:                 "UpdateBulkProgramMembership",
 	UpdateProgramMembershipDocument:                     "UpdateProgramMembership",
 	CreateBulkCSVRemediationDocument:                    "CreateBulkCSVRemediation",
 	CreateBulkRemediationDocument:                       "CreateBulkRemediation",
@@ -230518,13 +230628,11 @@ var DocumentOperationNames = map[string]string{
 	AddUserToReportWithRoleDocument:                     "AddUserToReportWithRole",
 	CreateBulkReportMembershipDocument:                  "CreateBulkReportMembership",
 	CreateReportMembershipDocument:                      "CreateReportMembership",
-	DeleteBulkReportMembershipDocument:                  "DeleteBulkReportMembership",
 	DeleteReportMembershipDocument:                      "DeleteReportMembership",
 	GetAllReportMembershipsDocument:                     "GetAllReportMemberships",
 	GetReportMembershipByIDDocument:                     "GetReportMembershipByID",
 	GetReportMembershipsDocument:                        "GetReportMemberships",
 	RemoveUserFromReportDocument:                        "RemoveUserFromReport",
-	UpdateBulkReportMembershipDocument:                  "UpdateBulkReportMembership",
 	UpdateReportMembershipDocument:                      "UpdateReportMembership",
 	CreateBulkCSVReviewDocument:                         "CreateBulkCSVReview",
 	CreateBulkReviewDocument:                            "CreateBulkReview",
@@ -230586,6 +230694,7 @@ var DocumentOperationNames = map[string]string{
 	CreateSubprocessorDocument:                          "CreateSubprocessor",
 	DeleteSubprocessorDocument:                          "DeleteSubprocessor",
 	GetAllSubprocessorsDocument:                         "GetAllSubprocessors",
+	GetPublicSubprocessorsDocument:                      "GetPublicSubprocessors",
 	GetSubprocessorByIDDocument:                         "GetSubprocessorByID",
 	GetSubprocessorsDocument:                            "GetSubprocessors",
 	UpdateBulkSubprocessorDocument:                      "UpdateBulkSubprocessor",

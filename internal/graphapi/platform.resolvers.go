@@ -87,12 +87,7 @@ func (r *mutationResolver) CreateBulkCSVPlatform(ctx context.Context, input grap
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreatePlatformInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreatePlatform(ctx, inputs)
+	return r.bulkCreateCSVPlatform(ctx, data)
 }
 
 // UpdatePlatform is the resolver for the updatePlatform field.

@@ -471,7 +471,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "assessment": {
 	ObjectType:          "assessment",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "template": {
 	ObjectType:          "template",
@@ -753,6 +753,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "control_kind": {
+	ObjectType:          "custom_type_enum",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "control_origin": {
 	ObjectType:          "custom_type_enum",
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
@@ -1515,6 +1520,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "risks": {
+	ObjectType:          "risk",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "vulnerabilities": {
 	ObjectType:          "vulnerability",
 	SkipEditCheck:       false,
@@ -1840,6 +1850,36 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "trust_center_setting_logo": {
+	ObjectType:          "trust_center_setting",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "trust_center_setting_favicon": {
+	ObjectType:          "trust_center_setting",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "trust_center_setting_hero_image": {
+	ObjectType:          "trust_center_setting",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "trust_center_entity_logo": {
+	ObjectType:          "trust_center_entity",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "subprocessor_logo": {
+	ObjectType:          "subprocessor",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "standard_logo": {
+	ObjectType:          "standard",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 },
 }, "file_download_token": {"owner": {
 	ObjectType:          "user",
@@ -3598,7 +3638,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
-}, "campaigns_manager": {
+}, "campaign_manager": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
@@ -3613,7 +3653,12 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
-}, "policies_manager": {
+}, "integration_manager": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "policy_manager": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
@@ -3633,7 +3678,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
-}, "workflows_manager": {
+}, "workflow_manager": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
@@ -5016,6 +5061,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
+}, "legacy_entities": {
+	ObjectType:          "entity",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
 }, "scans": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
@@ -5341,6 +5391,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "subcontrol_kind": {
+	ObjectType:          "custom_type_enum",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "control_origin": {
 	ObjectType:          "custom_type_enum",
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,

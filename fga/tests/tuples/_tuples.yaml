@@ -179,6 +179,12 @@
 - user: user:ulid-workflow-manager
   relation: workflow_manager
   object: organization:openlane
+- user: user:ulid-integrations-manager
+  relation: member
+  object: organization:openlane
+- user: user:ulid-integrations-manager
+  relation: integration_manager
+  object: organization:openlane
 - user: user:ulid-campaign-manager
   relation: member
   object: organization:openlane

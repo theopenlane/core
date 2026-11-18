@@ -64,12 +64,7 @@ func (r *mutationResolver) CreateBulkCSVGroupMembership(ctx context.Context, inp
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateGroupMembershipInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateGroupMembership(ctx, inputs)
+	return r.bulkCreateCSVGroupMembership(ctx, data)
 }
 
 // UpdateGroupMembership is the resolver for the updateGroupMembership field.
@@ -105,44 +100,6 @@ func (r *mutationResolver) DeleteGroupMembership(ctx context.Context, id string)
 	return &model.GroupMembershipDeletePayload{
 		DeletedID: id,
 	}, nil
-}
-
-// DeleteBulkGroupMembership is the resolver for the deleteBulkGroupMembership field.
-func (r *mutationResolver) DeleteBulkGroupMembership(ctx context.Context, ids []string) (*model.GroupMembershipBulkDeletePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkDeleteGroupMembership(ctx, ids)
-}
-
-// UpdateBulkGroupMembership is the resolver for the updateBulkGroupMembership field.
-func (r *mutationResolver) UpdateBulkGroupMembership(ctx context.Context, ids []string, input generated.UpdateGroupMembershipInput) (*model.GroupMembershipBulkUpdatePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	return r.bulkUpdateGroupMembership(ctx, ids, input)
-}
-
-// UpdateBulkCSVGroupMembership is the resolver for the updateBulkCSVGroupMembership field.
-func (r *mutationResolver) UpdateBulkCSVGroupMembership(ctx context.Context, input graphql.Upload) (*model.GroupMembershipBulkUpdatePayload, error) {
-	data, err := common.UnmarshalBulkData[csvgenerated.GroupMembershipCSVUpdateInput](input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupmembership"})
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	if err := resolveCSVReferencesForSchema(ctx, "GroupMembership", data); err != nil {
-		return nil, err
-	}
-
-	return r.bulkUpdateCSVGroupMembership(ctx, data)
 }
 
 // GroupMembership is the resolver for the groupMembership field.

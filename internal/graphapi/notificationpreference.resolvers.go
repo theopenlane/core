@@ -86,12 +86,7 @@ func (r *mutationResolver) CreateBulkCSVNotificationPreference(ctx context.Conte
 		return nil, err
 	}
 
-	inputs := make([]*generated.CreateNotificationPreferenceInput, 0, len(data))
-	for i := range data {
-		inputs = append(inputs, &data[i].Input)
-	}
-
-	return r.bulkCreateNotificationPreference(ctx, inputs)
+	return r.bulkCreateCSVNotificationPreference(ctx, data)
 }
 
 // UpdateBulkNotificationPreference is the resolver for the updateBulkNotificationPreference field.

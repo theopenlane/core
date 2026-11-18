@@ -26,7 +26,9 @@ func (DomainPurpose) Values() []string { return stringValues(domainPurposeValues
 func (r DomainPurpose) String() string { return string(r) }
 
 // ToDomainPurpose converts a string to its corresponding DomainPurpose enum value.
-func ToDomainPurpose(r string) *DomainPurpose { return parse(r, domainPurposeValues, &DomainPurposeInvalid) }
+func ToDomainPurpose(r string) *DomainPurpose {
+	return parse(r, domainPurposeValues, &DomainPurposeInvalid)
+}
 
 // MarshalGQL implements the gqlgen Marshaler interface.
 func (r DomainPurpose) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
