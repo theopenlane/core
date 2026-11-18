@@ -9,6 +9,9 @@ var (
 	// ExportFormatMarkDown indicates the md.
 	ExportFormatMarkDown ExportFormat = "MARKDOWN"
 
+	// ExportFormatHTML indicates the HTML export format.
+	ExportFormatHTML ExportFormat = "HTML"
+
 	// ExportFormatPdf indicates the pdf.
 	ExportFormatPdf ExportFormat = "PDF"
 
@@ -21,7 +24,7 @@ var (
 	ExportFormatInvalid ExportFormat = "EXPORTFORMAT_INVALID"
 )
 
-var exportFormatValues = []ExportFormat{ExportFormatCsv, ExportFormatMarkDown, ExportFormatDocx, ExportFormatPdf}
+var exportFormatValues = []ExportFormat{ExportFormatCsv, ExportFormatMarkDown, ExportFormatHTML, ExportFormatDocx, ExportFormatPdf}
 
 // Values returns a slice of strings representing all valid ExportFormat values.
 func (ExportFormat) Values() []string { return stringValues(exportFormatValues) }
