@@ -24,7 +24,7 @@ const exprStatusName = exprMuted + ` ? "Dismissed" : (` + exprActive + ` ? "Open
 const exprResourcePaths = `[payload.?resource_name.orValue("")].filter(n, n != "")`
 
 // exprRiskImpact maps the SCC severity to a risk impact, null when the severity has no impact equivalent
-const exprRiskImpact = `{"LOW": "LOW", "MEDIUM": "MODERATE", "HIGH": "HIGH", "CRITICAL": "CRITICAL"}[?payload.?severity.orValue("")].orValue(null)`
+const exprRiskImpact = `dyn({"LOW": "LOW", "MEDIUM": "MODERATE", "HIGH": "HIGH", "CRITICAL": "CRITICAL"})[?payload.?severity.orValue("")].orValue(null)`
 
 // mapExprFinding is the CEL mapping expression for GCP Security Command Center finding payloads
 var mapExprFinding = providerkit.CelMapExpr(
