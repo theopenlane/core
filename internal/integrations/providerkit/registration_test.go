@@ -252,19 +252,14 @@ func TestEdgeKeyLinksLimitedToEdges(t *testing.T) {
 func TestEdgeKeys(t *testing.T) {
 	t.Parallel()
 
-	unique, ok := lo.Find(entityops.SchemaVulnerability.Edges, func(edge entityops.EdgeDescriptor) bool { return edge.Unique })
-	if !ok {
-		t.Fatal("expected a unique vulnerability edge")
-	}
-
 	testCases := []struct {
 		got  string
 		want string
 	}{
 		{got: EdgeExternalIDKey(entityops.SchemaVulnerability, vulnerability.EdgeAssets), want: "assets_external_ids"},
 		{got: nameMatch.payloadKey(entityops.SchemaVulnerability, vulnerability.EdgeAssets), want: "assets_names"},
-		{got: EdgeExternalIDKey(entityops.SchemaVulnerability, unique.Name), want: unique.Name + "_external_id"},
-		{got: nameMatch.payloadKey(entityops.SchemaVulnerability, unique.Name), want: unique.Name + "_name"},
+		{got: EdgeExternalIDKey(entityops.SchemaVulnerability, vulnerability.EdgeInternalOwnerIdentityHolder), want: "internal_owner_identity_holder_external_id"},
+		{got: nameMatch.payloadKey(entityops.SchemaVulnerability, vulnerability.EdgeInternalOwnerIdentityHolder), want: "internal_owner_identity_holder_name"},
 	}
 
 	for _, tc := range testCases {
