@@ -1,0 +1,600 @@
+{
+  "finding": {
+    "name": "organizations/123456789012/sources/1000000000000000001/locations/global/findings/0123456789abcdef0123456789abcdef",
+    "parent": "organizations/123456789012/sources/1000000000000000001/locations/global",
+    "resourceName": "//compute.googleapis.com/projects/example-project/global/targetHttpsProxies/gkegw1-abcd-gateway-system-example-gateway-0000000000",
+    "state": "ACTIVE",
+    "category": "WEAK_SSL_POLICY",
+    "externalUri": "https://console.cloud.google.com/net-security/sslpolicies/list?project=example-project",
+    "securityMarks": {
+      "name": "organizations/123456789012/sources/1000000000000000001/locations/global/findings/0123456789abcdef0123456789abcdef/securityMarks",
+      "marks": {}
+    },
+    "eventTime": "2026-11-07T20:49:25.631Z",
+    "createTime": "2026-07-11T22:59:18.016Z",
+    "severity": "MEDIUM",
+    "canonicalName": "projects/987654321098/sources/1000000000000000001/locations/global/findings/0123456789abcdef0123456789abcdef",
+    "mute": "UNDEFINED",
+    "findingClass": "MISCONFIGURATION",
+    "indicator": {
+      "ipAddresses": [],
+      "domains": [],
+      "signatures": [],
+      "uris": []
+    },
+    "dataProtectionKeyGovernance": {
+      "violations": []
+    },
+    "vertexAi": {
+      "datasets": [],
+      "pipelines": []
+    },
+    "muteUpdateTime": "1970-01-01T00:00:00Z",
+    "muteInitiator": "",
+    "muteInfo": {
+      "staticMute": {
+        "state": "UNDEFINED",
+        "applyTime": "1970-01-01T00:00:00Z"
+      },
+      "dynamicMuteRecords": []
+    },
+    "contacts": {},
+    "externalSystems": [],
+    "access": {
+      "principalEmail": "",
+      "callerIp": "",
+      "callerIpGeo": {
+        "regionCode": ""
+      },
+      "userAgent": "",
+      "userAgentFamily": "",
+      "serviceName": "",
+      "methodName": "",
+      "principalSubject": "",
+      "serviceAccountKeyName": "",
+      "serviceAccountDelegationInfo": [],
+      "userName": ""
+    },
+    "mitreAttack": {
+      "primaryTactic": "TACTIC_UNSPECIFIED",
+      "primaryTechniques": [],
+      "additionalTactics": [],
+      "additionalTechniques": [],
+      "version": ""
+    },
+    "description": "HTTPS and SSL Proxy load balancers use SSL policies to determine the protocol and cipher suites used in the TLS connections established between users and the Internet. These connections encrypt sensitive data to prevent malicious eavesdroppers from accessing it. A weak SSL policy permits clients using outdated versions of TLS to connect with a less secure cipher suite or protocol. For a list of recommended and outdated cipher suites, see https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4.",
+    "compliances": [
+      {
+        "standard": "cis",
+        "version": "1.1",
+        "ids": [
+          "3.9"
+        ]
+      },
+      {
+        "standard": "cis",
+        "version": "1.2",
+        "ids": [
+          "3.9"
+        ]
+      },
+      {
+        "standard": "cis",
+        "version": "1.3",
+        "ids": [
+          "3.9"
+        ]
+      },
+      {
+        "standard": "cis",
+        "version": "2.0",
+        "ids": [
+          "3.9"
+        ]
+      },
+      {
+        "standard": "iso",
+        "version": "",
+        "ids": [
+          "A.14.1.3"
+        ]
+      },
+      {
+        "standard": "nist",
+        "version": "",
+        "ids": [
+          "SC-7"
+        ]
+      },
+      {
+        "standard": "pci",
+        "version": "",
+        "ids": [
+          "4.1"
+        ]
+      }
+    ],
+    "iamBindings": [],
+    "nextSteps": "",
+    "connections": [],
+    "exfiltration": {
+      "sources": [],
+      "targets": [],
+      "totalExfiltratedBytes": "0"
+    },
+    "processes": [],
+    "containers": [],
+    "kubernetes": {
+      "pods": [],
+      "nodes": [],
+      "nodePools": [],
+      "roles": [],
+      "bindings": [],
+      "accessReviews": [],
+      "objects": [],
+      "clusters": []
+    },
+    "parentDisplayName": "Security Health Analytics",
+    "moduleName": "",
+    "vulnerability": {
+      "cve": {
+        "id": "",
+        "references": [],
+        "cvssv3": {
+          "baseScore": 0,
+          "attackVector": "ATTACK_VECTOR_UNSPECIFIED",
+          "attackComplexity": "ATTACK_COMPLEXITY_UNSPECIFIED",
+          "privilegesRequired": "PRIVILEGES_REQUIRED_UNSPECIFIED",
+          "userInteraction": "USER_INTERACTION_UNSPECIFIED",
+          "scope": "SCOPE_UNSPECIFIED",
+          "confidentialityImpact": "IMPACT_UNSPECIFIED",
+          "integrityImpact": "IMPACT_UNSPECIFIED",
+          "availabilityImpact": "IMPACT_UNSPECIFIED"
+        },
+        "upstreamFixAvailable": false,
+        "impact": "RISK_RATING_UNSPECIFIED",
+        "exploitationActivity": "EXPLOITATION_ACTIVITY_UNSPECIFIED",
+        "observedInTheWild": false,
+        "zeroDay": false,
+        "exploitReleaseDate": "1970-01-01T00:00:00Z",
+        "firstExploitationDate": "1970-01-01T00:00:00Z"
+      },
+      "offendingPackage": {
+        "packageName": "",
+        "cpeUri": "",
+        "packageType": "",
+        "packageVersion": ""
+      },
+      "fixedPackage": {
+        "packageName": "",
+        "cpeUri": "",
+        "packageType": "",
+        "packageVersion": ""
+      },
+      "securityBulletin": {
+        "bulletinId": "",
+        "submissionTime": "1970-01-01T00:00:00Z",
+        "suggestedUpgradeVersion": ""
+      },
+      "runtimeInfo": {
+        "impact": "RUNTIME_IMPACT_UNSPECIFIED",
+        "evidence": "RUNTIME_EVIDENCE_UNSPECIFIED",
+        "firstObservedTime": "1970-01-01T00:00:00Z",
+        "lastObservedTime": "1970-01-01T00:00:00Z"
+      }
+    },
+    "database": {
+      "name": "",
+      "displayName": "",
+      "userName": "",
+      "query": "",
+      "grantees": [],
+      "version": ""
+    },
+    "dataAccessEvents": [],
+    "agentDataAccessEvents": [],
+    "agent": {
+      "id": "",
+      "displayName": ""
+    },
+    "agentSessions": [],
+    "agentAnomaly": {
+      "confidenceScore": 0,
+      "detectorReferences": [],
+      "invocationReferences": []
+    },
+    "iamDetails": {
+      "iamRolePermissions": []
+    },
+    "dataFlowEvents": [],
+    "dataRetentionDeletionEvents": [],
+    "attackExposure": {
+      "score": 0,
+      "latestCalculationTime": "1970-01-01T00:00:00Z",
+      "attackExposureResult": "",
+      "state": "STATE_UNSPECIFIED",
+      "exposedHighValueResourcesCount": 0,
+      "exposedMediumValueResourcesCount": 0,
+      "exposedLowValueResourcesCount": 0
+    },
+    "files": [],
+    "orgPolicies": [],
+    "ipRules": {
+      "direction": "DIRECTION_UNSPECIFIED",
+      "allowed": {
+        "ipRules": []
+      },
+      "denied": {
+        "ipRules": []
+      },
+      "sourceIpRanges": [],
+      "destinationIpRanges": [],
+      "exposedServices": []
+    },
+    "kernelRootkit": {
+      "name": "",
+      "unexpectedCodeModification": false,
+      "unexpectedReadOnlyDataModification": false,
+      "unexpectedFtraceHandler": false,
+      "unexpectedKprobeHandler": false,
+      "unexpectedKernelCodePages": false,
+      "unexpectedSystemCallHandler": false,
+      "unexpectedInterruptHandler": false,
+      "unexpectedProcessesInRunqueue": false
+    },
+    "backupDisasterRecovery": {
+      "backupTemplate": "",
+      "policies": [],
+      "host": "",
+      "applications": [],
+      "storagePool": "",
+      "policyOptions": [],
+      "profile": "",
+      "appliance": "",
+      "backupType": "",
+      "backupCreateTime": "1970-01-01T00:00:00Z"
+    },
+    "apigee": {
+      "organization": "",
+      "environment": "",
+      "securityProfileId": ""
+    },
+    "disk": {
+      "name": ""
+    },
+    "risks": [],
+    "loadBalancers": [],
+    "deactivationReason": {
+      "reason": "REASON_UNSPECIFIED"
+    },
+    "domains": [],
+    "products": [],
+    "affectedResources": {
+      "count": "0"
+    },
+    "aiModel": {
+      "name": "",
+      "domain": "",
+      "library": "",
+      "location": "",
+      "publisher": "",
+      "deploymentPlatform": "DEPLOYMENT_PLATFORM_UNSPECIFIED",
+      "displayName": "",
+      "usageCategory": ""
+    },
+    "cloudDlpInspection": {
+      "inspectJob": "",
+      "infoType": "",
+      "infoTypeCount": "0",
+      "fullScan": false
+    },
+    "caiResource": "//compute.googleapis.com/projects/example-project/global/targetHttpsProxies/gkegw1-abcd-gateway-system-example-gateway-0000000000",
+    "cloudDlpDataProfile": {
+      "dataProfile": ""
+    },
+    "application": {
+      "baseUri": "",
+      "fullUri": ""
+    },
+    "securityPosture": {
+      "name": "",
+      "revisionId": "",
+      "policyDriftDetails": [],
+      "policySet": "",
+      "postureDeploymentResource": "",
+      "postureDeployment": "",
+      "changedPolicy": ""
+    },
+    "logEntries": [],
+    "cloudArmor": {
+      "securityPolicy": {
+        "name": "",
+        "type": "",
+        "preview": false
+      },
+      "requests": {
+        "ratio": 0,
+        "shortTermAllowed": 0,
+        "longTermAllowed": 0,
+        "longTermDenied": 0
+      },
+      "adaptiveProtection": {
+        "confidence": 0
+      },
+      "attack": {
+        "volumePps": 0,
+        "volumeBps": 0,
+        "classification": ""
+      },
+      "threatVector": "",
+      "duration": "0s"
+    },
+    "notebook": {
+      "name": "",
+      "service": "",
+      "lastAuthor": "",
+      "notebookUpdateTime": "1970-01-01T00:00:00Z"
+    },
+    "toxicCombination": {
+      "attackExposureScore": 0,
+      "relatedFindings": []
+    },
+    "groupMemberships": [],
+    "networks": [],
+    "chokepoint": {
+      "relatedFindings": []
+    },
+    "remediationDetails": {
+      "remediationIntent": "",
+      "repositoryUri": "",
+      "pullRequestUri": "",
+      "remediationExplanation": "",
+      "remediationState": "REMEDIATION_STATE_UNSPECIFIED",
+      "remediationError": "",
+      "prGenerationTime": "1970-01-01T00:00:00Z",
+      "owner": ""
+    },
+    "artifactGuardPolicies": {
+      "resourceId": "",
+      "failingPolicies": []
+    },
+    "secret": {
+      "type": "",
+      "status": {
+        "lastUpdatedTime": "1970-01-01T00:00:00Z",
+        "validity": "SECRET_VALIDITY_UNSPECIFIED"
+      },
+      "environmentVariable": {
+        "key": ""
+      },
+      "filePath": {
+        "path": ""
+      }
+    },
+    "complianceDetails": {
+      "frameworks": [],
+      "cloudControl": {
+        "cloudControlName": "",
+        "type": "CLOUD_CONTROL_TYPE_UNSPECIFIED",
+        "policyType": "",
+        "version": 0
+      },
+      "cloudControlDeploymentNames": []
+    },
+    "externalExposure": {
+      "privateIpAddress": "",
+      "privatePort": "",
+      "exposedService": "",
+      "publicIpAddress": "",
+      "publicPort": "",
+      "exposedEndpoint": "",
+      "loadBalancerFirewallPolicy": "",
+      "serviceFirewallPolicy": "",
+      "forwardingRule": "",
+      "backendService": "",
+      "instanceGroup": "",
+      "networkEndpointGroup": "",
+      "hostnameUri": "",
+      "pscServiceAttachment": "",
+      "pscNetworkAttachment": "",
+      "internalBackendService": "",
+      "backendBucket": "",
+      "exposedApplication": "",
+      "networkIngressFirewallPolicy": "",
+      "httpResponse": [],
+      "networkPathInsightsGenerationTime": "1970-01-01T00:00:00Z",
+      "networkEndpointGroupType": "",
+      "firewallPriority": 0,
+      "firewallPolicyPriority": 0,
+      "firewallTargetTags": [],
+      "firewallSecureTargetTags": [],
+      "firewallSourceRanges": [],
+      "firewallTargetType": "",
+      "firewallRuleType": "",
+      "firewallDirection": "FIREWALL_DIRECTION_UNSPECIFIED",
+      "firewallServiceAccount": "",
+      "loadBalancerType": "",
+      "detector": "",
+      "iapEnabled": false
+    },
+    "discoveredWorkload": {
+      "workloadType": "WORKLOAD_TYPE_UNSPECIFIED",
+      "confidence": "CONFIDENCE_UNSPECIFIED",
+      "detectedRelevantPackages": false,
+      "detectedRelevantKeywords": false,
+      "detectedRelevantHardware": false
+    },
+    "policyViolationSummary": {
+      "policyViolationsCount": "0",
+      "conformantResourcesCount": "0",
+      "evaluationErrorsCount": "0",
+      "outOfScopeResourcesCount": "0"
+    },
+    "cloudRun": {
+      "revisions": []
+    },
+    "dataproc": {
+      "clusters": []
+    }
+  },
+  "resource": {
+    "name": "//compute.googleapis.com/projects/example-project/global/targetHttpsProxies/gkegw1-abcd-gateway-system-example-gateway-0000000000",
+    "displayName": "gkegw1-abcd-gateway-system-example-gateway-0000000000",
+    "type": "google.compute.TargetHttpsProxy",
+    "cloudProvider": "GOOGLE_CLOUD_PLATFORM",
+    "service": "compute.googleapis.com",
+    "location": "global",
+    "gcpMetadata": {
+      "project": "//cloudresourcemanager.googleapis.com/projects/987654321098",
+      "projectDisplayName": "example-project",
+      "parent": "//cloudresourcemanager.googleapis.com/projects/987654321098",
+      "parentDisplayName": "example-project",
+      "folders": [
+        {
+          "resourceFolder": "//cloudresourcemanager.googleapis.com/folders/111111111111",
+          "resourceFolderDisplayName": "example-folder"
+        },
+        {
+          "resourceFolder": "//cloudresourcemanager.googleapis.com/folders/222222222222",
+          "resourceFolderDisplayName": "example-root"
+        }
+      ],
+      "organization": "organizations/123456789012"
+    },
+    "awsMetadata": {
+      "organization": {
+        "id": ""
+      },
+      "organizationalUnits": [],
+      "account": {
+        "id": "",
+        "name": ""
+      }
+    },
+    "azureMetadata": {
+      "tenant": {
+        "id": "",
+        "displayName": ""
+      },
+      "managementGroups": [],
+      "subscription": {
+        "id": "",
+        "displayName": ""
+      },
+      "resourceGroup": {
+        "name": ""
+      }
+    },
+    "resourcePath": {
+      "nodes": [
+        {
+          "nodeType": "GCP_PROJECT",
+          "id": "projects/987654321098",
+          "displayName": "example-project"
+        },
+        {
+          "nodeType": "GCP_FOLDER",
+          "id": "folders/111111111111",
+          "displayName": "example-folder"
+        },
+        {
+          "nodeType": "GCP_FOLDER",
+          "id": "folders/222222222222",
+          "displayName": "example-root"
+        },
+        {
+          "nodeType": "GCP_ORGANIZATION",
+          "id": "organizations/123456789012",
+          "displayName": ""
+        }
+      ]
+    },
+    "resourcePathString": "organizations/123456789012/folders/222222222222/folders/111111111111/projects/987654321098",
+    "application": {
+      "name": "",
+      "attributes": {
+        "criticality": {
+          "type": "CRITICALITY_TYPE_UNSPECIFIED"
+        },
+        "environment": {
+          "type": "ENVIRONMENT_TYPE_UNSPECIFIED"
+        },
+        "developerOwners": [],
+        "operatorOwners": [],
+        "businessOwners": []
+      }
+    }
+  },
+  "sourceProperties": {
+    "Recommendation": "Note: updating an SSL policy may reduce compatibility for users with outdated versions of TLS. This target proxy uses the default GCP SSL policy. Go to https://console.cloud.google.com/net-services/loadbalancing/advanced/targetProxies/list?project=example-project and find the row with the target proxy \"gkegw1-abcd-gateway-system-example-gateway-0000000000.\" Note the forwarding rules in the \"In use by\" column. Then, follow the instructions at https://cloud.google.com/load-balancing/docs/use-ssl-policies to either create a new or update an existing SSL policy with a \"Minimum TLS version\" of 1.2 and a Modern or Restricted \"Profile.\" If a Custom profile is desired, make sure [TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384] are all disabled. Apply the SSL policy to each forwarding rule you previously noted.",
+    "ExceptionInstructions": "Add the security mark \"allow_weak_ssl_policy\" to the asset with a value of \"true\" to prevent this finding from being activated again.",
+    "Explanation": "HTTPS and SSL Proxy load balancers use SSL policies to determine the protocol and cipher suites used in the TLS connections established between users and the Internet. These connections encrypt sensitive data to prevent malicious eavesdroppers from accessing it. A weak SSL policy permits clients using outdated versions of TLS to connect with a less secure cipher suite or protocol. For a list of recommended and outdated cipher suites, see https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4.",
+    "ScannerName": "COMPUTE_INSTANCE_SCANNER",
+    "ResourcePath": [
+      "projects/example-project/",
+      "folders/111111111111/",
+      "folders/222222222222/",
+      "organizations/123456789012/"
+    ],
+    "HasDefaultPolicy": true,
+    "CompatibleFeatures": "TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384",
+    "CompatibleFeaturesList": [
+      "TLS_RSA_WITH_3DES_EDE_CBC_SHA",
+      "TLS_RSA_WITH_AES_128_CBC_SHA",
+      "TLS_RSA_WITH_AES_128_GCM_SHA256",
+      "TLS_RSA_WITH_AES_256_CBC_SHA",
+      "TLS_RSA_WITH_AES_256_GCM_SHA384"
+    ],
+    "TargetProxyUrl": "https://console.cloud.google.com/net-services/loadbalancing/advanced/targetProxies/list?project=example-project",
+    "compliance_standards": {
+      "iso": [
+        {
+          "ids": [
+            "A.14.1.3"
+          ]
+        }
+      ],
+      "pci": [
+        {
+          "ids": [
+            "4.1"
+          ]
+        }
+      ],
+      "cis": [
+        {
+          "version": "1.1",
+          "ids": [
+            "3.9"
+          ]
+        },
+        {
+          "version": "1.2",
+          "ids": [
+            "3.9"
+          ]
+        },
+        {
+          "version": "1.3",
+          "ids": [
+            "3.9"
+          ]
+        },
+        {
+          "version": "2.0",
+          "ids": [
+            "3.9"
+          ]
+        }
+      ],
+      "nist": [
+        {
+          "ids": [
+            "SC-7"
+          ]
+        }
+      ]
+    },
+    "ReactivationCount": 0
+  }
+}

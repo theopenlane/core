@@ -144,6 +144,50 @@ func TestRawEnvelope(t *testing.T) {
 	})
 }
 
+func TestRawEnvelopeWithFields(t *testing.T) {
+	t.Parallel()
+
+	t.Run("merges non-empty fields", func(t *testing.T) {
+		t.Parallel()
+
+		fields := map[string]any{"summary": "openssl 3.5.0", "vector": "", "codes": []string(nil), "meta": map[string]any{}, "count": 2}
+
+		env, err := RawEnvelopeWithFields("items", json.RawMessage(`{"id":1}`), fields, errEncodeTest)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if env.Resource != "items" {
+			t.Fatalf("expected resource=items, got %q", env.Resource)
+		}
+
+		if string(env.Payload) != `{"count":2,"id":1,"summary":"openssl 3.5.0"}` {
+			t.Fatalf("unexpected payload %s", env.Payload)
+		}
+	})
+
+	t.Run("leaves payload unchanged without fields", func(t *testing.T) {
+		t.Parallel()
+
+		env, err := RawEnvelopeWithFields("items", json.RawMessage(`{"id":1}`), map[string]any{"vector": ""}, errEncodeTest)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if string(env.Payload) != `{"id":1}` {
+			t.Fatalf("unexpected payload %s", env.Payload)
+		}
+	})
+
+	t.Run("rejects a non-object payload", func(t *testing.T) {
+		t.Parallel()
+
+		if _, err := RawEnvelopeWithFields("items", json.RawMessage(`[1]`), map[string]any{"count": 2}, errEncodeTest); !errors.Is(err, errEncodeTest) {
+			t.Fatalf("expected errEncodeTest, got %v", err)
+		}
+	})
+}
+
 func TestRawEnvelopeVariant(t *testing.T) {
 	t.Parallel()
 

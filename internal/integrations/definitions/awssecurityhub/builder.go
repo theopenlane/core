@@ -88,13 +88,7 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Mappings: append([]types.MappingRegistration{
 				providerkit.FindingMapping(mapExprFinding),
-				{
-					Schema: entityops.SchemaVulnerability.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprVulnerability,
-					},
-				},
+				providerkit.VulnerabilityMapping(mapExprVulnerability),
 			}, providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership)...),
 		}, nil
 	})

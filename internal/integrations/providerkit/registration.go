@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/utils/jsonx"
@@ -37,11 +38,15 @@ type edgeMatch struct {
 	many string
 }
 
+var (
+	// externalIDMatch links edges through the target external id
+	externalIDMatch = edgeMatch{field: externalIDField, one: "_external_id", many: "_external_ids"}
+	// nameMatch links edges through the target name
+	nameMatch = edgeMatch{field: nameField, one: "_name", many: "_names"}
+)
+
 // edgeMatches are the target match keys EdgeKeyLinks derives links through
-var edgeMatches = []edgeMatch{
-	{field: externalIDField, one: "_external_id", many: "_external_ids"},
-	{field: nameField, one: "_name", many: "_names"},
-}
+var edgeMatches = []edgeMatch{externalIDMatch, nameMatch}
 
 // DirectorySync is the stored config of a directory sync operation that can skip groups and memberships; a directory without group sync declares its own DirectorySync embedding only types.OperationSettings
 type DirectorySync struct {
@@ -111,14 +116,14 @@ func DirectoryMappings(accountExpr, groupExpr, membershipExpr string) []types.Ma
 	}
 }
 
-// FindingMapping returns the finding mapping linking findings to controls by ref code, assets by name, and the internal owner identity holder by email
+// FindingMapping returns the finding mapping linking findings to controls by ref code, assets by name and external id, and the internal owner identity holder by email
 func FindingMapping(mapExpr string) types.MappingRegistration {
 	return types.MappingRegistration{
 		Schema: entityops.SchemaFinding.Name,
 		Spec: types.MappingOverride{
 			FilterExpr: matchAllFilterExpr,
 			MapExpr:    mapExpr,
-			Links: []types.LinkRule{
+			Links: append([]types.LinkRule{
 				{
 					TargetSchema: entityops.SchemaControl.Name,
 					TargetField:  control.FieldRefCode,
@@ -132,7 +137,7 @@ func FindingMapping(mapExpr string) types.MappingRegistration {
 					SourceList:   entityops.FindingFields.Targets.InputKey,
 				},
 				internalOwnerIdentityHolderLink(finding.EdgeInternalOwnerIdentityHolder, entityops.FindingFields.InternalOwner.InputKey),
-			},
+			}, externalIDMatch.links(entityops.SchemaFinding, []string{finding.EdgeAssets})...),
 		},
 	}
 }
@@ -155,37 +160,76 @@ func CheckResultMapping(mapExpr string) types.MappingRegistration {
 	}
 }
 
-// VulnerabilityMapping returns the vulnerability mapping linking the internal owner to an identity holder by email
+// VulnerabilityMapping returns the vulnerability mapping linking the internal owner to an identity holder by email and assets by edge keys
 func VulnerabilityMapping(mapExpr string) types.MappingRegistration {
 	return types.MappingRegistration{
 		Schema: entityops.SchemaVulnerability.Name,
 		Spec: types.MappingOverride{
 			FilterExpr: matchAllFilterExpr,
 			MapExpr:    mapExpr,
-			Links: []types.LinkRule{
+			Links: append([]types.LinkRule{
 				internalOwnerIdentityHolderLink(vulnerability.EdgeInternalOwnerIdentityHolder, entityops.VulnerabilityFields.InternalOwner.InputKey),
-			},
+			}, EdgeKeyLinks(entityops.SchemaVulnerability, vulnerability.EdgeAssets)...),
 		},
 	}
 }
 
+// RiskMapping returns the risk mapping linking assets by edge keys
+func RiskMapping(mapExpr string) types.MappingRegistration {
+	return types.MappingRegistration{
+		Schema: entityops.SchemaRisk.Name,
+		Spec: types.MappingOverride{
+			FilterExpr: matchAllFilterExpr,
+			MapExpr:    mapExpr,
+			Links:      EdgeKeyLinks(entityops.SchemaRisk, risk.EdgeAssets),
+		},
+	}
+}
+
+// EdgeExternalIDKey is the payload key EdgeKeyLinks reads the external ids schema's edge links to from
+func EdgeExternalIDKey(schema *entityops.Schema, edge string) string {
+	return externalIDMatch.payloadKey(schema, edge)
+}
+
+// EdgeExternalIDEntry binds a CEL expression producing the external ids schema's edge links to
+func EdgeExternalIDEntry(schema *entityops.Schema, edge, expr string) entityops.MappingEntry {
+	return entityops.MappingEntry{Key: EdgeExternalIDKey(schema, edge), Expr: expr}
+}
+
 // EdgeKeyLinks returns a link rule for every edge of schema through each match key its target supports, external id
 // and name, reading the values from a payload key named after the edge: <edge>_external_id(s) and <edge>_name(s), the
-// singular key for a unique edge and the plural key for a to-many edge
-func EdgeKeyLinks(schema *entityops.Schema) []types.LinkRule {
+// singular key for a unique edge and the plural key for a to-many edge. When edges are given only those edges are linked
+func EdgeKeyLinks(schema *entityops.Schema, edges ...string) []types.LinkRule {
 	return lo.FlatMap(edgeMatches, func(match edgeMatch, _ int) []types.LinkRule {
-		return match.links(schema)
+		return match.links(schema, edges)
 	})
 }
 
-// links returns the rules linking schema's edges through the match key
-func (m edgeMatch) links(schema *entityops.Schema) []types.LinkRule {
+// key is the payload key carrying the match values for edge, singular for a unique edge and plural otherwise
+func (m edgeMatch) key(edge entityops.EdgeDescriptor) string {
+	return edge.Name + lo.Ternary(edge.Unique, m.one, m.many)
+}
+
+// payloadKey is the payload key carrying the match values for schema's named edge
+func (m edgeMatch) payloadKey(schema *entityops.Schema, name string) string {
+	edge, _ := schema.EdgeByName(name)
+	edge.Name = name
+
+	return m.key(edge)
+}
+
+// links returns the rules linking schema's edges through the match key, limited to edges when any are given
+func (m edgeMatch) links(schema *entityops.Schema, edges []string) []types.LinkRule {
 	return lo.FilterMap(schema.Edges, func(edge entityops.EdgeDescriptor, _ int) (types.LinkRule, bool) {
+		if len(edges) > 0 && !lo.Contains(edges, edge.Name) {
+			return types.LinkRule{}, false
+		}
+
 		if edge.Target == nil || edge.Target.QueryByKey == nil || !edge.Target.MatchKeyField(m.field) {
 			return types.LinkRule{}, false
 		}
 
-		key := edge.Name + lo.Ternary(edge.Unique, m.one, m.many)
+		key := m.key(edge)
 		if inputKeyCollides(schema, key) {
 			return types.LinkRule{}, false
 		}

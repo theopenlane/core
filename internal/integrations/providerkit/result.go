@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/utils/jsonx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // EncodeResult serializes an operation result, mapping encode failure to the caller's error
@@ -36,6 +37,22 @@ func MarshalEnvelopeVariant(variant string, resource string, payload any, encode
 // RawEnvelope wraps an already-serialized provider payload in a mapping envelope
 func RawEnvelope(resource string, payload json.RawMessage) types.MappingEnvelope {
 	return RawEnvelopeVariant("", resource, payload)
+}
+
+// RawEnvelopeWithFields wraps a serialized provider payload in a mapping envelope with the non-empty fields merged in,
+// pruning empty values so mapping orValue fallbacks apply, mapping merge failure to the caller's error
+func RawEnvelopeWithFields(resource string, payload json.RawMessage, fields map[string]any, encodeErr error) (types.MappingEnvelope, error) {
+	patch, err := jsonx.ToRawMap(mapx.PruneMapZeroAny(fields))
+	if err != nil {
+		return types.MappingEnvelope{}, encodeErr
+	}
+
+	merged, _, err := jsonx.MergeObjectMap(payload, patch)
+	if err != nil {
+		return types.MappingEnvelope{}, encodeErr
+	}
+
+	return RawEnvelope(resource, merged), nil
 }
 
 // RawEnvelopeVariant wraps a serialized provider payload in a variant-specific mapping envelope

@@ -6,6 +6,8 @@ import (
 	"net"
 	"slices"
 	"strings"
+
+	"github.com/samber/lo"
 )
 
 // maxSubdomainDepth bounds how many levels of commonSubdomains are nested (e.g. mail.<apex> -> send.mail.<apex>)
@@ -320,7 +322,7 @@ func vendorNameFromHostname(host string) (name, domain string) {
 		if canonical, ok := vendorCanonicalNames[strings.ToLower(label)]; ok {
 			name = canonical
 		} else {
-			return titleCaseLabel(label), domain
+			return lo.Capitalize(label), domain
 		}
 	}
 
@@ -329,15 +331,6 @@ func vendorNameFromHostname(host string) (name, domain string) {
 	}
 
 	return name, domain
-}
-
-// titleCaseLabel capitalizes the first letter of a string
-func titleCaseLabel(s string) string {
-	if s == "" {
-		return ""
-	}
-
-	return strings.ToUpper(s[:1]) + strings.ToLower(s[1:])
 }
 
 // verificationVendorName recognizes a "tag=token" or "tag:token" TXT record (e.g.
@@ -375,5 +368,5 @@ func verificationVendorName(record string) (string, bool) {
 		label = key[:idx]
 	}
 
-	return titleCaseLabel(label), label != ""
+	return lo.Capitalize(label), label != ""
 }

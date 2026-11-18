@@ -19,7 +19,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/strx"
 	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 const (
@@ -33,6 +35,12 @@ const (
 	cvssv31Prefix = "CVSS:3.1"
 	// cvssVectorKey is the payload key holding the CVSS vector built from the SCC cvssv3 metrics
 	cvssVectorKey = "cvss_vector"
+	// vulnerabilitySummaryKey is the payload key holding the short vulnerability summary built from the SCC package details
+	vulnerabilitySummaryKey = "vulnerability_summary"
+	// resourceMetadataKey is the payload key holding the SCC resource the finding was raised against
+	resourceMetadataKey = "resource_metadata"
+	// categoryDisplayNameKey is the payload key holding the human readable SCC category
+	categoryDisplayNameKey = "category_display_name"
 )
 
 // runFindingsCollect collects GCP SCC findings from configured sources
@@ -76,7 +84,7 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, c C
 
 			finding.ExternalUri = findingConsoleURL(finding, result.GetResource())
 
-			envelope, err := buildFindingEnvelope(sourceName, finding, marshaler)
+			envelope, err := buildFindingEnvelope(sourceName, finding, result.GetResource(), marshaler)
 			if err != nil {
 				return nil, err
 			}
@@ -140,34 +148,46 @@ func listAllFindings(ctx context.Context, c *cloudscc.Client, sourceName string,
 }
 
 // buildFindingEnvelope serializes a finding into a mapping envelope
-func buildFindingEnvelope(sourceName string, finding *securitycenterpb.Finding, marshaler protojson.MarshalOptions) (types.MappingEnvelope, error) {
+func buildFindingEnvelope(sourceName string, finding *securitycenterpb.Finding, resource *securitycenterpb.ListFindingsResponse_ListFindingsResult_Resource, marshaler protojson.MarshalOptions) (types.MappingEnvelope, error) {
 	rawPayload, err := marshaler.Marshal(finding)
 	if err != nil {
 		return types.MappingEnvelope{}, ErrFindingEncode
 	}
 
-	rawPayload, err = withCVSSVector(rawPayload, cvssv31Vector(finding.GetVulnerability().GetCve().GetCvssv3()))
+	rawResource, err := marshaler.Marshal(resource)
 	if err != nil {
 		return types.MappingEnvelope{}, ErrFindingEncode
 	}
 
-	return providerkit.RawEnvelope(resolveFindingResource(sourceName, finding), rawPayload), nil
+	resourceMetadata, err := jsonx.ToMap(json.RawMessage(rawResource))
+	if err != nil {
+		return types.MappingEnvelope{}, ErrFindingEncode
+	}
+
+	derived := map[string]any{
+		cvssVectorKey:           cvssv31Vector(finding.GetVulnerability().GetCve().GetCvssv3()),
+		vulnerabilitySummaryKey: vulnerabilitySummary(finding.GetVulnerability()),
+		resourceMetadataKey:     resourceMetadata,
+		categoryDisplayNameKey:  strx.HumanizeSnake(finding.GetCategory()),
+	}
+
+	return providerkit.RawEnvelopeWithFields(resolveFindingResource(sourceName, finding), rawPayload, derived, ErrFindingEncode)
 }
 
-// withCVSSVector adds the CVSS vector string to a serialized finding payload
-func withCVSSVector(rawPayload []byte, vector string) ([]byte, error) {
-	if vector == "" {
-		return rawPayload, nil
+// vulnerabilitySummary describes the offending package and its fixed version, empty when the package is unknown
+func vulnerabilitySummary(vuln *securitycenterpb.Vulnerability) string {
+	name := vuln.GetOffendingPackage().GetPackageName()
+	if name == "" {
+		return ""
 	}
 
-	var payload map[string]any
-	if err := json.Unmarshal(rawPayload, &payload); err != nil {
-		return nil, err
+	summary := strings.TrimSpace(name + " " + vuln.GetOffendingPackage().GetPackageVersion())
+
+	if fixed := vuln.GetFixedPackage().GetPackageVersion(); fixed != "" {
+		summary += ", fixed in " + fixed
 	}
 
-	payload[cvssVectorKey] = vector
-
-	return json.Marshal(payload)
+	return summary
 }
 
 // cvssv31Vector builds a CVSS v3.1 vector string from the SCC cvssv3 metrics, empty when any metric is unspecified
