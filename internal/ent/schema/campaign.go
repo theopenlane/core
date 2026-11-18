@@ -278,7 +278,7 @@ func (c Campaign) Edges() []ent.Edge {
 			edgeSchema: Assessment{},
 			field:      "assessment_id",
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(Assessment{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
