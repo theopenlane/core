@@ -302,10 +302,10 @@ func updateIdentityHolder(ctx context.Context, client *generated.Client, userID 
 		return err
 	}
 
-	_, err = client.IdentityHolder.Update().
+	err = client.IdentityHolder.Update().
 		Where(identityholder.EmailEqualFold(orgUser.Email)).
 		SetIsOpenlaneUser(expectedOpenlaneUserValue).
-		Save(ctx)
+		Exec(ctx)
 
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("org_membership_id", userID).
