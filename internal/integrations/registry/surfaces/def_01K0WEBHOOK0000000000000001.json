@@ -1,0 +1,94 @@
+{
+  "hash": "be2ea80103074a55d065b56923c2659682622782a9dd88fd32a5bff067b1b27f",
+  "version": "01M7QR1JT2HJQQMH7XN2P7PEJE",
+  "surface": {
+    "id": "def_01K0WEBHOOK0000000000000001",
+    "credentials": [
+      {
+        "ref": "CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/webhook/credential-schema",
+          "$ref": "#/$defs/CredentialSchema",
+          "$defs": {
+            "CredentialSchema": {
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "title": "Destination URL",
+                  "description": "HTTPS endpoint that receives the JSON deliveries."
+                },
+                "headers": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Headers",
+                  "description": "Static headers added to every delivery keyed by header name. Use these for an API key or token the destination requires."
+                },
+                "signingSecret": {
+                  "type": "string",
+                  "title": "Signing Secret",
+                  "description": "Secret used to sign each delivery with HMAC-SHA256 following Standard Webhooks. A whsec_ secret is base64 decoded. Leave empty to send unsigned deliveries."
+                },
+                "signatureHeader": {
+                  "type": "string",
+                  "title": "Custom Signature Header",
+                  "description": "Only for a destination that requires its own signature header. The body alone is signed and sent in this header in place of the Standard Webhooks signature."
+                },
+                "signatureFormat": {
+                  "type": "string",
+                  "title": "Custom Signature Format",
+                  "description": "Value of the custom signature header. {signature} is replaced by the encoded signature.",
+                  "default": "{signature}"
+                },
+                "signatureEncoding": {
+                  "type": "string",
+                  "enum": [
+                    "hex",
+                    "base64"
+                  ],
+                  "title": "Custom Signature Encoding",
+                  "description": "How the custom signature bytes are written.",
+                  "default": "hex"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "url"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/webhook/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "host": {
+                "type": "string",
+                "title": "Host"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "CredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "DeliverOperation"
+      }
+    ]
+  }
+}

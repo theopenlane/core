@@ -69,3 +69,69 @@ func TestEvaluatorEvaluateJSONMap(t *testing.T) {
 	assert.Check(t, err != nil)
 	assert.Check(t, errors.Is(err, ErrJSONMapExpected))
 }
+
+func TestEvaluatorProgramCacheBounded(t *testing.T) {
+	const cacheSize = 2
+
+	env, err := NewEnv(EnvConfig{})
+	assert.Check(t, err)
+
+	eval := NewEvaluator(env, EvalConfig{Timeout: 100 * time.Millisecond, ProgramCacheSize: cacheSize})
+
+	for _, expression := range []string{"1 + 1", "2 + 2", "3 + 3"} {
+		_, _, err := eval.Evaluate(context.Background(), expression, nil)
+		assert.Check(t, err)
+	}
+
+	assert.Check(t, is.Equal(cacheSize, eval.programCache.Len()))
+	assert.Check(t, !eval.programCache.Contains("1 + 1"))
+	assert.Check(t, eval.programCache.Contains("3 + 3"))
+}
+
+func TestEvaluatorProgramCacheDefaultSize(t *testing.T) {
+	env, err := NewEnv(EnvConfig{})
+	assert.Check(t, err)
+
+	eval := NewEvaluator(env, EvalConfig{})
+
+	assert.Check(t, is.Equal(DefaultProgramCacheSize, eval.config.ProgramCacheSize))
+	assert.Check(t, is.Equal(DefaultProgramCacheSize, FastEvalConfig().ProgramCacheSize))
+}
+
+func TestEvaluatorProgramCacheEvictsLeastRecentlyUsed(t *testing.T) {
+	const cacheSize = 2
+
+	env, err := NewEnv(EnvConfig{})
+	assert.Check(t, err)
+
+	eval := NewEvaluator(env, EvalConfig{Timeout: 100 * time.Millisecond, ProgramCacheSize: cacheSize})
+
+	for _, expression := range []string{"1 + 1", "2 + 2", "1 + 1", "3 + 3"} {
+		_, _, err := eval.Evaluate(context.Background(), expression, nil)
+		assert.Check(t, err)
+	}
+
+	assert.Check(t, eval.programCache.Contains("1 + 1"))
+	assert.Check(t, !eval.programCache.Contains("2 + 2"))
+	assert.Check(t, eval.programCache.Contains("3 + 3"))
+}
+
+func TestEvaluatorProgramCacheSkipsFailedCompile(t *testing.T) {
+	env, err := NewEnv(EnvConfig{})
+	assert.Check(t, err)
+
+	eval := NewEvaluator(env, EvalConfig{Timeout: 100 * time.Millisecond})
+
+	_, _, err = eval.Evaluate(context.Background(), "1 +", nil)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Equal(0, eval.programCache.Len()))
+}
+
+func TestEvaluatorProgramCacheNegativeSizeUsesDefault(t *testing.T) {
+	env, err := NewEnv(EnvConfig{})
+	assert.Check(t, err)
+
+	eval := NewEvaluator(env, EvalConfig{ProgramCacheSize: -1})
+
+	assert.Check(t, is.Equal(DefaultProgramCacheSize, eval.config.ProgramCacheSize))
+}

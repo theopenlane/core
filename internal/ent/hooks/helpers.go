@@ -8,10 +8,8 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
-	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
-	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 	"github.com/theopenlane/logx"
 )
 
@@ -19,20 +17,6 @@ import (
 // which includes soft delete, delete, and delete one.
 func isDeleteOp(ctx context.Context, m ent.Mutation) bool {
 	return entx.CheckIsSoftDeleteType(ctx, m.Type()) || m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne)
-}
-
-// transactionFromContext returns the transaction from the context if it exists
-func transactionFromContext(ctx context.Context) *generated.Tx {
-	// check if the transaction is in the context
-	// this is returned from all graphql requests
-	tx := generated.TxFromContext(ctx)
-	if tx != nil {
-		return tx
-	}
-
-	// check if the transaction is in the context
-	// from the REST middleware
-	return transaction.FromContext(ctx)
 }
 
 // getMutationIDs retrieves the IDs from the mutation, handling both single and multiple ID cases

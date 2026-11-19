@@ -243,7 +243,7 @@ func (w *riverDispatchWorker) Work(ctx context.Context, job *river.Job[EnvelopeA
 	}
 
 	runtime := w.galaProvider()
-	dispatchErr := runtime.dispatchEnvelope(ctx, envelope)
+	dispatchErr := runtime.dispatchEnvelope(ctx, envelope, job.Attempt >= job.MaxAttempts)
 
 	// report an ended job context so River retries the job
 	if ctxErr := ctx.Err(); ctxErr != nil {

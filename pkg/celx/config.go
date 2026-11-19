@@ -11,6 +11,8 @@ const (
 	DefaultInterruptCheckFrequency uint = 100
 	// DefaultEvalTimeout bounds the wall-clock time allowed for a single CEL evaluation
 	DefaultEvalTimeout = 100 * time.Millisecond
+	// DefaultProgramCacheSize is the default program cache size
+	DefaultProgramCacheSize = 1024
 )
 
 // StrictEnvConfig returns a hardened environment config with parser limits and extended validations
@@ -30,6 +32,7 @@ func FastEvalConfig() EvalConfig {
 		Timeout:                 DefaultEvalTimeout,
 		InterruptCheckFrequency: DefaultInterruptCheckFrequency,
 		EvalOptimize:            true,
+		ProgramCacheSize:        DefaultProgramCacheSize,
 	}
 }
 
@@ -66,4 +69,6 @@ type EvalConfig struct {
 	EvalOptimize bool
 	// TrackState enables evaluation state tracking for debugging
 	TrackState bool
+	// ProgramCacheSize caps cached programs; 0 uses DefaultProgramCacheSize
+	ProgramCacheSize int
 }

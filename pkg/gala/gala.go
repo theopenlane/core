@@ -422,7 +422,7 @@ func (g *Gala) dispatch(ctx context.Context, envelope Envelope) error {
 }
 
 // dispatchEnvelope dispatches one envelope to all listeners on the topic
-func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
+func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope, lastAttempt bool) error {
 	registration, err := g.registry.topicRegistration(envelope.Topic)
 	if err != nil {
 		return err
@@ -443,9 +443,10 @@ func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	logx.FromContext(restoredContext).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Msg("gala processing event")
 
 	handlerContext := HandlerContext{
-		Context:  restoredContext,
-		Envelope: envelope,
-		Injector: g.injector,
+		Context:     restoredContext,
+		Envelope:    envelope,
+		Injector:    g.injector,
+		lastAttempt: lastAttempt,
 	}
 
 	listeners := g.registry.registeredListeners(envelope.Topic)

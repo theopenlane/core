@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/tx"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/iam/auth"
@@ -299,7 +300,7 @@ func recordSignedNDARequest(ctx, queryCtx context.Context, m *generated.TrustCen
 		return existing, nil
 	}
 
-	update := transactionFromContext(ctx).TrustCenterNDARequest.UpdateOne(existing).
+	update := tx.FromContext(ctx).TrustCenterNDARequest.UpdateOne(existing).
 		SetStatus(enums.TrustCenterNDARequestStatusSigned)
 
 	if signedAt, ok := m.SignedAt(); ok {

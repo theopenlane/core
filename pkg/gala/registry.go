@@ -2,6 +2,7 @@ package gala
 
 import (
 	"encoding/json"
+	"errors"
 	"sort"
 	"strings"
 	"sync"
@@ -195,9 +196,21 @@ func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(Handler
 		}
 
 		err := handler(handlerCtx, typedPayload)
-		// scheduled definitions classify errors through Cancel inside the schedule loop
-		if err != nil && definition.Schedule == nil && definition.Cancel != nil && definition.Cancel(handlerCtx.Context, typedPayload, err) {
+		// scheduled definitions classify errors and exhaustion inside the schedule loop
+		if err == nil || definition.Schedule != nil {
+			return err
+		}
+
+		if _, snoozed := errors.AsType[*river.JobSnoozeError](err); snoozed {
+			return err
+		}
+
+		if definition.Cancel != nil && definition.Cancel(handlerCtx.Context, typedPayload, err) {
 			return river.JobCancel(err)
+		}
+
+		if handlerCtx.lastAttempt && definition.OnExhausted != nil {
+			definition.OnExhausted(handlerCtx.Context, typedPayload, err)
 		}
 
 		return err

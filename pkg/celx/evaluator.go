@@ -3,24 +3,31 @@ package celx
 import (
 	"context"
 	"errors"
-	"sync"
 
 	"cel.dev/cel-go/cel"
 	"cel.dev/cel-go/common/types/ref"
+	lru "github.com/hashicorp/golang-lru/v2"
+	"github.com/samber/lo"
 )
 
 // Evaluator compiles and evaluates CEL expressions with caching
 type Evaluator struct {
 	env          *cel.Env
 	config       EvalConfig
-	programCache sync.Map
+	programCache *lru.Cache[string, cel.Program]
 }
 
 // NewEvaluator creates a new CEL evaluator with the provided environment and configuration
 func NewEvaluator(env *cel.Env, config EvalConfig) *Evaluator {
+	if config.ProgramCacheSize <= 0 {
+		config.ProgramCacheSize = DefaultProgramCacheSize
+	}
+
 	return &Evaluator{
 		env:    env,
 		config: config,
+		// lru.New only fails on a non-positive size
+		programCache: lo.Must(lru.New[string, cel.Program](config.ProgramCacheSize)),
 	}
 }
 
@@ -82,8 +89,8 @@ func (e *Evaluator) EvaluateBool(ctx context.Context, expression string, vars ma
 
 // getOrCompileProgram returns a cached program or compiles a new one with evaluator options
 func (e *Evaluator) getOrCompileProgram(expression string) (cel.Program, error) {
-	if cached, ok := e.programCache.Load(expression); ok {
-		return cached.(cel.Program), nil
+	if cached, ok := e.programCache.Get(expression); ok {
+		return cached, nil
 	}
 
 	ast, issues := e.env.Compile(expression)
@@ -108,7 +115,7 @@ func (e *Evaluator) getOrCompileProgram(expression string) (cel.Program, error) 
 		return nil, err
 	}
 
-	e.programCache.Store(expression, prg)
+	e.programCache.Add(expression, prg)
 
 	return prg, nil
 }

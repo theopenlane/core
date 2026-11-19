@@ -69,3 +69,79 @@ func TestValidateInput(t *testing.T) {
 		})
 	}
 }
+
+func TestConformStored(t *testing.T) {
+	t.Parallel()
+
+	const (
+		retiredName  = "retiredName"
+		upgradedBody = `{"name":"upgraded"}`
+	)
+
+	schema := json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}},"additionalProperties":false}`)
+	defaulted := json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string","default":"anon"}},"additionalProperties":false}`)
+	malformed := json.RawMessage(`{not valid json`)
+	errUpgrade := errors.New("upgrade failed")
+	errSemantic := errors.New("name is reserved")
+
+	upgradeTo := func(wantFrom string) types.UpgradeFunc {
+		return func(_ context.Context, _ types.InstallationRequest, from string, _ json.RawMessage) (json.RawMessage, error) {
+			if from != wantFrom {
+				return nil, errUpgrade
+			}
+
+			return json.RawMessage(upgradedBody), nil
+		}
+	}
+
+	tests := []struct {
+		name    string
+		layout  types.InputRegistration
+		from    string
+		payload string
+		want    string
+		wantErr []error
+	}{
+		{name: "valid document is unchanged", layout: types.InputRegistration{Schema: schema}, payload: `{"name":"alice"}`, want: `{"name":"alice"}`},
+		{name: "undeclared key is stripped", layout: types.InputRegistration{Schema: schema}, payload: `{"name":"alice","extra":1}`, want: `{"name":"alice"}`},
+		{name: "required default is filled", layout: types.InputRegistration{Schema: defaulted}, payload: `{}`, want: `{"name":"anon"}`},
+		{name: "upgrade receives the stored name and replaces the document", layout: types.InputRegistration{Schema: schema, Upgrade: upgradeTo(retiredName)}, from: retiredName, payload: `{"name":"old"}`, want: upgradedBody},
+		{name: "upgrade error wraps the sentinel and the cause", layout: types.InputRegistration{Schema: schema, Upgrade: upgradeTo(retiredName)}, from: "other", payload: `{"name":"old"}`, wantErr: []error{types.ErrOperationConfigInvalid, errUpgrade}},
+		{name: "schema conform error wraps the sentinel", layout: types.InputRegistration{Schema: malformed}, payload: `{"name":"alice"}`, wantErr: []error{types.ErrOperationConfigInvalid}},
+		{name: "schema violation after conform wraps the sentinel", layout: types.InputRegistration{Schema: schema}, payload: `{}`, wantErr: []error{types.ErrOperationConfigInvalid}},
+		{
+			name: "semantic validation error wraps the sentinel and the cause",
+			layout: types.InputRegistration{Schema: schema, Validate: func(context.Context, types.InstallationRequest, json.RawMessage) error {
+				return errSemantic
+			}},
+			payload: `{"name":"admin"}`,
+			wantErr: []error{types.ErrOperationConfigInvalid, errSemantic},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := ConformStored(context.Background(), types.InstallationRequest{}, tc.layout, tc.from, json.RawMessage(tc.payload), types.ErrOperationConfigInvalid)
+
+			if len(tc.wantErr) > 0 {
+				for _, want := range tc.wantErr {
+					if !errors.Is(err, want) {
+						t.Fatalf("expected error %v, got %v", want, err)
+					}
+				}
+
+				return
+			}
+
+			if err != nil {
+				t.Fatalf("expected no error, got %v", err)
+			}
+
+			if string(got) != tc.want {
+				t.Fatalf("ConformStored() = %s, want %s", got, tc.want)
+			}
+		})
+	}
+}

@@ -289,7 +289,7 @@ func TestRuntimeDispatchEnvelopeWithDependencyInjectionAndContextRehydration(t *
 		Topic:           topic.Name,
 		Payload:         encodedPayload,
 		ContextSnapshot: snapshot,
-	}); err != nil {
+	}, inMemoryLastAttempt); err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
 	}
 
@@ -369,7 +369,7 @@ func TestRuntimeDispatchEnvelopeWithCallerContext(t *testing.T) {
 		Topic:           topic.Name,
 		Payload:         encodedPayload,
 		ContextSnapshot: snapshot,
-	}); err != nil {
+	}, inMemoryLastAttempt); err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
 	}
 
@@ -433,7 +433,7 @@ func TestRuntimeDispatchEnvelopeReturnsDecodeError(t *testing.T) {
 		ID:      NewEventID(),
 		Topic:   topic.Name,
 		Payload: json.RawMessage("{bad"),
-	})
+	}, inMemoryLastAttempt)
 	if !errors.Is(err, ErrPayloadDecodeFailed) {
 		t.Fatalf("expected ErrPayloadDecodeFailed, got %v", err)
 	}
@@ -588,7 +588,7 @@ func TestRuntimeDispatchEnvelopeWrapsListenerErrors(t *testing.T) {
 		Topic:           topic.Name,
 		Payload:         encodedPayload,
 		ContextSnapshot: testCallerSnapshot(t, runtime),
-	})
+	}, inMemoryLastAttempt)
 	if err == nil {
 		t.Fatalf("expected error from failing listener")
 	}
@@ -639,7 +639,7 @@ func TestRuntimeDispatchEnvelopeRecoversPanic(t *testing.T) {
 		Topic:           topic.Name,
 		Payload:         encodedPayload,
 		ContextSnapshot: testCallerSnapshot(t, runtime),
-	})
+	}, inMemoryLastAttempt)
 	if err == nil {
 		t.Fatalf("expected error from panicking listener")
 	}
@@ -710,7 +710,7 @@ func TestRuntimeDispatchEnvelopeFiltersListenersByOperation(t *testing.T) {
 		Topic:           topic.Name,
 		Payload:         encodedPayload,
 		ContextSnapshot: testCallerSnapshot(t, runtime),
-	})
+	}, inMemoryLastAttempt)
 	if err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
 	}
@@ -919,6 +919,101 @@ func TestRegistryInterestedInWithWildcardListener(t *testing.T) {
 	}
 }
 
+// TestOnExhaustedFiresOnLastAttempt verifies OnExhausted gating for ordinary listeners.
+func TestOnExhaustedFiresOnLastAttempt(t *testing.T) {
+	errHandler := errors.New("handler failed")
+	snoozeDelay := time.Second
+
+	tests := []struct {
+		name        string
+		handlerErr  error
+		cancel      func(context.Context, runtimeTestPayload, error) bool
+		lastAttempt bool
+		wantFired   bool
+	}{
+		{name: "fires on last attempt failure", handlerErr: errHandler, lastAttempt: true, wantFired: true},
+		{name: "does not fire before last attempt", handlerErr: errHandler, lastAttempt: false},
+		{name: "does not fire on success", lastAttempt: true},
+		{
+			name:        "does not fire when cancel classifies the error",
+			handlerErr:  errHandler,
+			cancel:      func(context.Context, runtimeTestPayload, error) bool { return true },
+			lastAttempt: true,
+		},
+		{name: "does not fire for snooze", handlerErr: river.JobSnooze(snoozeDelay), lastAttempt: true},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			runtime := newTestGala(t, nil)
+
+			topic := Topic[runtimeTestPayload]{Name: TopicName("gala.test.exhausted")}
+			if err := registerTopic(runtime.registry, topic); err != nil {
+				t.Fatalf("failed to register topic: %v", err)
+			}
+
+			var (
+				fired       int
+				gotPayload  runtimeTestPayload
+				gotErr      error
+				cancelledAs *river.JobCancelError
+			)
+
+			if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+				Topic:  topic,
+				Name:   "gala.test.exhausted.listener",
+				Handle: func(HandlerContext, runtimeTestPayload) error { return tc.handlerErr },
+				Cancel: tc.cancel,
+				OnExhausted: func(_ context.Context, payload runtimeTestPayload, err error) {
+					fired++
+					gotPayload = payload
+					gotErr = err
+				},
+			}); err != nil {
+				t.Fatalf("failed to register listener: %v", err)
+			}
+
+			encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "exhaust"})
+			if err != nil {
+				t.Fatalf("failed to encode payload: %v", err)
+			}
+
+			dispatchErr := runtime.dispatchEnvelope(context.Background(), Envelope{
+				ID:              NewEventID(),
+				Topic:           topic.Name,
+				Payload:         encodedPayload,
+				ContextSnapshot: testCallerSnapshot(t, runtime),
+			}, tc.lastAttempt)
+
+			if tc.handlerErr == nil && dispatchErr != nil {
+				t.Fatalf("unexpected dispatch error: %v", dispatchErr)
+			}
+
+			if tc.handlerErr != nil && dispatchErr == nil {
+				t.Fatal("expected dispatch error to be returned")
+			}
+
+			if tc.cancel != nil && !errors.As(dispatchErr, &cancelledAs) {
+				t.Fatalf("expected river cancel error, got %v", dispatchErr)
+			}
+
+			if got := fired == 1; got != tc.wantFired || fired > 1 {
+				t.Fatalf("OnExhausted fired %d times, want fired=%v", fired, tc.wantFired)
+			}
+
+			if tc.wantFired {
+				if gotPayload.Message != "exhaust" {
+					t.Fatalf("payload = %q, want %q", gotPayload.Message, "exhaust")
+				}
+
+				if !errors.Is(gotErr, errHandler) {
+					t.Fatalf("exhausted error = %v, want %v", gotErr, errHandler)
+				}
+			}
+		})
+	}
+}
+
 func TestValidateTopicRegistrationErrors(t *testing.T) {
 	if err := registerTopic(nil, Topic[runtimeTestPayload]{}); !errors.Is(err, ErrRegistryRequired) {
 		t.Fatalf("expected ErrRegistryRequired, got %v", err)
@@ -1086,7 +1181,7 @@ func TestDispatchEnvelopeWithoutCallerLeavesCallerNil(t *testing.T) {
 		ID:      NewEventID(),
 		Topic:   topic.Name,
 		Payload: encodedPayload,
-	})
+	}, inMemoryLastAttempt)
 	if err != nil {
 		t.Fatalf("expected caller-less dispatch to succeed, got %v", err)
 	}
@@ -1140,7 +1235,7 @@ func TestDispatchEnvelopeCallerHookSuppliesCaller(t *testing.T) {
 		ID:      NewEventID(),
 		Topic:   topic.Name,
 		Payload: encodedPayload,
-	}); err != nil {
+	}, inMemoryLastAttempt); err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
 	}
 
@@ -1182,7 +1277,7 @@ func TestDispatchEnvelopeGatedListenerSkipsSilently(t *testing.T) {
 		Topic:           topic.Name,
 		Payload:         encodedPayload,
 		ContextSnapshot: testCallerSnapshot(t, runtime),
-	}); err != nil {
+	}, inMemoryLastAttempt); err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
 	}
 
@@ -1554,7 +1649,7 @@ func TestDispatchEnvelopeReturnsTopicNotFoundError(t *testing.T) {
 		ID:      NewEventID(),
 		Topic:   TopicName("missing.topic"),
 		Payload: []byte(`{"message":"test"}`),
-	})
+	}, inMemoryLastAttempt)
 	if !errors.Is(err, ErrTopicNotRegistered) {
 		t.Fatalf("expected ErrTopicNotRegistered, got %v", err)
 	}
@@ -1593,7 +1688,7 @@ func TestDispatchEnvelopeSkipsListenersWithMismatchedOperation(t *testing.T) {
 		ID:      NewEventID(),
 		Topic:   topic.Name,
 		Payload: encodedPayload,
-	}); err != nil {
+	}, inMemoryLastAttempt); err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
 	}
 

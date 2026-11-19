@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/utils/jsonx"
 )
@@ -395,7 +396,7 @@ func TestConformStored(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := conformStored(t.Context(), types.InstallationRequest{}, types.InputRegistration{Schema: tc.schema, Upgrade: tc.upgrade}, tc.from, json.RawMessage(tc.payload), tc.sentinel)
+			got, err := operations.ConformStored(t.Context(), types.InstallationRequest{}, types.InputRegistration{Schema: tc.schema, Upgrade: tc.upgrade}, tc.from, json.RawMessage(tc.payload), tc.sentinel)
 
 			if tc.wantErr != nil {
 				assert.Assert(t, errors.Is(err, tc.wantErr), "got %v", err)
