@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo-contrib/echoprometheus"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/theopenlane/logx"
 )
