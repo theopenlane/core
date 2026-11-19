@@ -127,6 +127,15 @@ func TestRunIntegrationOperationInlinePolicy(t *testing.T) {
 	}
 }
 
+func integrationRunCount(t *testing.T, db *ent.Client, ctx context.Context, integrationID string) int {
+	t.Helper()
+
+	count, err := db.IntegrationRun.Query().Where(integrationrun.IntegrationIDEQ(integrationID)).Count(ctx)
+	assert.NilError(t, err)
+
+	return count
+}
+
 func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
 	suite := suite.setupParallelTest(t)
 
@@ -167,6 +176,8 @@ func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
 			})
 			assert.NilError(t, err)
 
+			before := integrationRunCount(t, suite.db, testUser.UserCtx, integrationID)
+
 			req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
 			req.Header.Set("Content-Type", "application/json")
 
@@ -175,14 +186,8 @@ func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
 
 			assert.Assert(t, is.Equal(tc.expectedStatus, rec.Code))
 
-			runCount, err := suite.db.IntegrationRun.Query().
-				Where(
-					integrationrun.IntegrationIDEQ(integrationID),
-					integrationrun.CreatedByEQ(tc.user.ID),
-				).
-				Count(testUser.UserCtx)
-			assert.NilError(t, err)
-			assert.Check(t, is.Equal(tc.expectedRunCount, runCount))
+			after := integrationRunCount(t, suite.db, testUser.UserCtx, integrationID)
+			assert.Check(t, is.Equal(tc.expectedRunCount, after-before))
 
 			if tc.expectedStatus != http.StatusOK {
 				return
