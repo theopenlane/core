@@ -119,8 +119,26 @@ func seedShareLinkWithUses(t *testing.T, user th.TestUserDetails, maxUses *int64
 	return resp.CreateShareLink.ShareLink.ID
 }
 
+// shareLinkManagerRole is the organization role that lets a member manage share links
+const shareLinkManagerRole = "share_link_manager"
+
+// grantFileEdit makes the user an editor of the file
+func grantFileEdit(t *testing.T, owner, user th.TestUserDetails, fileID string) {
+	tuple := fgax.GetTupleKey(fgax.TupleRequest{
+		SubjectID:   user.ID,
+		SubjectType: "user",
+		ObjectID:    fileID,
+		ObjectType:  "file",
+		Relation:    fgax.EditorRelation,
+	})
+
+	_, err := suite.Client.DB.Authz.WriteTupleKeys(owner.UserCtx, []fgax.TupleKey{tuple}, nil)
+	assert.NilError(t, err)
+}
+
 func TestQueryShareLink(t *testing.T) {
 	shareLinkID := seedShareLink(t, th.SharedTestUser1)
+	manager := suite.OrgMemberWithFunctionalRoles(t, th.SharedTestUser1, shareLinkManagerRole)
 
 	testCases := []struct {
 		name     string
@@ -137,6 +155,11 @@ func TestQueryShareLink(t *testing.T) {
 			name:    "happy path, another member with edit access",
 			queryID: shareLinkID,
 			ctx:     th.SharedAdminUser.UserCtx,
+		},
+		{
+			name:    "happy path, member with the share link manager role",
+			queryID: shareLinkID,
+			ctx:     manager.UserCtx,
 		},
 		{
 			name:     "share link in another organization",
@@ -244,6 +267,13 @@ func TestMutationCreateShareLink(t *testing.T) {
 	diskFile := seedStoredFile(t, th.SharedTestUser1, storagetypes.DiskProvider)
 	otherOrgFile := seedStoredFile(t, th.SharedTestUser2, storagetypes.R2Provider)
 
+	manager := suite.OrgMemberWithFunctionalRoles(t, th.SharedTestUser1, shareLinkManagerRole)
+	managerFile := seedStoredFile(t, th.SharedTestUser1, storagetypes.R2Provider)
+	grantFileEdit(t, th.SharedTestUser1, manager, managerFile.ID)
+
+	// a member who can edit the file but does not hold the role
+	grantFileEdit(t, th.SharedTestUser1, th.SharedViewOnlyUser, managerFile.ID)
+
 	testCases := []struct {
 		name                string
 		request             testclient.CreateShareLinkInput
@@ -310,19 +340,19 @@ func TestMutationCreateShareLink(t *testing.T) {
 			name:        "empty recipient",
 			request:     testclient.CreateShareLinkInput{FileIDs: []string{file.ID}, RecipientEmails: []string{""}},
 			ctx:         th.SharedTestUser1.UserCtx,
-			expectedErr: hooks.ErrShareLinkRecipientInvalid.Error(),
+			expectedErr: "mail: no address",
 		},
 		{
 			name:        "blank recipient",
 			request:     testclient.CreateShareLinkInput{FileIDs: []string{file.ID}, RecipientEmails: []string{"  "}},
 			ctx:         th.SharedTestUser1.UserCtx,
-			expectedErr: hooks.ErrShareLinkRecipientInvalid.Error(),
+			expectedErr: "mail: no address",
 		},
 		{
 			name:        "recipient that is not an email address",
 			request:     testclient.CreateShareLinkInput{FileIDs: []string{file.ID}, RecipientEmails: []string{shareLinkRecipient, "not-an-email"}},
 			ctx:         th.SharedTestUser1.UserCtx,
-			expectedErr: hooks.ErrShareLinkRecipientInvalid.Error(),
+			expectedErr: "mail: missing '@' or angle-addr",
 		},
 		{
 			name:            "happy path, session required",
@@ -335,13 +365,13 @@ func TestMutationCreateShareLink(t *testing.T) {
 			name:        "file is not stored on R2",
 			request:     testclient.CreateShareLinkInput{FileIDs: []string{diskFile.ID}},
 			ctx:         th.SharedTestUser1.UserCtx,
-			expectedErr: hooks.ErrShareLinkFileNotOnR2.Error(),
+			expectedErr: hooks.ErrInvalidInput.Error(),
 		},
 		{
 			name:        "file belongs to another organization",
 			request:     testclient.CreateShareLinkInput{FileIDs: []string{otherOrgFile.ID}},
 			ctx:         th.SharedTestUser1.UserCtx,
-			expectedErr: hooks.ErrShareLinkFileAccess.Error(),
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:        "expiry beyond the maximum duration",
@@ -358,6 +388,24 @@ func TestMutationCreateShareLink(t *testing.T) {
 		{
 			name:        "not authorized, view only user",
 			request:     testclient.CreateShareLinkInput{FileIDs: []string{file.ID}},
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:            "happy path, share link manager who can edit the file",
+			request:         testclient.CreateShareLinkInput{FileIDs: []string{managerFile.ID}},
+			ctx:             manager.UserCtx,
+			expectedMaxUses: shareLinkDefaultUses,
+		},
+		{
+			name:        "not authorized, share link manager who cannot edit the file",
+			request:     testclient.CreateShareLinkInput{FileIDs: []string{file.ID}},
+			ctx:         manager.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:        "not authorized, file editor without the share link manager role",
+			request:     testclient.CreateShareLinkInput{FileIDs: []string{managerFile.ID}},
 			ctx:         th.SharedViewOnlyUser.UserCtx,
 			expectedErr: th.NotAuthorizedErrorMsg,
 		},
@@ -486,6 +534,7 @@ func TestQueryShareLinkAccessEvents(t *testing.T) {
 	}{
 		{name: "creator", ctx: th.SharedTestUser1.UserCtx, expectedCount: 1},
 		{name: "another member with edit access", ctx: th.SharedAdminUser.UserCtx, expectedCount: 1},
+		{name: "member with the share link manager role", ctx: suite.OrgMemberWithFunctionalRoles(t, th.SharedTestUser1, shareLinkManagerRole).UserCtx, expectedCount: 1},
 		{name: "another organization", ctx: th.SharedTestUser2.UserCtx},
 		{name: "view only user", ctx: th.SharedViewOnlyUser.UserCtx, errorMsg: th.NotAuthorizedErrorMsg},
 	}

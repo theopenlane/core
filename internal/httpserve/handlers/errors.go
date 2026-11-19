@@ -184,8 +184,6 @@ var (
 	ErrObjectStoreUnavailable = errors.New("object store unavailable")
 	// ErrDownloadTokenMissingFile indicates that the download token does not have an associated file
 	ErrDownloadTokenMissingFile = errors.New("download token missing associated file")
-	// ErrForwarderSecretMismatch indicates the forwarder secret presented does not match the configured secret
-	ErrForwarderSecretMismatch = errors.New("forwarder secret mismatch")
 	// ErrShareLinkVerificationFailed indicates the email or code presented for a share did not verify
 	ErrShareLinkVerificationFailed = errors.New("share verification failed")
 	// ErrLoginFailed is returned when login fails

@@ -5284,11 +5284,13 @@ func init() {
 
 	organization.Hooks[83] = organizationMixinHooks7[78]
 
-	organization.Hooks[84] = organizationHooks[0]
+	organization.Hooks[84] = organizationMixinHooks7[79]
 
-	organization.Hooks[85] = organizationHooks[1]
+	organization.Hooks[85] = organizationHooks[0]
 
-	organization.Hooks[86] = organizationHooks[2]
+	organization.Hooks[86] = organizationHooks[1]
+
+	organization.Hooks[87] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]
@@ -6878,10 +6880,6 @@ func init() {
 	sharelinkDescUseCount := sharelinkFields[3].Descriptor()
 	// sharelink.DefaultUseCount holds the default value on creation for the use_count field.
 	sharelink.DefaultUseCount = sharelinkDescUseCount.Default.(int)
-	// sharelinkDescRecipientEmails is the schema descriptor for recipient_emails field.
-	sharelinkDescRecipientEmails := sharelinkFields[4].Descriptor()
-	// sharelink.RecipientEmailsValidator is a validator for the "recipient_emails" field. It is called by the builders before save.
-	sharelink.RecipientEmailsValidator = sharelinkDescRecipientEmails.Validators[0].(func([]string) error)
 	// sharelinkDescLandingPage is the schema descriptor for landing_page field.
 	sharelinkDescLandingPage := sharelinkFields[5].Descriptor()
 	// sharelink.DefaultLandingPage holds the default value on creation for the landing_page field.

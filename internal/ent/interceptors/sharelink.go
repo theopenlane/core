@@ -34,15 +34,15 @@ func InterceptorShareLinkURL() ent.Interceptor {
 				return v, nil
 			}
 
+			links, ok := v.([]*generated.ShareLink)
+			if !ok {
+				return v, nil
+			}
+
 			baseURL := q.ObjectManager.Links().BaseURL
 
-			switch res := v.(type) {
-			case []*generated.ShareLink:
-				for _, link := range res {
-					setShareLinkURL(link, caller, baseURL)
-				}
-			case *generated.ShareLink:
-				setShareLinkURL(res, caller, baseURL)
+			for _, link := range links {
+				setShareLinkURL(link, caller, baseURL)
 			}
 
 			return v, nil

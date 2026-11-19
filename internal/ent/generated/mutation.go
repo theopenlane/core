@@ -172126,6 +172126,9 @@ type OrganizationMutation struct {
 	risk_manager                                  map[string]struct{}
 	removedrisk_manager                           map[string]struct{}
 	clearedrisk_manager                           bool
+	share_link_manager                            map[string]struct{}
+	removedshare_link_manager                     map[string]struct{}
+	clearedshare_link_manager                     bool
 	trust_center_manager                          map[string]struct{}
 	removedtrust_center_manager                   map[string]struct{}
 	clearedtrust_center_manager                   bool
@@ -177531,6 +177534,60 @@ func (m *OrganizationMutation) ResetRiskManager() {
 	m.removedrisk_manager = nil
 }
 
+// AddShareLinkManagerIDs adds the "share_link_manager" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddShareLinkManagerIDs(ids ...string) {
+	if m.share_link_manager == nil {
+		m.share_link_manager = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.share_link_manager[ids[i]] = struct{}{}
+	}
+}
+
+// ClearShareLinkManager clears the "share_link_manager" edge to the Group entity.
+func (m *OrganizationMutation) ClearShareLinkManager() {
+	m.clearedshare_link_manager = true
+}
+
+// ShareLinkManagerCleared reports if the "share_link_manager" edge to the Group entity was cleared.
+func (m *OrganizationMutation) ShareLinkManagerCleared() bool {
+	return m.clearedshare_link_manager
+}
+
+// RemoveShareLinkManagerIDs removes the "share_link_manager" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemoveShareLinkManagerIDs(ids ...string) {
+	if m.removedshare_link_manager == nil {
+		m.removedshare_link_manager = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.share_link_manager, ids[i])
+		m.removedshare_link_manager[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedShareLinkManager returns the removed IDs of the "share_link_manager" edge to the Group entity.
+func (m *OrganizationMutation) RemovedShareLinkManagerIDs() (ids []string) {
+	for id := range m.removedshare_link_manager {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ShareLinkManagerIDs returns the "share_link_manager" edge IDs in the mutation.
+func (m *OrganizationMutation) ShareLinkManagerIDs() (ids []string) {
+	for id := range m.share_link_manager {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetShareLinkManager resets all changes to the "share_link_manager" edge.
+func (m *OrganizationMutation) ResetShareLinkManager() {
+	m.share_link_manager = nil
+	m.clearedshare_link_manager = false
+	m.removedshare_link_manager = nil
+}
+
 // AddTrustCenterManagerIDs adds the "trust_center_manager" edge to the Group entity by ids.
 func (m *OrganizationMutation) AddTrustCenterManagerIDs(ids ...string) {
 	if m.trust_center_manager == nil {
@@ -182854,7 +182911,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 167)
+	edges := make([]string, 0, 168)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -183085,6 +183142,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.risk_manager != nil {
 		edges = append(edges, organization.EdgeRiskManager)
+	}
+	if m.share_link_manager != nil {
+		edges = append(edges, organization.EdgeShareLinkManager)
 	}
 	if m.trust_center_manager != nil {
 		edges = append(edges, organization.EdgeTrustCenterManager)
@@ -183825,6 +183885,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeShareLinkManager:
+		ids := make([]ent.Value, 0, len(m.share_link_manager))
+		for id := range m.share_link_manager {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeTrustCenterManager:
 		ids := make([]ent.Value, 0, len(m.trust_center_manager))
 		for id := range m.trust_center_manager {
@@ -184363,7 +184429,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 167)
+	edges := make([]string, 0, 168)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -184594,6 +184660,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedrisk_manager != nil {
 		edges = append(edges, organization.EdgeRiskManager)
+	}
+	if m.removedshare_link_manager != nil {
+		edges = append(edges, organization.EdgeShareLinkManager)
 	}
 	if m.removedtrust_center_manager != nil {
 		edges = append(edges, organization.EdgeTrustCenterManager)
@@ -185322,6 +185391,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeShareLinkManager:
+		ids := make([]ent.Value, 0, len(m.removedshare_link_manager))
+		for id := range m.removedshare_link_manager {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeTrustCenterManager:
 		ids := make([]ent.Value, 0, len(m.removedtrust_center_manager))
 		for id := range m.removedtrust_center_manager {
@@ -185844,7 +185919,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 167)
+	edges := make([]string, 0, 168)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -186075,6 +186150,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	}
 	if m.clearedrisk_manager {
 		edges = append(edges, organization.EdgeRiskManager)
+	}
+	if m.clearedshare_link_manager {
+		edges = append(edges, organization.EdgeShareLinkManager)
 	}
 	if m.clearedtrust_center_manager {
 		edges = append(edges, organization.EdgeTrustCenterManager)
@@ -186507,6 +186585,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedregistry_manager
 	case organization.EdgeRiskManager:
 		return m.clearedrisk_manager
+	case organization.EdgeShareLinkManager:
+		return m.clearedshare_link_manager
 	case organization.EdgeTrustCenterManager:
 		return m.clearedtrust_center_manager
 	case organization.EdgeWorkflowManager:
@@ -186945,6 +187025,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeRiskManager:
 		m.ResetRiskManager()
+		return nil
+	case organization.EdgeShareLinkManager:
+		m.ResetShareLinkManager()
 		return nil
 	case organization.EdgeTrustCenterManager:
 		m.ResetTrustCenterManager()

@@ -28,6 +28,8 @@ const (
 
 	// CanManageIntegrationsRelation is the organization relation required to run integration operations
 	CanManageIntegrationsRelation = "can_manage_integrations"
+	// CanManageShareLinkRelation is the organization relation required to create, manage, and read share links
+	CanManageShareLinkRelation = "can_manage_share_link"
 )
 
 // scopedRelation returns the scoped relation based on the object type, relation, and operation. A operation is checked for for create, update, delete. If instead a specific relation should be checked, that should be passed instead of the operation

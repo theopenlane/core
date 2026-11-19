@@ -10,6 +10,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/logx"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -155,7 +156,7 @@ func sharedFiles(ctx context.Context, m *generated.ShareLinkMutation) (int, erro
 
 	switch {
 	case len(fileIDs) == 0:
-		return 0, ErrShareLinkFileAccess
+		return 0, generated.ErrPermissionDenied
 	case len(fileIDs) > proxy.MaxShareFiles:
 		return 0, ErrShareLinkTooManyFiles
 	}
@@ -166,11 +167,17 @@ func sharedFiles(ctx context.Context, m *generated.ShareLinkMutation) (int, erro
 	}
 
 	if len(files) != len(fileIDs) {
-		return 0, ErrShareLinkFileAccess
+		return 0, generated.ErrPermissionDenied
 	}
 
-	if lo.SomeBy(files, func(f *generated.File) bool { return f.StorageProvider != string(storagetypes.R2Provider) }) {
-		return 0, ErrShareLinkFileNotOnR2
+	notOnR2 := lo.FilterMap(files, func(f *generated.File, _ int) (string, bool) {
+		return f.ID, f.StorageProvider != string(storagetypes.R2Provider)
+	})
+
+	if len(notOnR2) > 0 {
+		logx.FromContext(ctx).Warn().Strs("file_ids", notOnR2).Msg("share link file is not stored on R2")
+
+		return 0, ErrInvalidInput
 	}
 
 	return len(files), nil
@@ -189,7 +196,7 @@ func normalizeShareLinkRecipients(m *generated.ShareLinkMutation) (int, error) {
 	for _, email := range emails {
 		address, err := mail.ParseAddress(email)
 		if err != nil {
-			return 0, ErrShareLinkRecipientInvalid
+			return 0, err
 		}
 
 		normalized = append(normalized, proxy.NormalizeRecipientEmail(address.Address))

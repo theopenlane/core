@@ -12956,6 +12956,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"share_link_manager",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkManagerTable,
+			Columns: []string{organization.ShareLinkManagerColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
 		"trust_center_manager",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -40466,6 +40478,20 @@ func (f *OrganizationFilter) WhereHasRiskManager() {
 // WhereHasRiskManagerWith applies a predicate to check if query has an edge risk_manager with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasRiskManagerWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("risk_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasShareLinkManager applies a predicate to check if query has an edge share_link_manager.
+func (f *OrganizationFilter) WhereHasShareLinkManager() {
+	f.Where(entql.HasEdge("share_link_manager"))
+}
+
+// WhereHasShareLinkManagerWith applies a predicate to check if query has an edge share_link_manager with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasShareLinkManagerWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("share_link_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

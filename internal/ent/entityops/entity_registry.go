@@ -17633,6 +17633,14 @@ func init() {
 			AddField:    "add_share_link_creator_ids",
 		},
 		{
+			Name:        "share_link_manager",
+			Label:       "ShareLinkManager",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "share_link_manager_ids",
+			AddField:    "add_share_link_manager_ids",
+		},
+		{
 			Name:        "share_links",
 			Label:       "ShareLinks",
 			Target:      SchemaShareLink,

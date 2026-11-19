@@ -695,6 +695,8 @@ type ShareLinkResolveRequest struct {
 	ID string `param:"id" json:"-" description:"the share link ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	// Token is the share token from the share URL
 	Token string `json:"token" description:"the share token from the share URL" example:"token"`
+	// VerifiedToken is the share-verified token returned by the verify endpoint, required to list the files of a recipient-bound share link
+	VerifiedToken string `json:"verified_token,omitempty" description:"the share-verified token returned by the verify endpoint, required to list the files of a recipient-bound share link"`
 }
 
 // Validate ensures the required fields are set on the ShareLinkResolveRequest
@@ -733,8 +735,8 @@ type ShareLinkResolveResponse struct {
 	LandingPage bool `json:"landing_page" description:"whether the share URL opens the landing page instead of serving the file directly"`
 	// RecipientBound reports whether a recipient must verify their email before downloading
 	RecipientBound bool `json:"recipient_bound" description:"whether a recipient must verify their email before downloading"`
-	// Files are the files the share link grants downloads of
-	Files []ShareLinkResolveFile `json:"files" description:"the files the share link grants downloads of"`
+	// Files are the files the share link grants downloads of, empty for a recipient-bound share link until the recipient has verified
+	Files []ShareLinkResolveFile `json:"files" description:"the files the share link grants downloads of, empty for a recipient-bound share link until the recipient has verified"`
 }
 
 // ExampleResponse returns an example ShareLinkResolveResponse for OpenAPI documentation

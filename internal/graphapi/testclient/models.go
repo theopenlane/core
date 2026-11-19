@@ -9164,6 +9164,7 @@ type CreateOrganizationInput struct {
 	PolicyManagerIDs                     []string                        `json:"policyManagerIDs,omitempty"`
 	RegistryManagerIDs                   []string                        `json:"registryManagerIDs,omitempty"`
 	RiskManagerIDs                       []string                        `json:"riskManagerIDs,omitempty"`
+	ShareLinkManagerIDs                  []string                        `json:"shareLinkManagerIDs,omitempty"`
 	TrustCenterManagerIDs                []string                        `json:"trustCenterManagerIDs,omitempty"`
 	WorkflowManagerIDs                   []string                        `json:"workflowManagerIDs,omitempty"`
 	ParentID                             *string                         `json:"parentID,omitempty"`
@@ -25379,6 +25380,7 @@ type Organization struct {
 	PolicyManager                      *GroupConnection               `json:"policyManager"`
 	RegistryManager                    *GroupConnection               `json:"registryManager"`
 	RiskManager                        *GroupConnection               `json:"riskManager"`
+	ShareLinkManager                   *GroupConnection               `json:"shareLinkManager"`
 	TrustCenterManager                 *GroupConnection               `json:"trustCenterManager"`
 	WorkflowManager                    *GroupConnection               `json:"workflowManager"`
 	Parent                             *Organization                  `json:"parent,omitempty"`
@@ -26474,6 +26476,9 @@ type OrganizationWhereInput struct {
 	// risk_manager edge predicates
 	HasRiskManager     *bool              `json:"hasRiskManager,omitempty"`
 	HasRiskManagerWith []*GroupWhereInput `json:"hasRiskManagerWith,omitempty"`
+	// share_link_manager edge predicates
+	HasShareLinkManager     *bool              `json:"hasShareLinkManager,omitempty"`
+	HasShareLinkManagerWith []*GroupWhereInput `json:"hasShareLinkManagerWith,omitempty"`
 	// trust_center_manager edge predicates
 	HasTrustCenterManager     *bool              `json:"hasTrustCenterManager,omitempty"`
 	HasTrustCenterManagerWith []*GroupWhereInput `json:"hasTrustCenterManagerWith,omitempty"`
@@ -43566,6 +43571,9 @@ type UpdateOrganizationInput struct {
 	AddRiskManagerIDs                          []string                        `json:"addRiskManagerIDs,omitempty"`
 	RemoveRiskManagerIDs                       []string                        `json:"removeRiskManagerIDs,omitempty"`
 	ClearRiskManager                           *bool                           `json:"clearRiskManager,omitempty"`
+	AddShareLinkManagerIDs                     []string                        `json:"addShareLinkManagerIDs,omitempty"`
+	RemoveShareLinkManagerIDs                  []string                        `json:"removeShareLinkManagerIDs,omitempty"`
+	ClearShareLinkManager                      *bool                           `json:"clearShareLinkManager,omitempty"`
 	AddTrustCenterManagerIDs                   []string                        `json:"addTrustCenterManagerIDs,omitempty"`
 	RemoveTrustCenterManagerIDs                []string                        `json:"removeTrustCenterManagerIDs,omitempty"`
 	ClearTrustCenterManager                    *bool                           `json:"clearTrustCenterManager,omitempty"`

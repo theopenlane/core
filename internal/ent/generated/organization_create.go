@@ -1510,6 +1510,21 @@ func (_c *OrganizationCreate) AddRiskManager(v ...*Group) *OrganizationCreate {
 	return _c.AddRiskManagerIDs(ids...)
 }
 
+// AddShareLinkManagerIDs adds the "share_link_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddShareLinkManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddShareLinkManagerIDs(ids...)
+	return _c
+}
+
+// AddShareLinkManager adds the "share_link_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddShareLinkManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddShareLinkManagerIDs(ids...)
+}
+
 // AddTrustCenterManagerIDs adds the "trust_center_manager" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddTrustCenterManagerIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddTrustCenterManagerIDs(ids...)
@@ -4305,6 +4320,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.RiskManagerTable,
 			Columns: []string{organization.RiskManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ShareLinkManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkManagerTable,
+			Columns: []string{organization.ShareLinkManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

@@ -437,11 +437,6 @@ func (_c *ShareLinkCreate) check() error {
 	if _, ok := _c.mutation.UseCount(); !ok {
 		return &ValidationError{Name: "use_count", err: errors.New(`generated: missing required field "ShareLink.use_count"`)}
 	}
-	if v, ok := _c.mutation.RecipientEmails(); ok {
-		if err := sharelink.RecipientEmailsValidator(v); err != nil {
-			return &ValidationError{Name: "recipient_emails", err: fmt.Errorf(`generated: validator failed for field "ShareLink.recipient_emails": %w`, err)}
-		}
-	}
 	if _, ok := _c.mutation.CodeAttempts(); !ok {
 		return &ValidationError{Name: "code_attempts", err: errors.New(`generated: missing required field "ShareLink.code_attempts"`)}
 	}

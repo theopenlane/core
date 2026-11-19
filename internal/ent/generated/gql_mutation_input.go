@@ -16513,6 +16513,7 @@ type CreateOrganizationInput struct {
 	PolicyManagerIDs                     []string   `json:"policy_manager_ids,omitempty"`
 	RegistryManagerIDs                   []string   `json:"registry_manager_ids,omitempty"`
 	RiskManagerIDs                       []string   `json:"risk_manager_ids,omitempty"`
+	ShareLinkManagerIDs                  []string   `json:"share_link_manager_ids,omitempty"`
 	TrustCenterManagerIDs                []string   `json:"trust_center_manager_ids,omitempty"`
 	WorkflowManagerIDs                   []string   `json:"workflow_manager_ids,omitempty"`
 	ParentID                             *string    `json:"parent_id,omitempty"`
@@ -16778,6 +16779,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RiskManagerIDs; len(v) > 0 {
 		m.AddRiskManagerIDs(v...)
+	}
+	if v := i.ShareLinkManagerIDs; len(v) > 0 {
+		m.AddShareLinkManagerIDs(v...)
 	}
 	if v := i.TrustCenterManagerIDs; len(v) > 0 {
 		m.AddTrustCenterManagerIDs(v...)
@@ -17066,6 +17070,9 @@ type UpdateOrganizationInput struct {
 	ClearRiskManager                           bool
 	AddRiskManagerIDs                          []string `json:"add_risk_manager_ids,omitempty"`
 	RemoveRiskManagerIDs                       []string `json:"remove_risk_manager_ids,omitempty"`
+	ClearShareLinkManager                      bool
+	AddShareLinkManagerIDs                     []string `json:"add_share_link_manager_ids,omitempty"`
+	RemoveShareLinkManagerIDs                  []string `json:"remove_share_link_manager_ids,omitempty"`
 	ClearTrustCenterManager                    bool
 	AddTrustCenterManagerIDs                   []string `json:"add_trust_center_manager_ids,omitempty"`
 	RemoveTrustCenterManagerIDs                []string `json:"remove_trust_center_manager_ids,omitempty"`
@@ -17822,6 +17829,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveRiskManagerIDs; len(v) > 0 {
 		m.RemoveRiskManagerIDs(v...)
+	}
+	if i.ClearShareLinkManager {
+		m.ClearShareLinkManager()
+	}
+	if v := i.AddShareLinkManagerIDs; len(v) > 0 {
+		m.AddShareLinkManagerIDs(v...)
+	}
+	if v := i.RemoveShareLinkManagerIDs; len(v) > 0 {
+		m.RemoveShareLinkManagerIDs(v...)
 	}
 	if i.ClearTrustCenterManager {
 		m.ClearTrustCenterManager()

@@ -632,6 +632,7 @@ var ForeignKeys = []string{
 	"organization_policy_manager",
 	"organization_registry_manager",
 	"organization_risk_manager",
+	"organization_share_link_manager",
 	"organization_trust_center_manager",
 	"organization_workflow_manager",
 	"sla_definition_blocked_groups",

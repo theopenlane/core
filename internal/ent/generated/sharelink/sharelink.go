@@ -153,8 +153,6 @@ var (
 	MaxUsesValidator func(int) error
 	// DefaultUseCount holds the default value on creation for the "use_count" field.
 	DefaultUseCount int
-	// RecipientEmailsValidator is a validator for the "recipient_emails" field. It is called by the builders before save.
-	RecipientEmailsValidator func([]string) error
 	// DefaultLandingPage holds the default value on creation for the "landing_page" field.
 	DefaultLandingPage bool
 	// DefaultRequireSession holds the default value on creation for the "require_session" field.

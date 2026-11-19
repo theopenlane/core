@@ -266,14 +266,8 @@ var (
 	ErrShareLinkExpiryPast = errors.New("share link expiry must be in the future")
 	// ErrShareLinkExpiryTooLong is returned when a share link is created with an expiry beyond the maximum duration
 	ErrShareLinkExpiryTooLong = errors.New("share link expiry exceeds the maximum duration")
-	// ErrShareLinkFileAccess is returned when the caller cannot read the file named by a share link
-	ErrShareLinkFileAccess = errors.New("share link names a file the caller cannot read")
-	// ErrShareLinkFileNotOnR2 is returned when a share link names a file that is not stored on R2
-	ErrShareLinkFileNotOnR2 = errors.New("share link file is not stored on R2")
 	// ErrShareLinkTooManyFiles is returned when a share link names more files than a share token can carry
 	ErrShareLinkTooManyFiles = errors.New("share link names too many files")
-	// ErrShareLinkRecipientInvalid is returned when a share link recipient is not an email address
-	ErrShareLinkRecipientInvalid = errors.New("share link recipient is not a valid email address")
 	// ErrShareLinkRevocationPermanent is returned when an update tries to undo the revocation of a share link
 	ErrShareLinkRevocationPermanent = errors.New("a revoked share link cannot be restored")
 	// ErrShareLinkDirectUseCap is returned when a download cap is set on a share link that serves its file directly

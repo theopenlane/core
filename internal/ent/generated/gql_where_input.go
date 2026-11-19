@@ -66257,6 +66257,10 @@ type OrganizationWhereInput struct {
 	HasRiskManager     *bool              `json:"hasRiskManager,omitempty"`
 	HasRiskManagerWith []*GroupWhereInput `json:"hasRiskManagerWith,omitempty"`
 
+	// "share_link_manager" edge predicates.
+	HasShareLinkManager     *bool              `json:"hasShareLinkManager,omitempty"`
+	HasShareLinkManagerWith []*GroupWhereInput `json:"hasShareLinkManagerWith,omitempty"`
+
 	// "trust_center_manager" edge predicates.
 	HasTrustCenterManager     *bool              `json:"hasTrustCenterManager,omitempty"`
 	HasTrustCenterManagerWith []*GroupWhereInput `json:"hasTrustCenterManagerWith,omitempty"`
@@ -68206,6 +68210,25 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasRiskManagerWith(with...))
+	}
+	if i.HasShareLinkManager != nil {
+		p := organization.HasShareLinkManager()
+		if !*i.HasShareLinkManager {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasShareLinkManagerWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasShareLinkManagerWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasShareLinkManagerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasShareLinkManagerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasShareLinkManagerWith(with...))
 	}
 	if i.HasTrustCenterManager != nil {
 		p := organization.HasTrustCenterManager()

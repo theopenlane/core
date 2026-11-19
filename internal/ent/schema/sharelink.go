@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"net/mail"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -14,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -87,15 +87,6 @@ func (ShareLink) Fields() []ent.Field {
 			),
 		field.Strings("recipient_emails").
 			Comment("the email addresses the share link is bound to; when set a recipient must verify one of them before downloading").
-			Validate(func(emails []string) error {
-				for _, email := range emails {
-					if _, err := mail.ParseAddress(email); err != nil {
-						return err
-					}
-				}
-
-				return nil
-			}).
 			Immutable().
 			Optional(),
 		field.Bool("landing_page").
@@ -204,11 +195,10 @@ func (ShareLink) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			// a share link grants downloads, so only members who can manage share links may read them
-			policy.CheckOrgEditAccess(),
+			policy.CheckOrgRelationAccess(rule.CanManageShareLinkRelation),
 		),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
-			policy.CheckCreateAccess(),
+			policy.CheckOrgRelationAccess(rule.CanManageShareLinkRelation),
 		),
 	)
 }

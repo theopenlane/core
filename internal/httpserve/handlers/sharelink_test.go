@@ -67,13 +67,16 @@ func (suite *HandlerTestSuite) seedShareFixture() shareFixture {
 	t := suite.T()
 
 	user := suite.userBuilder(context.Background())
-	ctx := auth.WithInternalOperationContext(auth.NewTestContextWithOrgID(user.ID, user.PersonalOrgID))
+	ctx := ent.NewContext(auth.WithInternalOperationContext(auth.NewTestContextWithOrgID(user.ID, user.PersonalOrgID)), suite.db)
 
 	err := suite.db.OrganizationSetting.Update().
 		Where(organizationsetting.OrganizationID(user.PersonalOrgID)).
 		SetExternalSharingEnabled(true).
 		Exec(ctx)
 	assert.NilError(t, err)
+
+	// files cannot be written in an organization with no modules
+	suite.enableModules(user.ID, user.PersonalOrgID, nil)
 
 	files := make([]*ent.File, 0, 2)
 	for _, name := range []string{"report.pdf", "appendix.pdf"} {
@@ -784,9 +787,6 @@ func TestShareLinkConsumeHandlerRequireSession(t *testing.T) {
 	fx := suite.seedShareFixture()
 	stranger := suite.userBuilder(context.Background())
 
-	// the creator reads the file under the normal privacy rules, which need the organization's modules
-	suite.enableModules(fx.userID, fx.orgID, nil)
-
 	// a file record created directly carries no access tuples, upload writes them
 	viewTuple := fileViewTuple(fx, fx.files[0].ID)
 
@@ -893,8 +893,23 @@ func TestShareLinkResolveHandler(t *testing.T) {
 			assert.Check(t, out.ExpiresAt.Equal(link.ExpiresAt))
 			assert.Check(t, out.LandingPage)
 			assert.Check(t, out.RecipientBound)
-			assert.Check(t, is.DeepEqual([]models.ShareLinkResolveFile{{ID: fx.files[0].ID, Name: fx.files[0].ProvidedFileName, ContentType: fx.files[0].DetectedContentType}}, out.Files))
+			assert.Check(t, is.Len(out.Files, 0), "files are not listed before the recipient verifies")
 		}
+
+		verified := suite.postShare("/share/"+link.ID+"/resolve", shareTestSecret, models.ShareLinkResolveRequest{Token: link.Token, VerifiedToken: suite.verifiedToken(link.ID, shareTestRecipient)})
+		assert.Assert(t, is.Equal(http.StatusOK, verified.Code), verified.Body.String())
+
+		var listed models.ShareLinkResolveResponse
+		assert.NilError(t, json.Unmarshal(verified.Body.Bytes(), &listed))
+		assert.Check(t, is.DeepEqual([]models.ShareLinkResolveFile{{ID: fx.files[0].ID, Name: fx.files[0].ProvidedFileName, ContentType: fx.files[0].DetectedContentType}}, listed.Files))
+
+		other := suite.createShareLink(fx, []string{shareTestRecipient}, 1, time.Now().Add(shareTestLinkLifetime))
+		foreign := suite.postShare("/share/"+link.ID+"/resolve", shareTestSecret, models.ShareLinkResolveRequest{Token: link.Token, VerifiedToken: suite.verifiedToken(other.ID, shareTestRecipient)})
+		assert.Assert(t, is.Equal(http.StatusOK, foreign.Code), foreign.Body.String())
+
+		var refused models.ShareLinkResolveResponse
+		assert.NilError(t, json.Unmarshal(foreign.Body.Bytes(), &refused))
+		assert.Check(t, is.Len(refused.Files, 0), "a token verified for another share lists nothing")
 
 		// the worker reads these exact field names
 		var raw map[string]any
@@ -1008,6 +1023,7 @@ func TestShareLinkExternalSharingDisabled(t *testing.T) {
 	fx := suite.seedShareFixture()
 	capped := suite.createShareLink(fx, nil, 1, time.Now().Add(shareTestLinkLifetime))
 	direct := suite.createShareLink(fx, nil, 0, time.Now().Add(shareTestLinkLifetime))
+	bound := suite.createShareLink(fx, []string{shareTestRecipient}, 1, time.Now().Add(shareTestLinkLifetime))
 
 	suite.setExternalSharing(fx, false)
 
@@ -1045,6 +1061,23 @@ func TestShareLinkExternalSharingDisabled(t *testing.T) {
 			assert.Check(t, is.Len(suite.shareLinkAccessEvents(fx, tc.link.ID), 0))
 		})
 	}
+
+	t.Run("recipient bound share issues and verifies no code", func(t *testing.T) {
+		assert.Check(t, is.Equal(http.StatusNoContent, suite.requestShareCode(bound, shareTestRecipient).Code))
+
+		stored, err := suite.db.ShareLink.Get(fx.ctx, bound.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(stored.CodeHash, 0))
+
+		suite.seedShareCode(fx, bound, shareTestRecipient, shareTestCode, time.Now().Add(shareTestCodeLifetime))
+
+		recorder := suite.postShare("/share/"+bound.ID+"/verify", shareTestSecret, models.ShareLinkVerifyRequest{Token: bound.Token, Email: shareTestRecipient, Code: shareTestCode})
+		assert.Check(t, is.Equal(http.StatusForbidden, recorder.Code))
+
+		stored, err = suite.db.ShareLink.Get(fx.ctx, bound.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(0, stored.CodeAttempts))
+	})
 
 	t.Run("sharing turned back on serves the share again", func(t *testing.T) {
 		suite.setExternalSharing(fx, true)

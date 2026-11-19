@@ -91,7 +91,7 @@ func (ShareLinkAccessEvent) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			// access events carry client addresses, so only members who can manage share links may read them
-			policy.CheckOrgEditAccess(),
+			policy.CheckOrgRelationAccess(rule.CanManageShareLinkRelation),
 		),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),

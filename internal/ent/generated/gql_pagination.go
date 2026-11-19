@@ -47337,6 +47337,13 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 			c.withNamedRiskManager[name] = q.clonePage()
 		}
 	}
+	c.withShareLinkManager = _q.withShareLinkManager.clonePage()
+	if _q.withNamedShareLinkManager != nil {
+		c.withNamedShareLinkManager = make(map[string]*GroupQuery, len(_q.withNamedShareLinkManager))
+		for name, q := range _q.withNamedShareLinkManager {
+			c.withNamedShareLinkManager[name] = q.clonePage()
+		}
+	}
 	c.withTrustCenterManager = _q.withTrustCenterManager.clonePage()
 	if _q.withNamedTrustCenterManager != nil {
 		c.withNamedTrustCenterManager = make(map[string]*GroupQuery, len(_q.withNamedTrustCenterManager))

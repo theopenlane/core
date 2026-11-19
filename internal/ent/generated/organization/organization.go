@@ -205,6 +205,8 @@ const (
 	EdgeRegistryManager = "registry_manager"
 	// EdgeRiskManager holds the string denoting the risk_manager edge name in mutations.
 	EdgeRiskManager = "risk_manager"
+	// EdgeShareLinkManager holds the string denoting the share_link_manager edge name in mutations.
+	EdgeShareLinkManager = "share_link_manager"
 	// EdgeTrustCenterManager holds the string denoting the trust_center_manager edge name in mutations.
 	EdgeTrustCenterManager = "trust_center_manager"
 	// EdgeWorkflowManager holds the string denoting the workflow_manager edge name in mutations.
@@ -926,6 +928,13 @@ const (
 	RiskManagerInverseTable = "groups"
 	// RiskManagerColumn is the table column denoting the risk_manager relation/edge.
 	RiskManagerColumn = "organization_risk_manager"
+	// ShareLinkManagerTable is the table that holds the share_link_manager relation/edge.
+	ShareLinkManagerTable = "groups"
+	// ShareLinkManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ShareLinkManagerInverseTable = "groups"
+	// ShareLinkManagerColumn is the table column denoting the share_link_manager relation/edge.
+	ShareLinkManagerColumn = "organization_share_link_manager"
 	// TrustCenterManagerTable is the table that holds the trust_center_manager relation/edge.
 	TrustCenterManagerTable = "groups"
 	// TrustCenterManagerInverseTable is the table name for the Group entity.
@@ -1598,7 +1607,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [87]ent.Hook
+	Hooks        [88]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -2795,6 +2804,20 @@ func ByRiskManagerCount(opts ...sql.OrderTermOption) OrderOption {
 func ByRiskManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newRiskManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByShareLinkManagerCount orders the results by share_link_manager count.
+func ByShareLinkManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newShareLinkManagerStep(), opts...)
+	}
+}
+
+// ByShareLinkManager orders the results by share_link_manager terms.
+func ByShareLinkManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newShareLinkManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -4566,6 +4589,13 @@ func newRiskManagerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RiskManagerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, RiskManagerTable, RiskManagerColumn),
+	)
+}
+func newShareLinkManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ShareLinkManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ShareLinkManagerTable, ShareLinkManagerColumn),
 	)
 }
 func newTrustCenterManagerStep() *sqlgraph.Step {

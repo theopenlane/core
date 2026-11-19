@@ -55,7 +55,9 @@ func (h *Handler) forwarderSecretPresented(ctx echo.Context) (bool, error) {
 
 	presented := ctx.Request().Header.Get(ratelimit.ForwarderSecretHeader)
 	if subtle.ConstantTimeCompare([]byte(presented), []byte(h.ForwarderSecret)) != 1 {
-		return false, h.Forbidden(ctx, ErrForwarderSecretMismatch)
+		logx.FromContext(ctx.Request().Context()).Warn().Msg("forwarder secret mismatch")
+
+		return false, h.Forbidden(ctx, ErrUnauthorized)
 	}
 
 	return true, nil
@@ -158,7 +160,8 @@ func shareLinkSharingEnabled(ctx context.Context, settings *ent.OrganizationSett
 }
 
 // ShareLinkResolveHandler describes a share link to the file worker once the share token verifies: 404 for an unknown
-// share or token, 410 with the reason when the share is revoked, expired, or exhausted; it never counts a use
+// share or token, 410 with the reason when the share is revoked, expired, or exhausted; it never counts a use, and lists
+// the files of a recipient-bound share only when the request carries its share-verified token
 func (h *Handler) ShareLinkResolveHandler(ctx echo.Context) error {
 	if ok, err := h.forwarderSecretPresented(ctx); !ok {
 		return err
@@ -169,14 +172,14 @@ func (h *Handler) ShareLinkResolveHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	reqCtx := ctx.Request().Context()
+	reqCtx := logx.WithField(ctx.Request().Context(), "share_link_id", in.ID)
 	client := transaction.FromContext(reqCtx)
 
 	link, found, err := verifiedShareLink(reqCtx, client.ShareLink, in.ID, in.Token)
 
 	switch {
 	case err != nil:
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", in.ID).Msg("error loading share link")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	case !found:
@@ -187,7 +190,7 @@ func (h *Handler) ShareLinkResolveHandler(ctx echo.Context) error {
 
 	sharingEnabled, err := shareLinkSharingEnabled(orgCtx, client.OrganizationSetting, link)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error loading share link organization setting")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link organization setting")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -196,11 +199,18 @@ func (h *Handler) ShareLinkResolveHandler(ctx echo.Context) error {
 		return ctx.JSON(http.StatusGone, models.ShareLinkGoneResponse{Reason: reason, LandingPage: link.LandingPage})
 	}
 
-	files, err := link.QueryFiles().All(orgCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error loading share link files")
+	recipientBound := len(link.RecipientEmails) > 0
 
-		return h.InternalServerError(ctx, ErrProcessingRequest)
+	var files []*ent.File
+
+	// the files of a recipient-bound share are listed only once the recipient has verified
+	if !recipientBound || h.shareLinkRecipientVerified(link, in.VerifiedToken) {
+		files, err = link.QueryFiles().All(orgCtx)
+		if err != nil {
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link files")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest)
+		}
 	}
 
 	return h.Success(ctx, models.ShareLinkResolveResponse{
@@ -208,7 +218,7 @@ func (h *Handler) ShareLinkResolveHandler(ctx echo.Context) error {
 		Organization:   shareLinkOrgName(orgCtx, link),
 		ExpiresAt:      link.ExpiresAt.UTC(),
 		LandingPage:    link.LandingPage,
-		RecipientBound: len(link.RecipientEmails) > 0,
+		RecipientBound: recipientBound,
 		Files: lo.Map(files, func(f *ent.File, _ int) models.ShareLinkResolveFile {
 			return models.ShareLinkResolveFile{ID: f.ID, Name: f.ProvidedFileName, ContentType: f.DetectedContentType}
 		}),
@@ -230,9 +240,10 @@ func shareLinkGoneReason(link *ent.ShareLink, sharingEnabled bool, now time.Time
 	}
 }
 
-// ShareLinkCodeHandler issues a verification code to the recipient of a share link; it always responds 204 so a
-// caller cannot learn whether the share exists or whom it is bound to, and only emails the code when the share is live,
-// no earlier code is still valid, and the email names its recipient
+// ShareLinkCodeHandler issues a verification code to the recipient of a share link; once the request is validated it
+// always responds 204 so a caller cannot learn whether the share exists or whom it is bound to, and only emails the code
+// when the share is live, its organization still allows external sharing, no earlier code is still valid, and the email
+// names its recipient
 func (h *Handler) ShareLinkCodeHandler(ctx echo.Context) error {
 	if ok, err := h.forwarderSecretPresented(ctx); !ok {
 		return err
@@ -243,14 +254,14 @@ func (h *Handler) ShareLinkCodeHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	reqCtx := ctx.Request().Context()
+	reqCtx := logx.WithField(ctx.Request().Context(), "share_link_id", in.ID)
 	client := transaction.FromContext(reqCtx)
 
 	link, found, err := verifiedShareLink(reqCtx, client.ShareLink, in.ID, in.Token)
 
 	switch {
 	case err != nil:
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", in.ID).Msg("error loading share link")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	case !found:
@@ -264,6 +275,19 @@ func (h *Handler) ShareLinkCodeHandler(ctx echo.Context) error {
 		return ctx.NoContent(http.StatusNoContent)
 	}
 
+	orgCtx := shareLinkOrgContext(reqCtx, link)
+
+	sharingEnabled, err := shareLinkSharingEnabled(orgCtx, client.OrganizationSetting, link)
+
+	switch {
+	case err != nil:
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link organization setting")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest)
+	case !sharingEnabled:
+		return ctx.NoContent(http.StatusNoContent)
+	}
+
 	code, err := newShareLinkCode()
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error generating share link code")
@@ -271,14 +295,12 @@ func (h *Handler) ShareLinkCodeHandler(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	orgCtx := shareLinkOrgContext(reqCtx, link)
-
 	if err := client.ShareLink.UpdateOneID(link.ID).
 		SetCodeHash(shareLinkCodeHash(code, proxy.RecipientHash(in.Email))).
 		SetCodeExpiresAt(now.Add(shareLinkCodeDuration)).
 		SetCodeAttempts(0).
 		Exec(orgCtx); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error storing share link code")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error storing share link code")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -290,7 +312,7 @@ func (h *Handler) ShareLinkCodeHandler(ctx echo.Context) error {
 		Code:             code,
 		ExpiresInMinutes: int(shareLinkCodeDuration.Minutes()),
 	}); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error sending share link code email")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending share link code email")
 	}
 
 	return ctx.NoContent(http.StatusNoContent)
@@ -301,7 +323,7 @@ func (h *Handler) ShareLinkCodeHandler(ctx echo.Context) error {
 func shareLinkOrgName(ctx context.Context, link *ent.ShareLink) string {
 	org, err := link.QueryOwner().Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("share_link_id", link.ID).Msg("error resolving share link organization")
+		logx.FromContext(ctx).Warn().Err(err).Msg("error resolving share link organization")
 
 		return ""
 	}
@@ -325,14 +347,14 @@ func (h *Handler) ShareLinkVerifyHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	reqCtx := ctx.Request().Context()
+	reqCtx := logx.WithField(ctx.Request().Context(), "share_link_id", in.ID)
 	client := transaction.FromContext(reqCtx)
 
 	link, found, err := verifiedShareLink(reqCtx, client.ShareLink, in.ID, in.Token)
 
 	switch {
 	case err != nil:
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", in.ID).Msg("error loading share link")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	case !found:
@@ -347,11 +369,22 @@ func (h *Handler) ShareLinkVerifyHandler(ctx echo.Context) error {
 
 	orgCtx := shareLinkOrgContext(reqCtx, link)
 
+	sharingEnabled, err := shareLinkSharingEnabled(orgCtx, client.OrganizationSetting, link)
+
+	switch {
+	case err != nil:
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link organization setting")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest)
+	case !sharingEnabled:
+		return h.Forbidden(ctx, ErrShareLinkVerificationFailed)
+	}
+
 	claimed, err := claimShareLinkCodeAttempt(orgCtx, client.ShareLink, link.ID)
 
 	switch {
 	case err != nil:
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error claiming share link code attempt")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error claiming share link code attempt")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	case !claimed:
@@ -371,14 +404,14 @@ func (h *Handler) ShareLinkVerifyHandler(ctx echo.Context) error {
 		ClearCodeExpiresAt().
 		SetCodeAttempts(0).
 		Exec(orgCtx); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error clearing share link code")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error clearing share link code")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	token, err := proxy.NewShareVerifiedToken(h.TokenManager, h.TokenManager.Config().Issuer, link.ID, proxy.RecipientHash(in.Email))
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error minting share verified token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error minting share verified token")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -426,14 +459,14 @@ func (h *Handler) ShareLinkConsumeHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	reqCtx := ctx.Request().Context()
+	reqCtx := logx.WithField(ctx.Request().Context(), "share_link_id", in.ID)
 	client := transaction.FromContext(reqCtx)
 
 	link, found, err := verifiedShareLink(reqCtx, client.ShareLink, in.ID, in.Token)
 
 	switch {
 	case err != nil:
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", in.ID).Msg("error loading share link")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	case !found:
@@ -449,7 +482,7 @@ func (h *Handler) ShareLinkConsumeHandler(ctx echo.Context) error {
 
 		switch {
 		case err != nil:
-			logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error authenticating share link session")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error authenticating share link session")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest)
 		case reason != "":
@@ -462,7 +495,7 @@ func (h *Handler) ShareLinkConsumeHandler(ctx echo.Context) error {
 
 	sharingEnabled, err := shareLinkSharingEnabled(orgCtx, client.OrganizationSetting, link)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error loading share link organization setting")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link organization setting")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -474,7 +507,7 @@ func (h *Handler) ShareLinkConsumeHandler(ctx echo.Context) error {
 	case ent.IsNotFound(err):
 		return h.Success(ctx, models.ShareLinkConsumeResponse{Allowed: false, Reason: shareLinkDenyReason(link, sharingEnabled, false, now)})
 	case err != nil:
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error loading share link file")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link file")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -493,7 +526,7 @@ func (h *Handler) ShareLinkConsumeHandler(ctx echo.Context) error {
 		AddUseCount(1).
 		Save(orgCtx)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error consuming share link")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error consuming share link")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -501,7 +534,7 @@ func (h *Handler) ShareLinkConsumeHandler(ctx echo.Context) error {
 	if consumed == 0 {
 		link, err = client.ShareLink.Get(orgCtx, link.ID)
 		if err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", in.ID).Msg("error loading share link")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error loading share link")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
@@ -511,7 +544,7 @@ func (h *Handler) ShareLinkConsumeHandler(ctx echo.Context) error {
 
 	// the error is returned so the transaction rolls back and the use is not counted without its access event
 	if err := recordShareLinkAccessEvent(orgCtx, client.ShareLinkAccessEvent, link, in); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("share_link_id", link.ID).Msg("error recording share link access event")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error recording share link access event")
 
 		return err
 	}

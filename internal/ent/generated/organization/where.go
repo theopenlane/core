@@ -3031,6 +3031,29 @@ func HasRiskManagerWith(preds ...predicate.Group) predicate.Organization {
 	})
 }
 
+// HasShareLinkManager applies the HasEdge predicate on the "share_link_manager" edge.
+func HasShareLinkManager() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ShareLinkManagerTable, ShareLinkManagerColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasShareLinkManagerWith applies the HasEdge predicate on the "share_link_manager" edge with a given conditions (other predicates).
+func HasShareLinkManagerWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newShareLinkManagerStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasTrustCenterManager applies the HasEdge predicate on the "trust_center_manager" edge.
 func HasTrustCenterManager() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

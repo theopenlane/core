@@ -1514,6 +1514,21 @@ func (_u *OrganizationUpdate) AddRiskManager(v ...*Group) *OrganizationUpdate {
 	return _u.AddRiskManagerIDs(ids...)
 }
 
+// AddShareLinkManagerIDs adds the "share_link_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddShareLinkManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddShareLinkManagerIDs(ids...)
+	return _u
+}
+
+// AddShareLinkManager adds the "share_link_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) AddShareLinkManager(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddShareLinkManagerIDs(ids...)
+}
+
 // AddTrustCenterManagerIDs adds the "trust_center_manager" edge to the Group entity by IDs.
 func (_u *OrganizationUpdate) AddTrustCenterManagerIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddTrustCenterManagerIDs(ids...)
@@ -4481,6 +4496,27 @@ func (_u *OrganizationUpdate) RemoveRiskManager(v ...*Group) *OrganizationUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveRiskManagerIDs(ids...)
+}
+
+// ClearShareLinkManager clears all "share_link_manager" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearShareLinkManager() *OrganizationUpdate {
+	_u.mutation.ClearShareLinkManager()
+	return _u
+}
+
+// RemoveShareLinkManagerIDs removes the "share_link_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveShareLinkManagerIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveShareLinkManagerIDs(ids...)
+	return _u
+}
+
+// RemoveShareLinkManager removes "share_link_manager" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveShareLinkManager(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveShareLinkManagerIDs(ids...)
 }
 
 // ClearTrustCenterManager clears all "trust_center_manager" edges to the Group entity.
@@ -9935,6 +9971,51 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ShareLinkManagerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkManagerTable,
+			Columns: []string{organization.ShareLinkManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedShareLinkManagerIDs(); len(nodes) > 0 && !_u.mutation.ShareLinkManagerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkManagerTable,
+			Columns: []string{organization.ShareLinkManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ShareLinkManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkManagerTable,
+			Columns: []string{organization.ShareLinkManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.TrustCenterManagerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -15334,6 +15415,21 @@ func (_u *OrganizationUpdateOne) AddRiskManager(v ...*Group) *OrganizationUpdate
 	return _u.AddRiskManagerIDs(ids...)
 }
 
+// AddShareLinkManagerIDs adds the "share_link_manager" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddShareLinkManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddShareLinkManagerIDs(ids...)
+	return _u
+}
+
+// AddShareLinkManager adds the "share_link_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddShareLinkManager(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddShareLinkManagerIDs(ids...)
+}
+
 // AddTrustCenterManagerIDs adds the "trust_center_manager" edge to the Group entity by IDs.
 func (_u *OrganizationUpdateOne) AddTrustCenterManagerIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddTrustCenterManagerIDs(ids...)
@@ -18301,6 +18397,27 @@ func (_u *OrganizationUpdateOne) RemoveRiskManager(v ...*Group) *OrganizationUpd
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveRiskManagerIDs(ids...)
+}
+
+// ClearShareLinkManager clears all "share_link_manager" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearShareLinkManager() *OrganizationUpdateOne {
+	_u.mutation.ClearShareLinkManager()
+	return _u
+}
+
+// RemoveShareLinkManagerIDs removes the "share_link_manager" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveShareLinkManagerIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveShareLinkManagerIDs(ids...)
+	return _u
+}
+
+// RemoveShareLinkManager removes "share_link_manager" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveShareLinkManager(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveShareLinkManagerIDs(ids...)
 }
 
 // ClearTrustCenterManager clears all "trust_center_manager" edges to the Group entity.
@@ -23775,6 +23892,51 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Inverse: false,
 			Table:   organization.RiskManagerTable,
 			Columns: []string{organization.RiskManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ShareLinkManagerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkManagerTable,
+			Columns: []string{organization.ShareLinkManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedShareLinkManagerIDs(); len(nodes) > 0 && !_u.mutation.ShareLinkManagerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkManagerTable,
+			Columns: []string{organization.ShareLinkManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ShareLinkManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkManagerTable,
+			Columns: []string{organization.ShareLinkManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

@@ -4691,6 +4691,7 @@ type ComplexityRoot struct {
 		ScanCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Setting                            func(childComplexity int) int
 		ShareLinkCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ShareLinkManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		SlugName                           func(childComplexity int) int
 		StandardCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		StripeCustomerID                   func(childComplexity int) int
@@ -34523,6 +34524,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.ShareLinkCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.shareLinkManager":
+		if e.ComplexityRoot.Organization.ShareLinkManager == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_shareLinkManager_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.ShareLinkManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.slugName":
 		if e.ComplexityRoot.Organization.SlugName == nil {
 			break
@@ -74820,6 +74832,7 @@ input CreateOrganizationInput {
   policyManagerIDs: [ID!]
   registryManagerIDs: [ID!]
   riskManagerIDs: [ID!]
+  shareLinkManagerIDs: [ID!]
   trustCenterManagerIDs: [ID!]
   workflowManagerIDs: [ID!]
   parentID: ID
@@ -106549,6 +106562,37 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  shareLinkManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   trustCenterManager(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -108302,6 +108346,11 @@ input OrganizationWhereInput {
   """
   hasRiskManager: Boolean
   hasRiskManagerWith: [GroupWhereInput!]
+  """
+  share_link_manager edge predicates
+  """
+  hasShareLinkManager: Boolean
+  hasShareLinkManagerWith: [GroupWhereInput!]
   """
   trust_center_manager edge predicates
   """
@@ -140203,6 +140252,9 @@ input UpdateOrganizationInput {
   addRiskManagerIDs: [ID!]
   removeRiskManagerIDs: [ID!]
   clearRiskManager: Boolean
+  addShareLinkManagerIDs: [ID!]
+  removeShareLinkManagerIDs: [ID!]
+  clearShareLinkManager: Boolean
   addTrustCenterManagerIDs: [ID!]
   removeTrustCenterManagerIDs: [ID!]
   clearTrustCenterManager: Boolean
@@ -172441,6 +172493,8 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_registryManager(ctx, field)
 	case "riskManager":
 		return ec.fieldContext_Organization_riskManager(ctx, field)
+	case "shareLinkManager":
+		return ec.fieldContext_Organization_shareLinkManager(ctx, field)
 	case "trustCenterManager":
 		return ec.fieldContext_Organization_trustCenterManager(ctx, field)
 	case "workflowManager":

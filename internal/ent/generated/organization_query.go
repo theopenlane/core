@@ -188,6 +188,7 @@ type OrganizationQuery struct {
 	withPolicyManager                           *GroupQuery
 	withRegistryManager                         *GroupQuery
 	withRiskManager                             *GroupQuery
+	withShareLinkManager                        *GroupQuery
 	withTrustCenterManager                      *GroupQuery
 	withWorkflowManager                         *GroupQuery
 	withParent                                  *OrganizationQuery
@@ -357,6 +358,7 @@ type OrganizationQuery struct {
 	withNamedPolicyManager                      map[string]*GroupQuery
 	withNamedRegistryManager                    map[string]*GroupQuery
 	withNamedRiskManager                        map[string]*GroupQuery
+	withNamedShareLinkManager                   map[string]*GroupQuery
 	withNamedTrustCenterManager                 map[string]*GroupQuery
 	withNamedWorkflowManager                    map[string]*GroupQuery
 	withNamedChildren                           map[string]*OrganizationQuery
@@ -2166,6 +2168,28 @@ func (_q *OrganizationQuery) QueryRiskManager() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RiskManagerTable, organization.RiskManagerColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryShareLinkManager chains the current query on the "share_link_manager" edge.
+func (_q *OrganizationQuery) QueryShareLinkManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ShareLinkManagerTable, organization.ShareLinkManagerColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -4422,6 +4446,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withPolicyManager:                      _q.withPolicyManager.Clone(),
 		withRegistryManager:                    _q.withRegistryManager.Clone(),
 		withRiskManager:                        _q.withRiskManager.Clone(),
+		withShareLinkManager:                   _q.withShareLinkManager.Clone(),
 		withTrustCenterManager:                 _q.withTrustCenterManager.Clone(),
 		withWorkflowManager:                    _q.withWorkflowManager.Clone(),
 		withParent:                             _q.withParent.Clone(),
@@ -5363,6 +5388,17 @@ func (_q *OrganizationQuery) WithRiskManager(opts ...func(*GroupQuery)) *Organiz
 		opt(query)
 	}
 	_q.withRiskManager = query
+	return _q
+}
+
+// WithShareLinkManager tells the query-builder to eager-load the nodes that are connected to
+// the "share_link_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithShareLinkManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withShareLinkManager = query
 	return _q
 }
 
@@ -6440,7 +6476,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [167]bool{
+		loadedTypes = [168]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6518,6 +6554,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withPolicyManager != nil,
 			_q.withRegistryManager != nil,
 			_q.withRiskManager != nil,
+			_q.withShareLinkManager != nil,
 			_q.withTrustCenterManager != nil,
 			_q.withWorkflowManager != nil,
 			_q.withParent != nil,
@@ -7239,6 +7276,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadRiskManager(ctx, query, nodes,
 			func(n *Organization) { n.Edges.RiskManager = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.RiskManager = append(n.Edges.RiskManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withShareLinkManager; query != nil {
+		if err := _q.loadShareLinkManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ShareLinkManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.ShareLinkManager = append(n.Edges.ShareLinkManager, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8452,6 +8496,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadRiskManager(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedRiskManager(name) },
 			func(n *Organization, e *Group) { n.appendNamedRiskManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedShareLinkManager {
+		if err := _q.loadShareLinkManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedShareLinkManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedShareLinkManager(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -11449,6 +11500,37 @@ func (_q *OrganizationQuery) loadRiskManager(ctx context.Context, query *GroupQu
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_risk_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadShareLinkManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ShareLinkManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_share_link_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_share_link_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_share_link_manager" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -15481,6 +15563,20 @@ func (_q *OrganizationQuery) WithNamedRiskManager(name string, opts ...func(*Gro
 		_q.withNamedRiskManager = make(map[string]*GroupQuery)
 	}
 	_q.withNamedRiskManager[name] = query
+	return _q
+}
+
+// WithNamedShareLinkManager tells the query-builder to eager-load the nodes that are connected to the "share_link_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedShareLinkManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedShareLinkManager == nil {
+		_q.withNamedShareLinkManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedShareLinkManager[name] = query
 	return _q
 }
 
