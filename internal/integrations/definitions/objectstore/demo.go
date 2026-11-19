@@ -69,10 +69,6 @@ func SeedDemoRequest(ctx context.Context, dataset DemoDataset, profile enums.Dem
 
 	cfg := ImportRecords{Prefix: prefix, Manifest: true, Profile: profileName}
 
-	if caller, ok := auth.CallerFromContext(ctx); ok {
-		cfg.Requester = &DatasetRequester{UserID: caller.SubjectID, Email: caller.SubjectEmail, Name: caller.SubjectName}
-	}
-
 	return demoRequest(orgID, ImportRecordsOp.Name(), cfg, DemoSeedUniqueKey(orgID, dataset, profileName))
 }
 

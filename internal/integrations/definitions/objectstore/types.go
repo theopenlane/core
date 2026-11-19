@@ -177,18 +177,6 @@ type ImportSpec struct {
 	Manifest bool `json:"manifest,omitempty" koanf:"-" jsonschema:"title=Manifest,description=Import the prefix as a dataset described by its manifest.json"`
 	// Profile names the dataset manifest profile whose variables fill the records' placeholders, the defaults when empty
 	Profile string `json:"profile,omitempty" koanf:"-" jsonschema:"title=Profile,description=Dataset manifest profile whose variables fill the records' placeholders"`
-	// Requester is the user who requested the dataset import, captured at dispatch before the run switches to the integration caller
-	Requester *DatasetRequester `json:"requester,omitempty" koanf:"-" jsonschema:"title=Requester,description=User who requested the dataset import"`
-}
-
-// DatasetRequester identifies the user who requested a dataset import
-type DatasetRequester struct {
-	// UserID is the requesting user's id
-	UserID string `json:"userId,omitempty" jsonschema:"title=User ID,description=Id of the user who requested the import"`
-	// Email is the requesting user's email
-	Email string `json:"email,omitempty" jsonschema:"title=Email,description=Email of the user who requested the import"`
-	// Name is the requesting user's display name
-	Name string `json:"name,omitempty" jsonschema:"title=Name,description=Display name of the user who requested the import"`
 }
 
 // ImportRecordsResult reports the record import across every object under the prefix

@@ -14,10 +14,12 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -122,7 +124,7 @@ func importDataset(ctx context.Context, request types.OperationRequest, client *
 		return "", operations.IngestResult{}, err
 	}
 
-	payloadSets, err := loadDatasetPayloadSets(ctx, request.DB, client, prefix, manifest, cfg.Profile, lo.FromPtr(cfg.Requester))
+	payloadSets, err := loadDatasetPayloadSets(ctx, request.DB, client, prefix, manifest, cfg.Profile)
 	if err != nil {
 		return manifest.Name, operations.IngestResult{}, err
 	}
@@ -148,13 +150,13 @@ func importDataset(ctx context.Context, request types.OperationRequest, client *
 
 // loadDatasetPayloadSets clones the manifest's standards into the organization and returns the dataset's records in
 // manifest order, with their placeholders filled under the profile and each program linked to its cloned controls
-func loadDatasetPayloadSets(ctx context.Context, db *generated.Client, client *Client, prefix string, manifest datasetManifest, profile string, requester DatasetRequester) ([]types.IngestPayloadSet, error) {
+func loadDatasetPayloadSets(ctx context.Context, db *generated.Client, client *Client, prefix string, manifest datasetManifest, profile string) ([]types.IngestPayloadSet, error) {
 	variables, err := manifest.profileVariables(profile)
 	if err != nil {
 		return nil, err
 	}
 
-	builtins, err := datasetBuiltinVariables(ctx, db, requester)
+	builtins, err := datasetBuiltinVariables(ctx, db)
 	if err != nil {
 		return nil, err
 	}
@@ -266,8 +268,8 @@ func cloneDatasetStandard(ctx context.Context, db *generated.Client, std dataset
 }
 
 // datasetBuiltinVariables returns the built-in variables every dataset can use, filled from the importing organization
-// and the requesting user
-func datasetBuiltinVariables(ctx context.Context, db *generated.Client, requester DatasetRequester) (placeholder.Variables, error) {
+// and its owner
+func datasetBuiltinVariables(ctx context.Context, db *generated.Client) (placeholder.Variables, error) {
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok {
 		return nil, auth.ErrNoAuthUser
@@ -293,13 +295,21 @@ func datasetBuiltinVariables(ctx context.Context, db *generated.Client, requeste
 		return nil, fmt.Errorf("%w: %w", ErrDatasetOrganizationLookup, err)
 	}
 
+	owner, err := db.OrgMembership.Query().
+		Where(orgmembership.OrganizationIDEQ(ownerID), orgmembership.RoleEQ(enums.RoleOwner)).
+		QueryUser().
+		Only(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrDatasetOrganizationLookup, err)
+	}
+
 	return DatasetBuiltinVariables{
 		OrgName:     lo.CoalesceOrEmpty(org.DisplayName, org.Name),
 		OrgSlug:     lo.CoalesceOrEmpty(org.SlugName, urlx.Slug(org.Name)),
 		OrgDomain:   domain,
-		OwnerUserID: requester.UserID,
-		OwnerEmail:  requester.Email,
-		OwnerName:   lo.CoalesceOrEmpty(requester.Name, requester.Email),
+		OwnerUserID: owner.ID,
+		OwnerEmail:  owner.Email,
+		OwnerName:   lo.CoalesceOrEmpty(owner.DisplayName, owner.Email),
 		Today:       time.Now().UTC().Format(time.DateOnly),
 	}.variables()
 }
