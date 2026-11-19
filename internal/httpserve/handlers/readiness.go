@@ -3,10 +3,20 @@ package handlers
 import (
 	"context"
 	"net/http"
+	"time"
+
+	"github.com/samber/lo"
+	lop "github.com/samber/lo/parallel"
+	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/core/v2/internal/entdb"
-	echo "github.com/theopenlane/echox"
 )
+
+// readyCheckTimeout bounds each readiness check
+const readyCheckTimeout = 3 * time.Second
+
+// readyCheckOK is the status of a passing readiness check
+const readyCheckOK = "OK"
 
 // StatusResponse returns server status
 type StatusResponse struct {
@@ -20,7 +30,7 @@ type Checks struct {
 	checks map[string]CheckFunc
 }
 
-// AddReadinessCheck will accept a function to be ran during calls to /readyz
+// AddReadinessCheck will accept a function to be ran during calls to /ready
 // These functions should accept a context and only return an error. When adding
 // a readiness check a name is also provided, this name will be used when returning
 // the state of all the checks
@@ -33,30 +43,30 @@ func (h *Handler) AddReadinessCheck(name string, f CheckFunc) {
 	h.ReadyChecks.checks[name] = f
 }
 
+// ReadyHandler runs the readiness checks concurrently and reports their status
 func (c *Checks) ReadyHandler(ctx echo.Context) error {
 	if entdb.IsShuttingDown() {
 		return ctx.JSON(http.StatusServiceUnavailable, echo.Map{"status": "shutting down"})
 	}
 
-	failed := false
-	status := map[string]string{}
+	results := lop.Map(lo.Entries(c.checks), func(check lo.Entry[string, CheckFunc], _ int) lo.Entry[string, error] {
+		checkCtx, cancel := context.WithTimeout(ctx.Request().Context(), readyCheckTimeout)
+		defer cancel()
 
-	for name, check := range c.checks {
-		if err := check(ctx.Request().Context()); err != nil {
-			failed = true
-			status[name] = err.Error()
-		} else {
-			status[name] = "OK"
+		return lo.Entry[string, error]{Key: check.Key, Value: check.Value(checkCtx)}
+	})
+
+	status := lo.Associate(results, func(result lo.Entry[string, error]) (string, string) {
+		if result.Value != nil {
+			return result.Key, result.Value.Error()
 		}
-	}
 
-	if failed {
+		return result.Key, readyCheckOK
+	})
+
+	if lo.SomeBy(results, func(result lo.Entry[string, error]) bool { return result.Value != nil }) {
 		return ctx.JSON(http.StatusServiceUnavailable, status)
 	}
 
-	out := &StatusResponse{
-		Status: status,
-	}
-
-	return ctx.JSON(http.StatusOK, out)
+	return ctx.JSON(http.StatusOK, &StatusResponse{Status: status})
 }

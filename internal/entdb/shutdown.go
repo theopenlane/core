@@ -47,8 +47,11 @@ func newShutdownFlag() *ShutdownFlag {
 	return &ShutdownFlag{}
 }
 
-// / defaultShutdown is the default shutdown flag used throughout the package
+// defaultShutdown is the flag reporting that the system is shutting down
 var defaultShutdown = newShutdownFlag()
+
+// defaultBlock is the flag that blocks database operations once GracefulClose runs
+var defaultBlock = newShutdownFlag()
 
 // BeginShutdown marks the system as shutting down. It is safe to call multiple times
 func BeginShutdown() {
@@ -60,7 +63,7 @@ func ResetShutdown() {
 	defaultShutdown.Reset()
 }
 
-// IsShuttingDown reports whether GracefulClose was invoked
+// IsShuttingDown reports whether shutdown has begun
 func IsShuttingDown() bool {
 	return defaultShutdown.IsSet()
 }
@@ -98,7 +101,7 @@ func extractSQLDB(d dialect.Driver) *stdsql.DB {
 // blockDriver wraps a dialect.Driver and returns ErrShuttingDown when new
 // operations are attempted after shutdown started
 func blockDriver(d dialect.Driver) dialect.Driver {
-	return blockDriverWithFlag(d, defaultShutdown)
+	return blockDriverWithFlag(d, defaultBlock)
 }
 
 // blockDriverWithFlag returns a new instance of blockingDriver, which embeds the
@@ -161,7 +164,7 @@ func (d *blockingDriver) BeginTx(ctx context.Context, opts *stdsql.TxOptions) (d
 
 // BlockHook returns an ent.Hook that prevents mutations after shutdown begins
 func BlockHook() ent.Hook {
-	return BlockHookWithFlag(defaultShutdown)
+	return BlockHookWithFlag(defaultBlock)
 }
 
 // BlockHookWithFlag returns an ent.Hook tied to the provided shutdown flag
@@ -185,7 +188,7 @@ func BlockHookWithFlag(f *ShutdownFlag) ent.Hook {
 
 // BlockInterceptor returns an ent.Interceptor that prevents queries once shutdown starts
 func BlockInterceptor() ent.Interceptor {
-	return BlockInterceptorWithFlag(defaultShutdown)
+	return BlockInterceptorWithFlag(defaultBlock)
 }
 
 // BlockInterceptorWithFlag returns an interceptor tied to the provided shutdown flag
@@ -206,7 +209,7 @@ func BlockInterceptorWithFlag(f *ShutdownFlag) ent.Interceptor {
 
 // BlockHistoryInterceptor returns an ent.Interceptor that prevents history queries once shutdown starts
 func BlockHistoryInterceptor() historygenerated.Interceptor {
-	return BlockHistoryInterceptorWithFlag(defaultShutdown)
+	return BlockHistoryInterceptorWithFlag(defaultBlock)
 }
 
 // BlockHistoryInterceptorWithFlag returns an interceptor tied to the provided shutdown flag
@@ -227,7 +230,9 @@ func BlockHistoryInterceptorWithFlag(f *ShutdownFlag) historygenerated.Intercept
 
 // GracefulClose waits for in-flight queries to finish before closing the database connections
 func GracefulClose(ctx context.Context, c *ent.Client, interval time.Duration) error {
-	return GracefulCloseWithFlag(ctx, c, interval, defaultShutdown)
+	BeginShutdown()
+
+	return GracefulCloseWithFlag(ctx, c, interval, defaultBlock)
 }
 
 // GracefulCloseWithFlag behaves like GracefulClose but uses the provided shutdown flag

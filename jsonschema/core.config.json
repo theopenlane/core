@@ -331,6 +331,10 @@
           "type": "string",
           "description": "MetricsPort sets the port for the metrics endpoint"
         },
+        "shutdowndelay": {
+          "type": "integer",
+          "description": "ShutdownDelay sets how long the server keeps serving after a shutdown signal before draining"
+        },
         "shutdowngraceperiod": {
           "type": "integer",
           "description": "ShutdownGracePeriod sets the grace period for in flight requests before shutting down"

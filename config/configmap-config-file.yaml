@@ -28,6 +28,9 @@ data:
       {{- if .Values.openlane.coreConfiguration.server.metricsport }}
       metricsport: {{ .Values.openlane.coreConfiguration.server.metricsport | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.server.shutdowndelay }}
+      shutdowndelay: {{ .Values.openlane.coreConfiguration.server.shutdowndelay | quote }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.shutdowngraceperiod }}
       shutdowngraceperiod: {{ .Values.openlane.coreConfiguration.server.shutdowngraceperiod | quote }}
       {{- end }}

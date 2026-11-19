@@ -3,6 +3,7 @@ package gala
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"slices"
 	"strings"
 	"time"
@@ -36,6 +37,9 @@ const DefaultJobTimeout = 15 * time.Minute
 
 // DefaultSoftStopTimeout is the default window in-flight jobs get to finish once a stop begins
 const DefaultSoftStopTimeout = 8 * time.Second
+
+// rescueStuckJobsGrace is added to the job timeout to set when River rescues a stuck job
+const rescueStuckJobsGrace = 5 * time.Minute
 
 // riverInsertClient represents the minimal insert capability required for durable dispatch
 type riverInsertClient interface {
@@ -239,8 +243,15 @@ func (w *riverDispatchWorker) Work(ctx context.Context, job *river.Job[EnvelopeA
 	}
 
 	runtime := w.galaProvider()
-	if err := runtime.dispatchEnvelope(ctx, envelope); err != nil {
-		return err
+	dispatchErr := runtime.dispatchEnvelope(ctx, envelope)
+
+	// report an ended job context so River retries the job
+	if ctxErr := ctx.Err(); ctxErr != nil {
+		return errors.Join(ctxErr, dispatchErr)
+	}
+
+	if dispatchErr != nil {
+		return dispatchErr
 	}
 
 	if runtime.completeJobsInline {
