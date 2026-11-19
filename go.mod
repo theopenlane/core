@@ -122,7 +122,7 @@ require (
 	github.com/theopenlane/go-client v0.17.1
 	github.com/theopenlane/gqlgen-plugins v0.19.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.42.3-0.20261119204326-8c1df8084746
+	github.com/theopenlane/iam v0.42.3
 	github.com/theopenlane/logx v0.1.1
 	github.com/theopenlane/newman v0.7.0
 	github.com/theopenlane/riverboat v0.14.8
