@@ -232,48 +232,61 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 }
 
 // TestRiverDispatchWorkerPreservesCancellation verifies River's worker timeout
-// reaches listeners instead of being removed before dispatch.
+// reaches listeners and is returned whether or not the listener reports it.
 func TestRiverDispatchWorkerPreservesCancellation(t *testing.T) {
-	runtime := newTestGala(t, nil)
-
-	topic := Topic[runtimeTestPayload]{Name: TopicName("gala.test.worker.cancellation")}
-	if err := registerTopic(runtime.registry, topic); err != nil {
-		t.Fatalf("failed to register topic: %v", err)
-	}
-
-	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
-		Topic: topic,
-		Name:  "gala.test.worker.cancellation.listener",
-		Handle: func(handlerContext HandlerContext, _ runtimeTestPayload) error {
+	handlers := map[string]func(HandlerContext, runtimeTestPayload) error{
+		"listener returns the context error": func(handlerContext HandlerContext, _ runtimeTestPayload) error {
 			return handlerContext.Context.Err()
 		},
-	}); err != nil {
-		t.Fatalf("failed to register listener: %v", err)
+		"listener returns nil": func(HandlerContext, runtimeTestPayload) error {
+			return nil
+		},
 	}
 
-	encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "cancelled"})
-	if err != nil {
-		t.Fatalf("failed to encode payload: %v", err)
-	}
+	for name, handle := range handlers {
+		t.Run(name, func(t *testing.T) {
+			runtime := newTestGala(t, nil)
 
-	envelope := Envelope{
-		ID:              NewEventID(),
-		Topic:           topic.Name,
-		Payload:         encodedPayload,
-		ContextSnapshot: testCallerSnapshot(t, runtime),
-	}
-	args, err := newRiverDispatchArgs(envelope)
-	if err != nil {
-		t.Fatalf("failed to build river args: %v", err)
-	}
+			topic := Topic[runtimeTestPayload]{Name: TopicName("gala.test.worker.cancellation")}
+			if err := registerTopic(runtime.registry, topic); err != nil {
+				t.Fatalf("failed to register topic: %v", err)
+			}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	cancel()
+			if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+				Topic:  topic,
+				Name:   "gala.test.worker.cancellation.listener",
+				Handle: handle,
+			}); err != nil {
+				t.Fatalf("failed to register listener: %v", err)
+			}
 
-	worker := newRiverDispatchWorker(func() *Gala { return runtime })
-	err = worker.Work(ctx, &river.Job[EnvelopeArgs]{Args: args})
-	if !errors.Is(err, context.Canceled) {
-		t.Fatalf("expected listener to observe context cancellation, got %v", err)
+			encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "cancelled"})
+			if err != nil {
+				t.Fatalf("failed to encode payload: %v", err)
+			}
+
+			envelope := Envelope{
+				ID:              NewEventID(),
+				Topic:           topic.Name,
+				Payload:         encodedPayload,
+				ContextSnapshot: testCallerSnapshot(t, runtime),
+			}
+
+			args, err := newRiverDispatchArgs(envelope)
+			if err != nil {
+				t.Fatalf("failed to build river args: %v", err)
+			}
+
+			ctx, cancel := context.WithCancel(context.Background())
+			cancel()
+
+			worker := newRiverDispatchWorker(func() *Gala { return runtime })
+
+			err = worker.Work(ctx, &river.Job[EnvelopeArgs]{Args: args})
+			if !errors.Is(err, context.Canceled) {
+				t.Fatalf("expected the worker to return the context cancellation, got %v", err)
+			}
+		})
 	}
 }
 

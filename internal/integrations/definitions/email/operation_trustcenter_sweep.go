@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
+	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/logx"
@@ -227,7 +228,10 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 			}
 			sendReq.UnsubscribeURL = trustcenterurl.UnsubscribeURLWithToken(customDomain, tc.Slug, sub.Token)
 
-			if err := sendSubprocessorNotification(ctx, req, sendReq); err != nil {
+			// dedupes the notice when the sweep is retried
+			uniqueKey := gala.IntegrationRun.Key(SubprocessorNotificationOp.Name(), setting.TrustCenterID, sub.ID, latest.UTC().Format(time.RFC3339))
+
+			if err := sendSubprocessorNotification(ctx, req, sendReq, uniqueKey); err != nil {
 				errs = append(errs, fmt.Errorf("sending subprocessor notification to subscriber %s for trust center %s: %w", sub.ID, setting.TrustCenterID, err))
 
 				failedSends++
@@ -373,7 +377,7 @@ func activeTrustCenterSubscribers(ctx context.Context, req types.OperationReques
 }
 
 // sendSubprocessorNotification dispatches the subprocessor notification to a single recipient as a runtime system email
-func sendSubprocessorNotification(ctx context.Context, req types.OperationRequest, sendReq SubprocessorNotificationRequest) error {
+func sendSubprocessorNotification(ctx context.Context, req types.OperationRequest, sendReq SubprocessorNotificationRequest, uniqueKey string) error {
 	config, err := json.Marshal(sendReq)
 	if err != nil {
 		return err
@@ -385,6 +389,8 @@ func sendSubprocessorNotification(ctx context.Context, req types.OperationReques
 		Config:       config,
 		RunType:      enums.IntegrationRunTypeScheduled,
 		Runtime:      true,
+		UniqueKey:    uniqueKey,
+		UniqueOnce:   true,
 	})
 
 	return err

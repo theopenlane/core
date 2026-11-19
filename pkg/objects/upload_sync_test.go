@@ -1,6 +1,7 @@
 package objects
 
 import (
+	"context"
 	"sync"
 	"testing"
 	"time"
@@ -67,7 +68,7 @@ func TestWaitForUploads(t *testing.T) {
 
 	done := make(chan bool, 1)
 	go func() {
-		WaitForUploads()
+		_ = WaitForUploads(context.Background())
 		done <- true
 	}()
 
@@ -100,7 +101,7 @@ func TestUploadSync_Concurrent(t *testing.T) {
 
 	done := make(chan bool, 1)
 	go func() {
-		WaitForUploads()
+		_ = WaitForUploads(context.Background())
 		done <- true
 	}()
 
@@ -133,12 +134,12 @@ func TestUploadSync_MultipleWaiters(t *testing.T) {
 	waiter2Done := make(chan bool, 1)
 
 	go func() {
-		WaitForUploads()
+		_ = WaitForUploads(context.Background())
 		waiter1Done <- true
 	}()
 
 	go func() {
-		WaitForUploads()
+		_ = WaitForUploads(context.Background())
 		waiter2Done <- true
 	}()
 
@@ -179,7 +180,7 @@ func TestUploadSync_NoUploads(t *testing.T) {
 
 	done := make(chan bool, 1)
 	go func() {
-		WaitForUploads()
+		_ = WaitForUploads(context.Background())
 		done <- true
 	}()
 
@@ -201,7 +202,7 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 
 	done := make(chan bool, 1)
 	go func() {
-		WaitForUploads()
+		_ = WaitForUploads(context.Background())
 		done <- true
 	}()
 
@@ -216,7 +217,7 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 
 	done2 := make(chan bool, 1)
 	go func() {
-		WaitForUploads()
+		_ = WaitForUploads(context.Background())
 		done2 <- true
 	}()
 
@@ -234,4 +235,19 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 	case <-time.After(1 * time.Second):
 		t.Fatal("WaitForUploads should complete after all new uploads are done")
 	}
+}
+
+func TestWaitForUploadsContextDone(t *testing.T) {
+	testMutex.Lock()
+	defer testMutex.Unlock()
+
+	uploadWaitGroup = sync.WaitGroup{}
+
+	uploadWaitGroup.Add(1)
+	defer uploadWaitGroup.Done()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	assert.ErrorIs(t, WaitForUploads(ctx), context.Canceled)
 }

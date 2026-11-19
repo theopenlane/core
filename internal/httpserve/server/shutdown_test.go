@@ -12,8 +12,10 @@ import (
 	echo "github.com/theopenlane/echox"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+	"gotest.tools/v3/poll"
 
 	coreconfig "github.com/theopenlane/core/v2/config"
+	"github.com/theopenlane/core/v2/internal/entdb"
 	"github.com/theopenlane/core/v2/internal/httpserve/config"
 )
 
@@ -22,6 +24,9 @@ const waitTimeout = 5 * time.Second
 
 // settleDelay is how long a negative "has not happened yet" check observes before concluding
 const settleDelay = 100 * time.Millisecond
+
+// testShutdownDelay is the shutdown delay used by TestShutdownOnCancelDelay
+const testShutdownDelay = time.Second
 
 // errListener stands in for a non-shutdown failure returned by http.Server.Serve
 var errListener = errors.New("listener failed")
@@ -75,23 +80,23 @@ func waitClosed(t *testing.T, ch <-chan struct{}, what string) {
 	}
 }
 
-// getInBackground issues a GET and delivers the status code once the response arrives
-func getInBackground(t *testing.T, url string) <-chan int {
+// getInBackground issues a GET and delivers the response once it arrives, or an empty response on failure
+func getInBackground(t *testing.T, url string) <-chan *http.Response {
 	t.Helper()
 
-	status := make(chan int, 1)
+	response := make(chan *http.Response, 1)
 
 	go func() {
 		req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil)
 		if err != nil {
-			status <- 0
+			response <- &http.Response{}
 
 			return
 		}
 
 		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
-			status <- 0
+			response <- &http.Response{}
 
 			return
 		}
@@ -99,10 +104,10 @@ func getInBackground(t *testing.T, url string) <-chan int {
 		_, _ = io.Copy(io.Discard, resp.Body)
 		_ = resp.Body.Close()
 
-		status <- resp.StatusCode
+		response <- resp
 	}()
 
-	return status
+	return response
 }
 
 func TestAwaitDrain(t *testing.T) {
@@ -170,12 +175,11 @@ func TestShutdownOnCancel(t *testing.T) {
 		t.Parallel()
 
 		handler := newBlockingHandler()
-		srv, addr := listenAndServe(t, handler)
 
 		ctx, cancel := context.WithCancel(context.Background())
 		drained := make(chan struct{})
 
-		assert.NilError(t, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained)(srv.server))
+		srv, addr := listenAndServe(t, handler, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained))
 
 		status := getInBackground(t, "http://"+addr)
 		waitClosed(t, handler.started, "request to reach the handler")
@@ -191,7 +195,7 @@ func TestShutdownOnCancel(t *testing.T) {
 		close(handler.release)
 
 		waitClosed(t, drained, "drain to finish after the handler returned")
-		assert.Check(t, is.Equal(http.StatusOK, <-status))
+		assert.Check(t, is.Equal(http.StatusOK, (<-status).StatusCode))
 	})
 
 	t.Run("gives up on the drain when the grace period elapses", func(t *testing.T) {
@@ -200,12 +204,10 @@ func TestShutdownOnCancel(t *testing.T) {
 		handler := newBlockingHandler()
 		defer close(handler.release)
 
-		srv, addr := listenAndServe(t, handler)
-
 		ctx, cancel := context.WithCancel(context.Background())
 		drained := make(chan struct{})
 
-		assert.NilError(t, newShutdownServer(settleDelay).shutdownOnCancel(ctx, drained)(srv.server))
+		_, addr := listenAndServe(t, handler, newShutdownServer(settleDelay).shutdownOnCancel(ctx, drained))
 
 		getInBackground(t, "http://"+addr)
 		waitClosed(t, handler.started, "request to reach the handler")
@@ -219,14 +221,12 @@ func TestShutdownOnCancel(t *testing.T) {
 	t.Run("shuts down immediately when the context is already cancelled", func(t *testing.T) {
 		t.Parallel()
 
-		srv, _ := listenAndServe(t, http.NotFoundHandler())
-
 		ctx, cancel := context.WithCancel(context.Background())
 		cancel()
 
 		drained := make(chan struct{})
 
-		assert.NilError(t, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained)(srv.server))
+		srv, _ := listenAndServe(t, http.NotFoundHandler(), newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained))
 
 		waitClosed(t, drained, "drain to finish with no requests in flight")
 		waitClosed(t, srv.served, "Serve to return")
@@ -236,16 +236,14 @@ func TestShutdownOnCancel(t *testing.T) {
 	t.Run("does nothing until the context is cancelled", func(t *testing.T) {
 		t.Parallel()
 
-		srv, addr := listenAndServe(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-			w.WriteHeader(http.StatusOK)
-		}))
-
 		ctx, cancel := context.WithCancel(context.Background())
 		drained := make(chan struct{})
 
-		assert.NilError(t, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained)(srv.server))
+		srv, addr := listenAndServe(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		}), newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained))
 
-		assert.Check(t, is.Equal(http.StatusOK, <-getInBackground(t, "http://"+addr)))
+		assert.Check(t, is.Equal(http.StatusOK, (<-getInBackground(t, "http://"+addr)).StatusCode))
 		assert.Check(t, !isClosed(drained))
 		assert.Check(t, !isClosed(srv.served))
 
@@ -309,7 +307,58 @@ func TestStartEchoServerDrainOrdering(t *testing.T) {
 		t.Fatal("Start did not return after the drain finished")
 	}
 
-	assert.Check(t, is.Equal(http.StatusOK, <-status))
+	assert.Check(t, is.Equal(http.StatusOK, (<-status).StatusCode))
+}
+
+// TestShutdownOnCancelDelay is not parallel, the shutdown flag is process wide
+func TestShutdownOnCancelDelay(t *testing.T) {
+	t.Cleanup(entdb.ResetShutdown)
+
+	settings := coreconfig.Server{
+		ShutdownDelay:       testShutdownDelay,
+		ShutdownGracePeriod: waitTimeout,
+		ReadTimeout:         waitTimeout,
+		ReadHeaderTimeout:   2 * waitTimeout,
+		WriteTimeout:        3 * waitTimeout,
+		IdleTimeout:         4 * waitTimeout,
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	drained := make(chan struct{})
+
+	srv, addr := listenAndServe(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}), (&Server{config: config.Config{Settings: coreconfig.Config{Server: settings}}}).shutdownOnCancel(ctx, drained))
+
+	assert.Check(t, is.Equal(settings.ReadTimeout, srv.server.ReadTimeout))
+	assert.Check(t, is.Equal(settings.ReadHeaderTimeout, srv.server.ReadHeaderTimeout))
+	assert.Check(t, is.Equal(settings.WriteTimeout, srv.server.WriteTimeout))
+	assert.Check(t, is.Equal(settings.IdleTimeout, srv.server.IdleTimeout))
+
+	before := <-getInBackground(t, "http://"+addr)
+	assert.Check(t, is.Equal(http.StatusOK, before.StatusCode))
+	assert.Check(t, !before.Close, "client was told to close its connection before shutdown began")
+	assert.Check(t, !entdb.IsShuttingDown())
+
+	cancel()
+
+	poll.WaitOn(t, func(poll.LogT) poll.Result {
+		if entdb.IsShuttingDown() {
+			return poll.Success()
+		}
+
+		return poll.Continue("waiting for shutdown to begin")
+	}, poll.WithTimeout(waitTimeout), poll.WithDelay(time.Millisecond))
+
+	during := <-getInBackground(t, "http://"+addr)
+	assert.Check(t, is.Equal(http.StatusOK, during.StatusCode))
+	assert.Check(t, during.Close, "client was not told to close its connection during the shutdown delay")
+	assert.Check(t, !isClosed(drained), "server shut down before the shutdown delay passed")
+
+	waitClosed(t, drained, "drain to finish after the shutdown delay")
+	assert.Check(t, is.ErrorIs(srv.err(), http.ErrServerClosed))
 }
 
 // servedServer is an http.Server serving on a loopback listener with its Serve result captured
@@ -326,8 +375,8 @@ func (s *servedServer) err() error {
 	return s.result
 }
 
-// listenAndServe starts handler on a random loopback port and returns the server with its address
-func listenAndServe(t *testing.T, handler http.Handler) (*servedServer, string) {
+// listenAndServe applies before to a server for handler, starts it on a random loopback port, and returns it with its address
+func listenAndServe(t *testing.T, handler http.Handler, before func(*http.Server) error) (*servedServer, string) {
 	t.Helper()
 
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
@@ -337,6 +386,8 @@ func listenAndServe(t *testing.T, handler http.Handler) (*servedServer, string) 
 		server: &http.Server{Handler: handler, ReadHeaderTimeout: waitTimeout},
 		served: make(chan struct{}),
 	}
+
+	assert.NilError(t, before(s.server))
 
 	go func() {
 		defer close(s.served)

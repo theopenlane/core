@@ -36,6 +36,12 @@ const galaShutdownTimeout = 10 * time.Second
 // authShutdownTimeout is the maximum time to wait for the JWKS refresh workers to stop
 const authShutdownTimeout = 5 * time.Second
 
+// uploadShutdownTimeout is the maximum time to wait for in-flight uploads to complete
+const uploadShutdownTimeout = 15 * time.Second
+
+// dbShutdownTimeout is the maximum time to wait for in-flight queries before the database is closed
+const dbShutdownTimeout = 10 * time.Second
+
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "start the core api server",
@@ -227,7 +233,10 @@ func serve(ctx context.Context) error {
 
 	// deferred so the database outlives the HTTP drain and the gala worker stop below
 	defer func() {
-		if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
+		closeCtx, closeCancel := context.WithTimeout(context.Background(), dbShutdownTimeout)
+		defer closeCancel()
+
+		if err := entdb.GracefulClose(closeCtx, dbClient, time.Second); err != nil {
 			log.Error().Err(err).Msg("error closing database")
 		}
 	}()
@@ -301,8 +310,13 @@ func serve(ctx context.Context) error {
 	// the server has drained in-flight requests at this point; ctx is already cancelled so
 	// the stop context below uses context.Background()
 	log.Ctx(ctx).Info().Msg("waiting for in-flight uploads to complete")
-	pkgobjects.WaitForUploads()
-	log.Ctx(ctx).Info().Msg("all uploads completed")
+
+	uploadCtx, uploadCancel := context.WithTimeout(context.Background(), uploadShutdownTimeout)
+	defer uploadCancel()
+
+	if err := pkgobjects.WaitForUploads(uploadCtx); err != nil {
+		log.Ctx(ctx).Error().Err(err).Msg("in-flight uploads did not complete before the shutdown timeout")
+	}
 
 	if galaApp != nil {
 		galaStopCtx, galaCancel := context.WithTimeout(context.Background(), galaShutdownTimeout)

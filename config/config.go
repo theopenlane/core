@@ -112,14 +112,16 @@ type Server struct {
 	Listen string `json:"listen" koanf:"listen" jsonschema:"required" default:":17608"`
 	// MetricsPort sets the port for the metrics endpoint
 	MetricsPort string `json:"metricsport" koanf:"metricsport" default:":17609"`
+	// ShutdownDelay sets how long the server keeps serving after a shutdown signal before draining
+	ShutdownDelay time.Duration `json:"shutdowndelay" koanf:"shutdowndelay" default:"0s"`
 	// ShutdownGracePeriod sets the grace period for in flight requests before shutting down
 	ShutdownGracePeriod time.Duration `json:"shutdowngraceperiod" koanf:"shutdowngraceperiod" default:"10s"`
 	// ReadTimeout sets the maximum duration for reading the entire request including the body
-	ReadTimeout time.Duration `json:"readtimeout" koanf:"readtimeout" default:"15s"`
+	ReadTimeout time.Duration `json:"readtimeout" koanf:"readtimeout" default:"0s"`
 	// WriteTimeout sets the maximum duration before timing out writes of the response
-	WriteTimeout time.Duration `json:"writetimeout" koanf:"writetimeout" default:"15s"`
+	WriteTimeout time.Duration `json:"writetimeout" koanf:"writetimeout" default:"0s"`
 	// IdleTimeout sets the maximum amount of time to wait for the next request when keep-alives are enabled
-	IdleTimeout time.Duration `json:"idletimeout" koanf:"idletimeout" default:"30s"`
+	IdleTimeout time.Duration `json:"idletimeout" koanf:"idletimeout" default:"620s"`
 	// ReadHeaderTimeout sets the amount of time allowed to read request headers
 	ReadHeaderTimeout time.Duration `json:"readheadertimeout" koanf:"readheadertimeout" default:"2s"`
 	// TLS contains the tls configuration settings

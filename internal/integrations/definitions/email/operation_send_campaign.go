@@ -289,7 +289,12 @@ func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *C
 
 	for i, msg := range messages {
 		if i > 0 {
-			<-ticker.C
+			select {
+			case <-ticker.C:
+			case <-ctx.Done():
+				// unsent targets are picked up when the job is retried
+				return sent, failed + len(messages) - i
+			}
 		}
 
 		msg.Attachments = append(msg.Attachments, attachments...)

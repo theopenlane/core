@@ -59,14 +59,20 @@ func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID st
 	return record, nil
 }
 
+// targetSentMarkTimeout bounds the detached sent mark write
+const targetSentMarkTimeout = 10 * time.Second
+
 // markCampaignTargetSent records the current time as the sent_at timestamp on a campaign target
 func markCampaignTargetSent(ctx context.Context, db *generated.Client, targetID string) error {
 	now := models.DateTime(time.Now())
 
+	writeCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), targetSentMarkTimeout)
+	defer cancel()
+
 	if err := db.CampaignTarget.UpdateOneID(targetID).
 		SetSentAt(now).
 		SetStatus(enums.AssessmentResponseStatusSent).
-		Exec(ctx); err != nil {
+		Exec(writeCtx); err != nil {
 		return fmt.Errorf("mark sent: %w", err)
 	}
 

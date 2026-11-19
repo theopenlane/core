@@ -532,7 +532,7 @@ server:
     enablegraphsubscriptions: false
     graphpool:
         maxworkers: 100
-    idletimeout: 30000000000
+    idletimeout: 620000000000
     listen: :17608
     maxresultlimit: 100
     metricsport: :17609
@@ -542,7 +542,7 @@ server:
         mimetypesfile: ""
     notificationlookbackdays: 30
     readheadertimeout: 2000000000
-    readtimeout: 15000000000
+    readtimeout: 0
     secretmanager: ""
     secure:
         contentsecuritypolicy: default-src 'self'
@@ -554,6 +554,7 @@ server:
         referrerpolicy: same-origin
         xframeoptions: SAMEORIGIN
         xssprotection: 1; mode=block
+    shutdowndelay: 0
     shutdowngraceperiod: 10000000000
     tls:
         autocert: false
@@ -563,7 +564,7 @@ server:
     trustcentercacherefreshsecret: ""
     trustcentercnametarget: cname.openlane-dns.com
     trustcenterpreviewzoneid: ""
-    writetimeout: 15000000000
+    writetimeout: 0
 sessions:
     absolutetimeout: 86400000000000
     domain: ""

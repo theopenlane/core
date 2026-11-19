@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/rs/zerolog/log"
@@ -13,6 +14,7 @@ import (
 
 	echo_log "github.com/labstack/gommon/log"
 
+	"github.com/theopenlane/core/v2/internal/entdb"
 	"github.com/theopenlane/core/v2/internal/httpserve/config"
 	"github.com/theopenlane/core/v2/internal/httpserve/route"
 	"github.com/theopenlane/core/v2/internal/httpserve/specs"
@@ -23,6 +25,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/logx"
 )
+
+// connectionClose is the Connection header value that disables connection reuse
+const connectionClose = "close"
 
 // Server is a struct that holds the configuration for the server
 type Server struct {
@@ -245,15 +250,36 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 	return awaitDrain(sc.Start(s.Router.Echo), drained)
 }
 
-// shutdownOnCancel returns the echo BeforeServeFunc that drains the http server once ctx is cancelled
+// shutdownOnCancel returns the echo BeforeServeFunc that applies the configured timeouts and drains the http server once ctx is cancelled
 func (s *Server) shutdownOnCancel(ctx context.Context, drained chan<- struct{}) func(*http.Server) error {
 	return func(srv *http.Server) error {
+		settings := s.config.Settings.Server
+		next := srv.Handler
+
+		srv.ReadTimeout = settings.ReadTimeout
+		srv.ReadHeaderTimeout = settings.ReadHeaderTimeout
+		srv.WriteTimeout = settings.WriteTimeout
+		srv.IdleTimeout = settings.IdleTimeout
+		srv.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if entdb.IsShuttingDown() {
+				w.Header().Set(echo.HeaderConnection, connectionClose)
+			}
+
+			next.ServeHTTP(w, r)
+		})
+
 		go func() {
 			defer close(drained)
 
 			<-ctx.Done()
 
-			shutdownCtx, cancel := context.WithTimeout(context.Background(), s.config.Settings.Server.ShutdownGracePeriod)
+			entdb.BeginShutdown()
+
+			logx.FromContext(ctx).Info().Dur("shutdown_delay", settings.ShutdownDelay).Msg("server draining, health endpoints report unavailable until shutdown")
+
+			time.Sleep(settings.ShutdownDelay)
+
+			shutdownCtx, cancel := context.WithTimeout(context.Background(), settings.ShutdownGracePeriod)
 
 			defer cancel()
 

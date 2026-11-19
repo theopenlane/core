@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
 )
@@ -119,6 +120,9 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		return err
 	}
 
+	// dedupes the occurrence when the sweep is retried
+	occurrence := time.Time(*camp.NextRunAt).UTC().Format(time.RFC3339)
+
 	if _, err := req.Dispatch(ctx, types.DispatchRequest{
 		IntegrationID: integrationID,
 		DefinitionID:  DefinitionID.ID(),
@@ -127,6 +131,8 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		Config:        config,
 		RunType:       enums.IntegrationRunTypeScheduled,
 		Runtime:       integrationID == "",
+		UniqueKey:     gala.IntegrationRun.Key(operation, camp.ID, occurrence),
+		UniqueOnce:    true,
 	}); err != nil {
 		return err
 	}

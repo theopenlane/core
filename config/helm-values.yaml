@@ -21,14 +21,16 @@ coreConfiguration:
     listen: ":17608"  # @schema type:string; default::17608
     # -- MetricsPort sets the port for the metrics endpoint
     metricsport: ":17609"  # @schema type:string; default::17609
+    # -- ShutdownDelay sets how long the server keeps serving after a shutdown signal before draining
+    shutdowndelay: "0s"  # @schema type:integer; default:0s
     # -- ShutdownGracePeriod sets the grace period for in flight requests before shutting down
     shutdowngraceperiod: "10s"  # @schema type:integer; default:10s
     # -- ReadTimeout sets the maximum duration for reading the entire request including the body
-    readtimeout: "15s"  # @schema type:integer; default:15s
+    readtimeout: "0s"  # @schema type:integer; default:0s
     # -- WriteTimeout sets the maximum duration before timing out writes of the response
-    writetimeout: "15s"  # @schema type:integer; default:15s
+    writetimeout: "0s"  # @schema type:integer; default:0s
     # -- IdleTimeout sets the maximum amount of time to wait for the next request when keep-alives are enabled
-    idletimeout: "30s"  # @schema type:integer; default:30s
+    idletimeout: "10m20s"  # @schema type:integer; default:620s
     # -- ReadHeaderTimeout sets the amount of time allowed to read request headers
     readheadertimeout: "2s"  # @schema type:integer; default:2s
     # -- TLS contains the tls configuration settings

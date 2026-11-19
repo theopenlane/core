@@ -90,11 +90,17 @@ func MarkRunRunning(ctx context.Context, db *ent.Client, runID string) error {
 		Exec(auth.WithInternalOperationContext(ctx))
 }
 
+// runCompletionTimeout bounds the detached run outcome write
+const runCompletionTimeout = 10 * time.Second
+
 // CompleteRun writes the final run outcome
 func CompleteRun(ctx context.Context, db *ent.Client, runID string, startedAt time.Time, result RunResult) error {
 	if runID == "" {
 		return ErrRunIDRequired
 	}
+
+	writeCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), runCompletionTimeout)
+	defer cancel()
 
 	duration := time.Since(startedAt)
 	status := result.Status
@@ -109,7 +115,7 @@ func CompleteRun(ctx context.Context, db *ent.Client, runID string, startedAt ti
 		SetMetrics(mapx.DeepCloneMapAny(result.Metrics)).
 		SetDurationMs(int(duration.Milliseconds())).
 		SetFinishedAt(time.Now()).
-		Exec(auth.WithInternalOperationContext(ctx))
+		Exec(auth.WithInternalOperationContext(writeCtx))
 }
 
 // LastSuccessfulRunAt returns the finish time of the most recent successful run for the given

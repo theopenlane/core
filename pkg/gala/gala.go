@@ -139,10 +139,11 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 	}
 
 	riverConf := river.Config{
-		Workers:         workers,
-		Queues:          queues,
-		JobTimeout:      config.JobTimeout,
-		SoftStopTimeout: config.SoftStopTimeout,
+		Workers:              workers,
+		Queues:               queues,
+		JobTimeout:           config.JobTimeout,
+		SoftStopTimeout:      config.SoftStopTimeout,
+		RescueStuckJobsAfter: config.JobTimeout + rescueStuckJobsGrace,
 	}
 
 	if config.MaxRetries > 0 {
