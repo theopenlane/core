@@ -185,6 +185,12 @@
 - user: user:ulid-integrations-manager
   relation: integration_manager
   object: organization:openlane
+- user: user:ulid-share-link-manager
+  relation: member
+  object: organization:openlane
+- user: user:ulid-share-link-manager
+  relation: share_link_manager
+  object: organization:openlane
 - user: user:ulid-campaign-manager
   relation: member
   object: organization:openlane

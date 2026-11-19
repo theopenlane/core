@@ -77,6 +77,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -29852,6 +29854,748 @@ func (_m *Scan) ToEdge(order *ScanOrder) *ScanEdge {
 	}
 }
 
+// ShareLinkEdge is the edge representation of ShareLink.
+type ShareLinkEdge struct {
+	Node   *ShareLink `json:"node"`
+	Cursor Cursor     `json:"cursor"`
+}
+
+// ShareLinkConnection is the connection containing edges to ShareLink.
+type ShareLinkConnection struct {
+	Edges      []*ShareLinkEdge `json:"edges"`
+	PageInfo   PageInfo         `json:"pageInfo"`
+	TotalCount int              `json:"totalCount"`
+}
+
+func (c *ShareLinkConnection) build(nodes []*ShareLink, pager *sharelinkPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *ShareLink
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ShareLink {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ShareLink {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ShareLinkEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ShareLinkEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ShareLinkPaginateOption enables pagination customization.
+type ShareLinkPaginateOption func(*sharelinkPager) error
+
+// WithShareLinkOrder configures pagination ordering.
+func WithShareLinkOrder(order []*ShareLinkOrder) ShareLinkPaginateOption {
+	return func(pager *sharelinkPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithShareLinkFilter configures pagination filter.
+func WithShareLinkFilter(filter func(*ShareLinkQuery) (*ShareLinkQuery, error)) ShareLinkPaginateOption {
+	return func(pager *sharelinkPager) error {
+		if filter == nil {
+			return errors.New("ShareLinkQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type sharelinkPager struct {
+	reverse bool
+	order   []*ShareLinkOrder
+	filter  func(*ShareLinkQuery) (*ShareLinkQuery, error)
+}
+
+func newShareLinkPager(opts []ShareLinkPaginateOption, reverse bool) (*sharelinkPager, error) {
+	pager := &sharelinkPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *sharelinkPager) applyFilter(query *ShareLinkQuery) (*ShareLinkQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *sharelinkPager) toCursor(_m *ShareLink) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *sharelinkPager) applyCursors(query *ShareLinkQuery, after, before *Cursor) (*ShareLinkQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultShareLinkOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *sharelinkPager) applyOrder(query *ShareLinkQuery) *ShareLinkQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultShareLinkOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultShareLinkOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *sharelinkPager) orderExpr(query *ShareLinkQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultShareLinkOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ShareLink.
+func (_m *ShareLinkQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ShareLinkPaginateOption,
+) (*ShareLinkConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newShareLinkPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &ShareLinkConnection{Edges: []*ShareLinkEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimitSingle(first, last)
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ShareLinkOrderFieldCreatedAt orders ShareLink by created_at.
+	ShareLinkOrderFieldCreatedAt = &ShareLinkOrderField{
+		Value: func(_m *ShareLink) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: sharelink.FieldCreatedAt,
+		toTerm: sharelink.ByCreatedAt,
+		toCursor: func(_m *ShareLink) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// ShareLinkOrderFieldUpdatedAt orders ShareLink by updated_at.
+	ShareLinkOrderFieldUpdatedAt = &ShareLinkOrderField{
+		Value: func(_m *ShareLink) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: sharelink.FieldUpdatedAt,
+		toTerm: sharelink.ByUpdatedAt,
+		toCursor: func(_m *ShareLink) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// ShareLinkOrderFieldName orders ShareLink by name.
+	ShareLinkOrderFieldName = &ShareLinkOrderField{
+		Value: func(_m *ShareLink) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: sharelink.FieldName,
+		toTerm: sharelink.ByName,
+		toCursor: func(_m *ShareLink) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// ShareLinkOrderFieldExpiresAt orders ShareLink by expires_at.
+	ShareLinkOrderFieldExpiresAt = &ShareLinkOrderField{
+		Value: func(_m *ShareLink) (ent.Value, error) {
+			return _m.ExpiresAt, nil
+		},
+		column: sharelink.FieldExpiresAt,
+		toTerm: sharelink.ByExpiresAt,
+		toCursor: func(_m *ShareLink) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExpiresAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ShareLinkOrderField) String() string {
+	var str string
+	switch f.column {
+	case ShareLinkOrderFieldCreatedAt.column:
+		str = "created_at"
+	case ShareLinkOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case ShareLinkOrderFieldName.column:
+		str = "name"
+	case ShareLinkOrderFieldExpiresAt.column:
+		str = "expires_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ShareLinkOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ShareLinkOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ShareLinkOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *ShareLinkOrderFieldCreatedAt
+	case "updated_at":
+		*f = *ShareLinkOrderFieldUpdatedAt
+	case "name":
+		*f = *ShareLinkOrderFieldName
+	case "expires_at":
+		*f = *ShareLinkOrderFieldExpiresAt
+	default:
+		return fmt.Errorf("%s is not a valid ShareLinkOrderField", str)
+	}
+	return nil
+}
+
+// ShareLinkOrderField defines the ordering field of ShareLink.
+type ShareLinkOrderField struct {
+	// Value extracts the ordering value from the given ShareLink.
+	Value    func(*ShareLink) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) sharelink.OrderOption
+	toCursor func(*ShareLink) Cursor
+}
+
+// ShareLinkOrder defines the ordering of ShareLink.
+type ShareLinkOrder struct {
+	Direction OrderDirection       `json:"direction"`
+	Field     *ShareLinkOrderField `json:"field"`
+}
+
+// DefaultShareLinkOrder is the default ordering of ShareLink.
+var DefaultShareLinkOrder = &ShareLinkOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ShareLinkOrderField{
+		Value: func(_m *ShareLink) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: sharelink.FieldID,
+		toTerm: sharelink.ByID,
+		toCursor: func(_m *ShareLink) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts ShareLink into ShareLinkEdge.
+func (_m *ShareLink) ToEdge(order *ShareLinkOrder) *ShareLinkEdge {
+	if order == nil {
+		order = DefaultShareLinkOrder
+	}
+	return &ShareLinkEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// ShareLinkAccessEventEdge is the edge representation of ShareLinkAccessEvent.
+type ShareLinkAccessEventEdge struct {
+	Node   *ShareLinkAccessEvent `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// ShareLinkAccessEventConnection is the connection containing edges to ShareLinkAccessEvent.
+type ShareLinkAccessEventConnection struct {
+	Edges      []*ShareLinkAccessEventEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *ShareLinkAccessEventConnection) build(nodes []*ShareLinkAccessEvent, pager *sharelinkaccesseventPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *ShareLinkAccessEvent
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ShareLinkAccessEvent {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ShareLinkAccessEvent {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ShareLinkAccessEventEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ShareLinkAccessEventEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ShareLinkAccessEventPaginateOption enables pagination customization.
+type ShareLinkAccessEventPaginateOption func(*sharelinkaccesseventPager) error
+
+// WithShareLinkAccessEventOrder configures pagination ordering.
+func WithShareLinkAccessEventOrder(order []*ShareLinkAccessEventOrder) ShareLinkAccessEventPaginateOption {
+	return func(pager *sharelinkaccesseventPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithShareLinkAccessEventFilter configures pagination filter.
+func WithShareLinkAccessEventFilter(filter func(*ShareLinkAccessEventQuery) (*ShareLinkAccessEventQuery, error)) ShareLinkAccessEventPaginateOption {
+	return func(pager *sharelinkaccesseventPager) error {
+		if filter == nil {
+			return errors.New("ShareLinkAccessEventQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type sharelinkaccesseventPager struct {
+	reverse bool
+	order   []*ShareLinkAccessEventOrder
+	filter  func(*ShareLinkAccessEventQuery) (*ShareLinkAccessEventQuery, error)
+}
+
+func newShareLinkAccessEventPager(opts []ShareLinkAccessEventPaginateOption, reverse bool) (*sharelinkaccesseventPager, error) {
+	pager := &sharelinkaccesseventPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *sharelinkaccesseventPager) applyFilter(query *ShareLinkAccessEventQuery) (*ShareLinkAccessEventQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *sharelinkaccesseventPager) toCursor(_m *ShareLinkAccessEvent) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *sharelinkaccesseventPager) applyCursors(query *ShareLinkAccessEventQuery, after, before *Cursor) (*ShareLinkAccessEventQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultShareLinkAccessEventOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *sharelinkaccesseventPager) applyOrder(query *ShareLinkAccessEventQuery) *ShareLinkAccessEventQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultShareLinkAccessEventOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultShareLinkAccessEventOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *sharelinkaccesseventPager) orderExpr(query *ShareLinkAccessEventQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultShareLinkAccessEventOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ShareLinkAccessEvent.
+func (_m *ShareLinkAccessEventQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ShareLinkAccessEventPaginateOption,
+) (*ShareLinkAccessEventConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newShareLinkAccessEventPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &ShareLinkAccessEventConnection{Edges: []*ShareLinkAccessEventEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimitSingle(first, last)
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ShareLinkAccessEventOrderFieldCreatedAt orders ShareLinkAccessEvent by created_at.
+	ShareLinkAccessEventOrderFieldCreatedAt = &ShareLinkAccessEventOrderField{
+		Value: func(_m *ShareLinkAccessEvent) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: sharelinkaccessevent.FieldCreatedAt,
+		toTerm: sharelinkaccessevent.ByCreatedAt,
+		toCursor: func(_m *ShareLinkAccessEvent) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// ShareLinkAccessEventOrderFieldUpdatedAt orders ShareLinkAccessEvent by updated_at.
+	ShareLinkAccessEventOrderFieldUpdatedAt = &ShareLinkAccessEventOrderField{
+		Value: func(_m *ShareLinkAccessEvent) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: sharelinkaccessevent.FieldUpdatedAt,
+		toTerm: sharelinkaccessevent.ByUpdatedAt,
+		toCursor: func(_m *ShareLinkAccessEvent) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ShareLinkAccessEventOrderField) String() string {
+	var str string
+	switch f.column {
+	case ShareLinkAccessEventOrderFieldCreatedAt.column:
+		str = "created_at"
+	case ShareLinkAccessEventOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ShareLinkAccessEventOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ShareLinkAccessEventOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ShareLinkAccessEventOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *ShareLinkAccessEventOrderFieldCreatedAt
+	case "updated_at":
+		*f = *ShareLinkAccessEventOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid ShareLinkAccessEventOrderField", str)
+	}
+	return nil
+}
+
+// ShareLinkAccessEventOrderField defines the ordering field of ShareLinkAccessEvent.
+type ShareLinkAccessEventOrderField struct {
+	// Value extracts the ordering value from the given ShareLinkAccessEvent.
+	Value    func(*ShareLinkAccessEvent) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) sharelinkaccessevent.OrderOption
+	toCursor func(*ShareLinkAccessEvent) Cursor
+}
+
+// ShareLinkAccessEventOrder defines the ordering of ShareLinkAccessEvent.
+type ShareLinkAccessEventOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *ShareLinkAccessEventOrderField `json:"field"`
+}
+
+// DefaultShareLinkAccessEventOrder is the default ordering of ShareLinkAccessEvent.
+var DefaultShareLinkAccessEventOrder = &ShareLinkAccessEventOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ShareLinkAccessEventOrderField{
+		Value: func(_m *ShareLinkAccessEvent) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: sharelinkaccessevent.FieldID,
+		toTerm: sharelinkaccessevent.ByID,
+		toCursor: func(_m *ShareLinkAccessEvent) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts ShareLinkAccessEvent into ShareLinkAccessEventEdge.
+func (_m *ShareLinkAccessEvent) ToEdge(order *ShareLinkAccessEventOrder) *ShareLinkAccessEventEdge {
+	if order == nil {
+		order = DefaultShareLinkAccessEventOrder
+	}
+	return &ShareLinkAccessEventEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
 // StandardEdge is the edge representation of Standard.
 type StandardEdge struct {
 	Node   *Standard `json:"node"`
@@ -44294,6 +45038,13 @@ func (_q *FileQuery) clonePage() *FileQuery {
 			c.withNamedTrustCenterEntities[name] = q.clonePage()
 		}
 	}
+	c.withShareLinks = _q.withShareLinks.clonePage()
+	if _q.withNamedShareLinks != nil {
+		c.withNamedShareLinks = make(map[string]*ShareLinkQuery, len(_q.withNamedShareLinks))
+		for name, q := range _q.withNamedShareLinks {
+			c.withNamedShareLinks[name] = q.clonePage()
+		}
+	}
 	c.withTrustCenterDoc = _q.withTrustCenterDoc.clonePage()
 	if _q.withNamedTrustCenterDoc != nil {
 		c.withNamedTrustCenterDoc = make(map[string]*TrustCenterDocQuery, len(_q.withNamedTrustCenterDoc))
@@ -46383,6 +47134,13 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 			c.withNamedScanCreators[name] = q.clonePage()
 		}
 	}
+	c.withShareLinkCreators = _q.withShareLinkCreators.clonePage()
+	if _q.withNamedShareLinkCreators != nil {
+		c.withNamedShareLinkCreators = make(map[string]*GroupQuery, len(_q.withNamedShareLinkCreators))
+		for name, q := range _q.withNamedShareLinkCreators {
+			c.withNamedShareLinkCreators[name] = q.clonePage()
+		}
+	}
 	c.withSLADefinitionCreators = _q.withSLADefinitionCreators.clonePage()
 	if _q.withNamedSLADefinitionCreators != nil {
 		c.withNamedSLADefinitionCreators = make(map[string]*GroupQuery, len(_q.withNamedSLADefinitionCreators))
@@ -46577,6 +47335,13 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 		c.withNamedRiskManager = make(map[string]*GroupQuery, len(_q.withNamedRiskManager))
 		for name, q := range _q.withNamedRiskManager {
 			c.withNamedRiskManager[name] = q.clonePage()
+		}
+	}
+	c.withShareLinkManager = _q.withShareLinkManager.clonePage()
+	if _q.withNamedShareLinkManager != nil {
+		c.withNamedShareLinkManager = make(map[string]*GroupQuery, len(_q.withNamedShareLinkManager))
+		for name, q := range _q.withNamedShareLinkManager {
+			c.withNamedShareLinkManager[name] = q.clonePage()
 		}
 	}
 	c.withTrustCenterManager = _q.withTrustCenterManager.clonePage()
@@ -47162,6 +47927,20 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 		c.withNamedCheckResults = make(map[string]*CheckResultQuery, len(_q.withNamedCheckResults))
 		for name, q := range _q.withNamedCheckResults {
 			c.withNamedCheckResults[name] = q.clonePage()
+		}
+	}
+	c.withShareLinks = _q.withShareLinks.clonePage()
+	if _q.withNamedShareLinks != nil {
+		c.withNamedShareLinks = make(map[string]*ShareLinkQuery, len(_q.withNamedShareLinks))
+		for name, q := range _q.withNamedShareLinks {
+			c.withNamedShareLinks[name] = q.clonePage()
+		}
+	}
+	c.withShareLinkAccessEvents = _q.withShareLinkAccessEvents.clonePage()
+	if _q.withNamedShareLinkAccessEvents != nil {
+		c.withNamedShareLinkAccessEvents = make(map[string]*ShareLinkAccessEventQuery, len(_q.withNamedShareLinkAccessEvents))
+		for name, q := range _q.withNamedShareLinkAccessEvents {
+			c.withNamedShareLinkAccessEvents[name] = q.clonePage()
 		}
 	}
 	c.withMembers = _q.withMembers.clonePage()
@@ -48449,6 +49228,43 @@ func (_q *ScanQuery) clonePage() *ScanQuery {
 	c.withGeneratedByPlatform = _q.withGeneratedByPlatform.clonePage()
 	c.withPerformedByUser = _q.withPerformedByUser.clonePage()
 	c.withPerformedByGroup = _q.withPerformedByGroup.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ShareLinkQuery) clonePage() *ShareLinkQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withFiles = _q.withFiles.clonePage()
+	if _q.withNamedFiles != nil {
+		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
+		for name, q := range _q.withNamedFiles {
+			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withShareLinkAccessEvents = _q.withShareLinkAccessEvents.clonePage()
+	if _q.withNamedShareLinkAccessEvents != nil {
+		c.withNamedShareLinkAccessEvents = make(map[string]*ShareLinkAccessEventQuery, len(_q.withNamedShareLinkAccessEvents))
+		for name, q := range _q.withNamedShareLinkAccessEvents {
+			c.withNamedShareLinkAccessEvents[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *ShareLinkAccessEventQuery) clonePage() *ShareLinkAccessEventQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withShareLink = _q.withShareLink.clonePage()
 	c.loadTotal = _q.loadTotal
 	return c
 }

@@ -87,6 +87,8 @@ type Config struct {
 	Cloudflare handlers.CloudflareConfig `json:"cloudflare" koanf:"cloudflare"`
 	// Shortlinks contains configuration for the URL shortening service
 	Shortlinks shortlinks.Config `json:"shortlinks" koanf:"shortlinks"`
+	// StorageLinks contains configuration for signed download and share link URLs served by the storage worker
+	StorageLinks storage.LinksConfig `json:"storagelinks" koanf:"storagelinks"`
 	// Backfill contains configuration for one-time startup data backfill routines
 	Backfill Backfill `json:"backfill" koanf:"backfill"`
 }

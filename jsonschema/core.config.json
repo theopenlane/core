@@ -1978,6 +1978,25 @@
       "type": "object",
       "description": "GCSConfig configures the Google Cloud Storage provider"
     },
+    "storage.LinksConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled toggles minting of signed download URLs and share links"
+        },
+        "baseurl": {
+          "type": "string",
+          "description": "BaseURL is the prefix the storage worker serves download and share URLs under (e.g., https://api.theopenlane.io/v1/storage)"
+        },
+        "forwardersecret": {
+          "type": "string",
+          "description": "ForwarderSecret is the shared secret the storage worker presents on share link callbacks"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "LinksConfig configures signed download and share link URLs served by the storage worker"
+    },
     "storage.ProviderConfig": {
       "properties": {
         "enabled": {
@@ -2726,6 +2745,10 @@
     "shortlinks": {
       "$ref": "#/$defs/shortlinks.Config",
       "description": "Shortlinks contains configuration for the URL shortening service"
+    },
+    "storagelinks": {
+      "$ref": "#/$defs/storage.LinksConfig",
+      "description": "StorageLinks contains configuration for signed download and share link URLs served by the storage worker"
     },
     "backfill": {
       "$ref": "#/$defs/config.Backfill",

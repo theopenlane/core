@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
@@ -937,6 +938,21 @@ func (_u *FileUpdate) AddTrustCenterEntities(v ...*TrustCenterEntity) *FileUpdat
 	return _u.AddTrustCenterEntityIDs(ids...)
 }
 
+// AddShareLinkIDs adds the "share_links" edge to the ShareLink entity by IDs.
+func (_u *FileUpdate) AddShareLinkIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddShareLinkIDs(ids...)
+	return _u
+}
+
+// AddShareLinks adds the "share_links" edges to the ShareLink entity.
+func (_u *FileUpdate) AddShareLinks(v ...*ShareLink) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddShareLinkIDs(ids...)
+}
+
 // AddTrustCenterDocIDs adds the "trust_center_doc" edge to the TrustCenterDoc entity by IDs.
 func (_u *FileUpdate) AddTrustCenterDocIDs(ids ...string) *FileUpdate {
 	_u.mutation.AddTrustCenterDocIDs(ids...)
@@ -1414,6 +1430,27 @@ func (_u *FileUpdate) RemoveTrustCenterEntities(v ...*TrustCenterEntity) *FileUp
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterEntityIDs(ids...)
+}
+
+// ClearShareLinks clears all "share_links" edges to the ShareLink entity.
+func (_u *FileUpdate) ClearShareLinks() *FileUpdate {
+	_u.mutation.ClearShareLinks()
+	return _u
+}
+
+// RemoveShareLinkIDs removes the "share_links" edge to ShareLink entities by IDs.
+func (_u *FileUpdate) RemoveShareLinkIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveShareLinkIDs(ids...)
+	return _u
+}
+
+// RemoveShareLinks removes "share_links" edges to ShareLink entities.
+func (_u *FileUpdate) RemoveShareLinks(v ...*ShareLink) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveShareLinkIDs(ids...)
 }
 
 // ClearTrustCenterDoc clears all "trust_center_doc" edges to the TrustCenterDoc entity.
@@ -2650,6 +2687,51 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ShareLinksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ShareLinksTable,
+			Columns: file.ShareLinksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sharelink.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedShareLinksIDs(); len(nodes) > 0 && !_u.mutation.ShareLinksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ShareLinksTable,
+			Columns: file.ShareLinksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sharelink.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ShareLinksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ShareLinksTable,
+			Columns: file.ShareLinksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sharelink.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -3924,6 +4006,21 @@ func (_u *FileUpdateOne) AddTrustCenterEntities(v ...*TrustCenterEntity) *FileUp
 	return _u.AddTrustCenterEntityIDs(ids...)
 }
 
+// AddShareLinkIDs adds the "share_links" edge to the ShareLink entity by IDs.
+func (_u *FileUpdateOne) AddShareLinkIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddShareLinkIDs(ids...)
+	return _u
+}
+
+// AddShareLinks adds the "share_links" edges to the ShareLink entity.
+func (_u *FileUpdateOne) AddShareLinks(v ...*ShareLink) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddShareLinkIDs(ids...)
+}
+
 // AddTrustCenterDocIDs adds the "trust_center_doc" edge to the TrustCenterDoc entity by IDs.
 func (_u *FileUpdateOne) AddTrustCenterDocIDs(ids ...string) *FileUpdateOne {
 	_u.mutation.AddTrustCenterDocIDs(ids...)
@@ -4401,6 +4498,27 @@ func (_u *FileUpdateOne) RemoveTrustCenterEntities(v ...*TrustCenterEntity) *Fil
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterEntityIDs(ids...)
+}
+
+// ClearShareLinks clears all "share_links" edges to the ShareLink entity.
+func (_u *FileUpdateOne) ClearShareLinks() *FileUpdateOne {
+	_u.mutation.ClearShareLinks()
+	return _u
+}
+
+// RemoveShareLinkIDs removes the "share_links" edge to ShareLink entities by IDs.
+func (_u *FileUpdateOne) RemoveShareLinkIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveShareLinkIDs(ids...)
+	return _u
+}
+
+// RemoveShareLinks removes "share_links" edges to ShareLink entities.
+func (_u *FileUpdateOne) RemoveShareLinks(v ...*ShareLink) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveShareLinkIDs(ids...)
 }
 
 // ClearTrustCenterDoc clears all "trust_center_doc" edges to the TrustCenterDoc entity.
@@ -5667,6 +5785,51 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ShareLinksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ShareLinksTable,
+			Columns: file.ShareLinksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sharelink.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedShareLinksIDs(); len(nodes) > 0 && !_u.mutation.ShareLinksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ShareLinksTable,
+			Columns: file.ShareLinksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sharelink.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ShareLinksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ShareLinksTable,
+			Columns: file.ShareLinksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sharelink.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

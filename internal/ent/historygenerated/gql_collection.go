@@ -8836,6 +8836,11 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin)
 				fieldSeen[organizationsettinghistory.FieldAllowMatchingDomainsAutojoin] = struct{}{}
 			}
+		case "externalSharingEnabled":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldExternalSharingEnabled]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldExternalSharingEnabled)
+				fieldSeen[organizationsettinghistory.FieldExternalSharingEnabled] = struct{}{}
+			}
 		case "identityProvider":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProvider]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProvider)

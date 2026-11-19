@@ -78,6 +78,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -2379,6 +2381,46 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	{
+		ids, err := FromContext(ctx).ShareLink.Query().Where(sharelink.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying sharelink ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := ShareLinkEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up sharelink edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).ShareLink.Query().Where((sharelink.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if sharelinkCount, err := FromContext(ctx).ShareLink.Delete().Where(sharelink.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", sharelinkCount).Msg("error deleting sharelink")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).ShareLinkAccessEvent.Query().Where(sharelinkaccessevent.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying sharelinkaccessevent ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := ShareLinkAccessEventEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up sharelinkaccessevent edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).ShareLinkAccessEvent.Query().Where((sharelinkaccessevent.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if sharelinkaccesseventCount, err := FromContext(ctx).ShareLinkAccessEvent.Delete().Where(sharelinkaccessevent.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", sharelinkaccesseventCount).Msg("error deleting sharelinkaccessevent")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if err := PurgeOrgMembershipHistory(ctx, orgmembership.HasOrganizationWith(organization.ID(id))); err != nil {
 			return err
@@ -2514,6 +2556,20 @@ func SLADefinitionEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func ScanEdgeCleanup(ctx context.Context, id string) error {
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
+
+	return nil
+}
+
+func ShareLinkEdgeCleanup(ctx context.Context, id string) error {
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
+
+	return nil
+}
+
+func ShareLinkAccessEventEdgeCleanup(ctx context.Context, id string) error {
 	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
 	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
@@ -3440,6 +3496,8 @@ func init() {
 	edgeCleanups["Risk"] = RiskEdgeCleanup
 	edgeCleanups["SLADefinition"] = SLADefinitionEdgeCleanup
 	edgeCleanups["Scan"] = ScanEdgeCleanup
+	edgeCleanups["ShareLink"] = ShareLinkEdgeCleanup
+	edgeCleanups["ShareLinkAccessEvent"] = ShareLinkAccessEventEdgeCleanup
 	edgeCleanups["Standard"] = StandardEdgeCleanup
 	edgeCleanups["Subcontrol"] = SubcontrolEdgeCleanup
 	edgeCleanups["Subprocessor"] = SubprocessorEdgeCleanup

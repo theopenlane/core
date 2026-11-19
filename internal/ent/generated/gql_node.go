@@ -72,6 +72,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -430,6 +432,16 @@ var scanImplementors = []string{"Scan", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Scan) IsNode() {}
+
+var sharelinkImplementors = []string{"ShareLink", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ShareLink) IsNode() {}
+
+var sharelinkaccesseventImplementors = []string{"ShareLinkAccessEvent", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ShareLinkAccessEvent) IsNode() {}
 
 var standardImplementors = []string{"Standard", "Node"}
 
@@ -1216,6 +1228,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(scan.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, scanImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case sharelink.Table:
+		query := c.ShareLink.Query().
+			Where(sharelink.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, sharelinkImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case sharelinkaccessevent.Table:
+		query := c.ShareLinkAccessEvent.Query().
+			Where(sharelinkaccessevent.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, sharelinkaccesseventImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2584,6 +2614,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Scan.Query().
 			Where(scan.IDIn(ids...))
 		query, err := query.CollectFields(ctx, scanImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case sharelink.Table:
+		query := c.ShareLink.Query().
+			Where(sharelink.IDIn(ids...))
+		query, err := query.CollectFields(ctx, sharelinkImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case sharelinkaccessevent.Table:
+		query := c.ShareLinkAccessEvent.Query().
+			Where(sharelinkaccessevent.IDIn(ids...))
+		query, err := query.CollectFields(ctx, sharelinkaccesseventImplementors...)
 		if err != nil {
 			return nil, err
 		}

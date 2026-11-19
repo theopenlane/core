@@ -968,6 +968,12 @@ coreConfiguration:
     clientid: "d5d5babbdd4ba64d59ae543ac3b6a74d.access"  # @schema type:string; default:d5d5babbdd4ba64d59ae543ac3b6a74d.access
     endpointurl: "https://admin.s.theopenlane.io/api/links"  # @schema type:string; default:https://admin.s.theopenlane.io/api/links
     linkttl: "2160h0m0s"  # @schema type:integer; default:2160h
+  # -- StorageLinks contains configuration for signed download and share link URLs served by the storage worker
+  storagelinks:
+    # -- Enabled toggles minting of signed download URLs and share links
+    enabled: false  # @schema type:boolean; default:false
+    # -- BaseURL is the prefix the storage worker serves download and share URLs under (e.g., https://api.theopenlane.io/v1/storage)
+    baseurl: "http://localhost:17608/v1/storage"  # @schema type:string; default:http://localhost:17608/v1/storage
   # -- Backfill contains configuration for one-time startup data backfill routines
   backfill:
     # -- Enabled runs the backfill routines on server startup, this only setups up the main job, all configured backfills will run based on their settings
@@ -1483,3 +1489,11 @@ externalSecrets:
       secretKey: "CORE_SHORTLINKS_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-shortlinks-clientsecret"  # @schema type:string
+    # -- core-storagelinks-forwardersecret secret configuration
+    core-storagelinks-forwardersecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for storagelinks.forwardersecret
+      secretKey: "CORE_STORAGELINKS_FORWARDERSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-storagelinks-forwardersecret"  # @schema type:string

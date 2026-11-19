@@ -86,6 +86,8 @@ type Handler struct {
 	ShortlinksClient *shortlinks.Client
 	// SupportAccessConfig contains the configuration for the Openlane support access flow
 	SupportAccessConfig SupportAccessConfig
+	// ForwarderSecret is the shared secret the file worker presents on share link callbacks; empty disables those endpoints
+	ForwarderSecret string
 }
 
 // SupportAccessConfig contains configuration for the Openlane support access flow. The support

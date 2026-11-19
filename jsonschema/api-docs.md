@@ -27,6 +27,7 @@ Config contains the configuration for the core server
 |[**workflows**](#defsworkflowsconfig)|`object`|||
 |[**cloudflare**](#defshandlerscloudflareconfig)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
 |[**shortlinks**](#defsshortlinksconfig)|`object`|||
+|[**storagelinks**](#defsstoragelinksconfig)|`object`|LinksConfig configures signed download and share link URLs served by the storage worker<br/>||
 |[**backfill**](#defsconfigbackfill)|`object`|Backfill configures one-time startup data backfill routines that populate fields introduced by recent<br/>||
 
 **Additional Properties:** not allowed   
@@ -214,6 +215,7 @@ Config contains the configuration for the core server
     },
     "cloudflare": {},
     "shortlinks": {},
+    "storagelinks": {},
     "backfill": {}
 }
 ```
@@ -2892,6 +2894,22 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**clientsecret**|`string`|||
 |**endpointurl**|`string`|||
 |**linkttl**|`integer`|||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsstoragelinksconfig"></a>
+## $defs/storage\.LinksConfig: object
+
+LinksConfig configures signed download and share link URLs served by the storage worker
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled toggles minting of signed download URLs and share links<br/>||
+|**baseurl**|`string`|BaseURL is the prefix the storage worker serves download and share URLs under (e.g., https://api.theopenlane.io/v1/storage)<br/>||
+|**forwardersecret**|`string`|ForwarderSecret is the shared secret the storage worker presents on share link callbacks<br/>||
 
 **Additional Properties:** not allowed   
    

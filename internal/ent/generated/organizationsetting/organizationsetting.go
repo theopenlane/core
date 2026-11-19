@@ -56,6 +56,8 @@ const (
 	FieldAllowedEmailDomains = "allowed_email_domains"
 	// FieldAllowMatchingDomainsAutojoin holds the string denoting the allow_matching_domains_autojoin field in the database.
 	FieldAllowMatchingDomainsAutojoin = "allow_matching_domains_autojoin"
+	// FieldExternalSharingEnabled holds the string denoting the external_sharing_enabled field in the database.
+	FieldExternalSharingEnabled = "external_sharing_enabled"
 	// FieldIdentityProvider holds the string denoting the identity_provider field in the database.
 	FieldIdentityProvider = "identity_provider"
 	// FieldIdentityProviderClientID holds the string denoting the identity_provider_client_id field in the database.
@@ -134,6 +136,7 @@ var Columns = []string{
 	FieldBillingNotificationsEnabled,
 	FieldAllowedEmailDomains,
 	FieldAllowMatchingDomainsAutojoin,
+	FieldExternalSharingEnabled,
 	FieldIdentityProvider,
 	FieldIdentityProviderClientID,
 	FieldIdentityProviderClientSecret,
@@ -199,6 +202,8 @@ var (
 	AllowedEmailDomainsValidator func([]string) error
 	// DefaultAllowMatchingDomainsAutojoin holds the default value on creation for the "allow_matching_domains_autojoin" field.
 	DefaultAllowMatchingDomainsAutojoin bool
+	// DefaultExternalSharingEnabled holds the default value on creation for the "external_sharing_enabled" field.
+	DefaultExternalSharingEnabled bool
 	// DefaultIdentityProviderAuthTested holds the default value on creation for the "identity_provider_auth_tested" field.
 	DefaultIdentityProviderAuthTested bool
 	// SamlSigninURLValidator is a validator for the "saml_signin_url" field. It is called by the builders before save.
@@ -326,6 +331,11 @@ func ByBillingNotificationsEnabled(opts ...sql.OrderTermOption) OrderOption {
 // ByAllowMatchingDomainsAutojoin orders the results by the allow_matching_domains_autojoin field.
 func ByAllowMatchingDomainsAutojoin(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAllowMatchingDomainsAutojoin, opts...).ToFunc()
+}
+
+// ByExternalSharingEnabled orders the results by the external_sharing_enabled field.
+func ByExternalSharingEnabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalSharingEnabled, opts...).ToFunc()
 }
 
 // ByIdentityProvider orders the results by the identity_provider field.

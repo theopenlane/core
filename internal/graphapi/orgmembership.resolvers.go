@@ -14,12 +14,26 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateOrgMembership is the resolver for the createOrgMembership field.
 func (r *mutationResolver) CreateOrgMembership(ctx context.Context, input generated.CreateOrgMembershipInput) (*model.OrgMembershipCreatePayload, error) {
+	if input.OrganizationID == "" {
+		orgID, err := auth.GetOrganizationIDFromContext(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		input.OrganizationID = orgID
+
+		// required by access checks
+		gCtx := graphql.GetFieldContext(ctx)
+		gCtx.Args["input"] = input
+	}
+
 	res, err := withTransactionalMutation(ctx).OrgMembership.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "orgmembership"})

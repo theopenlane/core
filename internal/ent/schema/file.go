@@ -137,6 +137,13 @@ func (f File) Edges() []ent.Edge {
 		}),
 		defaultEdgeToWithPagination(f, Hush{}),
 		defaultEdgeToWithPagination(f, TrustCenterEntity{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: ShareLink{},
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
 		nonUniqueEdgeFrom(&edgeDefinition{
 			fromSchema: f,
 			ref:        "file",

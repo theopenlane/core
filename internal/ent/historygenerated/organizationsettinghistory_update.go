@@ -127,6 +127,9 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.AllowMatchingDomainsAutojoinCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool)
 	}
+	if _u.mutation.ExternalSharingEnabledCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldExternalSharingEnabled, field.TypeBool)
+	}
 	if _u.mutation.IdentityProviderCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum)
 	}
@@ -316,6 +319,9 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.AllowMatchingDomainsAutojoinCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool)
+	}
+	if _u.mutation.ExternalSharingEnabledCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldExternalSharingEnabled, field.TypeBool)
 	}
 	if _u.mutation.IdentityProviderCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum)

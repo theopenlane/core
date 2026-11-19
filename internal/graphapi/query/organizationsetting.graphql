@@ -44,6 +44,7 @@ query GetOrganizationSettingByID ($organizationSettingId: ID!) {
 		createdAt
 		createdBy
 		domains
+		externalSharingEnabled
 		geoLocation
 		id
 		identityProvider
@@ -121,6 +122,7 @@ mutation UpdateOrganizationSetting ($updateOrganizationSettingId: ID!, $input: U
 			createdAt
 			createdBy
 			domains
+			externalSharingEnabled
 			geoLocation
 			id
 			identityProvider

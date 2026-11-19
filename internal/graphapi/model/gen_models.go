@@ -3083,6 +3083,24 @@ type SendCampaignTestEmailInput struct {
 	Emails []string `json:"emails"`
 }
 
+// Return response for createShareLink mutation
+type ShareLinkCreatePayload struct {
+	// Created shareLink
+	ShareLink *generated.ShareLink `json:"shareLink"`
+}
+
+// Return response for deleteShareLink mutation
+type ShareLinkDeletePayload struct {
+	// Deleted shareLink ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateShareLink mutation
+type ShareLinkUpdatePayload struct {
+	// Updated shareLink
+	ShareLink *generated.ShareLink `json:"shareLink"`
+}
+
 // Return response for createBulkStandard mutation
 type StandardBulkCreatePayload struct {
 	// Created standards

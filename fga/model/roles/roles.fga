@@ -60,6 +60,12 @@ extend type organization
     # @role: Integration Manager | Manage integrations and run integration operations
     define integration_manager: [service, user, group#member]
 
+    # @crud: share_link
+    # @view: share_link_access_event
+    define can_manage_share_link: share_link_manager or can_edit
+    # @role: Share Link Manager | Create and manage external share links and view their downloads
+    define share_link_manager: [service, user, group#member]
+
     # @crud: campaign, assessment, template, email_template, email_branding, notification_template
     # @view: document_data, assessment_response
     define can_manage_campaigns: campaign_manager or admin

@@ -873,6 +873,30 @@ func (f ScanFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.V
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScanMutation", m)
 }
 
+// The ShareLinkFunc type is an adapter to allow the use of ordinary
+// function as ShareLink mutator.
+type ShareLinkFunc func(context.Context, *generated.ShareLinkMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ShareLinkFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ShareLinkMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ShareLinkMutation", m)
+}
+
+// The ShareLinkAccessEventFunc type is an adapter to allow the use of ordinary
+// function as ShareLinkAccessEvent mutator.
+type ShareLinkAccessEventFunc func(context.Context, *generated.ShareLinkAccessEventMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ShareLinkAccessEventFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ShareLinkAccessEventMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ShareLinkAccessEventMutation", m)
+}
+
 // The StandardFunc type is an adapter to allow the use of ordinary
 // function as Standard mutator.
 type StandardFunc func(context.Context, *generated.StandardMutation) (generated.Value, error)

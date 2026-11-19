@@ -200,6 +200,13 @@ func TestFixture(name, toEmail string, defaultBranding bool) json.RawMessage {
 			OrgName:       "Acme Corp",
 			DeletionDate:  time.Now().UTC().AddDate(0, 0, 7), //nolint:mnd
 		},
+		"ShareLinkCodeEmail": ShareLinkCodeEmail{
+			RecipientInfo:    r,
+			OrgName:          "Acme Corp",
+			ShareName:        "Audit evidence",
+			Code:             "123456",
+			ExpiresInMinutes: 10, //nolint:mnd
+		},
 		"BrandedMessageRequest": BrandedMessageRequest{
 			RecipientInfo:   r,
 			CampaignName:    "Cloudflare Customer Update",

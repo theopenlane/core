@@ -125,6 +125,8 @@ const (
 	EdgeSecrets = "secrets"
 	// EdgeTrustCenterEntities holds the string denoting the trust_center_entities edge name in mutations.
 	EdgeTrustCenterEntities = "trust_center_entities"
+	// EdgeShareLinks holds the string denoting the share_links edge name in mutations.
+	EdgeShareLinks = "share_links"
 	// EdgeTrustCenterDoc holds the string denoting the trust_center_doc edge name in mutations.
 	EdgeTrustCenterDoc = "trust_center_doc"
 	// EdgeOriginalTrustCenterDoc holds the string denoting the original_trust_center_doc edge name in mutations.
@@ -248,6 +250,11 @@ const (
 	TrustCenterEntitiesInverseTable = "trust_center_entities"
 	// TrustCenterEntitiesColumn is the table column denoting the trust_center_entities relation/edge.
 	TrustCenterEntitiesColumn = "file_trust_center_entities"
+	// ShareLinksTable is the table that holds the share_links relation/edge. The primary key declared below.
+	ShareLinksTable = "share_link_files"
+	// ShareLinksInverseTable is the table name for the ShareLink entity.
+	// It exists in this package in order to avoid circular dependency with the "sharelink" package.
+	ShareLinksInverseTable = "share_links"
 	// TrustCenterDocTable is the table that holds the trust_center_doc relation/edge.
 	TrustCenterDocTable = "trust_center_docs"
 	// TrustCenterDocInverseTable is the table name for the TrustCenterDoc entity.
@@ -406,6 +413,9 @@ var (
 	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
 	// primary key for the secrets relation (M2M).
 	SecretsPrimaryKey = []string{"file_id", "hush_id"}
+	// ShareLinksPrimaryKey and ShareLinksColumn2 are the table columns denoting the
+	// primary key for the share_links relation (M2M).
+	ShareLinksPrimaryKey = []string{"share_link_id", "file_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -863,6 +873,20 @@ func ByTrustCenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 	}
 }
 
+// ByShareLinksCount orders the results by share_links count.
+func ByShareLinksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newShareLinksStep(), opts...)
+	}
+}
+
+// ByShareLinks orders the results by share_links terms.
+func ByShareLinks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newShareLinksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByTrustCenterDocCount orders the results by trust_center_doc count.
 func ByTrustCenterDocCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1105,6 +1129,13 @@ func newTrustCenterEntitiesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterEntitiesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterEntitiesTable, TrustCenterEntitiesColumn),
+	)
+}
+func newShareLinksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ShareLinksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ShareLinksTable, ShareLinksPrimaryKey...),
 	)
 }
 func newTrustCenterDocStep() *sqlgraph.Step {

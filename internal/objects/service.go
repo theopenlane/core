@@ -35,6 +35,8 @@ type Service struct {
 	objectService *storage.ObjectService
 	// backups holds backup destination targets keyed by source provider type
 	backups map[storage.ProviderType]BackupTarget
+	// links configures signed download and share link URLs
+	links storage.LinksConfig
 }
 
 // Config holds configuration for creating a new Service
@@ -47,6 +49,8 @@ type Config struct {
 	ValidationFunc storage.ValidationFunc
 	// Backups maps a source provider type to its backup destination target
 	Backups map[storage.ProviderType]BackupTarget
+	// Links configures signed download and share link URLs
+	Links storage.LinksConfig
 }
 
 // NewService creates a new storage orchestration service
@@ -63,7 +67,13 @@ func NewService(cfg Config) *Service {
 		clientService: cfg.ClientService,
 		objectService: objectService,
 		backups:       cfg.Backups,
+		links:         cfg.Links,
 	}
+}
+
+// Links returns the signed download and share link URL configuration
+func (s *Service) Links() storage.LinksConfig {
+	return s.links
 }
 
 // BackupProviderFor returns the configured backup destination provider for a source provider

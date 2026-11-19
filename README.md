@@ -80,3 +80,11 @@ Others are allowed to make their own distribution of this software or include th
 ## Contributing
 
 See the [contributing guide](.github/CONTRIBUTING.md) for how to get involved. If our code or projects have helped you, or you want to support the work, we appreciate sponsorship on our GitHub project at any level.
+
+## Sponsors
+
+Thank you to our [GitHub sponsors](https://github.com/sponsors/theopenlane)!
+
+### CI Infrastructure support
+
+<a href="https://namespace.so/github-actions/?utm_source=oss&utm_campaign=openlane" target="_blank"><img alt="CI powered by Namespace" src="https://namespace.so/oss/badge.svg" height="20" /></a>

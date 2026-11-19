@@ -1,0 +1,75 @@
+extend type Query {
+    """
+    Look up shareLink by ID
+    """
+     shareLink(
+        """
+        ID of the shareLink
+        """
+        id: ID!
+    ):  ShareLink!
+}
+
+extend type Mutation{
+    """
+    Create a new shareLink
+    """
+    createShareLink(
+        """
+        values of the shareLink
+        """
+        input: CreateShareLinkInput!
+    ): ShareLinkCreatePayload!
+    """
+    Update an existing shareLink
+    """
+    updateShareLink(
+        """
+        ID of the shareLink
+        """
+        id: ID!
+        """
+        New values for the shareLink
+        """
+        input: UpdateShareLinkInput!
+    ): ShareLinkUpdatePayload!
+    """
+    Delete an existing shareLink
+    """
+    deleteShareLink(
+        """
+        ID of the shareLink
+        """
+        id: ID!
+    ): ShareLinkDeletePayload!
+}
+
+"""
+Return response for createShareLink mutation
+"""
+type ShareLinkCreatePayload {
+    """
+    Created shareLink
+    """
+    shareLink: ShareLink!
+}
+
+"""
+Return response for updateShareLink mutation
+"""
+type ShareLinkUpdatePayload {
+    """
+    Updated shareLink
+    """
+    shareLink: ShareLink!
+}
+
+"""
+Return response for deleteShareLink mutation
+"""
+type ShareLinkDeletePayload {
+    """
+    Deleted shareLink ID
+    """
+    deletedID: ID!
+}

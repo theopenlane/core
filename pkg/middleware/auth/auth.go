@@ -101,120 +101,125 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				return unauthorized(c, err, conf, validator)
 			}
 
-			// Create a reauthenticator function to handle refresh tokens if they are provided.
-			reauthenticate := Reauthenticate(conf, validator)
-
-			// Get access token from the request, if not available then attempt to refresh
-			// using the refresh token cookie.
-			bearerToken, err := auth.GetBearerToken(c)
-			if err != nil {
-				switch {
-				case errors.Is(err, ErrNoAuthorization):
-					if bearerToken, err = reauthenticate(c); err != nil {
-						return unauthorized(c, err, conf, validator)
-					}
-				default:
-					return unauthorized(c, err, conf, validator)
-				}
-			}
-
-			var (
-				caller *auth.Caller
-				id     string
-			)
-
-			reqCtx := logx.SeedContext(c.Request().Context())
-			c.SetRequest(c.Request().WithContext(reqCtx))
-			requestLogger := logx.FromContext(reqCtx)
-
-			switch getTokenType(bearerToken) {
-			case auth.PATAuthentication, auth.APITokenAuthentication:
-				caller, id, err = checkToken(reqCtx, conf, bearerToken, auth.GetOrganizationContextHeader(c))
-				if err != nil {
-					return unauthorized(c, err, conf, validator)
-				}
-
-				// Record authentication metric based on token type
-				switch caller.AuthenticationType {
-				case auth.PATAuthentication:
-					metrics.RecordAuthentication(metrics.AuthTypePAT)
-				case auth.APITokenAuthentication:
-					metrics.RecordAuthentication(metrics.AuthTypeAPIToken)
-				}
-
-			default:
-				claims, err := validator.VerifyWithContext(reqCtx, bearerToken)
-				if err != nil {
-					return unauthorized(c, err, conf, validator)
-				}
-
-				if strings.HasPrefix(claims.UserID, "anon_") {
-					if !conf.AllowAnonymous {
-						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
-					}
-
-					// derive the anonymous caller type from the scope claim that the token
-					// carries, not from a naming convention on the user id. A valid anonymous
-					// token carries exactly one of a trust center id or an assessment id
-					switch {
-					case claims.TrustCenterID != "" && claims.AssessmentID == "":
-						ctx := auth.WithCaller(c.Request().Context(), auth.NewTrustCenterCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
-						ctx = auth.ActiveTrustCenterIDKey.Set(ctx, claims.TrustCenterID)
-						c.SetRequest(c.Request().WithContext(ctx))
-					case claims.AssessmentID != "" && claims.TrustCenterID == "":
-						ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
-						ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
-						ctx = auth.ActiveAssessmentPreviewKey.Set(ctx, claims.AssessmentPreview)
-
-						if id := claims.CampaignID; id != "" {
-							ctx = auth.ActiveCampaignIDKey.Set(ctx, id)
-						}
-
-						c.SetRequest(c.Request().WithContext(ctx))
-					default:
-						// a token with neither or both scope claims is malformed and must not
-						// be granted any anonymous capability
-						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
-					}
-
-					// Record anonymous JWT authentication
-					metrics.RecordAuthentication(metrics.AuthTypeJWTAnonymous)
-
-					return next(c)
-				}
-
-				// Add claims to context for use in downstream processing and continue handlers
-				caller, err = createCallerFromClaims(reqCtx, conf, claims, auth.JWTAuthentication)
-				if err != nil {
-					return unauthorized(c, err, conf, validator)
-				}
-
-				ctx := auth.WithRefreshToken(c.Request().Context(), bearerToken)
-				c.SetRequest(c.Request().WithContext(ctx))
-
-				// Record regular JWT authentication
-				metrics.RecordAuthentication(metrics.AuthTypeJWT)
-			}
-
-			c.SetRequest(c.Request().WithContext(auth.WithCaller(c.Request().Context(), caller)))
-
-			if conf.RedisClient != nil {
-				permissioncache.SetCacheContext(c, conf.RedisClient)
-			}
-
-			// add the user and org ID to the logger context
-			requestLogger.UpdateContext(func(c zerolog.Context) zerolog.Context {
-				return c.Str("user_id", caller.SubjectID).
-					Strs("org_id", caller.OrganizationIDs)
-			})
-
-			if err := updateLastUsedFunc(c.Request().Context(), conf.DBClient, caller, id); err != nil {
+			if err := AuthenticateRequest(c, conf, validator); err != nil {
 				return unauthorized(c, err, conf, validator)
 			}
 
 			return next(c)
 		}
 	}
+}
+
+// AuthenticateRequest authenticates the credential on the request and stores the caller on the request context
+func AuthenticateRequest(c echo.Context, conf *Options, validator tokens.Validator) error {
+	// Create a reauthenticator function to handle refresh tokens if they are provided.
+	reauthenticate := Reauthenticate(conf, validator)
+
+	// Get access token from the request, if not available then attempt to refresh
+	// using the refresh token cookie.
+	bearerToken, err := auth.GetBearerToken(c)
+	if err != nil {
+		switch {
+		case errors.Is(err, ErrNoAuthorization):
+			if bearerToken, err = reauthenticate(c); err != nil {
+				return err
+			}
+		default:
+			return err
+		}
+	}
+
+	var (
+		caller *auth.Caller
+		id     string
+	)
+
+	reqCtx := logx.SeedContext(c.Request().Context())
+	c.SetRequest(c.Request().WithContext(reqCtx))
+	requestLogger := logx.FromContext(reqCtx)
+
+	switch getTokenType(bearerToken) {
+	case auth.PATAuthentication, auth.APITokenAuthentication:
+		caller, id, err = checkToken(reqCtx, conf, bearerToken, auth.GetOrganizationContextHeader(c))
+		if err != nil {
+			return err
+		}
+
+		// Record authentication metric based on token type
+		switch caller.AuthenticationType {
+		case auth.PATAuthentication:
+			metrics.RecordAuthentication(metrics.AuthTypePAT)
+		case auth.APITokenAuthentication:
+			metrics.RecordAuthentication(metrics.AuthTypeAPIToken)
+		}
+
+	default:
+		claims, err := validator.VerifyWithContext(reqCtx, bearerToken)
+		if err != nil {
+			return err
+		}
+
+		if strings.HasPrefix(claims.UserID, "anon_") {
+			if !conf.AllowAnonymous {
+				return ErrAnonymousAccessNotAllowed
+			}
+
+			// derive the anonymous caller type from the scope claim that the token
+			// carries, not from a naming convention on the user id. A valid anonymous
+			// token carries exactly one of a trust center id or an assessment id
+			switch {
+			case claims.TrustCenterID != "" && claims.AssessmentID == "":
+				ctx := auth.WithCaller(c.Request().Context(), auth.NewTrustCenterCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
+				ctx = auth.ActiveTrustCenterIDKey.Set(ctx, claims.TrustCenterID)
+				c.SetRequest(c.Request().WithContext(ctx))
+			case claims.AssessmentID != "" && claims.TrustCenterID == "":
+				ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
+				ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
+				ctx = auth.ActiveAssessmentPreviewKey.Set(ctx, claims.AssessmentPreview)
+
+				if id := claims.CampaignID; id != "" {
+					ctx = auth.ActiveCampaignIDKey.Set(ctx, id)
+				}
+
+				c.SetRequest(c.Request().WithContext(ctx))
+			default:
+				// a token with neither or both scope claims is malformed and must not
+				// be granted any anonymous capability
+				return ErrAnonymousAccessNotAllowed
+			}
+
+			// Record anonymous JWT authentication
+			metrics.RecordAuthentication(metrics.AuthTypeJWTAnonymous)
+
+			return nil
+		}
+
+		// Add claims to context for use in downstream processing and continue handlers
+		caller, err = createCallerFromClaims(reqCtx, conf, claims, auth.JWTAuthentication)
+		if err != nil {
+			return err
+		}
+
+		ctx := auth.WithRefreshToken(c.Request().Context(), bearerToken)
+		c.SetRequest(c.Request().WithContext(ctx))
+
+		// Record regular JWT authentication
+		metrics.RecordAuthentication(metrics.AuthTypeJWT)
+	}
+
+	c.SetRequest(c.Request().WithContext(auth.WithCaller(c.Request().Context(), caller)))
+
+	if conf.RedisClient != nil {
+		permissioncache.SetCacheContext(c, conf.RedisClient)
+	}
+
+	// add the user and org ID to the logger context
+	requestLogger.UpdateContext(func(c zerolog.Context) zerolog.Context {
+		return c.Str("user_id", caller.SubjectID).
+			Strs("org_id", caller.OrganizationIDs)
+	})
+
+	return updateLastUsedFunc(c.Request().Context(), conf.DBClient, caller, id)
 }
 
 // AuthenticateTransport authenticates a websocket transport init payload and returns the authenticated caller

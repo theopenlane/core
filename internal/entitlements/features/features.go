@@ -65,6 +65,8 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Review":                      {models.CatalogComplianceModule, models.CatalogVulnerabilityManagementModule},
 	"Risk":                        {models.CatalogComplianceModule, models.CatalogRiskManagementAddon},
 	"Scan":                        {models.CatalogVulnerabilityManagementModule, models.CatalogComplianceModule},
+	"ShareLink":                   {models.CatalogAnyModule},
+	"ShareLinkAccessEvent":        {models.CatalogAnyModule},
 	"SLADefinition":               {models.CatalogVulnerabilityManagementModule, models.CatalogComplianceModule},
 	"Standard":                    {models.CatalogComplianceModule, models.CatalogPolicyManagementAddon, models.CatalogRiskManagementAddon, models.CatalogEntityManagementModule, models.CatalogTrustCenterModule},
 	"Subcontrol":                  {models.CatalogComplianceModule},

@@ -291,6 +291,13 @@ extend type organization
     define scan_creator: [group#member]
     define can_create_scan: can_edit or can_edit_scan or scan_creator or can_manage_risk or can_manage_compliance
 
+    define can_view_share_link: [service, user] or can_edit_share_link or can_manage_share_link or full_access
+    define can_edit_share_link: [service, user] or can_delete_share_link or can_manage_share_link or full_access
+    define can_delete_share_link: [service, user] or can_manage_share_link or full_access
+    define can_create_share_link: can_edit or can_edit_share_link or can_manage_share_link
+
+    define can_view_share_link_access_event: [service, user] or can_manage_share_link or full_access
+
     define can_view_standard: [service, user] or can_edit_standard or can_manage_compliance or full_access
     define can_edit_standard: [service, user] or can_delete_standard or can_manage_compliance or full_access
     define can_delete_standard: [service, user] or can_manage_compliance or full_access

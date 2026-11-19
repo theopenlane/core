@@ -67,6 +67,8 @@ type OrganizationSettingHistory struct {
 	AllowedEmailDomains []string `json:"allowed_email_domains,omitempty"`
 	// allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
 	AllowMatchingDomainsAutojoin bool `json:"allow_matching_domains_autojoin,omitempty"`
+	// allow members to create share links that grant people outside the organization downloads of files
+	ExternalSharingEnabled bool `json:"external_sharing_enabled,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider enums.SSOProvider `json:"identity_provider,omitempty"`
 	// client ID for SSO integration
@@ -117,7 +119,7 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, organizationsettinghistory.FieldIdentityProviderAuthTested, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldIdentityProviderJitProvisioning, organizationsettinghistory.FieldMultifactorAuthEnforced, organizationsettinghistory.FieldAllowSupportAccess, organizationsettinghistory.FieldPaymentMethodAdded:
+		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, organizationsettinghistory.FieldExternalSharingEnabled, organizationsettinghistory.FieldIdentityProviderAuthTested, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldIdentityProviderJitProvisioning, organizationsettinghistory.FieldMultifactorAuthEnforced, organizationsettinghistory.FieldAllowSupportAccess, organizationsettinghistory.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
 		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldUpdatedByImpersonator, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldIdentityProvider, organizationsettinghistory.FieldIdentityProviderClientID, organizationsettinghistory.FieldIdentityProviderClientSecret, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, organizationsettinghistory.FieldIdentityProviderEntityID, organizationsettinghistory.FieldOidcDiscoveryEndpoint, organizationsettinghistory.FieldSamlSigninURL, organizationsettinghistory.FieldSamlIssuer, organizationsettinghistory.FieldSamlCert:
 			values[i] = new(sql.NullString)
@@ -284,6 +286,12 @@ func (_m *OrganizationSettingHistory) assignValues(columns []string, values []an
 				return fmt.Errorf("unexpected type %T for field allow_matching_domains_autojoin", values[i])
 			} else if value.Valid {
 				_m.AllowMatchingDomainsAutojoin = value.Bool
+			}
+		case organizationsettinghistory.FieldExternalSharingEnabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field external_sharing_enabled", values[i])
+			} else if value.Valid {
+				_m.ExternalSharingEnabled = value.Bool
 			}
 		case organizationsettinghistory.FieldIdentityProvider:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -503,6 +511,9 @@ func (_m *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("allow_matching_domains_autojoin=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AllowMatchingDomainsAutojoin))
+	builder.WriteString(", ")
+	builder.WriteString("external_sharing_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ExternalSharingEnabled))
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IdentityProvider))
