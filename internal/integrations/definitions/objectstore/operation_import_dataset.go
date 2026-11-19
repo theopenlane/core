@@ -122,7 +122,7 @@ func importDataset(ctx context.Context, request types.OperationRequest, client *
 		return "", operations.IngestResult{}, err
 	}
 
-	payloadSets, err := loadDatasetPayloadSets(ctx, request.DB, client, prefix, manifest, cfg.Profile)
+	payloadSets, err := loadDatasetPayloadSets(ctx, request.DB, client, prefix, manifest, cfg.Profile, lo.FromPtr(cfg.Requester))
 	if err != nil {
 		return manifest.Name, operations.IngestResult{}, err
 	}
@@ -148,13 +148,13 @@ func importDataset(ctx context.Context, request types.OperationRequest, client *
 
 // loadDatasetPayloadSets clones the manifest's standards into the organization and returns the dataset's records in
 // manifest order, with their placeholders filled under the profile and each program linked to its cloned controls
-func loadDatasetPayloadSets(ctx context.Context, db *generated.Client, client *Client, prefix string, manifest datasetManifest, profile string) ([]types.IngestPayloadSet, error) {
+func loadDatasetPayloadSets(ctx context.Context, db *generated.Client, client *Client, prefix string, manifest datasetManifest, profile string, requester DatasetRequester) ([]types.IngestPayloadSet, error) {
 	variables, err := manifest.profileVariables(profile)
 	if err != nil {
 		return nil, err
 	}
 
-	builtins, err := datasetBuiltinVariables(ctx, db)
+	builtins, err := datasetBuiltinVariables(ctx, db, requester)
 	if err != nil {
 		return nil, err
 	}
@@ -267,7 +267,7 @@ func cloneDatasetStandard(ctx context.Context, db *generated.Client, std dataset
 
 // datasetBuiltinVariables returns the built-in variables every dataset can use, filled from the importing organization
 // and the requesting user
-func datasetBuiltinVariables(ctx context.Context, db *generated.Client) (placeholder.Variables, error) {
+func datasetBuiltinVariables(ctx context.Context, db *generated.Client, requester DatasetRequester) (placeholder.Variables, error) {
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok {
 		return nil, auth.ErrNoAuthUser
@@ -297,9 +297,9 @@ func datasetBuiltinVariables(ctx context.Context, db *generated.Client) (placeho
 		OrgName:     lo.CoalesceOrEmpty(org.DisplayName, org.Name),
 		OrgSlug:     lo.CoalesceOrEmpty(org.SlugName, urlx.Slug(org.Name)),
 		OrgDomain:   domain,
-		OwnerUserID: caller.SubjectID,
-		OwnerEmail:  caller.SubjectEmail,
-		OwnerName:   lo.CoalesceOrEmpty(caller.SubjectName, caller.SubjectEmail),
+		OwnerUserID: requester.UserID,
+		OwnerEmail:  requester.Email,
+		OwnerName:   lo.CoalesceOrEmpty(requester.Name, requester.Email),
 		Today:       time.Now().UTC().Format(time.DateOnly),
 	}.variables()
 }

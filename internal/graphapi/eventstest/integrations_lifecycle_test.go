@@ -10,7 +10,6 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
-	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
@@ -21,16 +20,15 @@ import (
 func TestIntegrationLifecycle(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 
-	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
-	ownerCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
+	ownerCtx := org.UserCtx
 
-	installation, fragment := newHarnessInstallation(t, internalCtx, testint.ModeRecurring)
+	installation, fragment := newHarnessInstallation(t, ownerCtx, testint.ModeRecurring)
 	assert.Assert(t, is.Equal(org.OrganizationID, installation.OwnerID))
 
 	opName := harnessReconcileOperation(t, testint.ModeRecurring)
 
 	t.Run("seeding creates exactly one loop", func(t *testing.T) {
-		assert.NilError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, installation))
+		assert.NilError(t, suite.IntegrationsRT.ResetReconcileLoops(ownerCtx, installation))
 
 		waitForEvents()
 
@@ -38,9 +36,9 @@ func TestIntegrationLifecycle(t *testing.T) {
 	})
 
 	t.Run("unhealthy errors the installation and cancels the loop", func(t *testing.T) {
-		assert.NilError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, installation, "credentials revoked"))
+		assert.NilError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(ownerCtx, installation, "credentials revoked"))
 
-		reloaded := reloadIntegration(t, internalCtx, installation.ID)
+		reloaded := reloadIntegration(t, ownerCtx, installation.ID)
 		assert.Assert(t, is.Equal(enums.IntegrationStatusErrored, reloaded.Status))
 		assert.Assert(t, is.Equal(1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType)))
 
@@ -50,17 +48,17 @@ func TestIntegrationLifecycle(t *testing.T) {
 	})
 
 	t.Run("unhealthy is idempotent", func(t *testing.T) {
-		assert.NilError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, installation, "credentials revoked again"))
+		assert.NilError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(ownerCtx, installation, "credentials revoked again"))
 
 		assert.Assert(t, is.Equal(1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType)))
 	})
 
 	t.Run("recovery reconnects and reseeds a single loop", func(t *testing.T) {
-		reloaded := reloadIntegration(t, internalCtx, installation.ID)
+		reloaded := reloadIntegration(t, ownerCtx, installation.ID)
 
-		assert.NilError(t, suite.IntegrationsRT.ClearIntegrationUnhealthy(internalCtx, reloaded))
+		assert.NilError(t, suite.IntegrationsRT.ClearIntegrationUnhealthy(ownerCtx, reloaded))
 
-		reloaded = reloadIntegration(t, internalCtx, installation.ID)
+		reloaded = reloadIntegration(t, ownerCtx, installation.ID)
 		assert.Assert(t, is.Equal(enums.IntegrationStatusConnected, reloaded.Status))
 		assert.Assert(t, is.Equal(1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconnectedObjectType)))
 
@@ -74,7 +72,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 	t.Run("listener alone cancels and reseeds on direct status flips", func(t *testing.T) {
 		assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).
 			SetStatus(enums.IntegrationStatusErrored).
-			Exec(internalCtx))
+			Exec(ownerCtx))
 
 		waitForEvents()
 
@@ -82,7 +80,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 
 		assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).
 			SetStatus(enums.IntegrationStatusConnected).
-			Exec(internalCtx))
+			Exec(ownerCtx))
 
 		waitForEvents()
 
@@ -98,7 +96,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 			RunType:       enums.IntegrationRunTypeReconcile,
 		})
 
-		emitCtx, headers := intobvs.EmitContext(internalCtx, oc)
+		emitCtx, headers := intobvs.EmitContext(ownerCtx, oc)
 		headers.SkipUniqueKey = true
 
 		_, err := suite.GalaRuntime.EmitWithHeaders(emitCtx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
@@ -108,7 +106,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 
 		assert.Assert(t, is.Equal(2, activeReconcileJobs(t, fragment)))
 
-		assert.NilError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, reloadIntegration(t, internalCtx, installation.ID)))
+		assert.NilError(t, suite.IntegrationsRT.ResetReconcileLoops(ownerCtx, reloadIntegration(t, ownerCtx, installation.ID)))
 
 		waitForEvents()
 
@@ -116,7 +114,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 	})
 
 	t.Run("soft delete cancels the loop", func(t *testing.T) {
-		assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(internalCtx))
+		assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(ownerCtx))
 
 		waitForEvents()
 

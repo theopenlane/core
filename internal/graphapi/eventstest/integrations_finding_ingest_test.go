@@ -64,6 +64,8 @@ func ingestFindingPayloads(ctx context.Context, t *testing.T, installation *ent.
 		return integrationtypes.MappingEnvelope{Payload: json.RawMessage(p)}
 	})
 
+	ctx = th.SetUserContext(auth.EnsureIntegrationCaller(ctx, installation.OwnerID), suite.Client.DB)
+
 	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,
 		DB:          suite.Client.DB,
@@ -88,7 +90,7 @@ func findingByExternalID(ctx context.Context, t *testing.T, externalID string) *
 
 // TestFindingVolatileOnlyReingestNoop verifies a Volatile-only field difference never writes on its own but rides along on a material change
 func TestFindingVolatileOnlyReingestNoop(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	var findingCreates, findingUpdates atomic.Int64
 
@@ -172,9 +174,44 @@ func TestFindingVolatileOnlyReingestNoop(t *testing.T) {
 	assert.Check(t, time.Time(*after.EventTime).Equal(time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC)))
 }
 
+func TestFindingReingestMaterialChangeAsAdmin(t *testing.T) {
+	ctx := th.SharedTestUser1.UserCtx
+	adminCtx := th.SharedAdminUser.UserCtx
+
+	installation, err := suite.Client.DB.Integration.Create().
+		SetName("Finding User Reingest Test").
+		SetKind("finduserreingest").
+		SetDefinitionID("def_finduserreingest").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-finduserreingest"}}).
+		Save(ctx)
+	th.RequireNoError(t, err)
+
+	t.Cleanup(func() {
+		findings, err := suite.Client.DB.Finding.Query().Where(finding.ExternalIDHasPrefix("find-user-reingest-")).All(ctx)
+		th.RequireNoError(t, err)
+
+		if len(findings) > 0 {
+			(&th.Cleanup[*ent.FindingDeleteOne]{Client: suite.Client.DB.Finding, IDs: lo.Map(findings, func(f *ent.Finding, _ int) string { return f.ID })}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		}
+
+		(&th.Cleanup[*ent.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: installation.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	result := ingestFindingPayloads(adminCtx, t, installation, `{"external_id":"find-user-reingest-1","display_name":"User Finding","description":"initial desc"}`)
+	assert.Check(t, is.Equal(0, result.Failed))
+	assert.Check(t, is.Equal(1, result.Changed))
+
+	result = ingestFindingPayloads(adminCtx, t, installation, `{"external_id":"find-user-reingest-1","display_name":"User Finding","description":"changed desc"}`)
+	assert.Check(t, is.Equal(0, result.Failed))
+	assert.Check(t, is.Equal(1, result.Changed))
+
+	after := findingByExternalID(ctx, t, "find-user-reingest-1")
+	assert.Check(t, is.Equal("changed desc", after.Description))
+}
+
 // TestFindingForeignDefinitionReadOnly verifies a Finding claimed by one definition is read-only for a payload from a different definition
 func TestFindingForeignDefinitionReadOnly(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	installationA, err := suite.Client.DB.Integration.Create().
 		SetName("Finding Foreign Def A").
@@ -230,7 +267,7 @@ func TestFindingForeignDefinitionReadOnly(t *testing.T) {
 // TestFindingUnclaimedRowFilledNotClaimed verifies a finding ingest payload matching an organization's own row fills its
 // empty fields without overwriting its values or claiming it
 func TestFindingUnclaimedRowFilledNotClaimed(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("Finding Claim Unclaimed Test").
@@ -270,7 +307,7 @@ func TestFindingUnclaimedRowFilledNotClaimed(t *testing.T) {
 // TestFindingClaimActiveOtherInstallationReadOnly verifies a finding managed by another
 // still-active installation of the same definition is skipped untouched, pointer and data alike
 func TestFindingClaimActiveOtherInstallationReadOnly(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	const sharedDefinitionID = "def_findclaimactive"
 
@@ -322,7 +359,7 @@ func TestFindingClaimActiveOtherInstallationReadOnly(t *testing.T) {
 // TestFindingClaimGoneOtherInstallationRepoints verifies a finding whose managing installation no
 // longer exists is repointed to the new installation in the same update as any other field change
 func TestFindingClaimGoneOtherInstallationRepoints(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	const sharedDefinitionID = "def_findclaimgone"
 
@@ -373,7 +410,7 @@ func TestFindingClaimGoneOtherInstallationRepoints(t *testing.T) {
 
 // TestFindingStatusCasingFoldUnchanged verifies a provider casing that folds to the stored canonical value is unchanged
 func TestFindingStatusCasingFoldUnchanged(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	var findingUpdates atomic.Int64
 

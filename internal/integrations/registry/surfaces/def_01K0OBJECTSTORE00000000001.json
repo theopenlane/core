@@ -1,6 +1,6 @@
 {
-  "hash": "4922975a7d49d78845d2475f7ebde273519de9ff0492132272466eab88a865d1",
-  "version": "01M6J40TC6AHZCA913D69VV7QD",
+  "hash": "a4e16b40adecb695e56533e000aef6e61d7a8d04dc2e21f36881b1a14e592734",
+  "version": "01M7TQRY8HRXBTD9SHNVMMEBG3",
   "surface": {
     "id": "def_01K0OBJECTSTORE00000000001",
     "credentials": [
@@ -262,6 +262,27 @@
           "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore/import-records",
           "$ref": "#/$defs/ImportRecords",
           "$defs": {
+            "DatasetRequester": {
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "title": "User ID",
+                  "description": "Id of the user who requested the import"
+                },
+                "email": {
+                  "type": "string",
+                  "title": "Email",
+                  "description": "Email of the user who requested the import"
+                },
+                "name": {
+                  "type": "string",
+                  "title": "Name",
+                  "description": "Display name of the user who requested the import"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
             "ImportRecords": {
               "properties": {
                 "disable": {
@@ -293,6 +314,11 @@
                   "type": "string",
                   "title": "Profile",
                   "description": "Dataset manifest profile whose variables fill the records' placeholders"
+                },
+                "requester": {
+                  "$ref": "#/$defs/DatasetRequester",
+                  "title": "Requester",
+                  "description": "User who requested the dataset import"
                 }
               },
               "additionalProperties": false,

@@ -21,6 +21,7 @@ import (
 	intregistry "github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 // catalogFixtureIngestOperation names the shared ingest operation used by the catalog volatile-field regression tests
@@ -55,6 +56,8 @@ func ingestCatalogPayload(ctx context.Context, t *testing.T, installation *ent.I
 	def := catalogFixtureDefinition(installation.DefinitionID, schemaName)
 	reg := intregistry.New()
 	th.RequireNoError(t, reg.Register(def))
+
+	ctx = th.SetUserContext(auth.EnsureIntegrationCaller(ctx, installation.OwnerID), suite.Client.DB)
 
 	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,

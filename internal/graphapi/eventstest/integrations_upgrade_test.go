@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
-	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
@@ -325,15 +324,24 @@ func endpointRows(t *testing.T, ctx context.Context, integrationID string) []*en
 
 	rows, err := suite.Client.DB.IntegrationWebhook.Query().
 		Where(integrationwebhook.IntegrationIDEQ(integrationID), integrationwebhook.ExternalEventIDIsNil()).
-		All(ctx)
+		All(integrationCallerContext(t, ctx))
 	assert.NilError(t, err)
 
 	return rows
 }
 
+func integrationCallerContext(t *testing.T, ctx context.Context) context.Context {
+	t.Helper()
+
+	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
+	assert.NilError(t, err)
+
+	return auth.EnsureIntegrationCaller(ctx, ownerID)
+}
+
 func TestInstallationUpgrade(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
+	ctx := org.UserCtx
 
 	store, err := keystore.NewStore(suite.Client.DB)
 	assert.NilError(t, err)
@@ -377,7 +385,7 @@ func TestInstallationUpgrade(t *testing.T) {
 
 	t.Run("a stored type the current schema rejects fails the upgrade and marks the installation errored", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		installation, previous := installUnder(t, subCtx, previousDefinition(slotOf(numericTokenRef)), numericTokenRef.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
 			numericTokenRef.Connection().Credential.Name: {Data: json.RawMessage(`{"token":1}`)},
@@ -419,7 +427,7 @@ func TestInstallationUpgrade(t *testing.T) {
 
 	t.Run("reconnecting with a fresh credential recovers an installation whose upgrade failed", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		installation, _ := installUnder(t, subCtx, previousDefinition(slotOf(numericTokenRef)), numericTokenRef.Connection().Credential.Name, map[string]integrationtypes.CredentialSet{
 			numericTokenRef.Connection().Credential.Name: {Data: json.RawMessage(`{"token":1}`)},
@@ -564,7 +572,7 @@ func TestInstallationUpgrade(t *testing.T) {
 
 	t.Run("user input is renamed and backfilled on upgrade", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.UserInput = zoneInputRef.Registration()
@@ -596,7 +604,7 @@ func TestInstallationUpgrade(t *testing.T) {
 
 	t.Run("an operation rename moves health keys and run history", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
@@ -653,7 +661,7 @@ func TestInstallationUpgrade(t *testing.T) {
 
 	t.Run("an operation rename leaves the queue untouched until the next loop reset cancels the retired loop and seeds one under the current name", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
@@ -693,7 +701,7 @@ func TestInstallationUpgrade(t *testing.T) {
 
 	t.Run("a webhook rename keeps the provider-facing endpoint", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(retiredEventsWebhook, renameEventA)}
@@ -734,7 +742,7 @@ func TestInstallationUpgrade(t *testing.T) {
 
 		dedupes, err := suite.Client.DB.IntegrationWebhook.Query().
 			Where(integrationwebhook.IntegrationIDEQ(installation.ID), integrationwebhook.ExternalEventIDEQ("d1")).
-			All(subCtx)
+			All(integrationCallerContext(t, subCtx))
 		assert.NilError(t, err)
 		assert.Assert(t, is.Len(dedupes, 1))
 		assert.Equal(t, renamedEventsWebhook.Name(), dedupes[0].Name)

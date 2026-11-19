@@ -21,6 +21,7 @@ import (
 	intregistry "github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 const checkResultIngestTestOperation = "checkresult.ingest"
@@ -59,6 +60,8 @@ func ingestCheckResultPayloads(ctx context.Context, t *testing.T, installation *
 		return integrationtypes.MappingEnvelope{Payload: json.RawMessage(p)}
 	})
 
+	ctx = th.SetUserContext(auth.EnsureIntegrationCaller(ctx, installation.OwnerID), suite.Client.DB)
+
 	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,
 		DB:          suite.Client.DB,
@@ -83,7 +86,7 @@ func checkResultByParentExternalID(ctx context.Context, t *testing.T, parentExte
 
 // TestCheckResultReingestUpdatesInPlace verifies a second ingest with a changed field updates the row in place
 func TestCheckResultReingestUpdatesInPlace(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("CheckResult Ingest Test").
@@ -127,7 +130,7 @@ func TestCheckResultReingestUpdatesInPlace(t *testing.T) {
 // excluded on every subsequent batched run while tracked (counted Excluded, not Failed, attempts
 // incrementing), and drops out of tracking once it reaches the retention ceiling
 func TestCheckResultFailedRecordExclusionAcrossBatchedRuns(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("CheckResult Exclusion Test").
@@ -177,7 +180,7 @@ func TestCheckResultFailedRecordExclusionAcrossBatchedRuns(t *testing.T) {
 // TestCheckResultFailedRecordDoesNotAbortBatch verifies a record failing validation inside a batched
 // run is counted Failed while the records after it in the same batch still persist
 func TestCheckResultFailedRecordDoesNotAbortBatch(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("CheckResult Batch Continuation Test").

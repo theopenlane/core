@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
-	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
@@ -77,7 +76,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 	t.Run("an installation walks v1 to v2 to v3 with every stored structure transformed", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("initial-token"))
@@ -169,7 +168,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 	t.Run("an installation stored under v1 skips straight to v3", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("initial-token"))
@@ -229,7 +228,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 	t.Run("replacing removed after installations converged", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("converged-token"))
@@ -315,7 +314,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 	t.Run("replacing removed before an installation upgraded strands it", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), nil, testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("stranded-token"))
@@ -359,7 +358,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 	t.Run("an installation with no recorded version is upgraded and stamped on first use", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		v3 := versionedRuntime(t, testint.BuilderV3())
 		def, ok := v3.Registry().Definition(versionedDefinitionID.ID())
@@ -396,7 +395,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 	t.Run("installation metadata is refreshed by the upgrade", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"x"}`), nil, testint.TokenV1.Connection().Credential.Name, testint.TokenV1Set("meta-token"))
@@ -428,7 +427,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 	t.Run("an operation executed with no explicit config resolves it from the installation's stored operation input", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
-		subCtx := th.SetInternalContext(subOrg.UserCtx, suite.Client.DB)
+		subCtx := subOrg.UserCtx
 
 		v3 := versionedRuntime(t, testint.BuilderV3())
 		operationConfig := map[string]json.RawMessage{testint.SyncOpV3.Name(): json.RawMessage(`{"filter":"only-mine"}`)}

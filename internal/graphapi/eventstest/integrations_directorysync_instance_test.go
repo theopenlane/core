@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	intregistry "github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/iam/auth"
 )
 
 // ingestDirectorySnapshot runs one full sync batch (accounts, groups, memberships) through the
@@ -42,6 +43,8 @@ func ingestDirectorySnapshot(ctx context.Context, t *testing.T, integration *ent
 		return envelopes
 	}
 
+	ctx = th.SetUserContext(auth.EnsureIntegrationCaller(ctx, integration.OwnerID), suite.Client.DB)
+
 	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,
 		DB:          suite.Client.DB,
@@ -57,7 +60,7 @@ func ingestDirectorySnapshot(ctx context.Context, t *testing.T, integration *ent
 }
 
 func TestDirectorySyncInstanceScopedCorrelation(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	first, err := suite.Client.DB.Integration.Create().
 		SetName("Instance Correlation Test").
