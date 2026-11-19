@@ -1,0 +1,6 @@
+extend type ShareLink {
+    """
+    the share landing URL carrying the share token
+    """
+    url: String
+}

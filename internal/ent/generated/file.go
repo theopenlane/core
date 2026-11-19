@@ -154,6 +154,8 @@ type FileEdges struct {
 	Secrets []*Hush `json:"secrets,omitempty"`
 	// TrustCenterEntities holds the value of the trust_center_entities edge.
 	TrustCenterEntities []*TrustCenterEntity `json:"trust_center_entities,omitempty"`
+	// ShareLinks holds the value of the share_links edge.
+	ShareLinks []*ShareLink `json:"share_links,omitempty"`
 	// TrustCenterDoc holds the value of the trust_center_doc edge.
 	TrustCenterDoc []*TrustCenterDoc `json:"trust_center_doc,omitempty"`
 	// OriginalTrustCenterDoc holds the value of the original_trust_center_doc edge.
@@ -172,7 +174,7 @@ type FileEdges struct {
 	StandardLogo []*Standard `json:"standard_logo,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [27]bool
+	loadedTypes [28]bool
 	// totalCount holds the count of the edges above.
 	totalCount [21]map[string]int
 
@@ -192,6 +194,7 @@ type FileEdges struct {
 	namedIntegrations                map[string][]*Integration
 	namedSecrets                     map[string][]*Hush
 	namedTrustCenterEntities         map[string][]*TrustCenterEntity
+	namedShareLinks                  map[string][]*ShareLink
 	namedTrustCenterDoc              map[string][]*TrustCenterDoc
 	namedOriginalTrustCenterDoc      map[string][]*TrustCenterDoc
 	namedTrustCenterSettingLogo      map[string][]*TrustCenterSetting
@@ -379,10 +382,19 @@ func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
 	return nil, &NotLoadedError{edge: "trust_center_entities"}
 }
 
+// ShareLinksOrErr returns the ShareLinks value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) ShareLinksOrErr() ([]*ShareLink, error) {
+	if e.loadedTypes[19] {
+		return e.ShareLinks, nil
+	}
+	return nil, &NotLoadedError{edge: "share_links"}
+}
+
 // TrustCenterDocOrErr returns the TrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.TrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_doc"}
@@ -391,7 +403,7 @@ func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
 // OriginalTrustCenterDocOrErr returns the OriginalTrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OriginalTrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.OriginalTrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "original_trust_center_doc"}
@@ -400,7 +412,7 @@ func (e FileEdges) OriginalTrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
 // TrustCenterSettingLogoOrErr returns the TrustCenterSettingLogo value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterSettingLogoOrErr() ([]*TrustCenterSetting, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.TrustCenterSettingLogo, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_setting_logo"}
@@ -409,7 +421,7 @@ func (e FileEdges) TrustCenterSettingLogoOrErr() ([]*TrustCenterSetting, error) 
 // TrustCenterSettingFaviconOrErr returns the TrustCenterSettingFavicon value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterSettingFaviconOrErr() ([]*TrustCenterSetting, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.TrustCenterSettingFavicon, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_setting_favicon"}
@@ -418,7 +430,7 @@ func (e FileEdges) TrustCenterSettingFaviconOrErr() ([]*TrustCenterSetting, erro
 // TrustCenterSettingHeroImageOrErr returns the TrustCenterSettingHeroImage value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterSettingHeroImageOrErr() ([]*TrustCenterSetting, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.TrustCenterSettingHeroImage, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_setting_hero_image"}
@@ -427,7 +439,7 @@ func (e FileEdges) TrustCenterSettingHeroImageOrErr() ([]*TrustCenterSetting, er
 // TrustCenterEntityLogoOrErr returns the TrustCenterEntityLogo value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterEntityLogoOrErr() ([]*TrustCenterEntity, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.TrustCenterEntityLogo, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_entity_logo"}
@@ -436,7 +448,7 @@ func (e FileEdges) TrustCenterEntityLogoOrErr() ([]*TrustCenterEntity, error) {
 // SubprocessorLogoOrErr returns the SubprocessorLogo value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) SubprocessorLogoOrErr() ([]*Subprocessor, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.SubprocessorLogo, nil
 	}
 	return nil, &NotLoadedError{edge: "subprocessor_logo"}
@@ -445,7 +457,7 @@ func (e FileEdges) SubprocessorLogoOrErr() ([]*Subprocessor, error) {
 // StandardLogoOrErr returns the StandardLogo value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) StandardLogoOrErr() ([]*Standard, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.StandardLogo, nil
 	}
 	return nil, &NotLoadedError{edge: "standard_logo"}
@@ -918,6 +930,11 @@ func (_m *File) QuerySecrets() *HushQuery {
 // QueryTrustCenterEntities queries the "trust_center_entities" edge of the File entity.
 func (_m *File) QueryTrustCenterEntities() *TrustCenterEntityQuery {
 	return NewFileClient(_m.config).QueryTrustCenterEntities(_m)
+}
+
+// QueryShareLinks queries the "share_links" edge of the File entity.
+func (_m *File) QueryShareLinks() *ShareLinkQuery {
+	return NewFileClient(_m.config).QueryShareLinks(_m)
 }
 
 // QueryTrustCenterDoc queries the "trust_center_doc" edge of the File entity.
@@ -1483,6 +1500,30 @@ func (_m *File) appendNamedTrustCenterEntities(name string, edges ...*TrustCente
 		_m.Edges.namedTrustCenterEntities[name] = []*TrustCenterEntity{}
 	} else {
 		_m.Edges.namedTrustCenterEntities[name] = append(_m.Edges.namedTrustCenterEntities[name], edges...)
+	}
+}
+
+// NamedShareLinks returns the ShareLinks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedShareLinks(name string) ([]*ShareLink, error) {
+	if _m.Edges.namedShareLinks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedShareLinks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedShareLinks(name string, edges ...*ShareLink) {
+	if _m.Edges.namedShareLinks == nil {
+		_m.Edges.namedShareLinks = make(map[string][]*ShareLink)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedShareLinks[name] = []*ShareLink{}
+	} else {
+		_m.Edges.namedShareLinks[name] = append(_m.Edges.namedShareLinks[name], edges...)
 	}
 }
 

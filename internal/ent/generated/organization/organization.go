@@ -147,6 +147,8 @@ const (
 	EdgeRiskCreators = "risk_creators"
 	// EdgeScanCreators holds the string denoting the scan_creators edge name in mutations.
 	EdgeScanCreators = "scan_creators"
+	// EdgeShareLinkCreators holds the string denoting the share_link_creators edge name in mutations.
+	EdgeShareLinkCreators = "share_link_creators"
 	// EdgeSLADefinitionCreators holds the string denoting the sla_definition_creators edge name in mutations.
 	EdgeSLADefinitionCreators = "sla_definition_creators"
 	// EdgeStandardCreators holds the string denoting the standard_creators edge name in mutations.
@@ -203,6 +205,8 @@ const (
 	EdgeRegistryManager = "registry_manager"
 	// EdgeRiskManager holds the string denoting the risk_manager edge name in mutations.
 	EdgeRiskManager = "risk_manager"
+	// EdgeShareLinkManager holds the string denoting the share_link_manager edge name in mutations.
+	EdgeShareLinkManager = "share_link_manager"
 	// EdgeTrustCenterManager holds the string denoting the trust_center_manager edge name in mutations.
 	EdgeTrustCenterManager = "trust_center_manager"
 	// EdgeWorkflowManager holds the string denoting the workflow_manager edge name in mutations.
@@ -377,6 +381,10 @@ const (
 	EdgeVendorRiskScores = "vendor_risk_scores"
 	// EdgeCheckResults holds the string denoting the check_results edge name in mutations.
 	EdgeCheckResults = "check_results"
+	// EdgeShareLinks holds the string denoting the share_links edge name in mutations.
+	EdgeShareLinks = "share_links"
+	// EdgeShareLinkAccessEvents holds the string denoting the share_link_access_events edge name in mutations.
+	EdgeShareLinkAccessEvents = "share_link_access_events"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -717,6 +725,13 @@ const (
 	ScanCreatorsInverseTable = "groups"
 	// ScanCreatorsColumn is the table column denoting the scan_creators relation/edge.
 	ScanCreatorsColumn = "organization_scan_creators"
+	// ShareLinkCreatorsTable is the table that holds the share_link_creators relation/edge.
+	ShareLinkCreatorsTable = "groups"
+	// ShareLinkCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ShareLinkCreatorsInverseTable = "groups"
+	// ShareLinkCreatorsColumn is the table column denoting the share_link_creators relation/edge.
+	ShareLinkCreatorsColumn = "organization_share_link_creators"
 	// SLADefinitionCreatorsTable is the table that holds the sla_definition_creators relation/edge.
 	SLADefinitionCreatorsTable = "groups"
 	// SLADefinitionCreatorsInverseTable is the table name for the Group entity.
@@ -913,6 +928,13 @@ const (
 	RiskManagerInverseTable = "groups"
 	// RiskManagerColumn is the table column denoting the risk_manager relation/edge.
 	RiskManagerColumn = "organization_risk_manager"
+	// ShareLinkManagerTable is the table that holds the share_link_manager relation/edge.
+	ShareLinkManagerTable = "groups"
+	// ShareLinkManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ShareLinkManagerInverseTable = "groups"
+	// ShareLinkManagerColumn is the table column denoting the share_link_manager relation/edge.
+	ShareLinkManagerColumn = "organization_share_link_manager"
 	// TrustCenterManagerTable is the table that holds the trust_center_manager relation/edge.
 	TrustCenterManagerTable = "groups"
 	// TrustCenterManagerInverseTable is the table name for the Group entity.
@@ -1508,6 +1530,20 @@ const (
 	CheckResultsInverseTable = "check_results"
 	// CheckResultsColumn is the table column denoting the check_results relation/edge.
 	CheckResultsColumn = "owner_id"
+	// ShareLinksTable is the table that holds the share_links relation/edge.
+	ShareLinksTable = "share_links"
+	// ShareLinksInverseTable is the table name for the ShareLink entity.
+	// It exists in this package in order to avoid circular dependency with the "sharelink" package.
+	ShareLinksInverseTable = "share_links"
+	// ShareLinksColumn is the table column denoting the share_links relation/edge.
+	ShareLinksColumn = "owner_id"
+	// ShareLinkAccessEventsTable is the table that holds the share_link_access_events relation/edge.
+	ShareLinkAccessEventsTable = "share_link_access_events"
+	// ShareLinkAccessEventsInverseTable is the table name for the ShareLinkAccessEvent entity.
+	// It exists in this package in order to avoid circular dependency with the "sharelinkaccessevent" package.
+	ShareLinkAccessEventsInverseTable = "share_link_access_events"
+	// ShareLinkAccessEventsColumn is the table column denoting the share_link_access_events relation/edge.
+	ShareLinkAccessEventsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1571,7 +1607,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [86]ent.Hook
+	Hooks        [88]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -2365,6 +2401,20 @@ func ByScanCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByShareLinkCreatorsCount orders the results by share_link_creators count.
+func ByShareLinkCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newShareLinkCreatorsStep(), opts...)
+	}
+}
+
+// ByShareLinkCreators orders the results by share_link_creators terms.
+func ByShareLinkCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newShareLinkCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // BySLADefinitionCreatorsCount orders the results by sla_definition_creators count.
 func BySLADefinitionCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2754,6 +2804,20 @@ func ByRiskManagerCount(opts ...sql.OrderTermOption) OrderOption {
 func ByRiskManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newRiskManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByShareLinkManagerCount orders the results by share_link_manager count.
+func ByShareLinkManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newShareLinkManagerStep(), opts...)
+	}
+}
+
+// ByShareLinkManager orders the results by share_link_manager terms.
+func ByShareLinkManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newShareLinkManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -3947,6 +4011,34 @@ func ByCheckResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByShareLinksCount orders the results by share_links count.
+func ByShareLinksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newShareLinksStep(), opts...)
+	}
+}
+
+// ByShareLinks orders the results by share_links terms.
+func ByShareLinks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newShareLinksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByShareLinkAccessEventsCount orders the results by share_link_access_events count.
+func ByShareLinkAccessEventsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newShareLinkAccessEventsStep(), opts...)
+	}
+}
+
+// ByShareLinkAccessEvents orders the results by share_link_access_events terms.
+func ByShareLinkAccessEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newShareLinkAccessEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -4296,6 +4388,13 @@ func newScanCreatorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ScanCreatorsTable, ScanCreatorsColumn),
 	)
 }
+func newShareLinkCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ShareLinkCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ShareLinkCreatorsTable, ShareLinkCreatorsColumn),
+	)
+}
 func newSLADefinitionCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -4490,6 +4589,13 @@ func newRiskManagerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RiskManagerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, RiskManagerTable, RiskManagerColumn),
+	)
+}
+func newShareLinkManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ShareLinkManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ShareLinkManagerTable, ShareLinkManagerColumn),
 	)
 }
 func newTrustCenterManagerStep() *sqlgraph.Step {
@@ -5099,6 +5205,20 @@ func newCheckResultsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CheckResultsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, CheckResultsTable, CheckResultsColumn),
+	)
+}
+func newShareLinksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ShareLinksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ShareLinksTable, ShareLinksColumn),
+	)
+}
+func newShareLinkAccessEventsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ShareLinkAccessEventsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ShareLinkAccessEventsTable, ShareLinkAccessEventsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

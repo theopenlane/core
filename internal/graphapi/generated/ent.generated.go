@@ -177,6 +177,8 @@ type QueryResolver interface {
 	Risks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) (*generated.RiskConnection, error)
 	SLADefinitions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SLADefinitionOrder, where *generated.SLADefinitionWhereInput) (*generated.SLADefinitionConnection, error)
 	Scans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) (*generated.ScanConnection, error)
+	ShareLinks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ShareLinkOrder, where *generated.ShareLinkWhereInput) (*generated.ShareLinkConnection, error)
+	ShareLinkAccessEvents(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ShareLinkAccessEventOrder, where *generated.ShareLinkAccessEventWhereInput) (*generated.ShareLinkAccessEventConnection, error)
 	Standards(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) (*generated.StandardConnection, error)
 	Subcontrols(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) (*generated.SubcontrolConnection, error)
 	Subprocessors(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) (*generated.SubprocessorConnection, error)
@@ -319,6 +321,7 @@ type QueryResolver interface {
 	TrustCenterEntitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterEntityConnection, error)
 	VulnerabilitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.VulnerabilityConnection, error)
 	Search(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*model.SearchResults, error)
+	ShareLink(ctx context.Context, id string) (*generated.ShareLink, error)
 	SLADefinition(ctx context.Context, id string) (*generated.SLADefinition, error)
 	Standard(ctx context.Context, id string) (*generated.Standard, error)
 	Subcontrol(ctx context.Context, id string) (*generated.Subcontrol, error)
@@ -26069,6 +26072,114 @@ func (ec *executionContext) field_Organization_scanCreators_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Organization_shareLinkCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.GroupOrder, error) {
+			return ec.unmarshalOGroupOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
+			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Organization_shareLinkManager_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.GroupOrder, error) {
+			return ec.unmarshalOGroupOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
+			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Organization_slaDefinitionCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -37027,6 +37138,128 @@ func (ec *executionContext) field_Query_search_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_shareLinkAccessEvents_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.ShareLinkAccessEventOrder, error) {
+			return ec.unmarshalOShareLinkAccessEventOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.ShareLinkAccessEventWhereInput, error) {
+			return ec.unmarshalOShareLinkAccessEventWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_shareLink_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_shareLinks_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.ShareLinkOrder, error) {
+			return ec.unmarshalOShareLinkOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.ShareLinkWhereInput, error) {
+			return ec.unmarshalOShareLinkWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_slaDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -44253,6 +44486,114 @@ func (ec *executionContext) field_Scan_vulnerabilities_args(ctx context.Context,
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.VulnerabilityWhereInput, error) {
 			return ec.unmarshalOVulnerabilityWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_ShareLink_files_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.FileOrder, error) {
+			return ec.unmarshalOFileOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFileOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.FileWhereInput, error) {
+			return ec.unmarshalOFileWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFileWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_ShareLink_shareLinkAccessEvents_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.ShareLinkAccessEventOrder, error) {
+			return ec.unmarshalOShareLinkAccessEventOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.ShareLinkAccessEventWhereInput, error) {
+			return ec.unmarshalOShareLinkAccessEventWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -119583,6 +119924,50 @@ func (ec *executionContext) fieldContext_Organization_scanCreators(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Organization_shareLinkCreators(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Organization_shareLinkCreators(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.ShareLinkCreators(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.GroupOrder), fc.Args["where"].(*generated.GroupWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
+			return ec.marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Organization_shareLinkCreators(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_GroupConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Organization_shareLinkCreators_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Organization_slaDefinitionCreators(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -120809,6 +121194,50 @@ func (ec *executionContext) fieldContext_Organization_riskManager(ctx context.Co
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Organization_riskManager_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Organization_shareLinkManager(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Organization_shareLinkManager(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.ShareLinkManager(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.GroupOrder), fc.Args["where"].(*generated.GroupWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
+			return ec.marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Organization_shareLinkManager(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_GroupConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Organization_shareLinkManager_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -122420,6 +122849,29 @@ func (ec *executionContext) _OrganizationSetting_allowMatchingDomainsAutojoin(ct
 	)
 }
 func (ec *executionContext) fieldContext_OrganizationSetting_allowMatchingDomainsAutojoin(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OrganizationSetting", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _OrganizationSetting_externalSharingEnabled(ctx context.Context, field graphql.CollectedField, obj *generated.OrganizationSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OrganizationSetting_externalSharingEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExternalSharingEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OrganizationSetting_externalSharingEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("OrganizationSetting", field, false, false, "Boolean")
 }
 
@@ -135115,6 +135567,94 @@ func (ec *executionContext) fieldContext_Query_scans(ctx context.Context, field 
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_shareLinks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_shareLinks(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().ShareLinks(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ShareLinkOrder), fc.Args["where"].(*generated.ShareLinkWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ShareLinkConnection) graphql.Marshaler {
+			return ec.marshalNShareLinkConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_shareLinks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ShareLinkConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_shareLinks_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_shareLinkAccessEvents(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_shareLinkAccessEvents(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().ShareLinkAccessEvents(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ShareLinkAccessEventOrder), fc.Args["where"].(*generated.ShareLinkAccessEventWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ShareLinkAccessEventConnection) graphql.Marshaler {
+			return ec.marshalNShareLinkAccessEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_shareLinkAccessEvents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ShareLinkAccessEventConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_shareLinkAccessEvents_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_standards(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -141303,6 +141843,50 @@ func (ec *executionContext) fieldContext_Query_search(ctx context.Context, field
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_search_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_shareLink(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_shareLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().ShareLink(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ShareLink) graphql.Marshaler {
+			return ec.marshalNShareLink2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLink(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_shareLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ShareLink(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_shareLink_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -154249,6 +154833,1095 @@ func (ec *executionContext) _ScanEdge_cursor(ctx context.Context, field graphql.
 }
 func (ec *executionContext) fieldContext_ScanEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ScanEdge", field, false, false, "Cursor")
+}
+
+func (ec *executionContext) _ShareLink_id(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "ID")
+}
+
+func (ec *executionContext) _ShareLink_createdAt(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ShareLink_updatedAt(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ShareLink_createdBy(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLink_updatedBy(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLink_updatedByImpersonator(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_updatedByImpersonator(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedByImpersonator, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_updatedByImpersonator(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLink_ownerID(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_ownerID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.OwnerID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_ownerID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "ID")
+}
+
+func (ec *executionContext) _ShareLink_name(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_name(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLink_expiresAt(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_expiresAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExpiresAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_expiresAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ShareLink_maxUses(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_maxUses(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.MaxUses, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalOInt2int(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_maxUses(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "Int")
+}
+
+func (ec *executionContext) _ShareLink_useCount(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_useCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UseCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_useCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "Int")
+}
+
+func (ec *executionContext) _ShareLink_recipientEmails(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_recipientEmails(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.RecipientEmails, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_recipientEmails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLink_landingPage(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_landingPage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LandingPage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_landingPage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _ShareLink_requireSession(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_requireSession(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.RequireSession, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_requireSession(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _ShareLink_revokedAt(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_revokedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.RevokedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_revokedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ShareLink_owner(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_owner(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Owner(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Organization) graphql.Marshaler {
+			return ec.marshalOOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganization(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_owner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLink",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Organization(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLink_files(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_files(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Files(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.FileOrder), fc.Args["where"].(*generated.FileWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FileConnection) graphql.Marshaler {
+			return ec.marshalNFileConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFileConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_files(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLink",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FileConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_ShareLink_files_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLink_shareLinkAccessEvents(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_shareLinkAccessEvents(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.ShareLinkAccessEvents(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ShareLinkAccessEventOrder), fc.Args["where"].(*generated.ShareLinkAccessEventWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ShareLinkAccessEventConnection) graphql.Marshaler {
+			return ec.marshalNShareLinkAccessEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_shareLinkAccessEvents(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLink",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ShareLinkAccessEventConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_ShareLink_shareLinkAccessEvents_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLink_url(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLink_url(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.URL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLink_url(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLink", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_id(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "ID")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_createdAt(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_updatedAt(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_createdBy(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_updatedBy(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_updatedByImpersonator(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_updatedByImpersonator(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedByImpersonator, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_updatedByImpersonator(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_ownerID(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_ownerID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.OwnerID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_ownerID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "ID")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_shareLinkID(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_shareLinkID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ShareLinkID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_shareLinkID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "ID")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_fileID(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_fileID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.FileID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_fileID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_ipAddress(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_ipAddress(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IPAddress, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_ipAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_userAgent(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_userAgent(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UserAgent, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_userAgent(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEvent", field, false, false, "String")
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_owner(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_owner(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Owner(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Organization) graphql.Marshaler {
+			return ec.marshalOOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganization(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_owner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLinkAccessEvent",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Organization(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLinkAccessEvent_shareLink(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEvent) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEvent_shareLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ShareLink(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ShareLink) graphql.Marshaler {
+			return ec.marshalNShareLink2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLink(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEvent_shareLink(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLinkAccessEvent",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ShareLink(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLinkAccessEventConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEventConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEventConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.ShareLinkAccessEventEdge) graphql.Marshaler {
+			return ec.marshalOShareLinkAccessEventEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventEdge(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEventConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLinkAccessEventConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ShareLinkAccessEventEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLinkAccessEventConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEventConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEventConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEventConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLinkAccessEventConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLinkAccessEventConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEventConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEventConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEventConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEventConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _ShareLinkAccessEventEdge_node(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEventEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEventEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ShareLinkAccessEvent) graphql.Marshaler {
+			return ec.marshalOShareLinkAccessEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEvent(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEventEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLinkAccessEventEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ShareLinkAccessEvent(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLinkAccessEventEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkAccessEventEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkAccessEventEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkAccessEventEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkAccessEventEdge", field, false, false, "Cursor")
+}
+
+func (ec *executionContext) _ShareLinkConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.ShareLinkEdge) graphql.Marshaler {
+			return ec.marshalOShareLinkEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkEdge(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLinkConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ShareLinkEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLinkConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLinkConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLinkConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _ShareLinkEdge_node(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ShareLink) graphql.Marshaler {
+			return ec.marshalOShareLink2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLink(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ShareLinkEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ShareLink(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ShareLinkEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *generated.ShareLinkEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ShareLinkEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ShareLinkEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ShareLinkEdge", field, false, false, "Cursor")
 }
 
 func (ec *executionContext) _Standard_id(ctx context.Context, field graphql.CollectedField, obj *generated.Standard) (ret graphql.Marshaler) {
@@ -227013,7 +228686,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "name", "displayName", "description", "personalOrg", "avatarRemoteURL", "avatarUpdatedAt", "actionPlanCreatorIDs", "apiTokenCreatorIDs", "assessmentCreatorIDs", "assessmentPolicyCreatorIDs", "assetCreatorIDs", "campaignCreatorIDs", "campaignTargetCreatorIDs", "checkResultCreatorIDs", "contactCreatorIDs", "controlCreatorIDs", "controlImplementationCreatorIDs", "controlObjectiveCreatorIDs", "customDomainCreatorIDs", "customTypeEnumCreatorIDs", "directoryAccountCreatorIDs", "directoryGroupCreatorIDs", "directoryMembershipCreatorIDs", "discussionCreatorIDs", "documentDataCreatorIDs", "emailTemplateCreatorIDs", "entityCreatorIDs", "entityTypeCreatorIDs", "evidenceCreatorIDs", "fileCreatorIDs", "findingCreatorIDs", "findingControlCreatorIDs", "groupCreatorIDs", "groupMembershipCreatorIDs", "groupSettingCreatorIDs", "hushCreatorIDs", "identityHolderCreatorIDs", "internalPolicyCreatorIDs", "inviteCreatorIDs", "mappedControlCreatorIDs", "narrativeCreatorIDs", "noteCreatorIDs", "notificationTemplateCreatorIDs", "orgMembershipCreatorIDs", "platformCreatorIDs", "procedureCreatorIDs", "programCreatorIDs", "programMembershipCreatorIDs", "remediationCreatorIDs", "reportCreatorIDs", "reportMembershipCreatorIDs", "reviewCreatorIDs", "riskCreatorIDs", "scanCreatorIDs", "slaDefinitionCreatorIDs", "standardCreatorIDs", "subcontrolCreatorIDs", "subprocessorCreatorIDs", "subscriberCreatorIDs", "systemDetailCreatorIDs", "tagDefinitionCreatorIDs", "taskCreatorIDs", "templateCreatorIDs", "trustCenterCreatorIDs", "trustCenterComplianceCreatorIDs", "trustCenterDocCreatorIDs", "trustCenterEntityCreatorIDs", "trustCenterFaqCreatorIDs", "trustCenterNdaRequestCreatorIDs", "trustCenterSubprocessorCreatorIDs", "trustCenterWatermarkConfigCreatorIDs", "vendorRiskScoreCreatorIDs", "vendorScoringConfigCreatorIDs", "vulnerabilityCreatorIDs", "workflowDefinitionCreatorIDs", "campaignManagerIDs", "complianceManagerIDs", "groupManagerIDs", "integrationManagerIDs", "policyManagerIDs", "registryManagerIDs", "riskManagerIDs", "trustCenterManagerIDs", "workflowManagerIDs", "parentID", "settingID", "personalAccessTokenIDs", "brandingSettingID", "fileIDs", "eventIDs", "avatarFileID", "orgSubscriptionIDs", "inviteIDs", "impersonationEventIDs", "createOrgSettings"}
+	fieldsInOrder := [...]string{"tags", "name", "displayName", "description", "personalOrg", "avatarRemoteURL", "avatarUpdatedAt", "actionPlanCreatorIDs", "apiTokenCreatorIDs", "assessmentCreatorIDs", "assessmentPolicyCreatorIDs", "assetCreatorIDs", "campaignCreatorIDs", "campaignTargetCreatorIDs", "checkResultCreatorIDs", "contactCreatorIDs", "controlCreatorIDs", "controlImplementationCreatorIDs", "controlObjectiveCreatorIDs", "customDomainCreatorIDs", "customTypeEnumCreatorIDs", "directoryAccountCreatorIDs", "directoryGroupCreatorIDs", "directoryMembershipCreatorIDs", "discussionCreatorIDs", "documentDataCreatorIDs", "emailTemplateCreatorIDs", "entityCreatorIDs", "entityTypeCreatorIDs", "evidenceCreatorIDs", "fileCreatorIDs", "findingCreatorIDs", "findingControlCreatorIDs", "groupCreatorIDs", "groupMembershipCreatorIDs", "groupSettingCreatorIDs", "hushCreatorIDs", "identityHolderCreatorIDs", "internalPolicyCreatorIDs", "inviteCreatorIDs", "mappedControlCreatorIDs", "narrativeCreatorIDs", "noteCreatorIDs", "notificationTemplateCreatorIDs", "orgMembershipCreatorIDs", "platformCreatorIDs", "procedureCreatorIDs", "programCreatorIDs", "programMembershipCreatorIDs", "remediationCreatorIDs", "reportCreatorIDs", "reportMembershipCreatorIDs", "reviewCreatorIDs", "riskCreatorIDs", "scanCreatorIDs", "shareLinkCreatorIDs", "slaDefinitionCreatorIDs", "standardCreatorIDs", "subcontrolCreatorIDs", "subprocessorCreatorIDs", "subscriberCreatorIDs", "systemDetailCreatorIDs", "tagDefinitionCreatorIDs", "taskCreatorIDs", "templateCreatorIDs", "trustCenterCreatorIDs", "trustCenterComplianceCreatorIDs", "trustCenterDocCreatorIDs", "trustCenterEntityCreatorIDs", "trustCenterFaqCreatorIDs", "trustCenterNdaRequestCreatorIDs", "trustCenterSubprocessorCreatorIDs", "trustCenterWatermarkConfigCreatorIDs", "vendorRiskScoreCreatorIDs", "vendorScoringConfigCreatorIDs", "vulnerabilityCreatorIDs", "workflowDefinitionCreatorIDs", "campaignManagerIDs", "complianceManagerIDs", "groupManagerIDs", "integrationManagerIDs", "policyManagerIDs", "registryManagerIDs", "riskManagerIDs", "shareLinkManagerIDs", "trustCenterManagerIDs", "workflowManagerIDs", "parentID", "settingID", "personalAccessTokenIDs", "brandingSettingID", "fileIDs", "eventIDs", "avatarFileID", "orgSubscriptionIDs", "inviteIDs", "impersonationEventIDs", "createOrgSettings"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -227405,6 +229078,13 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ScanCreatorIDs = data
+		case "shareLinkCreatorIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkCreatorIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkCreatorIDs = data
 		case "slaDefinitionCreatorIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("slaDefinitionCreatorIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -227601,6 +229281,13 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.RiskManagerIDs = data
+		case "shareLinkManagerIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkManagerIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkManagerIDs = data
 		case "trustCenterManagerIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trustCenterManagerIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -227722,7 +229409,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationSettingInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "domains", "billingContact", "billingEmail", "billingPhone", "billingAddress", "taxIdentifier", "geoLocation", "billingNotificationsEnabled", "allowedEmailDomains", "allowMatchingDomainsAutojoin", "identityProvider", "identityProviderClientID", "identityProviderClientSecret", "identityProviderMetadataEndpoint", "identityProviderEntityID", "oidcDiscoveryEndpoint", "samlSigninURL", "samlIssuer", "samlCert", "identityProviderLoginEnforced", "identityProviderJitProvisioning", "jitAllowedEmailDomains", "multifactorAuthEnforced", "ssoExemptDomains", "allowSupportAccess", "organizationID", "fileIDs"}
+	fieldsInOrder := [...]string{"tags", "domains", "billingContact", "billingEmail", "billingPhone", "billingAddress", "taxIdentifier", "geoLocation", "billingNotificationsEnabled", "allowedEmailDomains", "allowMatchingDomainsAutojoin", "externalSharingEnabled", "identityProvider", "identityProviderClientID", "identityProviderClientSecret", "identityProviderMetadataEndpoint", "identityProviderEntityID", "oidcDiscoveryEndpoint", "samlSigninURL", "samlIssuer", "samlCert", "identityProviderLoginEnforced", "identityProviderJitProvisioning", "jitAllowedEmailDomains", "multifactorAuthEnforced", "ssoExemptDomains", "allowSupportAccess", "organizationID", "fileIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -227806,6 +229493,13 @@ func (ec *executionContext) unmarshalInputCreateOrganizationSettingInput(ctx con
 				return it, err
 			}
 			it.AllowMatchingDomainsAutojoin = data
+		case "externalSharingEnabled":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalSharingEnabled"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalSharingEnabled = data
 		case "identityProvider":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProvider"))
 			data, err := ec.unmarshalOOrganizationSettingSSOProvider2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐSSOProvider(ctx, v)
@@ -231365,6 +233059,97 @@ func (ec *executionContext) unmarshalInputCreateScanInput(ctx context.Context, o
 func UnmarshalCreateScanInput(ctx context.Context, raw any) (generated.CreateScanInput, error) {
 	var out generated.CreateScanInput
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateScanInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputCreateShareLinkInput(ctx context.Context, obj any) (generated.CreateShareLinkInput, error) {
+	var it generated.CreateShareLinkInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "expiresAt", "maxUses", "recipientEmails", "landingPage", "requireSession", "ownerID", "fileIDs"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "expiresAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAt = data
+		case "maxUses":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUses"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUses = data
+		case "recipientEmails":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("recipientEmails"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RecipientEmails = data
+		case "landingPage":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("landingPage"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LandingPage = data
+		case "requireSession":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requireSession"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequireSession = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "fileIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDs"))
+			data, err := ec.unmarshalNID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileIDs = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCreateShareLinkInput unmarshals raw into the CreateShareLinkInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateShareLinkInput(ctx context.Context, raw any) (generated.CreateShareLinkInput, error) {
+	var out generated.CreateShareLinkInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateShareLinkInput", raw, &out)
 	return out, err
 }
 
@@ -298504,7 +300289,7 @@ func (ec *executionContext) unmarshalInputOrganizationSettingWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "billingContact", "billingContactNEQ", "billingContactIn", "billingContactNotIn", "billingContactContains", "billingContactHasPrefix", "billingContactHasSuffix", "billingContactIsNil", "billingContactNotNil", "billingContactEqualFold", "billingContactContainsFold", "billingEmail", "billingEmailNEQ", "billingEmailIn", "billingEmailNotIn", "billingEmailContains", "billingEmailHasPrefix", "billingEmailHasSuffix", "billingEmailIsNil", "billingEmailNotNil", "billingEmailEqualFold", "billingEmailContainsFold", "billingPhone", "billingPhoneNEQ", "billingPhoneIn", "billingPhoneNotIn", "billingPhoneContains", "billingPhoneHasPrefix", "billingPhoneHasSuffix", "billingPhoneIsNil", "billingPhoneNotNil", "billingPhoneEqualFold", "billingPhoneContainsFold", "taxIdentifier", "taxIdentifierNEQ", "taxIdentifierIn", "taxIdentifierNotIn", "taxIdentifierContains", "taxIdentifierHasPrefix", "taxIdentifierHasSuffix", "taxIdentifierIsNil", "taxIdentifierNotNil", "taxIdentifierEqualFold", "taxIdentifierContainsFold", "geoLocation", "geoLocationNEQ", "geoLocationIn", "geoLocationNotIn", "geoLocationIsNil", "geoLocationNotNil", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDIsNil", "organizationIDNotNil", "organizationIDEqualFold", "organizationIDContainsFold", "billingNotificationsEnabled", "billingNotificationsEnabledNEQ", "allowMatchingDomainsAutojoin", "allowMatchingDomainsAutojoinNEQ", "allowMatchingDomainsAutojoinIsNil", "allowMatchingDomainsAutojoinNotNil", "identityProvider", "identityProviderNEQ", "identityProviderIn", "identityProviderNotIn", "identityProviderIsNil", "identityProviderNotNil", "identityProviderClientID", "identityProviderClientIDNEQ", "identityProviderClientIDIn", "identityProviderClientIDNotIn", "identityProviderClientIDContains", "identityProviderClientIDHasPrefix", "identityProviderClientIDHasSuffix", "identityProviderClientIDIsNil", "identityProviderClientIDNotNil", "identityProviderClientIDEqualFold", "identityProviderClientIDContainsFold", "identityProviderMetadataEndpoint", "identityProviderMetadataEndpointNEQ", "identityProviderMetadataEndpointIn", "identityProviderMetadataEndpointNotIn", "identityProviderMetadataEndpointContains", "identityProviderMetadataEndpointHasPrefix", "identityProviderMetadataEndpointHasSuffix", "identityProviderMetadataEndpointIsNil", "identityProviderMetadataEndpointNotNil", "identityProviderMetadataEndpointEqualFold", "identityProviderMetadataEndpointContainsFold", "identityProviderAuthTested", "identityProviderAuthTestedNEQ", "identityProviderEntityID", "identityProviderEntityIDNEQ", "identityProviderEntityIDIn", "identityProviderEntityIDNotIn", "identityProviderEntityIDContains", "identityProviderEntityIDHasPrefix", "identityProviderEntityIDHasSuffix", "identityProviderEntityIDIsNil", "identityProviderEntityIDNotNil", "identityProviderEntityIDEqualFold", "identityProviderEntityIDContainsFold", "oidcDiscoveryEndpoint", "oidcDiscoveryEndpointNEQ", "oidcDiscoveryEndpointIn", "oidcDiscoveryEndpointNotIn", "oidcDiscoveryEndpointContains", "oidcDiscoveryEndpointHasPrefix", "oidcDiscoveryEndpointHasSuffix", "oidcDiscoveryEndpointIsNil", "oidcDiscoveryEndpointNotNil", "oidcDiscoveryEndpointEqualFold", "oidcDiscoveryEndpointContainsFold", "samlSigninURL", "samlSigninURLNEQ", "samlSigninURLIn", "samlSigninURLNotIn", "samlSigninURLContains", "samlSigninURLHasPrefix", "samlSigninURLHasSuffix", "samlSigninURLIsNil", "samlSigninURLNotNil", "samlSigninURLEqualFold", "samlSigninURLContainsFold", "samlIssuer", "samlIssuerNEQ", "samlIssuerIn", "samlIssuerNotIn", "samlIssuerContains", "samlIssuerHasPrefix", "samlIssuerHasSuffix", "samlIssuerIsNil", "samlIssuerNotNil", "samlIssuerEqualFold", "samlIssuerContainsFold", "samlCert", "samlCertNEQ", "samlCertIn", "samlCertNotIn", "samlCertContains", "samlCertHasPrefix", "samlCertHasSuffix", "samlCertIsNil", "samlCertNotNil", "samlCertEqualFold", "samlCertContainsFold", "identityProviderLoginEnforced", "identityProviderLoginEnforcedNEQ", "identityProviderJitProvisioning", "identityProviderJitProvisioningNEQ", "multifactorAuthEnforced", "multifactorAuthEnforcedNEQ", "multifactorAuthEnforcedIsNil", "multifactorAuthEnforcedNotNil", "allowSupportAccess", "allowSupportAccessNEQ", "allowSupportAccessIsNil", "allowSupportAccessNotNil", "paymentMethodAdded", "paymentMethodAddedNEQ", "pendingDeletionAt", "pendingDeletionAtGT", "pendingDeletionAtGTE", "pendingDeletionAtLT", "pendingDeletionAtLTE", "pendingDeletionAtIsNil", "pendingDeletionAtNotNil", "hasOrganization", "hasOrganizationWith", "hasFiles", "hasFilesWith", "tagsHas", "domainsHas", "allowedEmailDomainsHas", "jitAllowedEmailDomainsHas", "ssoExemptDomainsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "billingContact", "billingContactNEQ", "billingContactIn", "billingContactNotIn", "billingContactContains", "billingContactHasPrefix", "billingContactHasSuffix", "billingContactIsNil", "billingContactNotNil", "billingContactEqualFold", "billingContactContainsFold", "billingEmail", "billingEmailNEQ", "billingEmailIn", "billingEmailNotIn", "billingEmailContains", "billingEmailHasPrefix", "billingEmailHasSuffix", "billingEmailIsNil", "billingEmailNotNil", "billingEmailEqualFold", "billingEmailContainsFold", "billingPhone", "billingPhoneNEQ", "billingPhoneIn", "billingPhoneNotIn", "billingPhoneContains", "billingPhoneHasPrefix", "billingPhoneHasSuffix", "billingPhoneIsNil", "billingPhoneNotNil", "billingPhoneEqualFold", "billingPhoneContainsFold", "taxIdentifier", "taxIdentifierNEQ", "taxIdentifierIn", "taxIdentifierNotIn", "taxIdentifierContains", "taxIdentifierHasPrefix", "taxIdentifierHasSuffix", "taxIdentifierIsNil", "taxIdentifierNotNil", "taxIdentifierEqualFold", "taxIdentifierContainsFold", "geoLocation", "geoLocationNEQ", "geoLocationIn", "geoLocationNotIn", "geoLocationIsNil", "geoLocationNotNil", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDIsNil", "organizationIDNotNil", "organizationIDEqualFold", "organizationIDContainsFold", "billingNotificationsEnabled", "billingNotificationsEnabledNEQ", "allowMatchingDomainsAutojoin", "allowMatchingDomainsAutojoinNEQ", "allowMatchingDomainsAutojoinIsNil", "allowMatchingDomainsAutojoinNotNil", "externalSharingEnabled", "externalSharingEnabledNEQ", "externalSharingEnabledIsNil", "externalSharingEnabledNotNil", "identityProvider", "identityProviderNEQ", "identityProviderIn", "identityProviderNotIn", "identityProviderIsNil", "identityProviderNotNil", "identityProviderClientID", "identityProviderClientIDNEQ", "identityProviderClientIDIn", "identityProviderClientIDNotIn", "identityProviderClientIDContains", "identityProviderClientIDHasPrefix", "identityProviderClientIDHasSuffix", "identityProviderClientIDIsNil", "identityProviderClientIDNotNil", "identityProviderClientIDEqualFold", "identityProviderClientIDContainsFold", "identityProviderMetadataEndpoint", "identityProviderMetadataEndpointNEQ", "identityProviderMetadataEndpointIn", "identityProviderMetadataEndpointNotIn", "identityProviderMetadataEndpointContains", "identityProviderMetadataEndpointHasPrefix", "identityProviderMetadataEndpointHasSuffix", "identityProviderMetadataEndpointIsNil", "identityProviderMetadataEndpointNotNil", "identityProviderMetadataEndpointEqualFold", "identityProviderMetadataEndpointContainsFold", "identityProviderAuthTested", "identityProviderAuthTestedNEQ", "identityProviderEntityID", "identityProviderEntityIDNEQ", "identityProviderEntityIDIn", "identityProviderEntityIDNotIn", "identityProviderEntityIDContains", "identityProviderEntityIDHasPrefix", "identityProviderEntityIDHasSuffix", "identityProviderEntityIDIsNil", "identityProviderEntityIDNotNil", "identityProviderEntityIDEqualFold", "identityProviderEntityIDContainsFold", "oidcDiscoveryEndpoint", "oidcDiscoveryEndpointNEQ", "oidcDiscoveryEndpointIn", "oidcDiscoveryEndpointNotIn", "oidcDiscoveryEndpointContains", "oidcDiscoveryEndpointHasPrefix", "oidcDiscoveryEndpointHasSuffix", "oidcDiscoveryEndpointIsNil", "oidcDiscoveryEndpointNotNil", "oidcDiscoveryEndpointEqualFold", "oidcDiscoveryEndpointContainsFold", "samlSigninURL", "samlSigninURLNEQ", "samlSigninURLIn", "samlSigninURLNotIn", "samlSigninURLContains", "samlSigninURLHasPrefix", "samlSigninURLHasSuffix", "samlSigninURLIsNil", "samlSigninURLNotNil", "samlSigninURLEqualFold", "samlSigninURLContainsFold", "samlIssuer", "samlIssuerNEQ", "samlIssuerIn", "samlIssuerNotIn", "samlIssuerContains", "samlIssuerHasPrefix", "samlIssuerHasSuffix", "samlIssuerIsNil", "samlIssuerNotNil", "samlIssuerEqualFold", "samlIssuerContainsFold", "samlCert", "samlCertNEQ", "samlCertIn", "samlCertNotIn", "samlCertContains", "samlCertHasPrefix", "samlCertHasSuffix", "samlCertIsNil", "samlCertNotNil", "samlCertEqualFold", "samlCertContainsFold", "identityProviderLoginEnforced", "identityProviderLoginEnforcedNEQ", "identityProviderJitProvisioning", "identityProviderJitProvisioningNEQ", "multifactorAuthEnforced", "multifactorAuthEnforcedNEQ", "multifactorAuthEnforcedIsNil", "multifactorAuthEnforcedNotNil", "allowSupportAccess", "allowSupportAccessNEQ", "allowSupportAccessIsNil", "allowSupportAccessNotNil", "paymentMethodAdded", "paymentMethodAddedNEQ", "pendingDeletionAt", "pendingDeletionAtGT", "pendingDeletionAtGTE", "pendingDeletionAtLT", "pendingDeletionAtLTE", "pendingDeletionAtIsNil", "pendingDeletionAtNotNil", "hasOrganization", "hasOrganizationWith", "hasFiles", "hasFilesWith", "tagsHas", "domainsHas", "allowedEmailDomainsHas", "jitAllowedEmailDomainsHas", "ssoExemptDomainsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -299372,6 +301157,34 @@ func (ec *executionContext) unmarshalInputOrganizationSettingWhereInput(ctx cont
 				return it, err
 			}
 			it.AllowMatchingDomainsAutojoinNotNil = data
+		case "externalSharingEnabled":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalSharingEnabled"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalSharingEnabled = data
+		case "externalSharingEnabledNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalSharingEnabledNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalSharingEnabledNEQ = data
+		case "externalSharingEnabledIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalSharingEnabledIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalSharingEnabledIsNil = data
+		case "externalSharingEnabledNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalSharingEnabledNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalSharingEnabledNotNil = data
 		case "identityProvider":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProvider"))
 			data, err := ec.unmarshalOOrganizationSettingSSOProvider2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐSSOProvider(ctx, v)
@@ -300205,7 +302018,7 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "parentOrganizationID", "parentOrganizationIDNEQ", "parentOrganizationIDIn", "parentOrganizationIDNotIn", "parentOrganizationIDContains", "parentOrganizationIDHasPrefix", "parentOrganizationIDHasSuffix", "parentOrganizationIDIsNil", "parentOrganizationIDNotNil", "parentOrganizationIDEqualFold", "parentOrganizationIDContainsFold", "personalOrg", "personalOrgNEQ", "personalOrgIsNil", "personalOrgNotNil", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "slugName", "slugNameNEQ", "slugNameIn", "slugNameNotIn", "slugNameContains", "slugNameHasPrefix", "slugNameHasSuffix", "slugNameIsNil", "slugNameNotNil", "slugNameEqualFold", "slugNameContainsFold", "hasActionPlanCreators", "hasActionPlanCreatorsWith", "hasAPITokenCreators", "hasAPITokenCreatorsWith", "hasAssessmentCreators", "hasAssessmentCreatorsWith", "hasAssessmentPolicyCreators", "hasAssessmentPolicyCreatorsWith", "hasAssetCreators", "hasAssetCreatorsWith", "hasCampaignCreators", "hasCampaignCreatorsWith", "hasCampaignTargetCreators", "hasCampaignTargetCreatorsWith", "hasCheckResultCreators", "hasCheckResultCreatorsWith", "hasContactCreators", "hasContactCreatorsWith", "hasControlCreators", "hasControlCreatorsWith", "hasControlImplementationCreators", "hasControlImplementationCreatorsWith", "hasControlObjectiveCreators", "hasControlObjectiveCreatorsWith", "hasCustomDomainCreators", "hasCustomDomainCreatorsWith", "hasCustomTypeEnumCreators", "hasCustomTypeEnumCreatorsWith", "hasDirectoryAccountCreators", "hasDirectoryAccountCreatorsWith", "hasDirectoryGroupCreators", "hasDirectoryGroupCreatorsWith", "hasDirectoryMembershipCreators", "hasDirectoryMembershipCreatorsWith", "hasDiscussionCreators", "hasDiscussionCreatorsWith", "hasDocumentDataCreators", "hasDocumentDataCreatorsWith", "hasEmailTemplateCreators", "hasEmailTemplateCreatorsWith", "hasEntityCreators", "hasEntityCreatorsWith", "hasEntityTypeCreators", "hasEntityTypeCreatorsWith", "hasEvidenceCreators", "hasEvidenceCreatorsWith", "hasFileCreators", "hasFileCreatorsWith", "hasFindingCreators", "hasFindingCreatorsWith", "hasFindingControlCreators", "hasFindingControlCreatorsWith", "hasGroupCreators", "hasGroupCreatorsWith", "hasGroupMembershipCreators", "hasGroupMembershipCreatorsWith", "hasGroupSettingCreators", "hasGroupSettingCreatorsWith", "hasHushCreators", "hasHushCreatorsWith", "hasIdentityHolderCreators", "hasIdentityHolderCreatorsWith", "hasInternalPolicyCreators", "hasInternalPolicyCreatorsWith", "hasInviteCreators", "hasInviteCreatorsWith", "hasMappedControlCreators", "hasMappedControlCreatorsWith", "hasNarrativeCreators", "hasNarrativeCreatorsWith", "hasNoteCreators", "hasNoteCreatorsWith", "hasNotificationTemplateCreators", "hasNotificationTemplateCreatorsWith", "hasOrgMembershipCreators", "hasOrgMembershipCreatorsWith", "hasPlatformCreators", "hasPlatformCreatorsWith", "hasProcedureCreators", "hasProcedureCreatorsWith", "hasProgramCreators", "hasProgramCreatorsWith", "hasProgramMembershipCreators", "hasProgramMembershipCreatorsWith", "hasRemediationCreators", "hasRemediationCreatorsWith", "hasReportCreators", "hasReportCreatorsWith", "hasReportMembershipCreators", "hasReportMembershipCreatorsWith", "hasReviewCreators", "hasReviewCreatorsWith", "hasRiskCreators", "hasRiskCreatorsWith", "hasScanCreators", "hasScanCreatorsWith", "hasSLADefinitionCreators", "hasSLADefinitionCreatorsWith", "hasStandardCreators", "hasStandardCreatorsWith", "hasSubcontrolCreators", "hasSubcontrolCreatorsWith", "hasSubprocessorCreators", "hasSubprocessorCreatorsWith", "hasSubscriberCreators", "hasSubscriberCreatorsWith", "hasSystemDetailCreators", "hasSystemDetailCreatorsWith", "hasTagDefinitionCreators", "hasTagDefinitionCreatorsWith", "hasTaskCreators", "hasTaskCreatorsWith", "hasTemplateCreators", "hasTemplateCreatorsWith", "hasTrustCenterCreators", "hasTrustCenterCreatorsWith", "hasTrustCenterComplianceCreators", "hasTrustCenterComplianceCreatorsWith", "hasTrustCenterDocCreators", "hasTrustCenterDocCreatorsWith", "hasTrustCenterEntityCreators", "hasTrustCenterEntityCreatorsWith", "hasTrustCenterFaqCreators", "hasTrustCenterFaqCreatorsWith", "hasTrustCenterNdaRequestCreators", "hasTrustCenterNdaRequestCreatorsWith", "hasTrustCenterSubprocessorCreators", "hasTrustCenterSubprocessorCreatorsWith", "hasTrustCenterWatermarkConfigCreators", "hasTrustCenterWatermarkConfigCreatorsWith", "hasVendorRiskScoreCreators", "hasVendorRiskScoreCreatorsWith", "hasVendorScoringConfigCreators", "hasVendorScoringConfigCreatorsWith", "hasVulnerabilityCreators", "hasVulnerabilityCreatorsWith", "hasWorkflowDefinitionCreators", "hasWorkflowDefinitionCreatorsWith", "hasCampaignManager", "hasCampaignManagerWith", "hasComplianceManager", "hasComplianceManagerWith", "hasGroupManager", "hasGroupManagerWith", "hasIntegrationManager", "hasIntegrationManagerWith", "hasPolicyManager", "hasPolicyManagerWith", "hasRegistryManager", "hasRegistryManagerWith", "hasRiskManager", "hasRiskManagerWith", "hasTrustCenterManager", "hasTrustCenterManagerWith", "hasWorkflowManager", "hasWorkflowManagerWith", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith", "hasSetting", "hasSettingWith", "hasPersonalAccessTokens", "hasPersonalAccessTokensWith", "hasBrandingSetting", "hasBrandingSettingWith", "hasUsers", "hasUsersWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasAvatarFile", "hasAvatarFileWith", "hasOrgSubscriptions", "hasOrgSubscriptionsWith", "hasInvites", "hasInvitesWith", "hasMembers", "hasMembersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "parentOrganizationID", "parentOrganizationIDNEQ", "parentOrganizationIDIn", "parentOrganizationIDNotIn", "parentOrganizationIDContains", "parentOrganizationIDHasPrefix", "parentOrganizationIDHasSuffix", "parentOrganizationIDIsNil", "parentOrganizationIDNotNil", "parentOrganizationIDEqualFold", "parentOrganizationIDContainsFold", "personalOrg", "personalOrgNEQ", "personalOrgIsNil", "personalOrgNotNil", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "slugName", "slugNameNEQ", "slugNameIn", "slugNameNotIn", "slugNameContains", "slugNameHasPrefix", "slugNameHasSuffix", "slugNameIsNil", "slugNameNotNil", "slugNameEqualFold", "slugNameContainsFold", "hasActionPlanCreators", "hasActionPlanCreatorsWith", "hasAPITokenCreators", "hasAPITokenCreatorsWith", "hasAssessmentCreators", "hasAssessmentCreatorsWith", "hasAssessmentPolicyCreators", "hasAssessmentPolicyCreatorsWith", "hasAssetCreators", "hasAssetCreatorsWith", "hasCampaignCreators", "hasCampaignCreatorsWith", "hasCampaignTargetCreators", "hasCampaignTargetCreatorsWith", "hasCheckResultCreators", "hasCheckResultCreatorsWith", "hasContactCreators", "hasContactCreatorsWith", "hasControlCreators", "hasControlCreatorsWith", "hasControlImplementationCreators", "hasControlImplementationCreatorsWith", "hasControlObjectiveCreators", "hasControlObjectiveCreatorsWith", "hasCustomDomainCreators", "hasCustomDomainCreatorsWith", "hasCustomTypeEnumCreators", "hasCustomTypeEnumCreatorsWith", "hasDirectoryAccountCreators", "hasDirectoryAccountCreatorsWith", "hasDirectoryGroupCreators", "hasDirectoryGroupCreatorsWith", "hasDirectoryMembershipCreators", "hasDirectoryMembershipCreatorsWith", "hasDiscussionCreators", "hasDiscussionCreatorsWith", "hasDocumentDataCreators", "hasDocumentDataCreatorsWith", "hasEmailTemplateCreators", "hasEmailTemplateCreatorsWith", "hasEntityCreators", "hasEntityCreatorsWith", "hasEntityTypeCreators", "hasEntityTypeCreatorsWith", "hasEvidenceCreators", "hasEvidenceCreatorsWith", "hasFileCreators", "hasFileCreatorsWith", "hasFindingCreators", "hasFindingCreatorsWith", "hasFindingControlCreators", "hasFindingControlCreatorsWith", "hasGroupCreators", "hasGroupCreatorsWith", "hasGroupMembershipCreators", "hasGroupMembershipCreatorsWith", "hasGroupSettingCreators", "hasGroupSettingCreatorsWith", "hasHushCreators", "hasHushCreatorsWith", "hasIdentityHolderCreators", "hasIdentityHolderCreatorsWith", "hasInternalPolicyCreators", "hasInternalPolicyCreatorsWith", "hasInviteCreators", "hasInviteCreatorsWith", "hasMappedControlCreators", "hasMappedControlCreatorsWith", "hasNarrativeCreators", "hasNarrativeCreatorsWith", "hasNoteCreators", "hasNoteCreatorsWith", "hasNotificationTemplateCreators", "hasNotificationTemplateCreatorsWith", "hasOrgMembershipCreators", "hasOrgMembershipCreatorsWith", "hasPlatformCreators", "hasPlatformCreatorsWith", "hasProcedureCreators", "hasProcedureCreatorsWith", "hasProgramCreators", "hasProgramCreatorsWith", "hasProgramMembershipCreators", "hasProgramMembershipCreatorsWith", "hasRemediationCreators", "hasRemediationCreatorsWith", "hasReportCreators", "hasReportCreatorsWith", "hasReportMembershipCreators", "hasReportMembershipCreatorsWith", "hasReviewCreators", "hasReviewCreatorsWith", "hasRiskCreators", "hasRiskCreatorsWith", "hasScanCreators", "hasScanCreatorsWith", "hasShareLinkCreators", "hasShareLinkCreatorsWith", "hasSLADefinitionCreators", "hasSLADefinitionCreatorsWith", "hasStandardCreators", "hasStandardCreatorsWith", "hasSubcontrolCreators", "hasSubcontrolCreatorsWith", "hasSubprocessorCreators", "hasSubprocessorCreatorsWith", "hasSubscriberCreators", "hasSubscriberCreatorsWith", "hasSystemDetailCreators", "hasSystemDetailCreatorsWith", "hasTagDefinitionCreators", "hasTagDefinitionCreatorsWith", "hasTaskCreators", "hasTaskCreatorsWith", "hasTemplateCreators", "hasTemplateCreatorsWith", "hasTrustCenterCreators", "hasTrustCenterCreatorsWith", "hasTrustCenterComplianceCreators", "hasTrustCenterComplianceCreatorsWith", "hasTrustCenterDocCreators", "hasTrustCenterDocCreatorsWith", "hasTrustCenterEntityCreators", "hasTrustCenterEntityCreatorsWith", "hasTrustCenterFaqCreators", "hasTrustCenterFaqCreatorsWith", "hasTrustCenterNdaRequestCreators", "hasTrustCenterNdaRequestCreatorsWith", "hasTrustCenterSubprocessorCreators", "hasTrustCenterSubprocessorCreatorsWith", "hasTrustCenterWatermarkConfigCreators", "hasTrustCenterWatermarkConfigCreatorsWith", "hasVendorRiskScoreCreators", "hasVendorRiskScoreCreatorsWith", "hasVendorScoringConfigCreators", "hasVendorScoringConfigCreatorsWith", "hasVulnerabilityCreators", "hasVulnerabilityCreatorsWith", "hasWorkflowDefinitionCreators", "hasWorkflowDefinitionCreatorsWith", "hasCampaignManager", "hasCampaignManagerWith", "hasComplianceManager", "hasComplianceManagerWith", "hasGroupManager", "hasGroupManagerWith", "hasIntegrationManager", "hasIntegrationManagerWith", "hasPolicyManager", "hasPolicyManagerWith", "hasRegistryManager", "hasRegistryManagerWith", "hasRiskManager", "hasRiskManagerWith", "hasShareLinkManager", "hasShareLinkManagerWith", "hasTrustCenterManager", "hasTrustCenterManagerWith", "hasWorkflowManager", "hasWorkflowManagerWith", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith", "hasSetting", "hasSettingWith", "hasPersonalAccessTokens", "hasPersonalAccessTokensWith", "hasBrandingSetting", "hasBrandingSettingWith", "hasUsers", "hasUsersWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasAvatarFile", "hasAvatarFileWith", "hasOrgSubscriptions", "hasOrgSubscriptionsWith", "hasInvites", "hasInvitesWith", "hasMembers", "hasMembersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -301724,6 +303537,20 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasScanCreatorsWith = data
+		case "hasShareLinkCreators":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasShareLinkCreators"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasShareLinkCreators = data
+		case "hasShareLinkCreatorsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasShareLinkCreatorsWith"))
+			data, err := ec.unmarshalOGroupWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasShareLinkCreatorsWith = data
 		case "hasSLADefinitionCreators":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSLADefinitionCreators"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -302116,6 +303943,20 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasRiskManagerWith = data
+		case "hasShareLinkManager":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasShareLinkManager"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasShareLinkManager = data
+		case "hasShareLinkManagerWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasShareLinkManagerWith"))
+			data, err := ec.unmarshalOGroupWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasShareLinkManagerWith = data
 		case "hasTrustCenterManager":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTrustCenterManager"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -330752,6 +332593,1806 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 func UnmarshalScanWhereInput(ctx context.Context, raw any) (generated.ScanWhereInput, error) {
 	var out generated.ScanWhereInput
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "ScanWhereInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputShareLinkAccessEventOrder(ctx context.Context, obj any) (generated.ShareLinkAccessEventOrder, error) {
+	var it generated.ShareLinkAccessEventOrder
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNShareLinkAccessEventOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalShareLinkAccessEventOrder unmarshals raw into the ShareLinkAccessEventOrder input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalShareLinkAccessEventOrder(ctx context.Context, raw any) (generated.ShareLinkAccessEventOrder, error) {
+	var out generated.ShareLinkAccessEventOrder
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ShareLinkAccessEventOrder", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputShareLinkAccessEventWhereInput(ctx context.Context, obj any) (generated.ShareLinkAccessEventWhereInput, error) {
+	var it generated.ShareLinkAccessEventWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "shareLinkID", "shareLinkIDNEQ", "shareLinkIDIn", "shareLinkIDNotIn", "shareLinkIDContains", "shareLinkIDHasPrefix", "shareLinkIDHasSuffix", "shareLinkIDEqualFold", "shareLinkIDContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDEqualFold", "fileIDContainsFold", "ipAddress", "ipAddressNEQ", "ipAddressIn", "ipAddressNotIn", "ipAddressContains", "ipAddressHasPrefix", "ipAddressHasSuffix", "ipAddressIsNil", "ipAddressNotNil", "ipAddressEqualFold", "ipAddressContainsFold", "userAgent", "userAgentNEQ", "userAgentIn", "userAgentNotIn", "userAgentContains", "userAgentHasPrefix", "userAgentHasSuffix", "userAgentIsNil", "userAgentNotNil", "userAgentEqualFold", "userAgentContainsFold", "hasOwner", "hasOwnerWith", "hasShareLink", "hasShareLinkWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOShareLinkAccessEventWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOShareLinkAccessEventWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOShareLinkAccessEventWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDEqualFold = data
+		case "idContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDContainsFold = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIsNil = data
+		case "createdAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotNil = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIsNil = data
+		case "updatedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "updatedByImpersonator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonator"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonator = data
+		case "updatedByImpersonatorNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNEQ = data
+		case "updatedByImpersonatorIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIn = data
+		case "updatedByImpersonatorNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotIn = data
+		case "updatedByImpersonatorContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
+		case "updatedByImpersonatorHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasSuffix = data
+		case "updatedByImpersonatorIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIsNil = data
+		case "updatedByImpersonatorNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotNil = data
+		case "updatedByImpersonatorEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorEqualFold = data
+		case "updatedByImpersonatorContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContainsFold = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "ownerIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNEQ = data
+		case "ownerIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDIn = data
+		case "ownerIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNotIn = data
+		case "ownerIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
+		case "ownerIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasSuffix = data
+		case "ownerIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDIsNil = data
+		case "ownerIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNotNil = data
+		case "ownerIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDEqualFold = data
+		case "ownerIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDContainsFold = data
+		case "shareLinkID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkID = data
+		case "shareLinkIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkIDNEQ = data
+		case "shareLinkIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkIDIn = data
+		case "shareLinkIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkIDNotIn = data
+		case "shareLinkIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkIDContains = data
+		case "shareLinkIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkIDHasPrefix = data
+		case "shareLinkIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkIDHasSuffix = data
+		case "shareLinkIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkIDEqualFold = data
+		case "shareLinkIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shareLinkIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ShareLinkIDContainsFold = data
+		case "fileID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileID = data
+		case "fileIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileIDNEQ = data
+		case "fileIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileIDIn = data
+		case "fileIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileIDNotIn = data
+		case "fileIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileIDContains = data
+		case "fileIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileIDHasPrefix = data
+		case "fileIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileIDHasSuffix = data
+		case "fileIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileIDEqualFold = data
+		case "fileIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fileIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FileIDContainsFold = data
+		case "ipAddress":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddress"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddress = data
+		case "ipAddressNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressNEQ = data
+		case "ipAddressIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressIn = data
+		case "ipAddressNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressNotIn = data
+		case "ipAddressContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressContains = data
+		case "ipAddressHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressHasPrefix = data
+		case "ipAddressHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressHasSuffix = data
+		case "ipAddressIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressIsNil = data
+		case "ipAddressNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressNotNil = data
+		case "ipAddressEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressEqualFold = data
+		case "ipAddressContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ipAddressContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddressContainsFold = data
+		case "userAgent":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgent"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgent = data
+		case "userAgentNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentNEQ = data
+		case "userAgentIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentIn = data
+		case "userAgentNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentNotIn = data
+		case "userAgentContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentContains = data
+		case "userAgentHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentHasPrefix = data
+		case "userAgentHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentHasSuffix = data
+		case "userAgentIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentIsNil = data
+		case "userAgentNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentNotNil = data
+		case "userAgentEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentEqualFold = data
+		case "userAgentContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userAgentContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserAgentContainsFold = data
+		case "hasOwner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasOwner"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasOwner = data
+		case "hasOwnerWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasOwnerWith"))
+			data, err := ec.unmarshalOOrganizationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasOwnerWith = data
+		case "hasShareLink":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasShareLink"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasShareLink = data
+		case "hasShareLinkWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasShareLinkWith"))
+			data, err := ec.unmarshalOShareLinkWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasShareLinkWith = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalShareLinkAccessEventWhereInput unmarshals raw into the ShareLinkAccessEventWhereInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalShareLinkAccessEventWhereInput(ctx context.Context, raw any) (generated.ShareLinkAccessEventWhereInput, error) {
+	var out generated.ShareLinkAccessEventWhereInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ShareLinkAccessEventWhereInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputShareLinkOrder(ctx context.Context, obj any) (generated.ShareLinkOrder, error) {
+	var it generated.ShareLinkOrder
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNShareLinkOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalShareLinkOrder unmarshals raw into the ShareLinkOrder input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalShareLinkOrder(ctx context.Context, raw any) (generated.ShareLinkOrder, error) {
+	var out generated.ShareLinkOrder
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ShareLinkOrder", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputShareLinkWhereInput(ctx context.Context, obj any) (generated.ShareLinkWhereInput, error) {
+	var it generated.ShareLinkWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "expiresAt", "expiresAtGT", "expiresAtGTE", "expiresAtLT", "expiresAtLTE", "expiresAtIsNil", "expiresAtNotNil", "maxUses", "maxUsesNEQ", "maxUsesGT", "maxUsesGTE", "maxUsesLT", "maxUsesLTE", "maxUsesIsNil", "maxUsesNotNil", "useCount", "useCountNEQ", "useCountGT", "useCountGTE", "useCountLT", "useCountLTE", "landingPage", "landingPageNEQ", "landingPageIsNil", "landingPageNotNil", "requireSession", "requireSessionNEQ", "requireSessionIsNil", "requireSessionNotNil", "revokedAt", "revokedAtGT", "revokedAtGTE", "revokedAtLT", "revokedAtLTE", "revokedAtIsNil", "revokedAtNotNil", "hasOwner", "hasOwnerWith", "hasFiles", "hasFilesWith", "hasShareLinkAccessEvents", "hasShareLinkAccessEventsWith", "recipientEmailsHas"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOShareLinkWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOShareLinkWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOShareLinkWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDEqualFold = data
+		case "idContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDContainsFold = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIsNil = data
+		case "createdAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotNil = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIsNil = data
+		case "updatedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "updatedByImpersonator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonator"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonator = data
+		case "updatedByImpersonatorNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNEQ = data
+		case "updatedByImpersonatorIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIn = data
+		case "updatedByImpersonatorNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotIn = data
+		case "updatedByImpersonatorContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
+		case "updatedByImpersonatorHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasSuffix = data
+		case "updatedByImpersonatorIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIsNil = data
+		case "updatedByImpersonatorNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotNil = data
+		case "updatedByImpersonatorEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorEqualFold = data
+		case "updatedByImpersonatorContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContainsFold = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "ownerIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNEQ = data
+		case "ownerIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDIn = data
+		case "ownerIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNotIn = data
+		case "ownerIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
+		case "ownerIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasSuffix = data
+		case "ownerIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDIsNil = data
+		case "ownerIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNotNil = data
+		case "ownerIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDEqualFold = data
+		case "ownerIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDContainsFold = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "nameNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameNEQ = data
+		case "nameIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameIn = data
+		case "nameNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameNotIn = data
+		case "nameContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameContains = data
+		case "nameHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameHasPrefix = data
+		case "nameHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameHasSuffix = data
+		case "nameIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameIsNil = data
+		case "nameNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameNotNil = data
+		case "nameEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameEqualFold = data
+		case "nameContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameContainsFold = data
+		case "expiresAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAt = data
+		case "expiresAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtGT = data
+		case "expiresAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtGTE = data
+		case "expiresAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtLT = data
+		case "expiresAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtLTE = data
+		case "expiresAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtIsNil = data
+		case "expiresAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtNotNil = data
+		case "maxUses":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUses"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUses = data
+		case "maxUsesNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUsesNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUsesNEQ = data
+		case "maxUsesGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUsesGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUsesGT = data
+		case "maxUsesGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUsesGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUsesGTE = data
+		case "maxUsesLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUsesLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUsesLT = data
+		case "maxUsesLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUsesLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUsesLTE = data
+		case "maxUsesIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUsesIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUsesIsNil = data
+		case "maxUsesNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUsesNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUsesNotNil = data
+		case "useCount":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useCount"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseCount = data
+		case "useCountNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useCountNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseCountNEQ = data
+		case "useCountGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useCountGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseCountGT = data
+		case "useCountGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useCountGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseCountGTE = data
+		case "useCountLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useCountLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseCountLT = data
+		case "useCountLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useCountLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseCountLTE = data
+		case "landingPage":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("landingPage"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LandingPage = data
+		case "landingPageNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("landingPageNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LandingPageNEQ = data
+		case "landingPageIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("landingPageIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LandingPageIsNil = data
+		case "landingPageNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("landingPageNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LandingPageNotNil = data
+		case "requireSession":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requireSession"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequireSession = data
+		case "requireSessionNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requireSessionNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequireSessionNEQ = data
+		case "requireSessionIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requireSessionIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequireSessionIsNil = data
+		case "requireSessionNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requireSessionNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequireSessionNotNil = data
+		case "revokedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revokedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevokedAt = data
+		case "revokedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revokedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevokedAtGT = data
+		case "revokedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revokedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevokedAtGTE = data
+		case "revokedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revokedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevokedAtLT = data
+		case "revokedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revokedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevokedAtLTE = data
+		case "revokedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revokedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevokedAtIsNil = data
+		case "revokedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revokedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevokedAtNotNil = data
+		case "hasOwner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasOwner"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasOwner = data
+		case "hasOwnerWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasOwnerWith"))
+			data, err := ec.unmarshalOOrganizationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasOwnerWith = data
+		case "hasFiles":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFiles"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFiles = data
+		case "hasFilesWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFilesWith"))
+			data, err := ec.unmarshalOFileWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFileWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFilesWith = data
+		case "hasShareLinkAccessEvents":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasShareLinkAccessEvents"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasShareLinkAccessEvents = data
+		case "hasShareLinkAccessEventsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasShareLinkAccessEventsWith"))
+			data, err := ec.unmarshalOShareLinkAccessEventWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasShareLinkAccessEventsWith = data
+		case "recipientEmailsHas":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("recipientEmailsHas"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RecipientEmailsHas = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalShareLinkWhereInput unmarshals raw into the ShareLinkWhereInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalShareLinkWhereInput(ctx context.Context, raw any) (generated.ShareLinkWhereInput, error) {
+	var out generated.ShareLinkWhereInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ShareLinkWhereInput", raw, &out)
 	return out, err
 }
 
@@ -379113,7 +382754,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "displayName", "description", "clearDescription", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "addActionPlanCreatorIDs", "removeActionPlanCreatorIDs", "clearActionPlanCreators", "addAPITokenCreatorIDs", "removeAPITokenCreatorIDs", "clearAPITokenCreators", "addAssessmentCreatorIDs", "removeAssessmentCreatorIDs", "clearAssessmentCreators", "addAssessmentPolicyCreatorIDs", "removeAssessmentPolicyCreatorIDs", "clearAssessmentPolicyCreators", "addAssetCreatorIDs", "removeAssetCreatorIDs", "clearAssetCreators", "addCampaignCreatorIDs", "removeCampaignCreatorIDs", "clearCampaignCreators", "addCampaignTargetCreatorIDs", "removeCampaignTargetCreatorIDs", "clearCampaignTargetCreators", "addCheckResultCreatorIDs", "removeCheckResultCreatorIDs", "clearCheckResultCreators", "addContactCreatorIDs", "removeContactCreatorIDs", "clearContactCreators", "addControlCreatorIDs", "removeControlCreatorIDs", "clearControlCreators", "addControlImplementationCreatorIDs", "removeControlImplementationCreatorIDs", "clearControlImplementationCreators", "addControlObjectiveCreatorIDs", "removeControlObjectiveCreatorIDs", "clearControlObjectiveCreators", "addCustomDomainCreatorIDs", "removeCustomDomainCreatorIDs", "clearCustomDomainCreators", "addCustomTypeEnumCreatorIDs", "removeCustomTypeEnumCreatorIDs", "clearCustomTypeEnumCreators", "addDirectoryAccountCreatorIDs", "removeDirectoryAccountCreatorIDs", "clearDirectoryAccountCreators", "addDirectoryGroupCreatorIDs", "removeDirectoryGroupCreatorIDs", "clearDirectoryGroupCreators", "addDirectoryMembershipCreatorIDs", "removeDirectoryMembershipCreatorIDs", "clearDirectoryMembershipCreators", "addDiscussionCreatorIDs", "removeDiscussionCreatorIDs", "clearDiscussionCreators", "addDocumentDataCreatorIDs", "removeDocumentDataCreatorIDs", "clearDocumentDataCreators", "addEmailTemplateCreatorIDs", "removeEmailTemplateCreatorIDs", "clearEmailTemplateCreators", "addEntityCreatorIDs", "removeEntityCreatorIDs", "clearEntityCreators", "addEntityTypeCreatorIDs", "removeEntityTypeCreatorIDs", "clearEntityTypeCreators", "addEvidenceCreatorIDs", "removeEvidenceCreatorIDs", "clearEvidenceCreators", "addFileCreatorIDs", "removeFileCreatorIDs", "clearFileCreators", "addFindingCreatorIDs", "removeFindingCreatorIDs", "clearFindingCreators", "addFindingControlCreatorIDs", "removeFindingControlCreatorIDs", "clearFindingControlCreators", "addGroupCreatorIDs", "removeGroupCreatorIDs", "clearGroupCreators", "addGroupMembershipCreatorIDs", "removeGroupMembershipCreatorIDs", "clearGroupMembershipCreators", "addGroupSettingCreatorIDs", "removeGroupSettingCreatorIDs", "clearGroupSettingCreators", "addHushCreatorIDs", "removeHushCreatorIDs", "clearHushCreators", "addIdentityHolderCreatorIDs", "removeIdentityHolderCreatorIDs", "clearIdentityHolderCreators", "addInternalPolicyCreatorIDs", "removeInternalPolicyCreatorIDs", "clearInternalPolicyCreators", "addInviteCreatorIDs", "removeInviteCreatorIDs", "clearInviteCreators", "addMappedControlCreatorIDs", "removeMappedControlCreatorIDs", "clearMappedControlCreators", "addNarrativeCreatorIDs", "removeNarrativeCreatorIDs", "clearNarrativeCreators", "addNoteCreatorIDs", "removeNoteCreatorIDs", "clearNoteCreators", "addNotificationTemplateCreatorIDs", "removeNotificationTemplateCreatorIDs", "clearNotificationTemplateCreators", "addOrgMembershipCreatorIDs", "removeOrgMembershipCreatorIDs", "clearOrgMembershipCreators", "addPlatformCreatorIDs", "removePlatformCreatorIDs", "clearPlatformCreators", "addProcedureCreatorIDs", "removeProcedureCreatorIDs", "clearProcedureCreators", "addProgramCreatorIDs", "removeProgramCreatorIDs", "clearProgramCreators", "addProgramMembershipCreatorIDs", "removeProgramMembershipCreatorIDs", "clearProgramMembershipCreators", "addRemediationCreatorIDs", "removeRemediationCreatorIDs", "clearRemediationCreators", "addReportCreatorIDs", "removeReportCreatorIDs", "clearReportCreators", "addReportMembershipCreatorIDs", "removeReportMembershipCreatorIDs", "clearReportMembershipCreators", "addReviewCreatorIDs", "removeReviewCreatorIDs", "clearReviewCreators", "addRiskCreatorIDs", "removeRiskCreatorIDs", "clearRiskCreators", "addScanCreatorIDs", "removeScanCreatorIDs", "clearScanCreators", "addSLADefinitionCreatorIDs", "removeSLADefinitionCreatorIDs", "clearSLADefinitionCreators", "addStandardCreatorIDs", "removeStandardCreatorIDs", "clearStandardCreators", "addSubcontrolCreatorIDs", "removeSubcontrolCreatorIDs", "clearSubcontrolCreators", "addSubprocessorCreatorIDs", "removeSubprocessorCreatorIDs", "clearSubprocessorCreators", "addSubscriberCreatorIDs", "removeSubscriberCreatorIDs", "clearSubscriberCreators", "addSystemDetailCreatorIDs", "removeSystemDetailCreatorIDs", "clearSystemDetailCreators", "addTagDefinitionCreatorIDs", "removeTagDefinitionCreatorIDs", "clearTagDefinitionCreators", "addTaskCreatorIDs", "removeTaskCreatorIDs", "clearTaskCreators", "addTemplateCreatorIDs", "removeTemplateCreatorIDs", "clearTemplateCreators", "addTrustCenterCreatorIDs", "removeTrustCenterCreatorIDs", "clearTrustCenterCreators", "addTrustCenterComplianceCreatorIDs", "removeTrustCenterComplianceCreatorIDs", "clearTrustCenterComplianceCreators", "addTrustCenterDocCreatorIDs", "removeTrustCenterDocCreatorIDs", "clearTrustCenterDocCreators", "addTrustCenterEntityCreatorIDs", "removeTrustCenterEntityCreatorIDs", "clearTrustCenterEntityCreators", "addTrustCenterFaqCreatorIDs", "removeTrustCenterFaqCreatorIDs", "clearTrustCenterFaqCreators", "addTrustCenterNdaRequestCreatorIDs", "removeTrustCenterNdaRequestCreatorIDs", "clearTrustCenterNdaRequestCreators", "addTrustCenterSubprocessorCreatorIDs", "removeTrustCenterSubprocessorCreatorIDs", "clearTrustCenterSubprocessorCreators", "addTrustCenterWatermarkConfigCreatorIDs", "removeTrustCenterWatermarkConfigCreatorIDs", "clearTrustCenterWatermarkConfigCreators", "addVendorRiskScoreCreatorIDs", "removeVendorRiskScoreCreatorIDs", "clearVendorRiskScoreCreators", "addVendorScoringConfigCreatorIDs", "removeVendorScoringConfigCreatorIDs", "clearVendorScoringConfigCreators", "addVulnerabilityCreatorIDs", "removeVulnerabilityCreatorIDs", "clearVulnerabilityCreators", "addWorkflowDefinitionCreatorIDs", "removeWorkflowDefinitionCreatorIDs", "clearWorkflowDefinitionCreators", "addCampaignManagerIDs", "removeCampaignManagerIDs", "clearCampaignManager", "addComplianceManagerIDs", "removeComplianceManagerIDs", "clearComplianceManager", "addGroupManagerIDs", "removeGroupManagerIDs", "clearGroupManager", "addIntegrationManagerIDs", "removeIntegrationManagerIDs", "clearIntegrationManager", "addPolicyManagerIDs", "removePolicyManagerIDs", "clearPolicyManager", "addRegistryManagerIDs", "removeRegistryManagerIDs", "clearRegistryManager", "addRiskManagerIDs", "removeRiskManagerIDs", "clearRiskManager", "addTrustCenterManagerIDs", "removeTrustCenterManagerIDs", "clearTrustCenterManager", "addWorkflowManagerIDs", "removeWorkflowManagerIDs", "clearWorkflowManager", "settingID", "clearSetting", "addPersonalAccessTokenIDs", "removePersonalAccessTokenIDs", "clearPersonalAccessTokens", "brandingSettingID", "clearBrandingSetting", "addFileIDs", "removeFileIDs", "clearFiles", "addEventIDs", "removeEventIDs", "clearEvents", "avatarFileID", "clearAvatarFile", "addOrgSubscriptionIDs", "removeOrgSubscriptionIDs", "clearOrgSubscriptions", "addInviteIDs", "removeInviteIDs", "clearInvites", "addImpersonationEventIDs", "removeImpersonationEventIDs", "clearImpersonationEvents", "addOrgMembers", "removeOrgMembers", "updateOrgSettings"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "displayName", "description", "clearDescription", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "addActionPlanCreatorIDs", "removeActionPlanCreatorIDs", "clearActionPlanCreators", "addAPITokenCreatorIDs", "removeAPITokenCreatorIDs", "clearAPITokenCreators", "addAssessmentCreatorIDs", "removeAssessmentCreatorIDs", "clearAssessmentCreators", "addAssessmentPolicyCreatorIDs", "removeAssessmentPolicyCreatorIDs", "clearAssessmentPolicyCreators", "addAssetCreatorIDs", "removeAssetCreatorIDs", "clearAssetCreators", "addCampaignCreatorIDs", "removeCampaignCreatorIDs", "clearCampaignCreators", "addCampaignTargetCreatorIDs", "removeCampaignTargetCreatorIDs", "clearCampaignTargetCreators", "addCheckResultCreatorIDs", "removeCheckResultCreatorIDs", "clearCheckResultCreators", "addContactCreatorIDs", "removeContactCreatorIDs", "clearContactCreators", "addControlCreatorIDs", "removeControlCreatorIDs", "clearControlCreators", "addControlImplementationCreatorIDs", "removeControlImplementationCreatorIDs", "clearControlImplementationCreators", "addControlObjectiveCreatorIDs", "removeControlObjectiveCreatorIDs", "clearControlObjectiveCreators", "addCustomDomainCreatorIDs", "removeCustomDomainCreatorIDs", "clearCustomDomainCreators", "addCustomTypeEnumCreatorIDs", "removeCustomTypeEnumCreatorIDs", "clearCustomTypeEnumCreators", "addDirectoryAccountCreatorIDs", "removeDirectoryAccountCreatorIDs", "clearDirectoryAccountCreators", "addDirectoryGroupCreatorIDs", "removeDirectoryGroupCreatorIDs", "clearDirectoryGroupCreators", "addDirectoryMembershipCreatorIDs", "removeDirectoryMembershipCreatorIDs", "clearDirectoryMembershipCreators", "addDiscussionCreatorIDs", "removeDiscussionCreatorIDs", "clearDiscussionCreators", "addDocumentDataCreatorIDs", "removeDocumentDataCreatorIDs", "clearDocumentDataCreators", "addEmailTemplateCreatorIDs", "removeEmailTemplateCreatorIDs", "clearEmailTemplateCreators", "addEntityCreatorIDs", "removeEntityCreatorIDs", "clearEntityCreators", "addEntityTypeCreatorIDs", "removeEntityTypeCreatorIDs", "clearEntityTypeCreators", "addEvidenceCreatorIDs", "removeEvidenceCreatorIDs", "clearEvidenceCreators", "addFileCreatorIDs", "removeFileCreatorIDs", "clearFileCreators", "addFindingCreatorIDs", "removeFindingCreatorIDs", "clearFindingCreators", "addFindingControlCreatorIDs", "removeFindingControlCreatorIDs", "clearFindingControlCreators", "addGroupCreatorIDs", "removeGroupCreatorIDs", "clearGroupCreators", "addGroupMembershipCreatorIDs", "removeGroupMembershipCreatorIDs", "clearGroupMembershipCreators", "addGroupSettingCreatorIDs", "removeGroupSettingCreatorIDs", "clearGroupSettingCreators", "addHushCreatorIDs", "removeHushCreatorIDs", "clearHushCreators", "addIdentityHolderCreatorIDs", "removeIdentityHolderCreatorIDs", "clearIdentityHolderCreators", "addInternalPolicyCreatorIDs", "removeInternalPolicyCreatorIDs", "clearInternalPolicyCreators", "addInviteCreatorIDs", "removeInviteCreatorIDs", "clearInviteCreators", "addMappedControlCreatorIDs", "removeMappedControlCreatorIDs", "clearMappedControlCreators", "addNarrativeCreatorIDs", "removeNarrativeCreatorIDs", "clearNarrativeCreators", "addNoteCreatorIDs", "removeNoteCreatorIDs", "clearNoteCreators", "addNotificationTemplateCreatorIDs", "removeNotificationTemplateCreatorIDs", "clearNotificationTemplateCreators", "addOrgMembershipCreatorIDs", "removeOrgMembershipCreatorIDs", "clearOrgMembershipCreators", "addPlatformCreatorIDs", "removePlatformCreatorIDs", "clearPlatformCreators", "addProcedureCreatorIDs", "removeProcedureCreatorIDs", "clearProcedureCreators", "addProgramCreatorIDs", "removeProgramCreatorIDs", "clearProgramCreators", "addProgramMembershipCreatorIDs", "removeProgramMembershipCreatorIDs", "clearProgramMembershipCreators", "addRemediationCreatorIDs", "removeRemediationCreatorIDs", "clearRemediationCreators", "addReportCreatorIDs", "removeReportCreatorIDs", "clearReportCreators", "addReportMembershipCreatorIDs", "removeReportMembershipCreatorIDs", "clearReportMembershipCreators", "addReviewCreatorIDs", "removeReviewCreatorIDs", "clearReviewCreators", "addRiskCreatorIDs", "removeRiskCreatorIDs", "clearRiskCreators", "addScanCreatorIDs", "removeScanCreatorIDs", "clearScanCreators", "addShareLinkCreatorIDs", "removeShareLinkCreatorIDs", "clearShareLinkCreators", "addSLADefinitionCreatorIDs", "removeSLADefinitionCreatorIDs", "clearSLADefinitionCreators", "addStandardCreatorIDs", "removeStandardCreatorIDs", "clearStandardCreators", "addSubcontrolCreatorIDs", "removeSubcontrolCreatorIDs", "clearSubcontrolCreators", "addSubprocessorCreatorIDs", "removeSubprocessorCreatorIDs", "clearSubprocessorCreators", "addSubscriberCreatorIDs", "removeSubscriberCreatorIDs", "clearSubscriberCreators", "addSystemDetailCreatorIDs", "removeSystemDetailCreatorIDs", "clearSystemDetailCreators", "addTagDefinitionCreatorIDs", "removeTagDefinitionCreatorIDs", "clearTagDefinitionCreators", "addTaskCreatorIDs", "removeTaskCreatorIDs", "clearTaskCreators", "addTemplateCreatorIDs", "removeTemplateCreatorIDs", "clearTemplateCreators", "addTrustCenterCreatorIDs", "removeTrustCenterCreatorIDs", "clearTrustCenterCreators", "addTrustCenterComplianceCreatorIDs", "removeTrustCenterComplianceCreatorIDs", "clearTrustCenterComplianceCreators", "addTrustCenterDocCreatorIDs", "removeTrustCenterDocCreatorIDs", "clearTrustCenterDocCreators", "addTrustCenterEntityCreatorIDs", "removeTrustCenterEntityCreatorIDs", "clearTrustCenterEntityCreators", "addTrustCenterFaqCreatorIDs", "removeTrustCenterFaqCreatorIDs", "clearTrustCenterFaqCreators", "addTrustCenterNdaRequestCreatorIDs", "removeTrustCenterNdaRequestCreatorIDs", "clearTrustCenterNdaRequestCreators", "addTrustCenterSubprocessorCreatorIDs", "removeTrustCenterSubprocessorCreatorIDs", "clearTrustCenterSubprocessorCreators", "addTrustCenterWatermarkConfigCreatorIDs", "removeTrustCenterWatermarkConfigCreatorIDs", "clearTrustCenterWatermarkConfigCreators", "addVendorRiskScoreCreatorIDs", "removeVendorRiskScoreCreatorIDs", "clearVendorRiskScoreCreators", "addVendorScoringConfigCreatorIDs", "removeVendorScoringConfigCreatorIDs", "clearVendorScoringConfigCreators", "addVulnerabilityCreatorIDs", "removeVulnerabilityCreatorIDs", "clearVulnerabilityCreators", "addWorkflowDefinitionCreatorIDs", "removeWorkflowDefinitionCreatorIDs", "clearWorkflowDefinitionCreators", "addCampaignManagerIDs", "removeCampaignManagerIDs", "clearCampaignManager", "addComplianceManagerIDs", "removeComplianceManagerIDs", "clearComplianceManager", "addGroupManagerIDs", "removeGroupManagerIDs", "clearGroupManager", "addIntegrationManagerIDs", "removeIntegrationManagerIDs", "clearIntegrationManager", "addPolicyManagerIDs", "removePolicyManagerIDs", "clearPolicyManager", "addRegistryManagerIDs", "removeRegistryManagerIDs", "clearRegistryManager", "addRiskManagerIDs", "removeRiskManagerIDs", "clearRiskManager", "addShareLinkManagerIDs", "removeShareLinkManagerIDs", "clearShareLinkManager", "addTrustCenterManagerIDs", "removeTrustCenterManagerIDs", "clearTrustCenterManager", "addWorkflowManagerIDs", "removeWorkflowManagerIDs", "clearWorkflowManager", "settingID", "clearSetting", "addPersonalAccessTokenIDs", "removePersonalAccessTokenIDs", "clearPersonalAccessTokens", "brandingSettingID", "clearBrandingSetting", "addFileIDs", "removeFileIDs", "clearFiles", "addEventIDs", "removeEventIDs", "clearEvents", "avatarFileID", "clearAvatarFile", "addOrgSubscriptionIDs", "removeOrgSubscriptionIDs", "clearOrgSubscriptions", "addInviteIDs", "removeInviteIDs", "clearInvites", "addImpersonationEventIDs", "removeImpersonationEventIDs", "clearImpersonationEvents", "addOrgMembers", "removeOrgMembers", "updateOrgSettings"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -380198,6 +383839,27 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearScanCreators = data
+		case "addShareLinkCreatorIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addShareLinkCreatorIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddShareLinkCreatorIDs = data
+		case "removeShareLinkCreatorIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeShareLinkCreatorIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveShareLinkCreatorIDs = data
+		case "clearShareLinkCreators":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearShareLinkCreators"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearShareLinkCreators = data
 		case "addSLADefinitionCreatorIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addSLADefinitionCreatorIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -380786,6 +384448,27 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearRiskManager = data
+		case "addShareLinkManagerIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addShareLinkManagerIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddShareLinkManagerIDs = data
+		case "removeShareLinkManagerIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeShareLinkManagerIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveShareLinkManagerIDs = data
+		case "clearShareLinkManager":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearShareLinkManager"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearShareLinkManager = data
 		case "addTrustCenterManagerIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addTrustCenterManagerIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -381051,7 +384734,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationSettingInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "domains", "appendDomains", "clearDomains", "billingContact", "clearBillingContact", "billingEmail", "clearBillingEmail", "billingPhone", "clearBillingPhone", "billingAddress", "clearBillingAddress", "taxIdentifier", "clearTaxIdentifier", "geoLocation", "clearGeoLocation", "billingNotificationsEnabled", "allowedEmailDomains", "appendAllowedEmailDomains", "clearAllowedEmailDomains", "allowMatchingDomainsAutojoin", "clearAllowMatchingDomainsAutojoin", "identityProvider", "clearIdentityProvider", "identityProviderClientID", "clearIdentityProviderClientID", "identityProviderClientSecret", "clearIdentityProviderClientSecret", "identityProviderMetadataEndpoint", "clearIdentityProviderMetadataEndpoint", "identityProviderEntityID", "clearIdentityProviderEntityID", "oidcDiscoveryEndpoint", "clearOidcDiscoveryEndpoint", "samlSigninURL", "clearSamlSigninURL", "samlIssuer", "clearSamlIssuer", "samlCert", "clearSamlCert", "identityProviderLoginEnforced", "identityProviderJitProvisioning", "jitAllowedEmailDomains", "appendJitAllowedEmailDomains", "clearJitAllowedEmailDomains", "multifactorAuthEnforced", "clearMultifactorAuthEnforced", "ssoExemptDomains", "appendSSOExemptDomains", "clearSSOExemptDomains", "allowSupportAccess", "clearAllowSupportAccess", "pendingDeletionAt", "clearPendingDeletionAt", "organizationID", "clearOrganization", "addFileIDs", "removeFileIDs", "clearFiles"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "domains", "appendDomains", "clearDomains", "billingContact", "clearBillingContact", "billingEmail", "clearBillingEmail", "billingPhone", "clearBillingPhone", "billingAddress", "clearBillingAddress", "taxIdentifier", "clearTaxIdentifier", "geoLocation", "clearGeoLocation", "billingNotificationsEnabled", "allowedEmailDomains", "appendAllowedEmailDomains", "clearAllowedEmailDomains", "allowMatchingDomainsAutojoin", "clearAllowMatchingDomainsAutojoin", "externalSharingEnabled", "clearExternalSharingEnabled", "identityProvider", "clearIdentityProvider", "identityProviderClientID", "clearIdentityProviderClientID", "identityProviderClientSecret", "clearIdentityProviderClientSecret", "identityProviderMetadataEndpoint", "clearIdentityProviderMetadataEndpoint", "identityProviderEntityID", "clearIdentityProviderEntityID", "oidcDiscoveryEndpoint", "clearOidcDiscoveryEndpoint", "samlSigninURL", "clearSamlSigninURL", "samlIssuer", "clearSamlIssuer", "samlCert", "clearSamlCert", "identityProviderLoginEnforced", "identityProviderJitProvisioning", "jitAllowedEmailDomains", "appendJitAllowedEmailDomains", "clearJitAllowedEmailDomains", "multifactorAuthEnforced", "clearMultifactorAuthEnforced", "ssoExemptDomains", "appendSSOExemptDomains", "clearSSOExemptDomains", "allowSupportAccess", "clearAllowSupportAccess", "pendingDeletionAt", "clearPendingDeletionAt", "organizationID", "clearOrganization", "addFileIDs", "removeFileIDs", "clearFiles"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -381226,6 +384909,20 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationSettingInput(ctx con
 				return it, err
 			}
 			it.ClearAllowMatchingDomainsAutojoin = data
+		case "externalSharingEnabled":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalSharingEnabled"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalSharingEnabled = data
+		case "clearExternalSharingEnabled":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalSharingEnabled"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearExternalSharingEnabled = data
 		case "identityProvider":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProvider"))
 			data, err := ec.unmarshalOOrganizationSettingSSOProvider2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐSSOProvider(ctx, v)
@@ -388879,6 +392576,97 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 func UnmarshalUpdateScanInput(ctx context.Context, raw any) (generated.UpdateScanInput, error) {
 	var out generated.UpdateScanInput
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateScanInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputUpdateShareLinkInput(ctx context.Context, obj any) (generated.UpdateShareLinkInput, error) {
+	var it generated.UpdateShareLinkInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "clearName", "maxUses", "clearMaxUses", "revokedAt", "clearRevokedAt", "ownerID", "clearOwner"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "clearName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearName"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearName = data
+		case "maxUses":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxUses"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxUses = data
+		case "clearMaxUses":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearMaxUses"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearMaxUses = data
+		case "revokedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revokedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevokedAt = data
+		case "clearRevokedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearRevokedAt"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearRevokedAt = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "clearOwner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearOwner"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearOwner = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdateShareLinkInput unmarshals raw into the UpdateShareLinkInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateShareLinkInput(ctx context.Context, raw any) (generated.UpdateShareLinkInput, error) {
+	var out generated.UpdateShareLinkInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateShareLinkInput", raw, &out)
 	return out, err
 }
 
@@ -419273,6 +423061,16 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._Standard(ctx, sel, obj)
+	case *generated.ShareLinkAccessEvent:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ShareLinkAccessEvent(ctx, sel, obj)
+	case *generated.ShareLink:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ShareLink(ctx, sel, obj)
 	case *generated.Scan:
 		if obj == nil {
 			return graphql.Null
@@ -435997,6 +439795,12 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Organization_scanCreators(ctx, field, obj)
 				})
+		case "shareLinkCreators":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Organization_shareLinkCreators(ctx, field, obj)
+				})
 		case "slaDefinitionCreators":
 			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
 				true, true,
@@ -436164,6 +439968,12 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 				true, true,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Organization_riskManager(ctx, field, obj)
+				})
+		case "shareLinkManager":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Organization_shareLinkManager(ctx, field, obj)
 				})
 		case "trustCenterManager":
 			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
@@ -436630,6 +440440,11 @@ func (ec *executionContext) _OrganizationSetting(ctx context.Context, sel ast.Se
 			}
 		case "allowMatchingDomainsAutojoin":
 			out.Values[i] = ec._OrganizationSetting_allowMatchingDomainsAutojoin(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "externalSharingEnabled":
+			out.Values[i] = ec._OrganizationSetting_externalSharingEnabled(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -439379,6 +443194,18 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_scans(ctx, field)
 				})
+		case "shareLinks":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_shareLinks(ctx, field)
+				})
+		case "shareLinkAccessEvents":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_shareLinkAccessEvents(ctx, field)
+				})
 		case "standards":
 			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
 				true, true,
@@ -440230,6 +444057,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				true, false,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_search(ctx, field)
+				})
+		case "shareLink":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_shareLink(ctx, field)
 				})
 		case "slaDefinition":
 			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
@@ -443101,6 +446934,389 @@ func (ec *executionContext) _ScanEdge(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "cursor":
 			out.Values[i] = ec._ScanEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var shareLinkImplementors = []string{"ShareLink", "Node"}
+
+func (ec *executionContext) _ShareLink(ctx context.Context, sel ast.SelectionSet, obj *generated.ShareLink) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, shareLinkImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ShareLink")
+		case "id":
+			out.Values[i] = ec._ShareLink_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdAt":
+			out.Values[i] = ec._ShareLink_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedAt":
+			out.Values[i] = ec._ShareLink_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdBy":
+			out.Values[i] = ec._ShareLink_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._ShareLink_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedByImpersonator":
+			out.Values[i] = ec._ShareLink_updatedByImpersonator(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "ownerID":
+			out.Values[i] = ec._ShareLink_ownerID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "name":
+			out.Values[i] = ec._ShareLink_name(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "expiresAt":
+			out.Values[i] = ec._ShareLink_expiresAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "maxUses":
+			out.Values[i] = ec._ShareLink_maxUses(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "useCount":
+			out.Values[i] = ec._ShareLink_useCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "recipientEmails":
+			out.Values[i] = ec._ShareLink_recipientEmails(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "landingPage":
+			out.Values[i] = ec._ShareLink_landingPage(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "requireSession":
+			out.Values[i] = ec._ShareLink_requireSession(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "revokedAt":
+			out.Values[i] = ec._ShareLink_revokedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "owner":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._ShareLink_owner(ctx, field, obj)
+				})
+		case "files":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._ShareLink_files(ctx, field, obj)
+				})
+		case "shareLinkAccessEvents":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._ShareLink_shareLinkAccessEvents(ctx, field, obj)
+				})
+		case "url":
+			out.Values[i] = ec._ShareLink_url(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var shareLinkAccessEventImplementors = []string{"ShareLinkAccessEvent", "Node"}
+
+func (ec *executionContext) _ShareLinkAccessEvent(ctx context.Context, sel ast.SelectionSet, obj *generated.ShareLinkAccessEvent) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, shareLinkAccessEventImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ShareLinkAccessEvent")
+		case "id":
+			out.Values[i] = ec._ShareLinkAccessEvent_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdAt":
+			out.Values[i] = ec._ShareLinkAccessEvent_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedAt":
+			out.Values[i] = ec._ShareLinkAccessEvent_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdBy":
+			out.Values[i] = ec._ShareLinkAccessEvent_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._ShareLinkAccessEvent_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedByImpersonator":
+			out.Values[i] = ec._ShareLinkAccessEvent_updatedByImpersonator(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "ownerID":
+			out.Values[i] = ec._ShareLinkAccessEvent_ownerID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "shareLinkID":
+			out.Values[i] = ec._ShareLinkAccessEvent_shareLinkID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "fileID":
+			out.Values[i] = ec._ShareLinkAccessEvent_fileID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "ipAddress":
+			out.Values[i] = ec._ShareLinkAccessEvent_ipAddress(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "userAgent":
+			out.Values[i] = ec._ShareLinkAccessEvent_userAgent(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "owner":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._ShareLinkAccessEvent_owner(ctx, field, obj)
+				})
+		case "shareLink":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._ShareLinkAccessEvent_shareLink(ctx, field, obj)
+				})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var shareLinkAccessEventConnectionImplementors = []string{"ShareLinkAccessEventConnection"}
+
+func (ec *executionContext) _ShareLinkAccessEventConnection(ctx context.Context, sel ast.SelectionSet, obj *generated.ShareLinkAccessEventConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, shareLinkAccessEventConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ShareLinkAccessEventConnection")
+		case "edges":
+			out.Values[i] = ec._ShareLinkAccessEventConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._ShareLinkAccessEventConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._ShareLinkAccessEventConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var shareLinkAccessEventEdgeImplementors = []string{"ShareLinkAccessEventEdge"}
+
+func (ec *executionContext) _ShareLinkAccessEventEdge(ctx context.Context, sel ast.SelectionSet, obj *generated.ShareLinkAccessEventEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, shareLinkAccessEventEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ShareLinkAccessEventEdge")
+		case "node":
+			out.Values[i] = ec._ShareLinkAccessEventEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._ShareLinkAccessEventEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var shareLinkConnectionImplementors = []string{"ShareLinkConnection"}
+
+func (ec *executionContext) _ShareLinkConnection(ctx context.Context, sel ast.SelectionSet, obj *generated.ShareLinkConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, shareLinkConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ShareLinkConnection")
+		case "edges":
+			out.Values[i] = ec._ShareLinkConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._ShareLinkConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._ShareLinkConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var shareLinkEdgeImplementors = []string{"ShareLinkEdge"}
+
+func (ec *executionContext) _ShareLinkEdge(ctx context.Context, sel ast.SelectionSet, obj *generated.ShareLinkEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, shareLinkEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ShareLinkEdge")
+		case "node":
+			out.Values[i] = ec._ShareLinkEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._ShareLinkEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -453070,6 +457286,11 @@ func (ec *executionContext) unmarshalNCreateScanInput2ᚖgithubᚗcomᚋtheopenl
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNCreateShareLinkInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateShareLinkInput(ctx context.Context, v any) (generated.CreateShareLinkInput, error) {
+	res, err := ec.unmarshalInputCreateShareLinkInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCreateStandardInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateStandardInput(ctx context.Context, v any) (generated.CreateStandardInput, error) {
 	res, err := ec.unmarshalInputCreateStandardInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -456010,6 +460231,78 @@ func (ec *executionContext) unmarshalNScanWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNShareLink2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLink(ctx context.Context, sel ast.SelectionSet, v *generated.ShareLink) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ShareLink!")
+		return graphql.Null
+	}
+	return ec._ShareLink(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNShareLinkAccessEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ShareLinkAccessEventConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ShareLinkAccessEventConnection!")
+		return graphql.Null
+	}
+	return ec._ShareLinkAccessEventConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNShareLinkAccessEventOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventOrder(ctx context.Context, v any) (*generated.ShareLinkAccessEventOrder, error) {
+	res, err := ec.unmarshalInputShareLinkAccessEventOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNShareLinkAccessEventOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventOrderField(ctx context.Context, v any) (*generated.ShareLinkAccessEventOrderField, error) {
+	var res = new(generated.ShareLinkAccessEventOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNShareLinkAccessEventOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventOrderField(ctx context.Context, sel ast.SelectionSet, v *generated.ShareLinkAccessEventOrderField) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ShareLinkAccessEventOrderField!")
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNShareLinkAccessEventWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInput(ctx context.Context, v any) (*generated.ShareLinkAccessEventWhereInput, error) {
+	res, err := ec.unmarshalInputShareLinkAccessEventWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNShareLinkConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ShareLinkConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ShareLinkConnection!")
+		return graphql.Null
+	}
+	return ec._ShareLinkConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNShareLinkOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkOrder(ctx context.Context, v any) (*generated.ShareLinkOrder, error) {
+	res, err := ec.unmarshalInputShareLinkOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNShareLinkOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkOrderField(ctx context.Context, v any) (*generated.ShareLinkOrderField, error) {
+	var res = new(generated.ShareLinkOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNShareLinkOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkOrderField(ctx context.Context, sel ast.SelectionSet, v *generated.ShareLinkOrderField) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ShareLinkOrderField!")
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNShareLinkWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkWhereInput(ctx context.Context, v any) (*generated.ShareLinkWhereInput, error) {
+	res, err := ec.unmarshalInputShareLinkWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandard(ctx context.Context, sel ast.SelectionSet, v *generated.Standard) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "Standard!")
@@ -457196,6 +461489,11 @@ func (ec *executionContext) unmarshalNUpdateSLADefinitionInput2githubᚗcomᚋth
 
 func (ec *executionContext) unmarshalNUpdateScanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateScanInput(ctx context.Context, v any) (generated.UpdateScanInput, error) {
 	res, err := ec.unmarshalInputUpdateScanInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateShareLinkInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateShareLinkInput(ctx context.Context, v any) (generated.UpdateShareLinkInput, error) {
+	res, err := ec.unmarshalInputUpdateShareLinkInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -469817,6 +474115,144 @@ func (ec *executionContext) unmarshalOScanWhereInput2ᚖgithubᚗcomᚋtheopenla
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputScanWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOShareLink2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLink(ctx context.Context, sel ast.SelectionSet, v *generated.ShareLink) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ShareLink(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOShareLinkAccessEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEvent(ctx context.Context, sel ast.SelectionSet, v *generated.ShareLinkAccessEvent) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ShareLinkAccessEvent(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOShareLinkAccessEventEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventEdge(ctx context.Context, sel ast.SelectionSet, v []*generated.ShareLinkAccessEventEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalOShareLinkAccessEventEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventEdge(ctx, sel, v[i])
+	})
+
+	return ret
+}
+
+func (ec *executionContext) marshalOShareLinkAccessEventEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventEdge(ctx context.Context, sel ast.SelectionSet, v *generated.ShareLinkAccessEventEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ShareLinkAccessEventEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOShareLinkAccessEventOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventOrderᚄ(ctx context.Context, v any) ([]*generated.ShareLinkAccessEventOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.ShareLinkAccessEventOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNShareLinkAccessEventOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOShareLinkAccessEventWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInputᚄ(ctx context.Context, v any) ([]*generated.ShareLinkAccessEventWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.ShareLinkAccessEventWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNShareLinkAccessEventWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOShareLinkAccessEventWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkAccessEventWhereInput(ctx context.Context, v any) (*generated.ShareLinkAccessEventWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputShareLinkAccessEventWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOShareLinkEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkEdge(ctx context.Context, sel ast.SelectionSet, v []*generated.ShareLinkEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalOShareLinkEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkEdge(ctx, sel, v[i])
+	})
+
+	return ret
+}
+
+func (ec *executionContext) marshalOShareLinkEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkEdge(ctx context.Context, sel ast.SelectionSet, v *generated.ShareLinkEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ShareLinkEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOShareLinkOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkOrderᚄ(ctx context.Context, v any) ([]*generated.ShareLinkOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.ShareLinkOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNShareLinkOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOShareLinkWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkWhereInputᚄ(ctx context.Context, v any) ([]*generated.ShareLinkWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.ShareLinkWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNShareLinkWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOShareLinkWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐShareLinkWhereInput(ctx context.Context, v any) (*generated.ShareLinkWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputShareLinkWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

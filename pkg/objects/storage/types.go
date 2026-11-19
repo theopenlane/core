@@ -144,6 +144,16 @@ type ProviderCommon struct {
 	Backup *BackupConfig `json:"backup" koanf:"backup"`
 }
 
+// LinksConfig configures signed download and share link URLs served by the storage worker
+type LinksConfig struct {
+	// Enabled toggles minting of signed download URLs and share links
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// BaseURL is the prefix the storage worker serves download and share URLs under (e.g., https://api.theopenlane.io/v1/storage)
+	BaseURL string `json:"baseurl" koanf:"baseurl" default:"http://localhost:17608/v1/storage"`
+	// ForwarderSecret is the shared secret the storage worker presents on share link callbacks
+	ForwarderSecret string `json:"forwardersecret" koanf:"forwardersecret" default:"" sensitive:"true"`
+}
+
 // ProxyPresign holds the proxy-signed download URL settings
 type ProxyPresign struct {
 	// ProxyPresignEnabled toggles proxy-signed download URL generation

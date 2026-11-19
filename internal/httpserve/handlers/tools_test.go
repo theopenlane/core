@@ -57,6 +57,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 	authmiddleware "github.com/theopenlane/core/v2/pkg/middleware/auth"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
@@ -339,6 +340,7 @@ func (suite *HandlerTestSuite) setupSuite() {
 		ent.Pool(suite.sharedPool),
 		ent.EntitlementManager(entitlementsClient),
 		ent.HistoryClient(hc),
+		ent.ObjectManager(objects.NewService(objects.Config{Links: storage.LinksConfig{Enabled: true, BaseURL: shareTestBaseURL}})),
 	}
 
 	// create database connection

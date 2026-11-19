@@ -258,6 +258,22 @@ var (
 	ErrQuestionnaireTransformInvalid = errors.New("questionnaire transform invalid")
 	// ErrClientResolveFailed indicates the ent client could not be resolved from the context
 	ErrClientResolveFailed = errors.New("client resolve failed")
+	// ErrShareLinkExternalSharingDisabled is returned when a share link is created in an organization that has not enabled external sharing
+	ErrShareLinkExternalSharingDisabled = errors.New("external sharing is not enabled for the organization")
+	// ErrShareLinkExpiryRequired is returned when a share link is created without an expiry
+	ErrShareLinkExpiryRequired = errors.New("share link expiry is required")
+	// ErrShareLinkExpiryPast is returned when a share link is created with an expiry already passed
+	ErrShareLinkExpiryPast = errors.New("share link expiry must be in the future")
+	// ErrShareLinkExpiryTooLong is returned when a share link is created with an expiry beyond the maximum duration
+	ErrShareLinkExpiryTooLong = errors.New("share link expiry exceeds the maximum duration")
+	// ErrShareLinkTooManyFiles is returned when a share link names more files than a share token can carry
+	ErrShareLinkTooManyFiles = errors.New("share link names too many files")
+	// ErrShareLinkRevocationPermanent is returned when an update tries to undo the revocation of a share link
+	ErrShareLinkRevocationPermanent = errors.New("a revoked share link cannot be restored")
+	// ErrShareLinkDirectUseCap is returned when a download cap is set on a share link that serves its file directly
+	ErrShareLinkDirectUseCap = errors.New("a share link that serves its file directly cannot have a download cap")
+	// ErrShareLinksDisabled is returned when a share link is created while storage links are not enabled
+	ErrShareLinksDisabled = errors.New("share links are not enabled")
 	// ErrTooManyFiles is returned when a file upload only allows one file and multiple were provided
 	ErrTooManyFiles = errors.New("too many files uploaded, only one is allowed")
 )

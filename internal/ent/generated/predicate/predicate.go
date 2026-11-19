@@ -222,6 +222,12 @@ type SLADefinition func(*sql.Selector)
 // Scan is the predicate function for scan builders.
 type Scan func(*sql.Selector)
 
+// ShareLink is the predicate function for sharelink builders.
+type ShareLink func(*sql.Selector)
+
+// ShareLinkAccessEvent is the predicate function for sharelinkaccessevent builders.
+type ShareLinkAccessEvent func(*sql.Selector)
+
 // Standard is the predicate function for standard builders.
 type Standard func(*sql.Selector)
 

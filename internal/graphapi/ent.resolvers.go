@@ -2150,6 +2150,72 @@ func (r *queryResolver) Scans(ctx context.Context, after *entgql.Cursor[string],
 	return res, err
 }
 
+// ShareLinks is the resolver for the shareLinks field.
+func (r *queryResolver) ShareLinks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ShareLinkOrder, where *generated.ShareLinkWhereInput) (*generated.ShareLinkConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ShareLinkOrder{
+			{
+				Field:     generated.ShareLinkOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+	query, err := withTransactionalMutation(ctx).ShareLink.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sharelink"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithShareLinkOrder(orderBy),
+		generated.WithShareLinkFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sharelink"})
+	}
+
+	return res, err
+}
+
+// ShareLinkAccessEvents is the resolver for the shareLinkAccessEvents field.
+func (r *queryResolver) ShareLinkAccessEvents(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ShareLinkAccessEventOrder, where *generated.ShareLinkAccessEventWhereInput) (*generated.ShareLinkAccessEventConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ShareLinkAccessEventOrder{
+			{
+				Field:     generated.ShareLinkAccessEventOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+	query, err := withTransactionalMutation(ctx).ShareLinkAccessEvent.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sharelinkaccessevent"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithShareLinkAccessEventOrder(orderBy),
+		generated.WithShareLinkAccessEventFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sharelinkaccessevent"})
+	}
+
+	return res, err
+}
+
 // Standards is the resolver for the standards field.
 func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) (*generated.StandardConnection, error) {
 	// set page limit if nothing was set

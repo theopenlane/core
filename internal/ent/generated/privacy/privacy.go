@@ -1839,6 +1839,54 @@ func (f ScanMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Muta
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ScanMutation", m)
 }
 
+// The ShareLinkQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ShareLinkQueryRuleFunc func(context.Context, *generated.ShareLinkQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ShareLinkQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ShareLinkQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ShareLinkQuery", q)
+}
+
+// The ShareLinkMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ShareLinkMutationRuleFunc func(context.Context, *generated.ShareLinkMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ShareLinkMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ShareLinkMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ShareLinkMutation", m)
+}
+
+// The ShareLinkAccessEventQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ShareLinkAccessEventQueryRuleFunc func(context.Context, *generated.ShareLinkAccessEventQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ShareLinkAccessEventQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ShareLinkAccessEventQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ShareLinkAccessEventQuery", q)
+}
+
+// The ShareLinkAccessEventMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ShareLinkAccessEventMutationRuleFunc func(context.Context, *generated.ShareLinkAccessEventMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ShareLinkAccessEventMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ShareLinkAccessEventMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ShareLinkAccessEventMutation", m)
+}
+
 // The StandardQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type StandardQueryRuleFunc func(context.Context, *generated.StandardQuery) error
@@ -2762,6 +2810,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.ScanQuery:
 		return q.Filter(), nil
+	case *generated.ShareLinkQuery:
+		return q.Filter(), nil
+	case *generated.ShareLinkAccessEventQuery:
+		return q.Filter(), nil
 	case *generated.StandardQuery:
 		return q.Filter(), nil
 	case *generated.SubcontrolQuery:
@@ -2974,6 +3026,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.SLADefinitionMutation:
 		return m.Filter(), nil
 	case *generated.ScanMutation:
+		return m.Filter(), nil
+	case *generated.ShareLinkMutation:
+		return m.Filter(), nil
+	case *generated.ShareLinkAccessEventMutation:
 		return m.Filter(), nil
 	case *generated.StandardMutation:
 		return m.Filter(), nil

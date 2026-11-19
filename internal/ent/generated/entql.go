@@ -75,6 +75,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -116,7 +118,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 103)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 105)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -2442,6 +2444,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldBillingNotificationsEnabled:      {Type: field.TypeBool, Column: organizationsetting.FieldBillingNotificationsEnabled},
 			organizationsetting.FieldAllowedEmailDomains:              {Type: field.TypeJSON, Column: organizationsetting.FieldAllowedEmailDomains},
 			organizationsetting.FieldAllowMatchingDomainsAutojoin:     {Type: field.TypeBool, Column: organizationsetting.FieldAllowMatchingDomainsAutojoin},
+			organizationsetting.FieldExternalSharingEnabled:           {Type: field.TypeBool, Column: organizationsetting.FieldExternalSharingEnabled},
 			organizationsetting.FieldIdentityProvider:                 {Type: field.TypeEnum, Column: organizationsetting.FieldIdentityProvider},
 			organizationsetting.FieldIdentityProviderClientID:         {Type: field.TypeString, Column: organizationsetting.FieldIdentityProviderClientID},
 			organizationsetting.FieldIdentityProviderClientSecret:     {Type: field.TypeString, Column: organizationsetting.FieldIdentityProviderClientSecret},
@@ -3052,6 +3055,65 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[72] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   sharelink.Table,
+			Columns: sharelink.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: sharelink.FieldID,
+			},
+		},
+		Type: "ShareLink",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			sharelink.FieldCreatedAt:             {Type: field.TypeTime, Column: sharelink.FieldCreatedAt},
+			sharelink.FieldUpdatedAt:             {Type: field.TypeTime, Column: sharelink.FieldUpdatedAt},
+			sharelink.FieldCreatedBy:             {Type: field.TypeString, Column: sharelink.FieldCreatedBy},
+			sharelink.FieldUpdatedBy:             {Type: field.TypeString, Column: sharelink.FieldUpdatedBy},
+			sharelink.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: sharelink.FieldUpdatedByImpersonator},
+			sharelink.FieldDeletedAt:             {Type: field.TypeTime, Column: sharelink.FieldDeletedAt},
+			sharelink.FieldDeletedBy:             {Type: field.TypeString, Column: sharelink.FieldDeletedBy},
+			sharelink.FieldOwnerID:               {Type: field.TypeString, Column: sharelink.FieldOwnerID},
+			sharelink.FieldName:                  {Type: field.TypeString, Column: sharelink.FieldName},
+			sharelink.FieldExpiresAt:             {Type: field.TypeTime, Column: sharelink.FieldExpiresAt},
+			sharelink.FieldMaxUses:               {Type: field.TypeInt, Column: sharelink.FieldMaxUses},
+			sharelink.FieldUseCount:              {Type: field.TypeInt, Column: sharelink.FieldUseCount},
+			sharelink.FieldRecipientEmails:       {Type: field.TypeJSON, Column: sharelink.FieldRecipientEmails},
+			sharelink.FieldLandingPage:           {Type: field.TypeBool, Column: sharelink.FieldLandingPage},
+			sharelink.FieldRequireSession:        {Type: field.TypeBool, Column: sharelink.FieldRequireSession},
+			sharelink.FieldCodeHash:              {Type: field.TypeBytes, Column: sharelink.FieldCodeHash},
+			sharelink.FieldCodeExpiresAt:         {Type: field.TypeTime, Column: sharelink.FieldCodeExpiresAt},
+			sharelink.FieldCodeAttempts:          {Type: field.TypeInt, Column: sharelink.FieldCodeAttempts},
+			sharelink.FieldRevokedAt:             {Type: field.TypeTime, Column: sharelink.FieldRevokedAt},
+			sharelink.FieldToken:                 {Type: field.TypeString, Column: sharelink.FieldToken},
+			sharelink.FieldSecret:                {Type: field.TypeBytes, Column: sharelink.FieldSecret},
+		},
+	}
+	graph.Nodes[73] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   sharelinkaccessevent.Table,
+			Columns: sharelinkaccessevent.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: sharelinkaccessevent.FieldID,
+			},
+		},
+		Type: "ShareLinkAccessEvent",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			sharelinkaccessevent.FieldCreatedAt:             {Type: field.TypeTime, Column: sharelinkaccessevent.FieldCreatedAt},
+			sharelinkaccessevent.FieldUpdatedAt:             {Type: field.TypeTime, Column: sharelinkaccessevent.FieldUpdatedAt},
+			sharelinkaccessevent.FieldCreatedBy:             {Type: field.TypeString, Column: sharelinkaccessevent.FieldCreatedBy},
+			sharelinkaccessevent.FieldUpdatedBy:             {Type: field.TypeString, Column: sharelinkaccessevent.FieldUpdatedBy},
+			sharelinkaccessevent.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: sharelinkaccessevent.FieldUpdatedByImpersonator},
+			sharelinkaccessevent.FieldDeletedAt:             {Type: field.TypeTime, Column: sharelinkaccessevent.FieldDeletedAt},
+			sharelinkaccessevent.FieldDeletedBy:             {Type: field.TypeString, Column: sharelinkaccessevent.FieldDeletedBy},
+			sharelinkaccessevent.FieldOwnerID:               {Type: field.TypeString, Column: sharelinkaccessevent.FieldOwnerID},
+			sharelinkaccessevent.FieldShareLinkID:           {Type: field.TypeString, Column: sharelinkaccessevent.FieldShareLinkID},
+			sharelinkaccessevent.FieldFileID:                {Type: field.TypeString, Column: sharelinkaccessevent.FieldFileID},
+			sharelinkaccessevent.FieldIPAddress:             {Type: field.TypeString, Column: sharelinkaccessevent.FieldIPAddress},
+			sharelinkaccessevent.FieldUserAgent:             {Type: field.TypeString, Column: sharelinkaccessevent.FieldUserAgent},
+		},
+	}
+	graph.Nodes[74] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   standard.Table,
 			Columns: standard.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -3090,7 +3152,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldLogoFileID:            {Type: field.TypeString, Column: standard.FieldLogoFileID},
 		},
 	}
-	graph.Nodes[73] = &sqlgraph.Node{
+	graph.Nodes[75] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subcontrol.Table,
 			Columns: subcontrol.Columns,
@@ -3160,7 +3222,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldControlID:                  {Type: field.TypeString, Column: subcontrol.FieldControlID},
 		},
 	}
-	graph.Nodes[74] = &sqlgraph.Node{
+	graph.Nodes[76] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subprocessor.Table,
 			Columns: subprocessor.Columns,
@@ -3189,7 +3251,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subprocessor.FieldLogoFileID:            {Type: field.TypeString, Column: subprocessor.FieldLogoFileID},
 		},
 	}
-	graph.Nodes[75] = &sqlgraph.Node{
+	graph.Nodes[77] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subscriber.Table,
 			Columns: subscriber.Columns,
@@ -3224,7 +3286,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subscriber.FieldUserID:                {Type: field.TypeString, Column: subscriber.FieldUserID},
 		},
 	}
-	graph.Nodes[76] = &sqlgraph.Node{
+	graph.Nodes[78] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   systemdetail.Table,
 			Columns: systemdetail.Columns,
@@ -3262,7 +3324,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemdetail.FieldOscalMetadataJSON:       {Type: field.TypeJSON, Column: systemdetail.FieldOscalMetadataJSON},
 		},
 	}
-	graph.Nodes[77] = &sqlgraph.Node{
+	graph.Nodes[79] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tfasetting.Table,
 			Columns: tfasetting.Columns,
@@ -3289,7 +3351,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tfasetting.FieldTotpAllowed:           {Type: field.TypeBool, Column: tfasetting.FieldTotpAllowed},
 		},
 	}
-	graph.Nodes[78] = &sqlgraph.Node{
+	graph.Nodes[80] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tagdefinition.Table,
 			Columns: tagdefinition.Columns,
@@ -3325,7 +3387,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tagdefinition.FieldColor:                   {Type: field.TypeString, Column: tagdefinition.FieldColor},
 		},
 	}
-	graph.Nodes[79] = &sqlgraph.Node{
+	graph.Nodes[81] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   task.Table,
 			Columns: task.Columns,
@@ -3380,7 +3442,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldParentTaskID:            {Type: field.TypeString, Column: task.FieldParentTaskID},
 		},
 	}
-	graph.Nodes[80] = &sqlgraph.Node{
+	graph.Nodes[82] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   template.Table,
 			Columns: template.Columns,
@@ -3424,7 +3486,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldTransformConfiguration:  {Type: field.TypeJSON, Column: template.FieldTransformConfiguration},
 		},
 	}
-	graph.Nodes[81] = &sqlgraph.Node{
+	graph.Nodes[83] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenter.Table,
 			Columns: trustcenter.Columns,
@@ -3454,7 +3516,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenter.FieldSubprocessorURL:          {Type: field.TypeString, Column: trustcenter.FieldSubprocessorURL},
 		},
 	}
-	graph.Nodes[82] = &sqlgraph.Node{
+	graph.Nodes[84] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentercompliance.Table,
 			Columns: trustcentercompliance.Columns,
@@ -3477,7 +3539,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentercompliance.FieldTrustCenterID:         {Type: field.TypeString, Column: trustcentercompliance.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[83] = &sqlgraph.Node{
+	graph.Nodes[85] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterdoc.Table,
 			Columns: trustcenterdoc.Columns,
@@ -3508,7 +3570,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdoc.FieldStandardID:             {Type: field.TypeString, Column: trustcenterdoc.FieldStandardID},
 		},
 	}
-	graph.Nodes[84] = &sqlgraph.Node{
+	graph.Nodes[86] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterentity.Table,
 			Columns: trustcenterentity.Columns,
@@ -3533,7 +3595,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterentity.FieldEntityTypeID:          {Type: field.TypeString, Column: trustcenterentity.FieldEntityTypeID},
 		},
 	}
-	graph.Nodes[85] = &sqlgraph.Node{
+	graph.Nodes[87] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterfaq.Table,
 			Columns: trustcenterfaq.Columns,
@@ -3559,7 +3621,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterfaq.FieldDisplayOrder:           {Type: field.TypeInt, Column: trustcenterfaq.FieldDisplayOrder},
 		},
 	}
-	graph.Nodes[86] = &sqlgraph.Node{
+	graph.Nodes[88] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterndarequest.Table,
 			Columns: trustcenterndarequest.Columns,
@@ -3594,7 +3656,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequest.FieldFileID:                {Type: field.TypeString, Column: trustcenterndarequest.FieldFileID},
 		},
 	}
-	graph.Nodes[87] = &sqlgraph.Node{
+	graph.Nodes[89] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersetting.Table,
 			Columns: trustcentersetting.Columns,
@@ -3646,7 +3708,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldDisableDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersetting.FieldDisableDefaultDomain},
 		},
 	}
-	graph.Nodes[88] = &sqlgraph.Node{
+	graph.Nodes[90] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessor.Table,
 			Columns: trustcentersubprocessor.Columns,
@@ -3671,7 +3733,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessor.FieldCountries:                       {Type: field.TypeJSON, Column: trustcentersubprocessor.FieldCountries},
 		},
 	}
-	graph.Nodes[89] = &sqlgraph.Node{
+	graph.Nodes[91] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfig.Table,
 			Columns: trustcenterwatermarkconfig.Columns,
@@ -3701,7 +3763,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldFont:                  {Type: field.TypeEnum, Column: trustcenterwatermarkconfig.FieldFont},
 		},
 	}
-	graph.Nodes[90] = &sqlgraph.Node{
+	graph.Nodes[92] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -3740,7 +3802,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldScimLocale:            {Type: field.TypeString, Column: user.FieldScimLocale},
 		},
 	}
-	graph.Nodes[91] = &sqlgraph.Node{
+	graph.Nodes[93] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -3773,7 +3835,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:           {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[92] = &sqlgraph.Node{
+	graph.Nodes[94] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorriskscore.Table,
 			Columns: vendorriskscore.Columns,
@@ -3815,7 +3877,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendorriskscore.FieldAssessmentResponseID:    {Type: field.TypeString, Column: vendorriskscore.FieldAssessmentResponseID},
 		},
 	}
-	graph.Nodes[93] = &sqlgraph.Node{
+	graph.Nodes[95] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorscoringconfig.Table,
 			Columns: vendorscoringconfig.Columns,
@@ -3840,7 +3902,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendorscoringconfig.FieldRiskThresholds:        {Type: field.TypeJSON, Column: vendorscoringconfig.FieldRiskThresholds},
 		},
 	}
-	graph.Nodes[94] = &sqlgraph.Node{
+	graph.Nodes[96] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vulnerability.Table,
 			Columns: vulnerability.Columns,
@@ -3933,7 +3995,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldRawPayload:                    {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
 		},
 	}
-	graph.Nodes[95] = &sqlgraph.Node{
+	graph.Nodes[97] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -3962,7 +4024,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webauthn.FieldUserVerified:    {Type: field.TypeBool, Column: webauthn.FieldUserVerified},
 		},
 	}
-	graph.Nodes[96] = &sqlgraph.Node{
+	graph.Nodes[98] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignment.Table,
 			Columns: workflowassignment.Columns,
@@ -4001,7 +4063,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignment.FieldDueAt:                 {Type: field.TypeTime, Column: workflowassignment.FieldDueAt},
 		},
 	}
-	graph.Nodes[97] = &sqlgraph.Node{
+	graph.Nodes[99] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignmenttarget.Table,
 			Columns: workflowassignmenttarget.Columns,
@@ -4029,7 +4091,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignmenttarget.FieldResolverKey:           {Type: field.TypeString, Column: workflowassignmenttarget.FieldResolverKey},
 		},
 	}
-	graph.Nodes[98] = &sqlgraph.Node{
+	graph.Nodes[100] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowdefinition.Table,
 			Columns: workflowdefinition.Columns,
@@ -4072,7 +4134,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowdefinition.FieldTrackedFields:          {Type: field.TypeJSON, Column: workflowdefinition.FieldTrackedFields},
 		},
 	}
-	graph.Nodes[99] = &sqlgraph.Node{
+	graph.Nodes[101] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowevent.Table,
 			Columns: workflowevent.Columns,
@@ -4098,7 +4160,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowevent.FieldPayload:               {Type: field.TypeJSON, Column: workflowevent.FieldPayload},
 		},
 	}
-	graph.Nodes[100] = &sqlgraph.Node{
+	graph.Nodes[102] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowinstance.Table,
 			Columns: workflowinstance.Columns,
@@ -4146,7 +4208,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowinstance.FieldVulnerabilityID:       {Type: field.TypeString, Column: workflowinstance.FieldVulnerabilityID},
 		},
 	}
-	graph.Nodes[101] = &sqlgraph.Node{
+	graph.Nodes[103] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowobjectref.Table,
 			Columns: workflowobjectref.Columns,
@@ -4187,7 +4249,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowobjectref.FieldRemediationID:         {Type: field.TypeString, Column: workflowobjectref.FieldRemediationID},
 		},
 	}
-	graph.Nodes[102] = &sqlgraph.Node{
+	graph.Nodes[104] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowproposal.Table,
 			Columns: workflowproposal.Columns,
@@ -8538,6 +8600,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TrustCenterEntity",
 	)
 	graph.MustAddE(
+		"share_links",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ShareLinksTable,
+			Columns: file.ShareLinksPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"ShareLink",
+	)
+	graph.MustAddE(
 		"trust_center_doc",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -12534,6 +12608,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"share_link_creators",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkCreatorsTable,
+			Columns: []string{organization.ShareLinkCreatorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
 		"sla_definition_creators",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -12864,6 +12950,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   organization.RiskManagerTable,
 			Columns: []string{organization.RiskManagerColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
+		"share_link_manager",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkManagerTable,
+			Columns: []string{organization.ShareLinkManagerColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -13912,6 +14010,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Organization",
 		"CheckResult",
+	)
+	graph.MustAddE(
+		"share_links",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinksTable,
+			Columns: []string{organization.ShareLinksColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"ShareLink",
+	)
+	graph.MustAddE(
+		"share_link_access_events",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ShareLinkAccessEventsTable,
+			Columns: []string{organization.ShareLinkAccessEventsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"ShareLinkAccessEvent",
 	)
 	graph.MustAddE(
 		"members",
@@ -16660,6 +16782,66 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Scan",
 		"Group",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sharelink.OwnerTable,
+			Columns: []string{sharelink.OwnerColumn},
+			Bidi:    false,
+		},
+		"ShareLink",
+		"Organization",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   sharelink.FilesTable,
+			Columns: sharelink.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"ShareLink",
+		"File",
+	)
+	graph.MustAddE(
+		"share_link_access_events",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   sharelink.ShareLinkAccessEventsTable,
+			Columns: []string{sharelink.ShareLinkAccessEventsColumn},
+			Bidi:    false,
+		},
+		"ShareLink",
+		"ShareLinkAccessEvent",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sharelinkaccessevent.OwnerTable,
+			Columns: []string{sharelinkaccessevent.OwnerColumn},
+			Bidi:    false,
+		},
+		"ShareLinkAccessEvent",
+		"Organization",
+	)
+	graph.MustAddE(
+		"share_link",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   sharelinkaccessevent.ShareLinkTable,
+			Columns: []string{sharelinkaccessevent.ShareLinkColumn},
+			Bidi:    false,
+		},
+		"ShareLinkAccessEvent",
+		"ShareLink",
 	)
 	graph.MustAddE(
 		"owner",
@@ -30860,6 +31042,20 @@ func (f *FileFilter) WhereHasTrustCenterEntitiesWith(preds ...predicate.TrustCen
 	})))
 }
 
+// WhereHasShareLinks applies a predicate to check if query has an edge share_links.
+func (f *FileFilter) WhereHasShareLinks() {
+	f.Where(entql.HasEdge("share_links"))
+}
+
+// WhereHasShareLinksWith applies a predicate to check if query has an edge share_links with a given conditions (other predicates).
+func (f *FileFilter) WhereHasShareLinksWith(preds ...predicate.ShareLink) {
+	f.Where(entql.HasEdgeWith("share_links", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasTrustCenterDoc applies a predicate to check if query has an edge trust_center_doc.
 func (f *FileFilter) WhereHasTrustCenterDoc() {
 	f.Where(entql.HasEdge("trust_center_doc"))
@@ -39882,6 +40078,20 @@ func (f *OrganizationFilter) WhereHasScanCreatorsWith(preds ...predicate.Group) 
 	})))
 }
 
+// WhereHasShareLinkCreators applies a predicate to check if query has an edge share_link_creators.
+func (f *OrganizationFilter) WhereHasShareLinkCreators() {
+	f.Where(entql.HasEdge("share_link_creators"))
+}
+
+// WhereHasShareLinkCreatorsWith applies a predicate to check if query has an edge share_link_creators with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasShareLinkCreatorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("share_link_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasSLADefinitionCreators applies a predicate to check if query has an edge sla_definition_creators.
 func (f *OrganizationFilter) WhereHasSLADefinitionCreators() {
 	f.Where(entql.HasEdge("sla_definition_creators"))
@@ -40268,6 +40478,20 @@ func (f *OrganizationFilter) WhereHasRiskManager() {
 // WhereHasRiskManagerWith applies a predicate to check if query has an edge risk_manager with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasRiskManagerWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("risk_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasShareLinkManager applies a predicate to check if query has an edge share_link_manager.
+func (f *OrganizationFilter) WhereHasShareLinkManager() {
+	f.Where(entql.HasEdge("share_link_manager"))
+}
+
+// WhereHasShareLinkManagerWith applies a predicate to check if query has an edge share_link_manager with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasShareLinkManagerWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("share_link_manager", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -41492,6 +41716,34 @@ func (f *OrganizationFilter) WhereHasCheckResultsWith(preds ...predicate.CheckRe
 	})))
 }
 
+// WhereHasShareLinks applies a predicate to check if query has an edge share_links.
+func (f *OrganizationFilter) WhereHasShareLinks() {
+	f.Where(entql.HasEdge("share_links"))
+}
+
+// WhereHasShareLinksWith applies a predicate to check if query has an edge share_links with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasShareLinksWith(preds ...predicate.ShareLink) {
+	f.Where(entql.HasEdgeWith("share_links", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasShareLinkAccessEvents applies a predicate to check if query has an edge share_link_access_events.
+func (f *OrganizationFilter) WhereHasShareLinkAccessEvents() {
+	f.Where(entql.HasEdge("share_link_access_events"))
+}
+
+// WhereHasShareLinkAccessEventsWith applies a predicate to check if query has an edge share_link_access_events with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasShareLinkAccessEventsWith(preds ...predicate.ShareLinkAccessEvent) {
+	f.Where(entql.HasEdgeWith("share_link_access_events", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -41768,6 +42020,11 @@ func (f *OrganizationSettingFilter) WhereAllowedEmailDomains(p entql.BytesP) {
 // WhereAllowMatchingDomainsAutojoin applies the entql bool predicate on the allow_matching_domains_autojoin field.
 func (f *OrganizationSettingFilter) WhereAllowMatchingDomainsAutojoin(p entql.BoolP) {
 	f.Where(p.Field(organizationsetting.FieldAllowMatchingDomainsAutojoin))
+}
+
+// WhereExternalSharingEnabled applies the entql bool predicate on the external_sharing_enabled field.
+func (f *OrganizationSettingFilter) WhereExternalSharingEnabled(p entql.BoolP) {
+	f.Where(p.Field(organizationsetting.FieldExternalSharingEnabled))
 }
 
 // WhereIdentityProvider applies the entql string predicate on the identity_provider field.
@@ -47654,6 +47911,321 @@ func (f *ScanFilter) WhereHasPerformedByGroupWith(preds ...predicate.Group) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *ShareLinkQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the ShareLinkQuery builder.
+func (_q *ShareLinkQuery) Filter() *ShareLinkFilter {
+	return &ShareLinkFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *ShareLinkMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the ShareLinkMutation builder.
+func (m *ShareLinkMutation) Filter() *ShareLinkFilter {
+	return &ShareLinkFilter{config: m.config, predicateAdder: m}
+}
+
+// ShareLinkFilter provides a generic filtering capability at runtime for ShareLinkQuery.
+type ShareLinkFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *ShareLinkFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *ShareLinkFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(sharelink.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *ShareLinkFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(sharelink.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *ShareLinkFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(sharelink.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *ShareLinkFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(sharelink.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ShareLinkFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(sharelink.FieldUpdatedBy))
+}
+
+// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
+func (f *ShareLinkFilter) WhereUpdatedByImpersonator(p entql.StringP) {
+	f.Where(p.Field(sharelink.FieldUpdatedByImpersonator))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *ShareLinkFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(sharelink.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *ShareLinkFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(sharelink.FieldDeletedBy))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *ShareLinkFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(sharelink.FieldOwnerID))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *ShareLinkFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(sharelink.FieldName))
+}
+
+// WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
+func (f *ShareLinkFilter) WhereExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(sharelink.FieldExpiresAt))
+}
+
+// WhereMaxUses applies the entql int predicate on the max_uses field.
+func (f *ShareLinkFilter) WhereMaxUses(p entql.IntP) {
+	f.Where(p.Field(sharelink.FieldMaxUses))
+}
+
+// WhereUseCount applies the entql int predicate on the use_count field.
+func (f *ShareLinkFilter) WhereUseCount(p entql.IntP) {
+	f.Where(p.Field(sharelink.FieldUseCount))
+}
+
+// WhereRecipientEmails applies the entql json.RawMessage predicate on the recipient_emails field.
+func (f *ShareLinkFilter) WhereRecipientEmails(p entql.BytesP) {
+	f.Where(p.Field(sharelink.FieldRecipientEmails))
+}
+
+// WhereLandingPage applies the entql bool predicate on the landing_page field.
+func (f *ShareLinkFilter) WhereLandingPage(p entql.BoolP) {
+	f.Where(p.Field(sharelink.FieldLandingPage))
+}
+
+// WhereRequireSession applies the entql bool predicate on the require_session field.
+func (f *ShareLinkFilter) WhereRequireSession(p entql.BoolP) {
+	f.Where(p.Field(sharelink.FieldRequireSession))
+}
+
+// WhereCodeHash applies the entql []byte predicate on the code_hash field.
+func (f *ShareLinkFilter) WhereCodeHash(p entql.BytesP) {
+	f.Where(p.Field(sharelink.FieldCodeHash))
+}
+
+// WhereCodeExpiresAt applies the entql time.Time predicate on the code_expires_at field.
+func (f *ShareLinkFilter) WhereCodeExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(sharelink.FieldCodeExpiresAt))
+}
+
+// WhereCodeAttempts applies the entql int predicate on the code_attempts field.
+func (f *ShareLinkFilter) WhereCodeAttempts(p entql.IntP) {
+	f.Where(p.Field(sharelink.FieldCodeAttempts))
+}
+
+// WhereRevokedAt applies the entql time.Time predicate on the revoked_at field.
+func (f *ShareLinkFilter) WhereRevokedAt(p entql.TimeP) {
+	f.Where(p.Field(sharelink.FieldRevokedAt))
+}
+
+// WhereToken applies the entql string predicate on the token field.
+func (f *ShareLinkFilter) WhereToken(p entql.StringP) {
+	f.Where(p.Field(sharelink.FieldToken))
+}
+
+// WhereSecret applies the entql []byte predicate on the secret field.
+func (f *ShareLinkFilter) WhereSecret(p entql.BytesP) {
+	f.Where(p.Field(sharelink.FieldSecret))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *ShareLinkFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *ShareLinkFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *ShareLinkFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *ShareLinkFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasShareLinkAccessEvents applies a predicate to check if query has an edge share_link_access_events.
+func (f *ShareLinkFilter) WhereHasShareLinkAccessEvents() {
+	f.Where(entql.HasEdge("share_link_access_events"))
+}
+
+// WhereHasShareLinkAccessEventsWith applies a predicate to check if query has an edge share_link_access_events with a given conditions (other predicates).
+func (f *ShareLinkFilter) WhereHasShareLinkAccessEventsWith(preds ...predicate.ShareLinkAccessEvent) {
+	f.Where(entql.HasEdgeWith("share_link_access_events", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *ShareLinkAccessEventQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the ShareLinkAccessEventQuery builder.
+func (_q *ShareLinkAccessEventQuery) Filter() *ShareLinkAccessEventFilter {
+	return &ShareLinkAccessEventFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *ShareLinkAccessEventMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the ShareLinkAccessEventMutation builder.
+func (m *ShareLinkAccessEventMutation) Filter() *ShareLinkAccessEventFilter {
+	return &ShareLinkAccessEventFilter{config: m.config, predicateAdder: m}
+}
+
+// ShareLinkAccessEventFilter provides a generic filtering capability at runtime for ShareLinkAccessEventQuery.
+type ShareLinkAccessEventFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *ShareLinkAccessEventFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[73].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *ShareLinkAccessEventFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *ShareLinkAccessEventFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *ShareLinkAccessEventFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *ShareLinkAccessEventFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ShareLinkAccessEventFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldUpdatedBy))
+}
+
+// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
+func (f *ShareLinkAccessEventFilter) WhereUpdatedByImpersonator(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldUpdatedByImpersonator))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *ShareLinkAccessEventFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *ShareLinkAccessEventFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldDeletedBy))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *ShareLinkAccessEventFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldOwnerID))
+}
+
+// WhereShareLinkID applies the entql string predicate on the share_link_id field.
+func (f *ShareLinkAccessEventFilter) WhereShareLinkID(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldShareLinkID))
+}
+
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *ShareLinkAccessEventFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldFileID))
+}
+
+// WhereIPAddress applies the entql string predicate on the ip_address field.
+func (f *ShareLinkAccessEventFilter) WhereIPAddress(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldIPAddress))
+}
+
+// WhereUserAgent applies the entql string predicate on the user_agent field.
+func (f *ShareLinkAccessEventFilter) WhereUserAgent(p entql.StringP) {
+	f.Where(p.Field(sharelinkaccessevent.FieldUserAgent))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *ShareLinkAccessEventFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *ShareLinkAccessEventFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasShareLink applies a predicate to check if query has an edge share_link.
+func (f *ShareLinkAccessEventFilter) WhereHasShareLink() {
+	f.Where(entql.HasEdge("share_link"))
+}
+
+// WhereHasShareLinkWith applies a predicate to check if query has an edge share_link with a given conditions (other predicates).
+func (f *ShareLinkAccessEventFilter) WhereHasShareLinkWith(preds ...predicate.ShareLink) {
+	f.Where(entql.HasEdgeWith("share_link", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *StandardQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -47682,7 +48254,7 @@ type StandardFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StandardFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[74].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -47941,7 +48513,7 @@ type SubcontrolFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubcontrolFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[73].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[75].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -48686,7 +49258,7 @@ type SubprocessorFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubprocessorFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[74].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[76].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -48862,7 +49434,7 @@ type SubscriberFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubscriberFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[75].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[77].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -49096,7 +49668,7 @@ type SystemDetailFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SystemDetailFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[76].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[78].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -49345,7 +49917,7 @@ type TFASettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TFASettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[77].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -49469,7 +50041,7 @@ type TagDefinitionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TagDefinitionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[78].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[80].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -49652,7 +50224,7 @@ type TaskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[81].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -50280,7 +50852,7 @@ type TemplateFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[80].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[82].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -50615,7 +51187,7 @@ type TrustCenterFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[81].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51006,7 +51578,7 @@ type TrustCenterComplianceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterComplianceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[82].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51152,7 +51724,7 @@ type TrustCenterDocFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterDocFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51380,7 +51952,7 @@ type TrustCenterEntityFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterEntityFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51550,7 +52122,7 @@ type TrustCenterFAQFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterFAQFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51725,7 +52297,7 @@ type TrustCenterNDARequestFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterNDARequestFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51973,7 +52545,7 @@ type TrustCenterSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -52292,7 +52864,7 @@ type TrustCenterSubprocessorFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -52462,7 +53034,7 @@ type TrustCenterWatermarkConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -52657,7 +53229,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -53247,7 +53819,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -53415,7 +53987,7 @@ type VendorRiskScoreFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorRiskScoreFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -53670,7 +54242,7 @@ type VendorScoringConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorScoringConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -53798,7 +54370,7 @@ type VulnerabilityFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VulnerabilityFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -54700,7 +55272,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -54834,7 +55406,7 @@ type WorkflowAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -55074,7 +55646,7 @@ type WorkflowAssignmentTargetFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentTargetFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -55245,7 +55817,7 @@ type WorkflowDefinitionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowDefinitionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -55561,7 +56133,7 @@ type WorkflowEventFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowEventFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -55694,7 +56266,7 @@ type WorkflowInstanceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowInstanceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -56259,7 +56831,7 @@ type WorkflowObjectRefFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowObjectRefFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -56761,7 +57333,7 @@ type WorkflowProposalFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowProposalFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[104].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

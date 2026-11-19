@@ -559,10 +559,13 @@ func WithObjectStorage() ServerOption {
 			resolver.WithPresignConfig(func() *tokens.TokenManager {
 				return s.Config.Handler.TokenManager
 			}, authTokenCfg.Issuer, authTokenCfg.Audience),
+			resolver.WithLinksConfig(s.Config.Settings.StorageLinks),
 		)
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to initialize object storage")
 		}
+
+		s.Config.Handler.ForwarderSecret = s.Config.Settings.StorageLinks.ForwarderSecret
 
 		// Store in config for access
 		s.Config.StorageService = storageService

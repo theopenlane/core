@@ -156,6 +156,10 @@ type Tx struct {
 	SLADefinition *SLADefinitionClient
 	// Scan is the client for interacting with the Scan builders.
 	Scan *ScanClient
+	// ShareLink is the client for interacting with the ShareLink builders.
+	ShareLink *ShareLinkClient
+	// ShareLinkAccessEvent is the client for interacting with the ShareLinkAccessEvent builders.
+	ShareLinkAccessEvent *ShareLinkAccessEventClient
 	// Standard is the client for interacting with the Standard builders.
 	Standard *StandardClient
 	// Subcontrol is the client for interacting with the Subcontrol builders.
@@ -421,6 +425,8 @@ func (tx *Tx) init() {
 	tx.Risk = NewRiskClient(tx.config)
 	tx.SLADefinition = NewSLADefinitionClient(tx.config)
 	tx.Scan = NewScanClient(tx.config)
+	tx.ShareLink = NewShareLinkClient(tx.config)
+	tx.ShareLinkAccessEvent = NewShareLinkAccessEventClient(tx.config)
 	tx.Standard = NewStandardClient(tx.config)
 	tx.Subcontrol = NewSubcontrolClient(tx.config)
 	tx.Subprocessor = NewSubprocessorClient(tx.config)

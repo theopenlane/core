@@ -667,6 +667,240 @@ var ExampleFileDownloadRequest = FileDownload{
 	Token: "token",
 }
 
+// =========
+// SHARELINK
+// =========
+
+// Reasons a share link download is refused, reported by the `/share/:id/consume` endpoint
+const (
+	// ShareLinkConsumeReasonRevoked means the share link was revoked
+	ShareLinkConsumeReasonRevoked = "revoked"
+	// ShareLinkConsumeReasonExpired means the share link is past its expiry
+	ShareLinkConsumeReasonExpired = "expired"
+	// ShareLinkConsumeReasonExhausted means the share link has no downloads left
+	ShareLinkConsumeReasonExhausted = "exhausted"
+	// ShareLinkConsumeReasonUnknownFile means the file is not part of the share link
+	ShareLinkConsumeReasonUnknownFile = "unknown_file"
+	// ShareLinkConsumeReasonVerificationRequired means the recipient has not verified their email for the share link
+	ShareLinkConsumeReasonVerificationRequired = "verification_required"
+	// ShareLinkConsumeReasonSessionRequired means the share link requires a session and no usable credential was presented
+	ShareLinkConsumeReasonSessionRequired = "session_required"
+	// ShareLinkConsumeReasonForbidden means the presented credential is not allowed to download through the share link
+	ShareLinkConsumeReasonForbidden = "forbidden"
+)
+
+// ShareLinkResolveRequest contains the fields of a request to the `/share/:id/resolve` endpoint describing a share link
+type ShareLinkResolveRequest struct {
+	// ID is the share link ID in the path
+	ID string `param:"id" json:"-" description:"the share link ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	// Token is the share token from the share URL
+	Token string `json:"token" description:"the share token from the share URL" example:"token"`
+	// VerifiedToken is the share-verified token returned by the verify endpoint, required to list the files of a recipient-bound share link
+	VerifiedToken string `json:"verified_token,omitempty" description:"the share-verified token returned by the verify endpoint, required to list the files of a recipient-bound share link"`
+}
+
+// Validate ensures the required fields are set on the ShareLinkResolveRequest
+func (r *ShareLinkResolveRequest) Validate() error {
+	if r.Token == "" {
+		return rout.NewMissingRequiredFieldError("token")
+	}
+
+	return nil
+}
+
+// ExampleShareLinkResolveRequest is an example of a share link resolve request for OpenAPI documentation
+var ExampleShareLinkResolveRequest = ShareLinkResolveRequest{
+	Token: "token",
+}
+
+// ShareLinkResolveFile describes one file listed on a response to the `/share/:id/resolve` endpoint
+type ShareLinkResolveFile struct {
+	// ID is the file ID
+	ID string `json:"id" description:"the file ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	// Name is the file name provided at upload
+	Name string `json:"name" description:"the file name provided at upload" example:"report.pdf"`
+	// ContentType is the detected content type of the file
+	ContentType string `json:"content_type" description:"the detected content type of the file" example:"application/pdf"`
+}
+
+// ShareLinkResolveResponse holds the fields that are sent on a response to the `/share/:id/resolve` endpoint
+type ShareLinkResolveResponse struct {
+	// Name is the display name of the share link, empty when unnamed
+	Name string `json:"name" description:"the display name of the share link"`
+	// Organization is the display name of the organization owning the share link
+	Organization string `json:"organization" description:"the display name of the organization owning the share link"`
+	// ExpiresAt is when the share link stops serving downloads
+	ExpiresAt time.Time `json:"expires_at" description:"when the share link stops serving downloads"`
+	// LandingPage reports whether the share URL opens the landing page instead of serving the file directly
+	LandingPage bool `json:"landing_page" description:"whether the share URL opens the landing page instead of serving the file directly"`
+	// RecipientBound reports whether a recipient must verify their email before downloading
+	RecipientBound bool `json:"recipient_bound" description:"whether a recipient must verify their email before downloading"`
+	// Files are the files the share link grants downloads of, empty for a recipient-bound share link until the recipient has verified
+	Files []ShareLinkResolveFile `json:"files" description:"the files the share link grants downloads of, empty for a recipient-bound share link until the recipient has verified"`
+}
+
+// ExampleResponse returns an example ShareLinkResolveResponse for OpenAPI documentation
+func (r *ShareLinkResolveResponse) ExampleResponse() any {
+	return ShareLinkResolveResponse{
+		Name:         "Audit evidence",
+		Organization: "Acme Corp",
+		ExpiresAt:    exampleTime(time.Hour),
+		Files:        []ShareLinkResolveFile{{ID: "01J4HMNDSZCCQBTY93BF9CBF5D", Name: "report.pdf", ContentType: "application/pdf"}},
+	}
+}
+
+// ShareLinkGoneResponse holds the fields that are sent on a 410 response to the `/share/:id/resolve` endpoint
+type ShareLinkGoneResponse struct {
+	// Reason explains why the share link is no longer usable: revoked, expired, or exhausted
+	Reason string `json:"reason" description:"why the share link is no longer usable: revoked, expired, or exhausted" example:"expired"`
+	// LandingPage is whether the share URL opens the landing page instead of serving the file directly
+	LandingPage bool `json:"landing_page" description:"whether the share URL opens the landing page instead of serving the file directly"`
+}
+
+// ShareLinkCodeRequest contains the fields of a request to the `/share/:id/code` endpoint asking for a verification
+// code to be emailed to the recipient of a share link
+type ShareLinkCodeRequest struct {
+	// ID is the share link ID in the path
+	ID string `param:"id" json:"-" description:"the share link ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	// Token is the share token from the share URL
+	Token string `json:"token" description:"the share token from the share URL" example:"token"`
+	// Email is the address claiming to be the recipient of the share link
+	Email string `json:"email" description:"the email address claiming to be the share link recipient" example:"recipient@example.com"`
+}
+
+// Validate ensures the required fields are set on the ShareLinkCodeRequest
+func (r *ShareLinkCodeRequest) Validate() error {
+	if r.Token == "" {
+		return rout.NewMissingRequiredFieldError("token")
+	}
+
+	if r.Email == "" {
+		return rout.NewMissingRequiredFieldError("email")
+	}
+
+	return nil
+}
+
+// ExampleShareLinkCodeRequest is an example of a share link code request for OpenAPI documentation
+var ExampleShareLinkCodeRequest = ShareLinkCodeRequest{
+	Token: "token",
+	Email: "recipient@example.com",
+}
+
+// ShareLinkVerifyRequest contains the fields of a request to the `/share/:id/verify` endpoint presenting the
+// verification code emailed to the recipient of a share link
+type ShareLinkVerifyRequest struct {
+	// ID is the share link ID in the path
+	ID string `param:"id" json:"-" description:"the share link ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	// Token is the share token from the share URL
+	Token string `json:"token" description:"the share token from the share URL" example:"token"`
+	// Email is the address the code was sent to
+	Email string `json:"email" description:"the email address the verification code was sent to" example:"recipient@example.com"`
+	// Code is the verification code from the email
+	Code string `json:"code" description:"the verification code from the email" example:"123456"`
+}
+
+// Validate ensures the required fields are set on the ShareLinkVerifyRequest
+func (r *ShareLinkVerifyRequest) Validate() error {
+	if r.Token == "" {
+		return rout.NewMissingRequiredFieldError("token")
+	}
+
+	if r.Email == "" {
+		return rout.NewMissingRequiredFieldError("email")
+	}
+
+	if r.Code == "" {
+		return rout.NewMissingRequiredFieldError("code")
+	}
+
+	return nil
+}
+
+// ExampleShareLinkVerifyRequest is an example of a share link verify request for OpenAPI documentation
+var ExampleShareLinkVerifyRequest = ShareLinkVerifyRequest{
+	Token: "token",
+	Email: "recipient@example.com",
+	Code:  "123456",
+}
+
+// ShareLinkVerifyResponse holds the fields that are sent on a response to the `/share/:id/verify` endpoint
+type ShareLinkVerifyResponse struct {
+	// Token is the share-verified token proving the recipient verified their email
+	Token string `json:"token" description:"the share-verified token proving the recipient verified their email"`
+}
+
+// ExampleResponse returns an example ShareLinkVerifyResponse for OpenAPI documentation
+func (r *ShareLinkVerifyResponse) ExampleResponse() any {
+	return ShareLinkVerifyResponse{Token: "token"}
+}
+
+// ShareLinkConsumeRequest contains the fields of a request to the `/share/:id/consume` endpoint recording a download
+// through a share link
+type ShareLinkConsumeRequest struct {
+	// ID is the share link ID in the path
+	ID string `param:"id" json:"-" description:"the share link ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	// Token is the share token from the share URL
+	Token string `json:"token" description:"the share token from the share URL" example:"token"`
+	// FileID is the file being downloaded
+	FileID string `json:"file_id" description:"the file being downloaded" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	// VerifiedToken is the share-verified token returned by the verify endpoint, required for recipient-bound share links
+	VerifiedToken string `json:"verified_token,omitempty" description:"the share-verified token returned by the verify endpoint, required for recipient-bound share links"`
+	// IP is the client address the download is served to
+	IP string `json:"ip_address" description:"the client address the download is served to" example:"203.0.113.10"`
+	// UserAgent is the client user agent the download is served to
+	UserAgent string `json:"user_agent" description:"the client user agent the download is served to" example:"Mozilla/5.0"`
+}
+
+// Validate ensures the required fields are set on the ShareLinkConsumeRequest
+func (r *ShareLinkConsumeRequest) Validate() error {
+	if r.Token == "" {
+		return rout.NewMissingRequiredFieldError("token")
+	}
+
+	if r.FileID == "" {
+		return rout.NewMissingRequiredFieldError("file_id")
+	}
+
+	return nil
+}
+
+// ExampleShareLinkConsumeRequest is an example of a share link consume request for OpenAPI documentation
+var ExampleShareLinkConsumeRequest = ShareLinkConsumeRequest{
+	Token:     "token",
+	FileID:    "01J4HMNDSZCCQBTY93BF9CBF5D",
+	IP:        "203.0.113.10",
+	UserAgent: "Mozilla/5.0",
+}
+
+// ShareLinkConsumeFile names the stored object served for an allowed download through a share link
+type ShareLinkConsumeFile struct {
+	// Key is the object key of the file
+	Key string `json:"key" description:"the object key of the file" example:"org/object/report.pdf"`
+	// ContentType is the detected content type of the file
+	ContentType string `json:"content_type" description:"the detected content type of the file" example:"application/pdf"`
+	// FileName is the file name provided at upload
+	FileName string `json:"file_name" description:"the file name provided at upload" example:"report.pdf"`
+}
+
+// ShareLinkConsumeResponse holds the fields that are sent on a response to the `/share/:id/consume` endpoint
+type ShareLinkConsumeResponse struct {
+	// Allowed reports whether the download may be served
+	Allowed bool `json:"allowed" description:"whether the download may be served"`
+	// Reason explains a refused download: revoked, expired, exhausted, unknown_file, verification_required, session_required, or forbidden
+	Reason string `json:"reason" description:"why the download was refused: revoked, expired, exhausted, unknown_file, verification_required, session_required, or forbidden" example:"exhausted"`
+	// File is the stored object to serve, present only when the download is allowed
+	File *ShareLinkConsumeFile `json:"file,omitempty" description:"the stored object to serve, present only when the download is allowed"`
+}
+
+// ExampleResponse returns an example ShareLinkConsumeResponse for OpenAPI documentation
+func (r *ShareLinkConsumeResponse) ExampleResponse() any {
+	return ShareLinkConsumeResponse{
+		Allowed: true,
+		File:    &ShareLinkConsumeFile{Key: "org/object/report.pdf", ContentType: "application/pdf", FileName: "report.pdf"},
+	}
+}
+
 // UploadFilesResponse holds the fields that are sent on a response to the `/upload` endpoint
 type FileDownloadResponse struct {
 	// Reply is the reply value

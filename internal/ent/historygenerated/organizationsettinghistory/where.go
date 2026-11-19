@@ -149,6 +149,11 @@ func AllowMatchingDomainsAutojoin(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldAllowMatchingDomainsAutojoin, v))
 }
 
+// ExternalSharingEnabled applies equality check predicate on the "external_sharing_enabled" field. It's identical to ExternalSharingEnabledEQ.
+func ExternalSharingEnabled(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldExternalSharingEnabled, v))
+}
+
 // IdentityProviderClientID applies equality check predicate on the "identity_provider_client_id" field. It's identical to IdentityProviderClientIDEQ.
 func IdentityProviderClientID(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderClientID, v))
@@ -1292,6 +1297,26 @@ func AllowMatchingDomainsAutojoinIsNil() predicate.OrganizationSettingHistory {
 // AllowMatchingDomainsAutojoinNotNil applies the NotNil predicate on the "allow_matching_domains_autojoin" field.
 func AllowMatchingDomainsAutojoinNotNil() predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldAllowMatchingDomainsAutojoin))
+}
+
+// ExternalSharingEnabledEQ applies the EQ predicate on the "external_sharing_enabled" field.
+func ExternalSharingEnabledEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldExternalSharingEnabled, v))
+}
+
+// ExternalSharingEnabledNEQ applies the NEQ predicate on the "external_sharing_enabled" field.
+func ExternalSharingEnabledNEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldExternalSharingEnabled, v))
+}
+
+// ExternalSharingEnabledIsNil applies the IsNil predicate on the "external_sharing_enabled" field.
+func ExternalSharingEnabledIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldExternalSharingEnabled))
+}
+
+// ExternalSharingEnabledNotNil applies the NotNil predicate on the "external_sharing_enabled" field.
+func ExternalSharingEnabledNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldExternalSharingEnabled))
 }
 
 // IdentityProviderEQ applies the EQ predicate on the "identity_provider" field.

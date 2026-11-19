@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
@@ -767,6 +768,21 @@ func (_c *FileCreate) AddTrustCenterEntities(v ...*TrustCenterEntity) *FileCreat
 	return _c.AddTrustCenterEntityIDs(ids...)
 }
 
+// AddShareLinkIDs adds the "share_links" edge to the ShareLink entity by IDs.
+func (_c *FileCreate) AddShareLinkIDs(ids ...string) *FileCreate {
+	_c.mutation.AddShareLinkIDs(ids...)
+	return _c
+}
+
+// AddShareLinks adds the "share_links" edges to the ShareLink entity.
+func (_c *FileCreate) AddShareLinks(v ...*ShareLink) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddShareLinkIDs(ids...)
+}
+
 // AddTrustCenterDocIDs adds the "trust_center_doc" edge to the TrustCenterDoc entity by IDs.
 func (_c *FileCreate) AddTrustCenterDocIDs(ids ...string) *FileCreate {
 	_c.mutation.AddTrustCenterDocIDs(ids...)
@@ -1444,6 +1460,22 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ShareLinksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ShareLinksTable,
+			Columns: file.ShareLinksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sharelink.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

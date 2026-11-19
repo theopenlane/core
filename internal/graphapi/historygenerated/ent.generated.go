@@ -37035,6 +37035,29 @@ func (ec *executionContext) fieldContext_OrganizationSettingHistory_allowMatchin
 	return graphql.NewScalarFieldContext("OrganizationSettingHistory", field, false, false, "Boolean")
 }
 
+func (ec *executionContext) _OrganizationSettingHistory_externalSharingEnabled(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrganizationSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OrganizationSettingHistory_externalSharingEnabled(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExternalSharingEnabled, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OrganizationSettingHistory_externalSharingEnabled(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OrganizationSettingHistory", field, false, false, "Boolean")
+}
+
 func (ec *executionContext) _OrganizationSettingHistory_identityProvider(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrganizationSettingHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -127255,6 +127278,11 @@ func (ec *executionContext) _OrganizationSettingHistory(ctx context.Context, sel
 			}
 		case "allowMatchingDomainsAutojoin":
 			out.Values[i] = ec._OrganizationSettingHistory_allowMatchingDomainsAutojoin(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "externalSharingEnabled":
+			out.Values[i] = ec._OrganizationSettingHistory_externalSharingEnabled(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

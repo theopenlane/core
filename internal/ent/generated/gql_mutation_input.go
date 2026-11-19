@@ -16484,6 +16484,7 @@ type CreateOrganizationInput struct {
 	ReviewCreatorIDs                     []string   `json:"review_creator_ids,omitempty"`
 	RiskCreatorIDs                       []string   `json:"risk_creator_ids,omitempty"`
 	ScanCreatorIDs                       []string   `json:"scan_creator_ids,omitempty"`
+	ShareLinkCreatorIDs                  []string   `json:"share_link_creator_ids,omitempty"`
 	SLADefinitionCreatorIDs              []string   `json:"sla_definition_creator_ids,omitempty"`
 	StandardCreatorIDs                   []string   `json:"standard_creator_ids,omitempty"`
 	SubcontrolCreatorIDs                 []string   `json:"subcontrol_creator_ids,omitempty"`
@@ -16512,6 +16513,7 @@ type CreateOrganizationInput struct {
 	PolicyManagerIDs                     []string   `json:"policy_manager_ids,omitempty"`
 	RegistryManagerIDs                   []string   `json:"registry_manager_ids,omitempty"`
 	RiskManagerIDs                       []string   `json:"risk_manager_ids,omitempty"`
+	ShareLinkManagerIDs                  []string   `json:"share_link_manager_ids,omitempty"`
 	TrustCenterManagerIDs                []string   `json:"trust_center_manager_ids,omitempty"`
 	WorkflowManagerIDs                   []string   `json:"workflow_manager_ids,omitempty"`
 	ParentID                             *string    `json:"parent_id,omitempty"`
@@ -16691,6 +16693,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ScanCreatorIDs; len(v) > 0 {
 		m.AddScanCreatorIDs(v...)
 	}
+	if v := i.ShareLinkCreatorIDs; len(v) > 0 {
+		m.AddShareLinkCreatorIDs(v...)
+	}
 	if v := i.SLADefinitionCreatorIDs; len(v) > 0 {
 		m.AddSLADefinitionCreatorIDs(v...)
 	}
@@ -16774,6 +16779,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RiskManagerIDs; len(v) > 0 {
 		m.AddRiskManagerIDs(v...)
+	}
+	if v := i.ShareLinkManagerIDs; len(v) > 0 {
+		m.AddShareLinkManagerIDs(v...)
 	}
 	if v := i.TrustCenterManagerIDs; len(v) > 0 {
 		m.AddTrustCenterManagerIDs(v...)
@@ -16975,6 +16983,9 @@ type UpdateOrganizationInput struct {
 	ClearScanCreators                          bool
 	AddScanCreatorIDs                          []string `json:"add_scan_creator_ids,omitempty"`
 	RemoveScanCreatorIDs                       []string `json:"remove_scan_creator_ids,omitempty"`
+	ClearShareLinkCreators                     bool
+	AddShareLinkCreatorIDs                     []string `json:"add_share_link_creator_ids,omitempty"`
+	RemoveShareLinkCreatorIDs                  []string `json:"remove_share_link_creator_ids,omitempty"`
 	ClearSLADefinitionCreators                 bool
 	AddSLADefinitionCreatorIDs                 []string `json:"add_sla_definition_creator_ids,omitempty"`
 	RemoveSLADefinitionCreatorIDs              []string `json:"remove_sla_definition_creator_ids,omitempty"`
@@ -17059,6 +17070,9 @@ type UpdateOrganizationInput struct {
 	ClearRiskManager                           bool
 	AddRiskManagerIDs                          []string `json:"add_risk_manager_ids,omitempty"`
 	RemoveRiskManagerIDs                       []string `json:"remove_risk_manager_ids,omitempty"`
+	ClearShareLinkManager                      bool
+	AddShareLinkManagerIDs                     []string `json:"add_share_link_manager_ids,omitempty"`
+	RemoveShareLinkManagerIDs                  []string `json:"remove_share_link_manager_ids,omitempty"`
 	ClearTrustCenterManager                    bool
 	AddTrustCenterManagerIDs                   []string `json:"add_trust_center_manager_ids,omitempty"`
 	RemoveTrustCenterManagerIDs                []string `json:"remove_trust_center_manager_ids,omitempty"`
@@ -17555,6 +17569,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveScanCreatorIDs; len(v) > 0 {
 		m.RemoveScanCreatorIDs(v...)
 	}
+	if i.ClearShareLinkCreators {
+		m.ClearShareLinkCreators()
+	}
+	if v := i.AddShareLinkCreatorIDs; len(v) > 0 {
+		m.AddShareLinkCreatorIDs(v...)
+	}
+	if v := i.RemoveShareLinkCreatorIDs; len(v) > 0 {
+		m.RemoveShareLinkCreatorIDs(v...)
+	}
 	if i.ClearSLADefinitionCreators {
 		m.ClearSLADefinitionCreators()
 	}
@@ -17807,6 +17830,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveRiskManagerIDs; len(v) > 0 {
 		m.RemoveRiskManagerIDs(v...)
 	}
+	if i.ClearShareLinkManager {
+		m.ClearShareLinkManager()
+	}
+	if v := i.AddShareLinkManagerIDs; len(v) > 0 {
+		m.AddShareLinkManagerIDs(v...)
+	}
+	if v := i.RemoveShareLinkManagerIDs; len(v) > 0 {
+		m.RemoveShareLinkManagerIDs(v...)
+	}
 	if i.ClearTrustCenterManager {
 		m.ClearTrustCenterManager()
 	}
@@ -18046,6 +18078,7 @@ type CreateOrganizationSettingInput struct {
 	BillingNotificationsEnabled      *bool              `json:"billing_notifications_enabled,omitempty"`
 	AllowedEmailDomains              []string           `json:"allowed_email_domains,omitempty"`
 	AllowMatchingDomainsAutojoin     *bool              `json:"allow_matching_domains_autojoin,omitempty"`
+	ExternalSharingEnabled           *bool              `json:"external_sharing_enabled,omitempty"`
 	IdentityProvider                 *enums.SSOProvider `json:"identity_provider,omitempty"`
 	IdentityProviderClientID         *string            `json:"identity_provider_client_id,omitempty"`
 	IdentityProviderClientSecret     *string            `json:"identity_provider_client_secret,omitempty"`
@@ -18099,6 +18132,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.AllowMatchingDomainsAutojoin; v != nil {
 		m.SetAllowMatchingDomainsAutojoin(*v)
+	}
+	if v := i.ExternalSharingEnabled; v != nil {
+		m.SetExternalSharingEnabled(*v)
 	}
 	if v := i.IdentityProvider; v != nil {
 		m.SetIdentityProvider(*v)
@@ -18185,6 +18221,8 @@ type UpdateOrganizationSettingInput struct {
 	AppendAllowedEmailDomains             []string
 	ClearAllowMatchingDomainsAutojoin     bool
 	AllowMatchingDomainsAutojoin          *bool `json:"allow_matching_domains_autojoin,omitempty"`
+	ClearExternalSharingEnabled           bool
+	ExternalSharingEnabled                *bool `json:"external_sharing_enabled,omitempty"`
 	ClearIdentityProvider                 bool
 	IdentityProvider                      *enums.SSOProvider `json:"identity_provider,omitempty"`
 	ClearIdentityProviderClientID         bool
@@ -18297,6 +18335,12 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.AllowMatchingDomainsAutojoin; v != nil {
 		m.SetAllowMatchingDomainsAutojoin(*v)
+	}
+	if i.ClearExternalSharingEnabled {
+		m.ClearExternalSharingEnabled()
+	}
+	if v := i.ExternalSharingEnabled; v != nil {
+		m.SetExternalSharingEnabled(*v)
 	}
 	if i.ClearIdentityProvider {
 		m.ClearIdentityProvider()
@@ -24227,6 +24271,104 @@ func (c *ScanUpdate) SetInput(i UpdateScanInput) *ScanUpdate {
 
 // SetInput applies the change-set in the UpdateScanInput on the ScanUpdateOne builder.
 func (c *ScanUpdateOne) SetInput(i UpdateScanInput) *ScanUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateShareLinkInput represents a mutation input for creating sharelinks.
+type CreateShareLinkInput struct {
+	Name            *string    `json:"name,omitempty"`
+	ExpiresAt       *time.Time `json:"expires_at,omitempty"`
+	MaxUses         *int       `json:"max_uses,omitempty"`
+	RecipientEmails []string   `json:"recipient_emails,omitempty"`
+	LandingPage     *bool      `json:"landing_page,omitempty"`
+	RequireSession  *bool      `json:"require_session,omitempty"`
+	OwnerID         *string    `json:"owner_id,omitempty"`
+	FileIDs         []string   `json:"file_ids,omitempty"`
+}
+
+// Mutate applies the CreateShareLinkInput on the ShareLinkMutation builder.
+func (i *CreateShareLinkInput) Mutate(m *ShareLinkMutation) {
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
+	}
+	if v := i.MaxUses; v != nil {
+		m.SetMaxUses(*v)
+	}
+	if v := i.RecipientEmails; v != nil {
+		m.SetRecipientEmails(v)
+	}
+	if v := i.LandingPage; v != nil {
+		m.SetLandingPage(*v)
+	}
+	if v := i.RequireSession; v != nil {
+		m.SetRequireSession(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateShareLinkInput on the ShareLinkCreate builder.
+func (c *ShareLinkCreate) SetInput(i CreateShareLinkInput) *ShareLinkCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateShareLinkInput represents a mutation input for updating sharelinks.
+type UpdateShareLinkInput struct {
+	ClearName      bool
+	Name           *string `json:"name,omitempty"`
+	ClearMaxUses   bool
+	MaxUses        *int `json:"max_uses,omitempty"`
+	ClearRevokedAt bool
+	RevokedAt      *time.Time `json:"revoked_at,omitempty"`
+	ClearOwner     bool
+	OwnerID        *string `json:"owner_id,omitempty"`
+}
+
+// Mutate applies the UpdateShareLinkInput on the ShareLinkMutation builder.
+func (i *UpdateShareLinkInput) Mutate(m *ShareLinkMutation) {
+	if i.ClearName {
+		m.ClearName()
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearMaxUses {
+		m.ClearMaxUses()
+	}
+	if v := i.MaxUses; v != nil {
+		m.SetMaxUses(*v)
+	}
+	if i.ClearRevokedAt {
+		m.ClearRevokedAt()
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateShareLinkInput on the ShareLinkUpdate builder.
+func (c *ShareLinkUpdate) SetInput(i UpdateShareLinkInput) *ShareLinkUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateShareLinkInput on the ShareLinkUpdateOne builder.
+func (c *ShareLinkUpdateOne) SetInput(i UpdateShareLinkInput) *ShareLinkUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

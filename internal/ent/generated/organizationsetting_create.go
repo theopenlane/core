@@ -266,6 +266,20 @@ func (_c *OrganizationSettingCreate) SetNillableAllowMatchingDomainsAutojoin(v *
 	return _c
 }
 
+// SetExternalSharingEnabled sets the "external_sharing_enabled" field.
+func (_c *OrganizationSettingCreate) SetExternalSharingEnabled(v bool) *OrganizationSettingCreate {
+	_c.mutation.SetExternalSharingEnabled(v)
+	return _c
+}
+
+// SetNillableExternalSharingEnabled sets the "external_sharing_enabled" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillableExternalSharingEnabled(v *bool) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetExternalSharingEnabled(*v)
+	}
+	return _c
+}
+
 // SetIdentityProvider sets the "identity_provider" field.
 func (_c *OrganizationSettingCreate) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingCreate {
 	_c.mutation.SetIdentityProvider(v)
@@ -603,6 +617,10 @@ func (_c *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultAllowMatchingDomainsAutojoin
 		_c.mutation.SetAllowMatchingDomainsAutojoin(v)
 	}
+	if _, ok := _c.mutation.ExternalSharingEnabled(); !ok {
+		v := organizationsetting.DefaultExternalSharingEnabled
+		_c.mutation.SetExternalSharingEnabled(v)
+	}
 	if _, ok := _c.mutation.IdentityProvider(); !ok {
 		v := organizationsetting.DefaultIdentityProvider
 		_c.mutation.SetIdentityProvider(v)
@@ -809,6 +827,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.AllowMatchingDomainsAutojoin(); ok {
 		_spec.SetField(organizationsetting.FieldAllowMatchingDomainsAutojoin, field.TypeBool, value)
 		_node.AllowMatchingDomainsAutojoin = value
+	}
+	if value, ok := _c.mutation.ExternalSharingEnabled(); ok {
+		_spec.SetField(organizationsetting.FieldExternalSharingEnabled, field.TypeBool, value)
+		_node.ExternalSharingEnabled = value
 	}
 	if value, ok := _c.mutation.IdentityProvider(); ok {
 		_spec.SetField(organizationsetting.FieldIdentityProvider, field.TypeEnum, value)

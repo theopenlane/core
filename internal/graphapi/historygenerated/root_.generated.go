@@ -1710,6 +1710,7 @@ type ComplexityRoot struct {
 		CreatedAt                        func(childComplexity int) int
 		CreatedBy                        func(childComplexity int) int
 		Domains                          func(childComplexity int) int
+		ExternalSharingEnabled           func(childComplexity int) int
 		GeoLocation                      func(childComplexity int) int
 		HistoryTime                      func(childComplexity int) int
 		ID                               func(childComplexity int) int
@@ -11515,6 +11516,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.Domains(childComplexity), true
+	case "OrganizationSettingHistory.externalSharingEnabled":
+		if e.ComplexityRoot.OrganizationSettingHistory.ExternalSharingEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.ExternalSharingEnabled(childComplexity), true
 	case "OrganizationSettingHistory.geoLocation":
 		if e.ComplexityRoot.OrganizationSettingHistory.GeoLocation == nil {
 			break
@@ -31129,6 +31136,10 @@ type OrganizationSettingHistory implements Node {
   """
   allowMatchingDomainsAutojoin: Boolean
   """
+  allow members to create share links that grant people outside the organization downloads of files
+  """
+  externalSharingEnabled: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingHistorySSOProvider
@@ -46666,6 +46677,8 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_allowedEmailDomains(ctx, field)
 	case "allowMatchingDomainsAutojoin":
 		return ec.fieldContext_OrganizationSettingHistory_allowMatchingDomainsAutojoin(ctx, field)
+	case "externalSharingEnabled":
+		return ec.fieldContext_OrganizationSettingHistory_externalSharingEnabled(ctx, field)
 	case "identityProvider":
 		return ec.fieldContext_OrganizationSettingHistory_identityProvider(ctx, field)
 	case "identityProviderClientID":

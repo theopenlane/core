@@ -76,6 +76,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelink"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sharelinkaccessevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -157,6 +159,7 @@ type OrganizationQuery struct {
 	withReviewCreators                          *GroupQuery
 	withRiskCreators                            *GroupQuery
 	withScanCreators                            *GroupQuery
+	withShareLinkCreators                       *GroupQuery
 	withSLADefinitionCreators                   *GroupQuery
 	withStandardCreators                        *GroupQuery
 	withSubcontrolCreators                      *GroupQuery
@@ -185,6 +188,7 @@ type OrganizationQuery struct {
 	withPolicyManager                           *GroupQuery
 	withRegistryManager                         *GroupQuery
 	withRiskManager                             *GroupQuery
+	withShareLinkManager                        *GroupQuery
 	withTrustCenterManager                      *GroupQuery
 	withWorkflowManager                         *GroupQuery
 	withParent                                  *OrganizationQuery
@@ -272,6 +276,8 @@ type OrganizationQuery struct {
 	withVendorScoringConfigs                    *VendorScoringConfigQuery
 	withVendorRiskScores                        *VendorRiskScoreQuery
 	withCheckResults                            *CheckResultQuery
+	withShareLinks                              *ShareLinkQuery
+	withShareLinkAccessEvents                   *ShareLinkAccessEventQuery
 	withMembers                                 *OrgMembershipQuery
 	loadTotal                                   []func(context.Context, []*Organization) error
 	modifiers                                   []func(*sql.Selector)
@@ -323,6 +329,7 @@ type OrganizationQuery struct {
 	withNamedReviewCreators                     map[string]*GroupQuery
 	withNamedRiskCreators                       map[string]*GroupQuery
 	withNamedScanCreators                       map[string]*GroupQuery
+	withNamedShareLinkCreators                  map[string]*GroupQuery
 	withNamedSLADefinitionCreators              map[string]*GroupQuery
 	withNamedStandardCreators                   map[string]*GroupQuery
 	withNamedSubcontrolCreators                 map[string]*GroupQuery
@@ -351,6 +358,7 @@ type OrganizationQuery struct {
 	withNamedPolicyManager                      map[string]*GroupQuery
 	withNamedRegistryManager                    map[string]*GroupQuery
 	withNamedRiskManager                        map[string]*GroupQuery
+	withNamedShareLinkManager                   map[string]*GroupQuery
 	withNamedTrustCenterManager                 map[string]*GroupQuery
 	withNamedWorkflowManager                    map[string]*GroupQuery
 	withNamedChildren                           map[string]*OrganizationQuery
@@ -434,6 +442,8 @@ type OrganizationQuery struct {
 	withNamedVendorScoringConfigs               map[string]*VendorScoringConfigQuery
 	withNamedVendorRiskScores                   map[string]*VendorRiskScoreQuery
 	withNamedCheckResults                       map[string]*CheckResultQuery
+	withNamedShareLinks                         map[string]*ShareLinkQuery
+	withNamedShareLinkAccessEvents              map[string]*ShareLinkAccessEventQuery
 	withNamedMembers                            map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1527,6 +1537,28 @@ func (_q *OrganizationQuery) QueryScanCreators() *GroupQuery {
 	return query
 }
 
+// QueryShareLinkCreators chains the current query on the "share_link_creators" edge.
+func (_q *OrganizationQuery) QueryShareLinkCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ShareLinkCreatorsTable, organization.ShareLinkCreatorsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QuerySLADefinitionCreators chains the current query on the "sla_definition_creators" edge.
 func (_q *OrganizationQuery) QuerySLADefinitionCreators() *GroupQuery {
 	query := (&GroupClient{config: _q.config}).Query()
@@ -2136,6 +2168,28 @@ func (_q *OrganizationQuery) QueryRiskManager() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RiskManagerTable, organization.RiskManagerColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryShareLinkManager chains the current query on the "share_link_manager" edge.
+func (_q *OrganizationQuery) QueryShareLinkManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ShareLinkManagerTable, organization.ShareLinkManagerColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -4057,6 +4111,50 @@ func (_q *OrganizationQuery) QueryCheckResults() *CheckResultQuery {
 	return query
 }
 
+// QueryShareLinks chains the current query on the "share_links" edge.
+func (_q *OrganizationQuery) QueryShareLinks() *ShareLinkQuery {
+	query := (&ShareLinkClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(sharelink.Table, sharelink.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ShareLinksTable, organization.ShareLinksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryShareLinkAccessEvents chains the current query on the "share_link_access_events" edge.
+func (_q *OrganizationQuery) QueryShareLinkAccessEvents() *ShareLinkAccessEventQuery {
+	query := (&ShareLinkAccessEventClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(sharelinkaccessevent.Table, sharelinkaccessevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ShareLinkAccessEventsTable, organization.ShareLinkAccessEventsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -4319,6 +4417,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withReviewCreators:                     _q.withReviewCreators.Clone(),
 		withRiskCreators:                       _q.withRiskCreators.Clone(),
 		withScanCreators:                       _q.withScanCreators.Clone(),
+		withShareLinkCreators:                  _q.withShareLinkCreators.Clone(),
 		withSLADefinitionCreators:              _q.withSLADefinitionCreators.Clone(),
 		withStandardCreators:                   _q.withStandardCreators.Clone(),
 		withSubcontrolCreators:                 _q.withSubcontrolCreators.Clone(),
@@ -4347,6 +4446,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withPolicyManager:                      _q.withPolicyManager.Clone(),
 		withRegistryManager:                    _q.withRegistryManager.Clone(),
 		withRiskManager:                        _q.withRiskManager.Clone(),
+		withShareLinkManager:                   _q.withShareLinkManager.Clone(),
 		withTrustCenterManager:                 _q.withTrustCenterManager.Clone(),
 		withWorkflowManager:                    _q.withWorkflowManager.Clone(),
 		withParent:                             _q.withParent.Clone(),
@@ -4434,6 +4534,8 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withVendorScoringConfigs:               _q.withVendorScoringConfigs.Clone(),
 		withVendorRiskScores:                   _q.withVendorRiskScores.Clone(),
 		withCheckResults:                       _q.withCheckResults.Clone(),
+		withShareLinks:                         _q.withShareLinks.Clone(),
+		withShareLinkAccessEvents:              _q.withShareLinkAccessEvents.Clone(),
 		withMembers:                            _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -4970,6 +5072,17 @@ func (_q *OrganizationQuery) WithScanCreators(opts ...func(*GroupQuery)) *Organi
 	return _q
 }
 
+// WithShareLinkCreators tells the query-builder to eager-load the nodes that are connected to
+// the "share_link_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithShareLinkCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withShareLinkCreators = query
+	return _q
+}
+
 // WithSLADefinitionCreators tells the query-builder to eager-load the nodes that are connected to
 // the "sla_definition_creators" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithSLADefinitionCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -5275,6 +5388,17 @@ func (_q *OrganizationQuery) WithRiskManager(opts ...func(*GroupQuery)) *Organiz
 		opt(query)
 	}
 	_q.withRiskManager = query
+	return _q
+}
+
+// WithShareLinkManager tells the query-builder to eager-load the nodes that are connected to
+// the "share_link_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithShareLinkManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withShareLinkManager = query
 	return _q
 }
 
@@ -6235,6 +6359,28 @@ func (_q *OrganizationQuery) WithCheckResults(opts ...func(*CheckResultQuery)) *
 	return _q
 }
 
+// WithShareLinks tells the query-builder to eager-load the nodes that are connected to
+// the "share_links" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithShareLinks(opts ...func(*ShareLinkQuery)) *OrganizationQuery {
+	query := (&ShareLinkClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withShareLinks = query
+	return _q
+}
+
+// WithShareLinkAccessEvents tells the query-builder to eager-load the nodes that are connected to
+// the "share_link_access_events" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithShareLinkAccessEvents(opts ...func(*ShareLinkAccessEventQuery)) *OrganizationQuery {
+	query := (&ShareLinkAccessEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withShareLinkAccessEvents = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -6330,7 +6476,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [164]bool{
+		loadedTypes = [168]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6379,6 +6525,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withReviewCreators != nil,
 			_q.withRiskCreators != nil,
 			_q.withScanCreators != nil,
+			_q.withShareLinkCreators != nil,
 			_q.withSLADefinitionCreators != nil,
 			_q.withStandardCreators != nil,
 			_q.withSubcontrolCreators != nil,
@@ -6407,6 +6554,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withPolicyManager != nil,
 			_q.withRegistryManager != nil,
 			_q.withRiskManager != nil,
+			_q.withShareLinkManager != nil,
 			_q.withTrustCenterManager != nil,
 			_q.withWorkflowManager != nil,
 			_q.withParent != nil,
@@ -6494,6 +6642,8 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withVendorScoringConfigs != nil,
 			_q.withVendorRiskScores != nil,
 			_q.withCheckResults != nil,
+			_q.withShareLinks != nil,
+			_q.withShareLinkAccessEvents != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -6896,6 +7046,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withShareLinkCreators; query != nil {
+		if err := _q.loadShareLinkCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ShareLinkCreators = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.ShareLinkCreators = append(n.Edges.ShareLinkCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withSLADefinitionCreators; query != nil {
 		if err := _q.loadSLADefinitionCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.SLADefinitionCreators = []*Group{} },
@@ -7119,6 +7276,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadRiskManager(ctx, query, nodes,
 			func(n *Organization) { n.Edges.RiskManager = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.RiskManager = append(n.Edges.RiskManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withShareLinkManager; query != nil {
+		if err := _q.loadShareLinkManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ShareLinkManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.ShareLinkManager = append(n.Edges.ShareLinkManager, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -7773,6 +7937,22 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withShareLinks; query != nil {
+		if err := _q.loadShareLinks(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ShareLinks = []*ShareLink{} },
+			func(n *Organization, e *ShareLink) { n.Edges.ShareLinks = append(n.Edges.ShareLinks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withShareLinkAccessEvents; query != nil {
+		if err := _q.loadShareLinkAccessEvents(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ShareLinkAccessEvents = []*ShareLinkAccessEvent{} },
+			func(n *Organization, e *ShareLinkAccessEvent) {
+				n.Edges.ShareLinkAccessEvents = append(n.Edges.ShareLinkAccessEvents, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -8116,6 +8296,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedShareLinkCreators {
+		if err := _q.loadShareLinkCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedShareLinkCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedShareLinkCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedSLADefinitionCreators {
 		if err := _q.loadSLADefinitionCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedSLADefinitionCreators(name) },
@@ -8309,6 +8496,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadRiskManager(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedRiskManager(name) },
 			func(n *Organization, e *Group) { n.appendNamedRiskManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedShareLinkManager {
+		if err := _q.loadShareLinkManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedShareLinkManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedShareLinkManager(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8892,6 +9086,20 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadCheckResults(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedCheckResults(name) },
 			func(n *Organization, e *CheckResult) { n.appendNamedCheckResults(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedShareLinks {
+		if err := _q.loadShareLinks(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedShareLinks(name) },
+			func(n *Organization, e *ShareLink) { n.appendNamedShareLinks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedShareLinkAccessEvents {
+		if err := _q.loadShareLinkAccessEvents(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedShareLinkAccessEvents(name) },
+			func(n *Organization, e *ShareLinkAccessEvent) { n.appendNamedShareLinkAccessEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -10398,6 +10606,37 @@ func (_q *OrganizationQuery) loadScanCreators(ctx context.Context, query *GroupQ
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadShareLinkCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ShareLinkCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_share_link_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_share_link_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_share_link_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadSLADefinitionCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -11261,6 +11500,37 @@ func (_q *OrganizationQuery) loadRiskManager(ctx context.Context, query *GroupQu
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_risk_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadShareLinkManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ShareLinkManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_share_link_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_share_link_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_share_link_manager" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -14027,6 +14297,66 @@ func (_q *OrganizationQuery) loadCheckResults(ctx context.Context, query *CheckR
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadShareLinks(ctx context.Context, query *ShareLinkQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ShareLink)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(sharelink.FieldOwnerID)
+	}
+	query.Where(predicate.ShareLink(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ShareLinksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadShareLinkAccessEvents(ctx context.Context, query *ShareLinkAccessEventQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ShareLinkAccessEvent)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(sharelinkaccessevent.FieldOwnerID)
+	}
+	query.Where(predicate.ShareLinkAccessEvent(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ShareLinkAccessEventsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -14830,6 +15160,20 @@ func (_q *OrganizationQuery) WithNamedScanCreators(name string, opts ...func(*Gr
 	return _q
 }
 
+// WithNamedShareLinkCreators tells the query-builder to eager-load the nodes that are connected to the "share_link_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedShareLinkCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedShareLinkCreators == nil {
+		_q.withNamedShareLinkCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedShareLinkCreators[name] = query
+	return _q
+}
+
 // WithNamedSLADefinitionCreators tells the query-builder to eager-load the nodes that are connected to the "sla_definition_creators"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedSLADefinitionCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -15219,6 +15563,20 @@ func (_q *OrganizationQuery) WithNamedRiskManager(name string, opts ...func(*Gro
 		_q.withNamedRiskManager = make(map[string]*GroupQuery)
 	}
 	_q.withNamedRiskManager[name] = query
+	return _q
+}
+
+// WithNamedShareLinkManager tells the query-builder to eager-load the nodes that are connected to the "share_link_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedShareLinkManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedShareLinkManager == nil {
+		_q.withNamedShareLinkManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedShareLinkManager[name] = query
 	return _q
 }
 
@@ -16381,6 +16739,34 @@ func (_q *OrganizationQuery) WithNamedCheckResults(name string, opts ...func(*Ch
 		_q.withNamedCheckResults = make(map[string]*CheckResultQuery)
 	}
 	_q.withNamedCheckResults[name] = query
+	return _q
+}
+
+// WithNamedShareLinks tells the query-builder to eager-load the nodes that are connected to the "share_links"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedShareLinks(name string, opts ...func(*ShareLinkQuery)) *OrganizationQuery {
+	query := (&ShareLinkClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedShareLinks == nil {
+		_q.withNamedShareLinks = make(map[string]*ShareLinkQuery)
+	}
+	_q.withNamedShareLinks[name] = query
+	return _q
+}
+
+// WithNamedShareLinkAccessEvents tells the query-builder to eager-load the nodes that are connected to the "share_link_access_events"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedShareLinkAccessEvents(name string, opts ...func(*ShareLinkAccessEventQuery)) *OrganizationQuery {
+	query := (&ShareLinkAccessEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedShareLinkAccessEvents == nil {
+		_q.withNamedShareLinkAccessEvents = make(map[string]*ShareLinkAccessEventQuery)
+	}
+	_q.withNamedShareLinkAccessEvents[name] = query
 	return _q
 }
 

@@ -59,6 +59,7 @@ func TestOrganizationRolesExistInModel(t *testing.T) {
 
 	assert.Check(t, is.Contains(relations, "campaign_manager"))
 	assert.Check(t, is.Contains(relations, "integration_manager"))
+	assert.Check(t, is.Contains(relations, "share_link_manager"))
 }
 
 func TestScopeOptions(t *testing.T) {

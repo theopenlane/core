@@ -406,6 +406,15 @@
     "hasGroupCreator": true
   },
   {
+    "name": "ShareLink",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "ShareLinkAccessEvent",
+    "viewOnly": true
+  },
+  {
     "name": "Standard",
     "hasCreate": true,
     "hasUpdate": true

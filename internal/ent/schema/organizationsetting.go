@@ -97,6 +97,10 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Comment("allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization").
 			Default(false).
 			Optional(),
+		field.Bool("external_sharing_enabled").
+			Comment("allow members to create share links that grant people outside the organization downloads of files").
+			Default(false).
+			Optional(),
 		field.Enum("identity_provider").
 			Comment("SSO provider type for the organization").
 			GoType(enums.SSOProvider("")).

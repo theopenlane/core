@@ -3795,6 +3795,7 @@ type ComplexityRoot struct {
 		CreateRisk                               func(childComplexity int, input generated.CreateRiskInput) int
 		CreateSLADefinition                      func(childComplexity int, input generated.CreateSLADefinitionInput) int
 		CreateScan                               func(childComplexity int, input generated.CreateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
+		CreateShareLink                          func(childComplexity int, input generated.CreateShareLinkInput) int
 		CreateStandard                           func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateSubcontrol                         func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                       func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
@@ -3939,6 +3940,7 @@ type ComplexityRoot struct {
 		DeleteRisk                               func(childComplexity int, id string) int
 		DeleteSLADefinition                      func(childComplexity int, id string) int
 		DeleteScan                               func(childComplexity int, id string) int
+		DeleteShareLink                          func(childComplexity int, id string) int
 		DeleteStandard                           func(childComplexity int, id string) int
 		DeleteSubcontrol                         func(childComplexity int, id string) int
 		DeleteSubprocessor                       func(childComplexity int, id string) int
@@ -4139,6 +4141,7 @@ type ComplexityRoot struct {
 		UpdateRiskComment                        func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateSLADefinition                      func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
 		UpdateScan                               func(childComplexity int, id string, input generated.UpdateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
+		UpdateShareLink                          func(childComplexity int, id string, input generated.UpdateShareLinkInput) int
 		UpdateStandard                           func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateSubcontrol                         func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
@@ -4687,6 +4690,8 @@ type ComplexityRoot struct {
 		SLADefinitionCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ScanCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Setting                            func(childComplexity int) int
+		ShareLinkCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ShareLinkManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		SlugName                           func(childComplexity int) int
 		StandardCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		StripeCustomerID                   func(childComplexity int) int
@@ -4811,6 +4816,7 @@ type ComplexityRoot struct {
 		CreatedAt                        func(childComplexity int) int
 		CreatedBy                        func(childComplexity int) int
 		Domains                          func(childComplexity int) int
+		ExternalSharingEnabled           func(childComplexity int) int
 		Files                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		GeoLocation                      func(childComplexity int) int
 		ID                               func(childComplexity int) int
@@ -5520,6 +5526,9 @@ type ComplexityRoot struct {
 		Scans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Search                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Self                            func(childComplexity int) int
+		ShareLink                       func(childComplexity int, id string) int
+		ShareLinkAccessEvents           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ShareLinkAccessEventOrder, where *generated.ShareLinkAccessEventWhereInput) int
+		ShareLinks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ShareLinkOrder, where *generated.ShareLinkWhereInput) int
 		Standard                        func(childComplexity int, id string) int
 		StandardSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Standards                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
@@ -6294,6 +6303,78 @@ type ComplexityRoot struct {
 
 	SeedDemoDataPayload struct {
 		Accepted func(childComplexity int) int
+	}
+
+	ShareLink struct {
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		ExpiresAt             func(childComplexity int) int
+		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID                    func(childComplexity int) int
+		LandingPage           func(childComplexity int) int
+		MaxUses               func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		RecipientEmails       func(childComplexity int) int
+		RequireSession        func(childComplexity int) int
+		RevokedAt             func(childComplexity int) int
+		ShareLinkAccessEvents func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ShareLinkAccessEventOrder, where *generated.ShareLinkAccessEventWhereInput) int
+		URL                   func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		UseCount              func(childComplexity int) int
+	}
+
+	ShareLinkAccessEvent struct {
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		FileID                func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IPAddress             func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		ShareLink             func(childComplexity int) int
+		ShareLinkID           func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		UserAgent             func(childComplexity int) int
+	}
+
+	ShareLinkAccessEventConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ShareLinkAccessEventEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ShareLinkConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ShareLinkCreatePayload struct {
+		ShareLink func(childComplexity int) int
+	}
+
+	ShareLinkDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ShareLinkEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ShareLinkUpdatePayload struct {
+		ShareLink func(childComplexity int) int
 	}
 
 	Standard struct {
@@ -27654,6 +27735,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
+	case "Mutation.createShareLink":
+		if e.ComplexityRoot.Mutation.CreateShareLink == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createShareLink_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateShareLink(childComplexity, args["input"].(generated.CreateShareLinkInput)), true
 	case "Mutation.createStandard":
 		if e.ComplexityRoot.Mutation.CreateStandard == nil {
 			break
@@ -29238,6 +29330,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteScan(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteShareLink":
+		if e.ComplexityRoot.Mutation.DeleteShareLink == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteShareLink_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteShareLink(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteStandard":
 		if e.ComplexityRoot.Mutation.DeleteStandard == nil {
 			break
@@ -31433,6 +31536,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
+	case "Mutation.updateShareLink":
+		if e.ComplexityRoot.Mutation.UpdateShareLink == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateShareLink_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateShareLink(childComplexity, args["id"].(string), args["input"].(generated.UpdateShareLinkInput)), true
 	case "Mutation.updateStandard":
 		if e.ComplexityRoot.Mutation.UpdateStandard == nil {
 			break
@@ -34399,6 +34513,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.Setting(childComplexity), true
+	case "Organization.shareLinkCreators":
+		if e.ComplexityRoot.Organization.ShareLinkCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_shareLinkCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.ShareLinkCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.shareLinkManager":
+		if e.ComplexityRoot.Organization.ShareLinkManager == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_shareLinkManager_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.ShareLinkManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.slugName":
 		if e.ComplexityRoot.Organization.SlugName == nil {
 			break
@@ -35003,6 +35139,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSetting.Domains(childComplexity), true
+	case "OrganizationSetting.externalSharingEnabled":
+		if e.ComplexityRoot.OrganizationSetting.ExternalSharingEnabled == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSetting.ExternalSharingEnabled(childComplexity), true
 	case "OrganizationSetting.files":
 		if e.ComplexityRoot.OrganizationSetting.Files == nil {
 			break
@@ -39600,6 +39742,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Self(childComplexity), true
+	case "Query.shareLink":
+		if e.ComplexityRoot.Query.ShareLink == nil {
+			break
+		}
+
+		args, err := ec.field_Query_shareLink_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ShareLink(childComplexity, args["id"].(string)), true
+	case "Query.shareLinkAccessEvents":
+		if e.ComplexityRoot.Query.ShareLinkAccessEvents == nil {
+			break
+		}
+
+		args, err := ec.field_Query_shareLinkAccessEvents_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ShareLinkAccessEvents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ShareLinkAccessEventOrder), args["where"].(*generated.ShareLinkAccessEventWhereInput)), true
+	case "Query.shareLinks":
+		if e.ComplexityRoot.Query.ShareLinks == nil {
+			break
+		}
+
+		args, err := ec.field_Query_shareLinks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ShareLinks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ShareLinkOrder), args["where"].(*generated.ShareLinkWhereInput)), true
 	case "Query.standard":
 		if e.ComplexityRoot.Query.Standard == nil {
 			break
@@ -43907,6 +44082,295 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SeedDemoDataPayload.Accepted(childComplexity), true
+
+	case "ShareLink.createdAt":
+		if e.ComplexityRoot.ShareLink.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.CreatedAt(childComplexity), true
+	case "ShareLink.createdBy":
+		if e.ComplexityRoot.ShareLink.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.CreatedBy(childComplexity), true
+	case "ShareLink.expiresAt":
+		if e.ComplexityRoot.ShareLink.ExpiresAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.ExpiresAt(childComplexity), true
+	case "ShareLink.files":
+		if e.ComplexityRoot.ShareLink.Files == nil {
+			break
+		}
+
+		args, err := ec.field_ShareLink_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.ShareLink.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+	case "ShareLink.id":
+		if e.ComplexityRoot.ShareLink.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.ID(childComplexity), true
+	case "ShareLink.landingPage":
+		if e.ComplexityRoot.ShareLink.LandingPage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.LandingPage(childComplexity), true
+	case "ShareLink.maxUses":
+		if e.ComplexityRoot.ShareLink.MaxUses == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.MaxUses(childComplexity), true
+	case "ShareLink.name":
+		if e.ComplexityRoot.ShareLink.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.Name(childComplexity), true
+	case "ShareLink.owner":
+		if e.ComplexityRoot.ShareLink.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.Owner(childComplexity), true
+	case "ShareLink.ownerID":
+		if e.ComplexityRoot.ShareLink.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.OwnerID(childComplexity), true
+	case "ShareLink.recipientEmails":
+		if e.ComplexityRoot.ShareLink.RecipientEmails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.RecipientEmails(childComplexity), true
+	case "ShareLink.requireSession":
+		if e.ComplexityRoot.ShareLink.RequireSession == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.RequireSession(childComplexity), true
+	case "ShareLink.revokedAt":
+		if e.ComplexityRoot.ShareLink.RevokedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.RevokedAt(childComplexity), true
+	case "ShareLink.shareLinkAccessEvents":
+		if e.ComplexityRoot.ShareLink.ShareLinkAccessEvents == nil {
+			break
+		}
+
+		args, err := ec.field_ShareLink_shareLinkAccessEvents_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.ShareLink.ShareLinkAccessEvents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ShareLinkAccessEventOrder), args["where"].(*generated.ShareLinkAccessEventWhereInput)), true
+	case "ShareLink.url":
+		if e.ComplexityRoot.ShareLink.URL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.URL(childComplexity), true
+	case "ShareLink.updatedAt":
+		if e.ComplexityRoot.ShareLink.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.UpdatedAt(childComplexity), true
+	case "ShareLink.updatedBy":
+		if e.ComplexityRoot.ShareLink.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.UpdatedBy(childComplexity), true
+	case "ShareLink.updatedByImpersonator":
+		if e.ComplexityRoot.ShareLink.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.UpdatedByImpersonator(childComplexity), true
+	case "ShareLink.useCount":
+		if e.ComplexityRoot.ShareLink.UseCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLink.UseCount(childComplexity), true
+
+	case "ShareLinkAccessEvent.createdAt":
+		if e.ComplexityRoot.ShareLinkAccessEvent.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.CreatedAt(childComplexity), true
+	case "ShareLinkAccessEvent.createdBy":
+		if e.ComplexityRoot.ShareLinkAccessEvent.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.CreatedBy(childComplexity), true
+	case "ShareLinkAccessEvent.fileID":
+		if e.ComplexityRoot.ShareLinkAccessEvent.FileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.FileID(childComplexity), true
+	case "ShareLinkAccessEvent.id":
+		if e.ComplexityRoot.ShareLinkAccessEvent.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.ID(childComplexity), true
+	case "ShareLinkAccessEvent.ipAddress":
+		if e.ComplexityRoot.ShareLinkAccessEvent.IPAddress == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.IPAddress(childComplexity), true
+	case "ShareLinkAccessEvent.owner":
+		if e.ComplexityRoot.ShareLinkAccessEvent.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.Owner(childComplexity), true
+	case "ShareLinkAccessEvent.ownerID":
+		if e.ComplexityRoot.ShareLinkAccessEvent.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.OwnerID(childComplexity), true
+	case "ShareLinkAccessEvent.shareLink":
+		if e.ComplexityRoot.ShareLinkAccessEvent.ShareLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.ShareLink(childComplexity), true
+	case "ShareLinkAccessEvent.shareLinkID":
+		if e.ComplexityRoot.ShareLinkAccessEvent.ShareLinkID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.ShareLinkID(childComplexity), true
+	case "ShareLinkAccessEvent.updatedAt":
+		if e.ComplexityRoot.ShareLinkAccessEvent.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.UpdatedAt(childComplexity), true
+	case "ShareLinkAccessEvent.updatedBy":
+		if e.ComplexityRoot.ShareLinkAccessEvent.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.UpdatedBy(childComplexity), true
+	case "ShareLinkAccessEvent.updatedByImpersonator":
+		if e.ComplexityRoot.ShareLinkAccessEvent.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.UpdatedByImpersonator(childComplexity), true
+	case "ShareLinkAccessEvent.userAgent":
+		if e.ComplexityRoot.ShareLinkAccessEvent.UserAgent == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEvent.UserAgent(childComplexity), true
+
+	case "ShareLinkAccessEventConnection.edges":
+		if e.ComplexityRoot.ShareLinkAccessEventConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEventConnection.Edges(childComplexity), true
+	case "ShareLinkAccessEventConnection.pageInfo":
+		if e.ComplexityRoot.ShareLinkAccessEventConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEventConnection.PageInfo(childComplexity), true
+	case "ShareLinkAccessEventConnection.totalCount":
+		if e.ComplexityRoot.ShareLinkAccessEventConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEventConnection.TotalCount(childComplexity), true
+
+	case "ShareLinkAccessEventEdge.cursor":
+		if e.ComplexityRoot.ShareLinkAccessEventEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEventEdge.Cursor(childComplexity), true
+	case "ShareLinkAccessEventEdge.node":
+		if e.ComplexityRoot.ShareLinkAccessEventEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkAccessEventEdge.Node(childComplexity), true
+
+	case "ShareLinkConnection.edges":
+		if e.ComplexityRoot.ShareLinkConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkConnection.Edges(childComplexity), true
+	case "ShareLinkConnection.pageInfo":
+		if e.ComplexityRoot.ShareLinkConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkConnection.PageInfo(childComplexity), true
+	case "ShareLinkConnection.totalCount":
+		if e.ComplexityRoot.ShareLinkConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkConnection.TotalCount(childComplexity), true
+
+	case "ShareLinkCreatePayload.shareLink":
+		if e.ComplexityRoot.ShareLinkCreatePayload.ShareLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkCreatePayload.ShareLink(childComplexity), true
+
+	case "ShareLinkDeletePayload.deletedID":
+		if e.ComplexityRoot.ShareLinkDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkDeletePayload.DeletedID(childComplexity), true
+
+	case "ShareLinkEdge.cursor":
+		if e.ComplexityRoot.ShareLinkEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkEdge.Cursor(childComplexity), true
+	case "ShareLinkEdge.node":
+		if e.ComplexityRoot.ShareLinkEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkEdge.Node(childComplexity), true
+
+	case "ShareLinkUpdatePayload.shareLink":
+		if e.ComplexityRoot.ShareLinkUpdatePayload.ShareLink == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ShareLinkUpdatePayload.ShareLink(childComplexity), true
 
 	case "Standard.applicablePlatforms":
 		if e.ComplexityRoot.Standard.ApplicablePlatforms == nil {
@@ -53463,6 +53927,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("CreateRiskInput", ec.unmarshalInputCreateRiskInput),
 			graphql.NewInputUnmarshaler("CreateSLADefinitionInput", ec.unmarshalInputCreateSLADefinitionInput),
 			graphql.NewInputUnmarshaler("CreateScanInput", ec.unmarshalInputCreateScanInput),
+			graphql.NewInputUnmarshaler("CreateShareLinkInput", ec.unmarshalInputCreateShareLinkInput),
 			graphql.NewInputUnmarshaler("CreateStandardInput", ec.unmarshalInputCreateStandardInput),
 			graphql.NewInputUnmarshaler("CreateSubcontrolInput", ec.unmarshalInputCreateSubcontrolInput),
 			graphql.NewInputUnmarshaler("CreateSubprocessorInput", ec.unmarshalInputCreateSubprocessorInput),
@@ -53609,6 +54074,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("ScanWhereInput", ec.unmarshalInputScanWhereInput),
 			graphql.NewInputUnmarshaler("SeedDemoDataInput", ec.unmarshalInputSeedDemoDataInput),
 			graphql.NewInputUnmarshaler("SendCampaignTestEmailInput", ec.unmarshalInputSendCampaignTestEmailInput),
+			graphql.NewInputUnmarshaler("ShareLinkAccessEventOrder", ec.unmarshalInputShareLinkAccessEventOrder),
+			graphql.NewInputUnmarshaler("ShareLinkAccessEventWhereInput", ec.unmarshalInputShareLinkAccessEventWhereInput),
+			graphql.NewInputUnmarshaler("ShareLinkOrder", ec.unmarshalInputShareLinkOrder),
+			graphql.NewInputUnmarshaler("ShareLinkWhereInput", ec.unmarshalInputShareLinkWhereInput),
 			graphql.NewInputUnmarshaler("StandardOrder", ec.unmarshalInputStandardOrder),
 			graphql.NewInputUnmarshaler("StandardWhereInput", ec.unmarshalInputStandardWhereInput),
 			graphql.NewInputUnmarshaler("SubcontrolOrder", ec.unmarshalInputSubcontrolOrder),
@@ -53706,6 +54175,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("UpdateRiskInput", ec.unmarshalInputUpdateRiskInput),
 			graphql.NewInputUnmarshaler("UpdateSLADefinitionInput", ec.unmarshalInputUpdateSLADefinitionInput),
 			graphql.NewInputUnmarshaler("UpdateScanInput", ec.unmarshalInputUpdateScanInput),
+			graphql.NewInputUnmarshaler("UpdateShareLinkInput", ec.unmarshalInputUpdateShareLinkInput),
 			graphql.NewInputUnmarshaler("UpdateStandardInput", ec.unmarshalInputUpdateStandardInput),
 			graphql.NewInputUnmarshaler("UpdateSubcontrolInput", ec.unmarshalInputUpdateSubcontrolInput),
 			graphql.NewInputUnmarshaler("UpdateSubprocessorInput", ec.unmarshalInputUpdateSubprocessorInput),
@@ -74333,6 +74803,7 @@ input CreateOrganizationInput {
   reviewCreatorIDs: [ID!]
   riskCreatorIDs: [ID!]
   scanCreatorIDs: [ID!]
+  shareLinkCreatorIDs: [ID!]
   slaDefinitionCreatorIDs: [ID!]
   standardCreatorIDs: [ID!]
   subcontrolCreatorIDs: [ID!]
@@ -74361,6 +74832,7 @@ input CreateOrganizationInput {
   policyManagerIDs: [ID!]
   registryManagerIDs: [ID!]
   riskManagerIDs: [ID!]
+  shareLinkManagerIDs: [ID!]
   trustCenterManagerIDs: [ID!]
   workflowManagerIDs: [ID!]
   parentID: ID
@@ -74423,6 +74895,10 @@ input CreateOrganizationSettingInput {
   allow users who can successfully confirm their email or who login via social providers with an email that matches the organizations configured allowed domain to auto-join the organization
   """
   allowMatchingDomainsAutojoin: Boolean
+  """
+  allow members to create share links that grant people outside the organization downloads of files
+  """
+  externalSharingEnabled: Boolean
   """
   SSO provider type for the organization
   """
@@ -75528,6 +76004,38 @@ input CreateScanInput {
   generatedByPlatformID: ID
   performedByUserID: ID
   performedByGroupID: ID
+}
+"""
+CreateShareLinkInput is used for create ShareLink object.
+Input was generated by ent.
+"""
+input CreateShareLinkInput {
+  """
+  a display name for the share link
+  """
+  name: String
+  """
+  when the share link stops serving downloads; defaults to seven days out and may be at most thirty days out
+  """
+  expiresAt: Time
+  """
+  the number of downloads the share link allows, zero for unlimited
+  """
+  maxUses: Int
+  """
+  the email addresses the share link is bound to; when set a recipient must verify one of them before downloading
+  """
+  recipientEmails: [String!]
+  """
+  whether the share URL opens a page listing the files instead of serving the file directly; always set for links with recipients or more than one file
+  """
+  landingPage: Boolean
+  """
+  whether a download must present the credential of the caller that created the share link, who must still be able to read the file
+  """
+  requireSession: Boolean
+  ownerID: ID
+  fileIDs: [ID!]!
 }
 """
 CreateStandardInput is used for create Standard object.
@@ -105155,6 +105663,37 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  shareLinkCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   slaDefinitionCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -106023,6 +106562,37 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  shareLinkManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   trustCenterManager(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -106693,6 +107263,10 @@ type OrganizationSetting implements Node {
   """
   allowMatchingDomainsAutojoin: Boolean
   """
+  allow members to create share links that grant people outside the organization downloads of files
+  """
+  externalSharingEnabled: Boolean
+  """
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingSSOProvider
@@ -107034,6 +107608,13 @@ input OrganizationSettingWhereInput {
   allowMatchingDomainsAutojoinNEQ: Boolean
   allowMatchingDomainsAutojoinIsNil: Boolean
   allowMatchingDomainsAutojoinNotNil: Boolean
+  """
+  external_sharing_enabled field predicates
+  """
+  externalSharingEnabled: Boolean
+  externalSharingEnabledNEQ: Boolean
+  externalSharingEnabledIsNil: Boolean
+  externalSharingEnabledNotNil: Boolean
   """
   identity_provider field predicates
   """
@@ -107621,6 +108202,11 @@ input OrganizationWhereInput {
   hasScanCreators: Boolean
   hasScanCreatorsWith: [GroupWhereInput!]
   """
+  share_link_creators edge predicates
+  """
+  hasShareLinkCreators: Boolean
+  hasShareLinkCreatorsWith: [GroupWhereInput!]
+  """
   sla_definition_creators edge predicates
   """
   hasSLADefinitionCreators: Boolean
@@ -107760,6 +108346,11 @@ input OrganizationWhereInput {
   """
   hasRiskManager: Boolean
   hasRiskManagerWith: [GroupWhereInput!]
+  """
+  share_link_manager edge predicates
+  """
+  hasShareLinkManager: Boolean
+  hasShareLinkManagerWith: [GroupWhereInput!]
   """
   trust_center_manager edge predicates
   """
@@ -115453,6 +116044,68 @@ type Query {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  shareLinks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ShareLinks returned from the connection.
+    """
+    orderBy: [ShareLinkOrder!]
+
+    """
+    Filtering options for ShareLinks returned from the connection.
+    """
+    where: ShareLinkWhereInput
+  ): ShareLinkConnection!
+  shareLinkAccessEvents(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ShareLinkAccessEvents returned from the connection.
+    """
+    orderBy: [ShareLinkAccessEventOrder!]
+
+    """
+    Filtering options for ShareLinkAccessEvents returned from the connection.
+    """
+    where: ShareLinkAccessEventWhereInput
+  ): ShareLinkAccessEventConnection!
   standards(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -123468,6 +124121,591 @@ input ScanWhereInput {
   Filter for discoveredVulnerabilityIdsHas to contain a specific value
   """
   discoveredVulnerabilityIdsHas: String
+}
+type ShareLink implements Node @modules(names: ["any_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  a display name for the share link
+  """
+  name: String
+  """
+  when the share link stops serving downloads; defaults to seven days out and may be at most thirty days out
+  """
+  expiresAt: Time
+  """
+  the number of downloads the share link allows, zero for unlimited
+  """
+  maxUses: Int
+  """
+  the number of downloads served through the share link
+  """
+  useCount: Int!
+  """
+  the email addresses the share link is bound to; when set a recipient must verify one of them before downloading
+  """
+  recipientEmails: [String!]
+  """
+  whether the share URL opens a page listing the files instead of serving the file directly; always set for links with recipients or more than one file
+  """
+  landingPage: Boolean
+  """
+  whether a download must present the credential of the caller that created the share link, who must still be able to read the file
+  """
+  requireSession: Boolean
+  """
+  when the share link was revoked
+  """
+  revokedAt: Time
+  owner: Organization
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  shareLinkAccessEvents(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ShareLinkAccessEvents returned from the connection.
+    """
+    orderBy: [ShareLinkAccessEventOrder!]
+
+    """
+    Filtering options for ShareLinkAccessEvents returned from the connection.
+    """
+    where: ShareLinkAccessEventWhereInput
+  ): ShareLinkAccessEventConnection!
+}
+type ShareLinkAccessEvent implements Node @modules(names: ["any_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the share link the download was served through
+  """
+  shareLinkID: ID!
+  """
+  the file that was downloaded
+  """
+  fileID: String!
+  """
+  the client address the download was served to
+  """
+  ipAddress: String
+  """
+  the client user agent the download was served to
+  """
+  userAgent: String
+  owner: Organization
+  """
+  the share link the download was served through
+  """
+  shareLink: ShareLink!
+}
+"""
+A connection to a list of items.
+"""
+type ShareLinkAccessEventConnection {
+  """
+  A list of edges.
+  """
+  edges: [ShareLinkAccessEventEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ShareLinkAccessEventEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ShareLinkAccessEvent
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for ShareLinkAccessEvent connections
+"""
+input ShareLinkAccessEventOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ShareLinkAccessEvents.
+  """
+  field: ShareLinkAccessEventOrderField!
+}
+"""
+Properties by which ShareLinkAccessEvent connections can be ordered.
+"""
+enum ShareLinkAccessEventOrderField {
+  created_at
+  updated_at
+}
+"""
+ShareLinkAccessEventWhereInput is used for filtering ShareLinkAccessEvent objects.
+Input was generated by ent.
+"""
+input ShareLinkAccessEventWhereInput {
+  not: ShareLinkAccessEventWhereInput
+  and: [ShareLinkAccessEventWhereInput!]
+  or: [ShareLinkAccessEventWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  share_link_id field predicates
+  """
+  shareLinkID: ID
+  shareLinkIDNEQ: ID
+  shareLinkIDIn: [ID!]
+  shareLinkIDNotIn: [ID!]
+  shareLinkIDContains: ID
+  shareLinkIDHasPrefix: ID
+  shareLinkIDHasSuffix: ID
+  shareLinkIDEqualFold: ID
+  shareLinkIDContainsFold: ID
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+  """
+  ip_address field predicates
+  """
+  ipAddress: String
+  ipAddressNEQ: String
+  ipAddressIn: [String!]
+  ipAddressNotIn: [String!]
+  ipAddressContains: String
+  ipAddressHasPrefix: String
+  ipAddressHasSuffix: String
+  ipAddressIsNil: Boolean
+  ipAddressNotNil: Boolean
+  ipAddressEqualFold: String
+  ipAddressContainsFold: String
+  """
+  user_agent field predicates
+  """
+  userAgent: String
+  userAgentNEQ: String
+  userAgentIn: [String!]
+  userAgentNotIn: [String!]
+  userAgentContains: String
+  userAgentHasPrefix: String
+  userAgentHasSuffix: String
+  userAgentIsNil: Boolean
+  userAgentNotNil: Boolean
+  userAgentEqualFold: String
+  userAgentContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  share_link edge predicates
+  """
+  hasShareLink: Boolean
+  hasShareLinkWith: [ShareLinkWhereInput!]
+}
+"""
+A connection to a list of items.
+"""
+type ShareLinkConnection {
+  """
+  A list of edges.
+  """
+  edges: [ShareLinkEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ShareLinkEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ShareLink
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for ShareLink connections
+"""
+input ShareLinkOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ShareLinks.
+  """
+  field: ShareLinkOrderField!
+}
+"""
+Properties by which ShareLink connections can be ordered.
+"""
+enum ShareLinkOrderField {
+  created_at
+  updated_at
+  name
+  expires_at
+}
+"""
+ShareLinkWhereInput is used for filtering ShareLink objects.
+Input was generated by ent.
+"""
+input ShareLinkWhereInput {
+  not: ShareLinkWhereInput
+  and: [ShareLinkWhereInput!]
+  or: [ShareLinkWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameIsNil: Boolean
+  nameNotNil: Boolean
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  expires_at field predicates
+  """
+  expiresAt: Time
+  expiresAtGT: Time
+  expiresAtGTE: Time
+  expiresAtLT: Time
+  expiresAtLTE: Time
+  expiresAtIsNil: Boolean
+  expiresAtNotNil: Boolean
+  """
+  max_uses field predicates
+  """
+  maxUses: Int
+  maxUsesNEQ: Int
+  maxUsesGT: Int
+  maxUsesGTE: Int
+  maxUsesLT: Int
+  maxUsesLTE: Int
+  maxUsesIsNil: Boolean
+  maxUsesNotNil: Boolean
+  """
+  use_count field predicates
+  """
+  useCount: Int
+  useCountNEQ: Int
+  useCountGT: Int
+  useCountGTE: Int
+  useCountLT: Int
+  useCountLTE: Int
+  """
+  landing_page field predicates
+  """
+  landingPage: Boolean
+  landingPageNEQ: Boolean
+  landingPageIsNil: Boolean
+  landingPageNotNil: Boolean
+  """
+  require_session field predicates
+  """
+  requireSession: Boolean
+  requireSessionNEQ: Boolean
+  requireSessionIsNil: Boolean
+  requireSessionNotNil: Boolean
+  """
+  revoked_at field predicates
+  """
+  revokedAt: Time
+  revokedAtGT: Time
+  revokedAtGTE: Time
+  revokedAtLT: Time
+  revokedAtLTE: Time
+  revokedAtIsNil: Boolean
+  revokedAtNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  share_link_access_events edge predicates
+  """
+  hasShareLinkAccessEvents: Boolean
+  hasShareLinkAccessEventsWith: [ShareLinkAccessEventWhereInput!]
+  """
+  Filter for recipientEmailsHas to contain a specific value
+  """
+  recipientEmailsHas: String
 }
 type Standard implements Node @modules(names: ["compliance_module","policy_management_addon","risk_management_addon","entity_management_module","trust_center_module"]) {
   id: ID!
@@ -138927,6 +140165,9 @@ input UpdateOrganizationInput {
   addScanCreatorIDs: [ID!]
   removeScanCreatorIDs: [ID!]
   clearScanCreators: Boolean
+  addShareLinkCreatorIDs: [ID!]
+  removeShareLinkCreatorIDs: [ID!]
+  clearShareLinkCreators: Boolean
   addSLADefinitionCreatorIDs: [ID!]
   removeSLADefinitionCreatorIDs: [ID!]
   clearSLADefinitionCreators: Boolean
@@ -139011,6 +140252,9 @@ input UpdateOrganizationInput {
   addRiskManagerIDs: [ID!]
   removeRiskManagerIDs: [ID!]
   clearRiskManager: Boolean
+  addShareLinkManagerIDs: [ID!]
+  removeShareLinkManagerIDs: [ID!]
+  clearShareLinkManager: Boolean
   addTrustCenterManagerIDs: [ID!]
   removeTrustCenterManagerIDs: [ID!]
   clearTrustCenterManager: Boolean
@@ -139104,6 +140348,11 @@ input UpdateOrganizationSettingInput {
   """
   allowMatchingDomainsAutojoin: Boolean
   clearAllowMatchingDomainsAutojoin: Boolean
+  """
+  allow members to create share links that grant people outside the organization downloads of files
+  """
+  externalSharingEnabled: Boolean
+  clearExternalSharingEnabled: Boolean
   """
   SSO provider type for the organization
   """
@@ -140769,6 +142018,29 @@ input UpdateScanInput {
   clearPerformedByUser: Boolean
   performedByGroupID: ID
   clearPerformedByGroup: Boolean
+}
+"""
+UpdateShareLinkInput is used for update ShareLink object.
+Input was generated by ent.
+"""
+input UpdateShareLinkInput {
+  """
+  a display name for the share link
+  """
+  name: String
+  clearName: Boolean
+  """
+  the number of downloads the share link allows, zero for unlimited
+  """
+  maxUses: Int
+  clearMaxUses: Boolean
+  """
+  when the share link was revoked
+  """
+  revokedAt: Time
+  clearRevokedAt: Boolean
+  ownerID: ID
+  clearOwner: Boolean
 }
 """
 UpdateStandardInput is used for update Standard object.
@@ -158468,6 +159740,89 @@ extend type SearchResults{
 }
 
 `, BuiltIn: false},
+	{Name: "../schema/sharelink.graphql", Input: `extend type Query {
+    """
+    Look up shareLink by ID
+    """
+     shareLink(
+        """
+        ID of the shareLink
+        """
+        id: ID!
+    ):  ShareLink!
+}
+
+extend type Mutation{
+    """
+    Create a new shareLink
+    """
+    createShareLink(
+        """
+        values of the shareLink
+        """
+        input: CreateShareLinkInput!
+    ): ShareLinkCreatePayload!
+    """
+    Update an existing shareLink
+    """
+    updateShareLink(
+        """
+        ID of the shareLink
+        """
+        id: ID!
+        """
+        New values for the shareLink
+        """
+        input: UpdateShareLinkInput!
+    ): ShareLinkUpdatePayload!
+    """
+    Delete an existing shareLink
+    """
+    deleteShareLink(
+        """
+        ID of the shareLink
+        """
+        id: ID!
+    ): ShareLinkDeletePayload!
+}
+
+"""
+Return response for createShareLink mutation
+"""
+type ShareLinkCreatePayload {
+    """
+    Created shareLink
+    """
+    shareLink: ShareLink!
+}
+
+"""
+Return response for updateShareLink mutation
+"""
+type ShareLinkUpdatePayload {
+    """
+    Updated shareLink
+    """
+    shareLink: ShareLink!
+}
+
+"""
+Return response for deleteShareLink mutation
+"""
+type ShareLinkDeletePayload {
+    """
+    Deleted shareLink ID
+    """
+    deletedID: ID!
+}
+`, BuiltIn: false},
+	{Name: "../schema/sharelinkextended.graphql", Input: `extend type ShareLink {
+    """
+    the share landing URL carrying the share token
+    """
+    url: String
+}
+`, BuiltIn: false},
 	{Name: "../schema/sladefinition.graphql", Input: `extend type Query {
     """
     Look up slaDefinition by ID
@@ -171080,6 +172435,8 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_riskCreators(ctx, field)
 	case "scanCreators":
 		return ec.fieldContext_Organization_scanCreators(ctx, field)
+	case "shareLinkCreators":
+		return ec.fieldContext_Organization_shareLinkCreators(ctx, field)
 	case "slaDefinitionCreators":
 		return ec.fieldContext_Organization_slaDefinitionCreators(ctx, field)
 	case "standardCreators":
@@ -171136,6 +172493,8 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_registryManager(ctx, field)
 	case "riskManager":
 		return ec.fieldContext_Organization_riskManager(ctx, field)
+	case "shareLinkManager":
+		return ec.fieldContext_Organization_shareLinkManager(ctx, field)
 	case "trustCenterManager":
 		return ec.fieldContext_Organization_trustCenterManager(ctx, field)
 	case "workflowManager":
@@ -171360,6 +172719,8 @@ func (ec *executionContext) childFields_OrganizationSetting(ctx context.Context,
 		return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
 	case "allowMatchingDomainsAutojoin":
 		return ec.fieldContext_OrganizationSetting_allowMatchingDomainsAutojoin(ctx, field)
+	case "externalSharingEnabled":
+		return ec.fieldContext_OrganizationSetting_externalSharingEnabled(ctx, field)
 	case "identityProvider":
 		return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
 	case "identityProviderClientID":
@@ -173792,6 +175153,150 @@ func (ec *executionContext) childFields_SeedDemoDataPayload(ctx context.Context,
 		return ec.fieldContext_SeedDemoDataPayload_accepted(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type SeedDemoDataPayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ShareLink(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ShareLink_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ShareLink_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ShareLink_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ShareLink_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ShareLink_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ShareLink_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ShareLink_ownerID(ctx, field)
+	case "name":
+		return ec.fieldContext_ShareLink_name(ctx, field)
+	case "expiresAt":
+		return ec.fieldContext_ShareLink_expiresAt(ctx, field)
+	case "maxUses":
+		return ec.fieldContext_ShareLink_maxUses(ctx, field)
+	case "useCount":
+		return ec.fieldContext_ShareLink_useCount(ctx, field)
+	case "recipientEmails":
+		return ec.fieldContext_ShareLink_recipientEmails(ctx, field)
+	case "landingPage":
+		return ec.fieldContext_ShareLink_landingPage(ctx, field)
+	case "requireSession":
+		return ec.fieldContext_ShareLink_requireSession(ctx, field)
+	case "revokedAt":
+		return ec.fieldContext_ShareLink_revokedAt(ctx, field)
+	case "owner":
+		return ec.fieldContext_ShareLink_owner(ctx, field)
+	case "files":
+		return ec.fieldContext_ShareLink_files(ctx, field)
+	case "shareLinkAccessEvents":
+		return ec.fieldContext_ShareLink_shareLinkAccessEvents(ctx, field)
+	case "url":
+		return ec.fieldContext_ShareLink_url(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ShareLink", field.Name)
+}
+
+func (ec *executionContext) childFields_ShareLinkAccessEvent(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ShareLinkAccessEvent_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ShareLinkAccessEvent_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ShareLinkAccessEvent_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ShareLinkAccessEvent_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ShareLinkAccessEvent_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ShareLinkAccessEvent_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ShareLinkAccessEvent_ownerID(ctx, field)
+	case "shareLinkID":
+		return ec.fieldContext_ShareLinkAccessEvent_shareLinkID(ctx, field)
+	case "fileID":
+		return ec.fieldContext_ShareLinkAccessEvent_fileID(ctx, field)
+	case "ipAddress":
+		return ec.fieldContext_ShareLinkAccessEvent_ipAddress(ctx, field)
+	case "userAgent":
+		return ec.fieldContext_ShareLinkAccessEvent_userAgent(ctx, field)
+	case "owner":
+		return ec.fieldContext_ShareLinkAccessEvent_owner(ctx, field)
+	case "shareLink":
+		return ec.fieldContext_ShareLinkAccessEvent_shareLink(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ShareLinkAccessEvent", field.Name)
+}
+
+func (ec *executionContext) childFields_ShareLinkAccessEventConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ShareLinkAccessEventConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ShareLinkAccessEventConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ShareLinkAccessEventConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ShareLinkAccessEventConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ShareLinkAccessEventEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ShareLinkAccessEventEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ShareLinkAccessEventEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ShareLinkAccessEventEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ShareLinkConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ShareLinkConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ShareLinkConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ShareLinkConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ShareLinkConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ShareLinkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "shareLink":
+		return ec.fieldContext_ShareLinkCreatePayload_shareLink(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ShareLinkCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ShareLinkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedID":
+		return ec.fieldContext_ShareLinkDeletePayload_deletedID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ShareLinkDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ShareLinkEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ShareLinkEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ShareLinkEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ShareLinkEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ShareLinkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "shareLink":
+		return ec.fieldContext_ShareLinkUpdatePayload_shareLink(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ShareLinkUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_Standard(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
