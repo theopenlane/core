@@ -8,6 +8,7 @@ import (
 
 	"github.com/oklog/ulid/v2"
 	"github.com/samber/lo"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -53,6 +54,10 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 func (r *mutationResolver) cloneTemplateControls(ctx context.Context, controlsToClone []*generated.Control,
 	programID *string, shouldCloneTemplates bool) ([]*generated.Control, error) {
 
+	if shouldCloneTemplates && r.integrationsRuntime == nil {
+		return nil, common.ErrInternalServerError
+	}
+
 	clonedControls, err := r.controlCloner().Controls(ctx, controlsToClone, programID)
 	if err != nil {
 		return nil, err
@@ -60,10 +65,6 @@ func (r *mutationResolver) cloneTemplateControls(ctx context.Context, controlsTo
 
 	if !shouldCloneTemplates {
 		return clonedControls, nil
-	}
-
-	if r.integrationsRuntime == nil {
-		return nil, common.ErrInternalServerError
 	}
 
 	ids := make([]string, 0, len(controlsToClone))
@@ -92,12 +93,25 @@ func (r *mutationResolver) emitTemplateMappingsJob(ctx context.Context, controlI
 		value = ulids.New().String()
 	}
 
-	_, err := r.integrationsRuntime.Gala().
-		EmitWithHeaders(ctx, hooks.TemplateMappingTopic.Name, req, gala.Headers{
-			UniqueKey: "template-mapping-" + value,
-		})
+	tx := generated.TxFromContext(ctx)
+	tx.OnCommit(func(next generated.Committer) generated.Committer {
+		return generated.CommitFunc(func(commitCtx context.Context, tx *generated.Tx) error {
+			if err := next.Commit(commitCtx, tx); err != nil {
+				return err
+			}
 
-	return err
+			_, err := r.integrationsRuntime.Gala().EmitWithHeaders(ctx, hooks.TemplateMappingTopic.Name, req, gala.Headers{
+				UniqueKey: "template-mapping-" + value,
+			})
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to emit template mappings after commit")
+			}
+
+			return nil
+		})
+	})
+
+	return nil
 }
 
 // getCloneFilterOptions returns the filter options for cloning controls from the input based on the provided fields

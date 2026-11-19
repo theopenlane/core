@@ -225,7 +225,6 @@ func fetchTemplateControls(ctx context.Context, templateControls []*generated.Co
 		Select(control.FieldID, control.FieldRefCode).
 		Where(
 			control.StandardIDIsNil(),
-			control.DeletedAtIsNil(),
 			control.SystemOwned(false),
 			control.RefCodeIn(refCodesToRetrieve...),
 		).
@@ -301,11 +300,8 @@ func computeExistingMappings(ctx context.Context, controlsToMap []*generated.Con
 func createMappings(ctx context.Context, mappings []*generated.MappedControl, sourceRefCodes, controlLookup, subcontrolLookup map[string]string, existingMappings map[dedupSetKey]struct{}) error {
 	client := generated.FromContext(ctx)
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return err
-	}
-
+	// permission hooks require can edit access which the org/user does not have to these
+	// system owned controls/subcontrols in other to add the mapping edge
 	writeCtx := auth.WithInternalOperationContext(ctx)
 	builders := make([]*generated.MappedControlCreate, 0, mappingWriteBatchSize)
 	for _, m := range mappings {
@@ -342,7 +338,6 @@ func createMappings(ctx context.Context, mappings []*generated.MappedControl, so
 		existingMappings[key] = struct{}{}
 
 		input := generated.CreateMappedControlInput{
-			OwnerID:           lo.ToPtr(orgID),
 			Source:            lo.ToPtr(enums.MappingSourceImported),
 			MappingType:       &m.MappingType,
 			Relation:          &m.Relation,
