@@ -311,3 +311,16 @@ func TestGCPSCCMappingsRiskObservedAtMissing(t *testing.T) {
 
 	assert.Check(t, is.Nil(mapped["observed_at"]))
 }
+
+func TestGCPSCCMappingsNumericFindingClass(t *testing.T) {
+	envelope := types.MappingEnvelope{
+		Resource: "projects/example-project",
+		Payload:  json.RawMessage(`{"name":"organizations/123456789012/sources/2000000000000000002/findings/finding-10","state":"ACTIVE","category":"EXTERNAL_EXPOSURE","finding_class":10}`),
+	}
+
+	finding := evalSchema(t, entityops.SchemaFinding, envelope)
+	assert.Check(t, is.Equal("10", finding["finding_class"]))
+
+	mappedRisk := evalSchema(t, entityops.SchemaRisk, envelope)
+	assert.Check(t, is.Equal("10", mappedRisk["risk_category_name"]))
+}

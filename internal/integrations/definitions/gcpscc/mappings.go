@@ -31,7 +31,7 @@ var mapExprFinding = providerkit.CelMapExpr(
 	entityops.FindingFields.ExternalID.Expr(`payload.?name.orValue("")`),
 	entityops.FindingFields.ExternalOwnerID.Expr("resource"),
 	entityops.FindingFields.Category.Expr(`payload.?category.orValue("")`),
-	entityops.FindingFields.FindingClass.Expr(`payload.?finding_class.orValue("")`),
+	entityops.FindingFields.FindingClass.Expr(`string(payload.?finding_class.orValue(""))`),
 	entityops.FindingFields.FindingStatusName.Expr(exprStatusName),
 	entityops.FindingFields.Open.Expr(exprOpen),
 	entityops.FindingFields.Severity.Expr(`payload.?severity.orValue("")`),
@@ -116,7 +116,7 @@ var mapExprRisk = providerkit.CelMapExpr(
 	entityops.RiskFields.Impact.Expr(exprRiskImpact),
 	entityops.RiskFields.ObservedAt.Expr(`payload.?create_time.orValue(null)`),
 	entityops.RiskFields.Details.Expr(`payload.?description.orValue("")`),
-	entityops.RiskFields.RiskCategoryName.Expr(`payload.?finding_class.orValue("")`),
+	entityops.RiskFields.RiskCategoryName.Expr(`string(payload.?finding_class.orValue(""))`),
 	entityops.RiskFields.Mitigation.Expr(`payload.?next_steps.orValue("")`),
 	providerkit.EdgeExternalIDEntry(entityops.SchemaRisk, risk.EdgeAssets, exprResourcePaths),
 )
