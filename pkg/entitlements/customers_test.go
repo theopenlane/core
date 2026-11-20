@@ -3,7 +3,7 @@ package entitlements_test
 import (
 	"testing"
 
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
