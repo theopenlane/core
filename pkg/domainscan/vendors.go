@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
+	"github.com/samber/lo"
 	"golang.org/x/net/publicsuffix"
 
 	"github.com/theopenlane/core/v2/pkg/urlx"
@@ -357,7 +358,7 @@ func domainVendorName(domain string) string {
 		return canonical
 	}
 
-	return strings.ToUpper(label[:1]) + label[1:]
+	return lo.Capitalize(label)
 }
 
 // vendorNameForURL derives a vendor's grouping domain and display name from rawURL,

@@ -56,20 +56,8 @@ func Builder(federationIssuer string) registry.Builder {
 					Registration(),
 			},
 			Mappings: []types.MappingRegistration{
-				{
-					Schema: entityops.SchemaRisk.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprRisk,
-					},
-				},
-				{
-					Schema: entityops.SchemaVulnerability.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprVuln,
-					},
-				},
+				providerkit.RiskMapping(mapExprRisk),
+				providerkit.VulnerabilityMapping(mapExprVuln),
 				providerkit.FindingMapping(mapExprFinding),
 			},
 		}, nil

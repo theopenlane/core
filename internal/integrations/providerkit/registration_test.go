@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -81,6 +82,13 @@ func TestFindingMapping(t *testing.T) {
 			SourceField:  entityops.FindingFields.InternalOwner.InputKey,
 		},
 	}
+	want = append(want, types.LinkRule{
+		TargetSchema: entityops.SchemaAsset.Name,
+		Edge:         finding.EdgeAssets,
+		TargetField:  externalIDField,
+		SourceList:   EdgeExternalIDKey(entityops.SchemaFinding, finding.EdgeAssets),
+		PayloadKeys:  true,
+	})
 
 	if !slices.Equal(got.Spec.Links, want) {
 		t.Fatalf("expected links %+v, got %+v", want, got.Spec.Links)
@@ -124,8 +132,23 @@ func TestVulnerabilityMapping(t *testing.T) {
 			SourceField:  entityops.VulnerabilityFields.InternalOwner.InputKey,
 		},
 	}
+	want = append(want, EdgeKeyLinks(entityops.SchemaVulnerability, vulnerability.EdgeAssets)...)
 
 	if !slices.Equal(got.Spec.Links, want) {
+		t.Fatalf("expected links %+v, got %+v", want, got.Spec.Links)
+	}
+}
+
+func TestRiskMapping(t *testing.T) {
+	t.Parallel()
+
+	got := RiskMapping("risk")
+	if got.Schema != entityops.SchemaRisk.Name || got.Spec.MapExpr != "risk" || got.Spec.FilterExpr != matchAllFilterExpr {
+		t.Fatalf("unexpected registration %+v", got)
+	}
+
+	want := EdgeKeyLinks(entityops.SchemaRisk, risk.EdgeAssets)
+	if len(want) == 0 || !slices.Equal(got.Spec.Links, want) {
 		t.Fatalf("expected links %+v, got %+v", want, got.Spec.Links)
 	}
 }
@@ -199,6 +222,61 @@ func TestEdgeKeyLinks(t *testing.T) {
 				t.Fatalf("unexpected rule %+v", rule)
 			}
 		})
+	}
+}
+
+func TestEdgeKeyLinksLimitedToEdges(t *testing.T) {
+	t.Parallel()
+
+	rules := EdgeKeyLinks(entityops.SchemaVulnerability, vulnerability.EdgeAssets)
+
+	lists := []string{}
+	for _, rule := range rules {
+		if rule.Edge != vulnerability.EdgeAssets || rule.TargetSchema != entityops.SchemaAsset.Name || !rule.PayloadKeys {
+			t.Fatalf("unexpected rule %+v", rule)
+		}
+
+		lists = append(lists, rule.SourceList)
+	}
+
+	want := []string{
+		EdgeExternalIDKey(entityops.SchemaVulnerability, vulnerability.EdgeAssets),
+		nameMatch.payloadKey(entityops.SchemaVulnerability, vulnerability.EdgeAssets),
+	}
+
+	if !lo.ElementsMatch(lists, want) {
+		t.Fatalf("unexpected rules %+v", rules)
+	}
+}
+
+func TestEdgeKeys(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		got  string
+		want string
+	}{
+		{got: EdgeExternalIDKey(entityops.SchemaVulnerability, vulnerability.EdgeAssets), want: "assets_external_ids"},
+		{got: nameMatch.payloadKey(entityops.SchemaVulnerability, vulnerability.EdgeAssets), want: "assets_names"},
+		{got: EdgeExternalIDKey(entityops.SchemaVulnerability, vulnerability.EdgeInternalOwnerIdentityHolder), want: "internal_owner_identity_holder_external_id"},
+		{got: nameMatch.payloadKey(entityops.SchemaVulnerability, vulnerability.EdgeInternalOwnerIdentityHolder), want: "internal_owner_identity_holder_name"},
+	}
+
+	for _, tc := range testCases {
+		if tc.got != tc.want {
+			t.Fatalf("expected key %q, got %q", tc.want, tc.got)
+		}
+	}
+}
+
+func TestEdgeExternalIDEntry(t *testing.T) {
+	t.Parallel()
+
+	got := EdgeExternalIDEntry(entityops.SchemaVulnerability, vulnerability.EdgeAssets, "ids")
+	want := entityops.MappingEntry{Key: "assets_external_ids", Expr: "ids"}
+
+	if got != want {
+		t.Fatalf("expected entry %+v, got %+v", want, got)
 	}
 }
 
