@@ -215,8 +215,13 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 	}
 
 	validDoc := map[string]any{
-		"pdf_file_id":     "file-abc",
-		"acknowledgment":  true,
+		"pdf_file_id": "file-abc",
+		"acknowledgment": map[string]any{
+			"acknowledged": true,
+			"fullName":     "Jane Doe",
+			"signature":    "data:image/svg+xml;charset=utf-8",
+			"signedAt":     "2026-11-16T14:30:00Z",
+		},
 		"trust_center_id": "tc-123",
 		"signatory_info": map[string]any{
 			"email":        "jane@example.com",
@@ -238,6 +243,24 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 		assert.Check(t, err)
 	})
 
+	t.Run("submission not acknowledged yet", func(t *testing.T) {
+		doc := map[string]any{
+			"pdf_file_id": "file-abc",
+			"acknowledgment": map[string]any{
+				"acknowledged": false,
+				"fullName":     "Jane Doe",
+				"signature":    "data:image/svg+xml;charset=utf-8",
+				"signedAt":     "2026-11-16T14:30:00Z",
+			},
+			"trust_center_id":    "tc-123",
+			"signatory_info":     validDoc["signatory_info"],
+			"signature_metadata": validDoc["signature_metadata"],
+		}
+
+		err := validateTrustCenterNDAJSON(context.Background(), doc, "tc-123", "jane@example.com", "user-456", templateFile)
+		assert.Check(t, is.ErrorIs(err, errValidationFailed))
+	})
+
 	t.Run("mismatched trust center id", func(t *testing.T) {
 		err := validateTrustCenterNDAJSON(context.Background(), validDoc, "tc-wrong", "jane@example.com", "user-456", templateFile)
 		assert.Check(t, is.ErrorIs(err, errDocInfoDoesNotMatchCaller))
@@ -255,8 +278,13 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 
 	t.Run("missing required field", func(t *testing.T) {
 		incomplete := map[string]any{
-			"pdf_file_id":     "file-abc",
-			"acknowledgment":  true,
+			"pdf_file_id": "file-abc",
+			"acknowledgment": map[string]any{
+				"acknowledged": true,
+				"fullName":     "Jane Doe",
+				"signature":    "data:image/svg+xml;charset=utf-8",
+				"signedAt":     "2026-11-16T14:30:00Z",
+			},
 			"trust_center_id": "tc-123",
 		}
 
@@ -266,8 +294,13 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 
 	t.Run("empty signatory name fails schema", func(t *testing.T) {
 		doc := map[string]any{
-			"pdf_file_id":     "file-abc",
-			"acknowledgment":  true,
+			"pdf_file_id": "file-abc",
+			"acknowledgment": map[string]any{
+				"acknowledged": true,
+				"fullName":     "Jane Doe",
+				"signature":    "data:image/svg+xml;charset=utf-8",
+				"signedAt":     "2026-11-16T14:30:00Z",
+			},
 			"trust_center_id": "tc-123",
 			"signatory_info": map[string]any{
 				"email":        "jane@example.com",

@@ -9,13 +9,14 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/v2/pkg/objects"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/jsonx"
 )
 
 // HookDocumentDataTrustCenterNDA runs on document data create mutations to ensure trust center NDA document submissions are valid
@@ -190,6 +191,10 @@ func validateTrustCenterNDAJSON(ctx context.Context, document map[string]any, tr
 			Msg("failed to decode trust center nda json")
 
 		return fmt.Errorf("%w: %v", errValidationFailed, err)
+	}
+
+	if !doc.Acknowledgment.Acknowledged {
+		return fmt.Errorf("%w: NDA must be acknowledged before submission", errValidationFailed)
 	}
 
 	if doc.TrustCenterID != trustCenterID ||

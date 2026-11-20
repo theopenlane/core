@@ -36,11 +36,18 @@ import (
 
 // signedNDADocumentData captures the expected structure of the document data for a trust center NDA submission
 type signedNDADocumentData struct {
-	PDFFileID         string               `json:"pdf_file_id" jsonschema:"required"`
-	Acknowledgment    bool                 `json:"acknowledgment" jsonschema:"required"`
-	SignatoryInfo     signatoryInformation `json:"signatory_info" jsonschema:"required"`
-	TrustCenterID     string               `json:"trust_center_id" jsonschema:"required"`
-	SignatureMetadata signatureMetadata    `json:"signature_metadata" jsonschema:"required"`
+	PDFFileID         string                 `json:"pdf_file_id" jsonschema:"required"`
+	Acknowledgment    ndaAcknowledgementData `json:"acknowledgment" jsonschema:"required"`
+	SignatoryInfo     signatoryInformation   `json:"signatory_info" jsonschema:"required"`
+	TrustCenterID     string                 `json:"trust_center_id" jsonschema:"required"`
+	SignatureMetadata signatureMetadata      `json:"signature_metadata" jsonschema:"required"`
+}
+
+type ndaAcknowledgementData struct {
+	Acknowledged bool   `json:"acknowledged" jsonschema:"required"`
+	FullName     string `json:"fullName" jsonschema:"required,minLength=1"`
+	Signature    string `json:"signature" jsonschema:"required,minLength=1"`
+	SignedAt     string `json:"signedAt" jsonschema:"required,format=date-time"`
 }
 
 // signatoryInformation captures the key details of the NDA signer for attestation purposes
