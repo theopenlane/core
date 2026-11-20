@@ -22,6 +22,7 @@ import (
 	intregistry "github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 // ingestFindingPayloadsWithOptions pushes finding payloads through the synchronous catalog ingest
@@ -36,6 +37,8 @@ func ingestFindingPayloadsWithOptions(ctx context.Context, t *testing.T, install
 	envelopes := lo.Map(payloads, func(p string, _ int) integrationtypes.MappingEnvelope {
 		return integrationtypes.MappingEnvelope{Payload: json.RawMessage(p)}
 	})
+
+	ctx = th.SetUserContext(auth.EnsureIntegrationCaller(ctx, installation.OwnerID), suite.Client.DB)
 
 	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,
@@ -53,7 +56,7 @@ func ingestFindingPayloadsWithOptions(ctx context.Context, t *testing.T, install
 // integration_run_id from IngestOptions.RunID on created rows, leaves it unwritten on a
 // volatile-only re-sync under a new run, and repoints it once a material change rides along
 func TestDirectorySnapshotIntegrationRunLink(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	const prefix = "runlink"
 
@@ -161,7 +164,7 @@ func TestDirectorySnapshotIntegrationRunLink(t *testing.T) {
 // IngestOptions.RunID on a created row, leaves it unwritten on a volatile-only re-ingest under a
 // new run, and repoints it once a material change rides along
 func TestFindingIntegrationRunLink(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("Finding Run Link Test").

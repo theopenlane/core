@@ -33,7 +33,7 @@ func directoryAccountByExternalIDAndIntegration(ctx context.Context, t *testing.
 // but distinct source_instance_id tenants never see each other's rows even when every external id
 // in their snapshots is identical
 func TestDirectorySameDefinitionTwoTenantsIsolated(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	const prefix = "sdtwotenant"
 	const tenant1 = "tenant-" + prefix + "-1"
@@ -99,7 +99,7 @@ func TestDirectorySameDefinitionTwoTenantsIsolated(t *testing.T) {
 // TestDirectoryRowsProtectedFromOtherDefinition verifies rows an installation wrote are read-only for a different
 // definition sharing the same tenant
 func TestDirectoryRowsProtectedFromOtherDefinition(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	const prefix = "otherdefinition"
 	const tenant = "tenant-" + prefix
@@ -199,7 +199,7 @@ func TestDirectoryRowsProtectedFromOtherDefinition(t *testing.T) {
 // every row onto the new installation without duplicating rows or removal-inferring memberships, and
 // a membership first seen after the reinstall links to the rows the old installation wrote
 func TestDirectoryRemoveAndReaddKeepsFlowing(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	const prefix = "removereadd"
 	const tenant = "tenant-" + prefix

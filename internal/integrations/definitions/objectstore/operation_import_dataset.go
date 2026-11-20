@@ -14,10 +14,12 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -266,7 +268,7 @@ func cloneDatasetStandard(ctx context.Context, db *generated.Client, std dataset
 }
 
 // datasetBuiltinVariables returns the built-in variables every dataset can use, filled from the importing organization
-// and the requesting user
+// and its owner
 func datasetBuiltinVariables(ctx context.Context, db *generated.Client) (placeholder.Variables, error) {
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok {
@@ -293,13 +295,21 @@ func datasetBuiltinVariables(ctx context.Context, db *generated.Client) (placeho
 		return nil, fmt.Errorf("%w: %w", ErrDatasetOrganizationLookup, err)
 	}
 
+	owner, err := db.OrgMembership.Query().
+		Where(orgmembership.OrganizationIDEQ(ownerID), orgmembership.RoleEQ(enums.RoleOwner)).
+		QueryUser().
+		Only(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrDatasetOrganizationLookup, err)
+	}
+
 	return DatasetBuiltinVariables{
 		OrgName:     lo.CoalesceOrEmpty(org.DisplayName, org.Name),
 		OrgSlug:     lo.CoalesceOrEmpty(org.SlugName, urlx.Slug(org.Name)),
 		OrgDomain:   domain,
-		OwnerUserID: caller.SubjectID,
-		OwnerEmail:  caller.SubjectEmail,
-		OwnerName:   lo.CoalesceOrEmpty(caller.SubjectName, caller.SubjectEmail),
+		OwnerUserID: owner.ID,
+		OwnerEmail:  owner.Email,
+		OwnerName:   lo.CoalesceOrEmpty(owner.DisplayName, owner.Email),
 		Today:       time.Now().UTC().Format(time.DateOnly),
 	}.variables()
 }

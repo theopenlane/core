@@ -16,11 +16,11 @@ import (
 
 func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
+	ownerCtx := org.UserCtx
 
-	installation, fragment := seedHarnessLoop(t, internalCtx)
+	installation, fragment := seedHarnessLoop(t, ownerCtx)
 
-	hardDeleteCtx := entx.SkipSoftDelete(internalCtx)
+	hardDeleteCtx := entx.SkipSoftDelete(ownerCtx)
 
 	assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(hardDeleteCtx))
 
@@ -35,17 +35,17 @@ func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 
 func TestIntegrationCleanupListenerNonStatusUpdateKeepsLoops(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
-	internalCtx := th.SetInternalContext(org.UserCtx, suite.Client.DB)
+	ownerCtx := org.UserCtx
 
-	installation, fragment := seedHarnessLoop(t, internalCtx)
+	installation, fragment := seedHarnessLoop(t, ownerCtx)
 
-	assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).SetName(th.RandomName(t)).Exec(internalCtx))
+	assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).SetName(th.RandomName(t)).Exec(ownerCtx))
 
 	waitForEvents()
 
 	assert.Equal(t, 1, activeReconcileJobs(t, fragment))
 
-	assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(internalCtx))
+	assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(ownerCtx))
 
 	waitForEvents()
 
