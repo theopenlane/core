@@ -12,7 +12,7 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
