@@ -46,19 +46,30 @@ func integrationNotFoundCancel[T integrationEnvelope](message string) func(conte
 }
 
 // operationCancel builds the Cancel predicate for an operation's queued runs, cancelling instead of retrying when the
-// integration no longer exists or the operation does not retry
+// integration no longer exists, the operation does not retry, or the failure is terminal
 func operationCancel(policy types.ExecutionPolicy) func(context.Context, operations.Envelope, error) bool {
 	notFound := integrationNotFoundCancel[operations.Envelope]("integration not found, cancelling operation")
 
 	return func(ctx context.Context, envelope operations.Envelope, err error) bool {
-		if policy.NoRetry {
-			logx.FromContext(ctx).Info().Err(err).Msg("operation does not retry, cancelling")
+		if !cancelsRetry(policy, err) {
+			return false
+		}
 
+		if notFound(ctx, envelope, err) {
 			return true
 		}
 
-		return notFound(ctx, envelope, err)
+		logx.FromContext(ctx).Info().Err(err).Msg("operation failure does not retry, cancelling")
+
+		return true
 	}
+}
+
+// cancelsRetry is the one decision of whether a failed run is cancelled instead of retried
+func cancelsRetry(policy types.ExecutionPolicy, err error) bool {
+	_, terminal := types.TerminalFrom(err)
+
+	return policy.NoRetry || terminal || ent.IsNotFound(err)
 }
 
 // registerListeners registers the operation, ingest, webhook, reconcile, and definition-provided gala listeners
@@ -75,8 +86,13 @@ func (r *Runtime) registerListeners() error {
 			Topic:  gala.Topic[operations.Envelope]{Name: operation.Topic, Kind: gala.IntegrationRun.Kind()},
 			Name:   operation.Name,
 			Cancel: operationCancel(operation.Policy),
+			OnExhausted: func(ctx context.Context, envelope operations.Envelope, err error) {
+				if r.exhaustedHook != nil {
+					r.exhaustedHook(ctx, envelope, err)
+				}
+			},
 			Handle: func(ctx gala.HandlerContext, envelope operations.Envelope) error {
-				return r.HandleOperation(ctx.Context, envelope)
+				return r.HandleOperation(ctx.Context, envelope, operation.Policy)
 			},
 		}); err != nil {
 			return err

@@ -184,14 +184,23 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
+	const (
+		jobAttempt     = 2
+		jobMaxAttempts = 5
+	)
+
 	called := 0
 	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "gala.test.worker.listener",
-		Handle: func(_ HandlerContext, payload runtimeTestPayload) error {
+		Handle: func(handlerContext HandlerContext, payload runtimeTestPayload) error {
 			called++
 			if payload.Message != "from-worker" {
 				t.Fatalf("unexpected payload message %q", payload.Message)
+			}
+
+			if handlerContext.lastAttempt {
+				t.Fatal("lastAttempt = true, want false before max attempts")
 			}
 
 			return nil
@@ -221,13 +230,82 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 		return runtime
 	})
 
-	job := &river.Job[EnvelopeArgs]{Args: args}
+	job := &river.Job[EnvelopeArgs]{
+		JobRow: &rivertype.JobRow{Attempt: jobAttempt, MaxAttempts: jobMaxAttempts},
+		Args:   args,
+	}
 	if err := worker.Work(context.Background(), job); err != nil {
 		t.Fatalf("unexpected worker error: %v", err)
 	}
 
 	if called != 1 {
 		t.Fatalf("expected listener to be called once, got %d", called)
+	}
+}
+
+// TestRiverDispatchWorkerSetsLastAttempt verifies the worker derives lastAttempt from the job row.
+func TestRiverDispatchWorkerSetsLastAttempt(t *testing.T) {
+	const maxAttempts = 3
+
+	tests := []struct {
+		name      string
+		attempt   int
+		wantFired bool
+	}{
+		{name: "attempt equals max", attempt: maxAttempts, wantFired: true},
+		{name: "attempt below max", attempt: maxAttempts - 1},
+	}
+
+	errHandler := errors.New("handler failed")
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			runtime := newTestGala(t, nil)
+
+			topic := Topic[runtimeTestPayload]{Name: TopicName("gala.test.worker.exhausted")}
+			if err := registerTopic(runtime.registry, topic); err != nil {
+				t.Fatalf("failed to register topic: %v", err)
+			}
+
+			fired := 0
+			if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+				Topic:       topic,
+				Name:        "gala.test.worker.exhausted.listener",
+				Handle:      func(HandlerContext, runtimeTestPayload) error { return errHandler },
+				OnExhausted: func(context.Context, runtimeTestPayload, error) { fired++ },
+			}); err != nil {
+				t.Fatalf("failed to register listener: %v", err)
+			}
+
+			encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "from-worker"})
+			if err != nil {
+				t.Fatalf("failed to encode payload: %v", err)
+			}
+
+			args, err := newRiverDispatchArgs(Envelope{
+				ID:              NewEventID(),
+				Topic:           topic.Name,
+				Payload:         encodedPayload,
+				ContextSnapshot: testCallerSnapshot(t, runtime),
+			})
+			if err != nil {
+				t.Fatalf("failed to build river args: %v", err)
+			}
+
+			worker := newRiverDispatchWorker(func() *Gala { return runtime })
+
+			err = worker.Work(context.Background(), &river.Job[EnvelopeArgs]{
+				JobRow: &rivertype.JobRow{Attempt: tc.attempt, MaxAttempts: maxAttempts},
+				Args:   args,
+			})
+			if !errors.Is(err, errHandler) {
+				t.Fatalf("worker error = %v, want %v", err, errHandler)
+			}
+
+			if got := fired == 1; got != tc.wantFired || fired > 1 {
+				t.Fatalf("OnExhausted fired %d times, want fired=%v", fired, tc.wantFired)
+			}
+		})
 	}
 }
 
@@ -282,7 +360,7 @@ func TestRiverDispatchWorkerPreservesCancellation(t *testing.T) {
 
 			worker := newRiverDispatchWorker(func() *Gala { return runtime })
 
-			err = worker.Work(ctx, &river.Job[EnvelopeArgs]{Args: args})
+			err = worker.Work(ctx, &river.Job[EnvelopeArgs]{JobRow: &rivertype.JobRow{}, Args: args})
 			if !errors.Is(err, context.Canceled) {
 				t.Fatalf("expected the worker to return the context cancellation, got %v", err)
 			}

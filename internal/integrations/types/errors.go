@@ -64,3 +64,31 @@ func Degraded(err error, reason string) error {
 func DegradedFrom(err error) (*DegradedError, bool) {
 	return errors.AsType[*DegradedError](err)
 }
+
+// TerminalError marks a failure that retrying cannot resolve
+type TerminalError struct {
+	// Reason explains why retrying cannot succeed
+	Reason string
+	// Err is the underlying failure
+	Err error
+}
+
+// Error returns the reason followed by the underlying failure
+func (e *TerminalError) Error() string {
+	return e.Reason + ": " + e.Err.Error()
+}
+
+// Unwrap exposes the underlying failure for errors.Is and errors.As
+func (e *TerminalError) Unwrap() error {
+	return e.Err
+}
+
+// Terminal wraps err as a failure retrying cannot resolve
+func Terminal(err error, reason string) error {
+	return &TerminalError{Reason: reason, Err: err}
+}
+
+// TerminalFrom returns the TerminalError in err's chain when present
+func TerminalFrom(err error) (*TerminalError, bool) {
+	return errors.AsType[*TerminalError](err)
+}

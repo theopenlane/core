@@ -122,10 +122,12 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 
 	e.scopeEvaluator = evaluator
 
-	e.integrationRuntime.SetPostExecutionHook(func(ctx context.Context, envelope operations.Envelope, execErr error) {
-		if types.IntegrationSourceFrom(envelope.OperationContext).Workflow != nil {
-			e.emitWorkflowActionCompleted(ctx, envelope, execErr)
+	e.integrationRuntime.SetPostExecutionHook(func(ctx context.Context, outcome integrationsruntime.OperationOutcome) error {
+		if types.IntegrationSourceFrom(outcome.Envelope.OperationContext).Workflow != nil {
+			e.emitWorkflowActionCompleted(ctx, outcome.Envelope, outcome.Err)
 		}
+
+		return nil
 	})
 
 	return nil

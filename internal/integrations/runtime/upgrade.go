@@ -542,7 +542,7 @@ func conformDocuments(ctx context.Context, req types.InstallationRequest, kind d
 			continue
 		}
 
-		document, err := conformStored(ctx, req, layout, name, stored[name], kind.sentinel)
+		document, err := operations.ConformStored(ctx, req, layout, name, stored[name], kind.sentinel)
 		if err != nil {
 			failed = append(failed, fmt.Errorf("%w: %s %s", err, kind.label, name))
 
@@ -557,33 +557,4 @@ func conformDocuments(ctx context.Context, req types.InstallationRequest, kind d
 	}
 
 	return next, errors.Join(failed...)
-}
-
-// conformStored upgrades a stored document from the name it was persisted under, strips and defaults it against the layout schema, then validates it
-func conformStored(ctx context.Context, req types.InstallationRequest, layout types.InputRegistration, from string, stored json.RawMessage, sentinel error) (json.RawMessage, error) {
-	document := stored
-
-	if layout.Upgrade != nil {
-		upgraded, err := layout.Upgrade(ctx, req, from, stored)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed upgrading stored document")
-
-			return nil, fmt.Errorf("%w: upgrade: %w", sentinel, err)
-		}
-
-		document = upgraded
-	}
-
-	conformed, err := jsonx.ConformToSchema(layout.Schema, document)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed conforming stored document to schema")
-
-		return nil, fmt.Errorf("%w: conform to schema: %w", sentinel, err)
-	}
-
-	if err := operations.ValidateInput(ctx, req, layout.Schema, layout.Validate, conformed, sentinel); err != nil {
-		return nil, err
-	}
-
-	return conformed, nil
 }

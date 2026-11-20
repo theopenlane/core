@@ -332,7 +332,7 @@ func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.I
 }
 
 // HandleOperation executes one queued operation envelope through the runtime-managed dependencies
-func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envelope) error {
+func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envelope, policy types.ExecutionPolicy) error {
 	oc := envelope.OperationContext
 	src := types.IntegrationSourceFrom(oc)
 	ctx = intobvs.WithContext(ctx, oc)
@@ -361,8 +361,19 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 			}
 		}
 
-		if r.postExecutionHook != nil {
-			r.postExecutionHook(ctx, envelope, execErr)
+		if r.postExecutionHook == nil {
+			return execErr
+		}
+
+		outcome := OperationOutcome{
+			Envelope: envelope,
+			Response: response,
+			Err:      execErr,
+			Final:    execErr == nil || cancelsRetry(policy, execErr),
+		}
+
+		if hookErr := r.postExecutionHook(ctx, outcome); hookErr != nil {
+			logx.FromContext(ctx).Error().Err(hookErr).Bool("final", outcome.Final).Msg("post execution hook failed")
 		}
 
 		return execErr

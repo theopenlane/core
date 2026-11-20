@@ -381,3 +381,106 @@ func TestExecuteRuntimeOperationKeepsDispatchCaller(t *testing.T) {
 		})
 	}
 }
+
+// errTestHookFailed is the post-execution hook failure the runtime must log and not return
+var errTestHookFailed = errors.New("post execution hook failed")
+
+// errTestOperationFailed is the operation failure the post-execution hook tests report
+var errTestOperationFailed = errors.New("operation failed")
+
+// errTestNotFound is the missing-integration failure that cancels retries
+var errTestNotFound = &ent.NotFoundError{}
+
+// hookTestHandler returns an operation handler responding with response and err
+func hookTestHandler(response json.RawMessage, err error) types.OperationHandler {
+	return func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+		return response, err
+	}
+}
+
+func TestHandleOperationPostExecutionHookOutcome(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name         string
+		handle       types.OperationHandler
+		policy       types.ExecutionPolicy
+		wantErr      error
+		wantFinal    bool
+		wantResponse string
+	}{
+		{
+			name:         "success is final and carries the response",
+			handle:       hookTestHandler(json.RawMessage(`{"ok":true}`), nil),
+			wantFinal:    true,
+			wantResponse: `{"ok":true}`,
+		},
+		{
+			name:    "retryable failure is not final",
+			handle:  hookTestHandler(nil, errTestOperationFailed),
+			wantErr: errTestOperationFailed,
+		},
+		{
+			name:      "failure of a no-retry operation is final",
+			handle:    hookTestHandler(nil, errTestOperationFailed),
+			policy:    types.ExecutionPolicy{NoRetry: true},
+			wantErr:   errTestOperationFailed,
+			wantFinal: true,
+		},
+		{
+			name:      "not-found failure is final",
+			handle:    hookTestHandler(nil, errTestNotFound),
+			wantErr:   errTestNotFound,
+			wantFinal: true,
+		},
+		{
+			name:      "terminal failure is final",
+			handle:    hookTestHandler(nil, types.Terminal(errTestOperationFailed, "recipient rejected")),
+			wantErr:   errTestOperationFailed,
+			wantFinal: true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			reg := registry.New()
+			assert.NilError(t, reg.Register(types.Definition{
+				ID:         "hook-def",
+				Operations: []types.OperationRegistration{{Name: "hook-op", Handle: tc.handle}},
+			}))
+
+			rt := NewForTesting(reg)
+
+			var outcomes []OperationOutcome
+
+			rt.SetPostExecutionHook(func(_ context.Context, outcome OperationOutcome) error {
+				outcomes = append(outcomes, outcome)
+
+				return errTestHookFailed
+			})
+
+			envelope := operations.Envelope{
+				OperationContext: types.NewOperationContext("org-1", "hook-op", types.IntegrationSource{DefinitionID: "hook-def", Runtime: true}),
+				Config:           json.RawMessage(`{}`),
+			}
+
+			err := rt.HandleOperation(context.Background(), envelope, tc.policy)
+
+			switch tc.wantErr {
+			case nil:
+				assert.NilError(t, err)
+			default:
+				assert.Assert(t, errors.Is(err, tc.wantErr), "got %v", err)
+				assert.Assert(t, !errors.Is(err, errTestHookFailed), "the hook failure must not be returned")
+			}
+
+			assert.Assert(t, len(outcomes) == 1, "expected one hook call, got %d", len(outcomes))
+			assert.Equal(t, outcomes[0].Final, tc.wantFinal)
+			assert.Equal(t, string(outcomes[0].Response), tc.wantResponse)
+			assert.Equal(t, outcomes[0].Envelope.Operation, "hook-op")
+			assert.Assert(t, errors.Is(outcomes[0].Err, tc.wantErr), "outcome error = %v", outcomes[0].Err)
+		})
+	}
+}

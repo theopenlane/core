@@ -34,3 +34,32 @@ func ValidateInput(ctx context.Context, req types.InstallationRequest, schema js
 
 	return nil
 }
+
+// ConformStored upgrades a stored document from the name it was persisted under, strips and defaults it against the layout schema, then validates it
+func ConformStored(ctx context.Context, req types.InstallationRequest, layout types.InputRegistration, from string, stored json.RawMessage, sentinel error) (json.RawMessage, error) {
+	document := stored
+
+	if layout.Upgrade != nil {
+		upgraded, err := layout.Upgrade(ctx, req, from, stored)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed upgrading stored document")
+
+			return nil, fmt.Errorf("%w: upgrade: %w", sentinel, err)
+		}
+
+		document = upgraded
+	}
+
+	conformed, err := jsonx.ConformToSchema(layout.Schema, document)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed conforming stored document to schema")
+
+		return nil, fmt.Errorf("%w: conform to schema: %w", sentinel, err)
+	}
+
+	if err := ValidateInput(ctx, req, layout.Schema, layout.Validate, conformed, sentinel); err != nil {
+		return nil, err
+	}
+
+	return conformed, nil
+}

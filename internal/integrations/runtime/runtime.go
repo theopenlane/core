@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -48,8 +49,23 @@ type Config struct {
 	DefaultLookback time.Duration
 }
 
-// PostExecutionHook is called after HandleOperation completes with the envelope and any error
-type PostExecutionHook func(ctx context.Context, envelope operations.Envelope, err error)
+// OperationOutcome is one HandleOperation attempt's result
+type OperationOutcome struct {
+	// Envelope is the executed operation envelope
+	Envelope operations.Envelope
+	// Response is the operation's response, nil when it produced none
+	Response json.RawMessage
+	// Err is the attempt's failure, nil on success
+	Err error
+	// Final reports whether no retry follows: success or a cancelled failure
+	Final bool
+}
+
+// PostExecutionHook is called after each HandleOperation attempt; its error is only logged
+type PostExecutionHook func(ctx context.Context, outcome OperationOutcome) error
+
+// ExhaustedHook is called when an operation's last attempt fails
+type ExhaustedHook func(ctx context.Context, envelope operations.Envelope, err error)
 
 // Runtime bundles the integrations services behind a do injector
 type Runtime struct {
@@ -57,6 +73,8 @@ type Runtime struct {
 	injector do.Injector
 	// postExecutionHook is an optional callback invoked after each HandleOperation call
 	postExecutionHook PostExecutionHook
+	// exhaustedHook is an optional callback invoked when an operation's last attempt fails
+	exhaustedHook ExhaustedHook
 	// defaultLookback is applied as LastRunAt when an operation has no prior successful run
 	defaultLookback time.Duration
 	// devMode indicates the server is running in development mode
@@ -66,6 +84,11 @@ type Runtime struct {
 // SetPostExecutionHook registers a callback invoked after each HandleOperation call
 func (r *Runtime) SetPostExecutionHook(hook PostExecutionHook) {
 	r.postExecutionHook = hook
+}
+
+// SetExhaustedHook registers a callback invoked when an operation's last attempt fails
+func (r *Runtime) SetExhaustedHook(hook ExhaustedHook) {
+	r.exhaustedHook = hook
 }
 
 // defaultRuntime holds the process-wide integrations runtime

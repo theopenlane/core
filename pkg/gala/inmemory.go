@@ -6,6 +6,9 @@ import (
 	"github.com/theopenlane/logx"
 )
 
+// inMemoryLastAttempt is true because in-process dispatch never retries
+const inMemoryLastAttempt = true
+
 func newInMemoryGala(config Config) (*Gala, error) {
 	g := &Gala{}
 	if err := g.initialize(DispatchModeInMemory); err != nil {
@@ -24,11 +27,11 @@ func newInMemoryGala(config Config) (*Gala, error) {
 // pool is configured
 func (g *Gala) dispatchInMemory(ctx context.Context, envelope Envelope) error {
 	if g.inMemoryPool == nil {
-		return g.dispatchEnvelope(ctx, envelope)
+		return g.dispatchEnvelope(ctx, envelope, inMemoryLastAttempt)
 	}
 
 	g.inMemoryPool.Submit(func() {
-		if err := g.dispatchEnvelope(ctx, envelope); err != nil {
+		if err := g.dispatchEnvelope(ctx, envelope, inMemoryLastAttempt); err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Msg("gala in-memory listener dispatch failed")
 		}
 	})

@@ -48,6 +48,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	systemdef "github.com/theopenlane/core/v2/internal/integrations/definitions/system"
+	webhookdef "github.com/theopenlane/core/v2/internal/integrations/definitions/webhook"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/internal/objects"
@@ -349,6 +350,8 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		objectstore.Builder(&suite.ObjectStoreRuntime, "", objectstore.Config{}),
 		testint.Builder(),
 		testint.MockHTTPBuilder(),
+		// dev mode, so tests can deliver to a local endpoint
+		webhookdef.Builder(true),
 	)
 	RequireNoError(t, err)
 

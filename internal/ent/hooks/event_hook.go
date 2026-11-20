@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/v2/internal/ent/tx"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
@@ -107,20 +107,7 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 				}
 			}
 
-			if tx := transactionFromContext(ctx); tx != nil {
-				tx.OnCommit(func(next entgen.Committer) entgen.Committer {
-					return entgen.CommitFunc(func(ctx context.Context, tx *entgen.Tx) error {
-						err := next.Commit(ctx, tx)
-						if err == nil {
-							defer emit()
-						}
-
-						return err
-					})
-				})
-			} else {
-				defer emit()
-			}
+			tx.AfterCommit(ctx, emit)
 
 			return retVal, err
 		})

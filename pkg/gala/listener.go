@@ -33,6 +33,8 @@ type HandlerContext struct {
 	Injector do.Injector
 	// Caller is the pre-resolved caller for this dispatch
 	Caller *auth.Caller
+	// lastAttempt reports whether the transport will not retry this dispatch
+	lastAttempt bool
 }
 
 // Handler processes a typed event payload
@@ -74,7 +76,7 @@ type Definition[T any] struct {
 	LogFields func(T) map[string]any
 	// Cancel optionally classifies a handler error as terminal, converting it to river.JobCancel
 	Cancel func(context.Context, T, error) bool
-	// OnExhausted runs when a scheduled loop stops on its error-streak budget
+	// OnExhausted runs when the listener's last attempt fails, or a scheduled loop stops on its error-streak budget
 	OnExhausted func(context.Context, T, error)
 	// Schedule makes this listener a self-sustaining adaptive re-emit loop when non-nil;
 	// exactly one of Handle and Schedule.Handle must be set
