@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	intregistry "github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/iam/auth"
 )
 
 // ingestCheckResultPayloadsWithRunID pushes check-result payloads through the synchronous catalog
@@ -36,6 +37,8 @@ func ingestCheckResultPayloadsWithRunID(ctx context.Context, t *testing.T, insta
 	envelopes := lo.Map(payloads, func(p string, _ int) integrationtypes.MappingEnvelope {
 		return integrationtypes.MappingEnvelope{Payload: json.RawMessage(p)}
 	})
+
+	ctx = th.SetUserContext(auth.EnsureIntegrationCaller(ctx, installation.OwnerID), suite.Client.DB)
 
 	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,
@@ -80,7 +83,7 @@ func trackedFailedRecord(health models.IntegrationHealth, key string) (models.Fa
 // from exclusion once a durable per-record retry has independently written the row at or after the
 // tracked run, and stays excluded when the row on hand predates the tracked run
 func TestCheckResultTrackedFailureResolvedByDurableRetry(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("CheckResult Retry Resolution Test").

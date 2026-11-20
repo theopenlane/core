@@ -23,6 +23,7 @@ import (
 	intregistry "github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 // directoryProfileBaseLastLogin is the profile lastLoginTime carried by every directorySnapshot fixture record before a churn permutation advances it
@@ -299,6 +300,8 @@ func ingestDirectorySnapshotFixture(ctx context.Context, t *testing.T, integrati
 	def := directorySyncTestDefinition(integration.DefinitionID)
 	reg := intregistry.New()
 	th.RequireNoError(t, reg.Register(def))
+
+	ctx = th.SetUserContext(auth.EnsureIntegrationCaller(ctx, integration.OwnerID), suite.Client.DB)
 
 	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,

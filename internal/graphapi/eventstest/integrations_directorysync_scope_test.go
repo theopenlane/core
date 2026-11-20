@@ -23,7 +23,7 @@ const directoryScopeTestInstance = "tenant-dirscope"
 func newDirectoryScopeInstallation(t *testing.T, name string) *ent.Integration {
 	t.Helper()
 
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	integration, err := suite.Client.DB.Integration.Create().
 		SetName(name).
@@ -38,7 +38,7 @@ func newDirectoryScopeInstallation(t *testing.T, name string) *ent.Integration {
 
 // TestDirectorySnapshotRemovalScopedToManagingInstallation verifies a complete snapshot from one installation only marks its own rows removed, never rows another installation of the same definition and instance manages
 func TestDirectorySnapshotRemovalScopedToManagingInstallation(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	const prefix = "dirscope"
 
@@ -75,7 +75,7 @@ func TestDirectorySnapshotRemovalScopedToManagingInstallation(t *testing.T) {
 
 // TestDirectoryIngestExcludedRecordSkipsPersist verifies a record tracked as failing from an earlier run is skipped without a write, its attempt counter advances on the installation's health, and only that record is shielded from snapshot removal
 func TestDirectoryIngestExcludedRecordSkipsPersist(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	const prefix = "direxcluded"
 
@@ -135,7 +135,7 @@ func TestDirectoryIngestExcludedRecordSkipsPersist(t *testing.T) {
 
 // TestRetryRunCreatesFreshPendingRun verifies a re-executed attempt of a terminal run continues under a new pending run that records the run it retries
 func TestRetryRunCreatesFreshPendingRun(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	integration, err := suite.Client.DB.Integration.Create().
 		SetName("Retry Run Test").

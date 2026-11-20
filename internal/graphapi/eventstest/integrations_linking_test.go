@@ -21,6 +21,7 @@ import (
 	intregistry "github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 const linkTestOperationName = "findings.sync"
@@ -63,6 +64,8 @@ func ingestFindings(ctx context.Context, t *testing.T, integration *ent.Integrat
 		return integrationtypes.MappingEnvelope{Payload: json.RawMessage(p)}
 	})
 
+	ctx = th.SetUserContext(auth.EnsureIntegrationCaller(ctx, integration.OwnerID), suite.Client.DB)
+
 	_, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,
 		DB:          suite.Client.DB,
@@ -88,7 +91,7 @@ func findingControls(ctx context.Context, t *testing.T, externalID string) (*ent
 }
 
 func TestIntegrationCrossObjectLinking(t *testing.T) {
-	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	ctx := th.SharedTestUser1.UserCtx
 
 	// seed link targets with stable ref codes; other tests' controls use random UUID ref codes
 	controlIDs := make([]string, 0, 4)
