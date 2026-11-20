@@ -43,7 +43,7 @@ require (
 	github.com/cloudflare/cloudflare-go/v7 v7.15.0
 	github.com/coder/websocket v1.8.15
 	github.com/didasy/tldr v0.7.0
-	github.com/elimity-com/scim v0.0.0-20261112130359-73634688791c
+	github.com/elimity-com/scim v0.0.0-20261113092633-5fffe914c211
 	github.com/fatih/camelcase v1.0.0
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/fsouza/fake-gcs-server v1.56.1
