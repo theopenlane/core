@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"strings"
 
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/mapx"
@@ -205,6 +206,20 @@ func pentestIssueIDs(issues []map[string]any) []string {
 	return ids
 }
 
+// intelIDPrefixes are the identifier prefixes the Aikido Intel cve endpoint resolves, others such as GHSA ids 404
+var intelIDPrefixes = []string{"CVE-", "AIKIDO-"}
+
+// isIntelID reports whether the Aikido Intel cve endpoint can resolve the identifier
+func isIntelID(id string) bool {
+	for _, prefix := range intelIDPrefixes {
+		if strings.HasPrefix(id, prefix) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // issueCVEs returns the distinct CVE or AIKIDO ids of the open open source issues
 func issueCVEs(issues []map[string]any) []string {
 	seen := map[string]struct{}{}
@@ -212,7 +227,7 @@ func issueCVEs(issues []map[string]any) []string {
 
 	for _, issue := range issues {
 		cve := mapx.Value[string](issue, "cve_id")
-		if cve == "" || mapx.Value[string](issue, "type") != issueTypeOpenSource || !isOpenIssue(issue) {
+		if !isIntelID(cve) || mapx.Value[string](issue, "type") != issueTypeOpenSource || !isOpenIssue(issue) {
 			continue
 		}
 
