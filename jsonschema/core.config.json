@@ -46,6 +46,21 @@
       },
       "type": "array"
     },
+    "aikido.Config": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "awssecurityhub.Config": {
       "properties": {
         "accesskeyid": {
@@ -170,6 +185,9 @@
       "properties": {
         "consoleintegrationpath": {
           "type": "string"
+        },
+        "aikido": {
+          "$ref": "#/$defs/aikido.Config"
         },
         "awssecurityhub": {
           "$ref": "#/$defs/awssecurityhub.Config"

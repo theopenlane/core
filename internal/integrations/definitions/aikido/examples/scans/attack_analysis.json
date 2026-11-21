@@ -1,0 +1,47 @@
+{
+  "title": "SQL Injection",
+  "summary": "The /api/faq/search endpoint concatenates the user-supplied q parameter directly into a SQL string. This allows unauthenticated attackers to inject arbitrary SQL, including stacked queries, evidenced by timing-based payloads using pg_sleep.",
+  "description": "The FAQ search functionality at /api/faq/search dynamically builds a SQL query using string interpolation rather than parameterized queries. In server/index.ts, the query is constructed as:\n\n`SELECT id, question, answer FROM faq WHERE question LIKE '%${search}%' OR answer LIKE '%${search}%'`\n\nBecause the q value (assigned to search) is inserted directly inside single-quoted string literals, attackers can break out of the quotes and append additional SQL. The PostgreSQL driver executes the full query string, and Postgres permits multiple statements in a single query (stacked queries), enabling reliable time-based detection with pg_sleep.\n\nNo authentication is required to reach this endpoint, making it directly exploitable from the public internet. During testing, injecting a semicolon and a SELECT pg_sleep(5) statement caused the server to delay the response by ~5 seconds, confirming SQL injection. The server returned a 500 JSON error after the injection due to the unexpected result shape from stacked queries, which further corroborates the injection behavior.",
+  "risk": "This vulnerability enables attackers to run arbitrary SQL statements against the application database. Potential impacts include reading or modifying sensitive data, altering application behavior, creating or deleting records, and escalating attacks by extracting credentials or tokens stored in the database. As the endpoint is unauthenticated and public, the likelihood of exploitation is high and could lead to data breaches, service instability, and regulatory non-compliance if personal or operational data is exposed.",
+  "reproduction_steps": [
+    {
+      "code_block": "curl -i \"https://user.domain/api/faq/search?q=%27%3B%20SELECT%20pg_sleep(0)%3B%20--\"",
+      "observed_result": "HTTP/1.1 500 Internal Server Error\nContent-Type: application/json; charset=utf-8\n\n{\"error\":\"Search failed\",\"message\":\"TypeError: Cannot read properties of undefined (reading 'map')\"}\n(Response returns quickly, ~0.2-0.4s observed)",
+      "step_info": "Send a baseline timing request with pg_sleep(0) injected into the q parameter"
+    },
+    {
+      "code_block": "curl -i \"https://user.domain/api/faq/search?q=%27%3B%20SELECT%20pg_sleep(5)%3B%20--\"",
+      "observed_result": "HTTP/1.1 500 Internal Server Error\nContent-Type: application/json; charset=utf-8\n\n{\"error\":\"Search failed\",\"message\":\"TypeError: Cannot read properties of undefined (reading 'map')\"}\n(Response is delayed by ~5 seconds; observed ~5.24s vs ~0.26s baseline, confirming time-based SQL injection)",
+      "step_info": "Send an identical request but with pg_sleep(5) to induce a delay"
+    }
+  ],
+  "remediation": [
+    "Replace string interpolation with parameterized queries using placeholders (e.g., WHERE question LIKE $1 OR answer LIKE $2 with values like `%${search}%`)",
+    "Sanitize and validate the q parameter (set reasonable length limits, reject control characters and semicolons)",
+    "Consider using ILIKE with parameters for case-insensitive search and full-text search features for safer matching",
+    "Disable or avoid stacked queries by ensuring the database driver uses parameterized statements exclusively",
+    "Add unit/integration tests for the search API covering injection payloads"
+  ],
+  "root_cause_analysis": "User-controlled input (q) is directly concatenated into a SQL query string and wrapped in single quotes without escaping or parameterization. The code at server/index.ts:1004 uses a template literal with ${search} inside the SQL, which allows breaking out of the literal and appending stacked statements. Using the simple query protocol in Postgres enables multiple statements separated by semicolons, making timing-based exploitation possible.",
+  "retests": [
+    {
+      "id": "8c1e2f3a-4b5d-6e7f-8091-a2b3c4d5e6f7",
+      "created_at": "2026-04-02T09:15:00Z",
+      "status": "completed",
+      "status_details": null,
+      "result": {
+        "solved": true,
+        "summary": "The search endpoint now uses parameterized queries. The previous time-based payload no longer delays the response.",
+        "description": "Retesting /api/faq/search with the original pg_sleep payload returned immediately and no longer executed stacked SQL.",
+        "reproduction_steps": [
+          {
+            "code_block": "curl -i \"https://user.domain/api/faq/search?q=%27%3B%20SELECT%20pg_sleep(5)%3B%20--\"",
+            "observed_result": "HTTP/1.1 200 OK. Response returns in ~0.2s.",
+            "step_info": "Repeat the timing payload against the fixed endpoint"
+          }
+        ],
+        "remediation": []
+      }
+    }
+  ]
+}

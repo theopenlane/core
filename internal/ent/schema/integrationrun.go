@@ -152,6 +152,7 @@ func (r IntegrationRun) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(r, Finding{}),
 		defaultEdgeFromWithPagination(r, InternalPolicy{}),
 		defaultEdgeFromWithPagination(r, Procedure{}),
+		defaultEdgeFromWithPagination(r, Remediation{}),
 		defaultEdgeFromWithPagination(r, Risk{}),
 		defaultEdgeFromWithPagination(r, Vulnerability{}),
 	}

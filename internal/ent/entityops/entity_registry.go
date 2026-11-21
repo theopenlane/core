@@ -15754,6 +15754,14 @@ func init() {
 			AddField:    "add_procedure_ids",
 		},
 		{
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+		},
+		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,

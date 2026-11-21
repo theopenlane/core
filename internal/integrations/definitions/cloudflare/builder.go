@@ -83,13 +83,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			},
 			Mappings: append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 				providerkit.FindingMapping(mapExprFinding),
-				types.MappingRegistration{
-					Schema: entityops.SchemaAsset.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprAsset,
-					},
-				},
+				providerkit.AssetMapping("", mapExprAsset),
 			),
 		}
 

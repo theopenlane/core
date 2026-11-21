@@ -95,14 +95,7 @@ func Builder(cfg Config) registry.Builder {
 						MapExpr:    mapExprSecretScanning,
 					},
 				},
-				{
-					Schema:  entityops.SchemaAsset.Name,
-					Variant: repositoryAssetVariant,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprRepositoryAsset,
-					},
-				},
+				providerkit.AssetMapping(repositoryAssetVariant, mapExprRepositoryAsset),
 			}, providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership)...),
 			Webhooks: []types.WebhookRegistration{
 				InstallationEventsWebhook.Registration(types.WebhookRegistration{

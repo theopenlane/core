@@ -1,0 +1,8 @@
+{
+  "id": 1,
+  "name": "AWS Cloud environment",
+  "provider": "aws",
+  "environment": "production",
+  "external_id": "000000000000",
+  "last_scanned_at": 1720083163
+}

@@ -1535,6 +1535,29 @@ func HasProceduresWith(preds ...predicate.Procedure) predicate.IntegrationRun {
 	})
 }
 
+// HasRemediations applies the HasEdge predicate on the "remediations" edge.
+func HasRemediations() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRemediationsWith applies the HasEdge predicate on the "remediations" edge with a given conditions (other predicates).
+func HasRemediationsWith(preds ...predicate.Remediation) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newRemediationsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasRisks applies the HasEdge predicate on the "risks" edge.
 func HasRisks() predicate.IntegrationRun {
 	return predicate.IntegrationRun(func(s *sql.Selector) {

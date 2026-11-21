@@ -1,0 +1,24 @@
+{
+  "cve": "AIKIDO-2026-10095",
+  "related_cve_id": "CVE-2026-23864",
+  "package_name": "next",
+  "language": "JS",
+  "short_description": "Attacker can trigger DOS-attack",
+  "tldr": "Affected versions of the `react-server-dom-webpack`, `react-server-dom-parcel`, and `react-server-dom-turbopack` packages and frameworks that use the affected packages, including `Next.js` 13.x, 14.x, 15.x, and 16.x using the App Router are vulnerable to multiple denial of service (DoS) issues. The previously applied DoS mitigations were incomplete, allowing specially crafted HTTP requests to Server Function endpoints to trigger server crashes, out-of-memory conditions, or excessive CPU usage, depending on the code path and application configuration. Applications that do not use React Server Components or server-side React functionality are not affected.",
+  "does_this_affect_me": "You are affected only if you are using a version within the vulnerable range and your application uses React Server Components. Applications that do not run React code on the server, or that do not use a framework, bundler, or bundler plugin supporting React Server Components, are not affected.",
+  "severity": 75,
+  "severity_score": "High",
+  "patch_versions": [
+    "16.2.0-canary.9",
+    "16.1.5",
+    "16.0.11",
+    "15.6.0-canary.61",
+    "15.5.10",
+    "15.4.11",
+    "15.3.9",
+    "15.2.9",
+    "15.1.1",
+    "15.0.8"
+  ],
+  "published": "2026-01-27"
+}

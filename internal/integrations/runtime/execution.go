@@ -29,6 +29,13 @@ import (
 // operationCompletedSummary is the run summary for a successful operation that ingests no records
 const operationCompletedSummary = "operation completed"
 
+const (
+	// runInterruptedError replaces a bare context canceled error, which a server restart or job cancellation causes
+	runInterruptedError = "the run was interrupted before it finished, such as by a server restart, run it again or wait for the next scheduled sync"
+	// runTimedOutError replaces a bare context deadline exceeded error
+	runTimedOutError = "the run did not finish within its time limit"
+)
+
 // reconcileOutput is the structured output recorded on reconcile River jobs for UI visibility
 type reconcileOutput struct {
 	// IntegrationID is the target integration identifier
@@ -262,7 +269,12 @@ func executionRunResult(ingest bool, response json.RawMessage, ingestResult oper
 	metrics := IngestMetrics(ingestResult)
 	metrics[metricResponse] = jsonx.DecodeAnyOrNil(response)
 
-	if execErr != nil {
+	switch {
+	case errors.Is(execErr, context.Canceled):
+		return operations.RunResult{Status: enums.IntegrationRunStatusCancelled, Error: runInterruptedError, Metrics: metrics}
+	case errors.Is(execErr, context.DeadlineExceeded):
+		return operations.RunResult{Status: enums.IntegrationRunStatusFailed, Error: runTimedOutError, Metrics: metrics}
+	case execErr != nil:
 		return operations.RunResult{Status: enums.IntegrationRunStatusFailed, Error: execErr.Error(), Metrics: metrics}
 	}
 
