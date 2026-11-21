@@ -1,0 +1,22 @@
+[
+  {
+    "id": 12345,
+    "type": "dependency",
+    "status": "pr_open",
+    "triggered_by": {
+      "type": "user",
+      "user_id": 42
+    },
+    "autofix_target": {
+      "code_repo_id": 1,
+      "location": "package-lock.json",
+      "title": "lodash → 4.17.21"
+    },
+    "triggered_at": 1783119723,
+    "finished_at": 1783119840,
+    "pull_request": {
+      "url": "https://github.com/org/repo/pull/123",
+      "close_reason": "unknown"
+    }
+  }
+]

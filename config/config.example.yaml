@@ -156,6 +156,10 @@ entconfig:
         maximumsentences: 10
         type: lexrank
 integrations:
+    aikido:
+        clientid: ""
+        clientsecret: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     awssecurityhub:
         accesskeyid: ""
         arn: ""

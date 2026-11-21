@@ -46192,6 +46192,13 @@ func (_q *IntegrationRunQuery) clonePage() *IntegrationRunQuery {
 			c.withNamedProcedures[name] = q.clonePage()
 		}
 	}
+	c.withRemediations = _q.withRemediations.clonePage()
+	if _q.withNamedRemediations != nil {
+		c.withNamedRemediations = make(map[string]*RemediationQuery, len(_q.withNamedRemediations))
+		for name, q := range _q.withNamedRemediations {
+			c.withNamedRemediations[name] = q.clonePage()
+		}
+	}
 	c.withRisks = _q.withRisks.clonePage()
 	if _q.withNamedRisks != nil {
 		c.withNamedRisks = make(map[string]*RiskQuery, len(_q.withNamedRisks))

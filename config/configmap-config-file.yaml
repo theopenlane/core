@@ -1136,6 +1136,15 @@ data:
       {{- if .Values.openlane.coreConfiguration.integrations.consoleintegrationpath }}
       consoleintegrationpath: {{ .Values.openlane.coreConfiguration.integrations.consoleintegrationpath | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.aikido }}
+      aikido:
+        {{- if .Values.openlane.coreConfiguration.integrations.aikido.clientid }}
+        clientid: {{ .Values.openlane.coreConfiguration.integrations.aikido.clientid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.aikido.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.aikido.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub }}
       awssecurityhub:
         {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn }}

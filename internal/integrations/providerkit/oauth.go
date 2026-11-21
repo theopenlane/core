@@ -24,9 +24,14 @@ func OAuthToken(accessToken, refreshToken string, expiry *time.Time) *oauth2.Tok
 
 // GoogleTokenSource builds a token source refreshing against the Google endpoint
 func GoogleTokenSource(ctx context.Context, clientID, clientSecret string, token *oauth2.Token) oauth2.TokenSource {
+	return OAuthTokenSource(ctx, clientID, clientSecret, google.Endpoint, token)
+}
+
+// OAuthTokenSource builds a token source refreshing the stored token against the given provider endpoint
+func OAuthTokenSource(ctx context.Context, clientID, clientSecret string, endpoint oauth2.Endpoint, token *oauth2.Token) oauth2.TokenSource {
 	return (&oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
-		Endpoint:     google.Endpoint,
+		Endpoint:     endpoint,
 	}).TokenSource(ctx, token)
 }

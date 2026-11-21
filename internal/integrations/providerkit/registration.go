@@ -3,9 +3,11 @@ package providerkit
 import (
 	"context"
 	"encoding/json"
+	"strconv"
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -13,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -118,8 +121,14 @@ func DirectoryMappings(accountExpr, groupExpr, membershipExpr string) []types.Ma
 
 // FindingMapping returns the finding mapping linking findings to controls by ref code, assets by name and external id, and the internal owner identity holder by email
 func FindingMapping(mapExpr string) types.MappingRegistration {
+	return FindingVariantMapping("", mapExpr)
+}
+
+// FindingVariantMapping returns the finding mapping for one payload variant, linking the same targets as FindingMapping
+func FindingVariantMapping(variant, mapExpr string) types.MappingRegistration {
 	return types.MappingRegistration{
-		Schema: entityops.SchemaFinding.Name,
+		Schema:  entityops.SchemaFinding.Name,
+		Variant: variant,
 		Spec: types.MappingOverride{
 			FilterExpr: matchAllFilterExpr,
 			MapExpr:    mapExpr,
@@ -137,7 +146,7 @@ func FindingMapping(mapExpr string) types.MappingRegistration {
 					SourceList:   entityops.FindingFields.Targets.InputKey,
 				},
 				internalOwnerIdentityHolderLink(finding.EdgeInternalOwnerIdentityHolder, entityops.FindingFields.InternalOwner.InputKey),
-			}, externalIDMatch.links(entityops.SchemaFinding, []string{finding.EdgeAssets})...),
+			}, externalIDMatch.links(entityops.SchemaFinding, []string{finding.EdgeAssets, finding.EdgeScans})...),
 		},
 	}
 }
@@ -186,6 +195,61 @@ func RiskMapping(mapExpr string) types.MappingRegistration {
 	}
 }
 
+// ScanMapping returns the scan mapping, findings link to their scan by its external id
+func ScanMapping(mapExpr string) types.MappingRegistration {
+	return types.MappingRegistration{
+		Schema: entityops.SchemaScan.Name,
+		Spec: types.MappingOverride{
+			FilterExpr: matchAllFilterExpr,
+			MapExpr:    mapExpr,
+		},
+	}
+}
+
+// RemediationMapping returns the remediation mapping linking the findings, vulnerabilities and assets it addresses by edge keys
+func RemediationMapping(mapExpr string) types.MappingRegistration {
+	return types.MappingRegistration{
+		Schema: entityops.SchemaRemediation.Name,
+		Spec: types.MappingOverride{
+			FilterExpr: matchAllFilterExpr,
+			MapExpr:    mapExpr,
+			Links:      EdgeKeyLinks(entityops.SchemaRemediation, remediation.EdgeFindings, remediation.EdgeVulnerabilities, remediation.EdgeAssets),
+		},
+	}
+}
+
+// AssetMapping returns the asset mapping for one payload variant, empty when the provider emits a single asset shape
+func AssetMapping(variant, mapExpr string) types.MappingRegistration {
+	return types.MappingRegistration{
+		Schema:  entityops.SchemaAsset.Name,
+		Variant: variant,
+		Spec: types.MappingOverride{
+			FilterExpr: matchAllFilterExpr,
+			MapExpr:    "merge(" + importedAssetDefaults + ", " + mapExpr + ")",
+			Links: []types.LinkRule{
+				{
+					TargetSchema: entityops.SchemaAsset.Name,
+					Edge:         asset.EdgeConnectedAssets,
+					TargetField:  asset.FieldSourceIdentifier,
+					SourceList:   connectedAssetsSourceIdentifiersKey,
+					PayloadKeys:  true,
+				},
+			},
+		},
+	}
+}
+
+// connectedAssetsSourceIdentifiersKey is the payload key carrying the source identifiers of the assets an asset connects to
+const connectedAssetsSourceIdentifiersKey = "connected_assets_source_identifiers"
+
+// ConnectedAssetsEntry binds a CEL expression producing the source identifiers of the assets an asset connects to
+func ConnectedAssetsEntry(expr string) entityops.MappingEntry {
+	return entityops.MappingEntry{Key: connectedAssetsSourceIdentifiersKey, Expr: expr}
+}
+
+// importedAssetDefaults marks integration assets as imported unless the provider mapping sets its own source type
+var importedAssetDefaults = CelMapExpr(entityops.AssetFields.SourceType.Expr(strconv.Quote(enums.SourceTypeImported.String())))
+
 // EdgeExternalIDKey is the payload key EdgeKeyLinks reads the external ids schema's edge links to from
 func EdgeExternalIDKey(schema *entityops.Schema, edge string) string {
 	return externalIDMatch.payloadKey(schema, edge)
@@ -194,6 +258,11 @@ func EdgeExternalIDKey(schema *entityops.Schema, edge string) string {
 // EdgeExternalIDEntry binds a CEL expression producing the external ids schema's edge links to
 func EdgeExternalIDEntry(schema *entityops.Schema, edge, expr string) entityops.MappingEntry {
 	return entityops.MappingEntry{Key: EdgeExternalIDKey(schema, edge), Expr: expr}
+}
+
+// EdgeNameEntry binds a CEL expression producing the names of the targets schema's edge links to
+func EdgeNameEntry(schema *entityops.Schema, edge, expr string) entityops.MappingEntry {
+	return entityops.MappingEntry{Key: nameMatch.payloadKey(schema, edge), Expr: expr}
 }
 
 // EdgeKeyLinks returns a link rule for every edge of schema through each match key its target supports, external id

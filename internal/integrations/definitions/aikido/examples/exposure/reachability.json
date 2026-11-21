@@ -1,0 +1,44 @@
+[
+  [
+    {
+      "package_name": null,
+      "package_version": null,
+      "files": [
+        {
+          "file_path": "/app.js",
+          "line_numbers": [
+            2,
+            5
+          ]
+        },
+        {
+          "file_path": "/routes.js",
+          "line_numbers": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "package_name": "express",
+      "package_version": "4.19.2",
+      "files": [
+        {
+          "file_path": "/lib/express.js",
+          "line_numbers": [
+            78,
+            80,
+            82,
+            83,
+            90
+          ]
+        }
+      ]
+    },
+    {
+      "package_name": "body-parser",
+      "package_version": "1.20.2",
+      "files": []
+    }
+  ]
+]

@@ -1246,10 +1246,10 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.IntegrationRunsTable,
-			Columns: []string{remediation.IntegrationRunsColumn},
+			Columns: remediation.IntegrationRunsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),

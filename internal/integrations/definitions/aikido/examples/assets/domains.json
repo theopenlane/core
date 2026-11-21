@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "domain": "https://www.aikido.dev",
+    "kind": "front_end",
+    "is_auth_configured": false,
+    "scan_frequency": "weekly",
+    "last_scanned_at": 1777885020,
+    "linked_resource": {
+      "type": "code_repo",
+      "id": 1
+    }
+  }
+]

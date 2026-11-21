@@ -152,13 +152,11 @@ const (
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the remediation in the database.
 	Table = "remediations"
-	// IntegrationRunsTable is the table that holds the integration_runs relation/edge.
-	IntegrationRunsTable = "integration_runs"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge. The primary key declared below.
+	IntegrationRunsTable = "remediation_integration_runs"
 	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
 	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
 	IntegrationRunsInverseTable = "integration_runs"
-	// IntegrationRunsColumn is the table column denoting the integration_runs relation/edge.
-	IntegrationRunsColumn = "remediation_integration_runs"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "remediations"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -330,6 +328,9 @@ var Columns = []string{
 }
 
 var (
+	// IntegrationRunsPrimaryKey and IntegrationRunsColumn2 are the table columns denoting the
+	// primary key for the integration_runs relation (M2M).
+	IntegrationRunsPrimaryKey = []string{"remediation_id", "integration_run_id"}
 	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the blocked_groups relation (M2M).
 	BlockedGroupsPrimaryKey = []string{"remediation_id", "group_id"}
@@ -933,7 +934,7 @@ func newIntegrationRunsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRunsTable, IntegrationRunsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, IntegrationRunsTable, IntegrationRunsPrimaryKey...),
 	)
 }
 func newOwnerStep() *sqlgraph.Step {

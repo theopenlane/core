@@ -21046,6 +21046,7 @@ type IntegrationRun struct {
 	Findings             *FindingConnection             `json:"findings"`
 	InternalPolicies     *InternalPolicyConnection      `json:"internalPolicies"`
 	Procedures           *ProcedureConnection           `json:"procedures"`
+	Remediations         *RemediationConnection         `json:"remediations"`
 	Risks                *RiskConnection                `json:"risks"`
 	Vulnerabilities      *VulnerabilityConnection       `json:"vulnerabilities"`
 }
@@ -21284,6 +21285,9 @@ type IntegrationRunWhereInput struct {
 	// procedures edge predicates
 	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
 	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
 	// risks edge predicates
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`

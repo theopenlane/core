@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1,
+    "active": 1,
+    "name": "vm1",
+    "region": "eu-west-1",
+    "latest_snapshot_id": "nevergonnagive-1",
+    "external_id": "nevergonnagive",
+    "created_at": 1725622868,
+    "count_open_issues": 2,
+    "count_ignored_issues": 6,
+    "purpose": "",
+    "cloud_id": 1,
+    "last_scanned_at": 1725622868,
+    "instance_count": 1,
+    "environment": "production",
+    "cloud_kind": "aws"
+  }
+]

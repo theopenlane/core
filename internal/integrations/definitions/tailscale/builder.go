@@ -51,14 +51,7 @@ func Builder() registry.Builder {
 					Registration(),
 			},
 			Mappings: append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
-				types.MappingRegistration{
-					Schema:  entityops.SchemaAsset.Name,
-					Variant: deviceAssetVariant,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprAsset,
-					},
-				},
+				providerkit.AssetMapping(deviceAssetVariant, mapExprAsset),
 			),
 		}, nil
 	})

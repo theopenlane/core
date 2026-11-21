@@ -646,6 +646,9 @@ coreConfiguration:
   # -- Integrations contains operator-level credentials for all v2 integration definitions
   integrations:
     consoleintegrationpath: "/organization-settings/integrations"  # @schema type:string; default:/organization-settings/integrations
+    aikido:
+      clientid: ""  # @schema type:string
+      redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
     awssecurityhub:
       arn: ""  # @schema type:string
     cloudflareruntime:
@@ -1211,6 +1214,14 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2026_02_25_CLOVER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets-2026_02_25_clover"  # @schema type:string
+    # -- core-integrations-aikido-clientsecret secret configuration
+    core-integrations-aikido-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.aikido.clientsecret
+      secretKey: "CORE_INTEGRATIONS_AIKIDO_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-aikido-clientsecret"  # @schema type:string
     # -- core-integrations-awssecurityhub-accesskeyid secret configuration
     core-integrations-awssecurityhub-accesskeyid:
       # -- Enable this external secret

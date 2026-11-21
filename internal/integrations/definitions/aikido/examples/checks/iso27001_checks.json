@@ -1,0 +1,34 @@
+[
+  {
+    "overview": {
+      "technological_controls": [
+        {
+          "code": "privileged_access_rights",
+          "title": "A.8.2 - Privileged access rights",
+          "results": [
+            {
+              "measure": "checks_access_rights",
+              "title": "App Services have strict SCM Site access restrictions",
+              "measure_title": "Has checks in place for enforcing permissions",
+              "status": "failing"
+            },
+            {
+              "measure": "checks_access_rights",
+              "title": "Container registries have no admin user enabled",
+              "measure_title": "Has checks in place for enforcing permissions",
+              "status": "failing"
+            },
+            {
+              "measure": "checks_access_rights",
+              "title": "Azure Virtual Machines are not accessible via passwords",
+              "measure_title": "Has checks in place for enforcing permissions",
+              "status": "complying"
+            }
+          ]
+        }
+      ]
+    },
+    "total_complying_rule_count": 1,
+    "total_rule_count": 3
+  }
+]
