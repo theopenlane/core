@@ -58,30 +58,8 @@ func HookCreateAPIToken() ent.Hook {
 				return retVal, err
 			}
 
-			// create the relationship tuples in fga for the token
-			tuples, err := createScopeTuples(ctx, token.Scopes, orgID, token.ID)
-			if err != nil {
-				return retVal, err
-			}
-
-			// add self relation tuple for the token
-			req := fgax.TupleRequest{
-				SubjectID:   token.ID,
-				SubjectType: auth.ServiceSubjectType,
-				ObjectID:    token.ID,
-				ObjectType:  auth.ServiceSubjectType,
-				Relation:    fgax.SelfRelation,
-			}
-
-			tuples = append(tuples, fgax.GetTupleKey(req))
-
-			// create the relationship tuples if we have any
-			if len(tuples) > 0 {
-				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
-
-					return nil, ErrInternalServerError
-				}
+			if err := writeServiceSubjectTuples(ctx, m.Authz, token.Scopes, orgID, token.ID); err != nil {
+				return nil, err
 			}
 
 			return retVal, err
@@ -93,22 +71,9 @@ func HookCreateAPIToken() ent.Hook {
 func HookUpdateAPIToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.APITokenFunc(func(ctx context.Context, m *generated.APITokenMutation) (generated.Value, error) {
-			var oldScopes []string
-			var scopesModified bool
-
-			// Only query old scopes if scopes are being modified and this is an UpdateOne operation
-			_, scopesModified = m.Scopes()
-			if !scopesModified {
-				// check appended
-				_, scopesModified = m.AppendedScopes()
-			}
-
-			if scopesModified && m.Op().Is(ent.OpUpdateOne) {
-				var err error
-				oldScopes, err = m.OldScopes(ctx)
-				if err != nil {
-					return nil, err
-				}
+			oldScopes, scopesModified, err := oldScopesIfModified(ctx, m)
+			if err != nil {
+				return nil, err
 			}
 
 			retVal, err := next.Mutate(ctx, m)
@@ -126,35 +91,95 @@ func HookUpdateAPIToken() ent.Hook {
 
 			// Only update scope tuples if scopes were modified
 			if scopesModified {
-				scopeSet, err := fgamodel.DefaultServiceScopeSet()
-				if err != nil {
-					return nil, fmt.Errorf("failed to load available token scopes from model: %w", err)
-				}
-
-				addedScopes, removedScopes := diffScopes(oldScopes, at.Scopes)
-
-				addTuples, err := scopeTuples(ctx, addedScopes, at.OwnerID, at.ID, scopeSet)
-				if err != nil {
+				if err := syncScopeTuples(ctx, m.Authz, oldScopes, at.Scopes, at.OwnerID, at.ID); err != nil {
 					return nil, err
-				}
-
-				removeTuples, err := scopeTuples(ctx, removedScopes, at.OwnerID, at.ID, scopeSet)
-				if err != nil {
-					return nil, err
-				}
-
-				if len(addTuples) > 0 || len(removeTuples) > 0 {
-					if _, err := m.Authz.WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
-						logx.FromContext(ctx).Error().Err(err).Msg("failed to update api token scope tuples")
-
-						return nil, ErrInternalServerError
-					}
 				}
 			}
 
 			return at, nil
 		})
 	}, ent.OpUpdateOne)
+}
+
+// scopedMutation is a mutation of a service subject that holds scopes, an api token or an oauth grant
+type scopedMutation interface {
+	Op() ent.Op
+	Scopes() ([]string, bool)
+	AppendedScopes() ([]string, bool)
+	OldScopes(ctx context.Context) ([]string, error)
+}
+
+// oldScopesIfModified returns the scopes before an UpdateOne mutation that changes them, and whether they change
+func oldScopesIfModified(ctx context.Context, m scopedMutation) ([]string, bool, error) {
+	_, modified := m.Scopes()
+	if !modified {
+		_, modified = m.AppendedScopes()
+	}
+
+	if !modified || !m.Op().Is(ent.OpUpdateOne) {
+		return nil, modified, nil
+	}
+
+	oldScopes, err := m.OldScopes(ctx)
+
+	return oldScopes, true, err
+}
+
+// writeServiceSubjectTuples writes the scope tuples and self tuple of a new service subject
+func writeServiceSubjectTuples(ctx context.Context, authz fgax.Client, scopes []string, orgID, subjectID string) error {
+	tuples, err := createScopeTuples(ctx, scopes, orgID, subjectID)
+	if err != nil {
+		return err
+	}
+
+	tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
+		SubjectID:   subjectID,
+		SubjectType: auth.ServiceSubjectType,
+		ObjectID:    subjectID,
+		ObjectType:  auth.ServiceSubjectType,
+		Relation:    fgax.SelfRelation,
+	}))
+
+	if _, err := authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("subject_id", subjectID).Msg("failed to create service subject tuples")
+
+		return ErrInternalServerError
+	}
+
+	return nil
+}
+
+// syncScopeTuples writes and deletes the scope tuples of a service subject (an api token
+// or an organization application install) when its scopes change from oldScopes to newScopes
+func syncScopeTuples(ctx context.Context, authz fgax.Client, oldScopes, newScopes []string, orgID, subjectID string) error {
+	scopeSet, err := fgamodel.DefaultServiceScopeSet()
+	if err != nil {
+		return fmt.Errorf("failed to load available token scopes from model: %w", err)
+	}
+
+	added, removed := diffScopes(oldScopes, newScopes)
+
+	addTuples, err := scopeTuples(ctx, added, orgID, subjectID, scopeSet)
+	if err != nil {
+		return err
+	}
+
+	removeTuples, err := scopeTuples(ctx, removed, orgID, subjectID, scopeSet)
+	if err != nil {
+		return err
+	}
+
+	if len(addTuples) == 0 && len(removeTuples) == 0 {
+		return nil
+	}
+
+	if _, err := authz.WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("subject_id", subjectID).Msg("failed to update scope tuples")
+
+		return ErrInternalServerError
+	}
+
+	return nil
 }
 
 // / createScopeTuples creates the relationship tuples for the token

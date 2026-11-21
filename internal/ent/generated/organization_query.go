@@ -58,6 +58,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
@@ -148,6 +149,7 @@ type OrganizationQuery struct {
 	withNarrativeCreators                       *GroupQuery
 	withNoteCreators                            *GroupQuery
 	withNotificationTemplateCreators            *GroupQuery
+	withOauthGrantCreators                      *GroupQuery
 	withOrgMembershipCreators                   *GroupQuery
 	withPlatformCreators                        *GroupQuery
 	withProcedureCreators                       *GroupQuery
@@ -197,6 +199,7 @@ type OrganizationQuery struct {
 	withPersonalAccessTokens                    *PersonalAccessTokenQuery
 	withBrandingSetting                         *OrganizationBrandingSettingQuery
 	withAPITokens                               *APITokenQuery
+	withOauthGrants                             *OauthGrantQuery
 	withEmailTemplates                          *EmailTemplateQuery
 	withIntegrationWebhooks                     *IntegrationWebhookQuery
 	withIntegrationRuns                         *IntegrationRunQuery
@@ -318,6 +321,7 @@ type OrganizationQuery struct {
 	withNamedNarrativeCreators                  map[string]*GroupQuery
 	withNamedNoteCreators                       map[string]*GroupQuery
 	withNamedNotificationTemplateCreators       map[string]*GroupQuery
+	withNamedOauthGrantCreators                 map[string]*GroupQuery
 	withNamedOrgMembershipCreators              map[string]*GroupQuery
 	withNamedPlatformCreators                   map[string]*GroupQuery
 	withNamedProcedureCreators                  map[string]*GroupQuery
@@ -364,6 +368,7 @@ type OrganizationQuery struct {
 	withNamedChildren                           map[string]*OrganizationQuery
 	withNamedPersonalAccessTokens               map[string]*PersonalAccessTokenQuery
 	withNamedAPITokens                          map[string]*APITokenQuery
+	withNamedOauthGrants                        map[string]*OauthGrantQuery
 	withNamedEmailTemplates                     map[string]*EmailTemplateQuery
 	withNamedIntegrationWebhooks                map[string]*IntegrationWebhookQuery
 	withNamedIntegrationRuns                    map[string]*IntegrationRunQuery
@@ -1288,6 +1293,28 @@ func (_q *OrganizationQuery) QueryNotificationTemplateCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationTemplateCreatorsTable, organization.NotificationTemplateCreatorsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOauthGrantCreators chains the current query on the "oauth_grant_creators" edge.
+func (_q *OrganizationQuery) QueryOauthGrantCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OauthGrantCreatorsTable, organization.OauthGrantCreatorsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -2366,6 +2393,28 @@ func (_q *OrganizationQuery) QueryAPITokens() *APITokenQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(apitoken.Table, apitoken.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.APITokensTable, organization.APITokensColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOauthGrants chains the current query on the "oauth_grants" edge.
+func (_q *OrganizationQuery) QueryOauthGrants() *OauthGrantQuery {
+	query := (&OauthGrantClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(oauthgrant.Table, oauthgrant.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OauthGrantsTable, organization.OauthGrantsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -4406,6 +4455,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withNarrativeCreators:                  _q.withNarrativeCreators.Clone(),
 		withNoteCreators:                       _q.withNoteCreators.Clone(),
 		withNotificationTemplateCreators:       _q.withNotificationTemplateCreators.Clone(),
+		withOauthGrantCreators:                 _q.withOauthGrantCreators.Clone(),
 		withOrgMembershipCreators:              _q.withOrgMembershipCreators.Clone(),
 		withPlatformCreators:                   _q.withPlatformCreators.Clone(),
 		withProcedureCreators:                  _q.withProcedureCreators.Clone(),
@@ -4455,6 +4505,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withPersonalAccessTokens:               _q.withPersonalAccessTokens.Clone(),
 		withBrandingSetting:                    _q.withBrandingSetting.Clone(),
 		withAPITokens:                          _q.withAPITokens.Clone(),
+		withOauthGrants:                        _q.withOauthGrants.Clone(),
 		withEmailTemplates:                     _q.withEmailTemplates.Clone(),
 		withIntegrationWebhooks:                _q.withIntegrationWebhooks.Clone(),
 		withIntegrationRuns:                    _q.withIntegrationRuns.Clone(),
@@ -4948,6 +4999,17 @@ func (_q *OrganizationQuery) WithNotificationTemplateCreators(opts ...func(*Grou
 		opt(query)
 	}
 	_q.withNotificationTemplateCreators = query
+	return _q
+}
+
+// WithOauthGrantCreators tells the query-builder to eager-load the nodes that are connected to
+// the "oauth_grant_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithOauthGrantCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withOauthGrantCreators = query
 	return _q
 }
 
@@ -5487,6 +5549,17 @@ func (_q *OrganizationQuery) WithAPITokens(opts ...func(*APITokenQuery)) *Organi
 		opt(query)
 	}
 	_q.withAPITokens = query
+	return _q
+}
+
+// WithOauthGrants tells the query-builder to eager-load the nodes that are connected to
+// the "oauth_grants" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithOauthGrants(opts ...func(*OauthGrantQuery)) *OrganizationQuery {
+	query := (&OauthGrantClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withOauthGrants = query
 	return _q
 }
 
@@ -6476,7 +6549,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [168]bool{
+		loadedTypes = [170]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6514,6 +6587,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withNarrativeCreators != nil,
 			_q.withNoteCreators != nil,
 			_q.withNotificationTemplateCreators != nil,
+			_q.withOauthGrantCreators != nil,
 			_q.withOrgMembershipCreators != nil,
 			_q.withPlatformCreators != nil,
 			_q.withProcedureCreators != nil,
@@ -6563,6 +6637,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withPersonalAccessTokens != nil,
 			_q.withBrandingSetting != nil,
 			_q.withAPITokens != nil,
+			_q.withOauthGrants != nil,
 			_q.withEmailTemplates != nil,
 			_q.withIntegrationWebhooks != nil,
 			_q.withIntegrationRuns != nil,
@@ -6963,6 +7038,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withOauthGrantCreators; query != nil {
+		if err := _q.loadOauthGrantCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.OauthGrantCreators = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.OauthGrantCreators = append(n.Edges.OauthGrantCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withOrgMembershipCreators; query != nil {
 		if err := _q.loadOrgMembershipCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.OrgMembershipCreators = []*Group{} },
@@ -7338,6 +7420,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAPITokens(ctx, query, nodes,
 			func(n *Organization) { n.Edges.APITokens = []*APIToken{} },
 			func(n *Organization, e *APIToken) { n.Edges.APITokens = append(n.Edges.APITokens, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withOauthGrants; query != nil {
+		if err := _q.loadOauthGrants(ctx, query, nodes,
+			func(n *Organization) { n.Edges.OauthGrants = []*OauthGrant{} },
+			func(n *Organization, e *OauthGrant) { n.Edges.OauthGrants = append(n.Edges.OauthGrants, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8219,6 +8308,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedOauthGrantCreators {
+		if err := _q.loadOauthGrantCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedOauthGrantCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedOauthGrantCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedOrgMembershipCreators {
 		if err := _q.loadOrgMembershipCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedOrgMembershipCreators(name) },
@@ -8538,6 +8634,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAPITokens(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedAPITokens(name) },
 			func(n *Organization, e *APIToken) { n.appendNamedAPITokens(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedOauthGrants {
+		if err := _q.loadOauthGrants(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedOauthGrants(name) },
+			func(n *Organization, e *OauthGrant) { n.appendNamedOauthGrants(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -10265,6 +10368,37 @@ func (_q *OrganizationQuery) loadNotificationTemplateCreators(ctx context.Contex
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadOauthGrantCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.OauthGrantCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_oauth_grant_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_oauth_grant_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_oauth_grant_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadOrgMembershipCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -11787,6 +11921,36 @@ func (_q *OrganizationQuery) loadAPITokens(ctx context.Context, query *APITokenQ
 	}
 	query.Where(predicate.APIToken(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.APITokensColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadOauthGrants(ctx context.Context, query *OauthGrantQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OauthGrant)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(oauthgrant.FieldOwnerID)
+	}
+	query.Where(predicate.OauthGrant(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.OauthGrantsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -15006,6 +15170,20 @@ func (_q *OrganizationQuery) WithNamedNotificationTemplateCreators(name string, 
 	return _q
 }
 
+// WithNamedOauthGrantCreators tells the query-builder to eager-load the nodes that are connected to the "oauth_grant_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedOauthGrantCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedOauthGrantCreators == nil {
+		_q.withNamedOauthGrantCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedOauthGrantCreators[name] = query
+	return _q
+}
+
 // WithNamedOrgMembershipCreators tells the query-builder to eager-load the nodes that are connected to the "org_membership_creators"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedOrgMembershipCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -15647,6 +15825,20 @@ func (_q *OrganizationQuery) WithNamedAPITokens(name string, opts ...func(*APITo
 		_q.withNamedAPITokens = make(map[string]*APITokenQuery)
 	}
 	_q.withNamedAPITokens[name] = query
+	return _q
+}
+
+// WithNamedOauthGrants tells the query-builder to eager-load the nodes that are connected to the "oauth_grants"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedOauthGrants(name string, opts ...func(*OauthGrantQuery)) *OrganizationQuery {
+	query := (&OauthGrantClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedOauthGrants == nil {
+		_q.withNamedOauthGrants = make(map[string]*OauthGrantQuery)
+	}
+	_q.withNamedOauthGrants[name] = query
 	return _q
 }
 

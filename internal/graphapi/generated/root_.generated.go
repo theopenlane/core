@@ -3645,6 +3645,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVNarrative                   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNotificationPreference      func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNotificationTemplate        func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOauthGrant                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganizationBrandingSetting func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVPlatform                    func(childComplexity int, input graphql.Upload) int
@@ -3704,6 +3705,7 @@ type ComplexityRoot struct {
 		CreateBulkNarrative                      func(childComplexity int, input []*generated.CreateNarrativeInput) int
 		CreateBulkNotificationPreference         func(childComplexity int, input []*generated.CreateNotificationPreferenceInput) int
 		CreateBulkNotificationTemplate           func(childComplexity int, input []*generated.CreateNotificationTemplateInput) int
+		CreateBulkOauthGrant                     func(childComplexity int, input []*generated.CreateOauthGrantInput) int
 		CreateBulkOrgMembership                  func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
 		CreateBulkOrganizationBrandingSetting    func(childComplexity int, input []*generated.CreateOrganizationBrandingSettingInput) int
 		CreateBulkPlatform                       func(childComplexity int, input []*generated.CreatePlatformInput) int
@@ -3776,6 +3778,7 @@ type ComplexityRoot struct {
 		CreateNotification                       func(childComplexity int, input generated.CreateNotificationInput) int
 		CreateNotificationPreference             func(childComplexity int, input generated.CreateNotificationPreferenceInput) int
 		CreateNotificationTemplate               func(childComplexity int, input generated.CreateNotificationTemplateInput) int
+		CreateOauthGrant                         func(childComplexity int, input generated.CreateOauthGrantInput) int
 		CreateOnboarding                         func(childComplexity int, input generated.CreateOnboardingInput) int
 		CreateOrgMembership                      func(childComplexity int, input generated.CreateOrgMembershipInput) int
 		CreateOrganization                       func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
@@ -3863,6 +3866,7 @@ type ComplexityRoot struct {
 		DeleteBulkNarrative                      func(childComplexity int, ids []string) int
 		DeleteBulkNotificationPreference         func(childComplexity int, ids []string) int
 		DeleteBulkNotificationTemplate           func(childComplexity int, ids []string) int
+		DeleteBulkOauthGrant                     func(childComplexity int, ids []string) int
 		DeleteBulkOrgMembership                  func(childComplexity int, ids []string) int
 		DeleteBulkOrganizationBrandingSetting    func(childComplexity int, ids []string) int
 		DeleteBulkProcedure                      func(childComplexity int, ids []string) int
@@ -3924,6 +3928,7 @@ type ComplexityRoot struct {
 		DeleteNote                               func(childComplexity int, id string) int
 		DeleteNotificationPreference             func(childComplexity int, id string) int
 		DeleteNotificationTemplate               func(childComplexity int, id string) int
+		DeleteOauthGrant                         func(childComplexity int, id string) int
 		DeleteOrgMembership                      func(childComplexity int, id string) int
 		DeleteOrganization                       func(childComplexity int, id string) int
 		DeleteOrganizationBrandingSetting        func(childComplexity int, id string) int
@@ -4017,6 +4022,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVNarrative                   func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVNotificationPreference      func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVNotificationTemplate        func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVOauthGrant                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVOrgMembership               func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVOrganizationBrandingSetting func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProcedure                   func(childComplexity int, input graphql.Upload) int
@@ -4061,6 +4067,7 @@ type ComplexityRoot struct {
 		UpdateBulkNarrative                      func(childComplexity int, ids []string, input generated.UpdateNarrativeInput) int
 		UpdateBulkNotificationPreference         func(childComplexity int, ids []string, input generated.UpdateNotificationPreferenceInput) int
 		UpdateBulkNotificationTemplate           func(childComplexity int, ids []string, input generated.UpdateNotificationTemplateInput) int
+		UpdateBulkOauthGrant                     func(childComplexity int, ids []string, input generated.UpdateOauthGrantInput) int
 		UpdateBulkOrgMembership                  func(childComplexity int, ids []string, input generated.UpdateOrgMembershipInput) int
 		UpdateBulkOrganizationBrandingSetting    func(childComplexity int, ids []string, input generated.UpdateOrganizationBrandingSettingInput) int
 		UpdateBulkProcedure                      func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
@@ -4122,6 +4129,7 @@ type ComplexityRoot struct {
 		UpdateNotification                       func(childComplexity int, id string, input generated.UpdateNotificationInput) int
 		UpdateNotificationPreference             func(childComplexity int, id string, input generated.UpdateNotificationPreferenceInput) int
 		UpdateNotificationTemplate               func(childComplexity int, id string, input generated.UpdateNotificationTemplateInput) int
+		UpdateOauthGrant                         func(childComplexity int, id string, input generated.UpdateOauthGrantInput) int
 		UpdateOrgMembership                      func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
 		UpdateOrganization                       func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		UpdateOrganizationBrandingSetting        func(childComplexity int, id string, input generated.UpdateOrganizationBrandingSettingInput) int
@@ -4499,6 +4507,73 @@ type ComplexityRoot struct {
 		Notification func(childComplexity int) int
 	}
 
+	OauthGrant struct {
+		AccessLevel           func(childComplexity int) int
+		ClientID              func(childComplexity int) int
+		ClientName            func(childComplexity int) int
+		ClientURI             func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InstalledByUserID     func(childComplexity int) int
+		IsActive              func(childComplexity int) int
+		Kind                  func(childComplexity int) int
+		LastUsedAt            func(childComplexity int) int
+		LogoURI               func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		RevokedAt             func(childComplexity int) int
+		RevokedBy             func(childComplexity int) int
+		RevokedReason         func(childComplexity int) int
+		Scopes                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		User                  func(childComplexity int) int
+		UserID                func(childComplexity int) int
+	}
+
+	OauthGrantBulkCreatePayload struct {
+		OauthGrants func(childComplexity int) int
+	}
+
+	OauthGrantBulkDeletePayload struct {
+		DeletedIDs    func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotDeletedIDs func(childComplexity int) int
+	}
+
+	OauthGrantBulkUpdatePayload struct {
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		OauthGrants   func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
+	}
+
+	OauthGrantConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	OauthGrantCreatePayload struct {
+		OauthGrant func(childComplexity int) int
+	}
+
+	OauthGrantDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	OauthGrantEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	OauthGrantUpdatePayload struct {
+		OauthGrant func(childComplexity int) int
+	}
+
 	Onboarding struct {
 		CompanyDetails func(childComplexity int) int
 		CompanyName    func(childComplexity int) int
@@ -4670,6 +4745,7 @@ type ComplexityRoot struct {
 		NarrativeCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		NoteCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		NotificationTemplateCreators       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		OauthGrantCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		OrgMembershipCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		OrgSubscriptions                   func(childComplexity int) int
 		Parent                             func(childComplexity int) int
@@ -5480,6 +5556,8 @@ type ComplexityRoot struct {
 		NotificationTemplate            func(childComplexity int, id string) int
 		NotificationTemplateSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		NotificationTemplates           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
+		OauthGrant                      func(childComplexity int, id string) int
+		OauthGrants                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OauthGrantOrder, where *generated.OauthGrantWhereInput) int
 		OrgMembership                   func(childComplexity int, id string) int
 		OrgMemberships                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		OrgSubscription                 func(childComplexity int, id string) int
@@ -26085,6 +26163,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVNotificationTemplate(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.createBulkCSVOauthGrant":
+		if e.ComplexityRoot.Mutation.CreateBulkCSVOauthGrant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVOauthGrant_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkCSVOauthGrant(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVOrgMembership":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVOrgMembership == nil {
 			break
@@ -26734,6 +26823,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkNotificationTemplate(childComplexity, args["input"].([]*generated.CreateNotificationTemplateInput)), true
+	case "Mutation.createBulkOauthGrant":
+		if e.ComplexityRoot.Mutation.CreateBulkOauthGrant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkOauthGrant_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkOauthGrant(childComplexity, args["input"].([]*generated.CreateOauthGrantInput)), true
 	case "Mutation.createBulkOrgMembership":
 		if e.ComplexityRoot.Mutation.CreateBulkOrgMembership == nil {
 			break
@@ -27526,6 +27626,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateNotificationTemplate(childComplexity, args["input"].(generated.CreateNotificationTemplateInput)), true
+	case "Mutation.createOauthGrant":
+		if e.ComplexityRoot.Mutation.CreateOauthGrant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createOauthGrant_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateOauthGrant(childComplexity, args["input"].(generated.CreateOauthGrantInput)), true
 	case "Mutation.createOnboarding":
 		if e.ComplexityRoot.Mutation.CreateOnboarding == nil {
 			break
@@ -28483,6 +28594,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkNotificationTemplate(childComplexity, args["ids"].([]string)), true
+	case "Mutation.deleteBulkOauthGrant":
+		if e.ComplexityRoot.Mutation.DeleteBulkOauthGrant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkOauthGrant_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkOauthGrant(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkOrgMembership":
 		if e.ComplexityRoot.Mutation.DeleteBulkOrgMembership == nil {
 			break
@@ -29154,6 +29276,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteNotificationTemplate(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteOauthGrant":
+		if e.ComplexityRoot.Mutation.DeleteOauthGrant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteOauthGrant_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteOauthGrant(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteOrgMembership":
 		if e.ComplexityRoot.Mutation.DeleteOrgMembership == nil {
 			break
@@ -30172,6 +30305,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVNotificationTemplate(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.updateBulkCSVOauthGrant":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVOauthGrant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVOauthGrant_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVOauthGrant(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVOrgMembership":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVOrgMembership == nil {
 			break
@@ -30656,6 +30800,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkNotificationTemplate(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateNotificationTemplateInput)), true
+	case "Mutation.updateBulkOauthGrant":
+		if e.ComplexityRoot.Mutation.UpdateBulkOauthGrant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkOauthGrant_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkOauthGrant(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateOauthGrantInput)), true
 	case "Mutation.updateBulkOrgMembership":
 		if e.ComplexityRoot.Mutation.UpdateBulkOrgMembership == nil {
 			break
@@ -31327,6 +31482,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateNotificationTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateNotificationTemplateInput)), true
+	case "Mutation.updateOauthGrant":
+		if e.ComplexityRoot.Mutation.UpdateOauthGrant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateOauthGrant_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateOauthGrant(childComplexity, args["id"].(string), args["input"].(generated.UpdateOauthGrantInput)), true
 	case "Mutation.updateOrgMembership":
 		if e.ComplexityRoot.Mutation.UpdateOrgMembership == nil {
 			break
@@ -33291,6 +33457,255 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NotificationUpdatePayload.Notification(childComplexity), true
 
+	case "OauthGrant.accessLevel":
+		if e.ComplexityRoot.OauthGrant.AccessLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.AccessLevel(childComplexity), true
+	case "OauthGrant.clientID":
+		if e.ComplexityRoot.OauthGrant.ClientID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.ClientID(childComplexity), true
+	case "OauthGrant.clientName":
+		if e.ComplexityRoot.OauthGrant.ClientName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.ClientName(childComplexity), true
+	case "OauthGrant.clientURI":
+		if e.ComplexityRoot.OauthGrant.ClientURI == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.ClientURI(childComplexity), true
+	case "OauthGrant.createdAt":
+		if e.ComplexityRoot.OauthGrant.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.CreatedAt(childComplexity), true
+	case "OauthGrant.createdBy":
+		if e.ComplexityRoot.OauthGrant.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.CreatedBy(childComplexity), true
+	case "OauthGrant.id":
+		if e.ComplexityRoot.OauthGrant.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.ID(childComplexity), true
+	case "OauthGrant.installedByUserID":
+		if e.ComplexityRoot.OauthGrant.InstalledByUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.InstalledByUserID(childComplexity), true
+	case "OauthGrant.isActive":
+		if e.ComplexityRoot.OauthGrant.IsActive == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.IsActive(childComplexity), true
+	case "OauthGrant.kind":
+		if e.ComplexityRoot.OauthGrant.Kind == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.Kind(childComplexity), true
+	case "OauthGrant.lastUsedAt":
+		if e.ComplexityRoot.OauthGrant.LastUsedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.LastUsedAt(childComplexity), true
+	case "OauthGrant.logoURI":
+		if e.ComplexityRoot.OauthGrant.LogoURI == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.LogoURI(childComplexity), true
+	case "OauthGrant.owner":
+		if e.ComplexityRoot.OauthGrant.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.Owner(childComplexity), true
+	case "OauthGrant.ownerID":
+		if e.ComplexityRoot.OauthGrant.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.OwnerID(childComplexity), true
+	case "OauthGrant.revokedAt":
+		if e.ComplexityRoot.OauthGrant.RevokedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.RevokedAt(childComplexity), true
+	case "OauthGrant.revokedBy":
+		if e.ComplexityRoot.OauthGrant.RevokedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.RevokedBy(childComplexity), true
+	case "OauthGrant.revokedReason":
+		if e.ComplexityRoot.OauthGrant.RevokedReason == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.RevokedReason(childComplexity), true
+	case "OauthGrant.scopes":
+		if e.ComplexityRoot.OauthGrant.Scopes == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.Scopes(childComplexity), true
+	case "OauthGrant.tags":
+		if e.ComplexityRoot.OauthGrant.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.Tags(childComplexity), true
+	case "OauthGrant.updatedAt":
+		if e.ComplexityRoot.OauthGrant.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.UpdatedAt(childComplexity), true
+	case "OauthGrant.updatedBy":
+		if e.ComplexityRoot.OauthGrant.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.UpdatedBy(childComplexity), true
+	case "OauthGrant.updatedByImpersonator":
+		if e.ComplexityRoot.OauthGrant.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.UpdatedByImpersonator(childComplexity), true
+	case "OauthGrant.user":
+		if e.ComplexityRoot.OauthGrant.User == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.User(childComplexity), true
+	case "OauthGrant.userID":
+		if e.ComplexityRoot.OauthGrant.UserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrant.UserID(childComplexity), true
+
+	case "OauthGrantBulkCreatePayload.oauthGrants":
+		if e.ComplexityRoot.OauthGrantBulkCreatePayload.OauthGrants == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantBulkCreatePayload.OauthGrants(childComplexity), true
+
+	case "OauthGrantBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.OauthGrantBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantBulkDeletePayload.DeletedIDs(childComplexity), true
+	case "OauthGrantBulkDeletePayload.error":
+		if e.ComplexityRoot.OauthGrantBulkDeletePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantBulkDeletePayload.Error(childComplexity), true
+	case "OauthGrantBulkDeletePayload.notDeletedIDs":
+		if e.ComplexityRoot.OauthGrantBulkDeletePayload.NotDeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantBulkDeletePayload.NotDeletedIDs(childComplexity), true
+
+	case "OauthGrantBulkUpdatePayload.error":
+		if e.ComplexityRoot.OauthGrantBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantBulkUpdatePayload.Error(childComplexity), true
+	case "OauthGrantBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.OauthGrantBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
+	case "OauthGrantBulkUpdatePayload.oauthGrants":
+		if e.ComplexityRoot.OauthGrantBulkUpdatePayload.OauthGrants == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantBulkUpdatePayload.OauthGrants(childComplexity), true
+	case "OauthGrantBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.OauthGrantBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "OauthGrantConnection.edges":
+		if e.ComplexityRoot.OauthGrantConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantConnection.Edges(childComplexity), true
+	case "OauthGrantConnection.pageInfo":
+		if e.ComplexityRoot.OauthGrantConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantConnection.PageInfo(childComplexity), true
+	case "OauthGrantConnection.totalCount":
+		if e.ComplexityRoot.OauthGrantConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantConnection.TotalCount(childComplexity), true
+
+	case "OauthGrantCreatePayload.oauthGrant":
+		if e.ComplexityRoot.OauthGrantCreatePayload.OauthGrant == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantCreatePayload.OauthGrant(childComplexity), true
+
+	case "OauthGrantDeletePayload.deletedID":
+		if e.ComplexityRoot.OauthGrantDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantDeletePayload.DeletedID(childComplexity), true
+
+	case "OauthGrantEdge.cursor":
+		if e.ComplexityRoot.OauthGrantEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantEdge.Cursor(childComplexity), true
+	case "OauthGrantEdge.node":
+		if e.ComplexityRoot.OauthGrantEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantEdge.Node(childComplexity), true
+
+	case "OauthGrantUpdatePayload.oauthGrant":
+		if e.ComplexityRoot.OauthGrantUpdatePayload.OauthGrant == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OauthGrantUpdatePayload.OauthGrant(childComplexity), true
+
 	case "Onboarding.companyDetails":
 		if e.ComplexityRoot.Onboarding.CompanyDetails == nil {
 			break
@@ -34313,6 +34728,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.NotificationTemplateCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.oauthGrantCreators":
+		if e.ComplexityRoot.Organization.OauthGrantCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_oauthGrantCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.OauthGrantCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.orgMembershipCreators":
 		if e.ComplexityRoot.Organization.OrgMembershipCreators == nil {
 			break
@@ -39241,6 +39667,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.NotificationTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationTemplateOrder), args["where"].(*generated.NotificationTemplateWhereInput)), true
+	case "Query.oauthGrant":
+		if e.ComplexityRoot.Query.OauthGrant == nil {
+			break
+		}
+
+		args, err := ec.field_Query_oauthGrant_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.OauthGrant(childComplexity, args["id"].(string)), true
+	case "Query.oauthGrants":
+		if e.ComplexityRoot.Query.OauthGrants == nil {
+			break
+		}
+
+		args, err := ec.field_Query_oauthGrants_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.OauthGrants(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OauthGrantOrder), args["where"].(*generated.OauthGrantWhereInput)), true
 	case "Query.orgMembership":
 		if e.ComplexityRoot.Query.OrgMembership == nil {
 			break
@@ -53909,6 +54357,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("CreateNotificationInput", ec.unmarshalInputCreateNotificationInput),
 			graphql.NewInputUnmarshaler("CreateNotificationPreferenceInput", ec.unmarshalInputCreateNotificationPreferenceInput),
 			graphql.NewInputUnmarshaler("CreateNotificationTemplateInput", ec.unmarshalInputCreateNotificationTemplateInput),
+			graphql.NewInputUnmarshaler("CreateOauthGrantInput", ec.unmarshalInputCreateOauthGrantInput),
 			graphql.NewInputUnmarshaler("CreateOnboardingInput", ec.unmarshalInputCreateOnboardingInput),
 			graphql.NewInputUnmarshaler("CreateOrgMembershipInput", ec.unmarshalInputCreateOrgMembershipInput),
 			graphql.NewInputUnmarshaler("CreateOrganizationBrandingSettingInput", ec.unmarshalInputCreateOrganizationBrandingSettingInput),
@@ -54033,6 +54482,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("NotificationPreferenceWhereInput", ec.unmarshalInputNotificationPreferenceWhereInput),
 			graphql.NewInputUnmarshaler("NotificationTemplateOrder", ec.unmarshalInputNotificationTemplateOrder),
 			graphql.NewInputUnmarshaler("NotificationTemplateWhereInput", ec.unmarshalInputNotificationTemplateWhereInput),
+			graphql.NewInputUnmarshaler("OauthGrantOrder", ec.unmarshalInputOauthGrantOrder),
+			graphql.NewInputUnmarshaler("OauthGrantWhereInput", ec.unmarshalInputOauthGrantWhereInput),
 			graphql.NewInputUnmarshaler("OnboardingWhereInput", ec.unmarshalInputOnboardingWhereInput),
 			graphql.NewInputUnmarshaler("OrgMembersInput", ec.unmarshalInputOrgMembersInput),
 			graphql.NewInputUnmarshaler("OrgMembershipOrder", ec.unmarshalInputOrgMembershipOrder),
@@ -54159,6 +54610,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("UpdateNotificationInput", ec.unmarshalInputUpdateNotificationInput),
 			graphql.NewInputUnmarshaler("UpdateNotificationPreferenceInput", ec.unmarshalInputUpdateNotificationPreferenceInput),
 			graphql.NewInputUnmarshaler("UpdateNotificationTemplateInput", ec.unmarshalInputUpdateNotificationTemplateInput),
+			graphql.NewInputUnmarshaler("UpdateOauthGrantInput", ec.unmarshalInputUpdateOauthGrantInput),
 			graphql.NewInputUnmarshaler("UpdateOrgMembershipInput", ec.unmarshalInputUpdateOrgMembershipInput),
 			graphql.NewInputUnmarshaler("UpdateOrganizationBrandingSettingInput", ec.unmarshalInputUpdateOrganizationBrandingSettingInput),
 			graphql.NewInputUnmarshaler("UpdateOrganizationInput", ec.unmarshalInputUpdateOrganizationInput),
@@ -74630,6 +75082,25 @@ input CreateNotificationTemplateInput {
   notificationIDs: [ID!]
 }
 """
+CreateOauthGrantInput is used for create OauthGrant object.
+Input was generated by ent.
+"""
+input CreateOauthGrantInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  whether the grant is active, set to false to revoke the application's access
+  """
+  isActive: Boolean
+  """
+  the reason the grant was revoked
+  """
+  revokedReason: String
+  ownerID: ID
+}
+"""
 CreateOnboardingInput is used for create Onboarding object.
 Input was generated by ent.
 """
@@ -74792,6 +75263,7 @@ input CreateOrganizationInput {
   narrativeCreatorIDs: [ID!]
   noteCreatorIDs: [ID!]
   notificationTemplateCreatorIDs: [ID!]
+  oauthGrantCreatorIDs: [ID!]
   orgMembershipCreatorIDs: [ID!]
   platformCreatorIDs: [ID!]
   procedureCreatorIDs: [ID!]
@@ -103375,6 +103847,412 @@ input NotificationTemplateWhereInput {
   hasEmailTemplate: Boolean
   hasEmailTemplateWith: [EmailTemplateWhereInput!]
 }
+type OauthGrant implements Node @modules(names: ["any_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the OAuth client_id of the installed application, the URL of its client metadata document
+  """
+  clientID: String!
+  """
+  the application's display name from its client metadata document
+  """
+  clientName: String!
+  """
+  the application's home page
+  """
+  clientURI: String
+  """
+  the application's logo
+  """
+  logoURI: String
+  """
+  USER for a personal connection that acts as the user, ORGANIZATION for an install that acts as the organization
+  """
+  kind: OauthGrantOAuthGrantKind!
+  """
+  for USER grants, the user the application acts as
+  """
+  userID: ID
+  """
+  for USER grants, READ or WRITE, the application never exceeds the user's own permissions
+  """
+  accessLevel: OauthGrantOAuthAccessLevel
+  """
+  the scopes granted, object:action scopes for ORGANIZATION grants and personal scopes for USER grants
+  """
+  scopes: [String!]
+  """
+  the user who approved the application
+  """
+  installedByUserID: String!
+  """
+  when an access token under this grant was last used
+  """
+  lastUsedAt: Time
+  """
+  whether the grant is active, set to false to revoke the application's access
+  """
+  isActive: Boolean!
+  """
+  the reason the grant was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the grant
+  """
+  revokedBy: String
+  """
+  when the grant was revoked
+  """
+  revokedAt: Time
+  owner: Organization
+  """
+  for USER grants, the user the application acts as
+  """
+  user: User
+}
+"""
+A connection to a list of items.
+"""
+type OauthGrantConnection {
+  """
+  A list of edges.
+  """
+  edges: [OauthGrantEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type OauthGrantEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: OauthGrant
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+OauthGrantOAuthAccessLevel is enum for the field access_level
+"""
+enum OauthGrantOAuthAccessLevel @goModel(model: "github.com/theopenlane/core/common/enums.OAuthAccessLevel") {
+  READ
+  WRITE
+}
+"""
+OauthGrantOAuthGrantKind is enum for the field kind
+"""
+enum OauthGrantOAuthGrantKind @goModel(model: "github.com/theopenlane/core/common/enums.OAuthGrantKind") {
+  USER
+  ORGANIZATION
+}
+"""
+Ordering options for OauthGrant connections
+"""
+input OauthGrantOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OauthGrants.
+  """
+  field: OauthGrantOrderField!
+}
+"""
+Properties by which OauthGrant connections can be ordered.
+"""
+enum OauthGrantOrderField {
+  created_at
+  updated_at
+  client_name
+  last_used_at
+  is_active
+}
+"""
+OauthGrantWhereInput is used for filtering OauthGrant objects.
+Input was generated by ent.
+"""
+input OauthGrantWhereInput {
+  not: OauthGrantWhereInput
+  and: [OauthGrantWhereInput!]
+  or: [OauthGrantWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  client_id field predicates
+  """
+  clientID: String
+  clientIDNEQ: String
+  clientIDIn: [String!]
+  clientIDNotIn: [String!]
+  clientIDContains: String
+  clientIDHasPrefix: String
+  clientIDHasSuffix: String
+  clientIDEqualFold: String
+  clientIDContainsFold: String
+  """
+  client_name field predicates
+  """
+  clientName: String
+  clientNameNEQ: String
+  clientNameIn: [String!]
+  clientNameNotIn: [String!]
+  clientNameContains: String
+  clientNameHasPrefix: String
+  clientNameHasSuffix: String
+  clientNameEqualFold: String
+  clientNameContainsFold: String
+  """
+  client_uri field predicates
+  """
+  clientURI: String
+  clientURINEQ: String
+  clientURIIn: [String!]
+  clientURINotIn: [String!]
+  clientURIContains: String
+  clientURIHasPrefix: String
+  clientURIHasSuffix: String
+  clientURIIsNil: Boolean
+  clientURINotNil: Boolean
+  clientURIEqualFold: String
+  clientURIContainsFold: String
+  """
+  logo_uri field predicates
+  """
+  logoURI: String
+  logoURINEQ: String
+  logoURIIn: [String!]
+  logoURINotIn: [String!]
+  logoURIContains: String
+  logoURIHasPrefix: String
+  logoURIHasSuffix: String
+  logoURIIsNil: Boolean
+  logoURINotNil: Boolean
+  logoURIEqualFold: String
+  logoURIContainsFold: String
+  """
+  kind field predicates
+  """
+  kind: OauthGrantOAuthGrantKind
+  kindNEQ: OauthGrantOAuthGrantKind
+  kindIn: [OauthGrantOAuthGrantKind!]
+  kindNotIn: [OauthGrantOAuthGrantKind!]
+  """
+  user_id field predicates
+  """
+  userID: ID
+  userIDNEQ: ID
+  userIDIn: [ID!]
+  userIDNotIn: [ID!]
+  userIDContains: ID
+  userIDHasPrefix: ID
+  userIDHasSuffix: ID
+  userIDIsNil: Boolean
+  userIDNotNil: Boolean
+  userIDEqualFold: ID
+  userIDContainsFold: ID
+  """
+  access_level field predicates
+  """
+  accessLevel: OauthGrantOAuthAccessLevel
+  accessLevelNEQ: OauthGrantOAuthAccessLevel
+  accessLevelIn: [OauthGrantOAuthAccessLevel!]
+  accessLevelNotIn: [OauthGrantOAuthAccessLevel!]
+  accessLevelIsNil: Boolean
+  accessLevelNotNil: Boolean
+  """
+  installed_by_user_id field predicates
+  """
+  installedByUserID: String
+  installedByUserIDNEQ: String
+  installedByUserIDIn: [String!]
+  installedByUserIDNotIn: [String!]
+  installedByUserIDContains: String
+  installedByUserIDHasPrefix: String
+  installedByUserIDHasSuffix: String
+  installedByUserIDEqualFold: String
+  installedByUserIDContainsFold: String
+  """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  """
+  revoked_reason field predicates
+  """
+  revokedReason: String
+  revokedReasonNEQ: String
+  revokedReasonIn: [String!]
+  revokedReasonNotIn: [String!]
+  revokedReasonContains: String
+  revokedReasonHasPrefix: String
+  revokedReasonHasSuffix: String
+  revokedReasonIsNil: Boolean
+  revokedReasonNotNil: Boolean
+  revokedReasonEqualFold: String
+  revokedReasonContainsFold: String
+  """
+  revoked_by field predicates
+  """
+  revokedBy: String
+  revokedByNEQ: String
+  revokedByIn: [String!]
+  revokedByNotIn: [String!]
+  revokedByContains: String
+  revokedByHasPrefix: String
+  revokedByHasSuffix: String
+  revokedByIsNil: Boolean
+  revokedByNotNil: Boolean
+  revokedByEqualFold: String
+  revokedByContainsFold: String
+  """
+  revoked_at field predicates
+  """
+  revokedAt: Time
+  revokedAtGT: Time
+  revokedAtGTE: Time
+  revokedAtLT: Time
+  revokedAtLTE: Time
+  revokedAtIsNil: Boolean
+  revokedAtNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for scopesHas to contain a specific value
+  """
+  scopesHas: String
+}
 type Onboarding implements Node {
   id: ID!
   organizationID: ID
@@ -105292,6 +106170,37 @@ type Organization implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   notificationTemplateCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  oauthGrantCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -108146,6 +109055,11 @@ input OrganizationWhereInput {
   """
   hasNotificationTemplateCreators: Boolean
   hasNotificationTemplateCreatorsWith: [GroupWhereInput!]
+  """
+  oauth_grant_creators edge predicates
+  """
+  hasOauthGrantCreators: Boolean
+  hasOauthGrantCreatorsWith: [GroupWhereInput!]
   """
   org_membership_creators edge predicates
   """
@@ -115517,6 +116431,37 @@ type Query {
     """
     where: NotificationTemplateWhereInput
   ): NotificationTemplateConnection!
+  oauthGrants(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for OauthGrants returned from the connection.
+    """
+    orderBy: [OauthGrantOrder!]
+
+    """
+    Filtering options for OauthGrants returned from the connection.
+    """
+    where: OauthGrantWhereInput
+  ): OauthGrantConnection!
   orgMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -139923,6 +140868,29 @@ input UpdateNotificationTemplateInput {
   clearNotifications: Boolean
 }
 """
+UpdateOauthGrantInput is used for update OauthGrant object.
+Input was generated by ent.
+"""
+input UpdateOauthGrantInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  whether the grant is active, set to false to revoke the application's access
+  """
+  isActive: Boolean
+  """
+  the reason the grant was revoked
+  """
+  revokedReason: String
+  clearRevokedReason: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+}
+"""
 UpdateOrgMembershipInput is used for update OrgMembership object.
 Input was generated by ent.
 """
@@ -140132,6 +141100,9 @@ input UpdateOrganizationInput {
   addNotificationTemplateCreatorIDs: [ID!]
   removeNotificationTemplateCreatorIDs: [ID!]
   clearNotificationTemplateCreators: Boolean
+  addOauthGrantCreatorIDs: [ID!]
+  removeOauthGrantCreatorIDs: [ID!]
+  clearOauthGrantCreators: Boolean
   addOrgMembershipCreatorIDs: [ID!]
   removeOrgMembershipCreatorIDs: [ID!]
   clearOrgMembershipCreators: Boolean
@@ -156171,6 +157142,181 @@ type NotificationTemplateBulkDeletePayload {
     error: String
 }
 `, BuiltIn: false},
+	{Name: "../schema/oauthgrant.graphql", Input: `extend type Query {
+    """
+    Look up oauthGrant by ID
+    """
+     oauthGrant(
+        """
+        ID of the oauthGrant
+        """
+        id: ID!
+    ):  OauthGrant!
+}
+
+extend type Mutation{
+    """
+    Create a new oauthGrant
+    """
+    createOauthGrant(
+        """
+        values of the oauthGrant
+        """
+        input: CreateOauthGrantInput!
+    ): OauthGrantCreatePayload!
+    """
+    Create multiple new oauthGrants
+    """
+    createBulkOauthGrant(
+        """
+        values of the oauthGrant
+        """
+        input: [CreateOauthGrantInput!]
+    ): OauthGrantBulkCreatePayload!
+    """
+    Create multiple new oauthGrants via file upload
+    """
+    createBulkCSVOauthGrant(
+        """
+        csv file containing values of the oauthGrant
+        """
+        input: Upload!
+    ): OauthGrantBulkCreatePayload!
+    """
+    Update multiple existing oauthGrants
+    """
+    updateBulkOauthGrant(
+        """
+        IDs of the oauthGrants to update
+        """
+        ids: [ID!]!
+        """
+        values to update the oauthGrants with
+        """
+        input: UpdateOauthGrantInput!
+    ): OauthGrantBulkUpdatePayload!
+    """
+    Update multiple existing oauthGrants via file upload
+    """
+    updateBulkCSVOauthGrant(
+        """
+        csv file containing values of the oauthGrant, must include ID column
+        """
+        input: Upload!
+    ): OauthGrantBulkUpdatePayload!
+    """
+    Update an existing oauthGrant
+    """
+    updateOauthGrant(
+        """
+        ID of the oauthGrant
+        """
+        id: ID!
+        """
+        New values for the oauthGrant
+        """
+        input: UpdateOauthGrantInput!
+    ): OauthGrantUpdatePayload!
+    """
+    Delete an existing oauthGrant
+    """
+    deleteOauthGrant(
+        """
+        ID of the oauthGrant
+        """
+        id: ID!
+    ): OauthGrantDeletePayload!
+    """
+    Delete multiple oauthGrants
+    """
+    deleteBulkOauthGrant(
+        """
+        IDs of the oauthGrants to delete
+        """
+        ids: [ID!]!
+    ): OauthGrantBulkDeletePayload!
+}
+
+"""
+Return response for createOauthGrant mutation
+"""
+type OauthGrantCreatePayload {
+    """
+    Created oauthGrant
+    """
+    oauthGrant: OauthGrant!
+}
+
+"""
+Return response for updateOauthGrant mutation
+"""
+type OauthGrantUpdatePayload {
+    """
+    Updated oauthGrant
+    """
+    oauthGrant: OauthGrant!
+}
+
+"""
+Return response for deleteOauthGrant mutation
+"""
+type OauthGrantDeletePayload {
+    """
+    Deleted oauthGrant ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkOauthGrant mutation
+"""
+type OauthGrantBulkCreatePayload {
+    """
+    Created oauthGrants
+    """
+    oauthGrants: [OauthGrant!]
+}
+
+"""
+Return response for updateBulkOauthGrant mutation
+"""
+type OauthGrantBulkUpdatePayload {
+    """
+    Updated oauthGrants
+    """
+    oauthGrants: [OauthGrant!]
+    """
+    IDs of the updated oauthGrants
+    """
+    updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
+}
+
+"""
+Return response for deleteBulkOauthGrant mutation
+"""
+type OauthGrantBulkDeletePayload {
+    """
+    Deleted oauthGrant IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of oauthGrants that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/onboarding.graphql", Input: `extend type Mutation{
     """
     Create a new onboarding
@@ -172079,6 +173225,140 @@ func (ec *executionContext) childFields_NotificationUpdatePayload(ctx context.Co
 	return nil, fmt.Errorf("no field named %q was found under type NotificationUpdatePayload", field.Name)
 }
 
+func (ec *executionContext) childFields_OauthGrant(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_OauthGrant_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_OauthGrant_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_OauthGrant_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_OauthGrant_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_OauthGrant_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_OauthGrant_updatedByImpersonator(ctx, field)
+	case "tags":
+		return ec.fieldContext_OauthGrant_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_OauthGrant_ownerID(ctx, field)
+	case "clientID":
+		return ec.fieldContext_OauthGrant_clientID(ctx, field)
+	case "clientName":
+		return ec.fieldContext_OauthGrant_clientName(ctx, field)
+	case "clientURI":
+		return ec.fieldContext_OauthGrant_clientURI(ctx, field)
+	case "logoURI":
+		return ec.fieldContext_OauthGrant_logoURI(ctx, field)
+	case "kind":
+		return ec.fieldContext_OauthGrant_kind(ctx, field)
+	case "userID":
+		return ec.fieldContext_OauthGrant_userID(ctx, field)
+	case "accessLevel":
+		return ec.fieldContext_OauthGrant_accessLevel(ctx, field)
+	case "scopes":
+		return ec.fieldContext_OauthGrant_scopes(ctx, field)
+	case "installedByUserID":
+		return ec.fieldContext_OauthGrant_installedByUserID(ctx, field)
+	case "lastUsedAt":
+		return ec.fieldContext_OauthGrant_lastUsedAt(ctx, field)
+	case "isActive":
+		return ec.fieldContext_OauthGrant_isActive(ctx, field)
+	case "revokedReason":
+		return ec.fieldContext_OauthGrant_revokedReason(ctx, field)
+	case "revokedBy":
+		return ec.fieldContext_OauthGrant_revokedBy(ctx, field)
+	case "revokedAt":
+		return ec.fieldContext_OauthGrant_revokedAt(ctx, field)
+	case "owner":
+		return ec.fieldContext_OauthGrant_owner(ctx, field)
+	case "user":
+		return ec.fieldContext_OauthGrant_user(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OauthGrant", field.Name)
+}
+
+func (ec *executionContext) childFields_OauthGrantBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "oauthGrants":
+		return ec.fieldContext_OauthGrantBulkCreatePayload_oauthGrants(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OauthGrantBulkCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OauthGrantBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedIDs":
+		return ec.fieldContext_OauthGrantBulkDeletePayload_deletedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_OauthGrantBulkDeletePayload_error(ctx, field)
+	case "notDeletedIDs":
+		return ec.fieldContext_OauthGrantBulkDeletePayload_notDeletedIDs(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OauthGrantBulkDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OauthGrantBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "oauthGrants":
+		return ec.fieldContext_OauthGrantBulkUpdatePayload_oauthGrants(ctx, field)
+	case "updatedIDs":
+		return ec.fieldContext_OauthGrantBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_OauthGrantBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_OauthGrantBulkUpdatePayload_error(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OauthGrantBulkUpdatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OauthGrantConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_OauthGrantConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_OauthGrantConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_OauthGrantConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OauthGrantConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_OauthGrantCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "oauthGrant":
+		return ec.fieldContext_OauthGrantCreatePayload_oauthGrant(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OauthGrantCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OauthGrantDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedID":
+		return ec.fieldContext_OauthGrantDeletePayload_deletedID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OauthGrantDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OauthGrantEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_OauthGrantEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_OauthGrantEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OauthGrantEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_OauthGrantUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "oauthGrant":
+		return ec.fieldContext_OauthGrantUpdatePayload_oauthGrant(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OauthGrantUpdatePayload", field.Name)
+}
+
 func (ec *executionContext) childFields_Onboarding(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -172413,6 +173693,8 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_noteCreators(ctx, field)
 	case "notificationTemplateCreators":
 		return ec.fieldContext_Organization_notificationTemplateCreators(ctx, field)
+	case "oauthGrantCreators":
+		return ec.fieldContext_Organization_oauthGrantCreators(ctx, field)
 	case "orgMembershipCreators":
 		return ec.fieldContext_Organization_orgMembershipCreators(ctx, field)
 	case "platformCreators":

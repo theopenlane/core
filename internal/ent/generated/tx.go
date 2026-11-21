@@ -112,6 +112,10 @@ type Tx struct {
 	NotificationPreference *NotificationPreferenceClient
 	// NotificationTemplate is the client for interacting with the NotificationTemplate builders.
 	NotificationTemplate *NotificationTemplateClient
+	// OauthGrant is the client for interacting with the OauthGrant builders.
+	OauthGrant *OauthGrantClient
+	// OauthToken is the client for interacting with the OauthToken builders.
+	OauthToken *OauthTokenClient
 	// Onboarding is the client for interacting with the Onboarding builders.
 	Onboarding *OnboardingClient
 	// OrgMembership is the client for interacting with the OrgMembership builders.
@@ -403,6 +407,8 @@ func (tx *Tx) init() {
 	tx.Notification = NewNotificationClient(tx.config)
 	tx.NotificationPreference = NewNotificationPreferenceClient(tx.config)
 	tx.NotificationTemplate = NewNotificationTemplateClient(tx.config)
+	tx.OauthGrant = NewOauthGrantClient(tx.config)
+	tx.OauthToken = NewOauthTokenClient(tx.config)
 	tx.Onboarding = NewOnboardingClient(tx.config)
 	tx.OrgMembership = NewOrgMembershipClient(tx.config)
 	tx.OrgModule = NewOrgModuleClient(tx.config)

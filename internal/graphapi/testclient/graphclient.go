@@ -392,6 +392,17 @@ type TestGraphClient interface {
 	UpdateBulkCSVNotificationTemplate(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVNotificationTemplate, error)
 	UpdateBulkNotificationTemplate(ctx context.Context, ids []string, input UpdateNotificationTemplateInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkNotificationTemplate, error)
 	UpdateNotificationTemplate(ctx context.Context, updateNotificationTemplateID string, input UpdateNotificationTemplateInput, interceptors ...clientv2.RequestInterceptor) (*UpdateNotificationTemplate, error)
+	CreateBulkCSVOauthGrant(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVOauthGrant, error)
+	CreateBulkOauthGrant(ctx context.Context, input []*CreateOauthGrantInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkOauthGrant, error)
+	CreateOauthGrant(ctx context.Context, input CreateOauthGrantInput, interceptors ...clientv2.RequestInterceptor) (*CreateOauthGrant, error)
+	DeleteBulkOauthGrant(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkOauthGrant, error)
+	DeleteOauthGrant(ctx context.Context, deleteOauthGrantID string, interceptors ...clientv2.RequestInterceptor) (*DeleteOauthGrant, error)
+	GetAllOauthGrants(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*OauthGrantOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllOauthGrants, error)
+	GetOauthGrantByID(ctx context.Context, oauthGrantID string, interceptors ...clientv2.RequestInterceptor) (*GetOauthGrantByID, error)
+	GetOauthGrants(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*OauthGrantOrder, where *OauthGrantWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetOauthGrants, error)
+	UpdateBulkCSVOauthGrant(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVOauthGrant, error)
+	UpdateBulkOauthGrant(ctx context.Context, ids []string, input UpdateOauthGrantInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkOauthGrant, error)
+	UpdateOauthGrant(ctx context.Context, updateOauthGrantID string, input UpdateOauthGrantInput, interceptors ...clientv2.RequestInterceptor) (*UpdateOauthGrant, error)
 	CreateOnboarding(ctx context.Context, input CreateOnboardingInput, interceptors ...clientv2.RequestInterceptor) (*CreateOnboarding, error)
 	CreateOrganization(ctx context.Context, input CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *FileMetadataInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganization, error)
 	CreateOrganizationWithMembers(ctx context.Context, organizationInput CreateOrganizationInput, members []*OrgMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateOrganizationWithMembers, error)
@@ -84973,6 +84984,1666 @@ func (t *UpdateNotificationTemplate_UpdateNotificationTemplate) GetNotificationT
 		t = &UpdateNotificationTemplate_UpdateNotificationTemplate{}
 	}
 	return &t.NotificationTemplate
+}
+
+type CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants struct {
+	AccessLevel           *enums.OAuthAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
+	ClientID              string                  "json:\"clientID\" graphql:\"clientID\""
+	ClientName            string                  "json:\"clientName\" graphql:\"clientName\""
+	ClientURI             *string                 "json:\"clientURI,omitempty\" graphql:\"clientURI\""
+	CreatedAt             *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string                  "json:\"id\" graphql:\"id\""
+	InstalledByUserID     string                  "json:\"installedByUserID\" graphql:\"installedByUserID\""
+	IsActive              bool                    "json:\"isActive\" graphql:\"isActive\""
+	Kind                  enums.OAuthGrantKind    "json:\"kind\" graphql:\"kind\""
+	LastUsedAt            *time.Time              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	LogoURI               *string                 "json:\"logoURI,omitempty\" graphql:\"logoURI\""
+	OwnerID               *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt             *time.Time              "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy             *string                 "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason         *string                 "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes                []string                "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags                  []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string                 "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetAccessLevel() *enums.OAuthAccessLevel {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.AccessLevel
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetClientID() string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.ClientID
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetClientName() string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.ClientName
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetClientURI() *string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.ClientURI
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetInstalledByUserID() string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.InstalledByUserID
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetIsActive() bool {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.IsActive
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetKind() *enums.OAuthGrantKind {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return &t.Kind
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.LastUsedAt
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetLogoURI() *string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.LogoURI
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.RevokedAt
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetRevokedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.RevokedBy
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetRevokedReason() *string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.RevokedReason
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetScopes() []string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.Scopes
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants) GetUserID() *string {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.UserID
+}
+
+type CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant struct {
+	OauthGrants []*CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants "json:\"oauthGrants,omitempty\" graphql:\"oauthGrants\""
+}
+
+func (t *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant) GetOauthGrants() []*CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant_OauthGrants {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant{}
+	}
+	return t.OauthGrants
+}
+
+type CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants struct {
+	AccessLevel           *enums.OAuthAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
+	ClientID              string                  "json:\"clientID\" graphql:\"clientID\""
+	ClientName            string                  "json:\"clientName\" graphql:\"clientName\""
+	ClientURI             *string                 "json:\"clientURI,omitempty\" graphql:\"clientURI\""
+	CreatedAt             *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string                  "json:\"id\" graphql:\"id\""
+	InstalledByUserID     string                  "json:\"installedByUserID\" graphql:\"installedByUserID\""
+	IsActive              bool                    "json:\"isActive\" graphql:\"isActive\""
+	Kind                  enums.OAuthGrantKind    "json:\"kind\" graphql:\"kind\""
+	LastUsedAt            *time.Time              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	LogoURI               *string                 "json:\"logoURI,omitempty\" graphql:\"logoURI\""
+	OwnerID               *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt             *time.Time              "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy             *string                 "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason         *string                 "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes                []string                "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags                  []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string                 "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetAccessLevel() *enums.OAuthAccessLevel {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.AccessLevel
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetClientID() string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.ClientID
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetClientName() string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.ClientName
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetClientURI() *string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.ClientURI
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetID() string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.ID
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetInstalledByUserID() string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.InstalledByUserID
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetIsActive() bool {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.IsActive
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetKind() *enums.OAuthGrantKind {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return &t.Kind
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.LastUsedAt
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetLogoURI() *string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.LogoURI
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.RevokedAt
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetRevokedBy() *string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.RevokedBy
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetRevokedReason() *string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.RevokedReason
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetScopes() []string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.Scopes
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants) GetUserID() *string {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants{}
+	}
+	return t.UserID
+}
+
+type CreateBulkOauthGrant_CreateBulkOauthGrant struct {
+	OauthGrants []*CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants "json:\"oauthGrants,omitempty\" graphql:\"oauthGrants\""
+}
+
+func (t *CreateBulkOauthGrant_CreateBulkOauthGrant) GetOauthGrants() []*CreateBulkOauthGrant_CreateBulkOauthGrant_OauthGrants {
+	if t == nil {
+		t = &CreateBulkOauthGrant_CreateBulkOauthGrant{}
+	}
+	return t.OauthGrants
+}
+
+type CreateOauthGrant_CreateOauthGrant_OauthGrant struct {
+	AccessLevel           *enums.OAuthAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
+	ClientID              string                  "json:\"clientID\" graphql:\"clientID\""
+	ClientName            string                  "json:\"clientName\" graphql:\"clientName\""
+	ClientURI             *string                 "json:\"clientURI,omitempty\" graphql:\"clientURI\""
+	CreatedAt             *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string                  "json:\"id\" graphql:\"id\""
+	InstalledByUserID     string                  "json:\"installedByUserID\" graphql:\"installedByUserID\""
+	IsActive              bool                    "json:\"isActive\" graphql:\"isActive\""
+	Kind                  enums.OAuthGrantKind    "json:\"kind\" graphql:\"kind\""
+	LastUsedAt            *time.Time              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	LogoURI               *string                 "json:\"logoURI,omitempty\" graphql:\"logoURI\""
+	OwnerID               *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt             *time.Time              "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy             *string                 "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason         *string                 "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes                []string                "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags                  []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string                 "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetAccessLevel() *enums.OAuthAccessLevel {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.AccessLevel
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetClientID() string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.ClientID
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetClientName() string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.ClientName
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetClientURI() *string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.ClientURI
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetID() string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.ID
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetInstalledByUserID() string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.InstalledByUserID
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetIsActive() bool {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.IsActive
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetKind() *enums.OAuthGrantKind {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return &t.Kind
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.LastUsedAt
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetLogoURI() *string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.LogoURI
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.OwnerID
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.RevokedAt
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetRevokedBy() *string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.RevokedBy
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetRevokedReason() *string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.RevokedReason
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetScopes() []string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.Scopes
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetTags() []string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.Tags
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateOauthGrant_CreateOauthGrant_OauthGrant) GetUserID() *string {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant_OauthGrant{}
+	}
+	return t.UserID
+}
+
+type CreateOauthGrant_CreateOauthGrant struct {
+	OauthGrant CreateOauthGrant_CreateOauthGrant_OauthGrant "json:\"oauthGrant\" graphql:\"oauthGrant\""
+}
+
+func (t *CreateOauthGrant_CreateOauthGrant) GetOauthGrant() *CreateOauthGrant_CreateOauthGrant_OauthGrant {
+	if t == nil {
+		t = &CreateOauthGrant_CreateOauthGrant{}
+	}
+	return &t.OauthGrant
+}
+
+type DeleteBulkOauthGrant_DeleteBulkOauthGrant struct {
+	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+}
+
+func (t *DeleteBulkOauthGrant_DeleteBulkOauthGrant) GetDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkOauthGrant_DeleteBulkOauthGrant{}
+	}
+	return t.DeletedIDs
+}
+
+type DeleteOauthGrant_DeleteOauthGrant struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteOauthGrant_DeleteOauthGrant) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteOauthGrant_DeleteOauthGrant{}
+	}
+	return t.DeletedID
+}
+
+type GetAllOauthGrants_OauthGrants_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllOauthGrants_OauthGrants_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllOauthGrants_OauthGrants_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllOauthGrants_OauthGrants_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllOauthGrants_OauthGrants_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllOauthGrants_OauthGrants_Edges_Node struct {
+	AccessLevel           *enums.OAuthAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
+	ClientID              string                  "json:\"clientID\" graphql:\"clientID\""
+	ClientName            string                  "json:\"clientName\" graphql:\"clientName\""
+	ClientURI             *string                 "json:\"clientURI,omitempty\" graphql:\"clientURI\""
+	CreatedAt             *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string                  "json:\"id\" graphql:\"id\""
+	InstalledByUserID     string                  "json:\"installedByUserID\" graphql:\"installedByUserID\""
+	IsActive              bool                    "json:\"isActive\" graphql:\"isActive\""
+	Kind                  enums.OAuthGrantKind    "json:\"kind\" graphql:\"kind\""
+	LastUsedAt            *time.Time              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	LogoURI               *string                 "json:\"logoURI,omitempty\" graphql:\"logoURI\""
+	OwnerID               *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt             *time.Time              "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy             *string                 "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason         *string                 "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes                []string                "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags                  []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string                 "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetAccessLevel() *enums.OAuthAccessLevel {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.AccessLevel
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetClientID() string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.ClientID
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetClientName() string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.ClientName
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetClientURI() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.ClientURI
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetInstalledByUserID() string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.InstalledByUserID
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetIsActive() bool {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.IsActive
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetKind() *enums.OAuthGrantKind {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return &t.Kind
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetLogoURI() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.LogoURI
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.RevokedBy
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.RevokedReason
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetScopes() []string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.Scopes
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetAllOauthGrants_OauthGrants_Edges_Node) GetUserID() *string {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetAllOauthGrants_OauthGrants_Edges struct {
+	Node *GetAllOauthGrants_OauthGrants_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllOauthGrants_OauthGrants_Edges) GetNode() *GetAllOauthGrants_OauthGrants_Edges_Node {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllOauthGrants_OauthGrants struct {
+	Edges      []*GetAllOauthGrants_OauthGrants_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllOauthGrants_OauthGrants_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllOauthGrants_OauthGrants) GetEdges() []*GetAllOauthGrants_OauthGrants_Edges {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants{}
+	}
+	return t.Edges
+}
+func (t *GetAllOauthGrants_OauthGrants) GetPageInfo() *GetAllOauthGrants_OauthGrants_PageInfo {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllOauthGrants_OauthGrants) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllOauthGrants_OauthGrants{}
+	}
+	return t.TotalCount
+}
+
+type GetOauthGrantByID_OauthGrant struct {
+	AccessLevel           *enums.OAuthAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
+	ClientID              string                  "json:\"clientID\" graphql:\"clientID\""
+	ClientName            string                  "json:\"clientName\" graphql:\"clientName\""
+	ClientURI             *string                 "json:\"clientURI,omitempty\" graphql:\"clientURI\""
+	CreatedAt             *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string                  "json:\"id\" graphql:\"id\""
+	InstalledByUserID     string                  "json:\"installedByUserID\" graphql:\"installedByUserID\""
+	IsActive              bool                    "json:\"isActive\" graphql:\"isActive\""
+	Kind                  enums.OAuthGrantKind    "json:\"kind\" graphql:\"kind\""
+	LastUsedAt            *time.Time              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	LogoURI               *string                 "json:\"logoURI,omitempty\" graphql:\"logoURI\""
+	OwnerID               *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt             *time.Time              "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy             *string                 "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason         *string                 "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes                []string                "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags                  []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string                 "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *GetOauthGrantByID_OauthGrant) GetAccessLevel() *enums.OAuthAccessLevel {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.AccessLevel
+}
+func (t *GetOauthGrantByID_OauthGrant) GetClientID() string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.ClientID
+}
+func (t *GetOauthGrantByID_OauthGrant) GetClientName() string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.ClientName
+}
+func (t *GetOauthGrantByID_OauthGrant) GetClientURI() *string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.ClientURI
+}
+func (t *GetOauthGrantByID_OauthGrant) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.CreatedAt
+}
+func (t *GetOauthGrantByID_OauthGrant) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.CreatedBy
+}
+func (t *GetOauthGrantByID_OauthGrant) GetID() string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.ID
+}
+func (t *GetOauthGrantByID_OauthGrant) GetInstalledByUserID() string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.InstalledByUserID
+}
+func (t *GetOauthGrantByID_OauthGrant) GetIsActive() bool {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.IsActive
+}
+func (t *GetOauthGrantByID_OauthGrant) GetKind() *enums.OAuthGrantKind {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return &t.Kind
+}
+func (t *GetOauthGrantByID_OauthGrant) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetOauthGrantByID_OauthGrant) GetLogoURI() *string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.LogoURI
+}
+func (t *GetOauthGrantByID_OauthGrant) GetOwnerID() *string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.OwnerID
+}
+func (t *GetOauthGrantByID_OauthGrant) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.RevokedAt
+}
+func (t *GetOauthGrantByID_OauthGrant) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.RevokedBy
+}
+func (t *GetOauthGrantByID_OauthGrant) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.RevokedReason
+}
+func (t *GetOauthGrantByID_OauthGrant) GetScopes() []string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.Scopes
+}
+func (t *GetOauthGrantByID_OauthGrant) GetTags() []string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.Tags
+}
+func (t *GetOauthGrantByID_OauthGrant) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetOauthGrantByID_OauthGrant) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetOauthGrantByID_OauthGrant) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetOauthGrantByID_OauthGrant) GetUserID() *string {
+	if t == nil {
+		t = &GetOauthGrantByID_OauthGrant{}
+	}
+	return t.UserID
+}
+
+type GetOauthGrants_OauthGrants_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetOauthGrants_OauthGrants_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetOauthGrants_OauthGrants_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetOauthGrants_OauthGrants_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetOauthGrants_OauthGrants_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetOauthGrants_OauthGrants_Edges_Node struct {
+	AccessLevel           *enums.OAuthAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
+	ClientID              string                  "json:\"clientID\" graphql:\"clientID\""
+	ClientName            string                  "json:\"clientName\" graphql:\"clientName\""
+	ClientURI             *string                 "json:\"clientURI,omitempty\" graphql:\"clientURI\""
+	CreatedAt             *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string                  "json:\"id\" graphql:\"id\""
+	InstalledByUserID     string                  "json:\"installedByUserID\" graphql:\"installedByUserID\""
+	IsActive              bool                    "json:\"isActive\" graphql:\"isActive\""
+	Kind                  enums.OAuthGrantKind    "json:\"kind\" graphql:\"kind\""
+	LastUsedAt            *time.Time              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	LogoURI               *string                 "json:\"logoURI,omitempty\" graphql:\"logoURI\""
+	OwnerID               *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt             *time.Time              "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy             *string                 "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason         *string                 "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes                []string                "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags                  []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string                 "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetAccessLevel() *enums.OAuthAccessLevel {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.AccessLevel
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetClientID() string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.ClientID
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetClientName() string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.ClientName
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetClientURI() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.ClientURI
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetInstalledByUserID() string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.InstalledByUserID
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetIsActive() bool {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.IsActive
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetKind() *enums.OAuthGrantKind {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return &t.Kind
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetLogoURI() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.LogoURI
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.RevokedBy
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.RevokedReason
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetScopes() []string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.Scopes
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetOauthGrants_OauthGrants_Edges_Node) GetUserID() *string {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetOauthGrants_OauthGrants_Edges struct {
+	Node *GetOauthGrants_OauthGrants_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetOauthGrants_OauthGrants_Edges) GetNode() *GetOauthGrants_OauthGrants_Edges_Node {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants_Edges{}
+	}
+	return t.Node
+}
+
+type GetOauthGrants_OauthGrants struct {
+	Edges      []*GetOauthGrants_OauthGrants_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetOauthGrants_OauthGrants_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetOauthGrants_OauthGrants) GetEdges() []*GetOauthGrants_OauthGrants_Edges {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants{}
+	}
+	return t.Edges
+}
+func (t *GetOauthGrants_OauthGrants) GetPageInfo() *GetOauthGrants_OauthGrants_PageInfo {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants{}
+	}
+	return &t.PageInfo
+}
+func (t *GetOauthGrants_OauthGrants) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetOauthGrants_OauthGrants{}
+	}
+	return t.TotalCount
+}
+
+type UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants struct {
+	AccessLevel           *enums.OAuthAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
+	ClientID              string                  "json:\"clientID\" graphql:\"clientID\""
+	ClientName            string                  "json:\"clientName\" graphql:\"clientName\""
+	ClientURI             *string                 "json:\"clientURI,omitempty\" graphql:\"clientURI\""
+	CreatedAt             *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string                  "json:\"id\" graphql:\"id\""
+	InstalledByUserID     string                  "json:\"installedByUserID\" graphql:\"installedByUserID\""
+	IsActive              bool                    "json:\"isActive\" graphql:\"isActive\""
+	Kind                  enums.OAuthGrantKind    "json:\"kind\" graphql:\"kind\""
+	LastUsedAt            *time.Time              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	LogoURI               *string                 "json:\"logoURI,omitempty\" graphql:\"logoURI\""
+	OwnerID               *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt             *time.Time              "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy             *string                 "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason         *string                 "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes                []string                "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags                  []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string                 "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetAccessLevel() *enums.OAuthAccessLevel {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.AccessLevel
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetClientID() string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.ClientID
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetClientName() string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.ClientName
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetClientURI() *string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.ClientURI
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetID() string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetInstalledByUserID() string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.InstalledByUserID
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetIsActive() bool {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.IsActive
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetKind() *enums.OAuthGrantKind {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return &t.Kind
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.LastUsedAt
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetLogoURI() *string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.LogoURI
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.RevokedAt
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetRevokedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.RevokedBy
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetRevokedReason() *string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.RevokedReason
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetScopes() []string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.Scopes
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants) GetUserID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants{}
+	}
+	return t.UserID
+}
+
+type UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant struct {
+	OauthGrants []*UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants "json:\"oauthGrants,omitempty\" graphql:\"oauthGrants\""
+	UpdatedIDs  []string                                                       "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant) GetOauthGrants() []*UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant_OauthGrants {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant{}
+	}
+	return t.OauthGrants
+}
+func (t *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants struct {
+	AccessLevel           *enums.OAuthAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
+	ClientID              string                  "json:\"clientID\" graphql:\"clientID\""
+	ClientName            string                  "json:\"clientName\" graphql:\"clientName\""
+	ClientURI             *string                 "json:\"clientURI,omitempty\" graphql:\"clientURI\""
+	CreatedAt             *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string                  "json:\"id\" graphql:\"id\""
+	InstalledByUserID     string                  "json:\"installedByUserID\" graphql:\"installedByUserID\""
+	IsActive              bool                    "json:\"isActive\" graphql:\"isActive\""
+	Kind                  enums.OAuthGrantKind    "json:\"kind\" graphql:\"kind\""
+	LastUsedAt            *time.Time              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	LogoURI               *string                 "json:\"logoURI,omitempty\" graphql:\"logoURI\""
+	OwnerID               *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt             *time.Time              "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy             *string                 "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason         *string                 "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes                []string                "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags                  []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string                 "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetAccessLevel() *enums.OAuthAccessLevel {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.AccessLevel
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetClientID() string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.ClientID
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetClientName() string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.ClientName
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetClientURI() *string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.ClientURI
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetID() string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetInstalledByUserID() string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.InstalledByUserID
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetIsActive() bool {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.IsActive
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetKind() *enums.OAuthGrantKind {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return &t.Kind
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.LastUsedAt
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetLogoURI() *string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.LogoURI
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.RevokedAt
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetRevokedBy() *string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.RevokedBy
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetRevokedReason() *string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.RevokedReason
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetScopes() []string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.Scopes
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants) GetUserID() *string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants{}
+	}
+	return t.UserID
+}
+
+type UpdateBulkOauthGrant_UpdateBulkOauthGrant struct {
+	OauthGrants []*UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants "json:\"oauthGrants,omitempty\" graphql:\"oauthGrants\""
+	UpdatedIDs  []string                                                 "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant) GetOauthGrants() []*UpdateBulkOauthGrant_UpdateBulkOauthGrant_OauthGrants {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant{}
+	}
+	return t.OauthGrants
+}
+func (t *UpdateBulkOauthGrant_UpdateBulkOauthGrant) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkOauthGrant_UpdateBulkOauthGrant{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateOauthGrant_UpdateOauthGrant_OauthGrant struct {
+	AccessLevel           *enums.OAuthAccessLevel "json:\"accessLevel,omitempty\" graphql:\"accessLevel\""
+	ClientID              string                  "json:\"clientID\" graphql:\"clientID\""
+	ClientName            string                  "json:\"clientName\" graphql:\"clientName\""
+	ClientURI             *string                 "json:\"clientURI,omitempty\" graphql:\"clientURI\""
+	CreatedAt             *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string                  "json:\"id\" graphql:\"id\""
+	InstalledByUserID     string                  "json:\"installedByUserID\" graphql:\"installedByUserID\""
+	IsActive              bool                    "json:\"isActive\" graphql:\"isActive\""
+	Kind                  enums.OAuthGrantKind    "json:\"kind\" graphql:\"kind\""
+	LastUsedAt            *time.Time              "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	LogoURI               *string                 "json:\"logoURI,omitempty\" graphql:\"logoURI\""
+	OwnerID               *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt             *time.Time              "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy             *string                 "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason         *string                 "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes                []string                "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Tags                  []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string                 "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetAccessLevel() *enums.OAuthAccessLevel {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.AccessLevel
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetClientID() string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.ClientID
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetClientName() string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.ClientName
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetClientURI() *string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.ClientURI
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetID() string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.ID
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetInstalledByUserID() string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.InstalledByUserID
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetIsActive() bool {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.IsActive
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetKind() *enums.OAuthGrantKind {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return &t.Kind
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.LastUsedAt
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetLogoURI() *string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.LogoURI
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.RevokedAt
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetRevokedBy() *string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.RevokedBy
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetRevokedReason() *string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.RevokedReason
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetScopes() []string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.Scopes
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetTags() []string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.Tags
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateOauthGrant_UpdateOauthGrant_OauthGrant) GetUserID() *string {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant_OauthGrant{}
+	}
+	return t.UserID
+}
+
+type UpdateOauthGrant_UpdateOauthGrant struct {
+	OauthGrant UpdateOauthGrant_UpdateOauthGrant_OauthGrant "json:\"oauthGrant\" graphql:\"oauthGrant\""
+}
+
+func (t *UpdateOauthGrant_UpdateOauthGrant) GetOauthGrant() *UpdateOauthGrant_UpdateOauthGrant_OauthGrant {
+	if t == nil {
+		t = &UpdateOauthGrant_UpdateOauthGrant{}
+	}
+	return &t.OauthGrant
 }
 
 type CreateOnboarding_CreateOnboarding_Onboarding struct {
@@ -182133,6 +183804,127 @@ func (t *UpdateNotificationTemplate) GetUpdateNotificationTemplate() *UpdateNoti
 	return &t.UpdateNotificationTemplate
 }
 
+type CreateBulkCSVOauthGrant struct {
+	CreateBulkCSVOauthGrant CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant "json:\"createBulkCSVOauthGrant\" graphql:\"createBulkCSVOauthGrant\""
+}
+
+func (t *CreateBulkCSVOauthGrant) GetCreateBulkCSVOauthGrant() *CreateBulkCSVOauthGrant_CreateBulkCSVOauthGrant {
+	if t == nil {
+		t = &CreateBulkCSVOauthGrant{}
+	}
+	return &t.CreateBulkCSVOauthGrant
+}
+
+type CreateBulkOauthGrant struct {
+	CreateBulkOauthGrant CreateBulkOauthGrant_CreateBulkOauthGrant "json:\"createBulkOauthGrant\" graphql:\"createBulkOauthGrant\""
+}
+
+func (t *CreateBulkOauthGrant) GetCreateBulkOauthGrant() *CreateBulkOauthGrant_CreateBulkOauthGrant {
+	if t == nil {
+		t = &CreateBulkOauthGrant{}
+	}
+	return &t.CreateBulkOauthGrant
+}
+
+type CreateOauthGrant struct {
+	CreateOauthGrant CreateOauthGrant_CreateOauthGrant "json:\"createOauthGrant\" graphql:\"createOauthGrant\""
+}
+
+func (t *CreateOauthGrant) GetCreateOauthGrant() *CreateOauthGrant_CreateOauthGrant {
+	if t == nil {
+		t = &CreateOauthGrant{}
+	}
+	return &t.CreateOauthGrant
+}
+
+type DeleteBulkOauthGrant struct {
+	DeleteBulkOauthGrant DeleteBulkOauthGrant_DeleteBulkOauthGrant "json:\"deleteBulkOauthGrant\" graphql:\"deleteBulkOauthGrant\""
+}
+
+func (t *DeleteBulkOauthGrant) GetDeleteBulkOauthGrant() *DeleteBulkOauthGrant_DeleteBulkOauthGrant {
+	if t == nil {
+		t = &DeleteBulkOauthGrant{}
+	}
+	return &t.DeleteBulkOauthGrant
+}
+
+type DeleteOauthGrant struct {
+	DeleteOauthGrant DeleteOauthGrant_DeleteOauthGrant "json:\"deleteOauthGrant\" graphql:\"deleteOauthGrant\""
+}
+
+func (t *DeleteOauthGrant) GetDeleteOauthGrant() *DeleteOauthGrant_DeleteOauthGrant {
+	if t == nil {
+		t = &DeleteOauthGrant{}
+	}
+	return &t.DeleteOauthGrant
+}
+
+type GetAllOauthGrants struct {
+	OauthGrants GetAllOauthGrants_OauthGrants "json:\"oauthGrants\" graphql:\"oauthGrants\""
+}
+
+func (t *GetAllOauthGrants) GetOauthGrants() *GetAllOauthGrants_OauthGrants {
+	if t == nil {
+		t = &GetAllOauthGrants{}
+	}
+	return &t.OauthGrants
+}
+
+type GetOauthGrantByID struct {
+	OauthGrant GetOauthGrantByID_OauthGrant "json:\"oauthGrant\" graphql:\"oauthGrant\""
+}
+
+func (t *GetOauthGrantByID) GetOauthGrant() *GetOauthGrantByID_OauthGrant {
+	if t == nil {
+		t = &GetOauthGrantByID{}
+	}
+	return &t.OauthGrant
+}
+
+type GetOauthGrants struct {
+	OauthGrants GetOauthGrants_OauthGrants "json:\"oauthGrants\" graphql:\"oauthGrants\""
+}
+
+func (t *GetOauthGrants) GetOauthGrants() *GetOauthGrants_OauthGrants {
+	if t == nil {
+		t = &GetOauthGrants{}
+	}
+	return &t.OauthGrants
+}
+
+type UpdateBulkCSVOauthGrant struct {
+	UpdateBulkCSVOauthGrant UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant "json:\"updateBulkCSVOauthGrant\" graphql:\"updateBulkCSVOauthGrant\""
+}
+
+func (t *UpdateBulkCSVOauthGrant) GetUpdateBulkCSVOauthGrant() *UpdateBulkCSVOauthGrant_UpdateBulkCSVOauthGrant {
+	if t == nil {
+		t = &UpdateBulkCSVOauthGrant{}
+	}
+	return &t.UpdateBulkCSVOauthGrant
+}
+
+type UpdateBulkOauthGrant struct {
+	UpdateBulkOauthGrant UpdateBulkOauthGrant_UpdateBulkOauthGrant "json:\"updateBulkOauthGrant\" graphql:\"updateBulkOauthGrant\""
+}
+
+func (t *UpdateBulkOauthGrant) GetUpdateBulkOauthGrant() *UpdateBulkOauthGrant_UpdateBulkOauthGrant {
+	if t == nil {
+		t = &UpdateBulkOauthGrant{}
+	}
+	return &t.UpdateBulkOauthGrant
+}
+
+type UpdateOauthGrant struct {
+	UpdateOauthGrant UpdateOauthGrant_UpdateOauthGrant "json:\"updateOauthGrant\" graphql:\"updateOauthGrant\""
+}
+
+func (t *UpdateOauthGrant) GetUpdateOauthGrant() *UpdateOauthGrant_UpdateOauthGrant {
+	if t == nil {
+		t = &UpdateOauthGrant{}
+	}
+	return &t.UpdateOauthGrant
+}
+
 type CreateOnboarding struct {
 	CreateOnboarding CreateOnboarding_CreateOnboarding "json:\"createOnboarding\" graphql:\"createOnboarding\""
 }
@@ -207896,6 +209688,506 @@ func (c *Client) UpdateNotificationTemplate(ctx context.Context, updateNotificat
 	return &res, nil
 }
 
+const CreateBulkCSVOauthGrantDocument = `mutation CreateBulkCSVOauthGrant ($input: Upload!) {
+	createBulkCSVOauthGrant(input: $input) {
+		oauthGrants {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVOauthGrant(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVOauthGrant, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVOauthGrant
+	if err := c.Client.Post(ctx, "CreateBulkCSVOauthGrant", CreateBulkCSVOauthGrantDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkOauthGrantDocument = `mutation CreateBulkOauthGrant ($input: [CreateOauthGrantInput!]) {
+	createBulkOauthGrant(input: $input) {
+		oauthGrants {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkOauthGrant(ctx context.Context, input []*CreateOauthGrantInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkOauthGrant, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkOauthGrant
+	if err := c.Client.Post(ctx, "CreateBulkOauthGrant", CreateBulkOauthGrantDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateOauthGrantDocument = `mutation CreateOauthGrant ($input: CreateOauthGrantInput!) {
+	createOauthGrant(input: $input) {
+		oauthGrant {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateOauthGrant(ctx context.Context, input CreateOauthGrantInput, interceptors ...clientv2.RequestInterceptor) (*CreateOauthGrant, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateOauthGrant
+	if err := c.Client.Post(ctx, "CreateOauthGrant", CreateOauthGrantDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteBulkOauthGrantDocument = `mutation DeleteBulkOauthGrant ($ids: [ID!]!) {
+	deleteBulkOauthGrant(ids: $ids) {
+		deletedIDs
+	}
+}
+`
+
+func (c *Client) DeleteBulkOauthGrant(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkOauthGrant, error) {
+	vars := map[string]any{
+		"ids": ids,
+	}
+
+	var res DeleteBulkOauthGrant
+	if err := c.Client.Post(ctx, "DeleteBulkOauthGrant", DeleteBulkOauthGrantDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteOauthGrantDocument = `mutation DeleteOauthGrant ($deleteOauthGrantId: ID!) {
+	deleteOauthGrant(id: $deleteOauthGrantId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteOauthGrant(ctx context.Context, deleteOauthGrantID string, interceptors ...clientv2.RequestInterceptor) (*DeleteOauthGrant, error) {
+	vars := map[string]any{
+		"deleteOauthGrantId": deleteOauthGrantID,
+	}
+
+	var res DeleteOauthGrant
+	if err := c.Client.Post(ctx, "DeleteOauthGrant", DeleteOauthGrantDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllOauthGrantsDocument = `query GetAllOauthGrants ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [OauthGrantOrder!]) {
+	oauthGrants(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				accessLevel
+				clientID
+				clientName
+				clientURI
+				createdAt
+				createdBy
+				id
+				installedByUserID
+				isActive
+				kind
+				lastUsedAt
+				logoURI
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllOauthGrants(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*OauthGrantOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllOauthGrants, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
+
+	var res GetAllOauthGrants
+	if err := c.Client.Post(ctx, "GetAllOauthGrants", GetAllOauthGrantsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetOauthGrantByIDDocument = `query GetOauthGrantByID ($oauthGrantId: ID!) {
+	oauthGrant(id: $oauthGrantId) {
+		accessLevel
+		clientID
+		clientName
+		clientURI
+		createdAt
+		createdBy
+		id
+		installedByUserID
+		isActive
+		kind
+		lastUsedAt
+		logoURI
+		ownerID
+		revokedAt
+		revokedBy
+		revokedReason
+		scopes
+		tags
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		userID
+	}
+}
+`
+
+func (c *Client) GetOauthGrantByID(ctx context.Context, oauthGrantID string, interceptors ...clientv2.RequestInterceptor) (*GetOauthGrantByID, error) {
+	vars := map[string]any{
+		"oauthGrantId": oauthGrantID,
+	}
+
+	var res GetOauthGrantByID
+	if err := c.Client.Post(ctx, "GetOauthGrantByID", GetOauthGrantByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetOauthGrantsDocument = `query GetOauthGrants ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [OauthGrantOrder!], $where: OauthGrantWhereInput) {
+	oauthGrants(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				accessLevel
+				clientID
+				clientName
+				clientURI
+				createdAt
+				createdBy
+				id
+				installedByUserID
+				isActive
+				kind
+				lastUsedAt
+				logoURI
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetOauthGrants(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*OauthGrantOrder, where *OauthGrantWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetOauthGrants, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+		"where":   where,
+	}
+
+	var res GetOauthGrants
+	if err := c.Client.Post(ctx, "GetOauthGrants", GetOauthGrantsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkCSVOauthGrantDocument = `mutation UpdateBulkCSVOauthGrant ($input: Upload!) {
+	updateBulkCSVOauthGrant(input: $input) {
+		oauthGrants {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkCSVOauthGrant(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVOauthGrant, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkCSVOauthGrant
+	if err := c.Client.Post(ctx, "UpdateBulkCSVOauthGrant", UpdateBulkCSVOauthGrantDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkOauthGrantDocument = `mutation UpdateBulkOauthGrant ($ids: [ID!]!, $input: UpdateOauthGrantInput!) {
+	updateBulkOauthGrant(ids: $ids, input: $input) {
+		oauthGrants {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkOauthGrant(ctx context.Context, ids []string, input UpdateOauthGrantInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkOauthGrant, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkOauthGrant
+	if err := c.Client.Post(ctx, "UpdateBulkOauthGrant", UpdateBulkOauthGrantDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateOauthGrantDocument = `mutation UpdateOauthGrant ($updateOauthGrantId: ID!, $input: UpdateOauthGrantInput!) {
+	updateOauthGrant(id: $updateOauthGrantId, input: $input) {
+		oauthGrant {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) UpdateOauthGrant(ctx context.Context, updateOauthGrantID string, input UpdateOauthGrantInput, interceptors ...clientv2.RequestInterceptor) (*UpdateOauthGrant, error) {
+	vars := map[string]any{
+		"updateOauthGrantId": updateOauthGrantID,
+		"input":              input,
+	}
+
+	var res UpdateOauthGrant
+	if err := c.Client.Post(ctx, "UpdateOauthGrant", UpdateOauthGrantDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateOnboardingDocument = `mutation CreateOnboarding ($input: CreateOnboardingInput!) {
 	createOnboarding(input: $input) {
 		onboarding {
@@ -231776,6 +234068,17 @@ var DocumentOperationNames = map[string]string{
 	UpdateBulkCSVNotificationTemplateDocument:           "UpdateBulkCSVNotificationTemplate",
 	UpdateBulkNotificationTemplateDocument:              "UpdateBulkNotificationTemplate",
 	UpdateNotificationTemplateDocument:                  "UpdateNotificationTemplate",
+	CreateBulkCSVOauthGrantDocument:                     "CreateBulkCSVOauthGrant",
+	CreateBulkOauthGrantDocument:                        "CreateBulkOauthGrant",
+	CreateOauthGrantDocument:                            "CreateOauthGrant",
+	DeleteBulkOauthGrantDocument:                        "DeleteBulkOauthGrant",
+	DeleteOauthGrantDocument:                            "DeleteOauthGrant",
+	GetAllOauthGrantsDocument:                           "GetAllOauthGrants",
+	GetOauthGrantByIDDocument:                           "GetOauthGrantByID",
+	GetOauthGrantsDocument:                              "GetOauthGrants",
+	UpdateBulkCSVOauthGrantDocument:                     "UpdateBulkCSVOauthGrant",
+	UpdateBulkOauthGrantDocument:                        "UpdateBulkOauthGrant",
+	UpdateOauthGrantDocument:                            "UpdateOauthGrant",
 	CreateOnboardingDocument:                            "CreateOnboarding",
 	CreateOrganizationDocument:                          "CreateOrganization",
 	CreateOrganizationWithMembersDocument:               "CreateOrganizationWithMembers",

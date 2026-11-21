@@ -67,6 +67,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
@@ -5329,6 +5330,53 @@ var (
 			return data, nil
 		},
 	}
+	SchemaOauthGrant = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:   "OauthGrant",
+			Snake:  "oauth_grant",
+			Lower:  "oauthgrant",
+			Plural: "oauth_grants",
+		},
+		OwnerField: oauthgrant.FieldOwnerID,
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "oauth_grant", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.OauthGrant.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
+	SchemaOauthToken = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:   "OauthToken",
+			Snake:  "oauth_token",
+			Lower:  "oauthtoken",
+			Plural: "oauth_tokens",
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "oauth_token", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.OauthToken.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
 	SchemaOnboarding = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
 			Name:   "Onboarding",
@@ -9472,6 +9520,51 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "version", Label: "Version", Type: "int"},
 		{Name: "workflow_definition_id", Label: "WorkflowDefinitionID", Type: "string", MatchKey: true, Clearable: true},
+	}
+	SchemaOauthGrant.Fields = []FieldDescriptor{
+		{Name: "access_level", Label: "AccessLevel", Type: "enums.OAuthAccessLevel", Clearable: true},
+		{Name: "client_id", Label: "ClientID", Type: "string", MatchKey: true},
+		{Name: "client_name", Label: "ClientName", Type: "string", MatchKey: true},
+		{Name: "client_uri", Label: "ClientURI", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "installed_by_user_id", Label: "InstalledByUserID", Type: "string", MatchKey: true},
+		{Name: "is_active", Label: "IsActive", Type: "bool"},
+		{Name: "kind", Label: "Kind", Type: "enums.OAuthGrantKind"},
+		{Name: "last_used_at", Label: "LastUsedAt", Type: "time.Time", Clearable: true},
+		{Name: "logo_uri", Label: "LogoURI", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "revoked_at", Label: "RevokedAt", Type: "time.Time", Clearable: true},
+		{Name: "revoked_by", Label: "RevokedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "revoked_reason", Label: "RevokedReason", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scopes", Label: "Scopes", Type: "[]string", Clearable: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
+	}
+	SchemaOauthToken.Fields = []FieldDescriptor{
+		{Name: "client_id", Label: "ClientID", Type: "string", MatchKey: true},
+		{Name: "code_challenge", Label: "CodeChallenge", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "consumed_at", Label: "ConsumedAt", Type: "time.Time", Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "expires_at", Label: "ExpiresAt", Type: "time.Time"},
+		{Name: "key_version", Label: "KeyVersion", Type: "string", MatchKey: true},
+		{Name: "kind", Label: "Kind", Type: "oauthserver.TokenKind"},
+		{Name: "oauth_grant_id", Label: "OauthGrantID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "redirect_uri", Label: "RedirectURI", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "resource", Label: "Resource", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scopes", Label: "Scopes", Type: "[]string", Clearable: true},
+		{Name: "state", Label: "State", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "token_hash", Label: "TokenHash", Type: "string"},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaOnboarding.Fields = []FieldDescriptor{
 		{Name: "company_details", Label: "CompanyDetails", Type: "map[string]interface {}", Clearable: true},
@@ -16471,6 +16564,45 @@ func init() {
 			Field:       "workflow_definition_id",
 		},
 	}
+	SchemaOauthGrant.Edges = []EdgeDescriptor{
+		{
+			Name:        "oauth_tokens",
+			Label:       "OauthTokens",
+			Target:      SchemaOauthToken,
+			TargetType:  "OauthToken",
+			CreateField: "oauth_token_ids",
+			AddField:    "add_oauth_token_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
+		{
+			Name:        "user",
+			Label:       "User",
+			Target:      SchemaUser,
+			TargetType:  "User",
+			Unique:      true,
+			CreateField: "user_id",
+			Field:       "user_id",
+		},
+	}
+	SchemaOauthToken.Edges = []EdgeDescriptor{
+		{
+			Name:        "oauth_grant",
+			Label:       "OauthGrant",
+			Target:      SchemaOauthGrant,
+			TargetType:  "OauthGrant",
+			Unique:      true,
+			CreateField: "oauth_grant_id",
+			Field:       "oauth_grant_id",
+		},
+	}
 	SchemaOnboarding.Edges = []EdgeDescriptor{
 		{
 			Name:        "organization",
@@ -17374,6 +17506,22 @@ func init() {
 			TargetType:  "Notification",
 			CreateField: "notification_ids",
 			AddField:    "add_notification_ids",
+		},
+		{
+			Name:        "oauth_grant_creators",
+			Label:       "OauthGrantCreators",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "oauth_grant_creator_ids",
+			AddField:    "add_oauth_grant_creator_ids",
+		},
+		{
+			Name:        "oauth_grants",
+			Label:       "OauthGrants",
+			Target:      SchemaOauthGrant,
+			TargetType:  "OauthGrant",
+			CreateField: "oauth_grant_ids",
+			AddField:    "add_oauth_grant_ids",
 		},
 		{
 			Name:        "org_membership_creators",
@@ -30829,6 +30977,8 @@ var allSchemas = []*Schema{
 	SchemaNotification,
 	SchemaNotificationPreference,
 	SchemaNotificationTemplate,
+	SchemaOauthGrant,
+	SchemaOauthToken,
 	SchemaOnboarding,
 	SchemaOrgMembership,
 	SchemaOrgModule,

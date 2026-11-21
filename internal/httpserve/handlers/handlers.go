@@ -9,6 +9,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
+	iamoauth "github.com/theopenlane/iam/oauthserver"
 	"github.com/theopenlane/iam/totp"
 
 	"github.com/theopenlane/iam/sessions"
@@ -88,6 +89,20 @@ type Handler struct {
 	SupportAccessConfig SupportAccessConfig
 	// ForwarderSecret is the shared secret the file worker presents on share link callbacks; empty disables those endpoints
 	ForwarderSecret string
+	// OAuthServerConfig contains the configuration for the OAuth authorization server
+	OAuthServerConfig OAuthServerConfig
+	// OAuthTokens issues and verifies OAuth tokens, set only when the OAuth authorization server is enabled
+	OAuthTokens *iamoauth.TokenIssuer
+	// OAuthClients resolves OAuth client metadata documents, set only when the OAuth authorization server is enabled
+	OAuthClients *iamoauth.ClientResolver
+}
+
+// OAuthServerConfig contains configuration for the OAuth authorization server that third-party apps connect through
+type OAuthServerConfig struct {
+	// Enabled turns on the OAuth endpoints, and requires the API token keyring under auth.token.apitokens
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// AllowedResources are the exact resource URLs tokens may be issued for, such as the API and MCP server URLs
+	AllowedResources []string `json:"allowedresources" koanf:"allowedresources"`
 }
 
 // SupportAccessConfig contains configuration for the Openlane support access flow. The support

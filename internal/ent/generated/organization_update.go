@@ -57,6 +57,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
@@ -914,6 +915,21 @@ func (_u *OrganizationUpdate) AddNotificationTemplateCreators(v ...*Group) *Orga
 	return _u.AddNotificationTemplateCreatorIDs(ids...)
 }
 
+// AddOauthGrantCreatorIDs adds the "oauth_grant_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddOauthGrantCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddOauthGrantCreatorIDs(ids...)
+	return _u
+}
+
+// AddOauthGrantCreators adds the "oauth_grant_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) AddOauthGrantCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddOauthGrantCreatorIDs(ids...)
+}
+
 // AddOrgMembershipCreatorIDs adds the "org_membership_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdate) AddOrgMembershipCreatorIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddOrgMembershipCreatorIDs(ids...)
@@ -1640,6 +1656,21 @@ func (_u *OrganizationUpdate) AddAPITokens(v ...*APIToken) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddAPITokenIDs(ids...)
+}
+
+// AddOauthGrantIDs adds the "oauth_grants" edge to the OauthGrant entity by IDs.
+func (_u *OrganizationUpdate) AddOauthGrantIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddOauthGrantIDs(ids...)
+	return _u
+}
+
+// AddOauthGrants adds the "oauth_grants" edges to the OauthGrant entity.
+func (_u *OrganizationUpdate) AddOauthGrants(v ...*OauthGrant) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddOauthGrantIDs(ids...)
 }
 
 // AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
@@ -3658,6 +3689,27 @@ func (_u *OrganizationUpdate) RemoveNotificationTemplateCreators(v ...*Group) *O
 	return _u.RemoveNotificationTemplateCreatorIDs(ids...)
 }
 
+// ClearOauthGrantCreators clears all "oauth_grant_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearOauthGrantCreators() *OrganizationUpdate {
+	_u.mutation.ClearOauthGrantCreators()
+	return _u
+}
+
+// RemoveOauthGrantCreatorIDs removes the "oauth_grant_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveOauthGrantCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveOauthGrantCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveOauthGrantCreators removes "oauth_grant_creators" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveOauthGrantCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveOauthGrantCreatorIDs(ids...)
+}
+
 // ClearOrgMembershipCreators clears all "org_membership_creators" edges to the Group entity.
 func (_u *OrganizationUpdate) ClearOrgMembershipCreators() *OrganizationUpdate {
 	_u.mutation.ClearOrgMembershipCreators()
@@ -4634,6 +4686,27 @@ func (_u *OrganizationUpdate) RemoveAPITokens(v ...*APIToken) *OrganizationUpdat
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAPITokenIDs(ids...)
+}
+
+// ClearOauthGrants clears all "oauth_grants" edges to the OauthGrant entity.
+func (_u *OrganizationUpdate) ClearOauthGrants() *OrganizationUpdate {
+	_u.mutation.ClearOauthGrants()
+	return _u
+}
+
+// RemoveOauthGrantIDs removes the "oauth_grants" edge to OauthGrant entities by IDs.
+func (_u *OrganizationUpdate) RemoveOauthGrantIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveOauthGrantIDs(ids...)
+	return _u
+}
+
+// RemoveOauthGrants removes "oauth_grants" edges to OauthGrant entities.
+func (_u *OrganizationUpdate) RemoveOauthGrants(v ...*OauthGrant) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveOauthGrantIDs(ids...)
 }
 
 // ClearEmailTemplates clears all "email_templates" edges to the EmailTemplate entity.
@@ -8171,6 +8244,51 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.OauthGrantCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantCreatorsTable,
+			Columns: []string{organization.OauthGrantCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedOauthGrantCreatorsIDs(); len(nodes) > 0 && !_u.mutation.OauthGrantCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantCreatorsTable,
+			Columns: []string{organization.OauthGrantCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OauthGrantCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantCreatorsTable,
+			Columns: []string{organization.OauthGrantCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.OrgMembershipCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -10292,6 +10410,51 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.OauthGrantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantsTable,
+			Columns: []string{organization.OauthGrantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthgrant.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedOauthGrantsIDs(); len(nodes) > 0 && !_u.mutation.OauthGrantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantsTable,
+			Columns: []string{organization.OauthGrantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthgrant.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OauthGrantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantsTable,
+			Columns: []string{organization.OauthGrantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthgrant.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -14815,6 +14978,21 @@ func (_u *OrganizationUpdateOne) AddNotificationTemplateCreators(v ...*Group) *O
 	return _u.AddNotificationTemplateCreatorIDs(ids...)
 }
 
+// AddOauthGrantCreatorIDs adds the "oauth_grant_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddOauthGrantCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddOauthGrantCreatorIDs(ids...)
+	return _u
+}
+
+// AddOauthGrantCreators adds the "oauth_grant_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddOauthGrantCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddOauthGrantCreatorIDs(ids...)
+}
+
 // AddOrgMembershipCreatorIDs adds the "org_membership_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdateOne) AddOrgMembershipCreatorIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddOrgMembershipCreatorIDs(ids...)
@@ -15541,6 +15719,21 @@ func (_u *OrganizationUpdateOne) AddAPITokens(v ...*APIToken) *OrganizationUpdat
 		ids[i] = v[i].ID
 	}
 	return _u.AddAPITokenIDs(ids...)
+}
+
+// AddOauthGrantIDs adds the "oauth_grants" edge to the OauthGrant entity by IDs.
+func (_u *OrganizationUpdateOne) AddOauthGrantIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddOauthGrantIDs(ids...)
+	return _u
+}
+
+// AddOauthGrants adds the "oauth_grants" edges to the OauthGrant entity.
+func (_u *OrganizationUpdateOne) AddOauthGrants(v ...*OauthGrant) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddOauthGrantIDs(ids...)
 }
 
 // AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
@@ -17559,6 +17752,27 @@ func (_u *OrganizationUpdateOne) RemoveNotificationTemplateCreators(v ...*Group)
 	return _u.RemoveNotificationTemplateCreatorIDs(ids...)
 }
 
+// ClearOauthGrantCreators clears all "oauth_grant_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearOauthGrantCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearOauthGrantCreators()
+	return _u
+}
+
+// RemoveOauthGrantCreatorIDs removes the "oauth_grant_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveOauthGrantCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveOauthGrantCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveOauthGrantCreators removes "oauth_grant_creators" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveOauthGrantCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveOauthGrantCreatorIDs(ids...)
+}
+
 // ClearOrgMembershipCreators clears all "org_membership_creators" edges to the Group entity.
 func (_u *OrganizationUpdateOne) ClearOrgMembershipCreators() *OrganizationUpdateOne {
 	_u.mutation.ClearOrgMembershipCreators()
@@ -18535,6 +18749,27 @@ func (_u *OrganizationUpdateOne) RemoveAPITokens(v ...*APIToken) *OrganizationUp
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAPITokenIDs(ids...)
+}
+
+// ClearOauthGrants clears all "oauth_grants" edges to the OauthGrant entity.
+func (_u *OrganizationUpdateOne) ClearOauthGrants() *OrganizationUpdateOne {
+	_u.mutation.ClearOauthGrants()
+	return _u
+}
+
+// RemoveOauthGrantIDs removes the "oauth_grants" edge to OauthGrant entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveOauthGrantIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveOauthGrantIDs(ids...)
+	return _u
+}
+
+// RemoveOauthGrants removes "oauth_grants" edges to OauthGrant entities.
+func (_u *OrganizationUpdateOne) RemoveOauthGrants(v ...*OauthGrant) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveOauthGrantIDs(ids...)
 }
 
 // ClearEmailTemplates clears all "email_templates" edges to the EmailTemplate entity.
@@ -22102,6 +22337,51 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.OauthGrantCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantCreatorsTable,
+			Columns: []string{organization.OauthGrantCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedOauthGrantCreatorsIDs(); len(nodes) > 0 && !_u.mutation.OauthGrantCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantCreatorsTable,
+			Columns: []string{organization.OauthGrantCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OauthGrantCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantCreatorsTable,
+			Columns: []string{organization.OauthGrantCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.OrgMembershipCreatorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -24223,6 +24503,51 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.OauthGrantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantsTable,
+			Columns: []string{organization.OauthGrantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthgrant.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedOauthGrantsIDs(); len(nodes) > 0 && !_u.mutation.OauthGrantsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantsTable,
+			Columns: []string{organization.OauthGrantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthgrant.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OauthGrantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantsTable,
+			Columns: []string{organization.OauthGrantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthgrant.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

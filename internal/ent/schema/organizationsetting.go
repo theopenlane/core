@@ -230,6 +230,7 @@ func (OrganizationSetting) Mixin() []ent.Mixin {
 // Policy defines the privacy policy of the OrganizationSetting
 func (OrganizationSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithDenyAppMutations(),
 		policy.WithQueryRules(
 			policy.CheckOrgReadAccess(), // access based on auth context
 			rule.AllowQueryIfSystemAdmin(),

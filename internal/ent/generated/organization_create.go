@@ -55,6 +55,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
@@ -910,6 +911,21 @@ func (_c *OrganizationCreate) AddNotificationTemplateCreators(v ...*Group) *Orga
 	return _c.AddNotificationTemplateCreatorIDs(ids...)
 }
 
+// AddOauthGrantCreatorIDs adds the "oauth_grant_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddOauthGrantCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddOauthGrantCreatorIDs(ids...)
+	return _c
+}
+
+// AddOauthGrantCreators adds the "oauth_grant_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddOauthGrantCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddOauthGrantCreatorIDs(ids...)
+}
+
 // AddOrgMembershipCreatorIDs adds the "org_membership_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddOrgMembershipCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddOrgMembershipCreatorIDs(ids...)
@@ -1655,6 +1671,21 @@ func (_c *OrganizationCreate) AddAPITokens(v ...*APIToken) *OrganizationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddAPITokenIDs(ids...)
+}
+
+// AddOauthGrantIDs adds the "oauth_grants" edge to the OauthGrant entity by IDs.
+func (_c *OrganizationCreate) AddOauthGrantIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddOauthGrantIDs(ids...)
+	return _c
+}
+
+// AddOauthGrants adds the "oauth_grants" edges to the OauthGrant entity.
+func (_c *OrganizationCreate) AddOauthGrants(v ...*OauthGrant) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddOauthGrantIDs(ids...)
 }
 
 // AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
@@ -3690,6 +3721,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.OauthGrantCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantCreatorsTable,
+			Columns: []string{organization.OauthGrantCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.OrgMembershipCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4468,6 +4515,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.OauthGrantsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OauthGrantsTable,
+			Columns: []string{organization.OauthGrantsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthgrant.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

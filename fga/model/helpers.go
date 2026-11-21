@@ -231,7 +231,7 @@ func NormalizeScope(scope string) string {
 	}
 
 	if parts := strings.SplitN(normalized, ":", scopePartsCount); len(parts) == scopePartsCount && parts[1] != "" {
-		return mapVerb(parts[1]) + "_" + parts[0]
+		return ScopeRelation(mapVerb(parts[1]), parts[0])
 	}
 
 	if rel := mapVerb(normalized); rel != "" {
@@ -287,6 +287,45 @@ func ScopeOptions() (map[string][]string, error) {
 	}
 
 	return opts, nil
+}
+
+// ScopeList returns every object:verb scope a service subject can be granted, sorted
+func ScopeList() ([]string, error) {
+	opts, err := ScopeOptions()
+	if err != nil {
+		return nil, err
+	}
+
+	var scopes []string
+
+	for obj, verbs := range opts {
+		for _, verb := range verbs {
+			scopes = append(scopes, obj+":"+verb)
+		}
+	}
+
+	slices.Sort(scopes)
+
+	return scopes, nil
+}
+
+// ScopeRelation returns the relation a base relation grants on an object, such as can_edit_control
+func ScopeRelation(relation, object string) string {
+	return relation + "_" + object
+}
+
+// ParseScopeRelation returns the base relation and object of a read, write, or delete scope,
+// such as can_edit and control for control:write
+func ParseScopeRelation(scope string) (relation, object string, ok bool) {
+	normalized := NormalizeScope(scope)
+
+	for _, rel := range aliasToRelation {
+		if obj, found := strings.CutPrefix(normalized, rel+"_"); found && obj != "" {
+			return rel, obj, true
+		}
+	}
+
+	return "", "", false
 }
 
 func getRelationsOptionsForObject(rels []string) ([]string, error) {

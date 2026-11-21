@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/oauthserver"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
@@ -129,6 +130,21 @@ type APITokenBuilder struct {
 	Scopes      []string
 	Description string
 	ExpiresAt   *time.Time
+}
+
+type OauthGrantBuilder struct {
+	Client *Client
+
+	// Fields
+	Revoked bool
+	Scopes  []string
+}
+
+type OauthTokenBuilder struct {
+	Client *Client
+
+	// Fields
+	GrantID string
 }
 
 type SubscriberBuilder struct {
@@ -2146,7 +2162,7 @@ func (te *TrustCenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *
 	return trustCenterEntity
 }
 
-// IntegrationRunBuilder is used to create integration run entires
+// IntegrationRunBuilder is used to create integration run entries
 type IntegrationRunBuilder struct {
 	Client *Client
 
@@ -2776,4 +2792,46 @@ func (p *PlatformBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Platfo
 	RequireNoError(t, err)
 
 	return platform
+}
+
+// MustNew oauth grant builder is used to create a personal grant for the caller, grants can only be created by the consent flow
+func (g *OauthGrantBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OauthGrant {
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	RequireNoError(t, err)
+
+	ctx = SetInternalContext(ctx, g.Client.DB)
+
+	if g.Scopes == nil {
+		g.Scopes = []string{oauthserver.ScopeRead, oauthserver.ScopeWrite}
+	}
+
+	grant, err := g.Client.DB.OauthGrant.Create().
+		SetKind(enums.OAuthGrantKindUser).
+		SetClientID(gofakeit.URL()).
+		SetClientName(gofakeit.AppName()).
+		SetUserID(userID).
+		SetInstalledByUserID(userID).
+		SetAccessLevel(enums.OAuthAccessLevelWrite).
+		SetScopes(g.Scopes).
+		SetIsActive(!g.Revoked).
+		Save(ctx)
+	RequireNoError(t, err)
+
+	return grant
+}
+
+// MustNew oauth token builder is used to create, without authz checks, an access token under a grant
+func (tb *OauthTokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OauthToken {
+	ctx = SetInternalContext(ctx, tb.Client.DB)
+
+	token, err := tb.Client.DB.OauthToken.Create().
+		SetTokenHash(gofakeit.UUID()).
+		SetKeyVersion("v1").
+		SetExpiresAt(time.Now().Add(time.Hour)).
+		SetClientID(gofakeit.URL()).
+		SetOauthGrantID(tb.GrantID).
+		Save(ctx)
+	RequireNoError(t, err)
+
+	return token
 }

@@ -204,6 +204,7 @@ func getEntfgaExtension(hasChanges bool) *entfga.AuthzExtension {
 	entfgaExt := entfga.New(
 		entfga.WithSoftDeletes(),
 		entfga.WithSchemaPath(schemaPath),
+		entfga.WithBuildFlags(buildFlags),
 	)
 
 	if hasChanges {

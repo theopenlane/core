@@ -16269,6 +16269,88 @@ func (c *NotificationTemplateUpdateOne) SetInput(i UpdateNotificationTemplateInp
 	return c
 }
 
+// CreateOauthGrantInput represents a mutation input for creating oauthgrants.
+type CreateOauthGrantInput struct {
+	Tags          []string `json:"tags,omitempty"`
+	IsActive      *bool    `json:"is_active,omitempty"`
+	RevokedReason *string  `json:"revoked_reason,omitempty"`
+	OwnerID       *string  `json:"owner_id,omitempty"`
+}
+
+// Mutate applies the CreateOauthGrantInput on the OauthGrantMutation builder.
+func (i *CreateOauthGrantInput) Mutate(m *OauthGrantMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateOauthGrantInput on the OauthGrantCreate builder.
+func (c *OauthGrantCreate) SetInput(i CreateOauthGrantInput) *OauthGrantCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateOauthGrantInput represents a mutation input for updating oauthgrants.
+type UpdateOauthGrantInput struct {
+	ClearTags          bool
+	Tags               []string `json:"tags,omitempty"`
+	AppendTags         []string
+	IsActive           *bool `json:"is_active,omitempty"`
+	ClearRevokedReason bool
+	RevokedReason      *string `json:"revoked_reason,omitempty"`
+	ClearOwner         bool
+	OwnerID            *string `json:"owner_id,omitempty"`
+}
+
+// Mutate applies the UpdateOauthGrantInput on the OauthGrantMutation builder.
+func (i *UpdateOauthGrantInput) Mutate(m *OauthGrantMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if i.ClearRevokedReason {
+		m.ClearRevokedReason()
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateOauthGrantInput on the OauthGrantUpdate builder.
+func (c *OauthGrantUpdate) SetInput(i UpdateOauthGrantInput) *OauthGrantUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateOauthGrantInput on the OauthGrantUpdateOne builder.
+func (c *OauthGrantUpdateOne) SetInput(i UpdateOauthGrantInput) *OauthGrantUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateOnboardingInput represents a mutation input for creating onboardings.
 type CreateOnboardingInput struct {
 	CompanyName    string                 `json:"company_name,omitempty"`
@@ -16473,6 +16555,7 @@ type CreateOrganizationInput struct {
 	NarrativeCreatorIDs                  []string   `json:"narrative_creator_ids,omitempty"`
 	NoteCreatorIDs                       []string   `json:"note_creator_ids,omitempty"`
 	NotificationTemplateCreatorIDs       []string   `json:"notification_template_creator_ids,omitempty"`
+	OauthGrantCreatorIDs                 []string   `json:"oauth_grant_creator_ids,omitempty"`
 	OrgMembershipCreatorIDs              []string   `json:"org_membership_creator_ids,omitempty"`
 	PlatformCreatorIDs                   []string   `json:"platform_creator_ids,omitempty"`
 	ProcedureCreatorIDs                  []string   `json:"procedure_creator_ids,omitempty"`
@@ -16659,6 +16742,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.NotificationTemplateCreatorIDs; len(v) > 0 {
 		m.AddNotificationTemplateCreatorIDs(v...)
+	}
+	if v := i.OauthGrantCreatorIDs; len(v) > 0 {
+		m.AddOauthGrantCreatorIDs(v...)
 	}
 	if v := i.OrgMembershipCreatorIDs; len(v) > 0 {
 		m.AddOrgMembershipCreatorIDs(v...)
@@ -16950,6 +17036,9 @@ type UpdateOrganizationInput struct {
 	ClearNotificationTemplateCreators          bool
 	AddNotificationTemplateCreatorIDs          []string `json:"add_notification_template_creator_ids,omitempty"`
 	RemoveNotificationTemplateCreatorIDs       []string `json:"remove_notification_template_creator_ids,omitempty"`
+	ClearOauthGrantCreators                    bool
+	AddOauthGrantCreatorIDs                    []string `json:"add_oauth_grant_creator_ids,omitempty"`
+	RemoveOauthGrantCreatorIDs                 []string `json:"remove_oauth_grant_creator_ids,omitempty"`
 	ClearOrgMembershipCreators                 bool
 	AddOrgMembershipCreatorIDs                 []string `json:"add_org_membership_creator_ids,omitempty"`
 	RemoveOrgMembershipCreatorIDs              []string `json:"remove_org_membership_creator_ids,omitempty"`
@@ -17469,6 +17558,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveNotificationTemplateCreatorIDs; len(v) > 0 {
 		m.RemoveNotificationTemplateCreatorIDs(v...)
+	}
+	if i.ClearOauthGrantCreators {
+		m.ClearOauthGrantCreators()
+	}
+	if v := i.AddOauthGrantCreatorIDs; len(v) > 0 {
+		m.AddOauthGrantCreatorIDs(v...)
+	}
+	if v := i.RemoveOauthGrantCreatorIDs; len(v) > 0 {
+		m.RemoveOauthGrantCreatorIDs(v...)
 	}
 	if i.ClearOrgMembershipCreators {
 		m.ClearOrgMembershipCreators()

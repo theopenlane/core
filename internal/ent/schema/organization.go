@@ -172,6 +172,7 @@ func (o Organization) Edges() []ent.Edge {
 			},
 		}),
 		hiddenOwnerEdge(o, APIToken{}),
+		hiddenOwnerEdge(o, OauthGrant{}),
 		hiddenOwnerEdge(o, EmailTemplate{}),
 		hiddenOwnerEdge(o, IntegrationWebhook{}),
 		hiddenOwnerEdge(o, IntegrationRun{}),
@@ -337,6 +338,7 @@ func (Organization) Mixin() []ent.Mixin {
 // Policy defines the privacy policy of the Organization.
 func (Organization) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithDenyAppMutations(),
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](), // Allow invite tokens to query the org ID they are invited to
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),    // Allow sign-up tokens to query the org ID they are subscribing to

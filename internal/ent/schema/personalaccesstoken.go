@@ -189,6 +189,7 @@ func (p PersonalAccessToken) Interceptors() []ent.Interceptor {
 func (p PersonalAccessToken) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
+			rule.DenyIfOAuthApp(),
 			rule.RequirePaymentMethod(),
 			rule.DenyIfMissingAllModules(),
 			rule.AllowMutationAfterApplyingUserOwnerFilter(),

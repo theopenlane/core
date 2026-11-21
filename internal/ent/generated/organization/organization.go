@@ -125,6 +125,8 @@ const (
 	EdgeNoteCreators = "note_creators"
 	// EdgeNotificationTemplateCreators holds the string denoting the notification_template_creators edge name in mutations.
 	EdgeNotificationTemplateCreators = "notification_template_creators"
+	// EdgeOauthGrantCreators holds the string denoting the oauth_grant_creators edge name in mutations.
+	EdgeOauthGrantCreators = "oauth_grant_creators"
 	// EdgeOrgMembershipCreators holds the string denoting the org_membership_creators edge name in mutations.
 	EdgeOrgMembershipCreators = "org_membership_creators"
 	// EdgePlatformCreators holds the string denoting the platform_creators edge name in mutations.
@@ -223,6 +225,8 @@ const (
 	EdgeBrandingSetting = "branding_setting"
 	// EdgeAPITokens holds the string denoting the api_tokens edge name in mutations.
 	EdgeAPITokens = "api_tokens"
+	// EdgeOauthGrants holds the string denoting the oauth_grants edge name in mutations.
+	EdgeOauthGrants = "oauth_grants"
 	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
 	EdgeEmailTemplates = "email_templates"
 	// EdgeIntegrationWebhooks holds the string denoting the integration_webhooks edge name in mutations.
@@ -648,6 +652,13 @@ const (
 	NotificationTemplateCreatorsInverseTable = "groups"
 	// NotificationTemplateCreatorsColumn is the table column denoting the notification_template_creators relation/edge.
 	NotificationTemplateCreatorsColumn = "organization_notification_template_creators"
+	// OauthGrantCreatorsTable is the table that holds the oauth_grant_creators relation/edge.
+	OauthGrantCreatorsTable = "groups"
+	// OauthGrantCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	OauthGrantCreatorsInverseTable = "groups"
+	// OauthGrantCreatorsColumn is the table column denoting the oauth_grant_creators relation/edge.
+	OauthGrantCreatorsColumn = "organization_oauth_grant_creators"
 	// OrgMembershipCreatorsTable is the table that holds the org_membership_creators relation/edge.
 	OrgMembershipCreatorsTable = "groups"
 	// OrgMembershipCreatorsInverseTable is the table name for the Group entity.
@@ -983,6 +994,13 @@ const (
 	APITokensInverseTable = "api_tokens"
 	// APITokensColumn is the table column denoting the api_tokens relation/edge.
 	APITokensColumn = "owner_id"
+	// OauthGrantsTable is the table that holds the oauth_grants relation/edge.
+	OauthGrantsTable = "oauth_grants"
+	// OauthGrantsInverseTable is the table name for the OauthGrant entity.
+	// It exists in this package in order to avoid circular dependency with the "oauthgrant" package.
+	OauthGrantsInverseTable = "oauth_grants"
+	// OauthGrantsColumn is the table column denoting the oauth_grants relation/edge.
+	OauthGrantsColumn = "owner_id"
 	// EmailTemplatesTable is the table that holds the email_templates relation/edge.
 	EmailTemplatesTable = "email_templates"
 	// EmailTemplatesInverseTable is the table name for the EmailTemplate entity.
@@ -1607,7 +1625,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [88]ent.Hook
+	Hooks        [89]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -2244,6 +2262,20 @@ func ByNotificationTemplateCreatorsCount(opts ...sql.OrderTermOption) OrderOptio
 func ByNotificationTemplateCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newNotificationTemplateCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOauthGrantCreatorsCount orders the results by oauth_grant_creators count.
+func ByOauthGrantCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOauthGrantCreatorsStep(), opts...)
+	}
+}
+
+// ByOauthGrantCreators orders the results by oauth_grant_creators terms.
+func ByOauthGrantCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOauthGrantCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2909,6 +2941,20 @@ func ByAPITokensCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAPITokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAPITokensStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOauthGrantsCount orders the results by oauth_grants count.
+func ByOauthGrantsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOauthGrantsStep(), opts...)
+	}
+}
+
+// ByOauthGrants orders the results by oauth_grants terms.
+func ByOauthGrants(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOauthGrantsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -4311,6 +4357,13 @@ func newNotificationTemplateCreatorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, NotificationTemplateCreatorsTable, NotificationTemplateCreatorsColumn),
 	)
 }
+func newOauthGrantCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OauthGrantCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OauthGrantCreatorsTable, OauthGrantCreatorsColumn),
+	)
+}
 func newOrgMembershipCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -4652,6 +4705,13 @@ func newAPITokensStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(APITokensInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, APITokensTable, APITokensColumn),
+	)
+}
+func newOauthGrantsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OauthGrantsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OauthGrantsTable, OauthGrantsColumn),
 	)
 }
 func newEmailTemplatesStep() *sqlgraph.Step {

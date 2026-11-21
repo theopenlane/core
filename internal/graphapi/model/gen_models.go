@@ -2343,6 +2343,52 @@ type NotificationUpdatePayload struct {
 	Notification *generated.Notification `json:"notification"`
 }
 
+// Return response for createBulkOauthGrant mutation
+type OauthGrantBulkCreatePayload struct {
+	// Created oauthGrants
+	OauthGrants []*generated.OauthGrant `json:"oauthGrants,omitempty"`
+}
+
+// Return response for deleteBulkOauthGrant mutation
+type OauthGrantBulkDeletePayload struct {
+	// Deleted oauthGrant IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// Error returned when the bulk delete is only partially applied
+	Error *string `json:"error,omitempty"`
+	// IDs of oauthGrants that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+}
+
+// Return response for updateBulkOauthGrant mutation
+type OauthGrantBulkUpdatePayload struct {
+	// Updated oauthGrants
+	OauthGrants []*generated.OauthGrant `json:"oauthGrants,omitempty"`
+	// IDs of the updated oauthGrants
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
+}
+
+// Return response for createOauthGrant mutation
+type OauthGrantCreatePayload struct {
+	// Created oauthGrant
+	OauthGrant *generated.OauthGrant `json:"oauthGrant"`
+}
+
+// Return response for deleteOauthGrant mutation
+type OauthGrantDeletePayload struct {
+	// Deleted oauthGrant ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateOauthGrant mutation
+type OauthGrantUpdatePayload struct {
+	// Updated oauthGrant
+	OauthGrant *generated.OauthGrant `json:"oauthGrant"`
+}
+
 // Return response for createOnboarding mutation
 type OnboardingCreatePayload struct {
 	// Created onboarding
