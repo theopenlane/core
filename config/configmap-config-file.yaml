@@ -587,6 +587,17 @@ data:
         alloweddomain: {{ .Values.openlane.coreConfiguration.auth.supportaccess.alloweddomain | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.auth.oauthserver }}
+      oauthserver:
+        {{- if not (kindIs "invalid" .Values.openlane.coreConfiguration.auth.oauthserver.enabled) }}
+        enabled: {{ .Values.openlane.coreConfiguration.auth.oauthserver.enabled }}
+        {{- end }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.auth.oauthserver.allowedresources | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        allowedresources:
+        {{- toYaml $sliceValue | nindent 10 }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.authz }}
     authz:
