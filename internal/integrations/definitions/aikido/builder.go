@@ -31,6 +31,7 @@ func Builder(cfg Config) registry.Builder {
 			Connections: []types.Connector{
 				oauthConnection.
 					Name("Aikido OAuth").
+					Recommended().
 					Description("Connect your Aikido workspace by authorizing the Openlane app.").
 					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[aikidoOAuthCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec

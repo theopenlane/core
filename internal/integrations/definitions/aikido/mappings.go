@@ -177,8 +177,21 @@ var mapExprDataleakFinding = providerkit.CelMapExpr(
 )
 
 const (
-	// exprAutofixStatus maps the autofix task status onto the remediation status, a failed or closed task will not land
-	exprAutofixStatus = `payload.?status.orValue("") == "pr_merged" ? "COMPLETED" : (payload.?status.orValue("") in ["pr_open", "pr_created"] ? "IN_REVIEW" : (payload.?status.orValue("") in ["pr_closed", "no_fix", "autofix_failed", "preview_failed"] ? "WONT_DO" : "IN_PROGRESS"))`
+	// exprAutofixStatus maps the autofix task status onto the remediation status, a fix preview nobody applied is still open
+	// and a failed or closed task will not land
+	exprAutofixStatus = `{
+	"preview_available": "OPEN",
+	"creating": "IN_PROGRESS",
+	"pr_open": "IN_REVIEW",
+	"pr_created": "IN_REVIEW",
+	"pr_merged": "COMPLETED",
+	"pr_closed": "WONT_DO",
+	"no_fix": "WONT_DO",
+	"autofix_failed": "WONT_DO",
+	"preview_failed": "WONT_DO"
+}[?payload.?status.orValue("")].orValue("OPEN")`
+	// exprAutofixInstructions describes the autofix and where it applies
+	exprAutofixInstructions = `"Aikido " + payload.?type.orValue("") + " autofix" + (payload.?autofix_target.?location.orValue("") != "" ? " in " + payload.autofix_target.location : "")`
 	// exprAutofixFinished is when the autofix task finished
 	exprAutofixFinished = `('finished_at' in payload ? timestamp(int(payload.finished_at)) : null)`
 	// exprAutofixIssueIDs are the ids of the issues the task targets, matching the external id of both vulnerabilities and findings
@@ -190,6 +203,7 @@ var mapExprRemediation = providerkit.CelMapExpr(
 	entityops.RemediationFields.ExternalID.Expr(`string(payload.?id.orValue(""))`),
 	entityops.RemediationFields.Title.Expr(`payload.?autofix_target.?title.orValue("")`),
 	entityops.RemediationFields.Intent.Expr(`payload.?type.orValue("")`),
+	entityops.RemediationFields.Instructions.Expr(exprAutofixInstructions),
 	entityops.RemediationFields.Status.Expr(exprAutofixStatus),
 	entityops.RemediationFields.State.Expr(`payload.?status.orValue("")`),
 	entityops.RemediationFields.Error.Expr(`payload.?status.orValue("") in ["autofix_failed", "preview_failed"] ? payload.status : ""`),

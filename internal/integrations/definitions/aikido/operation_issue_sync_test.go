@@ -170,7 +170,7 @@ func TestCollectIssuesAttachesAttackAnalysis(t *testing.T) {
 	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case pathIssuesExport:
-			writeJSON(w, `[{"id":7,"type":"ai_pentest","assessment_id":"f19e449d"},{"id":8,"type":"sast"}]`)
+			writeJSON(w, `[{"id":7,"type":"ai_pentest","status":"open","assessment_id":"f19e449d"},{"id":8,"type":"sast","status":"open"}]`)
 		case fmt.Sprintf(pathAttackAnalysisFormat, "7"):
 			writeJSON(w, `{"title":"SQL Injection","summary":"The search endpoint is injectable"}`)
 		case fmt.Sprintf(pathAttackAnalysisFormat, "8"):
@@ -196,12 +196,14 @@ func TestCollectIssuesAttachesCVEDetailsOncePerCVE(t *testing.T) {
 	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case pathIssuesExport:
-			writeJSON(w, `[{"id":1,"type":"open_source","cve_id":"CVE-2026-23864"},{"id":2,"type":"open_source","cve_id":"CVE-2026-23864"},{"id":3,"type":"sast","cve_id":"CVE-2020-1"}]`)
+			writeJSON(w, `[{"id":1,"type":"open_source","status":"open","cve_id":"CVE-2026-23864"},{"id":2,"type":"open_source","status":"snoozed","cve_id":"CVE-2026-23864"},{"id":3,"type":"sast","status":"open","cve_id":"CVE-2020-1"},{"id":4,"type":"open_source","status":"closed","cve_id":"CVE-2019-9"}]`)
 		case fmt.Sprintf(pathCVEFormat, "CVE-2026-23864"):
 			cveRequests.Add(1)
 			writeJSON(w, `{"cve":"CVE-2026-23864","tldr":"Denial of service in Next.js"}`)
 		case fmt.Sprintf(pathCVEFormat, "CVE-2020-1"):
 			t.Error("cve details requested for a non open source issue")
+		case fmt.Sprintf(pathCVEFormat, "CVE-2019-9"):
+			t.Error("cve details requested for a closed issue")
 		default:
 			writeJSON(w, `[]`)
 		}
@@ -211,17 +213,71 @@ func TestCollectIssuesAttachesCVEDetailsOncePerCVE(t *testing.T) {
 	assert.NilError(t, err)
 
 	vulnerabilities := payloadSet(payloads, entityops.SchemaVulnerability.Name)
-	assert.Assert(t, is.Len(vulnerabilities, 2))
+	assert.Assert(t, is.Len(vulnerabilities, 3))
 
 	assert.Check(t, is.Equal(int32(1), cveRequests.Load()))
 	assert.Check(t, is.Contains(string(vulnerabilities[1].Payload), `"tldr":"Denial of service in Next.js"`))
+	assert.Check(t, !strings.Contains(string(vulnerabilities[2].Payload), "cve_details"))
+}
+
+func TestFetchEachSkipsFailedKeys(t *testing.T) {
+	var requests atomic.Int32
+
+	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		requests.Add(1)
+
+		if r.URL.Path == fmt.Sprintf(pathCVEFormat, "AIKIDO-1") {
+			w.WriteHeader(http.StatusNotFound)
+
+			return
+		}
+
+		writeJSON(w, `{"tldr":"details"}`)
+	})
+
+	records, err := client.fetchEach(context.Background(), []string{"AIKIDO-1", "CVE-2", "CVE-3"}, pathCVEFormat)
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Len(records, 2))
+	assert.Check(t, is.Equal(int32(3), requests.Load()))
+}
+
+func TestFetchEachStopsWhenRateLimited(t *testing.T) {
+	var requests atomic.Int32
+
+	client := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		requests.Add(1)
+		w.Header().Set("Retry-After", "0")
+		w.WriteHeader(http.StatusTooManyRequests)
+	})
+
+	records, err := client.fetchEach(context.Background(), []string{"CVE-1", "CVE-2"}, pathCVEFormat)
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Len(records, 0))
+	assert.Check(t, is.Equal(int32(maxRateLimitRetries+1), requests.Load()))
+}
+
+func TestFetchEachStopsWithoutScope(t *testing.T) {
+	var requests atomic.Int32
+
+	client := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		requests.Add(1)
+		w.WriteHeader(http.StatusForbidden)
+	})
+
+	records, err := client.fetchEach(context.Background(), []string{"CVE-1", "CVE-2"}, pathCVEFormat)
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Len(records, 0))
+	assert.Check(t, is.Equal(int32(1), requests.Load()))
 }
 
 func TestCollectIssuesWithoutAttackAnalysis(t *testing.T) {
 	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case pathIssuesExport:
-			writeJSON(w, `[{"id":7,"type":"ai_pentest"}]`)
+			writeJSON(w, `[{"id":7,"type":"ai_pentest","status":"open"}]`)
 		case fmt.Sprintf(pathAttackAnalysisFormat, "7"):
 			w.WriteHeader(http.StatusForbidden)
 		default:

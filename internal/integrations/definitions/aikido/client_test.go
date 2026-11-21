@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"golang.org/x/time/rate"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -57,6 +58,8 @@ func newTestClient(t *testing.T, api http.HandlerFunc) *APIClient {
 
 	client, err := NewAPIClient(context.Background(), server.URL, testClientID, testClientSecret)
 	assert.NilError(t, err)
+
+	client.limiter = rate.NewLimiter(rate.Inf, 1)
 
 	return client
 }

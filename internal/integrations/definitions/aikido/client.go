@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/logx"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
+	"golang.org/x/time/rate"
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -19,7 +20,7 @@ import (
 
 const (
 	// pathToken is the OAuth client credentials token endpoint on the app host
-	pathToken = "/api/oauth/token"
+	pathToken = "/api/oauth/token" //nolint:gosec // endpoint path, not a credential
 	// pathAPI is the public REST API prefix on the app host
 	pathAPI = "/api/public/v1"
 	// requestTimeout is the per-request timeout for Aikido API calls
@@ -28,12 +29,16 @@ const (
 	maxRateLimitRetries = 3
 	// maxRetryAfter caps the wait between rate limited retries, Aikido uses a one minute sliding window
 	maxRetryAfter = 60 * time.Second
+	// requestsPerMinute is Aikido's documented per workspace limit, paced with a burst of one so no window exceeds it
+	requestsPerMinute = 20
 )
 
 // APIClient is a thin Aikido REST API client with the base URL and OAuth token source pre-applied
 type APIClient struct {
 	// requester is the underlying httpsling requester carrying the base URL and authenticated transport
 	requester *httpsling.Requester
+	// limiter paces requests under the Aikido rate limit instead of relying on 429 retries
+	limiter *rate.Limiter
 }
 
 // buildClient constructs the Aikido API client for one installation
@@ -109,7 +114,7 @@ func newAPIClient(ctx context.Context, appURL string, source oauth2.TokenSource)
 		return nil, ErrClientBuild
 	}
 
-	return &APIClient{requester: requester}, nil
+	return &APIClient{requester: requester, limiter: rate.NewLimiter(rate.Every(time.Minute/requestsPerMinute), 1)}, nil
 }
 
 // get issues a GET request and decodes a successful response into out, retrying while Aikido rate limits the call
@@ -122,6 +127,10 @@ func (c *APIClient) get(ctx context.Context, path string, params map[string]stri
 	}
 
 	for attempt := 0; ; attempt++ {
+		if err := c.limiter.Wait(ctx); err != nil {
+			return nil, err
+		}
+
 		status, header, err := c.receive(ctx, path, out, opts)
 		if status != http.StatusTooManyRequests || attempt >= maxRateLimitRetries {
 			return header, err
@@ -161,8 +170,14 @@ func (c *APIClient) receive(ctx context.Context, path string, out any, opts []ht
 		return 0, nil, ErrAPIRequest
 	}
 
+	// the body of a failed response is often html, so the decode error is not logged
 	if !httpsling.IsSuccess(resp) {
-		logx.FromContext(ctx).Error().Err(err).Str("path", path).Int("status", resp.StatusCode).Msg("aikido: unexpected response status")
+		switch resp.StatusCode {
+		case http.StatusNotFound, http.StatusTooManyRequests:
+			logx.FromContext(ctx).Warn().Str("path", path).Int("status", resp.StatusCode).Msg("aikido: unexpected response status")
+		default:
+			logx.FromContext(ctx).Error().Str("path", path).Int("status", resp.StatusCode).Msg("aikido: unexpected response status")
+		}
 
 		return resp.StatusCode, resp.Header, statusError(resp.StatusCode)
 	}

@@ -250,6 +250,7 @@ func TestRemediationMapping(t *testing.T) {
 		assert.Check(t, is.Equal("12345", mapped["external_id"]))
 		assert.Check(t, is.Equal("lodash → 4.17.21", mapped["title"]))
 		assert.Check(t, is.Equal("dependency", mapped["intent"]))
+		assert.Check(t, is.Equal("Aikido dependency autofix in package-lock.json", mapped["instructions"]))
 		assert.Check(t, is.Equal("IN_REVIEW", mapped["status"]))
 		assert.Check(t, is.Equal("pr_open", mapped["state"]))
 		assert.Check(t, is.Equal("", mapped["error"]))
@@ -265,6 +266,13 @@ func TestRemediationMapping(t *testing.T) {
 
 		assert.Check(t, is.Equal("COMPLETED", mapped["status"]))
 		assert.Check(t, is.Equal("2026-07-03T23:04:00Z", mapped["completed_at"]))
+	})
+
+	t.Run("preview not applied", func(t *testing.T) {
+		mapped := mappingtest.EvalMap(t, spec, types.MappingEnvelope{Payload: json.RawMessage(`{"id":3,"type":"sast","status":"preview_available"}`)})
+
+		assert.Check(t, is.Equal("OPEN", mapped["status"]))
+		assert.Check(t, is.Equal("Aikido sast autofix", mapped["instructions"]))
 	})
 
 	t.Run("failed", func(t *testing.T) {

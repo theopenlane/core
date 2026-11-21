@@ -287,8 +287,8 @@ func (c *APIClient) users(ctx context.Context, params map[string]string) ([]map[
 	return records, nil
 }
 
-// fetchEach fetches the record at pathFormat for each key, keyed by key, stopping at the first failure since these
-// endpoints need scopes older installations may not have granted, so the records fetched so far are kept
+// fetchEach fetches the record at pathFormat for each key, keyed by key, skipping a key that fails and stopping
+// when the scope is missing or Aikido keeps rate limiting, since every remaining call would fail the same way
 func (c *APIClient) fetchEach(ctx context.Context, keys []string, pathFormat string) (map[string]map[string]any, error) {
 	records := make(map[string]map[string]any, len(keys))
 
@@ -300,9 +300,15 @@ func (c *APIClient) fetchEach(ctx context.Context, keys []string, pathFormat str
 				return nil, ctx.Err()
 			}
 
-			logx.FromContext(ctx).Warn().Err(err).Str("path", pathFormat).Msg("aikido: optional detail unavailable, ingesting without it")
+			if errors.Is(err, ErrUnauthorized) || errors.Is(err, ErrRateLimited) {
+				logx.FromContext(ctx).Warn().Err(err).Str("path", pathFormat).Int("fetched", len(records)).Int("requested", len(keys)).Msg("aikido: optional detail unavailable, ingesting without the rest")
 
-			return records, nil
+				return records, nil
+			}
+
+			logx.FromContext(ctx).Warn().Err(err).Str("path", pathFormat).Str("key", key).Msg("aikido: optional detail unavailable, skipping it")
+
+			continue
 		}
 
 		records[key] = record

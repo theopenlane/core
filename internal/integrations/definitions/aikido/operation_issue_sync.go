@@ -3,6 +3,7 @@ package aikido
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/mapx"
@@ -182,12 +183,21 @@ func collectDataleaks(ctx context.Context, c *APIClient) ([]types.MappingEnvelop
 	return envelopes, nil
 }
 
-// pentestIssueIDs returns the ids of the AI pentest issues, which carry an attack analysis
+// openIssueStatuses are the issue statuses still needing action, matching the open mapping, only these are enriched
+// with per issue calls so each sync stays within the rate limit
+var openIssueStatuses = []string{"open", "snoozed"}
+
+// isOpenIssue reports whether the issue still needs action
+func isOpenIssue(issue map[string]any) bool {
+	return slices.Contains(openIssueStatuses, mapx.Value[string](issue, "status"))
+}
+
+// pentestIssueIDs returns the ids of the open AI pentest issues, which carry an attack analysis
 func pentestIssueIDs(issues []map[string]any) []string {
 	ids := make([]string, 0)
 
 	for _, issue := range issues {
-		if mapx.Value[string](issue, "type") == issueTypeAIPentest {
+		if mapx.Value[string](issue, "type") == issueTypeAIPentest && isOpenIssue(issue) {
 			ids = append(ids, recordID(issue))
 		}
 	}
@@ -195,14 +205,14 @@ func pentestIssueIDs(issues []map[string]any) []string {
 	return ids
 }
 
-// issueCVEs returns the distinct CVE or AIKIDO ids of the open source issues
+// issueCVEs returns the distinct CVE or AIKIDO ids of the open open source issues
 func issueCVEs(issues []map[string]any) []string {
 	seen := map[string]struct{}{}
 	cves := make([]string, 0)
 
 	for _, issue := range issues {
 		cve := mapx.Value[string](issue, "cve_id")
-		if cve == "" || mapx.Value[string](issue, "type") != issueTypeOpenSource {
+		if cve == "" || mapx.Value[string](issue, "type") != issueTypeOpenSource || !isOpenIssue(issue) {
 			continue
 		}
 
