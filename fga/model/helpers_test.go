@@ -1,6 +1,7 @@
 package model
 
 import (
+	"slices"
 	"testing"
 
 	"gotest.tools/v3/assert"
@@ -74,4 +75,57 @@ func TestScopeOptions(t *testing.T) {
 	assert.Check(t, is.Contains(opts, "control"))
 	assert.Check(t, is.Contains(opts["control"], "read"))
 	assert.Check(t, is.Contains(opts["control"], "write"))
+}
+
+func TestScopeList(t *testing.T) {
+	scopes, err := ScopeList()
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Contains(scopes, "control:read"))
+	assert.Check(t, is.Contains(scopes, "control:write"))
+	assert.Check(t, is.Contains(scopes, "api_token:delete"))
+	assert.Check(t, slices.IsSorted(scopes))
+}
+
+func TestScopeRelation(t *testing.T) {
+	tests := []struct {
+		relation string
+		object   string
+		want     string
+	}{
+		{relation: CanView, object: "control", want: "can_view_control"},
+		{relation: CanEdit, object: "vendor_risk_score", want: "can_edit_vendor_risk_score"},
+		{relation: CanDelete, object: "api_token", want: "can_delete_api_token"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.want, func(t *testing.T) {
+			assert.Check(t, is.Equal(ScopeRelation(tc.relation, tc.object), tc.want))
+		})
+	}
+}
+
+func TestParseScopeRelation(t *testing.T) {
+	tests := []struct {
+		scope        string
+		wantRelation string
+		wantObject   string
+		wantOK       bool
+	}{
+		{scope: "control:read", wantRelation: CanView, wantObject: "control", wantOK: true},
+		{scope: "vendor_risk_score:write", wantRelation: CanEdit, wantObject: "vendor_risk_score", wantOK: true},
+		{scope: "Risk:Delete", wantRelation: CanDelete, wantObject: "risk", wantOK: true},
+		{scope: "control:admin"},
+		{scope: "read"},
+		{scope: ""},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.scope, func(t *testing.T) {
+			relation, object, ok := ParseScopeRelation(tc.scope)
+			assert.Check(t, is.Equal(ok, tc.wantOK))
+			assert.Check(t, is.Equal(relation, tc.wantRelation))
+			assert.Check(t, is.Equal(object, tc.wantObject))
+		})
+	}
 }

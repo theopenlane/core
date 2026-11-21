@@ -3187,6 +3187,28 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 },
+}, "oauth_grant": {"owner": {
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "user": {
+	ObjectType:          "user",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "oauth_tokens": {
+	ObjectType:          "oauth_token",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+},
+}, "oauth_token": {"oauth_grant": {
+	ObjectType:          "oauth_grant",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+},
 }, "onboarding": {"organization": {
 	ObjectType:          "organization",
 	SkipEditCheck:       true,
@@ -3483,6 +3505,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "oauth_grant_creators": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "org_membership_creators": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
@@ -3725,6 +3752,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "api_tokens": {
 	ObjectType:          "api_token",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "oauth_grants": {
+	ObjectType:          "oauth_grant",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,

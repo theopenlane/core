@@ -267,8 +267,9 @@ func serve(ctx context.Context) error {
 		serveropts.WithReadyChecks(dbClient.Config, fgaClient, redisClient, dbClient.Job),
 	)
 
-	// add auth and integration options
+	// add auth and integration options, with the oauth server first so the auth middleware can verify its tokens
 	so.AddServerOptions(
+		serveropts.WithOAuthServer(),
 		serveropts.WithAuth(),
 		serveropts.WithIntegrationsRuntime(ctx, dbClient, galaApp),
 	)

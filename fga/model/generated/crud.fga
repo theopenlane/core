@@ -206,6 +206,11 @@ extend type organization
     define can_delete_notification_template: [service, user] or can_manage_campaigns or full_access
     define can_create_notification_template: can_edit or can_edit_notification_template or can_manage_campaigns
 
+    define can_view_oauth_grant: [service, user] or can_edit_oauth_grant or full_access
+    define can_edit_oauth_grant: [service, user] or can_delete_oauth_grant or full_access
+    define can_delete_oauth_grant: [service, user] or full_access
+    define can_create_oauth_grant: can_edit or can_edit_oauth_grant
+
     define can_view_org_membership: [service, user] or can_edit_org_membership or can_view_organization or full_access
     define can_edit_org_membership: [service, user] or can_delete_org_membership or can_edit_organization or full_access
     define can_delete_org_membership: [service, user] or can_delete_organization or full_access

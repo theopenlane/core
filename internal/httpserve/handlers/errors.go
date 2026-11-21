@@ -17,6 +17,24 @@ import (
 )
 
 var (
+	// ErrOAuthRequestNotFound is returned when an OAuth authorization request is unknown, used, or expired
+	ErrOAuthRequestNotFound = errors.New("authorization request not found or expired")
+	// ErrOAuthUserRequired is returned when an OAuth application is approved by anything but a console session
+	ErrOAuthUserRequired = errors.New("an interactive user session is required to approve applications")
+	// ErrOAuthNoPermission is returned when the user may not install the application in the organization
+	ErrOAuthNoPermission = errors.New("you don't have permission to install applications for this organization")
+	// ErrOAuthNoOrganization is returned when an OAuth application is approved without an organization in the session
+	ErrOAuthNoOrganization = errors.New("select an organization before approving an application")
+	// ErrOAuthImpersonation is returned when an OAuth application is approved while impersonating a user
+	ErrOAuthImpersonation = errors.New("applications can't be approved while impersonating a user")
+	// ErrOAuthKindMismatch is returned when the user picks a different install kind than the application requested
+	ErrOAuthKindMismatch = errors.New("the application requested a different kind of install")
+	// ErrOAuthInvalidKind is returned when the consent kind is not USER or ORGANIZATION
+	ErrOAuthInvalidKind = errors.New("kind must be USER or ORGANIZATION")
+	// ErrOAuthInvalidAccess is returned when the consent access level is not READ or WRITE
+	ErrOAuthInvalidAccess = errors.New("accessLevel must be READ or WRITE")
+	// ErrOAuthBadRedirect is returned when an application's redirect URI is not safe to send the browser to
+	ErrOAuthBadRedirect = errors.New("the application's redirect URI is not allowed")
 	// ErrIntegrationsNotEnabled is returned when the integrations runtime is not configured on this server
 	ErrIntegrationsNotEnabled = errors.New("integrations are not enabled")
 	// ErrCredentialRequiresAuthFlow is returned when credentials are posted for a connection that is configured through its auth flow

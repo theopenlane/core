@@ -18,6 +18,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	iamoauth "github.com/theopenlane/iam/oauthserver"
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/common/enums"
@@ -29,6 +30,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/v2/internal/oauthserver"
 	"github.com/theopenlane/core/v2/internal/ssoenforcement"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/permissioncache"
@@ -102,6 +104,10 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			}
 
 			if err := AuthenticateRequest(c, conf, validator); err != nil {
+				if isOAuthAccessDenied(err) {
+					return c.JSON(http.StatusForbidden, rout.ErrorResponse(err))
+				}
+
 				return unauthorized(c, err, conf, validator)
 			}
 
@@ -139,6 +145,22 @@ func AuthenticateRequest(c echo.Context, conf *Options, validator tokens.Validat
 	requestLogger := logx.FromContext(reqCtx)
 
 	switch getTokenType(bearerToken) {
+	case oauthAccessTokenAuthentication:
+		var grant oauthserver.CallerGrant
+
+		caller, grant, err = checkOAuthAccessToken(reqCtx, conf, bearerToken)
+		if err != nil {
+			return err
+		}
+
+		if err := enforceOAuthAccess(c, grant); err != nil {
+			return err
+		}
+
+		// privacy rules and the graphql scope extension read the grant from the context
+		c.SetRequest(c.Request().WithContext(oauthserver.WithCallerGrant(c.Request().Context(), grant)))
+
+		metrics.RecordAuthentication(metrics.AuthTypeOAuth)
 	case auth.PATAuthentication, auth.APITokenAuthentication:
 		caller, id, err = checkToken(reqCtx, conf, bearerToken, auth.GetOrganizationContextHeader(c))
 		if err != nil {
@@ -251,6 +273,8 @@ func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayloa
 // the default is JWT authentication
 func getTokenType(bearerToken string) auth.AuthenticationType {
 	switch {
+	case iamoauth.IsAccessToken(bearerToken):
+		return oauthAccessTokenAuthentication
 	case strings.HasPrefix(bearerToken, "tola_"):
 		return auth.APITokenAuthentication
 	case strings.HasPrefix(bearerToken, "tolp_"):
@@ -262,6 +286,11 @@ func getTokenType(bearerToken string) auth.AuthenticationType {
 
 // updateLastUsed updates the last used time for the token depending on the authentication type
 func updateLastUsed(ctx context.Context, dbClient *ent.Client, caller *auth.Caller, tokenID string) error {
+	// oauth access tokens have no token id here, their usage is tracked on the grant in checkOAuthAccessToken
+	if tokenID == "" {
+		return nil
+	}
+
 	logger := logx.FromContext(ctx)
 	switch caller.AuthenticationType {
 	case auth.PATAuthentication:

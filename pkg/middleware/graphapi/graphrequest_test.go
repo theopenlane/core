@@ -1,11 +1,32 @@
 package graphapi
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
+	echo "github.com/theopenlane/echox"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
+
+func TestIsGraphQLRequest(t *testing.T) {
+	tests := []struct {
+		path string
+		want bool
+	}{
+		{path: queryEndpoint, want: true},
+		{path: historyQueryEndpoint, want: true},
+		{path: "/v1/organizations", want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.path, func(t *testing.T) {
+			c := echo.New().NewContext(httptest.NewRequest(http.MethodPost, tt.path, nil), httptest.NewRecorder())
+			assert.Check(t, is.Equal(IsGraphQLRequest(c), tt.want))
+		})
+	}
+}
 
 func TestDetectGraphQLOperationType(t *testing.T) {
 	tests := []struct {

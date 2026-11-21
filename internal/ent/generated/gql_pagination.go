@@ -60,6 +60,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
@@ -21789,6 +21790,426 @@ func (_m *NotificationTemplate) ToEdge(order *NotificationTemplateOrder) *Notifi
 		order = DefaultNotificationTemplateOrder
 	}
 	return &NotificationTemplateEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// OauthGrantEdge is the edge representation of OauthGrant.
+type OauthGrantEdge struct {
+	Node   *OauthGrant `json:"node"`
+	Cursor Cursor      `json:"cursor"`
+}
+
+// OauthGrantConnection is the connection containing edges to OauthGrant.
+type OauthGrantConnection struct {
+	Edges      []*OauthGrantEdge `json:"edges"`
+	PageInfo   PageInfo          `json:"pageInfo"`
+	TotalCount int               `json:"totalCount"`
+}
+
+func (c *OauthGrantConnection) build(nodes []*OauthGrant, pager *oauthgrantPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *OauthGrant
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *OauthGrant {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *OauthGrant {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*OauthGrantEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &OauthGrantEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// OauthGrantPaginateOption enables pagination customization.
+type OauthGrantPaginateOption func(*oauthgrantPager) error
+
+// WithOauthGrantOrder configures pagination ordering.
+func WithOauthGrantOrder(order []*OauthGrantOrder) OauthGrantPaginateOption {
+	return func(pager *oauthgrantPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithOauthGrantFilter configures pagination filter.
+func WithOauthGrantFilter(filter func(*OauthGrantQuery) (*OauthGrantQuery, error)) OauthGrantPaginateOption {
+	return func(pager *oauthgrantPager) error {
+		if filter == nil {
+			return errors.New("OauthGrantQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type oauthgrantPager struct {
+	reverse bool
+	order   []*OauthGrantOrder
+	filter  func(*OauthGrantQuery) (*OauthGrantQuery, error)
+}
+
+func newOauthGrantPager(opts []OauthGrantPaginateOption, reverse bool) (*oauthgrantPager, error) {
+	pager := &oauthgrantPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *oauthgrantPager) applyFilter(query *OauthGrantQuery) (*OauthGrantQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *oauthgrantPager) toCursor(_m *OauthGrant) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *oauthgrantPager) applyCursors(query *OauthGrantQuery, after, before *Cursor) (*OauthGrantQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultOauthGrantOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *oauthgrantPager) applyOrder(query *OauthGrantQuery) *OauthGrantQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultOauthGrantOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultOauthGrantOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *oauthgrantPager) orderExpr(query *OauthGrantQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultOauthGrantOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to OauthGrant.
+func (_m *OauthGrantQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...OauthGrantPaginateOption,
+) (*OauthGrantConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newOauthGrantPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &OauthGrantConnection{Edges: []*OauthGrantEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimitSingle(first, last)
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// OauthGrantOrderFieldCreatedAt orders OauthGrant by created_at.
+	OauthGrantOrderFieldCreatedAt = &OauthGrantOrderField{
+		Value: func(_m *OauthGrant) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: oauthgrant.FieldCreatedAt,
+		toTerm: oauthgrant.ByCreatedAt,
+		toCursor: func(_m *OauthGrant) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// OauthGrantOrderFieldUpdatedAt orders OauthGrant by updated_at.
+	OauthGrantOrderFieldUpdatedAt = &OauthGrantOrderField{
+		Value: func(_m *OauthGrant) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: oauthgrant.FieldUpdatedAt,
+		toTerm: oauthgrant.ByUpdatedAt,
+		toCursor: func(_m *OauthGrant) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// OauthGrantOrderFieldClientName orders OauthGrant by client_name.
+	OauthGrantOrderFieldClientName = &OauthGrantOrderField{
+		Value: func(_m *OauthGrant) (ent.Value, error) {
+			return _m.ClientName, nil
+		},
+		column: oauthgrant.FieldClientName,
+		toTerm: oauthgrant.ByClientName,
+		toCursor: func(_m *OauthGrant) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ClientName,
+			}
+		},
+	}
+	// OauthGrantOrderFieldLastUsedAt orders OauthGrant by last_used_at.
+	OauthGrantOrderFieldLastUsedAt = &OauthGrantOrderField{
+		Value: func(_m *OauthGrant) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastUsedAt == nil {
+				return nil, nil
+			}
+			return _m.LastUsedAt, nil
+		},
+		column: oauthgrant.FieldLastUsedAt,
+		toTerm: func(opts ...sql.OrderTermOption) oauthgrant.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return oauthgrant.ByLastUsedAt(opts...)
+		},
+		toCursor: func(_m *OauthGrant) Cursor {
+			if _m.LastUsedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastUsedAt,
+			}
+		},
+	}
+	// OauthGrantOrderFieldIsActive orders OauthGrant by is_active.
+	OauthGrantOrderFieldIsActive = &OauthGrantOrderField{
+		Value: func(_m *OauthGrant) (ent.Value, error) {
+			return _m.IsActive, nil
+		},
+		column: oauthgrant.FieldIsActive,
+		toTerm: oauthgrant.ByIsActive,
+		toCursor: func(_m *OauthGrant) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsActive,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f OauthGrantOrderField) String() string {
+	var str string
+	switch f.column {
+	case OauthGrantOrderFieldCreatedAt.column:
+		str = "created_at"
+	case OauthGrantOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case OauthGrantOrderFieldClientName.column:
+		str = "client_name"
+	case OauthGrantOrderFieldLastUsedAt.column:
+		str = "last_used_at"
+	case OauthGrantOrderFieldIsActive.column:
+		str = "is_active"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f OauthGrantOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *OauthGrantOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("OauthGrantOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *OauthGrantOrderFieldCreatedAt
+	case "updated_at":
+		*f = *OauthGrantOrderFieldUpdatedAt
+	case "client_name":
+		*f = *OauthGrantOrderFieldClientName
+	case "last_used_at":
+		*f = *OauthGrantOrderFieldLastUsedAt
+	case "is_active":
+		*f = *OauthGrantOrderFieldIsActive
+	default:
+		return fmt.Errorf("%s is not a valid OauthGrantOrderField", str)
+	}
+	return nil
+}
+
+// OauthGrantOrderField defines the ordering field of OauthGrant.
+type OauthGrantOrderField struct {
+	// Value extracts the ordering value from the given OauthGrant.
+	Value    func(*OauthGrant) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) oauthgrant.OrderOption
+	toCursor func(*OauthGrant) Cursor
+}
+
+// OauthGrantOrder defines the ordering of OauthGrant.
+type OauthGrantOrder struct {
+	Direction OrderDirection        `json:"direction"`
+	Field     *OauthGrantOrderField `json:"field"`
+}
+
+// DefaultOauthGrantOrder is the default ordering of OauthGrant.
+var DefaultOauthGrantOrder = &OauthGrantOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &OauthGrantOrderField{
+		Value: func(_m *OauthGrant) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: oauthgrant.FieldID,
+		toTerm: oauthgrant.ByID,
+		toCursor: func(_m *OauthGrant) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts OauthGrant into OauthGrantEdge.
+func (_m *OauthGrant) ToEdge(order *OauthGrantOrder) *OauthGrantEdge {
+	if order == nil {
+		order = DefaultOauthGrantOrder
+	}
+	return &OauthGrantEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -46646,6 +47067,36 @@ func (_q *NotificationTemplateQuery) clonePage() *NotificationTemplateQuery {
 }
 
 // clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OauthGrantQuery) clonePage() *OauthGrantQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOwner = _q.withOwner.clonePage()
+	c.withUser = _q.withUser.clonePage()
+	c.withOauthTokens = _q.withOauthTokens.clonePage()
+	if _q.withNamedOauthTokens != nil {
+		c.withNamedOauthTokens = make(map[string]*OauthTokenQuery, len(_q.withNamedOauthTokens))
+		for name, q := range _q.withNamedOauthTokens {
+			c.withNamedOauthTokens[name] = q.clonePage()
+		}
+	}
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
+func (_q *OauthTokenQuery) clonePage() *OauthTokenQuery {
+	if _q == nil {
+		return nil
+	}
+	c := _q.Clone()
+	c.withOauthGrant = _q.withOauthGrant.clonePage()
+	c.loadTotal = _q.loadTotal
+	return c
+}
+
+// clonePage clones the query for a pagination batch, keeping the eager loads collected from the request at every depth
 func (_q *OnboardingQuery) clonePage() *OnboardingQuery {
 	if _q == nil {
 		return nil
@@ -47057,6 +47508,13 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 			c.withNamedNotificationTemplateCreators[name] = q.clonePage()
 		}
 	}
+	c.withOauthGrantCreators = _q.withOauthGrantCreators.clonePage()
+	if _q.withNamedOauthGrantCreators != nil {
+		c.withNamedOauthGrantCreators = make(map[string]*GroupQuery, len(_q.withNamedOauthGrantCreators))
+		for name, q := range _q.withNamedOauthGrantCreators {
+			c.withNamedOauthGrantCreators[name] = q.clonePage()
+		}
+	}
 	c.withOrgMembershipCreators = _q.withOrgMembershipCreators.clonePage()
 	if _q.withNamedOrgMembershipCreators != nil {
 		c.withNamedOrgMembershipCreators = make(map[string]*GroupQuery, len(_q.withNamedOrgMembershipCreators))
@@ -47380,6 +47838,13 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 		c.withNamedAPITokens = make(map[string]*APITokenQuery, len(_q.withNamedAPITokens))
 		for name, q := range _q.withNamedAPITokens {
 			c.withNamedAPITokens[name] = q.clonePage()
+		}
+	}
+	c.withOauthGrants = _q.withOauthGrants.clonePage()
+	if _q.withNamedOauthGrants != nil {
+		c.withNamedOauthGrants = make(map[string]*OauthGrantQuery, len(_q.withNamedOauthGrants))
+		for name, q := range _q.withNamedOauthGrants {
+			c.withNamedOauthGrants[name] = q.clonePage()
 		}
 	}
 	c.withEmailTemplates = _q.withEmailTemplates.clonePage()

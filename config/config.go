@@ -186,6 +186,8 @@ type Auth struct {
 	Providers handlers.OauthProviderConfig `json:"providers" koanf:"providers"`
 	// SupportAccess contains the configuration for the Openlane support access flow
 	SupportAccess handlers.SupportAccessConfig `json:"supportaccess" koanf:"supportaccess"`
+	// OAuthServer contains the configuration for the OAuth authorization server third-party apps connect through
+	OAuthServer handlers.OAuthServerConfig `json:"oauthserver" koanf:"oauthserver"`
 }
 
 // TLS settings for the server for secure connections

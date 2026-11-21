@@ -20,7 +20,7 @@ require (
 	github.com/theopenlane/core/v2 v2.17.5
 	github.com/theopenlane/go-client v0.17.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.42.3
+	github.com/theopenlane/iam v0.42.4-0.20261120020220-f227ac5d8c24
 	github.com/theopenlane/utils v0.7.4
 	golang.org/x/oauth2 v0.38.0
 	golang.org/x/term v0.48.0

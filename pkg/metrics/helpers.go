@@ -122,6 +122,7 @@ const (
 	AuthTypeJWTAnonymous = "jwt_anonymous"
 	AuthTypePAT          = "pat"
 	AuthTypeAPIToken     = "api_token"
+	AuthTypeOAuth        = "oauth"
 )
 
 // RecordWorkerExecution records a worker execution with appropriate labels

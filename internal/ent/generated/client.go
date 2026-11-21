@@ -69,6 +69,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthtoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
@@ -247,6 +249,10 @@ type Client struct {
 	NotificationPreference *NotificationPreferenceClient
 	// NotificationTemplate is the client for interacting with the NotificationTemplate builders.
 	NotificationTemplate *NotificationTemplateClient
+	// OauthGrant is the client for interacting with the OauthGrant builders.
+	OauthGrant *OauthGrantClient
+	// OauthToken is the client for interacting with the OauthToken builders.
+	OauthToken *OauthTokenClient
 	// Onboarding is the client for interacting with the Onboarding builders.
 	Onboarding *OnboardingClient
 	// OrgMembership is the client for interacting with the OrgMembership builders.
@@ -427,6 +433,8 @@ func (c *Client) init() {
 	c.Notification = NewNotificationClient(c.config)
 	c.NotificationPreference = NewNotificationPreferenceClient(c.config)
 	c.NotificationTemplate = NewNotificationTemplateClient(c.config)
+	c.OauthGrant = NewOauthGrantClient(c.config)
+	c.OauthToken = NewOauthTokenClient(c.config)
 	c.Onboarding = NewOnboardingClient(c.config)
 	c.OrgMembership = NewOrgMembershipClient(c.config)
 	c.OrgModule = NewOrgModuleClient(c.config)
@@ -730,6 +738,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Notification:                NewNotificationClient(cfg),
 		NotificationPreference:      NewNotificationPreferenceClient(cfg),
 		NotificationTemplate:        NewNotificationTemplateClient(cfg),
+		OauthGrant:                  NewOauthGrantClient(cfg),
+		OauthToken:                  NewOauthTokenClient(cfg),
 		Onboarding:                  NewOnboardingClient(cfg),
 		OrgMembership:               NewOrgMembershipClient(cfg),
 		OrgModule:                   NewOrgModuleClient(cfg),
@@ -854,6 +864,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Notification:                NewNotificationClient(cfg),
 		NotificationPreference:      NewNotificationPreferenceClient(cfg),
 		NotificationTemplate:        NewNotificationTemplateClient(cfg),
+		OauthGrant:                  NewOauthGrantClient(cfg),
+		OauthToken:                  NewOauthTokenClient(cfg),
 		Onboarding:                  NewOnboardingClient(cfg),
 		OrgMembership:               NewOrgMembershipClient(cfg),
 		OrgModule:                   NewOrgModuleClient(cfg),
@@ -949,19 +961,20 @@ func (c *Client) Use(hooks ...Hook) {
 		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
 		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
 		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
-		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationBrandingSetting,
-		c.OrganizationSetting, c.PasswordResetToken, c.PersonalAccessToken, c.Platform,
-		c.Procedure, c.Program, c.ProgramMembership, c.Remediation, c.Report,
-		c.ReportMembership, c.Review, c.Risk, c.SLADefinition, c.Scan, c.ShareLink,
-		c.ShareLinkAccessEvent, c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber,
-		c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task, c.Template,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
-		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
-		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
-		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
-		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
-		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.OauthGrant, c.OauthToken, c.Onboarding, c.OrgMembership, c.OrgModule,
+		c.OrgPrice, c.OrgProduct, c.OrgSubscription, c.Organization,
+		c.OrganizationBrandingSetting, c.OrganizationSetting, c.PasswordResetToken,
+		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
+		c.Remediation, c.Report, c.ReportMembership, c.Review, c.Risk, c.SLADefinition,
+		c.Scan, c.ShareLink, c.ShareLinkAccessEvent, c.Standard, c.Subcontrol,
+		c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting, c.TagDefinition,
+		c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc,
+		c.TrustCenterEntity, c.TrustCenterFAQ, c.TrustCenterNDARequest,
+		c.TrustCenterSetting, c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig,
+		c.User, c.UserSetting, c.VendorRiskScore, c.VendorScoringConfig,
+		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
+		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
+		c.WorkflowProposal,
 	} {
 		n.Use(hooks...)
 	}
@@ -982,19 +995,20 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
 		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
 		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
-		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationBrandingSetting,
-		c.OrganizationSetting, c.PasswordResetToken, c.PersonalAccessToken, c.Platform,
-		c.Procedure, c.Program, c.ProgramMembership, c.Remediation, c.Report,
-		c.ReportMembership, c.Review, c.Risk, c.SLADefinition, c.Scan, c.ShareLink,
-		c.ShareLinkAccessEvent, c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber,
-		c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task, c.Template,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
-		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
-		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
-		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
-		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
-		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.OauthGrant, c.OauthToken, c.Onboarding, c.OrgMembership, c.OrgModule,
+		c.OrgPrice, c.OrgProduct, c.OrgSubscription, c.Organization,
+		c.OrganizationBrandingSetting, c.OrganizationSetting, c.PasswordResetToken,
+		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
+		c.Remediation, c.Report, c.ReportMembership, c.Review, c.Risk, c.SLADefinition,
+		c.Scan, c.ShareLink, c.ShareLinkAccessEvent, c.Standard, c.Subcontrol,
+		c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting, c.TagDefinition,
+		c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc,
+		c.TrustCenterEntity, c.TrustCenterFAQ, c.TrustCenterNDARequest,
+		c.TrustCenterSetting, c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig,
+		c.User, c.UserSetting, c.VendorRiskScore, c.VendorScoringConfig,
+		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
+		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
+		c.WorkflowProposal,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1179,6 +1193,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.NotificationPreference.mutate(ctx, m)
 	case *NotificationTemplateMutation:
 		return c.NotificationTemplate.mutate(ctx, m)
+	case *OauthGrantMutation:
+		return c.OauthGrant.mutate(ctx, m)
+	case *OauthTokenMutation:
+		return c.OauthToken.mutate(ctx, m)
 	case *OnboardingMutation:
 		return c.Onboarding.mutate(ctx, m)
 	case *OrgMembershipMutation:
@@ -18043,6 +18061,339 @@ func (c *NotificationTemplateClient) mutate(ctx context.Context, m *Notification
 	}
 }
 
+// OauthGrantClient is a client for the OauthGrant schema.
+type OauthGrantClient struct {
+	config
+}
+
+// NewOauthGrantClient returns a client for the OauthGrant from the given config.
+func NewOauthGrantClient(c config) *OauthGrantClient {
+	return &OauthGrantClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `oauthgrant.Hooks(f(g(h())))`.
+func (c *OauthGrantClient) Use(hooks ...Hook) {
+	c.hooks.OauthGrant = append(c.hooks.OauthGrant, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `oauthgrant.Intercept(f(g(h())))`.
+func (c *OauthGrantClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OauthGrant = append(c.inters.OauthGrant, interceptors...)
+}
+
+// Create returns a builder for creating a OauthGrant entity.
+func (c *OauthGrantClient) Create() *OauthGrantCreate {
+	mutation := newOauthGrantMutation(c.config, OpCreate)
+	return &OauthGrantCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OauthGrant entities.
+func (c *OauthGrantClient) CreateBulk(builders ...*OauthGrantCreate) *OauthGrantCreateBulk {
+	return &OauthGrantCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OauthGrantClient) MapCreateBulk(slice any, setFunc func(*OauthGrantCreate, int)) *OauthGrantCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OauthGrantCreateBulk{err: fmt.Errorf("calling to OauthGrantClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OauthGrantCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OauthGrantCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OauthGrant.
+func (c *OauthGrantClient) Update() *OauthGrantUpdate {
+	mutation := newOauthGrantMutation(c.config, OpUpdate)
+	return &OauthGrantUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OauthGrantClient) UpdateOne(_m *OauthGrant) *OauthGrantUpdateOne {
+	mutation := newOauthGrantMutation(c.config, OpUpdateOne, withOauthGrant(_m))
+	return &OauthGrantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OauthGrantClient) UpdateOneID(id string) *OauthGrantUpdateOne {
+	mutation := newOauthGrantMutation(c.config, OpUpdateOne, withOauthGrantID(id))
+	return &OauthGrantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OauthGrant.
+func (c *OauthGrantClient) Delete() *OauthGrantDelete {
+	mutation := newOauthGrantMutation(c.config, OpDelete)
+	return &OauthGrantDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OauthGrantClient) DeleteOne(_m *OauthGrant) *OauthGrantDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OauthGrantClient) DeleteOneID(id string) *OauthGrantDeleteOne {
+	builder := c.Delete().Where(oauthgrant.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OauthGrantDeleteOne{builder}
+}
+
+// Query returns a query builder for OauthGrant.
+func (c *OauthGrantClient) Query() *OauthGrantQuery {
+	return &OauthGrantQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOauthGrant},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OauthGrant entity by its id.
+func (c *OauthGrantClient) Get(ctx context.Context, id string) (*OauthGrant, error) {
+	return c.Query().Where(oauthgrant.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OauthGrantClient) GetX(ctx context.Context, id string) *OauthGrant {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a OauthGrant.
+func (c *OauthGrantClient) QueryOwner(_m *OauthGrant) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(oauthgrant.Table, oauthgrant.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, oauthgrant.OwnerTable, oauthgrant.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a OauthGrant.
+func (c *OauthGrantClient) QueryUser(_m *OauthGrant) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(oauthgrant.Table, oauthgrant.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, oauthgrant.UserTable, oauthgrant.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOauthTokens queries the oauth_tokens edge of a OauthGrant.
+func (c *OauthGrantClient) QueryOauthTokens(_m *OauthGrant) *OauthTokenQuery {
+	query := (&OauthTokenClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(oauthgrant.Table, oauthgrant.FieldID, id),
+			sqlgraph.To(oauthtoken.Table, oauthtoken.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, oauthgrant.OauthTokensTable, oauthgrant.OauthTokensColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OauthGrantClient) Hooks() []Hook {
+	hooks := c.hooks.OauthGrant
+	return append(hooks[:len(hooks):len(hooks)], oauthgrant.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *OauthGrantClient) Interceptors() []Interceptor {
+	inters := c.inters.OauthGrant
+	return append(inters[:len(inters):len(inters)], oauthgrant.Interceptors[:]...)
+}
+
+func (c *OauthGrantClient) mutate(ctx context.Context, m *OauthGrantMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OauthGrantCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OauthGrantUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OauthGrantUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OauthGrantDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown OauthGrant mutation op: %q", m.Op())
+	}
+}
+
+// OauthTokenClient is a client for the OauthToken schema.
+type OauthTokenClient struct {
+	config
+}
+
+// NewOauthTokenClient returns a client for the OauthToken from the given config.
+func NewOauthTokenClient(c config) *OauthTokenClient {
+	return &OauthTokenClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `oauthtoken.Hooks(f(g(h())))`.
+func (c *OauthTokenClient) Use(hooks ...Hook) {
+	c.hooks.OauthToken = append(c.hooks.OauthToken, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `oauthtoken.Intercept(f(g(h())))`.
+func (c *OauthTokenClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OauthToken = append(c.inters.OauthToken, interceptors...)
+}
+
+// Create returns a builder for creating a OauthToken entity.
+func (c *OauthTokenClient) Create() *OauthTokenCreate {
+	mutation := newOauthTokenMutation(c.config, OpCreate)
+	return &OauthTokenCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OauthToken entities.
+func (c *OauthTokenClient) CreateBulk(builders ...*OauthTokenCreate) *OauthTokenCreateBulk {
+	return &OauthTokenCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OauthTokenClient) MapCreateBulk(slice any, setFunc func(*OauthTokenCreate, int)) *OauthTokenCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OauthTokenCreateBulk{err: fmt.Errorf("calling to OauthTokenClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OauthTokenCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OauthTokenCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OauthToken.
+func (c *OauthTokenClient) Update() *OauthTokenUpdate {
+	mutation := newOauthTokenMutation(c.config, OpUpdate)
+	return &OauthTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OauthTokenClient) UpdateOne(_m *OauthToken) *OauthTokenUpdateOne {
+	mutation := newOauthTokenMutation(c.config, OpUpdateOne, withOauthToken(_m))
+	return &OauthTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OauthTokenClient) UpdateOneID(id string) *OauthTokenUpdateOne {
+	mutation := newOauthTokenMutation(c.config, OpUpdateOne, withOauthTokenID(id))
+	return &OauthTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OauthToken.
+func (c *OauthTokenClient) Delete() *OauthTokenDelete {
+	mutation := newOauthTokenMutation(c.config, OpDelete)
+	return &OauthTokenDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OauthTokenClient) DeleteOne(_m *OauthToken) *OauthTokenDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OauthTokenClient) DeleteOneID(id string) *OauthTokenDeleteOne {
+	builder := c.Delete().Where(oauthtoken.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OauthTokenDeleteOne{builder}
+}
+
+// Query returns a query builder for OauthToken.
+func (c *OauthTokenClient) Query() *OauthTokenQuery {
+	return &OauthTokenQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOauthToken},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OauthToken entity by its id.
+func (c *OauthTokenClient) Get(ctx context.Context, id string) (*OauthToken, error) {
+	return c.Query().Where(oauthtoken.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OauthTokenClient) GetX(ctx context.Context, id string) *OauthToken {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOauthGrant queries the oauth_grant edge of a OauthToken.
+func (c *OauthTokenClient) QueryOauthGrant(_m *OauthToken) *OauthGrantQuery {
+	query := (&OauthGrantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(oauthtoken.Table, oauthtoken.FieldID, id),
+			sqlgraph.To(oauthgrant.Table, oauthgrant.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, oauthtoken.OauthGrantTable, oauthtoken.OauthGrantColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OauthTokenClient) Hooks() []Hook {
+	hooks := c.hooks.OauthToken
+	return append(hooks[:len(hooks):len(hooks)], oauthtoken.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *OauthTokenClient) Interceptors() []Interceptor {
+	return c.inters.OauthToken
+}
+
+func (c *OauthTokenClient) mutate(ctx context.Context, m *OauthTokenMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OauthTokenCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OauthTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OauthTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OauthTokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown OauthToken mutation op: %q", m.Op())
+	}
+}
+
 // OnboardingClient is a client for the Onboarding schema.
 type OnboardingClient struct {
 	config
@@ -19889,6 +20240,22 @@ func (c *OrganizationClient) QueryNotificationTemplateCreators(_m *Organization)
 	return query
 }
 
+// QueryOauthGrantCreators queries the oauth_grant_creators edge of a Organization.
+func (c *OrganizationClient) QueryOauthGrantCreators(_m *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OauthGrantCreatorsTable, organization.OauthGrantCreatorsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOrgMembershipCreators queries the org_membership_creators edge of a Organization.
 func (c *OrganizationClient) QueryOrgMembershipCreators(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -20666,6 +21033,22 @@ func (c *OrganizationClient) QueryAPITokens(_m *Organization) *APITokenQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(apitoken.Table, apitoken.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.APITokensTable, organization.APITokensColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOauthGrants queries the oauth_grants edge of a Organization.
+func (c *OrganizationClient) QueryOauthGrants(_m *Organization) *OauthGrantQuery {
+	query := (&OauthGrantClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(oauthgrant.Table, oauthgrant.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OauthGrantsTable, organization.OauthGrantsColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -37032,15 +37415,15 @@ type (
 		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
 		Integration, IntegrationRun, IntegrationWebhook, InternalPolicy, Invite,
 		MappableDomain, MappedControl, Narrative, Note, Notification,
-		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
-		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationBrandingSetting, OrganizationSetting, PasswordResetToken,
-		PersonalAccessToken, Platform, Procedure, Program, ProgramMembership,
-		Remediation, Report, ReportMembership, Review, Risk, SLADefinition, Scan,
-		ShareLink, ShareLinkAccessEvent, Standard, Subcontrol, Subprocessor,
-		Subscriber, SystemDetail, TFASetting, TagDefinition, Task, Template,
-		TrustCenter, TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity,
-		TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		NotificationPreference, NotificationTemplate, OauthGrant, OauthToken,
+		Onboarding, OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
+		Organization, OrganizationBrandingSetting, OrganizationSetting,
+		PasswordResetToken, PersonalAccessToken, Platform, Procedure, Program,
+		ProgramMembership, Remediation, Report, ReportMembership, Review, Risk,
+		SLADefinition, Scan, ShareLink, ShareLinkAccessEvent, Standard, Subcontrol,
+		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
+		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
+		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
 		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
 		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
 		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
@@ -37056,15 +37439,15 @@ type (
 		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
 		Integration, IntegrationRun, IntegrationWebhook, InternalPolicy, Invite,
 		MappableDomain, MappedControl, Narrative, Note, Notification,
-		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
-		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationBrandingSetting, OrganizationSetting, PasswordResetToken,
-		PersonalAccessToken, Platform, Procedure, Program, ProgramMembership,
-		Remediation, Report, ReportMembership, Review, Risk, SLADefinition, Scan,
-		ShareLink, ShareLinkAccessEvent, Standard, Subcontrol, Subprocessor,
-		Subscriber, SystemDetail, TFASetting, TagDefinition, Task, Template,
-		TrustCenter, TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity,
-		TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		NotificationPreference, NotificationTemplate, OauthGrant, OauthToken,
+		Onboarding, OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
+		Organization, OrganizationBrandingSetting, OrganizationSetting,
+		PasswordResetToken, PersonalAccessToken, Platform, Procedure, Program,
+		ProgramMembership, Remediation, Report, ReportMembership, Review, Risk,
+		SLADefinition, Scan, ShareLink, ShareLinkAccessEvent, Standard, Subcontrol,
+		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
+		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
+		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
 		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
 		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
 		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,

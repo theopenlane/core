@@ -1,0 +1,280 @@
+mutation CreateBulkCSVOauthGrant ($input: Upload!) {
+	createBulkCSVOauthGrant(input: $input) {
+		oauthGrants {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+mutation CreateBulkOauthGrant ($input: [CreateOauthGrantInput!]) {
+	createBulkOauthGrant(input: $input) {
+		oauthGrants {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+mutation CreateOauthGrant ($input: CreateOauthGrantInput!) {
+	createOauthGrant(input: $input) {
+		oauthGrant {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+mutation DeleteBulkOauthGrant ($ids: [ID!]!) {
+	deleteBulkOauthGrant(ids: $ids) {
+		deletedIDs
+	}
+}
+mutation DeleteOauthGrant ($deleteOauthGrantId: ID!) {
+	deleteOauthGrant(id: $deleteOauthGrantId) {
+		deletedID
+	}
+}
+query GetAllOauthGrants ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [OauthGrantOrder!]) {
+	oauthGrants(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				accessLevel
+				clientID
+				clientName
+				clientURI
+				createdAt
+				createdBy
+				id
+				installedByUserID
+				isActive
+				kind
+				lastUsedAt
+				logoURI
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+query GetOauthGrantByID ($oauthGrantId: ID!) {
+	oauthGrant(id: $oauthGrantId) {
+		accessLevel
+		clientID
+		clientName
+		clientURI
+		createdAt
+		createdBy
+		id
+		installedByUserID
+		isActive
+		kind
+		lastUsedAt
+		logoURI
+		ownerID
+		revokedAt
+		revokedBy
+		revokedReason
+		scopes
+		tags
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		userID
+	}
+}
+query GetOauthGrants ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [OauthGrantOrder!], $where: OauthGrantWhereInput) {
+	oauthGrants(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				accessLevel
+				clientID
+				clientName
+				clientURI
+				createdAt
+				createdBy
+				id
+				installedByUserID
+				isActive
+				kind
+				lastUsedAt
+				logoURI
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+mutation UpdateBulkCSVOauthGrant ($input: Upload!) {
+	updateBulkCSVOauthGrant(input: $input) {
+		oauthGrants {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+	}
+}
+mutation UpdateBulkOauthGrant ($ids: [ID!]!, $input: UpdateOauthGrantInput!) {
+	updateBulkOauthGrant(ids: $ids, input: $input) {
+		oauthGrants {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+	}
+}
+mutation UpdateOauthGrant ($updateOauthGrantId: ID!, $input: UpdateOauthGrantInput!) {
+	updateOauthGrant(id: $updateOauthGrantId, input: $input) {
+		oauthGrant {
+			accessLevel
+			clientID
+			clientName
+			clientURI
+			createdAt
+			createdBy
+			id
+			installedByUserID
+			isActive
+			kind
+			lastUsedAt
+			logoURI
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}

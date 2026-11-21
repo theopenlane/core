@@ -62,6 +62,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthtoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
@@ -227,6 +229,8 @@ func checkColumn(t, c string) error {
 			notification.Table:                notification.ValidColumn,
 			notificationpreference.Table:      notificationpreference.ValidColumn,
 			notificationtemplate.Table:        notificationtemplate.ValidColumn,
+			oauthgrant.Table:                  oauthgrant.ValidColumn,
+			oauthtoken.Table:                  oauthtoken.ValidColumn,
 			onboarding.Table:                  onboarding.ValidColumn,
 			orgmembership.Table:               orgmembership.ValidColumn,
 			orgmodule.Table:                   orgmodule.ValidColumn,

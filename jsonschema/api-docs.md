@@ -78,7 +78,8 @@ Config contains the configuration for the core server
             "google": {},
             "webauthn": {}
         },
-        "supportaccess": {}
+        "supportaccess": {},
+        "oauthserver": {}
     },
     "authz": {
         "credentials": {},
@@ -732,6 +733,7 @@ Auth settings including oauth2 providers and token configuration
 |[**supportedproviders**](#defsstring)|`string[]`|||
 |[**providers**](#defshandlersoauthproviderconfig)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>||
 |[**supportaccess**](#defshandlerssupportaccessconfig)|`object`|SupportAccessConfig contains configuration for the Openlane support access flow. The support<br/>||
+|[**oauthserver**](#defshandlersoauthserverconfig)|`object`|OAuthServerConfig contains configuration for the OAuth authorization server that third-party apps connect through<br/>||
 
 **Additional Properties:** not allowed   
 **Example**
@@ -752,7 +754,8 @@ Auth settings including oauth2 providers and token configuration
         "google": {},
         "webauthn": {}
     },
-    "supportaccess": {}
+    "supportaccess": {},
+    "oauthserver": {}
 }
 ```
 
@@ -1025,6 +1028,28 @@ identity provider configuration, since both authentications must occur together
 |**alloweddomain**|`string`|AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)<br/>||
 
 **Additional Properties:** not allowed   
+   
+<a name="defshandlersoauthserverconfig"></a>
+### $defs/handlers\.OAuthServerConfig: object
+
+OAuthServerConfig contains configuration for the OAuth authorization server that third-party apps connect through
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled turns on the OAuth endpoints, and requires the API token keyring under auth.token.apitokens<br/>||
+|[**allowedresources**](#defsstring)|`string[]`|||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+#### $defs/\[\]string: array
+
+**Items**
+
+**Item Type:** `string`   
    
 <a name="defsfgaxconfig"></a>
 ## $defs/fgax\.Config: object

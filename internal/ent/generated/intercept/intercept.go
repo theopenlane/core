@@ -58,6 +58,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthtoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
@@ -1520,6 +1522,60 @@ func (f TraverseNotificationTemplate) Traverse(ctx context.Context, q generated.
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.NotificationTemplateQuery", q)
+}
+
+// The OauthGrantFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OauthGrantFunc func(context.Context, *generated.OauthGrantQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OauthGrantFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.OauthGrantQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OauthGrantQuery", q)
+}
+
+// The TraverseOauthGrant type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOauthGrant func(context.Context, *generated.OauthGrantQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOauthGrant) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOauthGrant) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OauthGrantQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.OauthGrantQuery", q)
+}
+
+// The OauthTokenFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OauthTokenFunc func(context.Context, *generated.OauthTokenQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OauthTokenFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.OauthTokenQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OauthTokenQuery", q)
+}
+
+// The TraverseOauthToken type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOauthToken func(context.Context, *generated.OauthTokenQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOauthToken) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOauthToken) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OauthTokenQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.OauthTokenQuery", q)
 }
 
 // The OnboardingFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3110,6 +3166,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.NotificationPreferenceQuery, predicate.NotificationPreference, notificationpreference.OrderOption]{typ: generated.TypeNotificationPreference, tq: q}, nil
 	case *generated.NotificationTemplateQuery:
 		return &query[*generated.NotificationTemplateQuery, predicate.NotificationTemplate, notificationtemplate.OrderOption]{typ: generated.TypeNotificationTemplate, tq: q}, nil
+	case *generated.OauthGrantQuery:
+		return &query[*generated.OauthGrantQuery, predicate.OauthGrant, oauthgrant.OrderOption]{typ: generated.TypeOauthGrant, tq: q}, nil
+	case *generated.OauthTokenQuery:
+		return &query[*generated.OauthTokenQuery, predicate.OauthToken, oauthtoken.OrderOption]{typ: generated.TypeOauthToken, tq: q}, nil
 	case *generated.OnboardingQuery:
 		return &query[*generated.OnboardingQuery, predicate.Onboarding, onboarding.OrderOption]{typ: generated.TypeOnboarding, tq: q}, nil
 	case *generated.OrgMembershipQuery:

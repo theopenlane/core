@@ -1565,6 +1565,39 @@ func (r *queryResolver) NotificationTemplates(ctx context.Context, after *entgql
 	return res, err
 }
 
+// OauthGrants is the resolver for the oauthGrants field.
+func (r *queryResolver) OauthGrants(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OauthGrantOrder, where *generated.OauthGrantWhereInput) (*generated.OauthGrantConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.OauthGrantOrder{
+			{
+				Field:     generated.OauthGrantOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+	query, err := withTransactionalMutation(ctx).OauthGrant.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "oauthgrant"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOauthGrantOrder(orderBy),
+		generated.WithOauthGrantFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "oauthgrant"})
+	}
+
+	return res, err
+}
+
 // OrgMemberships is the resolver for the orgMemberships field.
 func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
 	// set page limit if nothing was set

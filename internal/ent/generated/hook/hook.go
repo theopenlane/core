@@ -609,6 +609,30 @@ func (f NotificationTemplateFunc) Mutate(ctx context.Context, m generated.Mutati
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.NotificationTemplateMutation", m)
 }
 
+// The OauthGrantFunc type is an adapter to allow the use of ordinary
+// function as OauthGrant mutator.
+type OauthGrantFunc func(context.Context, *generated.OauthGrantMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OauthGrantFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.OauthGrantMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.OauthGrantMutation", m)
+}
+
+// The OauthTokenFunc type is an adapter to allow the use of ordinary
+// function as OauthToken mutator.
+type OauthTokenFunc func(context.Context, *generated.OauthTokenMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OauthTokenFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.OauthTokenMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.OauthTokenMutation", m)
+}
+
 // The OnboardingFunc type is an adapter to allow the use of ordinary
 // function as Onboarding mutator.
 type OnboardingFunc func(context.Context, *generated.OnboardingMutation) (generated.Value, error)

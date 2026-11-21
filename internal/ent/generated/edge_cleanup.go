@@ -58,6 +58,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthtoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
@@ -595,6 +597,40 @@ func NotificationTemplateEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func OauthGrantEdgeCleanup(ctx context.Context, id string) error {
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
+
+	{
+		ids, err := FromContext(ctx).OauthToken.Query().Where(oauthtoken.HasOauthGrantWith(oauthgrant.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying oauthtoken ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := OauthTokenEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up oauthtoken edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).OauthToken.Query().Where((oauthtoken.HasOauthGrantWith(oauthgrant.ID(id)))).Exist(ctx); err == nil && exists {
+		if oauthtokenCount, err := FromContext(ctx).OauthToken.Delete().Where(oauthtoken.HasOauthGrantWith(oauthgrant.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", oauthtokenCount).Msg("error deleting oauthtoken")
+			return err
+		}
+	}
+
+	return nil
+}
+
+func OauthTokenEdgeCleanup(ctx context.Context, id string) error {
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
+
+	return nil
+}
+
 func OnboardingEdgeCleanup(ctx context.Context, id string) error {
 	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
 	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
@@ -721,6 +757,26 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).APIToken.Query().Where((apitoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if apitokenCount, err := FromContext(ctx).APIToken.Delete().Where(apitoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", apitokenCount).Msg("error deleting apitoken")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).OauthGrant.Query().Where(oauthgrant.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying oauthgrant ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := OauthGrantEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up oauthgrant edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).OauthGrant.Query().Where((oauthgrant.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if oauthgrantCount, err := FromContext(ctx).OauthGrant.Delete().Where(oauthgrant.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", oauthgrantCount).Msg("error deleting oauthgrant")
 			return err
 		}
 	}
@@ -3474,6 +3530,8 @@ func init() {
 	edgeCleanups["Notification"] = NotificationEdgeCleanup
 	edgeCleanups["NotificationPreference"] = NotificationPreferenceEdgeCleanup
 	edgeCleanups["NotificationTemplate"] = NotificationTemplateEdgeCleanup
+	edgeCleanups["OauthGrant"] = OauthGrantEdgeCleanup
+	edgeCleanups["OauthToken"] = OauthTokenEdgeCleanup
 	edgeCleanups["Onboarding"] = OnboardingEdgeCleanup
 	edgeCleanups["OrgMembership"] = OrgMembershipEdgeCleanup
 	edgeCleanups["OrgModule"] = OrgModuleEdgeCleanup

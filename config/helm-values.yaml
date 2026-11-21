@@ -302,6 +302,12 @@ coreConfiguration:
       redirecturl: ""  # @schema type:string
       # -- AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)
       alloweddomain: ""  # @schema type:string
+    # -- OAuthServer contains the configuration for the OAuth authorization server third-party apps connect through
+    oauthserver:
+      # -- Enabled turns on the OAuth endpoints, and requires the API token keyring under auth.token.apitokens
+      enabled: false  # @schema type:boolean; default:false
+      # -- AllowedResources are the exact resource URLs tokens may be issued for, such as the API and MCP server URLs
+      allowedresources: []
   # -- Authz contains the authorization settings for fine grained access control
   authz:
     # -- enables authorization checks with openFGA

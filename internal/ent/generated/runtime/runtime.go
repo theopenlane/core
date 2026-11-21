@@ -57,6 +57,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthtoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
@@ -4788,6 +4790,131 @@ func init() {
 	notificationtemplateDescID := notificationtemplateMixinFields4[0].Descriptor()
 	// notificationtemplate.DefaultID holds the default value on creation for the id field.
 	notificationtemplate.DefaultID = notificationtemplateDescID.Default.(func() string)
+	oauthgrantMixin := schema.OauthGrant{}.Mixin()
+	oauthgrant.Policy = privacy.NewPolicies(schema.OauthGrant{})
+	oauthgrant.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := oauthgrant.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	oauthgrantMixinHooks0 := oauthgrantMixin[0].Hooks()
+	oauthgrantMixinHooks1 := oauthgrantMixin[1].Hooks()
+	oauthgrantMixinHooks3 := oauthgrantMixin[3].Hooks()
+	oauthgrantMixinHooks5 := oauthgrantMixin[5].Hooks()
+	oauthgrantMixinHooks7 := oauthgrantMixin[7].Hooks()
+	oauthgrantHooks := schema.OauthGrant{}.Hooks()
+
+	oauthgrant.Hooks[1] = oauthgrantMixinHooks0[0]
+
+	oauthgrant.Hooks[2] = oauthgrantMixinHooks1[0]
+
+	oauthgrant.Hooks[3] = oauthgrantMixinHooks3[0]
+
+	oauthgrant.Hooks[4] = oauthgrantMixinHooks5[0]
+
+	oauthgrant.Hooks[5] = oauthgrantMixinHooks7[0]
+
+	oauthgrant.Hooks[6] = oauthgrantHooks[0]
+
+	oauthgrant.Hooks[7] = oauthgrantHooks[1]
+
+	oauthgrant.Hooks[8] = oauthgrantHooks[2]
+	oauthgrantMixinInters3 := oauthgrantMixin[3].Interceptors()
+	oauthgrantMixinInters7 := oauthgrantMixin[7].Interceptors()
+	oauthgrant.Interceptors[0] = oauthgrantMixinInters3[0]
+	oauthgrant.Interceptors[1] = oauthgrantMixinInters7[0]
+	oauthgrant.Interceptors[2] = oauthgrantMixinInters7[1]
+	oauthgrantMixinFields0 := oauthgrantMixin[0].Fields()
+	_ = oauthgrantMixinFields0
+	oauthgrantMixinFields4 := oauthgrantMixin[4].Fields()
+	_ = oauthgrantMixinFields4
+	oauthgrantMixinFields5 := oauthgrantMixin[5].Fields()
+	_ = oauthgrantMixinFields5
+	oauthgrantMixinFields7 := oauthgrantMixin[7].Fields()
+	_ = oauthgrantMixinFields7
+	oauthgrantFields := schema.OauthGrant{}.Fields()
+	_ = oauthgrantFields
+	// oauthgrantDescCreatedAt is the schema descriptor for created_at field.
+	oauthgrantDescCreatedAt := oauthgrantMixinFields0[0].Descriptor()
+	// oauthgrant.DefaultCreatedAt holds the default value on creation for the created_at field.
+	oauthgrant.DefaultCreatedAt = oauthgrantDescCreatedAt.Default.(func() time.Time)
+	// oauthgrantDescUpdatedAt is the schema descriptor for updated_at field.
+	oauthgrantDescUpdatedAt := oauthgrantMixinFields0[1].Descriptor()
+	// oauthgrant.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	oauthgrant.DefaultUpdatedAt = oauthgrantDescUpdatedAt.Default.(func() time.Time)
+	// oauthgrant.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	oauthgrant.UpdateDefaultUpdatedAt = oauthgrantDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// oauthgrantDescTags is the schema descriptor for tags field.
+	oauthgrantDescTags := oauthgrantMixinFields5[0].Descriptor()
+	// oauthgrant.DefaultTags holds the default value on creation for the tags field.
+	oauthgrant.DefaultTags = oauthgrantDescTags.Default.([]string)
+	// oauthgrantDescOwnerID is the schema descriptor for owner_id field.
+	oauthgrantDescOwnerID := oauthgrantMixinFields7[0].Descriptor()
+	// oauthgrant.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	oauthgrant.OwnerIDValidator = oauthgrantDescOwnerID.Validators[0].(func(string) error)
+	// oauthgrantDescClientID is the schema descriptor for client_id field.
+	oauthgrantDescClientID := oauthgrantFields[0].Descriptor()
+	// oauthgrant.ClientIDValidator is a validator for the "client_id" field. It is called by the builders before save.
+	oauthgrant.ClientIDValidator = oauthgrantDescClientID.Validators[0].(func(string) error)
+	// oauthgrantDescClientName is the schema descriptor for client_name field.
+	oauthgrantDescClientName := oauthgrantFields[1].Descriptor()
+	// oauthgrant.ClientNameValidator is a validator for the "client_name" field. It is called by the builders before save.
+	oauthgrant.ClientNameValidator = oauthgrantDescClientName.Validators[0].(func(string) error)
+	// oauthgrantDescIsActive is the schema descriptor for is_active field.
+	oauthgrantDescIsActive := oauthgrantFields[10].Descriptor()
+	// oauthgrant.DefaultIsActive holds the default value on creation for the is_active field.
+	oauthgrant.DefaultIsActive = oauthgrantDescIsActive.Default.(bool)
+	// oauthgrantDescID is the schema descriptor for id field.
+	oauthgrantDescID := oauthgrantMixinFields4[0].Descriptor()
+	// oauthgrant.DefaultID holds the default value on creation for the id field.
+	oauthgrant.DefaultID = oauthgrantDescID.Default.(func() string)
+	oauthtokenMixin := schema.OauthToken{}.Mixin()
+	oauthtoken.Policy = privacy.NewPolicies(schema.OauthToken{})
+	oauthtoken.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := oauthtoken.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	oauthtokenMixinHooks0 := oauthtokenMixin[0].Hooks()
+	oauthtokenMixinHooks1 := oauthtokenMixin[1].Hooks()
+
+	oauthtoken.Hooks[1] = oauthtokenMixinHooks0[0]
+
+	oauthtoken.Hooks[2] = oauthtokenMixinHooks1[0]
+	oauthtokenMixinFields0 := oauthtokenMixin[0].Fields()
+	_ = oauthtokenMixinFields0
+	oauthtokenMixinFields3 := oauthtokenMixin[3].Fields()
+	_ = oauthtokenMixinFields3
+	oauthtokenFields := schema.OauthToken{}.Fields()
+	_ = oauthtokenFields
+	// oauthtokenDescCreatedAt is the schema descriptor for created_at field.
+	oauthtokenDescCreatedAt := oauthtokenMixinFields0[0].Descriptor()
+	// oauthtoken.DefaultCreatedAt holds the default value on creation for the created_at field.
+	oauthtoken.DefaultCreatedAt = oauthtokenDescCreatedAt.Default.(func() time.Time)
+	// oauthtokenDescUpdatedAt is the schema descriptor for updated_at field.
+	oauthtokenDescUpdatedAt := oauthtokenMixinFields0[1].Descriptor()
+	// oauthtoken.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	oauthtoken.DefaultUpdatedAt = oauthtokenDescUpdatedAt.Default.(func() time.Time)
+	// oauthtoken.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	oauthtoken.UpdateDefaultUpdatedAt = oauthtokenDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// oauthtokenDescKeyVersion is the schema descriptor for key_version field.
+	oauthtokenDescKeyVersion := oauthtokenFields[2].Descriptor()
+	// oauthtoken.KeyVersionValidator is a validator for the "key_version" field. It is called by the builders before save.
+	oauthtoken.KeyVersionValidator = oauthtokenDescKeyVersion.Validators[0].(func(string) error)
+	// oauthtokenDescClientID is the schema descriptor for client_id field.
+	oauthtokenDescClientID := oauthtokenFields[5].Descriptor()
+	// oauthtoken.ClientIDValidator is a validator for the "client_id" field. It is called by the builders before save.
+	oauthtoken.ClientIDValidator = oauthtokenDescClientID.Validators[0].(func(string) error)
+	// oauthtokenDescID is the schema descriptor for id field.
+	oauthtokenDescID := oauthtokenMixinFields3[0].Descriptor()
+	// oauthtoken.DefaultID holds the default value on creation for the id field.
+	oauthtoken.DefaultID = oauthtokenDescID.Default.(func() string)
 	onboardingMixin := schema.Onboarding{}.Mixin()
 	onboarding.Policy = privacy.NewPolicies(schema.Onboarding{})
 	onboarding.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -5286,11 +5413,13 @@ func init() {
 
 	organization.Hooks[84] = organizationMixinHooks7[79]
 
-	organization.Hooks[85] = organizationHooks[0]
+	organization.Hooks[85] = organizationMixinHooks7[80]
 
-	organization.Hooks[86] = organizationHooks[1]
+	organization.Hooks[86] = organizationHooks[0]
 
-	organization.Hooks[87] = organizationHooks[2]
+	organization.Hooks[87] = organizationHooks[1]
+
+	organization.Hooks[88] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]
