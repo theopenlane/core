@@ -185,7 +185,7 @@ func TestPentestFindingMapping(t *testing.T) {
 	assert.NilError(t, err)
 
 	var analysis map[string]any
-	assert.NilError(t, json.Unmarshal(mappingtest.LoadExample(t, "examples", "scans/attack_anaysis.json"), &analysis))
+	assert.NilError(t, json.Unmarshal(mappingtest.LoadExample(t, "examples", "scans/attack_analysis.json"), &analysis))
 
 	payload, err := json.Marshal(map[string]any{"id": 7, "type": "ai_pentest", "assessment_id": "f19e449d-2bf0-8d37-ab9a-3bcbc748157d", "attack_analysis": analysis})
 	assert.NilError(t, err)
@@ -348,7 +348,7 @@ func TestDirectoryMappings(t *testing.T) {
 		assert.Check(t, is.Equal("1", mapped["external_id"]))
 		assert.Check(t, is.Equal("Frontend developers", mapped["display_name"]))
 		assert.Check(t, is.Equal("ACTIVE", mapped["status"]))
-		assert.Check(t, is.Equal(int64(3), mapped["member_count"]))
+		assert.Check(t, is.Equal(float64(3), mapped["member_count"]))
 	})
 
 	t.Run("membership", func(t *testing.T) {

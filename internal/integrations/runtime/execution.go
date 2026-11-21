@@ -31,7 +31,7 @@ const operationCompletedSummary = "operation completed"
 
 const (
 	// runInterruptedError replaces a bare context canceled error, which a server restart or job cancellation causes
-	runInterruptedError = "the run was interrupted before it finished, such as by a server restart, run it again or wait for the next scheduled sync"
+	runInterruptedError = "the run was interrupted before it finished, such as by a server restart, it will run again on the next scheduled sync"
 	// runTimedOutError replaces a bare context deadline exceeded error
 	runTimedOutError = "the run did not finish within its time limit"
 )
