@@ -15,9 +15,11 @@ func TestCollectAutofixes(t *testing.T) {
 	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case pathAutofixHistory:
-			writeJSON(w, `[{"id":12345,"type":"dependency","status":"pr_open","autofix_target":{"code_repo_id":1,"title":"lodash → 4.17.21"}}]`)
+			writeJSON(w, `[{"id":12345,"type":"dependency","status":"pr_merged","autofix_target":{"code_repo_id":1,"title":"lodash → 4.17.21"}},{"id":12346,"type":"sast","status":"preview_available"},{"id":12347,"type":"sast","status":"pr_closed"}]`)
 		case pathAutofixHistory + "/12345/issues":
 			writeJSON(w, `{"targeted_issues":[{"id":1},{"id":2}]}`)
+		case pathAutofixHistory + "/12346/issues", pathAutofixHistory + "/12347/issues":
+			t.Errorf("issues requested for an autofix that was not merged: %s", r.URL.Path)
 		default:
 			t.Errorf("unexpected path %s", r.URL.Path)
 		}
@@ -36,7 +38,7 @@ func TestCollectAutofixes(t *testing.T) {
 func TestCollectAutofixesPropagatesIssueErrors(t *testing.T) {
 	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == pathAutofixHistory {
-			writeJSON(w, `[{"id":7,"status":"pr_open"}]`)
+			writeJSON(w, `[{"id":7,"status":"pr_merged"}]`)
 
 			return
 		}

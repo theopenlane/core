@@ -12,15 +12,20 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// autofixIssueIDsKey is the payload key the targeted issue ids are attached under for the remediation links
-const autofixIssueIDsKey = "targeted_issue_ids"
+const (
+	// autofixIssueIDsKey is the payload key the targeted issue ids are attached under for the remediation links
+	autofixIssueIDsKey = "targeted_issue_ids"
+	// autofixStatusMerged is the status of an autofix whose pull request was merged, the only ones that remediated anything
+	autofixStatusMerged = "pr_merged"
+)
 
 // runAutofixSync collects Aikido autofix tasks for remediation ingestion
 func runAutofixSync(ctx context.Context, _ types.OperationRequest, client *APIClient, _ AutofixSync) ([]types.IngestPayloadSet, error) {
 	return CollectAutofixes(ctx, client)
 }
 
-// CollectAutofixes lists the autofix history and emits one remediation envelope per task with the issue ids it targets
+// CollectAutofixes lists the autofix history and emits one remediation envelope per merged task with the issue ids it
+// targets, a preview or closed pull request remediated nothing
 func CollectAutofixes(ctx context.Context, c *APIClient) ([]types.IngestPayloadSet, error) {
 	tasks, err := c.listAll(ctx, pathAutofixHistory, nil, autofixPageSize)
 	if err != nil {
@@ -30,6 +35,10 @@ func CollectAutofixes(ctx context.Context, c *APIClient) ([]types.IngestPayloadS
 	envelopes := make([]types.MappingEnvelope, 0, len(tasks))
 
 	for _, task := range tasks {
+		if mapx.Value[string](task, "status") != autofixStatusMerged {
+			continue
+		}
+
 		taskID := recordID(task)
 
 		issueIDs, err := c.autofixIssueIDs(ctx, taskID)
