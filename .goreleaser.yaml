@@ -101,6 +101,8 @@ changelog:
   use: github
 sboms:
   - artifacts: archive
+    env:
+      - SYFT_GOLANG_PROXY=https://proxy.golang.org
 release:
   prerelease: auto
   github:
