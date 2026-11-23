@@ -25,7 +25,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.15.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity v0.15.0
 	github.com/Nerzal/gocloak/v14 v14.0.4
-	github.com/PuerkitoBio/goquery v1.13.0
+	github.com/PuerkitoBio/goquery v1.14.0
 	github.com/alicebob/miniredis/v2 v2.40.0
 	github.com/alitto/pond/v2 v2.7.3
 	github.com/aws/aws-sdk-go-v2 v1.48.0
