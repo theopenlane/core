@@ -55,7 +55,6 @@ func FileBackupListeners() []gala.Registration {
 				entityops.OpUpdate,
 				entityops.OpUpdateOne,
 			},
-			Fields: []string{file.FieldStorageProvider},
 			Match: []entityops.FieldMatch{
 				// the files are actually created and updated in the same tx so no need to fire this backup multiple times
 				{
