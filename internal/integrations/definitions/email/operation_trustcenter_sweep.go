@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/logx"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
@@ -26,7 +28,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
-	"github.com/theopenlane/logx"
 )
 
 // trustCenterNotificationGrace is the debounce window a post or subprocessor change must be stable for before subscribers are notified, giving authors time to make further edits
@@ -197,13 +198,15 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 			continue
 		}
 
+		nextRunAt := formatNextRunAt(latest)
+
 		// the request carries only data; the subprocessor operation composes the subject and body copy
 		// from the branding's company name with defined fallbacks
 		// the tracking link is shared by every subscriber of this notification, so it is created once
 		// per baseline window and only when there is someone to send it to
 		trustCenterURL := trustcenterurl.BuildURL(customDomain, tc.Slug)
 		if len(subscribers) > 0 {
-			trustCenterURL = trackingLink(ctx, req, trustCenterURL, shortlinks.Metadata{Purpose: shortlinks.PurposeSubprocessorNotification, OrganizationID: tc.OwnerID, TrustCenterID: tc.ID}, latest.UTC().Format(time.RFC3339))
+			trustCenterURL = trackingLink(ctx, req, trustCenterURL, shortlinks.Metadata{Purpose: shortlinks.PurposeSubprocessorNotification, OrganizationID: tc.OwnerID, TrustCenterID: tc.ID}, nextRunAt)
 		}
 
 		base := SubprocessorNotificationRequest{
@@ -229,7 +232,7 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 			sendReq.UnsubscribeURL = trustcenterurl.UnsubscribeURLWithToken(customDomain, tc.Slug, sub.Token)
 
 			// dedupes the notice when the sweep is retried
-			uniqueKey := gala.IntegrationRun.Key(SubprocessorNotificationOp.Name(), setting.TrustCenterID, sub.ID, latest.UTC().Format(time.RFC3339))
+			uniqueKey := gala.IntegrationRun.Key(SubprocessorNotificationOp.Name(), setting.TrustCenterID, sub.ID, nextRunAt)
 
 			if err := sendSubprocessorNotification(ctx, req, sendReq, uniqueKey); err != nil {
 				errs = append(errs, fmt.Errorf("sending subprocessor notification to subscriber %s for trust center %s: %w", sub.ID, setting.TrustCenterID, err))
@@ -288,7 +291,7 @@ func createAndDispatchTrustCenterCampaign(ctx context.Context, req types.Operati
 	}
 
 	config, err := json.Marshal(SendBrandedCampaignRequest{
-		CampaignID: camp.ID,
+		CampaignDispatchInput: CampaignDispatchInput{CampaignID: camp.ID},
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed marshaling campaign dispatch config")

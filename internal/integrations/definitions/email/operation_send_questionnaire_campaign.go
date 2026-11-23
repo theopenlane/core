@@ -10,13 +10,16 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/logx"
@@ -62,8 +65,15 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 		return nil, err
 	}
 
+	oc, _ := gala.OperationContextFromContext(ctx)
+	source := types.IntegrationSourceFrom(oc)
+
 	if camp.AssessmentID == "" {
 		return nil, ErrCampaignMissingAssessment
+	}
+
+	if source.Runtime && source.RunType == enums.IntegrationRunTypeScheduled {
+		ctx = auth.EnsureIntegrationCaller(ctx, camp.OwnerID)
 	}
 
 	assessmentObj, err := req.DB.Assessment.Query().

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -208,24 +209,21 @@ func (e deliveryEvent) apply(ctx context.Context) error {
 
 	isTest := e.tags[TagIsTest] == TagTrueValue
 
+	campaignTargetID := e.tags[TagCampaignTargetID]
 	assessmentResponseID := lo.CoalesceOrEmpty(e.tags[TagAssessmentResponseID], e.tags[tagAssessmentResponseIDPrior])
 	if assessmentResponseID != "" {
-		if err := updateAssessmentResponse(ctx, db, assessmentResponseID, e, isTest); err != nil {
-			return err
-		}
+		return updateAssessmentResponse(ctx, db, assessmentResponseID, campaignTargetID, e, isTest)
 	}
 
-	if campaignTargetID := e.tags[TagCampaignTargetID]; campaignTargetID != "" && !isTest {
-		if err := updateCampaignTarget(ctx, db, campaignTargetID, "", e); err != nil {
-			return err
-		}
+	if campaignTargetID != "" && !isTest {
+		return updateCampaignTarget(ctx, db, campaignTargetID, "", e)
 	}
 
 	return nil
 }
 
 // updateAssessmentResponse applies delivery events to an assessment response record
-func updateAssessmentResponse(ctx context.Context, db *ent.Client, responseID string, event deliveryEvent, isTest bool) error {
+func updateAssessmentResponse(ctx context.Context, db *ent.Client, responseID, targetID string, event deliveryEvent, isTest bool) error {
 	resp, err := db.AssessmentResponse.Get(ctx, responseID)
 	if err != nil {
 		return err
@@ -275,11 +273,27 @@ func updateAssessmentResponse(ctx context.Context, db *ent.Client, responseID st
 		return err
 	}
 
-	if resp.CampaignID != "" && !resp.IsTest && !isTest {
-		return updateCampaignTarget(ctx, db, "", resp.CampaignID, event, resp.Email)
+	if resp.IsTest || isTest {
+		return nil
 	}
 
-	return nil
+	if resp.CampaignID == "" {
+		return updateCampaignTarget(ctx, db, targetID, "", event)
+	}
+
+	camp, err := db.Campaign.Query().
+		Where(campaign.IDEQ(resp.CampaignID)).
+		Select(campaign.FieldAssessmentID, campaign.FieldIsRecurring, campaign.FieldLastRunAt).
+		Only(ctx)
+	if err != nil && !ent.IsNotFound(err) {
+		return err
+	}
+
+	if camp != nil && (camp.IsRecurring || camp.LastRunAt != nil) && camp.AssessmentID != resp.AssessmentID {
+		return nil
+	}
+
+	return updateCampaignTarget(ctx, db, targetID, resp.CampaignID, event, resp.Email)
 }
 
 // updateCampaignTarget applies delivery events to a campaign target record

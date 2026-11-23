@@ -3,6 +3,7 @@
 package graphapi_test
 
 import (
+	"context"
 	"encoding/json"
 	"strings"
 	"testing"
@@ -16,12 +17,15 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/newman/providers/mock"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/newman/providers/mock"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // TestRecurringCampaignDispatchAdvancesSchedule verifies that dispatching a
@@ -105,8 +109,7 @@ func TestRecurringCampaignDispatchAdvancesSchedule(t *testing.T) {
 	}
 
 	cfg := email.SendBrandedCampaignRequest{
-		CampaignID: campaignObj.ID,
-		Resend:     true,
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID, Resend: true},
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -199,8 +202,7 @@ func TestRecurringCampaignExhaustion(t *testing.T) {
 	}
 
 	cfg := email.SendBrandedCampaignRequest{
-		CampaignID: campaignObj.ID,
-		Resend:     true,
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID, Resend: true},
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -218,6 +220,143 @@ func TestRecurringCampaignExhaustion(t *testing.T) {
 		messages := mockSender.Messages()
 		assert.Assert(t, is.Len(messages, 1))
 	})
+}
+
+func TestRecurringQuestionnaireCampaignCreatesNewAssessment(t *testing.T) {
+	ctx := th.SharedTestUser1.UserCtx
+	internalCtx := th.SetInternalContext(ctx, suite.Client.DB)
+
+	resp, err := suite.Client.API.CreateAssessment(ctx, testclient.CreateAssessmentInput{
+		Name:       th.RandomName(t),
+		Jsonconfig: map[string]any{"type": "object"},
+	})
+	assert.NilError(t, err)
+
+	sourceID := resp.CreateAssessment.Assessment.ID
+
+	templateResp, err := suite.Client.API.CreateAssessmentTemplate(ctx, testclient.CreateAssessmentTemplateInput{
+		AssessmentID: sourceID,
+	})
+	assert.NilError(t, err)
+	templateID := templateResp.CreateAssessmentTemplate.Template.ID
+
+	testCases := []struct {
+		name  string
+		input testclient.CreateCampaignInput
+	}{
+		{
+			name: "existing questionnaire",
+			input: testclient.CreateCampaignInput{
+				AssessmentID: &sourceID,
+			},
+		},
+		{
+			name: "questionnaire template",
+			input: testclient.CreateCampaignInput{
+				TemplateID: &templateID,
+			},
+		},
+	}
+
+	now := time.Now()
+	assessmentIDs := []string{sourceID}
+	var campaignIDs, targetIDs, responseIDs []string
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			created := createRecurringQuestionnaireTestCampaign(t, ctx, tc.input)
+			campaignID := created.CreateCampaignWithTargets.Campaign.ID
+			campaignIDs = append(campaignIDs, campaignID)
+			targetIDs = append(targetIDs, created.CreateCampaignWithTargets.CampaignTargets[0].ID)
+
+			client, sender := createQuestionnaireEmailClient(t)
+
+			firstID := sweepAndSendQuestionnaireCampaign(t, ctx, campaignID, now.Add(-2*time.Hour), client)
+
+			firstRound, err := suite.Client.API.GetAssessmentResponses(ctx, nil, nil, &testclient.AssessmentResponseWhereInput{
+				CampaignID: &campaignID,
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(firstRound.AssessmentResponses.Edges, 1))
+
+			err = suite.Client.DB.AssessmentResponse.UpdateOneID(firstRound.AssessmentResponses.Edges[0].Node.ID).
+				SetStatus(enums.AssessmentResponseStatusCompleted).
+				Exec(internalCtx)
+			assert.NilError(t, err)
+
+			secondID := sweepAndSendQuestionnaireCampaign(t, ctx, campaignID, now.Add(-time.Hour), client)
+			assessmentIDs = append(assessmentIDs, firstID, secondID)
+
+			assert.Check(t, firstID != secondID)
+			assert.Assert(t, is.Len(sender.Messages(), 2))
+			assert.Check(t, is.Contains(sender.Messages()[1].To, recurringQuestionnaireTestRecipient))
+
+			allResponses, err := suite.Client.API.GetAssessmentResponses(ctx, nil, nil, &testclient.AssessmentResponseWhereInput{
+				CampaignID: &campaignID,
+			})
+			assert.NilError(t, err)
+
+			for _, edge := range allResponses.AssessmentResponses.Edges {
+				responseIDs = append(responseIDs, edge.Node.ID)
+			}
+		})
+	}
+
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, IDs: responseIDs}).MustDelete(ctx, t)
+	(&th.Cleanup[*generated.CampaignTargetDeleteOne]{Client: suite.Client.DB.CampaignTarget, IDs: targetIDs}).MustDelete(ctx, t)
+	(&th.Cleanup[*generated.CampaignDeleteOne]{Client: suite.Client.DB.Campaign, IDs: campaignIDs}).MustDelete(ctx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, IDs: assessmentIDs}).MustDelete(ctx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: templateID}).MustDelete(ctx, t)
+}
+
+func sweepAndSendQuestionnaireCampaign(t *testing.T, ctx context.Context, campaignID string, scheduledAt time.Time, client *email.Client) string {
+	t.Helper()
+
+	_, err := suite.Client.API.UpdateCampaign(ctx, campaignID, testclient.UpdateCampaignInput{
+		NextRunAt: new(models.DateTime(scheduledAt)),
+	})
+	assert.NilError(t, err)
+
+	var dispatch types.DispatchRequest
+
+	sweep := types.OperationRequest{
+		DB:       suite.Client.DB,
+		Services: suite.IntegrationsRT,
+		Dispatch: func(_ context.Context, req types.DispatchRequest) (types.DispatchResult, error) {
+			dispatch = req
+			return types.DispatchResult{}, nil
+		},
+	}
+
+	_, err = (email.RecurringCampaignSweep{}).Run(ctx, sweep)
+	assert.NilError(t, err)
+	assert.Assert(t, len(dispatch.Config) != 0)
+
+	campaignResp, err := suite.Client.API.GetCampaignByID(ctx, campaignID)
+	assert.NilError(t, err)
+
+	assessmentID := lo.FromPtr(campaignResp.Campaign.AssessmentID)
+	assert.Assert(t, assessmentID != "")
+
+	var cfg email.SendQuestionnaireCampaignRequest
+	assert.NilError(t, json.Unmarshal(dispatch.Config, &cfg))
+
+	oc := types.NewOperationContext(dispatch.OwnerID, dispatch.Operation, types.IntegrationSource{
+		Runtime: dispatch.Runtime,
+		RunType: dispatch.RunType,
+	})
+	workerCtx := gala.WithOperationContext(auth.WithSystemSweepContext(t.Context()), oc)
+
+	req := types.OperationRequest{
+		Client: client,
+		DB:     suite.Client.DB,
+		Config: dispatch.Config,
+	}
+
+	_, err = (email.SendQuestionnaireCampaign{}).Run(workerCtx, req, client, cfg)
+	assert.NilError(t, err)
+
+	return assessmentID
 }
 
 // TestNextCampaignRunAtFrequencies verifies calendar-based frequency
@@ -272,6 +411,18 @@ func TestNextCampaignRunAtFrequencies(t *testing.T) {
 			frequency: enums.FrequencyYearly,
 			interval:  2,
 			expected:  time.Date(2027, time.March, 15, 10, 0, 0, 0, time.UTC),
+		},
+		{
+			name:      "biennial interval 1",
+			frequency: enums.FrequencyBiennially,
+			interval:  1,
+			expected:  time.Date(2027, time.March, 15, 10, 0, 0, 0, time.UTC),
+		},
+		{
+			name:      "triennial interval 2",
+			frequency: enums.FrequencyTriennially,
+			interval:  2,
+			expected:  time.Date(2031, time.March, 15, 10, 0, 0, 0, time.UTC),
 		},
 		{
 			name:      "none returns same time",

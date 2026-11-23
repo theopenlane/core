@@ -7,14 +7,15 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/logx"
 )
 
 // RecurringCampaignSweep configures one recurring campaign sweep cycle
@@ -83,26 +84,45 @@ func dueCampaignPredicates(now time.Time) []predicate.Campaign {
 	}
 }
 
+func formatNextRunAt(t time.Time) string { return t.Format(time.RFC3339) }
+
 // dispatchRecurringCampaign dispatches a single recurring campaign and advances its scheduling fields
 func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, camp *ent.Campaign, now time.Time) error {
+	nextRun := camp.RecurrenceFrequency.NextOccurrence(now, camp.RecurrenceInterval, camp.RecurrenceTimezone)
+	if !nextRun.After(now) {
+		return ErrInvalidCampaignRecurrence
+	}
+
+	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), camp.OwnerID, func(inst *ent.Integration) bool {
+		return inst.CampaignEmail
+	})
+	if err != nil {
+		return err
+	}
+
+	nextRunAt := formatNextRunAt(time.Time(*camp.NextRunAt))
+
 	input := CampaignDispatchInput{
 		CampaignID: camp.ID,
-		Resend:     true,
 	}
 
 	var (
 		operation string
 		config    []byte
-		err       error
 	)
 
 	switch camp.CampaignType {
 	case enums.CampaignTypeQuestionnaire:
+		if err := createRecurringQuestionnaire(ctx, req.DB, camp, nextRunAt); err != nil {
+			return err
+		}
+
 		operation = SendQuestionnaireCampaignOp.Name()
 		config, err = json.Marshal(SendQuestionnaireCampaignRequest{
 			CampaignDispatchInput: input,
 		})
 	default:
+		input.Resend = true
 		operation = SendCampaignOp.Name()
 		config, err = json.Marshal(SendBrandedCampaignRequest{
 			CampaignDispatchInput: input,
@@ -113,16 +133,6 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		return err
 	}
 
-	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), camp.OwnerID, func(inst *ent.Integration) bool {
-		return inst.CampaignEmail
-	})
-	if err != nil {
-		return err
-	}
-
-	// dedupes the occurrence when the sweep is retried
-	occurrence := time.Time(*camp.NextRunAt).UTC().Format(time.RFC3339)
-
 	if _, err := req.Dispatch(ctx, types.DispatchRequest{
 		IntegrationID: integrationID,
 		DefinitionID:  DefinitionID.ID(),
@@ -131,13 +141,12 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		Config:        config,
 		RunType:       enums.IntegrationRunTypeScheduled,
 		Runtime:       integrationID == "",
-		UniqueKey:     gala.IntegrationRun.Key(operation, camp.ID, occurrence),
+		UniqueKey:     gala.IntegrationRun.Key(operation, camp.ID, nextRunAt),
 		UniqueOnce:    true,
 	}); err != nil {
 		return err
 	}
 
-	nextRun := camp.RecurrenceFrequency.NextOccurrence(now, camp.RecurrenceInterval, camp.RecurrenceTimezone)
 	nowDT := models.DateTime(now)
 	exhausted := camp.RecurrenceEndAt != nil && !camp.RecurrenceEndAt.IsZero() && !nextRun.Before(time.Time(*camp.RecurrenceEndAt))
 

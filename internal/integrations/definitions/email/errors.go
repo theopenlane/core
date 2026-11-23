@@ -17,6 +17,8 @@ var (
 	ErrEmailTemplateNotFound = errors.New("email: email template not found")
 	// ErrCampaignNotFound indicates a campaign cannot be found for email dispatch
 	ErrCampaignNotFound = errors.New("email: campaign not found")
+	// ErrInvalidCampaignRecurrence indicates when a rerun of a compaign does not update the next run date
+	ErrInvalidCampaignRecurrence = errors.New("email: campaign rerun must have an updated next run date")
 	// ErrSenderNotConfigured indicates the email client has no sender configured
 	ErrSenderNotConfigured = errors.New("email: sender not configured")
 	// ErrSenderVerifyFailed indicates the email provider rejected the configured credentials
