@@ -88,6 +88,12 @@ func TestFindingMapping(t *testing.T) {
 		TargetField:  externalIDField,
 		SourceList:   EdgeExternalIDKey(entityops.SchemaFinding, finding.EdgeAssets),
 		PayloadKeys:  true,
+	}, types.LinkRule{
+		TargetSchema: entityops.SchemaScan.Name,
+		Edge:         finding.EdgeScans,
+		TargetField:  externalIDField,
+		SourceList:   EdgeExternalIDKey(entityops.SchemaFinding, finding.EdgeScans),
+		PayloadKeys:  true,
 	})
 
 	if !slices.Equal(got.Spec.Links, want) {

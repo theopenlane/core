@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "name": "Yuri's MacBook Pro",
+    "os": "macos",
+    "version": "1.0.0",
+    "serial_number": "C02XL0GHJGH5",
+    "mac_address": "3C:22:FB:8A:41:7E",
+    "user": "Yuri Dart",
+    "permission_group_id": 1,
+    "permission_group_name": "Default",
+    "last_heartbeat_at": 1716854400,
+    "status": "protected"
+  },
+  {
+    "id": 2,
+    "name": "Sugman's MacBook Pro",
+    "os": "macos",
+    "version": "1.0.3",
+    "serial_number": null,
+    "mac_address": null,
+    "user": "Sugman Utz",
+    "permission_group_id": 2,
+    "permission_group_name": "Sales",
+    "last_heartbeat_at": 1716854400,
+    "status": "offline"
+  }
+]

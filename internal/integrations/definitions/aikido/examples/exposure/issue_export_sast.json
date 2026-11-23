@@ -1,0 +1,29 @@
+{
+  "id": 2,
+  "group_id": 12,
+  "attack_surface": "backend",
+  "status": "ignored",
+  "severity": "high",
+  "severity_score": 72,
+  "type": "sast",
+  "rule": "SQL injection",
+  "rule_id": "aik_sast_go_001",
+  "affected_file": "internal/db/query.go",
+  "start_line": 10,
+  "end_line": 14,
+  "first_detected_at": 1700489005,
+  "actionable_at": 1700489005,
+  "code_repo_id": 42,
+  "code_repo_name": "example-repo",
+  "ignored_at": 1700500000,
+  "ignored_by": "user",
+  "sla_days": 30,
+  "cwe_classes": ["CWE-89"],
+  "programming_language": "GO",
+  "group": {
+    "id": 12,
+    "title": "SQL injection",
+    "description": "User input reaches a SQL query without parameterization.",
+    "how_to_fix": "Use parameterized queries."
+  }
+}

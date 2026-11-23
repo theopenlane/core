@@ -9,11 +9,11 @@ require (
 	github.com/riverqueue/river v0.51.2
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.35.1
-	github.com/stoewer/go-strcase v1.3.1
+	github.com/stoewer/go-strcase v1.4.0
 	github.com/theopenlane/core/v2 v2.17.10
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.38.5
-	github.com/theopenlane/utils v0.7.4
+	github.com/theopenlane/utils v0.7.5-0.20261123212740-f981a2f77f90
 	github.com/zitadel/oidc/v3 v3.52.0
 	golang.org/x/oauth2 v0.38.0
 	gotest.tools/v3 v3.5.2

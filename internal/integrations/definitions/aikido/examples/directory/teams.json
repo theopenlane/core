@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "name": "Frontend developers",
+    "external_source": "github",
+    "external_source_id": "387505",
+    "responsibilities": [
+      {
+        "type": "code_repository",
+        "id": 5,
+        "included_paths": [
+          "/client",
+          "/tests/client"
+        ],
+        "excluded_paths": null
+      },
+      {
+        "type": "container_repository",
+        "id": 8
+      }
+    ],
+    "active": true
+  }
+]

@@ -140,6 +140,7 @@ Config contains the configuration for the core server
     },
     "keywatcher": {},
     "integrations": {
+        "aikido": {},
         "awssecurityhub": {},
         "cloudflareruntime": {
             "domainscan": {}
@@ -1880,6 +1881,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**consoleintegrationpath**|`string`|||
+|[**aikido**](#defsaikidoconfig)|`object`|||
 |[**awssecurityhub**](#defsawssecurityhubconfig)|`object`|||
 |[**cloudflareruntime**](#defscloudflareruntimeconfig)|`object`|||
 |[**githubapp**](#defsgithubappconfig)|`object`|||
@@ -1906,6 +1908,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 ```json
 {
+    "aikido": {},
     "awssecurityhub": {},
     "cloudflareruntime": {
         "domainscan": {}
@@ -1980,6 +1983,19 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 }
 ```
 
+   
+<a name="defsaikidoconfig"></a>
+### $defs/aikido\.Config: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
+
+**Additional Properties:** not allowed   
    
 <a name="defsawssecurityhubconfig"></a>
 ### $defs/awssecurityhub\.Config: object

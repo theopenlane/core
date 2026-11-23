@@ -1,0 +1,20 @@
+{
+  "overview": {
+    "principles_result": [
+      {
+        "code": "2.1_principles_related_to_data_processing",
+        "title": "2.1 Principles Relating to Processing of Personal Data",
+        "results": [
+          {
+            "measure": "encryption_at_rest_enabled",
+            "title": "Docker image repository not encrypted at rest",
+            "measure_title": "Encryption at Rest Enabled",
+            "status": "complying"
+          }
+        ]
+      }
+    ]
+  },
+  "total_complying_rule_count": 214,
+  "total_rule_count": 272
+}

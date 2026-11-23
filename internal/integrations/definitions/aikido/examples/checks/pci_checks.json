@@ -1,0 +1,26 @@
+{
+  "overview": {
+    "network_security_control_measures_result": [
+      {
+        "code": "1.2_network_security_controls_are_configured",
+        "title": "1.2 Network security controls (NSCs) are configured and maintained. ",
+        "results": [
+          {
+            "measure": "prevents_public_access_to_database",
+            "title": "BigQuery table is anonymously or publicly accessible",
+            "measure_title": "Prevents unauthorized public access to database",
+            "status": "complying"
+          },
+          {
+            "measure": "prevents_public_access_to_database",
+            "title": "RDS instances are not publicly accessible",
+            "measure_title": "Prevents unauthorized public access to database",
+            "status": "complying"
+          }
+        ]
+      }
+    ]
+  },
+  "total_complying_rule_count": 5,
+  "total_rule_count": 6
+}
