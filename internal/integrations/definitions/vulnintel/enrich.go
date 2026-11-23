@@ -209,11 +209,6 @@ func advisoryUpdate(update *generated.VulnerabilityUpdateOne, vuln *generated.Vu
 		changed = true
 	}
 
-	if fixed := record.fixedVersion(vuln.PackageName); vuln.FirstPatchedVersion == "" && fixed != "" {
-		update.SetFirstPatchedVersion(fixed)
-		changed = true
-	}
-
 	if published := record.publishedAt(); vuln.PublishedAt == nil && !published.IsZero() {
 		update.SetPublishedAt(models.DateTime(published))
 		changed = true

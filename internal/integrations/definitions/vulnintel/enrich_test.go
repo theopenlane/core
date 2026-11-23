@@ -34,14 +34,12 @@ func TestAdvisoryUpdateFillsEmptyFields(t *testing.T) {
 	summary, _ := mutation.Summary()
 	description, _ := mutation.Description()
 	vector, _ := mutation.Vector()
-	fixed, _ := mutation.FirstPatchedVersion()
 	published, _ := mutation.PublishedAt()
 	references, _ := mutation.References()
 
 	assert.Check(t, is.Equal("Regular expression denial of service in zod", summary))
 	assert.Check(t, is.Equal("The emoji validator backtracks exponentially.", description))
 	assert.Check(t, is.Equal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L", vector))
-	assert.Check(t, is.Equal("3.25.2", fixed))
 	assert.Check(t, is.Equal(models.DateTime(time.Date(2026, 10, 21, 17, 59, 27, 0, time.UTC)), published))
 	assert.Check(t, is.DeepEqual([]string{
 		"https://osv.dev/vulnerability/GHSA-253c-mchw-3w2r",

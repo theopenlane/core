@@ -16,7 +16,7 @@ func Builder(cfg Config) registry.Builder {
 			ID:          DefinitionID.ID(),
 			Family:      "intelligence",
 			DisplayName: "Vulnerability Intelligence",
-			Description: "Fill in vulnerability descriptions, CVSS vectors, fixed versions and references from the OSV database.",
+			Description: "Fill in vulnerability descriptions, CVSS vectors and references from the OSV database.",
 			Category:    "security-posture",
 			Tags:        []string{"vulnerabilities", "enrichment"},
 			Active:      true,

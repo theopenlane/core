@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/ossf/osv-schema/bindings/go/osvschema"
-	"github.com/samber/lo"
 	"osv.dev/bindings/go/osvdev"
 )
 
@@ -42,16 +41,6 @@ type osvRecord struct {
 	Severity []osvSeverity `json:"severity,omitempty"`
 	// References are links about the advisory
 	References []string `json:"references,omitempty"`
-	// Fixes are the fixed versions of each affected package, in advisory order
-	Fixes []osvFix `json:"fixes,omitempty"`
-}
-
-// osvFix is one fixed version of an affected package
-type osvFix struct {
-	// Package is the affected package name
-	Package string `json:"package"`
-	// Version is the version fixing the advisory
-	Version string `json:"version"`
 }
 
 // osvSeverity is one scored severity of an advisory
@@ -84,16 +73,6 @@ func recordFromOSV(vuln *osvschema.Vulnerability) osvRecord {
 		}
 	}
 
-	for _, affected := range vuln.GetAffected() {
-		for _, rng := range affected.GetRanges() {
-			for _, event := range rng.GetEvents() {
-				if event.GetFixed() != "" {
-					record.Fixes = append(record.Fixes, osvFix{Package: affected.GetPackage().GetName(), Version: event.GetFixed()})
-				}
-			}
-		}
-	}
-
 	return record
 }
 
@@ -108,25 +87,6 @@ func (r osvRecord) vector() string {
 	}
 
 	return ""
-}
-
-// fixedVersion returns the fixed version of the package, empty when the advisory fixes it in several versions, such
-// as one per release branch, since the vulnerable branch is unknown
-func (r osvRecord) fixedVersion(packageName string) string {
-	versions := []string{}
-
-	for _, fix := range r.Fixes {
-		if packageName == "" || strings.EqualFold(fix.Package, packageName) {
-			versions = append(versions, fix.Version)
-		}
-	}
-
-	versions = lo.Uniq(versions)
-	if len(versions) != 1 {
-		return ""
-	}
-
-	return versions[0]
 }
 
 // referenceURLs returns the OSV page of the advisory followed by its reference links
