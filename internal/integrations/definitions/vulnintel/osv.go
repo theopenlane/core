@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/ossf/osv-schema/bindings/go/osvschema"
+	"github.com/samber/lo"
 	"osv.dev/bindings/go/osvdev"
 )
 
@@ -17,6 +18,8 @@ const (
 	osvPageURL = "https://osv.dev/vulnerability/"
 	// osvRequestTimeout bounds one OSV lookup
 	osvRequestTimeout = 15 * time.Second
+	// osvMaxAttempts is how many times the client tries one lookup
+	osvMaxAttempts = 2
 	// osvNotFoundStatus is how the OSV client reports an unknown advisory, it returns no typed not found error
 	osvNotFoundStatus = `status="404 Not Found"`
 	// severityCVSSV3 is the OSV severity type carrying a CVSS 3.x vector
@@ -39,8 +42,16 @@ type osvRecord struct {
 	Severity []osvSeverity `json:"severity,omitempty"`
 	// References are links about the advisory
 	References []string `json:"references,omitempty"`
-	// FixedVersions are the fixed versions across the affected ranges, in advisory order
-	FixedVersions []string `json:"fixed_versions,omitempty"`
+	// Fixes are the fixed versions of each affected package, in advisory order
+	Fixes []osvFix `json:"fixes,omitempty"`
+}
+
+// osvFix is one fixed version of an affected package
+type osvFix struct {
+	// Package is the affected package name
+	Package string `json:"package"`
+	// Version is the version fixing the advisory
+	Version string `json:"version"`
 }
 
 // osvSeverity is one scored severity of an advisory
@@ -77,7 +88,7 @@ func recordFromOSV(vuln *osvschema.Vulnerability) osvRecord {
 		for _, rng := range affected.GetRanges() {
 			for _, event := range rng.GetEvents() {
 				if event.GetFixed() != "" {
-					record.FixedVersions = append(record.FixedVersions, event.GetFixed())
+					record.Fixes = append(record.Fixes, osvFix{Package: affected.GetPackage().GetName(), Version: event.GetFixed()})
 				}
 			}
 		}
@@ -99,13 +110,23 @@ func (r osvRecord) vector() string {
 	return ""
 }
 
-// firstFixedVersion returns the first fixed version across the affected ranges
-func (r osvRecord) firstFixedVersion() string {
-	if len(r.FixedVersions) == 0 {
+// fixedVersion returns the fixed version of the package, empty when the advisory fixes it in several versions, such
+// as one per release branch, since the vulnerable branch is unknown
+func (r osvRecord) fixedVersion(packageName string) string {
+	versions := []string{}
+
+	for _, fix := range r.Fixes {
+		if packageName == "" || strings.EqualFold(fix.Package, packageName) {
+			versions = append(versions, fix.Version)
+		}
+	}
+
+	versions = lo.Uniq(versions)
+	if len(versions) != 1 {
 		return ""
 	}
 
-	return r.FixedVersions[0]
+	return versions[0]
 }
 
 // referenceURLs returns the OSV page of the advisory followed by its reference links
@@ -133,6 +154,8 @@ type osvClient struct {
 func newOSVClient() *osvClient {
 	client := osvdev.DefaultClient()
 	client.HTTPClient = &http.Client{Timeout: osvRequestTimeout}
+	// the client retries with sleeps that ignore context, so allow one retry and leave the rest to the next run
+	client.Config.MaxRetryAttempts = osvMaxAttempts
 
 	return &osvClient{client: client}
 }

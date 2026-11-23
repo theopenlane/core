@@ -24,7 +24,7 @@ func testAdvisory(t *testing.T) osvRecord {
 
 func TestAdvisoryUpdateFillsEmptyFields(t *testing.T) {
 	update := generated.NewClient().Vulnerability.UpdateOneID("vuln-1")
-	vuln := &generated.Vulnerability{ID: "vuln-1", References: []string{"https://intel.aikido.dev/cve/GHSA-253c-mchw-3w2r"}}
+	vuln := &generated.Vulnerability{ID: "vuln-1"}
 
 	update, changed := advisoryUpdate(update, vuln, testAdvisory(t))
 	assert.Assert(t, changed)
@@ -44,7 +44,6 @@ func TestAdvisoryUpdateFillsEmptyFields(t *testing.T) {
 	assert.Check(t, is.Equal("3.25.2", fixed))
 	assert.Check(t, is.Equal(models.DateTime(time.Date(2026, 10, 21, 17, 59, 27, 0, time.UTC)), published))
 	assert.Check(t, is.DeepEqual([]string{
-		"https://intel.aikido.dev/cve/GHSA-253c-mchw-3w2r",
 		"https://osv.dev/vulnerability/GHSA-253c-mchw-3w2r",
 		"https://github.com/advisories/GHSA-253c-mchw-3w2r",
 	}, references))
@@ -59,9 +58,20 @@ func TestAdvisoryUpdateKeepsProviderFields(t *testing.T) {
 		Vector:              "CVSS:3.1/AV:L",
 		FirstPatchedVersion: "3.25.1",
 		PublishedAt:         &published,
-		References:          []string{"https://osv.dev/vulnerability/GHSA-253c-mchw-3w2r", "https://github.com/advisories/GHSA-253c-mchw-3w2r"},
+		References:          []string{"https://intel.aikido.dev/cve/GHSA-253c-mchw-3w2r"},
 	}
 
 	_, changed := advisoryUpdate(generated.NewClient().Vulnerability.UpdateOneID("vuln-1"), vuln, testAdvisory(t))
 	assert.Check(t, !changed)
+}
+
+func TestAdvisoryID(t *testing.T) {
+	id, ok := advisoryID(" GHSA-253c-mchw-3w2r ")
+	assert.Check(t, ok)
+	assert.Check(t, is.Equal("GHSA-253c-mchw-3w2r", id))
+
+	for _, rawID := range []string{"", "../x", "a/b", "CVE..1", ".hidden", "CVE 2026"} {
+		_, ok := advisoryID(rawID)
+		assert.Check(t, !ok, rawID)
+	}
 }

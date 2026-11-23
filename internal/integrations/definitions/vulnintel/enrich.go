@@ -2,10 +2,10 @@ package vulnintel
 
 import (
 	"context"
-	"slices"
+	"regexp"
+	"strings"
 	"time"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
 
@@ -53,7 +53,12 @@ type enrichRun struct {
 	advisories map[string]*osvRecord
 	// result counts the work done
 	result enrichResult
+	// failures counts the OSV lookups that failed in a row
+	failures int
 }
+
+// maxConsecutiveFailures stops a run's OSV lookups once this many fail in a row, leaving the rest for the next run
+const maxConsecutiveFailures = 5
 
 // enrich fills the empty advisory fields of the open vulnerabilities the installation wrote, leaving every field the
 // provider set untouched, and writes rows directly so the provider's provenance on them is kept
@@ -116,7 +121,12 @@ func (r *enrichRun) apply(ctx context.Context, vuln *generated.Vulnerability) {
 
 // advisory returns the OSV advisory for the id from this run, the cache or OSV, nil when OSV has none, the lookup
 // failed, or the run already made its maximum lookups
-func (r *enrichRun) advisory(ctx context.Context, id string) *osvRecord {
+func (r *enrichRun) advisory(ctx context.Context, rawID string) *osvRecord {
+	id, ok := advisoryID(rawID)
+	if !ok {
+		return nil
+	}
+
 	if record, ok := r.advisories[id]; ok {
 		return record
 	}
@@ -129,7 +139,7 @@ func (r *enrichRun) advisory(ctx context.Context, id string) *osvRecord {
 		return r.advisories[id]
 	}
 
-	if r.result.Lookups >= r.maxPerRun {
+	if r.result.Lookups >= r.maxPerRun || r.failures >= maxConsecutiveFailures || ctx.Err() != nil {
 		r.result.Deferred++
 		r.advisories[id] = nil
 
@@ -142,10 +152,13 @@ func (r *enrichRun) advisory(ctx context.Context, id string) *osvRecord {
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("id", id).Msg("vulnintel: osv lookup failed, skipping advisory")
 
+		r.failures++
 		r.advisories[id] = nil
 
 		return nil
 	}
+
+	r.failures = 0
 
 	entry := cacheEntry{FetchedAt: now, Found: found, Record: record}
 	r.cache.put(ctx, id, entry)
@@ -153,6 +166,19 @@ func (r *enrichRun) advisory(ctx context.Context, id string) *osvRecord {
 
 	return r.advisories[id]
 }
+
+// advisoryIDPattern matches OSV identifiers such as CVE-2026-1, GHSA-xxxx-xxxx-xxxx or PYSEC-2026-1
+var advisoryIDPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._-]*$`)
+
+// advisoryID trims the provider's advisory id, false when it is not a safe OSV identifier to use as a cache key
+func advisoryID(rawID string) (string, bool) {
+	id := strings.TrimSpace(rawID)
+
+	return id, len(id) <= maxAdvisoryIDLength && advisoryIDPattern.MatchString(id) && !strings.Contains(id, "..")
+}
+
+// maxAdvisoryIDLength bounds the advisory ids looked up
+const maxAdvisoryIDLength = 128
 
 // cachedRecord returns the advisory of a lookup, nil when OSV had none
 func cachedRecord(entry cacheEntry) *osvRecord {
@@ -183,8 +209,8 @@ func advisoryUpdate(update *generated.VulnerabilityUpdateOne, vuln *generated.Vu
 		changed = true
 	}
 
-	if vuln.FirstPatchedVersion == "" && record.firstFixedVersion() != "" {
-		update.SetFirstPatchedVersion(record.firstFixedVersion())
+	if fixed := record.fixedVersion(vuln.PackageName); vuln.FirstPatchedVersion == "" && fixed != "" {
+		update.SetFirstPatchedVersion(fixed)
 		changed = true
 	}
 
@@ -193,8 +219,8 @@ func advisoryUpdate(update *generated.VulnerabilityUpdateOne, vuln *generated.Vu
 		changed = true
 	}
 
-	if references := lo.Uniq(append(slices.Clone(vuln.References), record.referenceURLs()...)); len(references) != len(vuln.References) {
-		update.SetReferences(references)
+	if len(vuln.References) == 0 {
+		update.SetReferences(record.referenceURLs())
 		changed = true
 	}
 

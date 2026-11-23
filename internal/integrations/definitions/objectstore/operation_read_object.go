@@ -16,19 +16,18 @@ import (
 
 // Run reads the object under the key, reporting a missing object as not found rather than as an error
 func (r ReadObject) Run(ctx context.Context, client storage.Provider) (ReadObjectResult, error) {
-	if statter, ok := client.(storage.Statter); ok {
-		if _, err := statter.Stat(ctx, &storagetypes.File{Key: r.Key}); err != nil {
-			if objectMissing(err) {
-				return ReadObjectResult{}, nil
-			}
+	exists, err := client.Exists(ctx, &storagetypes.File{Key: r.Key})
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("key", r.Key).Msg("objectstore: object exists check failed")
 
-			logx.FromContext(ctx).Error().Err(err).Str("key", r.Key).Msg("objectstore: object stat failed")
-
-			return ReadObjectResult{}, err
-		}
+		return ReadObjectResult{}, err
 	}
 
-	// providers without stat, such as disk, report a missing object only through the download error
+	if !exists {
+		return ReadObjectResult{}, nil
+	}
+
+	// the object can still be removed between the exists check and the download
 	downloaded, err := client.Download(ctx, &storagetypes.File{Key: r.Key}, &storagetypes.DownloadFileOptions{})
 	if err != nil {
 		if objectMissing(err) {

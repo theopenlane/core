@@ -31,7 +31,7 @@ const operationCompletedSummary = "operation completed"
 
 const (
 	// runInterruptedError replaces a bare context canceled error, which a server restart or job cancellation causes
-	runInterruptedError = "the run was interrupted before it finished, such as by a server restart, it will run again on the next scheduled sync"
+	runInterruptedError = "the run was interrupted before it finished, such as by a server restart, run it again or wait for the next scheduled sync"
 	// runTimedOutError replaces a bare context deadline exceeded error
 	runTimedOutError = "the run did not finish within its time limit"
 )
@@ -199,11 +199,11 @@ func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCyc
 
 	logx.FromContext(ctx).Info().Int("records", ingestResult.Attempted).Int("changed", delta).Msg("reconcile operation completed")
 
-	r.announceIngestCompleted(ctx, cycle.installation, operation, ingestResult)
-
 	if err := operations.CompleteRun(ctx, r.DB(), cycle.runID, cycle.startedAt, executionRunResult(operation.IngestHandle != nil, response, ingestResult, nil)); err != nil {
 		return delta, err
 	}
+
+	r.announceIngestCompleted(ctx, cycle.installation, operation, ingestResult)
 
 	if outputErr := river.RecordOutput(ctx, reconcileOutput{
 		IntegrationID: cycle.src.IntegrationID,
@@ -446,16 +446,20 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	response, ingestResult, err := r.executeResolvedOperation(ctx, integration, operation, envelope.Config, envelope.ForceClientRebuild, operations.IngestOptionsFromOperationContext(oc))
 
-	switch {
-	case err != nil:
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("operation failed")
-	default:
-		logx.FromContext(ctx).Info().Msg("operation completed")
 
+		return finish(err, operation.IngestHandle != nil, response, ingestResult)
+	}
+
+	logx.FromContext(ctx).Info().Msg("operation completed")
+
+	finishErr := finish(nil, operation.IngestHandle != nil, response, ingestResult)
+	if finishErr == nil {
 		r.announceIngestCompleted(ctx, integration, operation, ingestResult)
 	}
 
-	return finish(err, operation.IngestHandle != nil, response, ingestResult)
+	return finishErr
 }
 
 // resumeTrackedRun marks the envelope's run running, retrying under a new run if needed

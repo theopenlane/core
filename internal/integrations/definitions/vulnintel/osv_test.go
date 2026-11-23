@@ -57,7 +57,7 @@ func TestOSVLookup(t *testing.T) {
 
 	assert.Check(t, is.Equal("Regular expression denial of service in zod", record.Summary))
 	assert.Check(t, is.Equal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L", record.vector()))
-	assert.Check(t, is.Equal("3.25.2", record.firstFixedVersion()))
+	assert.Check(t, is.Equal("3.25.2", record.fixedVersion("")))
 	assert.Check(t, is.Equal(time.Date(2026, 10, 21, 17, 59, 27, 0, time.UTC), record.publishedAt()))
 	assert.Check(t, is.DeepEqual([]string{"https://osv.dev/vulnerability/GHSA-253c-mchw-3w2r", "https://github.com/advisories/GHSA-253c-mchw-3w2r"}, record.referenceURLs()))
 
@@ -90,6 +90,20 @@ func TestOSVVectorFallsBackToV4(t *testing.T) {
 	record := osvRecord{Severity: []osvSeverity{{Type: severityCVSSV4, Score: "CVSS:4.0/AV:N"}}}
 
 	assert.Check(t, is.Equal("CVSS:4.0/AV:N", record.vector()))
+}
+
+func TestOSVFixedVersion(t *testing.T) {
+	record := osvRecord{Fixes: []osvFix{
+		{Package: "lodash", Version: "4.17.21"},
+		{Package: "lodash-es", Version: "4.17.22"},
+		{Package: "log4j-core", Version: "2.15.0"},
+		{Package: "log4j-core", Version: "2.12.2"},
+	}}
+
+	assert.Check(t, is.Equal("4.17.21", record.fixedVersion("Lodash")))
+	assert.Check(t, is.Equal("", record.fixedVersion("log4j-core")))
+	assert.Check(t, is.Equal("", record.fixedVersion("")))
+	assert.Check(t, is.Equal("", record.fixedVersion("express")))
 }
 
 func TestCacheEntryFresh(t *testing.T) {
