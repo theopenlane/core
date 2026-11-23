@@ -936,6 +936,9 @@ coreConfiguration:
       dryrun: true  # @schema type:boolean; default:true
       # -- Maximum orphaned files to delete per run
       maxperrun: 500  # @schema type:integer; default:500
+    vulnintel:
+      # -- Maximum OSV advisory lookups per enrichment run
+      maxperrun: 500  # @schema type:integer; default:500
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false

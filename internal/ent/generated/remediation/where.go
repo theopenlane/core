@@ -3142,7 +3142,7 @@ func HasIntegrationRuns() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRunsTable, IntegrationRunsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, IntegrationRunsTable, IntegrationRunsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

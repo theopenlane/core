@@ -1,6 +1,6 @@
 module github.com/theopenlane/core/v2
 
-go 1.27.3
+go 1.27.4
 
 tool (
 	github.com/dave/jennifer
@@ -90,6 +90,7 @@ require (
 	github.com/openfga/go-sdk v0.8.4
 	github.com/openfga/language/pkg/go v0.3.2
 	github.com/oracle/oci-go-sdk/v65 v65.130.0
+	github.com/ossf/osv-schema/bindings/go v0.0.0-20261119032439-091feabc002e
 	github.com/pdfcpu/pdfcpu v0.16.4
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
@@ -119,7 +120,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.38.4
+	github.com/theopenlane/entx v0.38.5
 	github.com/theopenlane/go-client v0.17.1
 	github.com/theopenlane/gqlgen-plugins v0.19.4
 	github.com/theopenlane/httpsling v0.3.0
@@ -150,6 +151,7 @@ require (
 	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
+	osv.dev/bindings/go v0.0.0-20261120044147-5da6b9031249
 )
 
 require (

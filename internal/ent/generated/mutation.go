@@ -133654,6 +133654,9 @@ type IntegrationRunMutation struct {
 	procedures                   map[string]struct{}
 	removedprocedures            map[string]struct{}
 	clearedprocedures            bool
+	remediations                 map[string]struct{}
+	removedremediations          map[string]struct{}
+	clearedremediations          bool
 	risks                        map[string]struct{}
 	removedrisks                 map[string]struct{}
 	clearedrisks                 bool
@@ -135392,6 +135395,60 @@ func (m *IntegrationRunMutation) ResetProcedures() {
 	m.removedprocedures = nil
 }
 
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by ids.
+func (m *IntegrationRunMutation) AddRemediationIDs(ids ...string) {
+	if m.remediations == nil {
+		m.remediations = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.remediations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRemediations clears the "remediations" edge to the Remediation entity.
+func (m *IntegrationRunMutation) ClearRemediations() {
+	m.clearedremediations = true
+}
+
+// RemediationsCleared reports if the "remediations" edge to the Remediation entity was cleared.
+func (m *IntegrationRunMutation) RemediationsCleared() bool {
+	return m.clearedremediations
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to the Remediation entity by IDs.
+func (m *IntegrationRunMutation) RemoveRemediationIDs(ids ...string) {
+	if m.removedremediations == nil {
+		m.removedremediations = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.remediations, ids[i])
+		m.removedremediations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRemediations returns the removed IDs of the "remediations" edge to the Remediation entity.
+func (m *IntegrationRunMutation) RemovedRemediationsIDs() (ids []string) {
+	for id := range m.removedremediations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RemediationsIDs returns the "remediations" edge IDs in the mutation.
+func (m *IntegrationRunMutation) RemediationsIDs() (ids []string) {
+	for id := range m.remediations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRemediations resets all changes to the "remediations" edge.
+func (m *IntegrationRunMutation) ResetRemediations() {
+	m.remediations = nil
+	m.clearedremediations = false
+	m.removedremediations = nil
+}
+
 // AddRiskIDs adds the "risks" edge to the Risk entity by ids.
 func (m *IntegrationRunMutation) AddRiskIDs(ids ...string) {
 	if m.risks == nil {
@@ -136082,7 +136139,7 @@ func (m *IntegrationRunMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *IntegrationRunMutation) AddedEdges() []string {
-	edges := make([]string, 0, 15)
+	edges := make([]string, 0, 16)
 	if m.owner != nil {
 		edges = append(edges, integrationrun.EdgeOwner)
 	}
@@ -136121,6 +136178,9 @@ func (m *IntegrationRunMutation) AddedEdges() []string {
 	}
 	if m.procedures != nil {
 		edges = append(edges, integrationrun.EdgeProcedures)
+	}
+	if m.remediations != nil {
+		edges = append(edges, integrationrun.EdgeRemediations)
 	}
 	if m.risks != nil {
 		edges = append(edges, integrationrun.EdgeRisks)
@@ -136209,6 +136269,12 @@ func (m *IntegrationRunMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case integrationrun.EdgeRemediations:
+		ids := make([]ent.Value, 0, len(m.remediations))
+		for id := range m.remediations {
+			ids = append(ids, id)
+		}
+		return ids
 	case integrationrun.EdgeRisks:
 		ids := make([]ent.Value, 0, len(m.risks))
 		for id := range m.risks {
@@ -136227,7 +136293,7 @@ func (m *IntegrationRunMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *IntegrationRunMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 15)
+	edges := make([]string, 0, 16)
 	if m.removedaction_plans != nil {
 		edges = append(edges, integrationrun.EdgeActionPlans)
 	}
@@ -136260,6 +136326,9 @@ func (m *IntegrationRunMutation) RemovedEdges() []string {
 	}
 	if m.removedprocedures != nil {
 		edges = append(edges, integrationrun.EdgeProcedures)
+	}
+	if m.removedremediations != nil {
+		edges = append(edges, integrationrun.EdgeRemediations)
 	}
 	if m.removedrisks != nil {
 		edges = append(edges, integrationrun.EdgeRisks)
@@ -136340,6 +136409,12 @@ func (m *IntegrationRunMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case integrationrun.EdgeRemediations:
+		ids := make([]ent.Value, 0, len(m.removedremediations))
+		for id := range m.removedremediations {
+			ids = append(ids, id)
+		}
+		return ids
 	case integrationrun.EdgeRisks:
 		ids := make([]ent.Value, 0, len(m.removedrisks))
 		for id := range m.removedrisks {
@@ -136358,7 +136433,7 @@ func (m *IntegrationRunMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *IntegrationRunMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 15)
+	edges := make([]string, 0, 16)
 	if m.clearedowner {
 		edges = append(edges, integrationrun.EdgeOwner)
 	}
@@ -136397,6 +136472,9 @@ func (m *IntegrationRunMutation) ClearedEdges() []string {
 	}
 	if m.clearedprocedures {
 		edges = append(edges, integrationrun.EdgeProcedures)
+	}
+	if m.clearedremediations {
+		edges = append(edges, integrationrun.EdgeRemediations)
 	}
 	if m.clearedrisks {
 		edges = append(edges, integrationrun.EdgeRisks)
@@ -136437,6 +136515,8 @@ func (m *IntegrationRunMutation) EdgeCleared(name string) bool {
 		return m.clearedinternal_policies
 	case integrationrun.EdgeProcedures:
 		return m.clearedprocedures
+	case integrationrun.EdgeRemediations:
+		return m.clearedremediations
 	case integrationrun.EdgeRisks:
 		return m.clearedrisks
 	case integrationrun.EdgeVulnerabilities:
@@ -136501,6 +136581,9 @@ func (m *IntegrationRunMutation) ResetEdge(name string) error {
 		return nil
 	case integrationrun.EdgeProcedures:
 		m.ResetProcedures()
+		return nil
+	case integrationrun.EdgeRemediations:
+		m.ResetRemediations()
 		return nil
 	case integrationrun.EdgeRisks:
 		m.ResetRisks()

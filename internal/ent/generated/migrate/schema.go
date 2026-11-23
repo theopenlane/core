@@ -5038,7 +5038,6 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "platform_integration_runs", Type: field.TypeString, Nullable: true},
 		{Name: "program_integration_runs", Type: field.TypeString, Nullable: true},
-		{Name: "remediation_integration_runs", Type: field.TypeString, Nullable: true},
 		{Name: "review_integration_runs", Type: field.TypeString, Nullable: true},
 		{Name: "scan_integration_runs", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_integration_runs", Type: field.TypeString, Nullable: true},
@@ -5157,56 +5156,50 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "integration_runs_remediations_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[36]},
-				RefColumns: []*schema.Column{RemediationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "integration_runs_reviews_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[37]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[36]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_scans_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[38]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[37]},
 				RefColumns: []*schema.Column{ScansColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_subcontrols_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[39]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[38]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_system_details_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[40]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[39]},
 				RefColumns: []*schema.Column{SystemDetailsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_tag_definitions_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[41]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[40]},
 				RefColumns: []*schema.Column{TagDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_tasks_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[42]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[41]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_templates_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[43]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[42]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_runs_vendor_risk_scores_integration_runs",
-				Columns:    []*schema.Column{IntegrationRunsColumns[44]},
+				Columns:    []*schema.Column{IntegrationRunsColumns[43]},
 				RefColumns: []*schema.Column{VendorRiskScoresColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -15531,6 +15524,31 @@ var (
 			},
 		},
 	}
+	// RemediationIntegrationRunsColumns holds the columns for the "remediation_integration_runs" table.
+	RemediationIntegrationRunsColumns = []*schema.Column{
+		{Name: "remediation_id", Type: field.TypeString},
+		{Name: "integration_run_id", Type: field.TypeString},
+	}
+	// RemediationIntegrationRunsTable holds the schema information for the "remediation_integration_runs" table.
+	RemediationIntegrationRunsTable = &schema.Table{
+		Name:       "remediation_integration_runs",
+		Columns:    RemediationIntegrationRunsColumns,
+		PrimaryKey: []*schema.Column{RemediationIntegrationRunsColumns[0], RemediationIntegrationRunsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "remediation_integration_runs_remediation_id",
+				Columns:    []*schema.Column{RemediationIntegrationRunsColumns[0]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "remediation_integration_runs_integration_run_id",
+				Columns:    []*schema.Column{RemediationIntegrationRunsColumns[1]},
+				RefColumns: []*schema.Column{IntegrationRunsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// RemediationBlockedGroupsColumns holds the columns for the "remediation_blocked_groups" table.
 	RemediationBlockedGroupsColumns = []*schema.Column{
 		{Name: "remediation_id", Type: field.TypeString},
@@ -17503,6 +17521,7 @@ var (
 		ProgramNarrativesTable,
 		ProgramActionPlansTable,
 		ProgramSystemDetailsTable,
+		RemediationIntegrationRunsTable,
 		RemediationBlockedGroupsTable,
 		RemediationEditorsTable,
 		RemediationFindingsTable,
@@ -17908,15 +17927,14 @@ func init() {
 	IntegrationRunsTable.ForeignKeys[14].RefTable = OrganizationsTable
 	IntegrationRunsTable.ForeignKeys[15].RefTable = PlatformsTable
 	IntegrationRunsTable.ForeignKeys[16].RefTable = ProgramsTable
-	IntegrationRunsTable.ForeignKeys[17].RefTable = RemediationsTable
-	IntegrationRunsTable.ForeignKeys[18].RefTable = ReviewsTable
-	IntegrationRunsTable.ForeignKeys[19].RefTable = ScansTable
-	IntegrationRunsTable.ForeignKeys[20].RefTable = SubcontrolsTable
-	IntegrationRunsTable.ForeignKeys[21].RefTable = SystemDetailsTable
-	IntegrationRunsTable.ForeignKeys[22].RefTable = TagDefinitionsTable
-	IntegrationRunsTable.ForeignKeys[23].RefTable = TasksTable
-	IntegrationRunsTable.ForeignKeys[24].RefTable = TemplatesTable
-	IntegrationRunsTable.ForeignKeys[25].RefTable = VendorRiskScoresTable
+	IntegrationRunsTable.ForeignKeys[17].RefTable = ReviewsTable
+	IntegrationRunsTable.ForeignKeys[18].RefTable = ScansTable
+	IntegrationRunsTable.ForeignKeys[19].RefTable = SubcontrolsTable
+	IntegrationRunsTable.ForeignKeys[20].RefTable = SystemDetailsTable
+	IntegrationRunsTable.ForeignKeys[21].RefTable = TagDefinitionsTable
+	IntegrationRunsTable.ForeignKeys[22].RefTable = TasksTable
+	IntegrationRunsTable.ForeignKeys[23].RefTable = TemplatesTable
+	IntegrationRunsTable.ForeignKeys[24].RefTable = VendorRiskScoresTable
 	IntegrationWebhooksTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationWebhooksTable.ForeignKeys[1].RefTable = OrganizationsTable
 	InternalPoliciesTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
@@ -18560,6 +18578,8 @@ func init() {
 	ProgramActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	ProgramSystemDetailsTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramSystemDetailsTable.ForeignKeys[1].RefTable = SystemDetailsTable
+	RemediationIntegrationRunsTable.ForeignKeys[0].RefTable = RemediationsTable
+	RemediationIntegrationRunsTable.ForeignKeys[1].RefTable = IntegrationRunsTable
 	RemediationBlockedGroupsTable.ForeignKeys[0].RefTable = RemediationsTable
 	RemediationBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	RemediationEditorsTable.ForeignKeys[0].RefTable = RemediationsTable

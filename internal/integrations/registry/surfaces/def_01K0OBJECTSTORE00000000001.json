@@ -1,6 +1,6 @@
 {
-  "hash": "4922975a7d49d78845d2475f7ebde273519de9ff0492132272466eab88a865d1",
-  "version": "01M7TXYDHC48N458WF8KY4VR6C",
+  "hash": "9b0ed7af86b60cda4109008d1b9dcc477ed5fc06ff01c33a0f60a4a7cbc9aa21",
+  "version": "01M7ZP09J2KTHB3DFDN5PG0DX5",
   "surface": {
     "id": "def_01K0OBJECTSTORE00000000001",
     "credentials": [
@@ -303,6 +303,9 @@
             }
           }
         }
+      },
+      {
+        "name": "ReadObject"
       },
       {
         "name": "WriteObject"

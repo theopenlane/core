@@ -15402,6 +15402,22 @@ func (c *IntegrationRunClient) QueryProcedures(_m *IntegrationRun) *ProcedureQue
 	return query
 }
 
+// QueryRemediations queries the remediations edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryRemediations(_m *IntegrationRun) *RemediationQuery {
+	query := (&RemediationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.RemediationsTable, integrationrun.RemediationsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryRisks queries the risks edge of a IntegrationRun.
 func (c *IntegrationRunClient) QueryRisks(_m *IntegrationRun) *RiskQuery {
 	query := (&RiskClient{config: c.config}).Query()
@@ -24920,7 +24936,7 @@ func (c *RemediationClient) QueryIntegrationRuns(_m *Remediation) *IntegrationRu
 		step := sqlgraph.NewStep(
 			sqlgraph.From(remediation.Table, remediation.FieldID, id),
 			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, remediation.IntegrationRunsTable, remediation.IntegrationRunsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, remediation.IntegrationRunsTable, remediation.IntegrationRunsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

@@ -54307,6 +54307,10 @@ type IntegrationRunWhereInput struct {
 	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
 	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
 
+	// "remediations" edge predicates.
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+
 	// "risks" edge predicates.
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
@@ -55063,6 +55067,25 @@ func (i *IntegrationRunWhereInput) P() (predicate.IntegrationRun, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, integrationrun.HasProceduresWith(with...))
+	}
+	if i.HasRemediations != nil {
+		p := integrationrun.HasRemediations()
+		if !*i.HasRemediations {
+			p = integrationrun.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRemediationsWith) > 0 {
+		with := make([]predicate.Remediation, 0, len(i.HasRemediationsWith))
+		with = append(with, remediation.DeletedAtIsNil())
+		for _, w := range i.HasRemediationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRemediationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, integrationrun.HasRemediationsWith(with...))
 	}
 	if i.HasRisks != nil {
 		p := integrationrun.HasRisks()

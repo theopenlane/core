@@ -84,6 +84,8 @@ const (
 	EdgeInternalPolicies = "internal_policies"
 	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
 	EdgeProcedures = "procedures"
+	// EdgeRemediations holds the string denoting the remediations edge name in mutations.
+	EdgeRemediations = "remediations"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
 	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
@@ -159,6 +161,11 @@ const (
 	// ProceduresInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
 	ProceduresInverseTable = "procedures"
+	// RemediationsTable is the table that holds the remediations relation/edge. The primary key declared below.
+	RemediationsTable = "remediation_integration_runs"
+	// RemediationsInverseTable is the table name for the Remediation entity.
+	// It exists in this package in order to avoid circular dependency with the "remediation" package.
+	RemediationsInverseTable = "remediations"
 	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
 	RisksTable = "risk_integration_runs"
 	// RisksInverseTable is the table name for the Risk entity.
@@ -214,7 +221,6 @@ var ForeignKeys = []string{
 	"narrative_integration_runs",
 	"platform_integration_runs",
 	"program_integration_runs",
-	"remediation_integration_runs",
 	"review_integration_runs",
 	"scan_integration_runs",
 	"subcontrol_integration_runs",
@@ -259,6 +265,9 @@ var (
 	// ProceduresPrimaryKey and ProceduresColumn2 are the table columns denoting the
 	// primary key for the procedures relation (M2M).
 	ProceduresPrimaryKey = []string{"procedure_id", "integration_run_id"}
+	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
+	// primary key for the remediations relation (M2M).
+	RemediationsPrimaryKey = []string{"remediation_id", "integration_run_id"}
 	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
 	// primary key for the risks relation (M2M).
 	RisksPrimaryKey = []string{"risk_id", "integration_run_id"}
@@ -603,6 +612,20 @@ func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByRemediationsCount orders the results by remediations count.
+func ByRemediationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRemediationsStep(), opts...)
+	}
+}
+
+// ByRemediations orders the results by remediations terms.
+func ByRemediations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRemediationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByRisksCount orders the results by risks count.
 func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -719,6 +742,13 @@ func newProceduresStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProceduresInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProceduresTable, ProceduresPrimaryKey...),
+	)
+}
+func newRemediationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RemediationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
 	)
 }
 func newRisksStep() *sqlgraph.Step {

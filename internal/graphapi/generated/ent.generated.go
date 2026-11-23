@@ -19052,6 +19052,60 @@ func (ec *executionContext) field_IntegrationRun_procedures_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_IntegrationRun_remediations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.RemediationOrder, error) {
+			return ec.unmarshalORemediationOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.RemediationWhereInput, error) {
+			return ec.unmarshalORemediationWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_IntegrationRun_risks_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -106337,6 +106391,50 @@ func (ec *executionContext) fieldContext_IntegrationRun_procedures(ctx context.C
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_IntegrationRun_procedures_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _IntegrationRun_remediations(ctx context.Context, field graphql.CollectedField, obj *generated.IntegrationRun) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IntegrationRun_remediations(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Remediations(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.RemediationOrder), fc.Args["where"].(*generated.RemediationWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.RemediationConnection) graphql.Marshaler {
+			return ec.marshalNRemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_IntegrationRun_remediations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "IntegrationRun",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_RemediationConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_IntegrationRun_remediations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -280766,7 +280864,7 @@ func (ec *executionContext) unmarshalInputIntegrationRunWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "operationName", "operationNameNEQ", "operationNameIn", "operationNameNotIn", "operationNameContains", "operationNameHasPrefix", "operationNameHasSuffix", "operationNameIsNil", "operationNameNotNil", "operationNameEqualFold", "operationNameContainsFold", "operationKind", "operationKindNEQ", "operationKindIn", "operationKindNotIn", "operationKindIsNil", "operationKindNotNil", "runType", "runTypeNEQ", "runTypeIn", "runTypeNotIn", "runTypeIsNil", "runTypeNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "startedAt", "startedAtGT", "startedAtGTE", "startedAtLT", "startedAtLTE", "finishedAt", "finishedAtGT", "finishedAtGTE", "finishedAtLT", "finishedAtLTE", "finishedAtIsNil", "finishedAtNotNil", "durationMs", "durationMsNEQ", "durationMsGT", "durationMsGTE", "durationMsLT", "durationMsLTE", "durationMsIsNil", "durationMsNotNil", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "error", "errorNEQ", "errorIn", "errorNotIn", "errorContains", "errorHasPrefix", "errorHasSuffix", "errorIsNil", "errorNotNil", "errorEqualFold", "errorContainsFold", "hasOwner", "hasOwnerWith", "hasIntegration", "hasIntegrationWith", "hasActionPlans", "hasActionPlansWith", "hasAssets", "hasAssetsWith", "hasCheckResults", "hasCheckResultsWith", "hasContacts", "hasContactsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasEntities", "hasEntitiesWith", "hasFindings", "hasFindingsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasRisks", "hasRisksWith", "hasVulnerabilities", "hasVulnerabilitiesWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "operationName", "operationNameNEQ", "operationNameIn", "operationNameNotIn", "operationNameContains", "operationNameHasPrefix", "operationNameHasSuffix", "operationNameIsNil", "operationNameNotNil", "operationNameEqualFold", "operationNameContainsFold", "operationKind", "operationKindNEQ", "operationKindIn", "operationKindNotIn", "operationKindIsNil", "operationKindNotNil", "runType", "runTypeNEQ", "runTypeIn", "runTypeNotIn", "runTypeIsNil", "runTypeNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "startedAt", "startedAtGT", "startedAtGTE", "startedAtLT", "startedAtLTE", "finishedAt", "finishedAtGT", "finishedAtGTE", "finishedAtLT", "finishedAtLTE", "finishedAtIsNil", "finishedAtNotNil", "durationMs", "durationMsNEQ", "durationMsGT", "durationMsGTE", "durationMsLT", "durationMsLTE", "durationMsIsNil", "durationMsNotNil", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "error", "errorNEQ", "errorIn", "errorNotIn", "errorContains", "errorHasPrefix", "errorHasSuffix", "errorIsNil", "errorNotNil", "errorEqualFold", "errorContainsFold", "hasOwner", "hasOwnerWith", "hasIntegration", "hasIntegrationWith", "hasActionPlans", "hasActionPlansWith", "hasAssets", "hasAssetsWith", "hasCheckResults", "hasCheckResultsWith", "hasContacts", "hasContactsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasEntities", "hasEntitiesWith", "hasFindings", "hasFindingsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasRemediations", "hasRemediationsWith", "hasRisks", "hasRisksWith", "hasVulnerabilities", "hasVulnerabilitiesWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -281984,6 +282082,20 @@ func (ec *executionContext) unmarshalInputIntegrationRunWhereInput(ctx context.C
 				return it, err
 			}
 			it.HasProceduresWith = data
+		case "hasRemediations":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediations"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasRemediations = data
+		case "hasRemediationsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediationsWith"))
+			data, err := ec.unmarshalORemediationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasRemediationsWith = data
 		case "hasRisks":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRisks"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -436281,6 +436393,12 @@ func (ec *executionContext) _IntegrationRun(ctx context.Context, sel ast.Selecti
 				true, true,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._IntegrationRun_procedures(ctx, field, obj)
+				})
+		case "remediations":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._IntegrationRun_remediations(ctx, field, obj)
 				})
 		case "risks":
 			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
