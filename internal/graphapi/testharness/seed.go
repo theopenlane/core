@@ -217,15 +217,8 @@ func (suite *GraphTestSuite) SetupAPITokenContext(ctx context.Context, t *testin
 
 // allAPITokenScopes returns every scope available in the FGA model
 func allAPITokenScopes(t *testing.T) []string {
-	scopeOpts, err := fgamodel.ScopeOptions()
+	scopes, err := fgamodel.ScopeList()
 	RequireNoError(t, err)
-
-	var scopes []string
-	for obj, verbs := range scopeOpts {
-		for _, verb := range verbs {
-			scopes = append(scopes, obj+":"+verb)
-		}
-	}
 
 	return scopes
 }

@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"maps"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -22,6 +23,7 @@ import (
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
+	iamoauth "github.com/theopenlane/iam/oauthserver"
 	"github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
@@ -52,6 +54,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 type ServerOption interface {
@@ -226,6 +229,8 @@ func getAuthOptions(s *ServerOptions) []authmw.Option {
 		authmw.WithSkipperFunc(skipperFunc),
 		authmw.WithSupportIdentity(s.Config.Handler.SupportAccessConfig.SubjectID, s.Config.Handler.SupportAccessConfig.DisplayName, s.Config.Handler.SupportAccessConfig.Email),
 	}
+
+	opts = append(opts, authmw.WithOAuthTokenIssuer(s.Config.Handler.OAuthTokens))
 
 	if s.Config.Handler.RedisClient != nil {
 		opts = append(opts, authmw.WithRedisClient(s.Config.Handler.RedisClient))
@@ -703,6 +708,45 @@ func WithCloudflareConfig() ServerOption {
 func WithSupportAccessConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.SupportAccessConfig = s.Config.Settings.Auth.SupportAccess
+	})
+}
+
+// WithOAuthServer sets up the OAuth authorization server, failing startup when it is enabled without what it needs
+func WithOAuthServer() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		cfg := s.Config.Settings.Auth.OAuthServer
+		s.Config.Handler.OAuthServerConfig = cfg
+
+		if !cfg.Enabled {
+			return
+		}
+
+		if len(cfg.AllowedResources) == 0 {
+			log.Panic().Msg("auth.oauthserver.allowedresources must list the resource URLs tokens may be issued for")
+		}
+
+		issuer, err := iamoauth.NewTokenIssuer(s.Config.Handler.TokenManager)
+		if err != nil {
+			log.Panic().Err(err).Msg("the oauth server requires the api token keyring under auth.token.apitokens")
+		}
+
+		dial := iamoauth.DialContextFunc(urlx.PublicDialContext)
+
+		var opts []iamoauth.ResolverOption
+
+		// local development serves client metadata from private addresses over http
+		if s.Config.Handler.IsDev {
+			dial = (&net.Dialer{}).DialContext
+			opts = append(opts, iamoauth.WithInsecureClientIDs())
+		}
+
+		clients, err := iamoauth.NewClientResolver(dial, opts...)
+		if err != nil {
+			log.Panic().Err(err).Msg("unable to create the oauth client resolver")
+		}
+
+		s.Config.Handler.OAuthTokens = issuer
+		s.Config.Handler.OAuthClients = clients
 	})
 }
 

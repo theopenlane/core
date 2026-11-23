@@ -15,6 +15,13 @@ const (
 	historyQueryEndpoint = "/history/query"
 )
 
+// IsGraphQLRequest reports whether the request is for the GraphQL or history GraphQL API
+func IsGraphQLRequest(c echo.Context) bool {
+	path := c.Request().URL.Path
+
+	return path == queryEndpoint || path == historyQueryEndpoint
+}
+
 // CheckGraphReadRequest checks if the incoming GraphQL request is a read-only query via POST
 // this can be used to conditionally skip middleware like CSRF for read-only queries
 func CheckGraphReadRequest(c echo.Context) bool {

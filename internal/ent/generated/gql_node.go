@@ -55,6 +55,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/oauthgrant"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
@@ -342,6 +343,11 @@ var notificationtemplateImplementors = []string{"NotificationTemplate", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*NotificationTemplate) IsNode() {}
+
+var oauthgrantImplementors = []string{"OauthGrant", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*OauthGrant) IsNode() {}
 
 var onboardingImplementors = []string{"Onboarding", "Node"}
 
@@ -1066,6 +1072,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(notificationtemplate.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notificationtemplateImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case oauthgrant.Table:
+		query := c.OauthGrant.Query().
+			Where(oauthgrant.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, oauthgrantImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2326,6 +2341,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.NotificationTemplate.Query().
 			Where(notificationtemplate.IDIn(ids...))
 		query, err := query.CollectFields(ctx, notificationtemplateImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case oauthgrant.Table:
+		query := c.OauthGrant.Query().
+			Where(oauthgrant.IDIn(ids...))
+		query, err := query.CollectFields(ctx, oauthgrantImplementors...)
 		if err != nil {
 			return nil, err
 		}

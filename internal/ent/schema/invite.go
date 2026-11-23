@@ -170,6 +170,7 @@ func (Invite) Hooks() []ent.Hook {
 // Policy of the Invite
 func (i Invite) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithDenyAppMutations(),
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 		),

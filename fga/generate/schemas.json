@@ -281,6 +281,15 @@
     "hasUpdate": true
   },
   {
+    "name": "OauthGrant",
+    "hasCreate": true,
+    "hasUpdate": true
+  },
+  {
+    "name": "OauthToken",
+    "excludeFromGeneration": true
+  },
+  {
     "name": "Onboarding",
     "excludeFromGeneration": true
   },

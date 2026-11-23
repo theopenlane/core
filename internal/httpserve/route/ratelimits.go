@@ -42,3 +42,13 @@ var authFlowRateLimit = newRouteRateLimit(authFlowRateLimitRequests)
 
 // publicStaticRateLimit is the generous tier for public, cheap, cacheable endpoints (static assets, well-known, discovery)
 var publicStaticRateLimit = newRouteRateLimit(publicStaticRateLimitRequests)
+
+// oauthRateLimit is the auth flow tier enforced rather than logged on the public OAuth endpoints, since authorize fetches caller-chosen URLs and token and revoke look up credentials
+var oauthRateLimit = enforced(newRouteRateLimit(authFlowRateLimitRequests))
+
+// enforced turns a dry-run tier into one that rejects requests over its budget
+func enforced(config *ratelimit.Config) *ratelimit.Config {
+	config.DryRun = false
+
+	return config
+}

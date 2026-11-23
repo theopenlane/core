@@ -11,6 +11,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/theopenlane/echox/middleware"
 
+	iamoauth "github.com/theopenlane/iam/oauthserver"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
@@ -62,6 +63,8 @@ type Options struct {
 	supportName string
 	// supportEmail is the configured email of the virtual support identity.
 	supportEmail string
+	// oauthTokens verifies OAuth access tokens, nil when the OAuth authorization server is disabled
+	oauthTokens *iamoauth.TokenIssuer
 }
 
 // Reauthenticator generates new access and refresh pair given a valid refresh token.
@@ -188,6 +191,13 @@ func WithAuthOptions(opts Options) Option {
 		if opts.Context != nil {
 			conf.Context = opts.Context
 		}
+	}
+}
+
+// WithOAuthTokenIssuer lets the middleware accept OAuth access tokens verified by issuer
+func WithOAuthTokenIssuer(issuer *iamoauth.TokenIssuer) Option {
+	return func(opts *Options) {
+		opts.oauthTokens = issuer
 	}
 }
 

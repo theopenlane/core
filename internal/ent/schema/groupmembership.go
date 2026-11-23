@@ -140,6 +140,7 @@ func (GroupMembership) Hooks() []ent.Hook {
 // Policy of the GroupMembership
 func (GroupMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithDenyAppMutations(),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.GroupMembershipMutation](),
 		),

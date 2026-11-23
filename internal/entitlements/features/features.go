@@ -48,6 +48,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Notification":                {models.CatalogBaseModule},
 	"NotificationPreference":      {models.CatalogBaseModule},
 	"NotificationTemplate":        {models.CatalogAnyModule},
+	"OauthGrant":                  {models.CatalogAnyModule},
 	"Onboarding":                  {models.CatalogBaseModule},
 	"OrganizationBrandingSetting": {models.CatalogBaseModule},
 	"OrganizationSetting":         {models.CatalogBaseModule},

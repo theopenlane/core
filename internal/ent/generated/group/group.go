@@ -592,6 +592,7 @@ var ForeignKeys = []string{
 	"organization_narrative_creators",
 	"organization_note_creators",
 	"organization_notification_template_creators",
+	"organization_oauth_grant_creators",
 	"organization_org_membership_creators",
 	"organization_platform_creators",
 	"organization_procedure_creators",

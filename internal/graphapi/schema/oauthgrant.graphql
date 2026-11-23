@@ -1,0 +1,174 @@
+extend type Query {
+    """
+    Look up oauthGrant by ID
+    """
+     oauthGrant(
+        """
+        ID of the oauthGrant
+        """
+        id: ID!
+    ):  OauthGrant!
+}
+
+extend type Mutation{
+    """
+    Create a new oauthGrant
+    """
+    createOauthGrant(
+        """
+        values of the oauthGrant
+        """
+        input: CreateOauthGrantInput!
+    ): OauthGrantCreatePayload!
+    """
+    Create multiple new oauthGrants
+    """
+    createBulkOauthGrant(
+        """
+        values of the oauthGrant
+        """
+        input: [CreateOauthGrantInput!]
+    ): OauthGrantBulkCreatePayload!
+    """
+    Create multiple new oauthGrants via file upload
+    """
+    createBulkCSVOauthGrant(
+        """
+        csv file containing values of the oauthGrant
+        """
+        input: Upload!
+    ): OauthGrantBulkCreatePayload!
+    """
+    Update multiple existing oauthGrants
+    """
+    updateBulkOauthGrant(
+        """
+        IDs of the oauthGrants to update
+        """
+        ids: [ID!]!
+        """
+        values to update the oauthGrants with
+        """
+        input: UpdateOauthGrantInput!
+    ): OauthGrantBulkUpdatePayload!
+    """
+    Update multiple existing oauthGrants via file upload
+    """
+    updateBulkCSVOauthGrant(
+        """
+        csv file containing values of the oauthGrant, must include ID column
+        """
+        input: Upload!
+    ): OauthGrantBulkUpdatePayload!
+    """
+    Update an existing oauthGrant
+    """
+    updateOauthGrant(
+        """
+        ID of the oauthGrant
+        """
+        id: ID!
+        """
+        New values for the oauthGrant
+        """
+        input: UpdateOauthGrantInput!
+    ): OauthGrantUpdatePayload!
+    """
+    Delete an existing oauthGrant
+    """
+    deleteOauthGrant(
+        """
+        ID of the oauthGrant
+        """
+        id: ID!
+    ): OauthGrantDeletePayload!
+    """
+    Delete multiple oauthGrants
+    """
+    deleteBulkOauthGrant(
+        """
+        IDs of the oauthGrants to delete
+        """
+        ids: [ID!]!
+    ): OauthGrantBulkDeletePayload!
+}
+
+"""
+Return response for createOauthGrant mutation
+"""
+type OauthGrantCreatePayload {
+    """
+    Created oauthGrant
+    """
+    oauthGrant: OauthGrant!
+}
+
+"""
+Return response for updateOauthGrant mutation
+"""
+type OauthGrantUpdatePayload {
+    """
+    Updated oauthGrant
+    """
+    oauthGrant: OauthGrant!
+}
+
+"""
+Return response for deleteOauthGrant mutation
+"""
+type OauthGrantDeletePayload {
+    """
+    Deleted oauthGrant ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkOauthGrant mutation
+"""
+type OauthGrantBulkCreatePayload {
+    """
+    Created oauthGrants
+    """
+    oauthGrants: [OauthGrant!]
+}
+
+"""
+Return response for updateBulkOauthGrant mutation
+"""
+type OauthGrantBulkUpdatePayload {
+    """
+    Updated oauthGrants
+    """
+    oauthGrants: [OauthGrant!]
+    """
+    IDs of the updated oauthGrants
+    """
+    updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
+}
+
+"""
+Return response for deleteBulkOauthGrant mutation
+"""
+type OauthGrantBulkDeletePayload {
+    """
+    Deleted oauthGrant IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of oauthGrants that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}

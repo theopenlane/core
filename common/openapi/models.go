@@ -3147,3 +3147,133 @@ type AcmeSolverRequest struct {
 var ExampleAcmeSolverRequest = AcmeSolverRequest{
 	Path: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
+
+// =========
+// OAuth Authorization Server
+// =========
+
+// OAuthAuthorizationRequestRequest loads a pending OAuth authorization request for the consent screen
+type OAuthAuthorizationRequestRequest struct {
+	// RequestID is the pending authorization request from the authorize redirect
+	RequestID string `param:"requestID" description:"The pending authorization request ID" example:"tolq_01J4HMNDSZCCQBTY93BF9CBF5D.c2VjcmV0"`
+}
+
+// Validate ensures the required fields are set on the OAuthAuthorizationRequestRequest
+func (r *OAuthAuthorizationRequestRequest) Validate() error {
+	if r.RequestID == "" {
+		return rout.NewMissingRequiredFieldError("requestID")
+	}
+
+	return nil
+}
+
+// ExampleSet returns the curated named examples published for OAuthAuthorizationRequestRequest in the OpenAPI spec
+func (OAuthAuthorizationRequestRequest) ExampleSet() map[string]any {
+	return map[string]any{"OAuthAuthorizationRequestRequest": ExampleOAuthAuthorizationRequestRequest}
+}
+
+// ExampleOAuthAuthorizationRequestRequest is an example authorization request lookup for OpenAPI documentation
+var ExampleOAuthAuthorizationRequestRequest = OAuthAuthorizationRequestRequest{
+	RequestID: "tolq_01J4HMNDSZCCQBTY93BF9CBF5D.c2VjcmV0",
+}
+
+// OAuthAuthorizationRequestReply is a pending OAuth authorization request shown on the consent screen
+type OAuthAuthorizationRequestReply struct {
+	// Reply is the reply value
+	rout.Reply
+	// RequestID is the pending authorization request
+	RequestID string `json:"requestID"`
+	// ClientID is the application's client_id
+	ClientID string `json:"clientID"`
+	// ClientName is the application's display name
+	ClientName string `json:"clientName"`
+	// ClientURI is the application's home page
+	ClientURI string `json:"clientURI,omitempty"`
+	// LogoURI is the application's logo
+	LogoURI string `json:"logoURI,omitempty"`
+	// Scopes are the scopes the application requested
+	Scopes []string `json:"scopes"`
+	// Resource is the resource the tokens will be issued for
+	Resource string `json:"resource,omitempty"`
+	// ExpiresAt is when the request expires
+	ExpiresAt time.Time `json:"expiresAt"`
+	// Kind is USER or ORGANIZATION when the requested scopes decide it, empty when the user may choose
+	Kind enums.OAuthGrantKind `json:"kind,omitempty"`
+	// MaxAccessLevel is the highest access level a personal connection may be granted
+	MaxAccessLevel enums.OAuthAccessLevel `json:"maxAccessLevel,omitempty"`
+	// DefaultScopes are pre-selected on the consent screen for a personal connection
+	DefaultScopes []string `json:"defaultScopes,omitempty"`
+}
+
+// ExampleResponse returns an example OAuthAuthorizationRequestReply for OpenAPI documentation
+func (r *OAuthAuthorizationRequestReply) ExampleResponse() any {
+	return ExampleOAuthAuthorizationRequestReply
+}
+
+// ExampleOAuthAuthorizationRequestReply is an example pending authorization request for OpenAPI documentation
+var ExampleOAuthAuthorizationRequestReply = OAuthAuthorizationRequestReply{
+	Reply:          rout.Reply{Success: true},
+	RequestID:      "tolq_01J4HMNDSZCCQBTY93BF9CBF5D.c2VjcmV0",
+	ClientID:       "https://app.example.com/oauth/client.json",
+	ClientName:     "Example App",
+	Scopes:         []string{"openlane:user", "control:read"},
+	Resource:       "https://mcp.theopenlane.io/mcp",
+	Kind:           enums.OAuthGrantKindUser,
+	MaxAccessLevel: enums.OAuthAccessLevelRead,
+	DefaultScopes:  []string{"control:read"},
+}
+
+// OAuthConsentRequest is the console's answer to the consent screen, installing into the session's organization
+type OAuthConsentRequest struct {
+	// RequestID is the pending authorization request
+	RequestID string `json:"requestID" description:"The pending authorization request ID" example:"tolq_01J4HMNDSZCCQBTY93BF9CBF5D.c2VjcmV0"`
+	// Approve is whether the user approved the application
+	Approve bool `json:"approve" description:"Whether the user approved the application" example:"true"`
+	// Kind is USER to connect for yourself or ORGANIZATION to install for the organization
+	Kind enums.OAuthGrantKind `json:"kind" description:"USER or ORGANIZATION, must match the kind the application requested" example:"USER"`
+	// AccessLevel is a shorthand for USER installs that send no scopes
+	AccessLevel enums.OAuthAccessLevel `json:"accessLevel,omitempty" description:"READ or WRITE, for USER installs that send no scopes" example:"READ"`
+	// Scopes are what the user granted, which may be less than the application requested
+	Scopes []string `json:"scopes,omitempty" description:"The scopes the user granted" example:"control:read"`
+}
+
+// Validate ensures the required fields are set on the OAuthConsentRequest
+func (r *OAuthConsentRequest) Validate() error {
+	if r.RequestID == "" {
+		return rout.NewMissingRequiredFieldError("requestID")
+	}
+
+	return nil
+}
+
+// ExampleSet returns the curated named examples published for OAuthConsentRequest in the OpenAPI spec
+func (OAuthConsentRequest) ExampleSet() map[string]any {
+	return map[string]any{"OAuthConsentRequest": ExampleOAuthConsentRequest}
+}
+
+// ExampleOAuthConsentRequest is an example consent decision for OpenAPI documentation
+var ExampleOAuthConsentRequest = OAuthConsentRequest{
+	RequestID: "tolq_01J4HMNDSZCCQBTY93BF9CBF5D.c2VjcmV0",
+	Approve:   true,
+	Kind:      enums.OAuthGrantKindUser,
+	Scopes:    []string{"openlane:user", "control:read"},
+}
+
+// OAuthConsentReply tells the console where to send the browser after the consent decision
+type OAuthConsentReply struct {
+	// Reply is the reply value
+	rout.Reply
+	// RedirectURL is the client redirect carrying the code or error
+	RedirectURL string `json:"redirectURL"`
+}
+
+// ExampleResponse returns an example OAuthConsentReply for OpenAPI documentation
+func (r *OAuthConsentReply) ExampleResponse() any {
+	return ExampleOAuthConsentReply
+}
+
+// ExampleOAuthConsentReply is an example consent response for OpenAPI documentation
+var ExampleOAuthConsentReply = OAuthConsentReply{
+	Reply:       rout.Reply{Success: true},
+	RedirectURL: "https://client.example/callback?code=tolc_01J4HMNDSZCCQBTY93BF9CBF5D.c2VjcmV0&iss=https%3A%2F%2Fapi.theopenlane.io&state=xyz",
+}

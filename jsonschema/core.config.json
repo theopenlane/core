@@ -271,6 +271,10 @@
         "supportaccess": {
           "$ref": "#/$defs/handlers.SupportAccessConfig",
           "description": "SupportAccess contains the configuration for the Openlane support access flow"
+        },
+        "oauthserver": {
+          "$ref": "#/$defs/handlers.OAuthServerConfig",
+          "description": "OAuthServer contains the configuration for the OAuth authorization server third-party apps connect through"
         }
       },
       "additionalProperties": false,
@@ -1189,6 +1193,21 @@
       "additionalProperties": false,
       "type": "object",
       "description": "CloudflareConfig contains configuration for Cloudflare integration."
+    },
+    "handlers.OAuthServerConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled turns on the OAuth endpoints, and requires the API token keyring under auth.token.apitokens"
+        },
+        "allowedresources": {
+          "$ref": "#/$defs/[]string",
+          "description": "AllowedResources are the exact resource URLs tokens may be issued for, such as the API and MCP server URLs"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "OAuthServerConfig contains configuration for the OAuth authorization server that third-party apps connect through"
     },
     "handlers.OauthProviderConfig": {
       "properties": {

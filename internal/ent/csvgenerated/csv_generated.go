@@ -1466,6 +1466,10 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "NotificationTemplate",
 		Rules:      []CSVReferenceRule{},
 	},
+	"OauthGrant": {
+		SchemaName: "OauthGrant",
+		Rules:      []CSVReferenceRule{},
+	},
 	"Onboarding": {
 		SchemaName: "Onboarding",
 		Rules:      []CSVReferenceRule{},
@@ -3208,6 +3212,24 @@ type NotificationTemplateCSVUpdateInput struct {
 
 // CSVInputWrapper marks NotificationTemplateCSVUpdateInput for CSV header preprocessing.
 func (NotificationTemplateCSVUpdateInput) CSVInputWrapper() {}
+
+// OauthGrantCSVInput wraps CreateOauthGrantInput with CSV reference columns.
+type OauthGrantCSVInput struct {
+	Input generated.CreateOauthGrantInput
+}
+
+// CSVInputWrapper marks OauthGrantCSVInput for CSV header preprocessing.
+func (OauthGrantCSVInput) CSVInputWrapper() {}
+
+// OauthGrantCSVUpdateInput wraps UpdateOauthGrantInput with CSV reference columns for bulk updates.
+type OauthGrantCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID    string `csv:"ID"`
+	Input generated.UpdateOauthGrantInput
+}
+
+// CSVInputWrapper marks OauthGrantCSVUpdateInput for CSV header preprocessing.
+func (OauthGrantCSVUpdateInput) CSVInputWrapper() {}
 
 // OnboardingCSVInput wraps CreateOnboardingInput with CSV reference columns.
 type OnboardingCSVInput struct {

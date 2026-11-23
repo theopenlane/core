@@ -1311,6 +1311,54 @@ func (f NotificationTemplateMutationRuleFunc) EvalMutation(ctx context.Context, 
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.NotificationTemplateMutation", m)
 }
 
+// The OauthGrantQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OauthGrantQueryRuleFunc func(context.Context, *generated.OauthGrantQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OauthGrantQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OauthGrantQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OauthGrantQuery", q)
+}
+
+// The OauthGrantMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OauthGrantMutationRuleFunc func(context.Context, *generated.OauthGrantMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OauthGrantMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OauthGrantMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OauthGrantMutation", m)
+}
+
+// The OauthTokenQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OauthTokenQueryRuleFunc func(context.Context, *generated.OauthTokenQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OauthTokenQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OauthTokenQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OauthTokenQuery", q)
+}
+
+// The OauthTokenMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OauthTokenMutationRuleFunc func(context.Context, *generated.OauthTokenMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OauthTokenMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OauthTokenMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OauthTokenMutation", m)
+}
+
 // The OnboardingQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type OnboardingQueryRuleFunc func(context.Context, *generated.OnboardingQuery) error
@@ -2766,6 +2814,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.NotificationTemplateQuery:
 		return q.Filter(), nil
+	case *generated.OauthGrantQuery:
+		return q.Filter(), nil
+	case *generated.OauthTokenQuery:
+		return q.Filter(), nil
 	case *generated.OnboardingQuery:
 		return q.Filter(), nil
 	case *generated.OrgMembershipQuery:
@@ -2982,6 +3034,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.NotificationPreferenceMutation:
 		return m.Filter(), nil
 	case *generated.NotificationTemplateMutation:
+		return m.Filter(), nil
+	case *generated.OauthGrantMutation:
+		return m.Filter(), nil
+	case *generated.OauthTokenMutation:
 		return m.Filter(), nil
 	case *generated.OnboardingMutation:
 		return m.Filter(), nil

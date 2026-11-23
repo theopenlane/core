@@ -15,6 +15,8 @@ func getPrePolicies(skipDenyOrgRule bool, beforeScope privacy.MutationPolicy) pr
 		Query: privacy.QueryPolicy{
 			// allow internal operations and reads (CapInternalOperation or CapInternalRead) to proceed to query tables
 			rule.AllowIfInternalReadRequest(),
+			// deny reads of object types a personal connection's scopes don't cover
+			rule.DenyIfOAuthAppMissingReadScope(),
 			// allow history requests to proceed to query tables
 			history.AllowIfHistoryRequest(),
 		},
@@ -23,6 +25,8 @@ func getPrePolicies(skipDenyOrgRule bool, beforeScope privacy.MutationPolicy) pr
 			rule.DenyIfMissingAllModules(),
 			// allow internal operations (system code paths with CapInternalOperation) to proceed to mutate tables
 			rule.AllowIfInternalRequest(),
+			// deny mutations of object types a personal connection's scopes don't cover
+			rule.DenyIfOAuthAppMissingMutationScope(),
 		},
 	}
 
@@ -132,6 +136,11 @@ func WithPostPolicy(policy privacy.Policy) Option {
 	return func(policies *policies) {
 		policies.post = policy
 	}
+}
+
+// WithDenyAppMutations marks a schema installed OAuth applications may never modify, such as credentials and settings
+func WithDenyAppMutations() Option {
+	return WithMutationRulesBeforeScope(rule.DenyIfOAuthApp())
 }
 
 // WithSkipDenyOrganizationRule will skip the default Deny organization filter, this should only be set on non-org owned schemas or schemas external users do not have access to

@@ -156,6 +156,12 @@ type NotificationPreference func(*sql.Selector)
 // NotificationTemplate is the predicate function for notificationtemplate builders.
 type NotificationTemplate func(*sql.Selector)
 
+// OauthGrant is the predicate function for oauthgrant builders.
+type OauthGrant func(*sql.Selector)
+
+// OauthToken is the predicate function for oauthtoken builders.
+type OauthToken func(*sql.Selector)
+
 // Onboarding is the predicate function for onboarding builders.
 type Onboarding func(*sql.Selector)
 

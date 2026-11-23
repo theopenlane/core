@@ -1,5 +1,8 @@
 auth:
     enabled: true
+    oauthserver:
+        allowedresources: []
+        enabled: false
     providers:
         github:
             clientendpoint: ""
