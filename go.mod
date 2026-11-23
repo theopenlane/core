@@ -16,7 +16,7 @@ require (
 	ariga.io/entcache v0.1.0
 	cel.dev/cel-go v0.33.2
 	cloud.google.com/go/securitycenter v1.49.1
-	cloud.google.com/go/storage v1.70.0
+	cloud.google.com/go/storage v1.71.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6
 	github.com/99designs/gqlgen v0.17.98
