@@ -61,6 +61,10 @@ func TestAdvisoryUpdateKeepsProviderFields(t *testing.T) {
 
 	_, changed := advisoryUpdate(generated.NewClient().Vulnerability.UpdateOneID("vuln-1"), vuln, testAdvisory(t))
 	assert.Check(t, !changed)
+	assert.Check(t, enriched(vuln))
+
+	vuln.Vector = ""
+	assert.Check(t, !enriched(vuln))
 }
 
 func TestAdvisoryID(t *testing.T) {

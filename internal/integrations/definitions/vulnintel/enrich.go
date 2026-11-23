@@ -100,6 +100,10 @@ func (e *enricher) enrich(ctx context.Context, envelope operations.IngestComplet
 func (r *enrichRun) apply(ctx context.Context, vuln *generated.Vulnerability) {
 	r.result.Considered++
 
+	if enriched(vuln) {
+		return
+	}
+
 	record := r.advisory(ctx, vuln.CveID)
 	if record == nil {
 		return
@@ -165,6 +169,11 @@ func (r *enrichRun) advisory(ctx context.Context, rawID string) *osvRecord {
 	r.advisories[id] = cachedRecord(entry)
 
 	return r.advisories[id]
+}
+
+// enriched reports whether the vulnerability already has every field an advisory can fill, so no lookup is needed
+func enriched(vuln *generated.Vulnerability) bool {
+	return vuln.Summary != "" && vuln.Description != "" && vuln.Vector != "" && vuln.PublishedAt != nil && len(vuln.References) > 0
 }
 
 // advisoryIDPattern matches OSV identifiers such as CVE-2026-1, GHSA-xxxx-xxxx-xxxx or PYSEC-2026-1
