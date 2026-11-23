@@ -14,6 +14,7 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -195,6 +196,13 @@ func TestClientGivesUpAfterRateLimitRetries(t *testing.T) {
 	_, err := client.workspace(context.Background())
 	assert.Check(t, is.ErrorIs(err, ErrRateLimited))
 	assert.Check(t, is.Equal(int32(maxRateLimitRetries+1), requests.Load()))
+}
+
+func TestInstallationLimiterIsShared(t *testing.T) {
+	installation := &generated.Integration{ID: "01INSTALLATIONLIMITERTEST0"}
+
+	assert.Check(t, installationLimiter(installation) == installationLimiter(installation))
+	assert.Check(t, installationLimiter(nil) != installationLimiter(nil))
 }
 
 func TestRetryAfterDelay(t *testing.T) {

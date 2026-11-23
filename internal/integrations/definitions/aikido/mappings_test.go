@@ -72,7 +72,7 @@ func TestVulnerabilityMapping(t *testing.T) {
 	assert.Check(t, is.Nil(mapped["fixed_at"]))
 	assert.Check(t, is.Equal(float64(5), mapped["remediation_sla"]))
 	assert.Check(t, is.DeepEqual([]any{"CWE-1321"}, mapped["cwe_ids"]))
-	assert.Check(t, is.DeepEqual([]any{"https://intel.aikido.dev/cve/CVE-2021-23337"}, mapped["references"]))
+	assert.Check(t, is.Nil(mapped["references"]))
 	assert.Check(t, is.Equal(mappingtest.Installation.Name, mapped["source"]))
 
 	metadata, ok := mapped["metadata"].(map[string]any)
@@ -82,26 +82,32 @@ func TestVulnerabilityMapping(t *testing.T) {
 	assert.Check(t, is.Equal("Upgrade lodash to 4.17.21 or later.", metadata["howToFix"]))
 }
 
-func TestVulnerabilityMappingWithCVEDetails(t *testing.T) {
+func TestVulnerabilityDescriptionFallbacks(t *testing.T) {
 	def, err := Builder(Config{})()
 	assert.NilError(t, err)
 
-	var cve map[string]any
-	assert.NilError(t, json.Unmarshal(mappingtest.LoadExample(t, "examples", "exposure/cvedetails.json"), &cve))
-
-	payload, err := json.Marshal(map[string]any{"id": 1, "type": "open_source", "cve_id": "AIKIDO-2026-10095", "rule": "Attacker can trigger DOS-attack", "cve_details": cve})
-	assert.NilError(t, err)
-
 	spec := mappingtest.MappingSpec(t, def.Mappings, entityops.SchemaVulnerability.Name)
-	mapped := mappingtest.EvalMap(t, spec, types.MappingEnvelope{Resource: "web-app", Payload: payload})
 
-	assert.Check(t, is.Contains(mapped["description"].(string), "vulnerable to multiple denial of service (DoS) issues"))
-	assert.Check(t, is.Equal("2026-01-27T00:00:00Z", mapped["published_at"]))
-	assert.Check(t, is.DeepEqual([]any{"web-app"}, mapped["assets_names"]))
+	tests := []struct {
+		name                string
+		payload             string
+		expectedSummary     string
+		expectedDescription any
+	}{
+		{name: "group description only", payload: `{"id":1,"type":"open_source","group":{"description":"Attacker can trigger DOS-attack via regex"}}`, expectedSummary: "Attacker can trigger DOS-attack via regex", expectedDescription: nil},
+		{name: "cve keeps group description", payload: `{"id":2,"type":"open_source","cve_id":"CVE-2026-23864","rule":"DoS in Next.js","group":{"description":"Server functions crash on crafted requests"}}`, expectedSummary: "DoS in Next.js", expectedDescription: "Server functions crash on crafted requests"},
+		{name: "aikido advisory left to intel", payload: `{"id":3,"type":"open_source","cve_id":"AIKIDO-2026-161437","rule":"DoS via regex","group":{"description":"Server functions crash on crafted requests"}}`, expectedSummary: "DoS via regex", expectedDescription: nil},
+	}
 
-	metadata, ok := mapped["metadata"].(map[string]any)
-	assert.Check(t, ok)
-	assert.Check(t, is.Contains(metadata["doesThisAffectMe"].(string), "React Server Components"))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mapped := mappingtest.EvalMap(t, spec, types.MappingEnvelope{Payload: json.RawMessage(tt.payload)})
+
+			assert.Check(t, is.Equal(tt.expectedSummary, mapped["summary"]))
+			assert.Check(t, is.Equal(tt.expectedDescription, mapped["description"]))
+			assert.Check(t, is.Nil(mapped["published_at"]))
+		})
+	}
 }
 
 func TestVulnerabilityDescriptionSkipsRepeatedRule(t *testing.T) {
@@ -112,7 +118,7 @@ func TestVulnerabilityDescriptionSkipsRepeatedRule(t *testing.T) {
 	mapped := mappingtest.EvalMap(t, spec, types.MappingEnvelope{Payload: json.RawMessage(`{"id":1,"type":"open_source","rule":"Attacker can trigger memory corruption","group":{"description":"Attacker can trigger memory corruption"}}`)})
 
 	assert.Check(t, is.Equal("Attacker can trigger memory corruption", mapped["summary"]))
-	assert.Check(t, is.Equal("", mapped["description"]))
+	assert.Check(t, is.Nil(mapped["description"]))
 	assert.Check(t, is.DeepEqual([]any{}, mapped["assets_names"]))
 }
 
@@ -136,7 +142,7 @@ func TestVulnerabilityMappingWithBulkDetails(t *testing.T) {
 
 	assert.Check(t, is.Equal("CVE-2020-7598", mapped["cve_id"]))
 	assert.Check(t, is.Equal("AIKIDO-2020-123", mapped["display_name"]))
-	assert.Check(t, is.DeepEqual([]any{"https://intel.aikido.dev/cve/AIKIDO-2020-123", "https://intel.aikido.dev/cve/CVE-2020-7598"}, mapped["references"]))
+	assert.Check(t, is.DeepEqual([]any{"https://intel.aikido.dev/cve/AIKIDO-2020-123"}, mapped["references"]))
 	assert.Check(t, is.Equal("manual_ignore", mapped["dismissed_reason"]))
 	assert.Check(t, is.Equal("Marked as false positive, Dependency not used in production, Path starts with examples/ in repo-1, Ignored via API", mapped["dismissed_comment"]))
 
@@ -291,9 +297,11 @@ func TestCheckResultMapping(t *testing.T) {
 	spec := mappingtest.MappingSpec(t, def.Mappings, entityops.SchemaCheckResult.Name)
 
 	t.Run("failing rule", func(t *testing.T) {
-		mapped := mappingtest.EvalMap(t, spec, types.MappingEnvelope{Payload: json.RawMessage(`{"framework":"soc2","standard":"SOC 2","control_code":"cc3.3","ref_code":"CC3.3","measure":"enable_threat_detection","title":"Activity Log alerts are enabled","measure_title":"Threat detection is enabled","status":"failing"}`)})
+		mapped := mappingtest.EvalMap(t, spec, types.MappingEnvelope{Payload: json.RawMessage(`{"framework":"soc2","standard":"SOC 2","control_code":"cc3.3","ref_code":"CC3.3","measure":"enable_threat_detection","title":"Activity Log alerts are enabled","measure_title":"Threat detection is enabled","status":"failing","report_url":"https://app.aikido.dev/reports/soc2"}`)})
 
 		assert.Check(t, is.Equal("aikido:soc2:cc3.3:Activity Log alerts are enabled", mapped["parent_external_id"]))
+		assert.Check(t, is.Equal("https://app.aikido.dev/reports/soc2", mapped["external_uri"]))
+		assert.Check(t, is.Equal("Activity Log alerts are enabled", mapped["rule_title"]))
 		assert.Check(t, is.Equal("FAIL", mapped["status"]))
 		assert.Check(t, is.Equal("Activity Log alerts are enabled: Threat detection is enabled", mapped["details"]))
 		assert.Check(t, is.DeepEqual([]any{"SOC 2", "CC3.3"}, mapped["tags"]))
@@ -303,6 +311,7 @@ func TestCheckResultMapping(t *testing.T) {
 		mapped := mappingtest.EvalMap(t, spec, types.MappingEnvelope{Payload: json.RawMessage(`{"framework":"pci","standard":"PCI DSS","ref_code":"1.2","title":"RDS instances are not publicly accessible","status":"complying"}`)})
 
 		assert.Check(t, is.Equal("PASS", mapped["status"]))
+		assert.Check(t, is.Equal("", mapped["rule_title"]))
 	})
 
 	t.Run("disabled rule", func(t *testing.T) {

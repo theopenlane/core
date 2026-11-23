@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"slices"
-	"strings"
 
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/mapx"
@@ -25,8 +24,6 @@ const (
 	issueTypeAIPentest = "ai_pentest"
 	// attackAnalysisKey is the issue payload key the pentest attack analysis is attached under
 	attackAnalysisKey = "attack_analysis"
-	// cveDetailsKey is the issue payload key the Aikido Intel CVE details are attached under
-	cveDetailsKey = "cve_details"
 )
 
 const (
@@ -72,12 +69,6 @@ func CollectIssues(ctx context.Context, c *APIClient) ([]types.IngestPayloadSet,
 		return nil, err
 	}
 
-	// cve details need research:read, so a failure keeps the issue group description
-	cves, err := c.fetchEach(ctx, issueCVEs(issues), pathCVEFormat)
-	if err != nil {
-		return nil, err
-	}
-
 	vulnerabilities := make([]types.MappingEnvelope, 0)
 	findings := make([]types.MappingEnvelope, 0)
 
@@ -88,10 +79,6 @@ func CollectIssues(ctx context.Context, c *APIClient) ([]types.IngestPayloadSet,
 
 		if analysis, ok := analyses[recordID(issue)]; ok {
 			issue[attackAnalysisKey] = analysis
-		}
-
-		if cve, ok := cves[mapx.Value[string](issue, "cve_id")]; ok {
-			issue[cveDetailsKey] = cve
 		}
 
 		// orValue does not replace an explicit null, so nulls are pruned before mapping
@@ -204,42 +191,6 @@ func pentestIssueIDs(issues []map[string]any) []string {
 	}
 
 	return ids
-}
-
-// intelIDPrefixes are the identifier prefixes the Aikido Intel cve endpoint resolves, others such as GHSA ids 404
-var intelIDPrefixes = []string{"CVE-", "AIKIDO-"}
-
-// isIntelID reports whether the Aikido Intel cve endpoint can resolve the identifier
-func isIntelID(id string) bool {
-	for _, prefix := range intelIDPrefixes {
-		if strings.HasPrefix(id, prefix) {
-			return true
-		}
-	}
-
-	return false
-}
-
-// issueCVEs returns the distinct CVE or AIKIDO ids of the open open source issues
-func issueCVEs(issues []map[string]any) []string {
-	seen := map[string]struct{}{}
-	cves := make([]string, 0)
-
-	for _, issue := range issues {
-		cve := mapx.Value[string](issue, "cve_id")
-		if !isIntelID(cve) || mapx.Value[string](issue, "type") != issueTypeOpenSource || !isOpenIssue(issue) {
-			continue
-		}
-
-		if _, ok := seen[cve]; ok {
-			continue
-		}
-
-		seen[cve] = struct{}{}
-		cves = append(cves, cve)
-	}
-
-	return cves
 }
 
 // issueIDs returns the ids of the exported issues as the bulk detail endpoint expects them

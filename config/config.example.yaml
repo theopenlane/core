@@ -351,6 +351,8 @@ integrations:
         botToken: ""
         defaultChannel: ""
         webhookURL: ""
+    vulnintel:
+        maxperrun: 500
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:

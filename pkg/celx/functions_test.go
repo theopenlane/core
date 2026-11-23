@@ -99,3 +99,16 @@ func TestMerge(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, is.DeepEqual(map[string]any{"status": "DRAFT"}, out))
 }
+
+func TestCompact(t *testing.T) {
+	env, err := NewEnv(EnvConfig{}, cel.Variable("payload", cel.DynType))
+	assert.NilError(t, err)
+
+	eval := NewEvaluator(env, EvalConfig{Timeout: time.Second})
+
+	out, err := eval.EvaluateJSONMap(context.Background(), `merge({"name": payload.name}, compact({"summary": dyn(""), "references": dyn([]), "metadata": dyn({}), "fixed": dyn(null), "vector": dyn("CVSS:3.1/AV:N"), "open": dyn(false), "score": dyn(0)}))`, map[string]any{
+		"payload": map[string]any{"name": "CVE-2026-1"},
+	})
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(map[string]any{"name": "CVE-2026-1", "vector": "CVSS:3.1/AV:N", "open": false, "score": float64(0)}, out))
+}

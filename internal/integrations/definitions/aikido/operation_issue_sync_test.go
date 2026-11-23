@@ -190,36 +190,25 @@ func TestCollectIssuesAttachesAttackAnalysis(t *testing.T) {
 	assert.Check(t, !strings.Contains(string(findings[1].Payload), "attack_analysis"))
 }
 
-func TestCollectIssuesAttachesCVEDetailsOncePerCVE(t *testing.T) {
-	var cveRequests atomic.Int32
-
+func TestCollectIssuesSkipsIntel(t *testing.T) {
 	client := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
-		switch r.URL.Path {
-		case pathIssuesExport:
-			writeJSON(w, `[{"id":1,"type":"open_source","status":"open","cve_id":"CVE-2026-23864"},{"id":2,"type":"open_source","status":"snoozed","cve_id":"CVE-2026-23864"},{"id":3,"type":"sast","status":"open","cve_id":"CVE-2020-1"},{"id":4,"type":"open_source","status":"closed","cve_id":"CVE-2019-9"},{"id":5,"type":"open_source","status":"open","cve_id":"GHSA-253c-mchw-3w2r"}]`)
-		case fmt.Sprintf(pathCVEFormat, "CVE-2026-23864"):
-			cveRequests.Add(1)
-			writeJSON(w, `{"cve":"CVE-2026-23864","tldr":"Denial of service in Next.js"}`)
-		case fmt.Sprintf(pathCVEFormat, "CVE-2020-1"):
-			t.Error("cve details requested for a non open source issue")
-		case fmt.Sprintf(pathCVEFormat, "CVE-2019-9"):
-			t.Error("cve details requested for a closed issue")
-		case fmt.Sprintf(pathCVEFormat, "GHSA-253c-mchw-3w2r"):
-			t.Error("cve details requested for an id the intel endpoint cannot resolve")
-		default:
-			writeJSON(w, `[]`)
+		if strings.HasPrefix(r.URL.Path, pathAPI+"/cve/") {
+			t.Errorf("issue sync requested intel details: %s", r.URL.Path)
 		}
+
+		if r.URL.Path == pathIssuesExport {
+			writeJSON(w, `[{"id":1,"type":"open_source","status":"open","cve_id":"AIKIDO-2026-161437"},{"id":2,"type":"open_source","status":"open","cve_id":"CVE-2026-23864"}]`)
+
+			return
+		}
+
+		writeJSON(w, `[]`)
 	})
 
 	payloads, err := CollectIssues(context.Background(), client)
 	assert.NilError(t, err)
 
-	vulnerabilities := payloadSet(payloads, entityops.SchemaVulnerability.Name)
-	assert.Assert(t, is.Len(vulnerabilities, 4))
-
-	assert.Check(t, is.Equal(int32(1), cveRequests.Load()))
-	assert.Check(t, is.Contains(string(vulnerabilities[1].Payload), `"tldr":"Denial of service in Next.js"`))
-	assert.Check(t, !strings.Contains(string(vulnerabilities[2].Payload), "cve_details"))
+	assert.Check(t, is.Len(payloadSet(payloads, entityops.SchemaVulnerability.Name), 2))
 }
 
 func TestFetchEachSkipsFailedKeys(t *testing.T) {

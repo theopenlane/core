@@ -151,20 +151,21 @@ func FindingVariantMapping(variant, mapExpr string) types.MappingRegistration {
 	}
 }
 
-// CheckResultMapping returns the check result mapping linking check results to controls whose ref code is in the tags
-func CheckResultMapping(mapExpr string) types.MappingRegistration {
+// CheckResultMapping returns the check result mapping linking check results to controls whose ref code is in the tags,
+// plus any provider specific links such as the findings behind a failing check
+func CheckResultMapping(mapExpr string, links ...types.LinkRule) types.MappingRegistration {
 	return types.MappingRegistration{
 		Schema: entityops.SchemaCheckResult.Name,
 		Spec: types.MappingOverride{
 			FilterExpr: matchAllFilterExpr,
 			MapExpr:    mapExpr,
-			Links: []types.LinkRule{
+			Links: append([]types.LinkRule{
 				{
 					TargetSchema: entityops.SchemaControl.Name,
 					TargetField:  control.FieldRefCode,
 					SourceList:   entityops.CheckResultFields.Tags.InputKey,
 				},
-			},
+			}, links...),
 		},
 	}
 }

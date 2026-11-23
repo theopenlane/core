@@ -20,6 +20,7 @@ func NewEnv(cfg EnvConfig, vars ...cel.EnvOption) (*cel.Env, error) {
 		indexByFunc,
 		paragraphsFunc,
 		mergeFunc,
+		compactFunc,
 	)
 
 	if cfg.ComprehensionNestingLimit > 0 {

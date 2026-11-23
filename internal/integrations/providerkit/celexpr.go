@@ -35,3 +35,14 @@ func CelMapExpr(entries ...entityops.MappingEntry) string {
 
 	return b.String()
 }
+
+// CelMapExprOmitEmpty renders entries like CelMapExpr and adds the optional entries through the celx compact function,
+// which leaves out any whose value is empty, so a re-ingest keeps the stored field instead of clearing a value another
+// source filled in
+func CelMapExprOmitEmpty(entries []entityops.MappingEntry, optional ...entityops.MappingEntry) string {
+	if len(optional) == 0 {
+		return CelMapExpr(entries...)
+	}
+
+	return "merge(" + CelMapExpr(entries...) + ", compact(" + CelMapExpr(optional...) + "))"
+}

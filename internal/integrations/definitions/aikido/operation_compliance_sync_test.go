@@ -46,6 +46,8 @@ func TestCollectCompliance(t *testing.T) {
 		assert.NilError(t, json.Unmarshal(envelope.Payload, &check))
 
 		refCodes[check.Standard+" "+check.RefCode]++
+
+		assert.Check(t, is.Equal(client.appURL+"/reports/"+check.Framework, check.ReportURL))
 	}
 
 	assert.Check(t, is.DeepEqual(map[string]int{"SOC 2 CC3.3": 16, "ISO 27001 A.8.2": 3, "PCI DSS 1.2": 2, "GDPR 2.1": 1}, refCodes))

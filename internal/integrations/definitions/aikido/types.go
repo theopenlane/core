@@ -58,6 +58,14 @@ type AutofixSync struct {
 	types.OperationSettings
 }
 
+// IntelEnrichSync configures the Aikido Intel enrichment of Aikido's own advisories, dispatched after vulnerability ingest
+type IntelEnrichSync struct {
+	types.OperationSettings
+}
+
+// intelEnrichOp is the Intel enrichment operation the ingest listener dispatches
+var intelEnrichOp = types.OperationRefOf[IntelEnrichSync]()
+
 // ComplianceSync configures the Aikido compliance report sync
 type ComplianceSync struct {
 	types.OperationSettings

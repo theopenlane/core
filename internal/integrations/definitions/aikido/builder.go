@@ -74,7 +74,7 @@ func Builder(cfg Config) registry.Builder {
 						types.IngestContract{Schema: entityops.SchemaVulnerability.Name},
 						types.IngestContract{Schema: entityops.SchemaFinding.Name},
 					).
-					Permissions("Client credentials with the basics:read, issues:read and domains:read scopes, plus research:read for CVE details and pentests:read for pentest attack analyses").
+					Permissions("Client credentials with the basics:read, issues:read and domains:read scopes, plus pentests:read for pentest attack analyses").
 					Description("Collect Aikido open source issues as vulnerabilities, and every other issue type and leaked credentials as findings").
 					Registration(),
 				types.OperationRefOf[AutofixSync]().
@@ -95,6 +95,11 @@ func Builder(cfg Config) registry.Builder {
 					Permissions("Client credentials with the basics:read and reports:read scopes").
 					Description("Collect Aikido SOC 2, ISO 27001, PCI DSS, GDPR, NIS2, DORA and CIS compliance report rules as check results linked to their controls").
 					Registration(),
+				intelEnrichOp.
+					Handles(runIntelEnrich).
+					Permissions("Client credentials with the basics:read and research:read scopes").
+					Description("Fill the descriptions and publish dates of Aikido's own advisories from Aikido Intel, dispatched after each vulnerability ingest").
+					Registration(),
 				types.OperationRefOf[ScanSync]().
 					Ingests(runScanSync).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
@@ -114,12 +119,15 @@ func Builder(cfg Config) registry.Builder {
 					Description("Sync Aikido workspace users as directory accounts and teams as groups with their members").
 					Registration(),
 			},
+			GalaListeners: []types.GalaListenerRegistration{
+				intelEnrichListener(),
+			},
 			Mappings: append([]types.MappingRegistration{
 				providerkit.VulnerabilityMapping(mapExprVulnerability),
 				providerkit.FindingMapping(mapExprFinding),
 				providerkit.FindingVariantMapping(findingVariantDataleak, mapExprDataleakFinding),
 				providerkit.RemediationMapping(mapExprRemediation),
-				providerkit.CheckResultMapping(mapExprCheckResult),
+				providerkit.CheckResultMapping(mapExprCheckResult, checkResultFindingsLink),
 				providerkit.ScanMapping(mapExprScan),
 				providerkit.AssetMapping(assetVariantCodeRepository, mapExprCodeRepositoryAsset),
 				providerkit.AssetMapping(assetVariantContainer, mapExprContainerAsset),

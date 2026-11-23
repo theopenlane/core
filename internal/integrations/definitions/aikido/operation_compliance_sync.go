@@ -14,6 +14,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
+// pathReportPage is the app path of a framework's compliance report page, followed by the framework key
+const pathReportPage = "/reports/"
+
 // complianceFramework is one Aikido compliance report collected as check results
 type complianceFramework struct {
 	// key is the report path segment
@@ -75,6 +78,8 @@ type complianceCheck struct {
 	ControlTitle string `json:"control_title"`
 	// RefCode is the control reference matched against Openlane control ref codes
 	RefCode string `json:"ref_code"`
+	// ReportURL is the framework's report page in Aikido, which has no anchor per rule
+	ReportURL string `json:"report_url"`
 	complianceResult
 }
 
@@ -109,6 +114,7 @@ func CollectCompliance(ctx context.Context, c *APIClient) ([]types.IngestPayload
 						ControlCode:      control.Code,
 						ControlTitle:     control.Title,
 						RefCode:          complianceRefCode(control),
+						ReportURL:        c.appURL + pathReportPage + framework.key,
 						complianceResult: result,
 					}
 

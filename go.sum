@@ -727,6 +727,8 @@ github.com/oracle/oci-go-sdk/v65 v65.130.0 h1:TYjsSsOPEFzOiYnl8nr4fgCS7SklSMPZKn
 github.com/oracle/oci-go-sdk/v65 v65.130.0/go.mod h1:87yiCsoPSaOZkpt5KIEEThoSirgT8WolahE3I5/qz78=
 github.com/ory/dockertest/v3 v3.12.0 h1:3oV9d0sDzlSQfHtIaB5k6ghUCVMVLpAY8hwrqoCyRCw=
 github.com/ory/dockertest/v3 v3.12.0/go.mod h1:aKNDTva3cp8dwOWwb9cWuX84aH5akkxXRvO7KCwWVjE=
+github.com/ossf/osv-schema/bindings/go v0.0.0-20261119032439-091feabc002e h1:xNfaVM5wErJimTyxB8S1OeDJHZ25KiQTLwcjcRSYtRU=
+github.com/ossf/osv-schema/bindings/go v0.0.0-20261119032439-091feabc002e/go.mod h1:aW9XJyUJfg0r+HogMGMagTt4hF6ibBkH/FZenG/KiyE=
 github.com/pandatix/go-abnf v0.5.5 h1:EXex5KkRQx4Dm6GnpAcQnIMBs9KiK0uf8p/wq+4t9PM=
 github.com/pandatix/go-abnf v0.5.5/go.mod h1:AE0KD3/VNoCjGzc1gqetRKshbI4SYErXQ/8kPenR5mc=
 github.com/patrickmn/go-cache v2.1.0+incompatible h1:HRMgzkcYKYpi3C8ajMPV8OFXaaRUnok+kx1WdO15EQc=
@@ -904,8 +906,6 @@ github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rM
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4lY=
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
-github.com/theopenlane/entx v0.38.4 h1:RMdZxO9Q+lI+Xr1ntFaftPw8B/Yp6apcG0sb0N92JJk=
-github.com/theopenlane/entx v0.38.4/go.mod h1:RQloG7V3x7zbRkKO/5olh5TyFQTNhSHPORid/xGOAbc=
 github.com/theopenlane/go-client v0.17.1 h1:8Fz6prNsBmYX75tXxmPoGnt+/qiZgjueTr3cSplHH4U=
 github.com/theopenlane/go-client v0.17.1/go.mod h1:2PuuwjsmJ4R1QzT4+O7Nbio6Z87P1elFuqD7M8+Y3w0=
 github.com/theopenlane/gqlgen-plugins v0.19.4 h1:kQGXyiev7tLTfv6ym2FmwZ/ImWi+XxAssCKXW6ODMys=
@@ -1203,6 +1203,8 @@ mvdan.cc/sh/v3 v3.14.1 h1:bXkhQWNHCs0KZEChF8hYS6FC+T2N9mUZLbQv9blditI=
 mvdan.cc/sh/v3 v3.14.1/go.mod h1:syYCoFET8w9tvevxiXUtY8/ICrU+l26jHmhJDra3Vwo=
 mvdan.cc/sh/x v0.0.0-20260922090537-aebdf2b86f56 h1:deNO1TejgB0Dmp3IjB2vkIiHVG81yvLModUSzLjI98A=
 mvdan.cc/sh/x v0.0.0-20260922090537-aebdf2b86f56/go.mod h1:j4gEzJjKcncRAMCu/GVaXCR8/b63sHi/ty4+pG+FuPU=
+osv.dev/bindings/go v0.0.0-20261120044147-5da6b9031249 h1:g71ytoKaYuIgnKsvSgLxzYjuPnnAUK4/wi4eiynIbeE=
+osv.dev/bindings/go v0.0.0-20261120044147-5da6b9031249/go.mod h1:eoj3WUb7rpEQjfIsTBzPveIfxspq7PKY6Qb2R6Oqkdw=
 pgregory.net/rapid v1.2.0 h1:keKAYRcjm+e1F0oAuU5F5+YPAWcyxNNRK2wud503Gnk=
 pgregory.net/rapid v1.2.0/go.mod h1:PY5XlDGj0+V1FCq0o192FdRhpKHGTRIWBgqjDBTrq04=
 sigs.k8s.io/yaml v1.6.0 h1:G8fkbMSAFqgEFgh4b1wmtzDnioxFCUgTZhlbj5P9QYs=

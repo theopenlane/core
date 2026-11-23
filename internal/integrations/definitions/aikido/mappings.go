@@ -5,10 +5,12 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 const (
@@ -46,8 +48,11 @@ const (
 	exprIssueDescription = `paragraphs(payload.?group.?description.orValue(""))`
 	// exprIssueHowToFix is the remediation guidance of the issue group the issue belongs to
 	exprIssueHowToFix = `paragraphs(payload.?group.?how_to_fix.orValue(""))`
-	// exprVulnerabilityDescription prefers the Aikido Intel tldr, else the issue group description unless it only repeats the rule used as the summary
-	exprVulnerabilityDescription = `payload.?cve_details.?tldr.orValue("") != "" ? paragraphs(payload.cve_details.tldr) : (payload.?group.?description.orValue("") != payload.?rule.orValue("") ? ` + exprIssueDescription + ` : "")`
+	// exprVulnerabilityDescription is the issue group description unless it only repeats the summary, left empty for Aikido's own
+	// advisories so the Intel enrichment description is kept
+	exprVulnerabilityDescription = `payload.?cve_id.orValue("").startsWith(` + "\"" + aikidoIDPrefix + "\"" + `) || payload.?group.?description.orValue("") == ` + exprVulnerabilitySummary + ` ? "" : ` + exprIssueDescription
+	// exprVulnerabilitySummary is the rule, else the issue group description
+	exprVulnerabilitySummary = `(payload.?rule.orValue("") != "" ? payload.rule : payload.?group.?description.orValue(""))`
 	// exprFindingDisplayName is the rule, else the affected package with its license for license issues, else the issue group title, else the issue type
 	exprFindingDisplayName = `payload.?rule.orValue("") != "" ? payload.rule : (payload.?affected_package.orValue("") != "" ? payload.affected_package + (payload.?license_type.orValue("") != "" ? " (" + payload.license_type + ")" : "") : (payload.?group.?title.orValue("") != "" ? payload.group.title : payload.?type.orValue("")))`
 	// exprFindingDescription prefers the pentest attack analysis description over the issue group description
@@ -95,29 +100,24 @@ const exprIssueMetadata = `{
 	"attackSummary": payload.?attack_analysis.?summary.orValue(""),
 	"risk": payload.?attack_analysis.?risk.orValue(""),
 	"rootCauseAnalysis": payload.?attack_analysis.?root_cause_analysis.orValue(""),
-	"doesThisAffectMe": payload.?cve_details.?does_this_affect_me.orValue(""),
 	"howToFix": payload.?group.?how_to_fix.orValue("")
 }`
 
 // mapExprVulnerability maps Aikido open source dependency issues
-var mapExprVulnerability = providerkit.CelMapExpr(
+// the advisory fields are left out when empty so a re-sync keeps what vulnintel filled from OSV instead of clearing it
+var mapExprVulnerability = providerkit.CelMapExprOmitEmpty([]entityops.MappingEntry{
 	entityops.VulnerabilityFields.ExternalID.Expr(`string(payload.?id.orValue(""))`),
 	entityops.VulnerabilityFields.CveID.Expr(exprIssueCVE),
 	entityops.VulnerabilityFields.DisplayName.Expr(`payload.?cve_id.orValue("") != "" ? payload.cve_id : payload.?rule.orValue("")`),
-	entityops.VulnerabilityFields.Summary.Expr(`payload.?rule.orValue("")`),
-	entityops.VulnerabilityFields.Description.Expr(exprVulnerabilityDescription),
-	entityops.VulnerabilityFields.PublishedAt.Expr(`payload.?cve_details.?published.orValue("") != "" ? timestamp(payload.cve_details.published + "T00:00:00Z") : null`),
 	entityops.VulnerabilityFields.Severity.Expr(exprIssueSeverity),
 	entityops.VulnerabilityFields.Score.Expr(exprIssueScore),
 	entityops.VulnerabilityFields.CweIds.Expr(`payload.?cwe_classes.orValue([])`),
 	entityops.VulnerabilityFields.PackageName.Expr(`payload.?affected_package.orValue("")`),
 	entityops.VulnerabilityFields.ManifestPath.Expr(`payload.?affected_file.orValue("")`),
 	entityops.VulnerabilityFields.FixAvailable.Expr(`payload.?patched_versions.orValue([]).size() > 0`),
-	entityops.VulnerabilityFields.FirstPatchedVersion.Expr(`payload.?patched_versions[?0].orValue("")`),
 	entityops.VulnerabilityFields.ExternalOwnerID.Expr("resource"),
 	providerkit.EdgeNameEntry(entityops.SchemaVulnerability, vulnerability.EdgeAssets, `resource != "" ? [resource] : []`),
 	entityops.VulnerabilityFields.ExternalURI.Expr(exprIssueURI),
-	entityops.VulnerabilityFields.References.Expr(exprIssueReferences),
 	entityops.VulnerabilityFields.Category.Expr(`payload.?type.orValue("")`),
 	entityops.VulnerabilityFields.Open.Expr(exprIssueOpen),
 	entityops.VulnerabilityFields.VulnerabilityStatusName.Expr(exprIssueStatus),
@@ -130,7 +130,16 @@ var mapExprVulnerability = providerkit.CelMapExpr(
 	entityops.VulnerabilityFields.Metadata.Expr(exprIssueMetadata),
 	entityops.VulnerabilityFields.Source.Expr(providerkit.ExprInstallationName),
 	entityops.VulnerabilityFields.RawPayload.Expr("payload"),
+},
+	entityops.VulnerabilityFields.Summary.Expr(exprVulnerabilitySummary),
+	entityops.VulnerabilityFields.Description.Expr(exprVulnerabilityDescription),
+	entityops.VulnerabilityFields.FirstPatchedVersion.Expr(`payload.?patched_versions[?0].orValue("")`),
+	entityops.VulnerabilityFields.References.Expr(exprVulnerabilityReferences),
 )
+
+// exprVulnerabilityReferences links Aikido Intel only for Aikido's own advisories, OSV supplies the references of CVE
+// and GHSA ids through vulnintel, so Aikido does not overwrite them on every sync
+var exprVulnerabilityReferences = `[payload.?cve_id.orValue("")].filter(id, id.startsWith(` + strconv.Quote(aikidoIDPrefix) + `)).map(id, "https://intel.aikido.dev/cve/" + id)`
 
 // mapExprFinding maps every Aikido issue type other than open source dependencies, such as SAST, secrets, IaC and cloud
 var mapExprFinding = providerkit.CelMapExpr(
@@ -237,13 +246,28 @@ var mapExprScan = providerkit.CelMapExpr(
 }`),
 )
 
+// checkResultRuleTitleKey is the payload key carrying a failing check's rule title, which names the rule behind the
+// findings it raised, the same rule name the finding display name carries
+const checkResultRuleTitleKey = "rule_title"
+
+// checkResultFindingsLink links a failing check result to the findings its rule raised
+var checkResultFindingsLink = types.LinkRule{
+	TargetSchema: entityops.SchemaFinding.Name,
+	Edge:         checkresult.EdgeFindings,
+	TargetField:  finding.FieldDisplayName,
+	SourceField:  checkResultRuleTitleKey,
+	PayloadKeys:  true,
+}
+
 // mapExprCheckResult maps one compliance report rule to a check result, the framework and control reference in tags link it to its control
 var mapExprCheckResult = providerkit.CelMapExpr(
 	entityops.CheckResultFields.ParentExternalID.Expr(`"aikido:" + payload.?framework.orValue("") + ":" + payload.?control_code.orValue("") + ":" + payload.?title.orValue("")`),
+	entityops.CheckResultFields.ExternalURI.Expr(`payload.?report_url.orValue("")`),
 	entityops.CheckResultFields.Status.Expr(`payload.?status.orValue("") == "complying" ? "PASS" : (payload.?status.orValue("") == "failing" ? "FAIL" : "UNKNOWN")`),
 	entityops.CheckResultFields.Details.Expr(`payload.?measure_title.orValue("") != "" ? payload.?title.orValue("") + ": " + payload.measure_title : payload.?title.orValue("")`),
 	entityops.CheckResultFields.Tags.Expr(`[payload.?standard.orValue(""), payload.?ref_code.orValue("")].filter(t, t != "")`),
 	entityops.CheckResultFields.Source.Expr(providerkit.ExprInstallationName),
+	entityops.MappingEntry{Key: checkResultRuleTitleKey, Expr: `payload.?status.orValue("") == "failing" ? payload.?title.orValue("") : ""`},
 )
 
 // mapExprDirectoryAccount maps Aikido workspace users to directory accounts

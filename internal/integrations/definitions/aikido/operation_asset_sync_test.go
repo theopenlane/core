@@ -14,12 +14,12 @@ import (
 
 func TestCollectAssets(t *testing.T) {
 	responses := map[string]string{
-		pathCodeRepositories:                 `[{"id":42,"name":"example-repo","provider":"github"}]`,
-		pathContainers:                       `[{"id":5,"name":"api-image","provider":"aws"}]`,
-		pathClouds:                           `[{"id":7,"name":"AWS Cloud environment","provider":"aws"}]`,
-		pathDomains:                          `[{"id":9,"domain":"app.example.com","kind":"front_end"}]`,
-		pathVirtualMachines:                  `[{"id":3,"name":"vm1"}]`,
-		pathDevices:                          `[{"id":1,"name":"Yuri's MacBook Pro"}]`,
+		pathCodeRepositories:                   `[{"id":42,"name":"example-repo","provider":"github"}]`,
+		pathContainers:                         `[{"id":5,"name":"api-image","provider":"aws"}]`,
+		pathClouds:                             `[{"id":7,"name":"AWS Cloud environment","provider":"aws"}]`,
+		pathDomains:                            `[{"id":9,"domain":"app.example.com","kind":"front_end"}]`,
+		pathVirtualMachines:                    `[{"id":3,"name":"vm1"}]`,
+		pathDevices:                            `[{"id":1,"name":"Yuri's MacBook Pro"}]`,
 		fmt.Sprintf(pathSubdomainsFormat, "9"): `[{"id":"123e4567-e89b-12d3-a456-426614174000","name":"api.example.com"},{"id":"123e4567-e89b-12d3-a456-426614174001","name":"old.example.com","is_excluded":true}]`,
 	}
 

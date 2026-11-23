@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
@@ -199,6 +200,8 @@ func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCyc
 
 	logx.FromContext(ctx).Info().Int("records", ingestResult.Attempted).Int("changed", delta).Msg("reconcile operation completed")
 
+	r.announceVulnerabilities(ctx, cycle.installation, operation, ingestResult)
+
 	if err := operations.CompleteRun(ctx, r.DB(), cycle.runID, cycle.startedAt, executionRunResult(operation.IngestHandle != nil, response, ingestResult, nil)); err != nil {
 		return delta, err
 	}
@@ -216,6 +219,31 @@ func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCyc
 	}
 
 	return delta, nil
+}
+
+// announceVulnerabilities emits a vulnerability enrichment envelope when an installation's run persisted vulnerabilities,
+// a failed emit is logged since enrichment is best effort and must not fail the run
+func (r *Runtime) announceVulnerabilities(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, ingestResult operations.IngestResult) {
+	if installation == nil || ingestResult.Persisted == 0 || !ingestsVulnerabilities(operation) {
+		return
+	}
+
+	envelope := operations.VulnerabilitiesIngestedEnvelope{OwnerID: installation.OwnerID, IntegrationID: installation.ID, DefinitionID: installation.DefinitionID}
+
+	if _, err := r.Gala().EmitWithHeaders(ctx, operations.VulnerabilitiesIngestedTopic.Name, envelope, gala.Headers{}); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to emit vulnerability enrichment")
+	}
+}
+
+// ingestsVulnerabilities reports whether the operation declares a vulnerability ingest contract
+func ingestsVulnerabilities(operation types.OperationRegistration) bool {
+	for _, contract := range operation.Ingest {
+		if contract.Schema == entityops.SchemaVulnerability.Name {
+			return true
+		}
+	}
+
+	return false
 }
 
 // metricAttempted is the attempted-count key in an ingest run's metrics payload
@@ -422,6 +450,8 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		logx.FromContext(ctx).Error().Err(err).Msg("operation failed")
 	default:
 		logx.FromContext(ctx).Info().Msg("operation completed")
+
+		r.announceVulnerabilities(ctx, integration, operation, ingestResult)
 	}
 
 	return finish(err, operation.IngestHandle != nil, response, ingestResult)

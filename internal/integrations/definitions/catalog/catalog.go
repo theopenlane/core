@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/system"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/tailscale"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/vulnintel"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/webhook"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
@@ -58,6 +59,7 @@ func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Buil
 		slack.Builder(cfg.Slack, &cfg.SlackRuntime, devMode),
 		system.Builder(cfg.PaymentReminder, cfg.OrganizationDelete, cfg.IntegrationLifecycle, cfg.FileOrphan),
 		tailscale.Builder(),
+		vulnintel.Builder(cfg.VulnIntel),
 		webhook.Builder(devMode),
 		zitadel.Builder(devMode),
 	}

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/theopenlane/httpsling"
@@ -14,6 +15,7 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/time/rate"
 
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -29,8 +31,9 @@ const (
 	maxRateLimitRetries = 3
 	// maxRetryAfter caps the wait between rate limited retries, Aikido uses a one minute sliding window
 	maxRetryAfter = 60 * time.Second
-	// requestsPerMinute is Aikido's documented per workspace limit, paced with a burst of one so no window exceeds it
-	requestsPerMinute = 20
+	// requestsPerMinute paces requests just under Aikido's documented limit of 20 per workspace per minute, leaving
+	// headroom for unpaced token requests and window drift, with a burst of one so no window exceeds it
+	requestsPerMinute = 18
 )
 
 // APIClient is a thin Aikido REST API client with the base URL and OAuth token source pre-applied
@@ -39,6 +42,8 @@ type APIClient struct {
 	requester *httpsling.Requester
 	// limiter paces requests under the Aikido rate limit instead of relying on 429 retries
 	limiter *rate.Limiter
+	// appURL is the app host of the workspace's region, used to link records back to Aikido pages
+	appURL string
 }
 
 // buildClient constructs the Aikido API client for one installation
@@ -52,14 +57,49 @@ func buildClient(ctx context.Context, req types.ConnectionRequest[CredentialSche
 		return nil, err
 	}
 
-	return NewAPIClient(ctx, appURL, req.Credential.ClientID, req.Credential.ClientSecret)
+	client, err := NewAPIClient(ctx, appURL, req.Credential.ClientID, req.Credential.ClientSecret)
+	if err != nil {
+		return nil, err
+	}
+
+	client.limiter = installationLimiter(req.Integration)
+
+	return client, nil
 }
 
 // oauthClientBuilder returns the client constructor for installations connected through the Openlane Aikido OAuth app
 func oauthClientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[aikidoOAuthCred]) (*APIClient, error) {
 	return func(ctx context.Context, req types.ConnectionRequest[aikidoOAuthCred]) (*APIClient, error) {
-		return buildOAuthClient(ctx, cfg, oauthAppURL, req.Credential)
+		client, err := buildOAuthClient(ctx, cfg, oauthAppURL, req.Credential)
+		if err != nil {
+			return nil, err
+		}
+
+		client.limiter = installationLimiter(req.Integration)
+
+		return client, nil
 	}
+}
+
+// installationLimiters holds one limiter per installation, since Aikido limits the workspace and every operation
+// builds its own client
+var installationLimiters sync.Map
+
+// newLimiter paces requests at Aikido's per workspace limit with a burst of one so no window exceeds it
+func newLimiter() *rate.Limiter {
+	return rate.NewLimiter(rate.Every(time.Minute/requestsPerMinute), 1)
+}
+
+// installationLimiter returns the limiter shared by every client of the installation, a fresh one when the
+// request carries no installation such as while verifying credentials before install
+func installationLimiter(installation *generated.Integration) *rate.Limiter {
+	if installation == nil || installation.ID == "" {
+		return newLimiter()
+	}
+
+	limiter, _ := installationLimiters.LoadOrStore(installation.ID, newLimiter())
+
+	return limiter.(*rate.Limiter)
 }
 
 // buildOAuthClient constructs the Aikido API client from stored OAuth token material, refreshing it against the app host
@@ -114,7 +154,7 @@ func newAPIClient(ctx context.Context, appURL string, source oauth2.TokenSource)
 		return nil, ErrClientBuild
 	}
 
-	return &APIClient{requester: requester, limiter: rate.NewLimiter(rate.Every(time.Minute/requestsPerMinute), 1)}, nil
+	return &APIClient{requester: requester, limiter: newLimiter(), appURL: appURL}, nil
 }
 
 // get issues a GET request and decodes a successful response into out, retrying while Aikido rate limits the call
