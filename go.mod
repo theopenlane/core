@@ -38,7 +38,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.10
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.86.3
 	github.com/aws/aws-sdk-go-v2/service/sts v1.52.0
-	github.com/brianvoe/gofakeit/v7 v7.18.2
+	github.com/brianvoe/gofakeit/v7 v7.18.6
 	github.com/cenkalti/backoff/v7 v7.0.3
 	github.com/cloudflare/cloudflare-go/v7 v7.15.0
 	github.com/coder/websocket v1.8.15
@@ -73,7 +73,7 @@ require (
 	github.com/knadh/koanf/providers/posflag v1.0.2
 	github.com/knadh/koanf/v2 v2.4.1
 	github.com/labstack/echo-contrib v0.50.1
-	github.com/labstack/echo/v4 v4.16.4
+	github.com/labstack/echo/v4 v4.16.5
 	github.com/labstack/gommon v0.5.0
 	github.com/lestrrat-go/httprc/v3 v3.0.6
 	github.com/lestrrat-go/jwx/v4 v4.6.0
