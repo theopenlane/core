@@ -91,6 +91,7 @@ require (
 	github.com/openfga/language/pkg/go v0.3.2
 	github.com/oracle/oci-go-sdk/v65 v65.130.0
 	github.com/ossf/osv-schema/bindings/go v0.0.0-20261119032439-091feabc002e
+	github.com/pandatix/go-cvss v0.6.4
 	github.com/pdfcpu/pdfcpu v0.16.4
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2

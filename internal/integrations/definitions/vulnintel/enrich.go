@@ -213,8 +213,8 @@ func advisoryUpdate(update *generated.VulnerabilityUpdateOne, vuln *generated.Vu
 		changed = true
 	}
 
-	if vuln.Vector == "" && record.vector() != "" {
-		update.SetVector(record.vector())
+	if vector := record.vector(vuln.Score); vuln.Vector == "" && vector != "" {
+		update.SetVector(vector)
 		changed = true
 	}
 

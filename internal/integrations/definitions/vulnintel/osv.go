@@ -3,12 +3,16 @@ package vulnintel
 import (
 	"context"
 	"fmt"
+	"math"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
 	"github.com/ossf/osv-schema/bindings/go/osvschema"
+	gocvss30 "github.com/pandatix/go-cvss/30"
+	gocvss31 "github.com/pandatix/go-cvss/31"
+	gocvss40 "github.com/pandatix/go-cvss/40"
 	"osv.dev/bindings/go/osvdev"
 )
 
@@ -76,18 +80,71 @@ func recordFromOSV(vuln *osvschema.Vulnerability) osvRecord {
 	return record
 }
 
-// vector returns the CVSS 3.x vector when scored, else the CVSS 4.0 vector
-func (r osvRecord) vector() string {
-	for _, preferred := range []string{severityCVSSV3, severityCVSSV4} {
+// vector returns the CVSS vector whose base score equals the stored score, else the CVSS 4.0 vector, else the
+// CVSS 3.x vector
+func (r osvRecord) vector(score float64) string {
+	if score > 0 {
 		for _, severity := range r.Severity {
-			if severity.Type == preferred && severity.Score != "" {
+			if base, ok := baseScore(severity.Score); ok && base == roundScore(score) {
 				return severity.Score
 			}
 		}
 	}
 
+	if vector := r.vectorOfType(severityCVSSV4); vector != "" {
+		return vector
+	}
+
+	return r.vectorOfType(severityCVSSV3)
+}
+
+// vectorOfType returns the advisory's first vector of the severity type
+func (r osvRecord) vectorOfType(severityType string) string {
+	for _, severity := range r.Severity {
+		if severity.Type == severityType && severity.Score != "" {
+			return severity.Score
+		}
+	}
+
 	return ""
 }
+
+// baseScore computes the base score of a CVSS 3.0, 3.1 or 4.0 vector, false when it does not parse
+func baseScore(vector string) (float64, bool) {
+	switch {
+	case strings.HasPrefix(vector, "CVSS:3.1/"):
+		parsed, err := gocvss31.ParseVector(vector)
+		if err != nil {
+			return 0, false
+		}
+
+		return roundScore(parsed.BaseScore()), true
+	case strings.HasPrefix(vector, "CVSS:3.0/"):
+		parsed, err := gocvss30.ParseVector(vector)
+		if err != nil {
+			return 0, false
+		}
+
+		return roundScore(parsed.BaseScore()), true
+	case strings.HasPrefix(vector, "CVSS:4.0/"):
+		parsed, err := gocvss40.ParseVector(vector)
+		if err != nil {
+			return 0, false
+		}
+
+		return roundScore(parsed.Score()), true
+	default:
+		return 0, false
+	}
+}
+
+// roundScore rounds a score to one decimal, the precision CVSS scores are published at
+func roundScore(score float64) float64 {
+	return math.Round(score*scorePrecision) / scorePrecision
+}
+
+// scorePrecision is the scale rounding scores to one decimal
+const scorePrecision = 10
 
 // referenceURLs returns the OSV page of the advisory followed by its reference links
 func (r osvRecord) referenceURLs() []string {

@@ -56,7 +56,7 @@ func TestOSVLookup(t *testing.T) {
 	assert.Assert(t, found)
 
 	assert.Check(t, is.Equal("Regular expression denial of service in zod", record.Summary))
-	assert.Check(t, is.Equal("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L", record.vector()))
+	assert.Check(t, is.Equal("CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N", record.vector(0)))
 	assert.Check(t, is.Equal(time.Date(2026, 10, 21, 17, 59, 27, 0, time.UTC), record.publishedAt()))
 	assert.Check(t, is.DeepEqual([]string{"https://osv.dev/vulnerability/GHSA-253c-mchw-3w2r", "https://github.com/advisories/GHSA-253c-mchw-3w2r"}, record.referenceURLs()))
 
@@ -85,10 +85,51 @@ func TestOSVLookupSendsID(t *testing.T) {
 	assert.Check(t, !found)
 }
 
-func TestOSVVectorFallsBackToV4(t *testing.T) {
-	record := osvRecord{Severity: []osvSeverity{{Type: severityCVSSV4, Score: "CVSS:4.0/AV:N"}}}
+func TestOSVVectorFallsBackToV3(t *testing.T) {
+	record := osvRecord{Severity: []osvSeverity{{Type: severityCVSSV3, Score: "CVSS:3.1/AV:N"}}}
 
-	assert.Check(t, is.Equal("CVSS:4.0/AV:N", record.vector()))
+	assert.Check(t, is.Equal("CVSS:3.1/AV:N", record.vector(0)))
+}
+
+func TestBaseScore(t *testing.T) {
+	testCases := []struct {
+		name   string
+		vector string
+		score  float64
+		ok     bool
+	}{
+		{name: "cvss 3.1 critical", vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 9.8, ok: true},
+		{name: "cvss 3.1 medium", vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L", score: 5.3, ok: true},
+		{name: "cvss 3.0", vector: "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", score: 9.8, ok: true},
+		{name: "cvss 4.0", vector: "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N", score: 9.3, ok: true},
+		{name: "cvss 3.1 invalid metric", vector: "CVSS:3.1/AV:X/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"},
+		{name: "cvss 4.0 missing metrics", vector: "CVSS:4.0/AV:N"},
+		{name: "cvss 2 unsupported", vector: "AV:N/AC:L/Au:N/C:P/I:P/A:P"},
+		{name: "non cvss severity", vector: "low"},
+		{name: "empty", vector: ""},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			score, ok := baseScore(tc.vector)
+			assert.Check(t, is.Equal(tc.ok, ok))
+			assert.Check(t, is.Equal(tc.score, score))
+		})
+	}
+}
+
+func TestOSVVectorMatchesScore(t *testing.T) {
+	v3 := "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+	v4 := "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+	record := osvRecord{Severity: []osvSeverity{{Type: severityCVSSV4, Score: v4}, {Type: severityCVSSV3, Score: v3}}}
+
+	v4Score, ok := baseScore(v4)
+	assert.Assert(t, ok)
+
+	assert.Check(t, is.Equal(v3, record.vector(5.3)))
+	assert.Check(t, is.Equal(v4, record.vector(v4Score)))
+	assert.Check(t, is.Equal(v4, record.vector(0)))
+	assert.Check(t, is.Equal(v4, record.vector(1.1)))
 }
 
 func TestCacheEntryFresh(t *testing.T) {
