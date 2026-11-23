@@ -87,4 +87,4 @@ Thank you to our [GitHub sponsors](https://github.com/sponsors/theopenlane)!
 
 ### CI Infrastructure support
 
-<a href="https://namespace.so/github-actions/?utm_source=oss&utm_campaign=openlane" target="_blank"><img alt="CI powered by Namespace" src="https://namespace.so/oss/badge.svg" height="20" /></a>
+<a href="https://namespace.so/github-actions/?utm_source=oss&utm_campaign=openlane" target="_blank"><img alt="CI powered by Namespace" src="https://namespace.so/oss/badge.svg" height="30" /></a>
