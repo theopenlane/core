@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
@@ -82,14 +81,9 @@ func deletePermissionsForIDs(ctx context.Context, m utils.GenericMutation, objID
 		objType := strcase.SnakeCase(m.Type())
 		object := fmt.Sprintf("%s:%s", objType, objID)
 
-		var defaultExcludedRelations []string
-		if objType == strcase.SnakeCase(generated.TypeUser) {
-			defaultExcludedRelations = []string{auditOrgRelation}
-		}
-
 		logx.FromContext(ctx).Debug().Str("object", object).Msg("deleting relationship tuples")
 
-		if err := client.DeleteAllObjectRelations(ctx, object, defaultExcludedRelations); err != nil {
+		if err := client.DeleteAllObjectRelations(ctx, object, []string{}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to delete relationship tuples")
 
 			return ErrInternalServerError

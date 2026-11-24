@@ -54840,6 +54840,7 @@ type OrgMembership implements Node {
 		where: EventWhereInput
 	): EventConnection!
 	additionalRoles: [String!]
+	isDeleted: Boolean
 }
 """
 Return response for createBulkOrgMembership mutation
@@ -55155,6 +55156,7 @@ input OrgMembershipWhereInput {
 	organizationID: String
 	userID: String
 	hasUserWith: [UserWhereInput!]
+	includeHistory: Boolean
 }
 type OrgSubscription implements Node {
 	id: ID!

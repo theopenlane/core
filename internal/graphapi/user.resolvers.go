@@ -73,19 +73,11 @@ func (r *queryResolver) User(ctx context.Context, id string) (*generated.User, e
 	}
 
 	res, err := query.Only(ctx)
-	if err == nil {
-		return res, nil
-	}
-
-	if !generated.IsNotFound(err) {
+	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "user"})
 	}
 
-	if u, err := r.resolveAuditUser(ctx, id); err == nil && u != nil {
-		return u, nil
-	}
-
-	return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "user"})
+	return res, nil
 }
 
 // Self is the resolver for the self field.

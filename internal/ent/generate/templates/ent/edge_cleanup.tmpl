@@ -36,7 +36,7 @@ import (
 					{{/* if the edge has our custom annotation applied */}}
 					{{- if $annotation := $edge.Annotations.OPENLANE_CASCADE }}
 						{{/* schemas that opt out of history tracking have no history table to purge */}}
-						{{- $trackedHistory := or ( not $edge.Type.Annotations.History ) (eq $edge.Type.Annotations.History.Exclude false) }}
+						{{- $trackedHistory := or ( not $edge.Type.Annotations.History ) (not $edge.Type.Annotations.History.exclude) }}
 						{{/* use the client to delete records where the edge schema has a field (provided by the annotation) containing the ID provided by the func */}}
 						{{/* special case for child fields */}}
 						{{- if eq $annotation.Field "Child" }}
@@ -103,7 +103,7 @@ import (
 					{{- $throughHistory := false }}
 					{{- range $through := $.Nodes }}
 						{{- if eq $through.Name $field }}
-							{{- $throughHistory = or ( not $through.Annotations.History ) (eq $through.Annotations.History.Exclude false) }}
+							{{- $throughHistory = or ( not $through.Annotations.History ) (not $through.Annotations.History.exclude) }}
 						{{- end }}
 					{{- end }}
 					{{/* use the client to delete records where the edge has a field and a through schema (provided by the annotation) containing the ID provided by the func */}}

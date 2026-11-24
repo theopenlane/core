@@ -9,9 +9,6 @@ func WithCallerExtensions(srv *handler.Server) {
 	// prevent synthetic support-user list edges from falling through to QueryXxx()
 	WithSupportUserEdges(srv)
 
-	// prevent synthetic audit-user list edges from falling through to QueryXxx()
-	WithAuditUserEdges(srv)
-
 	// anonymous callers can never use bulk or delete mutations, and may only set entx.AnonymousFields fields
 	WithAnonymousMutationBlock(srv)
 

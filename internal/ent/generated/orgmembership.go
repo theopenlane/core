@@ -61,6 +61,8 @@ type OrgMembership struct {
 	// AdditionalRoles are the additional functional roles the user is assigned on top of their
 	// base organization role
 	AdditionalRoles []string `json:"additionalRoles,omitempty"`
+	// IsDeleted indicates whether the org membership record was retrieved from history
+	IsDeleted bool `json:"isDeleted,omitempty"`
 }
 
 // OrgMembershipEdges holds the relations/edges for other nodes in the graph.

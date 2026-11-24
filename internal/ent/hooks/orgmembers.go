@@ -63,10 +63,6 @@ func HookOrgMembers() ent.Hook {
 					})
 				}
 
-				if err := grantOrgAuditAccess(ctx, m.Client(), orgMember); err != nil {
-					return nil, err
-				}
-
 				return val, createUserManagedGroup(ctxWithAuth, m, orgMember)
 			}
 
@@ -85,10 +81,6 @@ func HookOrgMembers() ent.Hook {
 
 			retValue, err := next.Mutate(ctx, m)
 			if err != nil {
-				return nil, err
-			}
-
-			if err := grantOrgAuditAccess(ctx, m.Client(), orgMember); err != nil {
 				return nil, err
 			}
 
@@ -395,26 +387,6 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 	if err := m.Client().GroupMembership.Create().SetInput(input).Exec(managedCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error adding user to their managed group")
 		return err
-	}
-
-	return nil
-}
-
-const auditOrgRelation = "audit_org"
-
-func grantOrgAuditAccess(ctx context.Context, client *generated.Client, member OrgMember) error {
-	tuple := fgax.GetTupleKey(fgax.TupleRequest{
-		SubjectID:   member.OrgID,
-		SubjectType: generated.TypeOrganization,
-		ObjectID:    member.UserID,
-		ObjectType:  generated.TypeUser,
-		Relation:    auditOrgRelation,
-	})
-
-	if _, err := client.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil, fgax.WithIgnoreDuplicateKeyError(true)); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Interface("audit_org_tuple", tuple).Msg("failed to grant org audit access on user")
-
-		return ErrInternalServerError
 	}
 
 	return nil

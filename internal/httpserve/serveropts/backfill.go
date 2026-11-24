@@ -65,14 +65,7 @@ type backfillRoutine struct {
 }
 
 // backfillRoutines are the registered backfill routines
-var backfillRoutines = []backfillRoutine{
-	{
-		Name:    "backfill-org-member-auditing",
-		Version: "v1",
-		Enabled: true,
-		Run:     backfillOrgMembersForAuditing,
-	},
-}
+var backfillRoutines = []backfillRoutine{}
 
 // WithBackfill submits the config-gated backfill scheduling run
 func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {

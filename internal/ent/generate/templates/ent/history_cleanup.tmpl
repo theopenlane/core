@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/entx/history"
 	{{- range $node := $.Nodes }}
-		{{- if or ( not $node.Annotations.History ) (eq $node.Annotations.History.Exclude false) }}
+		{{- if or ( not $node.Annotations.History ) (not $node.Annotations.History.exclude) }}
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/{{ $node.Name | lower }}history"
 		{{- end }}
 	{{- end }}
@@ -30,7 +30,7 @@ func PurgeHistoryEnabled(ctx context.Context) bool {
 
 	{{- range $node := $.Nodes }}
 		{{/* only schemas that actually track history have a history table to purge */}}
-		{{- if or ( not $node.Annotations.History ) (eq $node.Annotations.History.Exclude false) }}
+		{{- if or ( not $node.Annotations.History ) (not $node.Annotations.History.exclude) }}
 			{{- $pkgName := $node.Name | lower }}
 
 			{{/* the ids are matched with a sub-select instead of being loaded into memory, an

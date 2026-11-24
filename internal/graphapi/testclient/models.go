@@ -24851,6 +24851,7 @@ type OrgMembership struct {
 	User            *User            `json:"user"`
 	Events          *EventConnection `json:"events"`
 	AdditionalRoles []string         `json:"additionalRoles,omitempty"`
+	IsDeleted       *bool            `json:"isDeleted,omitempty"`
 }
 
 func (OrgMembership) IsNode() {}
@@ -25074,6 +25075,7 @@ type OrgMembershipWhereInput struct {
 	OrganizationID      *string           `json:"organizationID,omitempty"`
 	UserID              *string           `json:"userID,omitempty"`
 	HasUserWith         []*UserWhereInput `json:"hasUserWith,omitempty"`
+	IncludeHistory      *bool             `json:"includeHistory,omitempty"`
 }
 
 type OrgSubscription struct {

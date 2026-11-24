@@ -44,6 +44,7 @@ query GetOrgMembersByOrgID ($where: OrgMembershipWhereInput) {
 					email
 				}
 				additionalRoles
+				isDeleted
 			}
 		}
 	}

@@ -128,6 +128,6 @@ func (OrgMembershipHistory) Policy() ent.Policy {
 // Interceptors of the OrgMembershipHistory
 func (OrgMembershipHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false, ""),
+		interceptors.HistoryAccess("can_view_org", true, false, ""),
 	}
 }

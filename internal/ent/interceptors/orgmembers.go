@@ -4,29 +4,49 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/samber/lo"
 
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/logx"
+
 	fgamodel "github.com/theopenlane/core/v2/fga/model"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	"github.com/theopenlane/logx"
+)
+
+const (
+	isDeletedProperty = "is_deleted"
 )
 
 // TraverseOrgMembers is middleware to change the Org Members query
 func TraverseOrgMembers() ent.Interceptor {
-	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+	return intercept.TraverseOrgMembership(func(ctx context.Context, q *generated.OrgMembershipQuery) error {
+		ctxQuery := ent.QueryFromContext(ctx)
+
+		if isRequestIncludingHistory(ctx) {
+			// needed because we cannot always include this else it would fail if
+			// client requests totalCount or others because the query would not contain this.
+			q.Modify(withOrgMembershipHistoryModifier(ctxQuery.Op == "All"))
+		}
+
 		if auth.HasCrossOrgCapabilities(ctx) {
 			return nil
 		}
 
 		// Organization list queries should not be deduped, they
 		// will show up under each org they are a member of
-		ctxQuery := ent.QueryFromContext(ctx)
 		if ctxQuery.Type == generated.TypeOrganization {
 			return nil
 		}
@@ -44,7 +64,7 @@ func TraverseOrgMembers() ent.Interceptor {
 		}
 
 		// sets the organization id on the query for the current organization
-		q.WhereP(orgmembership.OrganizationIDIn(allOrgsIDs...))
+		q.Where(orgmembership.OrganizationIDIn(allOrgsIDs...))
 
 		return nil
 	})
@@ -68,6 +88,18 @@ func InterceptorOrgMember() ent.Interceptor {
 			members, ok := v.([]*generated.OrgMembership)
 			if !ok || len(members) == 0 {
 				return v, nil
+			}
+
+			if isRequestIncludingHistory(ctx) {
+				if err := includeRemovedUserEdges(ctx, members); err != nil {
+					return nil, err
+				}
+
+				for _, om := range members {
+					if v, err := om.Value(isDeletedProperty); err == nil {
+						om.IsDeleted, _ = v.(bool)
+					}
+				}
 			}
 
 			res, err := dedupeOrgMembers(ctx, members)
@@ -143,16 +175,44 @@ func GetFunctionalRolesForSubject(ctx context.Context, subjectType, subjectID, o
 
 // dedupeOrgMembers removes duplicate org members from the list
 func dedupeOrgMembers(ctx context.Context, members []*generated.OrgMembership) ([]*generated.OrgMembership, error) {
-	seen := map[string]*generated.OrgMembership{}
-	deduped := []*generated.OrgMembership{}
 
-	for _, om := range members {
-		// we dedupe for hierarchical orgs, we should skip this if the org has no parent or children
-		org, err := om.Organization(ctx)
+	missingOrgs := lo.Uniq(lo.FilterMap(members, func(om *generated.OrgMembership, _ int) (string, bool) {
+		return om.OrganizationID, om.Edges.Organization == nil && om.OrganizationID != ""
+	}))
+
+	var orgsMap map[string]*generated.Organization
+
+	if len(missingOrgs) > 0 {
+		orgs, err := generated.FromContext(ctx).Organization.Query().
+			Where(organization.IDIn(missingOrgs...)).
+			Select(organization.FieldID, organization.FieldParentOrganizationID).
+			All(entx.SkipSoftDelete(auth.WithInternalReadContext(ctx)))
 		if err != nil {
 			return nil, err
 		}
 
+		orgsMap = lo.KeyBy(orgs, func(o *generated.Organization) string {
+			return o.ID
+		})
+	}
+
+	seen := map[string]*generated.OrgMembership{}
+	deduped := []*generated.OrgMembership{}
+
+	for _, om := range members {
+		org := om.Edges.Organization
+		if org == nil {
+			org = orgsMap[om.OrganizationID]
+		}
+
+		if org == nil {
+			deduped = append(deduped, om)
+			seen[om.UserID] = om
+
+			continue
+		}
+
+		// we dedupe for hierarchical orgs, we should skip this if the org has no parent or children
 		children, err := org.QueryChildren().All(ctx)
 		if err != nil {
 			return nil, err
@@ -186,4 +246,118 @@ func orgMembersSkipInterceptor(ctx context.Context) bool {
 	ctxQuery := ent.QueryFromContext(ctx)
 
 	return ctxQuery.Type == generated.TypeOrganization
+}
+
+func isRequestIncludingHistory(ctx context.Context) bool {
+	fCtx := graphql.GetFieldContext(ctx)
+	if fCtx == nil {
+		return false
+	}
+
+	where, ok := fCtx.Args["where"].(*generated.OrgMembershipWhereInput)
+	if !ok || where == nil {
+		return false
+	}
+
+	return lo.FromPtr(where.IncludeHistory)
+}
+
+func includeRemovedUserEdges(ctx context.Context, members []*generated.OrgMembership) error {
+	f, ok := findNestedField(ctx, "user")
+	if !ok {
+		return nil
+	}
+
+	// non deleted users will always be loaded so redundant to do that again
+	deletedOrgMembers := lo.FilterMap(members, func(om *generated.OrgMembership, _ int) (string, bool) {
+		return om.UserID, om.Edges.User == nil && om.UserID != ""
+	})
+	if len(deletedOrgMembers) == 0 {
+		return nil
+	}
+
+	readCtx := entx.SkipSoftDelete(auth.WithInternalReadContext(ctx))
+
+	userCtx := graphql.WithFieldContext(readCtx, &graphql.FieldContext{
+		Field: *f,
+	})
+
+	uq, err := generated.FromContext(ctx).User.Query().
+		Where(user.IDIn(lo.Uniq(deletedOrgMembers)...)).
+		CollectFields(userCtx)
+	if err != nil {
+		return err
+	}
+
+	users, err := uq.All(readCtx)
+	if err != nil {
+		return err
+	}
+
+	groupByID := lo.KeyBy(users, func(u *generated.User) string {
+		return u.ID
+	})
+
+	for _, om := range members {
+		if om.Edges.User != nil {
+			continue
+		}
+
+		om.Edges.User = groupByID[om.UserID]
+	}
+
+	return nil
+}
+
+// findNestedField checks if a field is requested in the nested query. because of the history merging,
+// we need to include the user nodes too unlike others where they would already be resolved
+func findNestedField(ctx context.Context, fieldName string) (*graphql.CollectedField, bool) {
+
+	opCtx := graphql.GetOperationContext(ctx)
+	fc := graphql.GetFieldContext(ctx)
+
+	if opCtx == nil || fc == nil {
+		return nil, false
+	}
+
+	fields := graphql.CollectFields(opCtx, fc.Field.Selections, nil)
+	for len(fields) > 0 {
+		f := fields[0]
+		fields = fields[1:]
+
+		if f.Name == fieldName {
+			return &f, true
+		}
+
+		fields = append(fields, graphql.CollectFields(opCtx, f.Selections, nil)...)
+	}
+
+	return nil, false
+}
+
+// withOrgMembershipHistoryModifier modifies the query to include the org_membership_history while perserving the
+// pagination among others else we'd need to change how pagination loading works for history
+// but since this is one off, we don't need to do that and others will ideally just go through the history
+// schemas directly
+func withOrgMembershipHistoryModifier(includeDeleted bool) func(*sql.Selector) {
+	return func(s *sql.Selector) {
+		cols := lo.Replace(orgmembership.Columns, orgmembership.FieldID,
+			sql.As(orgmembershiphistory.FieldRef, orgmembership.FieldID), 1)
+
+		sel := sql.Select(orgmembership.Columns...).
+			AppendSelectExprAs(sql.Raw("FALSE"), isDeletedProperty).
+			From(sql.Table(orgmembership.Table))
+
+		histSel := sql.Select(cols...).
+			AppendSelectExprAs(sql.Raw("TRUE"), isDeletedProperty).
+			From(sql.Table(orgmembershiphistory.Table)).
+			Where(sql.EQ(orgmembershiphistory.FieldOperation, history.OpTypeDelete))
+
+		s.From(sel.UnionAll(histSel).
+			As(orgmembership.Table))
+
+		if includeDeleted {
+			s.AppendSelect(s.C(isDeletedProperty))
+		}
+	}
 }
