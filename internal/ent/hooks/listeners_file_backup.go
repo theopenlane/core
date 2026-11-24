@@ -13,13 +13,14 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
 
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/metrics"
-	"github.com/theopenlane/logx"
 )
 
 // init registers the file backup listeners so gala setup picks them up automatically
@@ -48,17 +49,19 @@ var ErrFileBackupExhausted = errors.New("file backup exhausted max attempts")
 func FileBackupListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema:     entityops.SchemaFile,
-			Operations: []string{entityops.OpCreate},
-			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return restored.WithCapabilities(auth.CapInternalOperation)
+			Schema: entityops.SchemaFile,
+			Operations: []string{
+				entityops.OpCreate,
+				entityops.OpUpdate,
+				entityops.OpUpdateOne,
 			},
-			Handle: handleFileBackup,
-		},
-		entityops.MutationListener{
-			Schema:     entityops.SchemaFile,
-			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
-			Fields:     []string{file.FieldStorageProvider}, // only check when the provider is changed
+			Match: []entityops.FieldMatch{
+				// the files are actually created and updated in the same tx so no need to fire this backup multiple times
+				{
+					Field:  file.FieldStorageProvider,
+					Negate: true,
+				},
+			},
 			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return restored.WithCapabilities(auth.CapInternalOperation)
 			},
@@ -175,8 +178,9 @@ func replicateFileToBackup(ctx context.Context, client *generated.Client, fileID
 }
 
 // persistBackupState writes the backup replication state onto the file record
+// this is being vetoed to not allow event emissions because we already fired the event for this
 func persistBackupState(ctx context.Context, client *generated.Client, fileID string, state models.FileBackupState) error {
 	return client.File.UpdateOneID(fileID).
 		SetBackupState(state).
-		Exec(ctx)
+		Exec(entityops.WithEmissionVetoed(ctx))
 }
