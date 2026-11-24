@@ -3,9 +3,13 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/logx"
 )
 
 // DomainScanImportVendor is one reviewer-accepted vendor, keyed by a client-assigned Ref
@@ -96,16 +100,54 @@ type DomainScanImport struct {
 	Branding *domainscan.BrandDesignProfile `json:"branding,omitempty"`
 }
 
+// domainScanImportPolicy is the execution policy the domain scan import runs and ingests under
+var domainScanImportPolicy = types.ExecutionPolicy{SkipRunRecord: true}
+
 // DomainScanImportOp is the operation ref for importing an accepted domain scan review
+// it declares no ingest contracts so it runs as the reviewer who dispatched it, not as the integration
 var DomainScanImportOp = types.OperationPayloadOf[DomainScanImport]().
-	HandlesRequest(runDomainScanImport).
-	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
+	Policy(domainScanImportPolicy).
 	CustomerSelectable(false).
 	Internal()
 
-// runDomainScanImport imports the reviewer-accepted domain scan report through the domain scan saga
+// runDomainScanImport ingests the reviewer-accepted report, applies its branding, and notifies the organization
 func runDomainScanImport(ctx context.Context, request types.OperationRequest, cfg DomainScanImport) (json.RawMessage, error) {
-	saga := domainScanSaga{services: request.Services}
+	ctx = logx.WithFields(ctx, logx.LogFields{"scan_ids": cfg.ScanIDs})
 
-	return nil, saga.HandleImportDomainScanReview(ctx, cfg)
+	result, importErr := importDomainScan(ctx, request, cfg)
+
+	var (
+		brandingUpdated bool
+		brandingErr     error
+	)
+
+	if cfg.Branding != nil && importErr == nil {
+		brandingUpdated, brandingErr = applyBrandingToTrustCenter(ctx, request.DB, *cfg.Branding)
+	}
+
+	detail := domainScanImportDetail(brandingUpdated, importErr != nil || result.Failed > 0)
+
+	notifyErr := operations.NotifyImportOutcome(domainScanSystemContext(ctx, cfg.OrganizationID), "Domain scan", result, importErr, detail, "")
+
+	return nil, errors.Join(importErr, brandingErr, notifyErr)
+}
+
+// importDomainScan ingests the report's records as the calling reviewer
+func importDomainScan(ctx context.Context, request types.OperationRequest, cfg DomainScanImport) (operations.IngestResult, error) {
+	payloadSets, err := domainScanImportPayloadSets(ctx, request.DB, cfg)
+	if err != nil {
+		return operations.IngestResult{}, err
+	}
+
+	oc, _ := gala.OperationContextFromContext(ctx)
+
+	ingest := operations.IngestContext{
+		Registry:     request.Services.Definitions(),
+		DB:           request.DB,
+		Runtime:      request.Services.Gala(),
+		Integration:  request.Integration,
+		DefinitionID: DefinitionID.ID(),
+	}
+
+	return operations.ProcessPayloadSets(ctx, ingest, DomainScanImportOp.Name(), domainScanImportContracts, domainScanImportPolicy, payloadSets, operations.IngestOptionsFromOperationContext(oc))
 }

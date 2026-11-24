@@ -76,12 +76,12 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 				DomainScanEnrichmentOp.Description("Gather company profile, compliance, and DNS vendor data for a domain").Registration(),
 				DomainScanBuildReportOp.Description("Build the onboarding domain scan report from a completed URL Scanner result and gathered enrichment").Registration(),
 				domainScanRequestOp.Description("Request a domain scan for a single domain").Registration(),
-				DomainScanImportOp.Description("Import a reviewer-accepted domain scan report into real records").Registration(),
+				DomainScanImportOp.HandlesRequest(runDomainScanImport).Description("Import a reviewer-accepted domain scan report into real records").Registration(),
 			},
 			GalaListeners: []types.GalaListenerRegistration{
 				domainScanListeners(),
 			},
-			Mappings: append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
+			Mappings: append(append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 				providerkit.FindingMapping(mapExprFinding),
 				types.MappingRegistration{
 					Schema: entityops.SchemaAsset.Name,
@@ -90,7 +90,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 						MapExpr:    mapExprAsset,
 					},
 				},
-			),
+			), domainScanImportMappings()...),
 		}
 
 		if runtime.Provisioned() {

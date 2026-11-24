@@ -3892,6 +3892,8 @@ var (
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
+			{Fields: []string{"domains"}},
+			{Fields: []string{"name"}},
 		},
 		Catalog: &CatalogCapability{},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -8709,7 +8711,7 @@ func init() {
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true, SourceManaged: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true, SourceManaged: true},
-		{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains", Clearable: true, SourceManaged: true},
+		{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains", Clearable: true, SourceManaged: true, CaseInsensitive: true},
 		{Name: "entity_relationship_state_id", Label: "EntityRelationshipStateID", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_id", Clearable: true},
 		{Name: "entity_relationship_state_name", Label: "EntityRelationshipStateName", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_name", Clearable: true, CaseInsensitive: true},
 		{Name: "entity_security_questionnaire_status_id", Label: "EntitySecurityQuestionnaireStatusID", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_id", Clearable: true},
@@ -8736,7 +8738,7 @@ func init() {
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced", Clearable: true},
 		{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported", Clearable: true},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true, CaseInsensitive: true},
 		{Name: "next_review_at", Label: "NextReviewAt", Type: "models.DateTime", InputKey: "next_review_at", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
