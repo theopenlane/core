@@ -1611,6 +1611,12 @@ data:
         maxperrun: {{ .Values.openlane.coreConfiguration.integrations.fileorphan.maxperrun }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.vulnintel }}
+      vulnintel:
+        {{- if .Values.openlane.coreConfiguration.integrations.vulnintel.maxperrun }}
+        maxperrun: {{ .Values.openlane.coreConfiguration.integrations.vulnintel.maxperrun }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:

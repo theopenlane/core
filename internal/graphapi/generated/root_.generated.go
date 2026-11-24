@@ -3272,6 +3272,7 @@ type ComplexityRoot struct {
 		Owner                 func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
 		Procedures            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Remediations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		Risks                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		RunType               func(childComplexity int) int
 		StartedAt             func(childComplexity int) int
@@ -24014,6 +24015,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationRun.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
+	case "IntegrationRun.remediations":
+		if e.ComplexityRoot.IntegrationRun.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
 	case "IntegrationRun.risks":
 		if e.ComplexityRoot.IntegrationRun.Risks == nil {
 			break
@@ -97222,6 +97234,37 @@ type IntegrationRun implements Node @modules(names: ["any_module"]) {
     """
     where: ProcedureWhereInput
   ): ProcedureConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
   risks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -97640,6 +97683,11 @@ input IntegrationRunWhereInput {
   """
   hasProcedures: Boolean
   hasProceduresWith: [ProcedureWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
   """
   risks edge predicates
   """
@@ -170815,6 +170863,8 @@ func (ec *executionContext) childFields_IntegrationRun(ctx context.Context, fiel
 		return ec.fieldContext_IntegrationRun_internalPolicies(ctx, field)
 	case "procedures":
 		return ec.fieldContext_IntegrationRun_procedures(ctx, field)
+	case "remediations":
+		return ec.fieldContext_IntegrationRun_remediations(ctx, field)
 	case "risks":
 		return ec.fieldContext_IntegrationRun_risks(ctx, field)
 	case "vulnerabilities":

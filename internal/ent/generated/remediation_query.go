@@ -139,7 +139,7 @@ func (_q *RemediationQuery) QueryIntegrationRuns() *IntegrationRunQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(remediation.Table, remediation.FieldID, selector),
 			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, remediation.IntegrationRunsTable, remediation.IntegrationRunsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, remediation.IntegrationRunsTable, remediation.IntegrationRunsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -1497,33 +1497,63 @@ func (_q *RemediationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 }
 
 func (_q *RemediationQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Remediation, init func(*Remediation), assign func(*Remediation, *IntegrationRun)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Remediation)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Remediation)
+	nids := make(map[string]map[*Remediation]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(remediation.IntegrationRunsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(remediation.IntegrationRunsTable)
+		s.Join(joinT).On(s.C(integrationrun.FieldID), joinT.C(remediation.IntegrationRunsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(remediation.IntegrationRunsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(remediation.IntegrationRunsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Remediation]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IntegrationRun](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.remediation_integration_runs
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "remediation_integration_runs" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "remediation_integration_runs" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "integration_runs" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

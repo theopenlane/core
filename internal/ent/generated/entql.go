@@ -10832,6 +10832,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Procedure",
 	)
 	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RemediationsTable,
+			Columns: integrationrun.RemediationsPrimaryKey,
+			Bidi:    false,
+		},
+		"IntegrationRun",
+		"Remediation",
+	)
+	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -15334,10 +15346,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"integration_runs",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.IntegrationRunsTable,
-			Columns: []string{remediation.IntegrationRunsColumn},
+			Columns: remediation.IntegrationRunsPrimaryKey,
 			Bidi:    false,
 		},
 		"Remediation",
@@ -35560,6 +35572,20 @@ func (f *IntegrationRunFilter) WhereHasProcedures() {
 // WhereHasProceduresWith applies a predicate to check if query has an edge procedures with a given conditions (other predicates).
 func (f *IntegrationRunFilter) WhereHasProceduresWith(preds ...predicate.Procedure) {
 	f.Where(entql.HasEdgeWith("procedures", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *IntegrationRunFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *IntegrationRunFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -29,6 +29,13 @@ import (
 // operationCompletedSummary is the run summary for a successful operation that ingests no records
 const operationCompletedSummary = "operation completed"
 
+const (
+	// runInterruptedError replaces a bare context canceled error, which a server restart or job cancellation causes
+	runInterruptedError = "the run was interrupted before it finished, such as by a server restart, run it again or wait for the next scheduled sync"
+	// runTimedOutError replaces a bare context deadline exceeded error
+	runTimedOutError = "the run did not finish within its time limit"
+)
+
 // reconcileOutput is the structured output recorded on reconcile River jobs for UI visibility
 type reconcileOutput struct {
 	// IntegrationID is the target integration identifier
@@ -196,6 +203,8 @@ func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCyc
 		return delta, err
 	}
 
+	r.announceIngestCompleted(ctx, cycle.installation, operation, ingestResult)
+
 	if outputErr := river.RecordOutput(ctx, reconcileOutput{
 		IntegrationID: cycle.src.IntegrationID,
 		DefinitionID:  cycle.src.DefinitionID,
@@ -209,6 +218,33 @@ func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCyc
 	}
 
 	return delta, nil
+}
+
+// announceIngestCompleted emits an ingest completed envelope when an installation's run persisted records, a failed
+// emit is logged since listeners are best effort and must not fail the run
+func (r *Runtime) announceIngestCompleted(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, ingestResult operations.IngestResult) {
+	if installation == nil || ingestResult.Persisted == 0 {
+		return
+	}
+
+	envelope := operations.IngestCompletedEnvelope{
+		OwnerID:       installation.OwnerID,
+		IntegrationID: installation.ID,
+		DefinitionID:  installation.DefinitionID,
+		Operation:     operation.Name,
+		Schemas:       lo.Map(operation.Ingest, ingestContractSchema),
+		Persisted:     ingestResult.Persisted,
+		Changed:       ingestResult.Changed,
+	}
+
+	if _, err := r.Gala().EmitWithHeaders(ctx, operations.IngestCompletedTopic.Name, envelope, gala.Headers{}); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to emit ingest completed")
+	}
+}
+
+// ingestContractSchema returns the schema an ingest contract declares
+func ingestContractSchema(contract types.IngestContract, _ int) string {
+	return contract.Schema
 }
 
 // metricAttempted is the attempted-count key in an ingest run's metrics payload
@@ -262,7 +298,12 @@ func executionRunResult(ingest bool, response json.RawMessage, ingestResult oper
 	metrics := IngestMetrics(ingestResult)
 	metrics[metricResponse] = jsonx.DecodeAnyOrNil(response)
 
-	if execErr != nil {
+	switch {
+	case errors.Is(execErr, context.Canceled):
+		return operations.RunResult{Status: enums.IntegrationRunStatusCancelled, Error: runInterruptedError, Metrics: metrics}
+	case errors.Is(execErr, context.DeadlineExceeded):
+		return operations.RunResult{Status: enums.IntegrationRunStatusFailed, Error: runTimedOutError, Metrics: metrics}
+	case execErr != nil:
 		return operations.RunResult{Status: enums.IntegrationRunStatusFailed, Error: execErr.Error(), Metrics: metrics}
 	}
 
@@ -405,14 +446,20 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	response, ingestResult, err := r.executeResolvedOperation(ctx, integration, operation, envelope.Config, envelope.ForceClientRebuild, operations.IngestOptionsFromOperationContext(oc))
 
-	switch {
-	case err != nil:
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("operation failed")
-	default:
-		logx.FromContext(ctx).Info().Msg("operation completed")
+
+		return finish(err, operation.IngestHandle != nil, response, ingestResult)
 	}
 
-	return finish(err, operation.IngestHandle != nil, response, ingestResult)
+	logx.FromContext(ctx).Info().Msg("operation completed")
+
+	finishErr := finish(nil, operation.IngestHandle != nil, response, ingestResult)
+	if finishErr == nil {
+		r.announceIngestCompleted(ctx, integration, operation, ingestResult)
+	}
+
+	return finishErr
 }
 
 // resumeTrackedRun marks the envelope's run running, retrying under a new run if needed

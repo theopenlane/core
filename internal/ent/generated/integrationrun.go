@@ -79,7 +79,6 @@ type IntegrationRun struct {
 	narrative_integration_runs              *string
 	platform_integration_runs               *string
 	program_integration_runs                *string
-	remediation_integration_runs            *string
 	review_integration_runs                 *string
 	scan_integration_runs                   *string
 	subcontrol_integration_runs             *string
@@ -119,15 +118,17 @@ type IntegrationRunEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// Procedures holds the value of the procedures edge.
 	Procedures []*Procedure `json:"procedures,omitempty"`
+	// Remediations holds the value of the remediations edge.
+	Remediations []*Remediation `json:"remediations,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
 	// Vulnerabilities holds the value of the vulnerabilities edge.
 	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [16]map[string]int
 
 	namedActionPlans          map[string][]*ActionPlan
 	namedAssets               map[string][]*Asset
@@ -140,6 +141,7 @@ type IntegrationRunEdges struct {
 	namedFindings             map[string][]*Finding
 	namedInternalPolicies     map[string][]*InternalPolicy
 	namedProcedures           map[string][]*Procedure
+	namedRemediations         map[string][]*Remediation
 	namedRisks                map[string][]*Risk
 	namedVulnerabilities      map[string][]*Vulnerability
 }
@@ -265,10 +267,19 @@ func (e IntegrationRunEdges) ProceduresOrErr() ([]*Procedure, error) {
 	return nil, &NotLoadedError{edge: "procedures"}
 }
 
+// RemediationsOrErr returns the Remediations value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) RemediationsOrErr() ([]*Remediation, error) {
+	if e.loadedTypes[13] {
+		return e.Remediations, nil
+	}
+	return nil, &NotLoadedError{edge: "remediations"}
+}
+
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationRunEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -277,7 +288,7 @@ func (e IntegrationRunEdges) RisksOrErr() ([]*Risk, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationRunEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -326,23 +337,21 @@ func (*IntegrationRun) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case integrationrun.ForeignKeys[14]: // program_integration_runs
 			values[i] = new(sql.NullString)
-		case integrationrun.ForeignKeys[15]: // remediation_integration_runs
+		case integrationrun.ForeignKeys[15]: // review_integration_runs
 			values[i] = new(sql.NullString)
-		case integrationrun.ForeignKeys[16]: // review_integration_runs
+		case integrationrun.ForeignKeys[16]: // scan_integration_runs
 			values[i] = new(sql.NullString)
-		case integrationrun.ForeignKeys[17]: // scan_integration_runs
+		case integrationrun.ForeignKeys[17]: // subcontrol_integration_runs
 			values[i] = new(sql.NullString)
-		case integrationrun.ForeignKeys[18]: // subcontrol_integration_runs
+		case integrationrun.ForeignKeys[18]: // system_detail_integration_runs
 			values[i] = new(sql.NullString)
-		case integrationrun.ForeignKeys[19]: // system_detail_integration_runs
+		case integrationrun.ForeignKeys[19]: // tag_definition_integration_runs
 			values[i] = new(sql.NullString)
-		case integrationrun.ForeignKeys[20]: // tag_definition_integration_runs
+		case integrationrun.ForeignKeys[20]: // task_integration_runs
 			values[i] = new(sql.NullString)
-		case integrationrun.ForeignKeys[21]: // task_integration_runs
+		case integrationrun.ForeignKeys[21]: // template_integration_runs
 			values[i] = new(sql.NullString)
-		case integrationrun.ForeignKeys[22]: // template_integration_runs
-			values[i] = new(sql.NullString)
-		case integrationrun.ForeignKeys[23]: // vendor_risk_score_integration_runs
+		case integrationrun.ForeignKeys[22]: // vendor_risk_score_integration_runs
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -598,61 +607,54 @@ func (_m *IntegrationRun) assignValues(columns []string, values []any) error {
 			}
 		case integrationrun.ForeignKeys[15]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field remediation_integration_runs", values[i])
-			} else if value.Valid {
-				_m.remediation_integration_runs = new(string)
-				*_m.remediation_integration_runs = value.String
-			}
-		case integrationrun.ForeignKeys[16]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_integration_runs", values[i])
 			} else if value.Valid {
 				_m.review_integration_runs = new(string)
 				*_m.review_integration_runs = value.String
 			}
-		case integrationrun.ForeignKeys[17]:
+		case integrationrun.ForeignKeys[16]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field scan_integration_runs", values[i])
 			} else if value.Valid {
 				_m.scan_integration_runs = new(string)
 				*_m.scan_integration_runs = value.String
 			}
-		case integrationrun.ForeignKeys[18]:
+		case integrationrun.ForeignKeys[17]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_integration_runs", values[i])
 			} else if value.Valid {
 				_m.subcontrol_integration_runs = new(string)
 				*_m.subcontrol_integration_runs = value.String
 			}
-		case integrationrun.ForeignKeys[19]:
+		case integrationrun.ForeignKeys[18]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field system_detail_integration_runs", values[i])
 			} else if value.Valid {
 				_m.system_detail_integration_runs = new(string)
 				*_m.system_detail_integration_runs = value.String
 			}
-		case integrationrun.ForeignKeys[20]:
+		case integrationrun.ForeignKeys[19]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field tag_definition_integration_runs", values[i])
 			} else if value.Valid {
 				_m.tag_definition_integration_runs = new(string)
 				*_m.tag_definition_integration_runs = value.String
 			}
-		case integrationrun.ForeignKeys[21]:
+		case integrationrun.ForeignKeys[20]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field task_integration_runs", values[i])
 			} else if value.Valid {
 				_m.task_integration_runs = new(string)
 				*_m.task_integration_runs = value.String
 			}
-		case integrationrun.ForeignKeys[22]:
+		case integrationrun.ForeignKeys[21]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field template_integration_runs", values[i])
 			} else if value.Valid {
 				_m.template_integration_runs = new(string)
 				*_m.template_integration_runs = value.String
 			}
-		case integrationrun.ForeignKeys[23]:
+		case integrationrun.ForeignKeys[22]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vendor_risk_score_integration_runs", values[i])
 			} else if value.Valid {
@@ -735,6 +737,11 @@ func (_m *IntegrationRun) QueryInternalPolicies() *InternalPolicyQuery {
 // QueryProcedures queries the "procedures" edge of the IntegrationRun entity.
 func (_m *IntegrationRun) QueryProcedures() *ProcedureQuery {
 	return NewIntegrationRunClient(_m.config).QueryProcedures(_m)
+}
+
+// QueryRemediations queries the "remediations" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryRemediations() *RemediationQuery {
+	return NewIntegrationRunClient(_m.config).QueryRemediations(_m)
 }
 
 // QueryRisks queries the "risks" edge of the IntegrationRun entity.
@@ -1098,6 +1105,30 @@ func (_m *IntegrationRun) appendNamedProcedures(name string, edges ...*Procedure
 		_m.Edges.namedProcedures[name] = []*Procedure{}
 	} else {
 		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
+	}
+}
+
+// NamedRemediations returns the Remediations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedRemediations(name string) ([]*Remediation, error) {
+	if _m.Edges.namedRemediations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRemediations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedRemediations(name string, edges ...*Remediation) {
+	if _m.Edges.namedRemediations == nil {
+		_m.Edges.namedRemediations = make(map[string][]*Remediation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRemediations[name] = []*Remediation{}
+	} else {
+		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
 	}
 }
 

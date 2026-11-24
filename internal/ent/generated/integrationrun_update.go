@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 )
@@ -525,6 +526,21 @@ func (_u *IntegrationRunUpdate) AddProcedures(v ...*Procedure) *IntegrationRunUp
 	return _u.AddProcedureIDs(ids...)
 }
 
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *IntegrationRunUpdate) AddRemediationIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *IntegrationRunUpdate) AddRemediations(v ...*Remediation) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (_u *IntegrationRunUpdate) AddRiskIDs(ids ...string) *IntegrationRunUpdate {
 	_u.mutation.AddRiskIDs(ids...)
@@ -795,6 +811,27 @@ func (_u *IntegrationRunUpdate) RemoveProcedures(v ...*Procedure) *IntegrationRu
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProcedureIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *IntegrationRunUpdate) ClearRemediations() *IntegrationRunUpdate {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveRemediationIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *IntegrationRunUpdate) RemoveRemediations(v ...*Remediation) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
@@ -1542,6 +1579,51 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RemediationsTable,
+			Columns: integrationrun.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RemediationsTable,
+			Columns: integrationrun.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RemediationsTable,
+			Columns: integrationrun.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2135,6 +2217,21 @@ func (_u *IntegrationRunUpdateOne) AddProcedures(v ...*Procedure) *IntegrationRu
 	return _u.AddProcedureIDs(ids...)
 }
 
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddRemediationIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *IntegrationRunUpdateOne) AddRemediations(v ...*Remediation) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (_u *IntegrationRunUpdateOne) AddRiskIDs(ids ...string) *IntegrationRunUpdateOne {
 	_u.mutation.AddRiskIDs(ids...)
@@ -2405,6 +2502,27 @@ func (_u *IntegrationRunUpdateOne) RemoveProcedures(v ...*Procedure) *Integratio
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProcedureIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *IntegrationRunUpdateOne) ClearRemediations() *IntegrationRunUpdateOne {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveRemediationIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *IntegrationRunUpdateOne) RemoveRemediations(v ...*Remediation) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
 }
 
 // ClearRisks clears all "risks" edges to the Risk entity.
@@ -3175,6 +3293,51 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RemediationsTable,
+			Columns: integrationrun.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RemediationsTable,
+			Columns: integrationrun.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RemediationsTable,
+			Columns: integrationrun.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

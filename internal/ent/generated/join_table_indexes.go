@@ -180,6 +180,7 @@ var joinTables = map[string]bool{
 	"program_narratives":                    true,
 	"program_action_plans":                  true,
 	"program_system_details":                true,
+	"remediation_integration_runs":          true,
 	"remediation_blocked_groups":            true,
 	"remediation_editors":                   true,
 	"remediation_findings":                  true,

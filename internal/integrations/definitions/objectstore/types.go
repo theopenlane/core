@@ -1,6 +1,8 @@
 package objectstore
 
 import (
+	"encoding/json"
+
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
@@ -24,6 +26,10 @@ const (
 var (
 	// DefinitionID is the stable identifier for the object storage integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0OBJECTSTORE00000000001")
+	// WriteObjectOp is the operation writing a document into the bucket, run inline against the runtime integration
+	WriteObjectOp = types.OperationPayloadOf[WriteObject]()
+	// ReadObjectOp is the operation reading a document from the bucket, run inline against the runtime integration
+	ReadObjectOp = types.OperationPayloadOf[ReadObject]()
 	// installation is the typed installation metadata handle for the definition
 	installation = types.InstallationOf[InstallationMetadata]()
 	// workloadIdentity is the connection for GCS workload identity federation
@@ -228,6 +234,20 @@ type WriteObject struct {
 	ContentType string `json:"contentType,omitempty" jsonschema:"title=Content Type,description=MIME type of the object and defaults to application/json"`
 	// Content is the document to write; a string is written verbatim and any other value is JSON encoded
 	Content any `json:"content" jsonschema:"required,title=Content,description=Document to write; strings are written verbatim and other values are JSON encoded"`
+}
+
+// ReadObject reads a document from the bucket under a key
+type ReadObject struct {
+	// Key is the object key to read the document from
+	Key string `json:"key" jsonschema:"required,title=Key,description=Object key to read the document from"`
+}
+
+// ReadObjectResult carries the document read by the read operation
+type ReadObjectResult struct {
+	// Found reports whether an object exists under the key
+	Found bool `json:"found"`
+	// Content is the object as JSON, a document that is not JSON is returned as a JSON string
+	Content json.RawMessage `json:"content,omitempty"`
 }
 
 // WriteObjectResult describes the object written by the write operation

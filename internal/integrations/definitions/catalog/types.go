@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/system"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/vulnintel"
 )
 
 // Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)
@@ -61,4 +62,6 @@ type Config struct {
 	IntegrationLifecycle system.IntegrationLifecycleConfig `json:"integrationlifecycle" koanf:"integrationlifecycle"`
 	// FileOrphan configures the file orphan sweep
 	FileOrphan system.FileOrphanConfig `json:"fileorphan" koanf:"fileorphan"`
+	// VulnIntel configures vulnerability enrichment from OSV
+	VulnIntel vulnintel.Config `json:"vulnintel" koanf:"vulnintel"`
 }

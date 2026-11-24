@@ -4,13 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"testing"
 	"time"
 
 	"gotest.tools/v3/assert"
+	"gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
@@ -481,6 +484,32 @@ func TestHandleOperationPostExecutionHookOutcome(t *testing.T) {
 			assert.Equal(t, string(outcomes[0].Response), tc.wantResponse)
 			assert.Equal(t, outcomes[0].Envelope.Operation, "hook-op")
 			assert.Assert(t, errors.Is(outcomes[0].Err, tc.wantErr), "outcome error = %v", outcomes[0].Err)
+		})
+	}
+}
+
+func TestExecutionRunResultContextErrors(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		err        error
+		wantStatus enums.IntegrationRunStatus
+		wantError  string
+	}{
+		{name: "canceled", err: fmt.Errorf("aikido: unable to export issues: %w", context.Canceled), wantStatus: enums.IntegrationRunStatusCancelled, wantError: runInterruptedError},
+		{name: "deadline", err: context.DeadlineExceeded, wantStatus: enums.IntegrationRunStatusFailed, wantError: runTimedOutError},
+		{name: "other", err: errors.New("boom"), wantStatus: enums.IntegrationRunStatusFailed, wantError: "boom"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := executionRunResult(true, nil, operations.IngestResult{}, tc.err)
+
+			assert.Check(t, cmp.Equal(tc.wantStatus, result.Status))
+			assert.Check(t, cmp.Equal(tc.wantError, result.Error))
 		})
 	}
 }
