@@ -66,7 +66,6 @@ func Builder(cfg Config) registry.Builder {
 					Registration(),
 				types.OperationRefOf[IssueSync]().
 					Ingests(runIssueSync).
-					HealthCheck(probeAccess).
 					Policy(types.ExecutionPolicy{Reconcile: true}).
 					Schedule(gala.NewFullFetchSchedule()).
 					SkipDefaultLookback().

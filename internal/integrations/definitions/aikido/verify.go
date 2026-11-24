@@ -37,13 +37,6 @@ func verifyOAuth(ctx context.Context, _ types.ConnectionRequest[aikidoOAuthCred]
 	return metadata, nil
 }
 
-// probeAccess confirms the credentials can still read issues
-func probeAccess(ctx context.Context, _ types.OperationRequest, c *APIClient) error {
-	_, err := c.CheckAccess(ctx)
-
-	return err
-}
-
 // CheckAccess reads the workspace and one page of issues, so credentials missing the issues:read scope fail here rather than at collection time
 func (c *APIClient) CheckAccess(ctx context.Context) (InstallationMetadata, error) {
 	workspace, err := c.workspace(ctx)
