@@ -2787,3 +2787,42 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+  - name: user
+    description: organization audit log viewers can resolve former or deleted users for audit trails
+    tuple_file: tests/tuples/users.yaml
+    check:
+      - user: user:ulid-of-owner
+        object: user:ulid-of-former-member
+        assertions:
+          can_view_audit: true
+          can_view: false
+      - user: user:ulid-super-admin
+        object: user:ulid-of-former-member
+        assertions:
+          can_view_audit: true
+          can_view: false
+      - user: user:ulid-of-audit-log-viewer
+        object: user:ulid-of-former-member
+        assertions:
+          can_view_audit: true
+          can_view: false
+      - user: user:ulid-of-admin
+        object: user:ulid-of-former-member
+        assertions:
+          can_view_audit: false
+          can_view: false
+      - user: user:ulid-of-member
+        object: user:ulid-of-former-member
+        assertions:
+          can_view_audit: false
+          can_view: false
+      - user: service:ulid-of-service-viewer
+        object: user:ulid-of-former-member
+        assertions:
+          can_view_audit: false
+          can_view: false
+      - user: user:ulid-of-owner-foobar
+        object: user:ulid-of-former-member
+        assertions:
+          can_view_audit: false
+          can_view: false

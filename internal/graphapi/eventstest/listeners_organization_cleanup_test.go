@@ -10,12 +10,14 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
@@ -136,4 +138,13 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	eventExists, err := suite.Client.DB.WorkflowEvent.Query().Where(workflowevent.WorkflowInstanceID(instance.ID)).Exist(purgedCtx)
 	assert.NilError(t, err)
 	assert.Check(t, !eventExists)
+
+	orgAuditResponse, err := suite.Client.DB.Authz.ListObjectsRequest(purgedCtx, fgax.ListRequest{
+		SubjectID:   orgID,
+		SubjectType: generated.TypeOrganization,
+		ObjectType:  generated.TypeUser,
+		Relation:    "audit_org",
+	})
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(orgAuditResponse.Objects, 0))
 }

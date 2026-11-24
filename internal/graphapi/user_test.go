@@ -460,3 +460,62 @@ func TestMutationUserCascadeDelete(t *testing.T) {
 
 	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 }
+
+func TestDeletedUserLookupForAuditing(t *testing.T) {
+	t.Parallel()
+
+	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+	otherOrg := suite.SeedOrgOwner(t)
+
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(otherOrg.Owner.UserCtx, t)
+	})
+
+	internalCtx := auth.WithInternalOperationContext(localTestOrg.Owner.UserCtx)
+	memberUser := (&th.UserBuilder{Client: suite.Client}).MustNew(internalCtx, t)
+	memberUserCtx := auth.NewTestContextWithOrgID(memberUser.ID, memberUser.Edges.Setting.Edges.DefaultOrg.ID)
+
+	resp, err := suite.Client.API.AddUserToOrgWithRole(localTestOrg.Owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: localTestOrg.Owner.OrganizationID,
+		UserID:         memberUser.ID,
+		Role:           &enums.RoleMember,
+	})
+	assert.NilError(t, err)
+
+	_, err = suite.Client.API.RemoveUserFromOrg(localTestOrg.Owner.UserCtx, resp.CreateOrgMembership.OrgMembership.ID)
+	assert.NilError(t, err)
+
+	t.Run("removed org member details can be viewed", func(t *testing.T) {
+		user, err := suite.Client.API.GetUserByID(localTestOrg.Owner.UserCtx, memberUser.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(memberUser.ID, user.User.ID))
+		assert.Check(t, is.Equal(memberUser.DisplayName, user.User.DisplayName))
+		assert.Check(t, is.Equal(memberUser.Email, user.User.Email))
+		assert.Check(t, is.Len(user.User.Organizations.Edges, 0))
+	})
+
+	t.Run("unauthorized users cannot view removed org member", func(t *testing.T) {
+		_, err = suite.Client.API.GetUserByID(localTestOrg.Admin.UserCtx, memberUser.ID)
+		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+
+		_, err = suite.Client.API.GetUserByID(localTestOrg.Member.UserCtx, memberUser.ID)
+		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+
+		_, err = suite.Client.API.GetUserByID(otherOrg.Owner.UserCtx, memberUser.ID)
+		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+	})
+
+	t.Run("deleted user can still be seen", func(t *testing.T) {
+		resp, err := suite.Client.API.DeleteUser(memberUserCtx, memberUser.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(memberUser.ID, resp.DeleteUser.DeletedID))
+
+		user, err := suite.Client.API.GetUserByID(localTestOrg.Owner.UserCtx, memberUser.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(memberUser.ID, user.User.ID))
+		assert.Check(t, is.Equal(memberUser.DisplayName, user.User.DisplayName))
+		assert.Check(t, is.Equal(memberUser.Email, user.User.Email))
+		assert.Check(t, is.Len(user.User.Organizations.Edges, 0))
+	})
+}

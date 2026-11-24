@@ -17,7 +17,7 @@ func backfillOrgMembersForAuditing(ctx context.Context, deps backfillDeps) error
 	var lastKnownID string
 
 	for {
-		rows, err := deps.Client.OrgMembership.Query().
+		members, err := deps.Client.OrgMembership.Query().
 			Where(
 				orgmembership.IDGT(lastKnownID),
 				orgmembership.HasOrganizationWith(organization.PersonalOrg(false)),
@@ -34,22 +34,18 @@ func backfillOrgMembersForAuditing(ctx context.Context, deps backfillDeps) error
 			return err
 		}
 
-		if len(rows) == 0 {
+		if len(members) == 0 {
 			logx.FromContext(ctx).Info().Msg("backfill: org member auditing tuples complete")
 
 			return nil
 		}
 
-		writes := make([]fgax.TupleKey, 0, len(rows))
-		for _, row := range rows {
-			if row.OrganizationID == "" || row.UserID == "" {
-				continue
-			}
-
+		writes := make([]fgax.TupleKey, 0, len(members))
+		for _, member := range members {
 			writes = append(writes, fgax.GetTupleKey(fgax.TupleRequest{
-				SubjectID:   row.OrganizationID,
+				SubjectID:   member.OrganizationID,
 				SubjectType: generated.TypeOrganization,
-				ObjectID:    row.UserID,
+				ObjectID:    member.UserID,
 				ObjectType:  generated.TypeUser,
 				Relation:    userAuditOrgRelation,
 			}))
@@ -59,6 +55,6 @@ func backfillOrgMembersForAuditing(ctx context.Context, deps backfillDeps) error
 			return err
 		}
 
-		lastKnownID = rows[len(rows)-1].ID
+		lastKnownID = members[len(members)-1].ID
 	}
 }
