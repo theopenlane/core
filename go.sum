@@ -723,8 +723,8 @@ github.com/openfga/openfga v1.22.1 h1:gl5DiX841ZK3GSTAbgUUYEpiAfAK4EZFMQYW1NQmK8
 github.com/openfga/openfga v1.22.1/go.mod h1:ADkdHo5JIIEcQ3j0CBUdWqACT3ddwOx9zk7BujM6kCg=
 github.com/opentracing/opentracing-go v1.2.0 h1:uEJPy/1a5RIPAJ0Ov+OIO8OxWu77jEv+1B0VhjKrZUs=
 github.com/opentracing/opentracing-go v1.2.0/go.mod h1:GxEUsuufX4nBwe+T+Wl9TAgYrxe9dPLANfrWvHYVTgc=
-github.com/oracle/oci-go-sdk/v65 v65.130.0 h1:TYjsSsOPEFzOiYnl8nr4fgCS7SklSMPZKnFHpQhxUis=
-github.com/oracle/oci-go-sdk/v65 v65.130.0/go.mod h1:87yiCsoPSaOZkpt5KIEEThoSirgT8WolahE3I5/qz78=
+github.com/oracle/oci-go-sdk/v65 v65.131.0 h1:YGnV4us+Psks2qaW5Nm9MQLcHmXQeMYnu7m07cN7c5M=
+github.com/oracle/oci-go-sdk/v65 v65.131.0/go.mod h1:87yiCsoPSaOZkpt5KIEEThoSirgT8WolahE3I5/qz78=
 github.com/ory/dockertest/v3 v3.12.0 h1:3oV9d0sDzlSQfHtIaB5k6ghUCVMVLpAY8hwrqoCyRCw=
 github.com/ory/dockertest/v3 v3.12.0/go.mod h1:aKNDTva3cp8dwOWwb9cWuX84aH5akkxXRvO7KCwWVjE=
 github.com/pandatix/go-abnf v0.5.5 h1:EXex5KkRQx4Dm6GnpAcQnIMBs9KiK0uf8p/wq+4t9PM=
