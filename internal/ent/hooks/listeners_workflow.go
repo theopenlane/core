@@ -62,6 +62,12 @@ func WorkflowMutationListeners() []gala.Registration {
 		Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 			return restored.WithCapabilities(auth.CapInternalOperation)
 		},
+		// system-owned rows belong to no organization, so no workflow applies to them
+		RowMatch: []entityops.FieldMatch{{
+			Field:  ownerFieldName,
+			In:     []string{""},
+			Negate: true,
+		}},
 		Handle: forwardToWorkflowMutation((*engine.WorkflowListeners).HandleWorkflowMutationGala),
 	}), entityops.MutationListener{
 		Concern:    entityops.MutationConcernWorkflow,
