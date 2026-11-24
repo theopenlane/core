@@ -12,9 +12,7 @@ import (
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
-	"github.com/theopenlane/core/v2/internal/objects/relocate"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 // backfillBypassCaps are the capabilities backfill routines run with
@@ -68,34 +66,6 @@ type backfillRoutine struct {
 
 // backfillRoutines are the registered backfill routines
 var backfillRoutines = []backfillRoutine{
-	{
-		Name:    "relocate-files-v2",
-		Version: "v2",
-		Enabled: true,
-		Run: func(ctx context.Context, deps backfillDeps) error {
-			return relocate.Files(ctx, deps.Client, relocate.Plan{Target: storage.R2Provider, PullFrom: storage.S3Provider})
-		},
-	},
-	{
-		Name:    "backfill-entities-risk",
-		Version: "v1",
-		Enabled: true,
-		Run: func(ctx context.Context, deps backfillDeps) error {
-			return backfillRiskEntities(ctx, deps.Client)
-		},
-	},
-	{
-		Name:    "backfill-controls-origin",
-		Version: "v1",
-		Enabled: true,
-		Run:     backfillOrigins,
-	},
-	{
-		Name:    "cleanup-integration-parent-tuples",
-		Version: "v1",
-		Enabled: true,
-		Run:     cleanupIntegrationParentTuples,
-	},
 	{
 		Name:    "backfill-org-member-auditing",
 		Version: "v1",
