@@ -64,6 +64,13 @@ func WithAuditUserEdges(srv *handler.Server) {
 }
 
 func defineAuditUser(u *generated.User) *generated.User {
+	setting := &generated.UserSetting{
+		UserID: u.ID,
+		Edges: generated.UserSettingEdges{
+			DefaultOrg: &generated.Organization{},
+		},
+	}
+
 	return &generated.User{
 		ID:          u.ID,
 		DisplayID:   u.DisplayID,
@@ -72,7 +79,7 @@ func defineAuditUser(u *generated.User) *generated.User {
 		LastName:    u.LastName,
 		Email:       u.Email,
 		Edges: generated.UserEdges{
-			Setting:    &generated.UserSetting{UserID: u.ID},
+			Setting:    setting,
 			AvatarFile: &generated.File{},
 		},
 	}
