@@ -96,6 +96,12 @@ var backfillRoutines = []backfillRoutine{
 		Enabled: true,
 		Run:     cleanupIntegrationParentTuples,
 	},
+	{
+		Name:    "backfill-org-member-auditing",
+		Version: "v1",
+		Enabled: true,
+		Run:     backfillOrgMembersForAuditing,
+	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run

@@ -3,14 +3,19 @@ package hooks
 import (
 	"context"
 
+	openfga "github.com/openfga/go-sdk"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/logx"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/logx"
 )
 
 // init registers the organization cleanup listeners so gala setup picks them up automatically
@@ -56,6 +61,12 @@ func handleOrganizationCascadeDelete(inv entityops.Invocation, _ entityops.Mutat
 		return err
 	}
 
+	if err := purgeOrgMembersAuditing(inv.Context, inv.EntityID); err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to purge organization audit_org tuples")
+
+		return err
+	}
+
 	// the organization row goes last, once everything it owned is gone
 	if _, err := inv.Client.Organization.Delete().Where(organization.ID(inv.EntityID)).Exec(inv.Context); err != nil {
 		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to delete organization")
@@ -66,4 +77,43 @@ func handleOrganizationCascadeDelete(inv entityops.Invocation, _ entityops.Mutat
 	logx.FromContext(inv.Context).Info().Msg("organization cascade delete completed")
 
 	return nil
+}
+
+func purgeOrgMembersAuditing(ctx context.Context, orgID string) error {
+	client := utils.AuthzClientFromContext(ctx)
+
+	resp, err := client.ListObjectsRequestWithConsistency(ctx, fgax.ListRequest{
+		SubjectID:   orgID,
+		SubjectType: generated.TypeOrganization,
+		ObjectType:  generated.TypeUser,
+		Relation:    auditOrgRelation,
+	}, openfga.CONSISTENCYPREFERENCE_HIGHER_CONSISTENCY)
+	if err != nil {
+		return err
+	}
+
+	if resp == nil || len(resp.Objects) == 0 {
+		return nil
+	}
+
+	deletes := make([]fgax.TupleKey, 0, len(resp.Objects))
+	for _, obj := range resp.Objects {
+		entity, err := fgax.ParseEntity(obj)
+		if err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("object", obj).Msg("failed to parse entity for audit_org tuple cleanup")
+			continue
+		}
+
+		deletes = append(deletes, fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   orgID,
+			SubjectType: generated.TypeOrganization,
+			ObjectID:    entity.Identifier,
+			ObjectType:  generated.TypeUser,
+			Relation:    auditOrgRelation,
+		}))
+	}
+
+	_, err = client.WriteTupleKeys(ctx, nil, deletes, fgax.WithIgnoreDuplicateKeyError(true))
+
+	return err
 }

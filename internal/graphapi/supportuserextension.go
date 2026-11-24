@@ -31,22 +31,30 @@ func (supportUserEdgeExtension) InterceptField(ctx context.Context, next graphql
 		return next(ctx)
 	}
 
-	switch fc.Field.Name {
-	case "tfaSettings":
-		return &generated.TFASettingConnection{Edges: []*generated.TFASettingEdge{}}, nil
-	case "organizations":
-		return &generated.OrganizationConnection{Edges: []*generated.OrganizationEdge{}}, nil
-	case "orgMemberships":
-		return &generated.OrgMembershipConnection{Edges: []*generated.OrgMembershipEdge{}}, nil
-	case "groups":
-		return &generated.GroupConnection{Edges: []*generated.GroupEdge{}}, nil
-	case "groupMemberships":
-		return &generated.GroupMembershipConnection{Edges: []*generated.GroupMembershipEdge{}}, nil
-	case "personalAccessTokens":
-		return &generated.PersonalAccessTokenConnection{Edges: []*generated.PersonalAccessTokenEdge{}}, nil
+	if res, ok := defaultUserEdges(fc.Field.Name); ok {
+		return res, nil
 	}
 
 	return next(ctx)
+}
+
+func defaultUserEdges(fieldName string) (any, bool) {
+	switch fieldName {
+	case "tfaSettings":
+		return &generated.TFASettingConnection{Edges: []*generated.TFASettingEdge{}}, true
+	case "organizations":
+		return &generated.OrganizationConnection{Edges: []*generated.OrganizationEdge{}}, true
+	case "orgMemberships":
+		return &generated.OrgMembershipConnection{Edges: []*generated.OrgMembershipEdge{}}, true
+	case "groups":
+		return &generated.GroupConnection{Edges: []*generated.GroupEdge{}}, true
+	case "groupMemberships":
+		return &generated.GroupMembershipConnection{Edges: []*generated.GroupMembershipEdge{}}, true
+	case "personalAccessTokens":
+		return &generated.PersonalAccessTokenConnection{Edges: []*generated.PersonalAccessTokenEdge{}}, true
+	}
+
+	return nil, false
 }
 
 // WithSupportUserEdges registers the support-user edge extension

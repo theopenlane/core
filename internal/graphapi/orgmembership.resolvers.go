@@ -9,14 +9,15 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/v2/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateOrgMembership is the resolver for the createOrgMembership field.
