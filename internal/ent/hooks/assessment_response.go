@@ -9,15 +9,17 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
-	"github.com/theopenlane/logx"
 )
 
 // HookCreateAssessmentResponse sends the email to the user to fill in and input their data.
@@ -259,7 +261,7 @@ func HookUpdateAssessmentResponse() ent.Hook {
 				}
 			}
 
-			newStatus, statusExists = m.Status()
+			_, statusExists = m.Status()
 			value, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
@@ -270,21 +272,57 @@ func HookUpdateAssessmentResponse() ent.Hook {
 				return value, nil
 			}
 
-			if updatedResp.CampaignID != "" && !updatedResp.IsTest && statusExists {
-				if err := updateCampaignTargetFromAssessmentResponse(ctx, m.Client(), updatedResp); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to update campaign target status from assessment response")
-				}
+			if updatedResp.CampaignID == "" || updatedResp.IsTest || !statusExists {
+				return value, nil
+			}
 
-				if newStatus == enums.AssessmentResponseStatusCompleted {
-					if err := updateCampaignCompletionFromTargets(ctx, m.Client(), updatedResp.CampaignID); err != nil {
-						logx.FromContext(ctx).Error().Err(err).Msg("failed to update campaign completion status")
-					}
-				}
+			if err := syncCampaignAssessmentResponse(ctx, m.Client(), updatedResp); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to sync campaign status from assessment response")
 			}
 
 			return value, nil
 		})
 	}, ent.OpUpdateOne)
+}
+
+// syncCampaignAssessmentResponse updates the target when a response is completed and/or overdue,
+// also marks one time campaigns as completed.
+func syncCampaignAssessmentResponse(ctx context.Context, client *generated.Client, resp *generated.AssessmentResponse) error {
+	if resp.Status != enums.AssessmentResponseStatusCompleted && resp.Status != enums.AssessmentResponseStatusOverdue {
+		return nil
+	}
+
+	c, err := client.Campaign.Query().
+		Where(campaign.IDEQ(resp.CampaignID)).
+		Select(
+			campaign.FieldAssessmentID,
+			campaign.FieldIsRecurring,
+			campaign.FieldLastRunAt,
+			campaign.FieldStatus,
+			campaign.FieldCompletedAt,
+		).
+		Only(ctx)
+	if generated.IsNotFound(err) {
+		return nil
+	}
+
+	if err != nil {
+		return err
+	}
+
+	if (c.IsRecurring || c.LastRunAt != nil) && c.AssessmentID != resp.AssessmentID {
+		return nil
+	}
+
+	if err := updateCampaignTargetFromAssessmentResponse(ctx, client, resp); err != nil {
+		return err
+	}
+
+	if c.IsRecurring || resp.Status != enums.AssessmentResponseStatusCompleted {
+		return nil
+	}
+
+	return updateCampaignCompletionFromTargets(ctx, client, c)
 }
 
 // updateCampaignTargetFromAssessmentResponse mirrors response status into the campaign target record.
@@ -317,37 +355,27 @@ func updateCampaignTargetFromAssessmentResponse(ctx context.Context, client *gen
 }
 
 // updateCampaignCompletionFromTargets marks campaigns complete when all targets are completed
-func updateCampaignCompletionFromTargets(ctx context.Context, client *generated.Client, campaignID string) error {
-	if campaignID == "" {
-		return nil
-	}
-
-	campaignObj, err := client.Campaign.Get(ctx, campaignID)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil
-		}
-		return err
-	}
-
+func updateCampaignCompletionFromTargets(ctx context.Context, client *generated.Client, campaignObj *generated.Campaign) error {
 	if campaignObj.Status == enums.CampaignStatusCompleted || campaignObj.Status == enums.CampaignStatusCanceled {
 		return nil
 	}
 
-	total, err := client.CampaignTarget.Query().
-		Where(campaigntarget.CampaignIDEQ(campaignID)).
+	id := campaignObj.ID
+
+	count, err := client.CampaignTarget.Query().
+		Where(campaigntarget.CampaignIDEQ(id)).
 		Count(ctx)
 	if err != nil {
 		return err
 	}
 
-	if total == 0 {
+	if count == 0 {
 		return nil
 	}
 
-	completed, err := client.CampaignTarget.Query().
+	completedCount, err := client.CampaignTarget.Query().
 		Where(
-			campaigntarget.CampaignIDEQ(campaignID),
+			campaigntarget.CampaignIDEQ(id),
 			campaigntarget.StatusEQ(enums.AssessmentResponseStatusCompleted),
 		).
 		Count(ctx)
@@ -355,11 +383,11 @@ func updateCampaignCompletionFromTargets(ctx context.Context, client *generated.
 		return err
 	}
 
-	if completed != total {
+	if completedCount != count {
 		return nil
 	}
 
-	update := client.Campaign.UpdateOneID(campaignID).
+	update := client.Campaign.UpdateOneID(id).
 		SetStatus(enums.CampaignStatusCompleted).
 		SetIsActive(false)
 

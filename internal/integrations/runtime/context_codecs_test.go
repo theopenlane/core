@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
@@ -86,6 +87,7 @@ func TestDefaultCodecsRoundTripOperationContext(t *testing.T) {
 	}
 
 	restoredSrc := types.IntegrationSourceFrom(restoredOC)
+
 	if restoredSrc.Workflow == nil || restoredSrc.Workflow.InstanceID != "wf_123" {
 		t.Fatalf("expected workflow metadata to round-trip, got %#v", restoredSrc.Workflow)
 	}

@@ -19,9 +19,9 @@ var (
 	FrequencyMonthly Frequency = "MONTHLY"
 	// FrequencyNone indicates that there is no frequency
 	FrequencyNone Frequency = "NONE"
-	// FrequencyNone indicates that frequency should occur every 2 years
+	// FrequencyBiennially indicates that frequency should occur every 2 years
 	FrequencyBiennially Frequency = "BIENNIALLY"
-	// FrequencyNone indicates that frequency should occur every 3 years
+	// FrequencyTriennially indicates that frequency should occur every 3 years
 	FrequencyTriennially Frequency = "TRIENNIALLY"
 )
 
@@ -56,6 +56,10 @@ const (
 	quarterMonths = 3
 	// biannualMonths is the number of months in a half year
 	biannualMonths = 6
+	// biennialYears is the number of years between biennial occurrences
+	biennialYears = 2
+	// triennialYears is the number of years between triennial occurrences
+	triennialYears = 3
 )
 
 // NextOccurrence computes the next occurrence from the given base time using calendar-based
@@ -81,6 +85,10 @@ func (r Frequency) NextOccurrence(from time.Time, interval int, timezone string)
 		return base.AddDate(0, biannualMonths*interval, 0).In(time.UTC)
 	case FrequencyYearly:
 		return base.AddDate(interval, 0, 0).In(time.UTC)
+	case FrequencyBiennially:
+		return base.AddDate(biennialYears*interval, 0, 0).In(time.UTC)
+	case FrequencyTriennially:
+		return base.AddDate(triennialYears*interval, 0, 0).In(time.UTC)
 	default:
 		return from
 	}

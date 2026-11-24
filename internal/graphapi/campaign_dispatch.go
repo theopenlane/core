@@ -374,19 +374,20 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 	}
 
 	operation := emaildef.SendCampaignOp.Name()
-	config, err := json.Marshal(emaildef.SendBrandedCampaignRequest{
+	input := emaildef.CampaignDispatchInput{
 		CampaignID:     campaignObj.ID,
 		Resend:         resend,
 		IncludeOverdue: includeOverdue,
-		TestEmail:      testEmail,
+	}
+	config, err := json.Marshal(emaildef.SendBrandedCampaignRequest{
+		CampaignDispatchInput: input,
+		TestEmail:             testEmail,
 	})
 	if campaignObj.CampaignType == enums.CampaignTypeQuestionnaire {
 		operation = emaildef.SendQuestionnaireCampaignOp.Name()
 		config, err = json.Marshal(emaildef.SendQuestionnaireCampaignRequest{
-			CampaignID:     campaignObj.ID,
-			Resend:         resend,
-			IncludeOverdue: includeOverdue,
-			TestEmail:      testEmail,
+			CampaignDispatchInput: input,
+			TestEmail:             testEmail,
 		})
 	}
 	if err != nil {

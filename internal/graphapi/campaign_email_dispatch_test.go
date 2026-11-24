@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
+
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
@@ -18,11 +19,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/newman/providers/mock"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/newman/providers/mock"
 )
 
 // TestCampaignEmailDispatch verifies that SendBrandedCampaign renders
@@ -109,7 +112,9 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+	}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -268,7 +273,9 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+	}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -347,7 +354,9 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+	}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -409,7 +418,9 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+	}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.Client.DB,
@@ -478,8 +489,8 @@ func TestQuestionnaireTestEmailDispatch(t *testing.T) {
 
 	recipient := "test-recipient@test.example"
 	cfg := email.SendQuestionnaireCampaignRequest{
-		CampaignID: campaignObj.ID,
-		TestEmail:  recipient,
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+		TestEmail:             recipient,
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -584,7 +595,7 @@ func TestQuestionnaireCampaignDispatchAsUserMarksTargetSent(t *testing.T) {
 	}
 
 	cfg := email.SendQuestionnaireCampaignRequest{
-		CampaignID: campaignObj.ID,
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -611,6 +622,124 @@ func TestQuestionnaireCampaignDispatchAsUserMarksTargetSent(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, updated.SentAt != nil)
 	assert.Check(t, is.Equal(updated.Status, enums.AssessmentResponseStatusSent))
+}
+
+func TestRecurringQuestionnaire_ResendsDueDate(t *testing.T) {
+	ctx := th.SharedTestUser1.UserCtx
+	internalCtx := th.SetInternalContext(ctx, suite.Client.DB)
+
+	assessmentResp, err := suite.Client.API.CreateAssessment(ctx, testclient.CreateAssessmentInput{
+		Name:       th.RandomName(t),
+		Jsonconfig: map[string]any{"type": "object"},
+	})
+	assert.NilError(t, err)
+	assessmentID := assessmentResp.CreateAssessment.Assessment.ID
+
+	now := time.Now().Truncate(time.Second)
+	testCases := []struct {
+		name     string
+		dueDate  models.DateTime
+		wantSent int
+	}{
+		{
+			name:    "expired due date",
+			dueDate: models.DateTime(now.Add(-time.Hour)),
+		},
+		{
+			name:     "future due date",
+			dueDate:  models.DateTime(now.Add(time.Hour)),
+			wantSent: 1,
+		},
+	}
+
+	var campaignIDs, targetIDs, responseIDs []string
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			created := createRecurringQuestionnaireTestCampaign(t, ctx, testclient.CreateCampaignInput{
+				AssessmentID: &assessmentID,
+				DueDate:      &tc.dueDate,
+			})
+			campaignID := created.CreateCampaignWithTargets.Campaign.ID
+			campaignIDs = append(campaignIDs, campaignID)
+			targetIDs = append(targetIDs, created.CreateCampaignWithTargets.CampaignTargets[0].ID)
+
+			client, sender := createQuestionnaireEmailClient(t)
+			cfg := email.SendQuestionnaireCampaignRequest{
+				CampaignDispatchInput: email.CampaignDispatchInput{
+					CampaignID: campaignID,
+					Resend:     true,
+				},
+			}
+			req := types.OperationRequest{
+				Client: client,
+				DB:     suite.Client.DB,
+			}
+
+			_, err := (email.SendQuestionnaireCampaign{}).Run(internalCtx, req, client, cfg)
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(sender.Messages(), tc.wantSent))
+
+			responses, err := suite.Client.API.GetAssessmentResponses(ctx, nil, nil, &testclient.AssessmentResponseWhereInput{
+				CampaignID: &campaignID,
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(responses.AssessmentResponses.Edges, tc.wantSent))
+
+			if tc.wantSent == 1 {
+				dueDate := responses.AssessmentResponses.Edges[0].Node.DueDate
+				assert.Assert(t, dueDate != nil)
+				assert.Check(t, dueDate.Equal(time.Time(tc.dueDate)))
+				responseIDs = append(responseIDs, responses.AssessmentResponses.Edges[0].Node.ID)
+			}
+		})
+	}
+
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, IDs: responseIDs}).MustDelete(ctx, t)
+	(&th.Cleanup[*generated.CampaignTargetDeleteOne]{Client: suite.Client.DB.CampaignTarget, IDs: targetIDs}).MustDelete(ctx, t)
+	(&th.Cleanup[*generated.CampaignDeleteOne]{Client: suite.Client.DB.Campaign, IDs: campaignIDs}).MustDelete(ctx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessmentID}).MustDelete(ctx, t)
+}
+
+const recurringQuestionnaireTestRecipient = "recurring-questionnaire@test.example"
+
+func createRecurringQuestionnaireTestCampaign(t *testing.T, ctx context.Context, input testclient.CreateCampaignInput) *testclient.CreateCampaignWithTargets {
+	t.Helper()
+
+	input.Name = th.RandomName(t)
+	input.CampaignType = &enums.CampaignTypeQuestionnaire
+	input.IsRecurring = new(true)
+	input.RecurrenceFrequency = &enums.FrequencyYearly
+	input.Status = &enums.CampaignStatusActive
+	input.IsActive = new(true)
+
+	created, err := suite.Client.API.CreateCampaignWithTargets(ctx, testclient.CreateCampaignWithTargetsInput{
+		Campaign: &input,
+		Targets: []*testclient.CreateCampaignTargetInput{
+			{
+				Email: recurringQuestionnaireTestRecipient,
+			},
+		},
+	})
+	assert.NilError(t, err)
+
+	return created
+}
+
+func createQuestionnaireEmailClient(t *testing.T) (*email.Client, *mock.EmailSender) {
+	t.Helper()
+
+	sender, err := mock.New("")
+	assert.NilError(t, err)
+
+	return &email.Client{
+		Sender: sender,
+		Config: email.RuntimeEmailConfig{
+			FromEmail:   "questionnaire@test.example",
+			CompanyName: "QuestionnaireCo",
+			ProductURL:  "https://app.example.com",
+		},
+	}, sender
 }
 
 // TestCustomCampaignCompletesWhenAllSent verifies a custom campaign is marked completed
@@ -737,7 +866,9 @@ func TestCustomCampaignCompletesWhenAllSent(t *testing.T) {
 				},
 			}
 
-			cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+			cfg := email.SendBrandedCampaignRequest{
+				CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+			}
 
 			_, err = email.SendBrandedCampaign{}.Run(ctx, types.OperationRequest{Client: emailClient, DB: suite.Client.DB}, emailClient, cfg)
 			assert.NilError(t, err)
@@ -803,7 +934,9 @@ func TestCampaignEmailDispatchWithoutTrustCenterModule(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+	}
 
 	userCtx := generated.NewContext(graphql.WithResponseContext(user.UserCtx, gqlerrors.ErrorPresenter, graphql.DefaultRecover), suite.Client.DB)
 

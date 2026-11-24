@@ -180,7 +180,7 @@ func TestCampaignDispatchStatusRestrictions(t *testing.T) {
 			}
 
 			cfg := email.SendBrandedCampaignRequest{
-				CampaignID: campaignObj.ID,
+				CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
 			}
 			req := types.OperationRequest{
 				Client: emailClient,
@@ -253,7 +253,7 @@ func TestCampaignDispatchMissingTemplate(t *testing.T) {
 	}
 
 	cfg := email.SendBrandedCampaignRequest{
-		CampaignID: campaignObj.ID,
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
 	}
 	req := types.OperationRequest{
 		Client: emailClient,
@@ -340,8 +340,7 @@ func TestCampaignDispatchResendBehavior(t *testing.T) {
 		}
 
 		cfg := email.SendBrandedCampaignRequest{
-			CampaignID: campaignObj.ID,
-			Resend:     false,
+			CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID, Resend: false},
 		}
 		req := types.OperationRequest{Client: emailClient, DB: suite.Client.DB}
 
@@ -371,8 +370,7 @@ func TestCampaignDispatchResendBehavior(t *testing.T) {
 		}
 
 		cfg := email.SendBrandedCampaignRequest{
-			CampaignID: campaignObj.ID,
-			Resend:     true,
+			CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID, Resend: true},
 		}
 		req := types.OperationRequest{Client: emailClient, DB: suite.Client.DB}
 
@@ -467,8 +465,7 @@ func TestCampaignDispatchCompletedTargetsAlwaysSkipped(t *testing.T) {
 	}
 
 	cfg := email.SendBrandedCampaignRequest{
-		CampaignID: campaignObj.ID,
-		Resend:     true,
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID, Resend: true},
 	}
 	req := types.OperationRequest{Client: emailClient, DB: suite.Client.DB}
 
