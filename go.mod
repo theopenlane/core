@@ -115,7 +115,6 @@ require (
 	github.com/stripe/stripe-go/v86 v86.4.2
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
 	github.com/testcontainers/testcontainers-go v0.45.0
-	github.com/theopenlane/core/common v1.2.4
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
@@ -379,7 +378,6 @@ require (
 	github.com/riverqueue/river/rivershared v0.51.2 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.12.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
 	github.com/sajari/fuzzy v1.0.0 // indirect
 	github.com/samber/go-type-to-string v1.8.0 // indirect
