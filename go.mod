@@ -112,7 +112,7 @@ require (
 	github.com/slack-go/slack v0.36.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.1.0
-	github.com/stoewer/go-strcase v1.3.1
+	github.com/stoewer/go-strcase v1.4.0
 	github.com/stretchr/testify v1.12.1
 	github.com/stripe/stripe-go/v86 v86.4.2
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
@@ -129,7 +129,7 @@ require (
 	github.com/theopenlane/logx v0.1.1
 	github.com/theopenlane/newman v0.7.0
 	github.com/theopenlane/riverboat v0.14.8
-	github.com/theopenlane/utils v0.7.4
+	github.com/theopenlane/utils v0.7.5-0.20261123212740-f981a2f77f90
 	github.com/tmc/langchaingo v0.1.15
 	github.com/urfave/cli/v3 v3.14.0
 	github.com/vektah/gqlparser/v2 v2.5.64
@@ -146,6 +146,7 @@ require (
 	golang.org/x/sync v0.25.0
 	golang.org/x/term v0.48.0
 	golang.org/x/text v0.44.0
+	golang.org/x/time v0.16.0
 	golang.org/x/tools v0.52.1-0.20261106145633-d407941a339a
 	google.golang.org/api v0.315.0
 	google.golang.org/grpc v1.85.0
@@ -459,7 +460,6 @@ require (
 	golang.org/x/exp v0.0.0-20261113113407-e3970619a1a4 // indirect
 	golang.org/x/image v0.48.0 // indirect
 	golang.org/x/sys v0.50.0 // indirect
-	golang.org/x/time v0.16.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
 	google.golang.org/genproto v0.0.0-20261110000943-09e21b237f2c // indirect

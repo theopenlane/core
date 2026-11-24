@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/go-client v0.17.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.42.3
-	github.com/theopenlane/utils v0.7.4
+	github.com/theopenlane/utils v0.7.5-0.20261123212740-f981a2f77f90
 	golang.org/x/oauth2 v0.38.0
 	golang.org/x/term v0.48.0
 )
@@ -45,7 +45,7 @@ require (
 	github.com/go-webauthn/webauthn v0.18.2 // indirect
 	github.com/go-webauthn/x v0.3.1 // indirect
 	github.com/goccy/go-json v0.12.0 // indirect
-	github.com/godbus/dbus/v5 v5.2.2 // indirect
+	github.com/godbus/dbus/v5 v5.2.4 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
@@ -87,7 +87,7 @@ require (
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/spf13/pflag v1.1.0 // indirect
-	github.com/stoewer/go-strcase v1.3.1 // indirect
+	github.com/stoewer/go-strcase v1.4.0 // indirect
 	github.com/theopenlane/echox v0.3.0 // indirect
 	github.com/theopenlane/logx v0.1.1 // indirect
 	github.com/tinylib/msgp v1.6.5 // indirect

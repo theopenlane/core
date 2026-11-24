@@ -1,6 +1,7 @@
 package catalog
 
 import (
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/aikido"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/authentik"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid"
@@ -35,6 +36,7 @@ import (
 // email) use local file-based senders instead of calling provider APIs
 func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Builder {
 	return []registry.Builder{
+		aikido.Builder(cfg.Aikido),
 		authentik.Builder(devMode),
 		awssecurityhub.Builder(cfg.AWSSecurityHub),
 		azureentraid.Builder(cfg.AzureEntraID),

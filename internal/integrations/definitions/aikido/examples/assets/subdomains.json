@@ -1,0 +1,48 @@
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "name": "app.aikido.dev",
+    "ip_addresses": [
+      "192.168.1.1",
+      "192.168.1.2"
+    ],
+    "open_ports": [
+      {
+        "port": 80,
+        "protocol": "http",
+        "service": "http"
+      },
+      {
+        "port": 443,
+        "protocol": "http",
+        "service": "https"
+      }
+    ],
+    "is_responsive": true,
+    "is_excluded": false,
+    "dns_last_resolved_at": 1772704787
+  },
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174001",
+    "name": "apidocs.aikido.dev",
+    "ip_addresses": [
+      "192.168.1.3",
+      "192.168.1.4"
+    ],
+    "open_ports": [
+      {
+        "port": 80,
+        "protocol": "http",
+        "service": "http"
+      },
+      {
+        "port": 443,
+        "protocol": "https",
+        "service": "https"
+      }
+    ],
+    "is_responsive": true,
+    "is_excluded": true,
+    "dns_last_resolved_at": 1772704790
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "id": 1,
+  "name": "Compression service",
+  "provider": "github",
+  "external_repo_id": "R_kgDOI5RlKA",
+  "external_repo_numeric_id": 1234567890,
+  "active": true,
+  "branch": "main",
+  "url": "https://api.github.com/repos/aikidemo/compression-service",
+  "last_scanned_at": 1678886400,
+  "linked_teams": [
+    {
+      "id": 1,
+      "name": "Backend Team"
+    },
+    {
+      "id": 1,
+      "name": "Custom Aikido Team"
+    }
+  ],
+  "excluded_paths": [
+    {
+      "id": 1,
+      "path": "tests/"
+    },
+    {
+      "id": 2,
+      "path": "docs/"
+    }
+  ],
+  "connectivity": "connected",
+  "sensitivity": "normal",
+  "labels": [
+    {
+      "id": 1,
+      "name": "production",
+      "is_imported": false
+    },
+    {
+      "id": 2,
+      "name": "core",
+      "is_imported": true
+    }
+  ]
+}

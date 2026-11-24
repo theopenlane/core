@@ -1,6 +1,7 @@
 package catalog
 
 import (
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/aikido"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter"
@@ -23,6 +24,8 @@ import (
 type Config struct {
 	// ConsoleIntegrationPath is the relative path in the frontend for the integrations page
 	ConsoleIntegrationPath string `json:"consoleintegrationpath" koanf:"consoleintegrationpath" default:"/organization-settings/integrations"`
+	// Aikido holds operator credentials for the Openlane Aikido OAuth app
+	Aikido aikido.Config `json:"aikido" koanf:"aikido"`
 	// AWSSecurityHub holds operator credentials for the AWS Security Hub definition
 	AWSSecurityHub awssecurityhub.Config `json:"awssecurityhub" koanf:"awssecurityhub"`
 	// CloudflareRuntime holds runtime-provisioned configuration for the operator-owned

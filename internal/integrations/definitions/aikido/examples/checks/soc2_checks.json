@@ -1,0 +1,112 @@
+[
+  {
+    "overview": {
+      "risk_assessment": [
+        {
+          "code": "cc3.3",
+          "title": "CC3.3: Consider the potential for fraud",
+          "results": [
+            {
+              "measure": "proper_access_management_for_resources",
+              "title": "App Services have strict SCM Site access restrictions",
+              "measure_title": "Applies the least privilege principle for cloud resource",
+              "status": "failing"
+            },
+            {
+              "measure": "proper_access_management_for_resources",
+              "title": "Container registries have no admin user enabled",
+              "measure_title": "Applies the least privilege principle for cloud resource",
+              "status": "failing"
+            },
+            {
+              "measure": "mfa_enforced",
+              "title": "Azure Virtual Machines are not accessible via passwords",
+              "measure_title": "Requires MFA for cloud users",
+              "status": "complying"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Blob containers have stricta access permissions",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "failing"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Cosmos DB is not publicly accessible",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "complying"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "File Services have strict access permissions",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "complying"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Key Vaults have strict access permission rules",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "failing"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "SQL Servers are not publicly accessible",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "failing"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Azure Kubernetes cluster are private",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "failing"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Azure Storage Account restricts access by network",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "failing"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Firewall rule prevents SSH access from anywhere",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "failing"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Firewall rule prevents RDP access from anywhere",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "complying"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Firewall rule prevents FTP access from anywhere",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "complying"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Firewall rule prevents Elastic Search access from anywhere",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "complying"
+            },
+            {
+              "measure": "proper_access_management_to_resources",
+              "title": "Firewall rule prevents Docker API access from anywhere",
+              "measure_title": "Applies the least privilege principle to cloud resources",
+              "status": "complying"
+            },
+            {
+              "measure": "enable_threat_detection",
+              "title": "Activity Log alerts are enabled",
+              "measure_title": "Threat detection is enabled",
+              "status": "failing"
+            }
+          ]
+        }
+      ]
+    },
+    "total_complying_rule_count": 7,
+    "total_rule_count": 16
+  }
+]

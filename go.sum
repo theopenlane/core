@@ -874,8 +874,8 @@ github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf h1:pvbZ0lM0XWPBqUKqFU8cma
 github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf/go.mod h1:RJID2RhlZKId02nZ62WenDCkgHFerpIOmW0iT7GKmXM=
 github.com/std-uritemplate/std-uritemplate/go/v2 v2.0.13 h1:EvUlEJUuES5kbLhkXqvRQ63CfGcQDoW7n0G1bCY4cuo=
 github.com/std-uritemplate/std-uritemplate/go/v2 v2.0.13/go.mod h1:Z5KcoM0YLC7INlNhEezeIZ0TZNYf7WSNO0Lvah4DSeQ=
-github.com/stoewer/go-strcase v1.3.1 h1:iS0MdW+kVTxgMoE1LAZyMiYJFKlOzLooE4MxjirtkAs=
-github.com/stoewer/go-strcase v1.3.1/go.mod h1:fAH5hQ5pehh+j3nZfvwdk2RgEgQjAoM8wodgtPmh1xo=
+github.com/stoewer/go-strcase v1.4.0 h1:V/eQ1UHN6gV3ykkhhcfAqBaNv8IEQtGgRcWtAcd/zy8=
+github.com/stoewer/go-strcase v1.4.0/go.mod h1:fAH5hQ5pehh+j3nZfvwdk2RgEgQjAoM8wodgtPmh1xo=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
 github.com/stretchr/objx v0.5.0/go.mod h1:Yh+to48EsGEfYuaHDzXPcE3xhTkx73EhmCGUpEOglKo=
@@ -926,8 +926,8 @@ github.com/theopenlane/oscalot v0.1.0 h1:ExYiMU4Q1ezbGq77sxkgahmfmc46L+2NqB39fg0
 github.com/theopenlane/oscalot v0.1.0/go.mod h1:L7XzkqdBATqF2Du0uMTxoRr+eSfOHAwB6/ogwdwM0XE=
 github.com/theopenlane/riverboat v0.14.8 h1:tveHLRFUEqoZStK70S/QymjBVZFKla3Yp8yFi4QNG+U=
 github.com/theopenlane/riverboat v0.14.8/go.mod h1:HcSt9o94vYzIoewTZe7YhAZbHtyh4kosSxTMjryb79M=
-github.com/theopenlane/utils v0.7.4 h1:3R+Mg8rh6xwZ/2itWPOdEn0kW9ZyUygJ0pB1xWxffO0=
-github.com/theopenlane/utils v0.7.4/go.mod h1:MThjVD/86ERwVyCu5g7yZqfz+r7AO9fRvsPZUh9xpl0=
+github.com/theopenlane/utils v0.7.5-0.20261123212740-f981a2f77f90 h1:Igp5HzkLx3VPK7ArPyNhIsdjg9b/QU7xfMJ3tLngF+0=
+github.com/theopenlane/utils v0.7.5-0.20261123212740-f981a2f77f90/go.mod h1:MvUNmhui4tzr14w5NuMP+MXV1NFB1XyDaBuBJ0L7Bag=
 github.com/tidwall/gjson v1.20.2 h1:Ag48cSOUCOq/sheSLXV3M4ZS0FOd4YMnY1N7FRoxGQY=
 github.com/tidwall/gjson v1.20.2/go.mod h1:jV1Xkr7LRLVFhesDFU/nInoQ+MjVlnuqkUreTWMveUo=
 github.com/tidwall/match v1.2.0 h1:0pt8FlkOwjN2fPt4bIl4BoNxb98gGHN2ObFEDkrfZnM=

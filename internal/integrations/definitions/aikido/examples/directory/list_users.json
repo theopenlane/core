@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "full_name": "Wendy Snutz",
+    "email": "wendysnutz@gmail.com",
+    "active": 1,
+    "last_login_timestamp": 1720059659,
+    "role": "admin",
+    "auth_type": "github"
+  }
+]

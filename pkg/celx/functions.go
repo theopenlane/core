@@ -10,6 +10,7 @@ import (
 	celtypes "cel.dev/cel-go/common/types"
 	"cel.dev/cel-go/common/types/ref"
 	"cel.dev/cel-go/common/types/traits"
+	"github.com/theopenlane/utils/jsonx"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 )
 
@@ -94,12 +95,17 @@ func paragraphsBinding(val ref.Val) ref.Val {
 		return celtypes.NewErr("paragraphs: argument must be a string")
 	}
 
-	str := string(s)
+	return celtypes.String(Paragraphs(string(s)))
+}
+
+// Paragraphs normalizes a single-line description that uses runs of three or more spaces as paragraph separators into
+// blank-line separated paragraphs, a string that already contains a newline is returned unchanged
+func Paragraphs(str string) string {
 	if strings.Contains(str, "\n") {
-		return s
+		return str
 	}
 
-	return celtypes.String(paragraphSeparatorRe.ReplaceAllString(strings.TrimSpace(str), "\n\n"))
+	return paragraphSeparatorRe.ReplaceAllString(strings.TrimSpace(str), "\n\n")
 }
 
 // paragraphsFunc is the CEL function declaration for paragraphs
@@ -128,6 +134,32 @@ func mergeBinding(lhs, rhs ref.Val) ref.Val {
 
 	return celtypes.DefaultTypeAdapter.NativeToValue(base)
 }
+
+// compactBinding implements the compact(map) CEL function, returning the map without the keys whose value is null, an
+// empty string, an empty list or an empty map, so a map expression can leave out fields it has no value for
+func compactBinding(val ref.Val) ref.Val {
+	values, err := ToJSONMap(val)
+	if err != nil {
+		return celtypes.NewErr("compact: argument must be a map")
+	}
+
+	for key, value := range values {
+		if jsonx.IsEmptyValue(value) {
+			delete(values, key)
+		}
+	}
+
+	return celtypes.DefaultTypeAdapter.NativeToValue(values)
+}
+
+// compactFunc is the CEL function declaration for compact
+var compactFunc = cel.Function("compact",
+	cel.Overload("compact_map",
+		[]*cel.Type{cel.MapType(cel.StringType, cel.DynType)},
+		cel.MapType(cel.StringType, cel.DynType),
+		cel.UnaryBinding(compactBinding),
+	),
+)
 
 // mergeFunc is the CEL function declaration for merge, the base is dyn so a null payload reaches the binding
 var mergeFunc = cel.Function("merge",
