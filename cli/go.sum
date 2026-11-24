@@ -37,6 +37,7 @@ github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b h1:/mxSugRc4SgN7Xg
 github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b/go.mod h1:ssRF0IaB1hCcKIObp3FkZOsjTcAHpgii70JelNb4H8M=
 github.com/fumiama/imgsz v0.0.4 h1:Lsasu2hdSSFS+vnD+nvR1UkiRMK7hcpyYCC0FzgSMFI=
 github.com/fumiama/imgsz v0.0.4/go.mod h1:bISOQVTlw9sRytPwe8ir7tAaEmyz9hSNj9n8mXMBG0E=
+github.com/fxamacker/cbor/v2 v2.10.0 h1:HVF3T5vYwLqO81ebPirWEPNv2SMrUMD3HLnKgEr6uWE=
 github.com/gabriel-vasile/mimetype v1.4.16 h1:5izNFuvA37st1dDRAcA7TtmngBmRgiIPDmTtiEvjx1E=
 github.com/gabriel-vasile/mimetype v1.4.16/go.mod h1:3oFFwxX8kTklZwzIl2aQEDZT0lKY8xH92ST88bAwba4=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
@@ -46,6 +47,8 @@ github.com/go-logr/stdr v1.2.2 h1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=
 github.com/go-logr/stdr v1.2.2/go.mod h1:mMo/vtBO5dYbehREoey6XUKy/eSumjCCveDpRre4VKE=
 github.com/go-viper/mapstructure/v2 v2.5.0 h1:vM5IJoUAy3d7zRSVtIwQgBj7BiWtMPfmPEgAXnvj1Ro=
 github.com/go-viper/mapstructure/v2 v2.5.0/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlndYOZ6rGS0BRZIxGhM=
+github.com/go-webauthn/webauthn v0.18.2 h1:0BeftmEHU7i3Dv0VFwBtidy/ba37Vcdjvqst9EYu8Sk=
+github.com/go-webauthn/x v0.3.1 h1:1ff37z3XfmTTomkhlURgGizLIDyOvPgTt2t9nlzKLRo=
 github.com/goccy/go-json v0.12.0 h1:pD+oWouAiz4yruwXIt/iT+lOMeyhr1aTtxzaMP/RgVI=
 github.com/goccy/go-json v0.12.0/go.mod h1:3NdmfEkZlB7YI5UFw/qdFKq8XN1aiWR0YyRPWZNQltY=
 github.com/goccy/go-yaml v1.19.2 h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM=
@@ -61,6 +64,8 @@ github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
 github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
 github.com/google/go-querystring v1.2.0 h1:yhqkPbu2/OH+V9BfpCVPZkNmUXhb2gBxJArfhIxNtP0=
 github.com/google/go-querystring v1.2.0/go.mod h1:8IFJqpSRITyJ8QhQ13bmbeMBDfmeEJZD5A0egEOmkqU=
+github.com/google/go-tpm v0.9.8 h1:slArAR9Ft+1ybZu0lBwpSmpwhRXaa85hWtMinMyRAWo=
+github.com/google/go-tpm-tools v0.3.13-0.20230620182252-4639ecce2aba h1:qJEJcuLzH5KDR0gKc0zcktin6KSAwL7+jWKBYceddTc=
 github.com/google/gofuzz v1.2.0 h1:xRy4A+RhZaiKjJ1bPfwQ8sedCA+YS2YcCHW6ec7JMi0=
 github.com/google/gofuzz v1.2.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/google/jsonschema-go v0.4.3 h1:/DBOLZTfDow7pe2GmaJNhltueGTtDKICi8V8p+DQPd0=
@@ -152,6 +157,7 @@ github.com/openfga/language/pkg/go v0.3.2/go.mod h1:Ia3Luc0WcZdLogjjnFFKbce8+427
 github.com/pborman/getopt v0.0.0-20170112200414-7148bc3a4c30/go.mod h1:85jBQOZwpVEaDAr341tbn15RS4fCAsIst0qp7i8ex1o=
 github.com/pdfcpu/pdfcpu v0.16.4 h1:XW7q98xu3vNAimTSX93fIWnTDA2F0zz8mu88wiXoMjU=
 github.com/pdfcpu/pdfcpu v0.16.4/go.mod h1:zMjQF5nYZ6A0yaG2d4GAj1QrzM5U8BZYDFHpuRwPuxQ=
+github.com/philhofer/fwd v1.2.1 h1:UtpS73q8bFgy/yH3gCq8LSNvj5gv/FowNOiWZa7uKwQ=
 github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c h1:+mdjkGKdHQG3305AYmdv1U2eRNDiU2ErMBj1gwrq8eQ=
 github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c/go.mod h1:7rwL4CYBLnjLxUqIJNnCWiEdr3bn6IUYi15bNlnbCCU=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
@@ -159,6 +165,7 @@ github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/redis/go-redis/v9 v9.23.0 h1:/TTVdJa8BRNsybwwGGnmiYktHNlUXtbOQxlWpHBPL3s=
 github.com/redis/go-redis/v9 v9.23.0/go.mod h1:EWP2UUk+XDaI1s5nQB5mablZN6vccXlmBQTyfnF87D0=
+github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=
 github.com/rogpeppe/go-internal v1.15.0 h1:D0RCU5rMAp+SpgkiNdrjfJ+LX4J1M32V2NeCY7EJ6hc=
 github.com/rogpeppe/go-internal v1.15.0/go.mod h1:DrUVZyrJU+txYW5/1kwtXQSMFio52ZOxX7yM1VHvnxs=
 github.com/rs/zerolog v1.35.1 h1:m7xQeoiLIiV0BCEY4Hs+j2NG4Gp2o2KPKmhnnLiazKI=
@@ -186,6 +193,7 @@ github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o
 github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWDWE=
 github.com/stretchr/testify v1.12.1/go.mod h1:MDEgiDPPsNp5cuIrHPPCyornHKgEVbtFUmoNlxoYthg=
 github.com/theopenlane/core/common v1.2.4 h1:/oI6PZenr2EcSQJvV9DwJNyse12ek+M3HwYz/ARTyUE=
+github.com/theopenlane/core/common v1.2.4/go.mod h1:syL205mbnb/IBTJnDi/3XZW6R58LpTFa0qYOmA7fBB0=
 github.com/theopenlane/core/v2 v2.17.10 h1:t6HZpwPmiCyVxwgzpdK29oti3VEcI7o1t30pj0zL76E=
 github.com/theopenlane/core/v2 v2.17.10/go.mod h1:XNuyCRonALPo7PILO5vbSRkXAGYW5I49xGz8qef/1y8=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
@@ -200,6 +208,7 @@ github.com/theopenlane/logx v0.1.1 h1:V9pYUKuWdsi3ejcZ83f29h8KJbVqnZqmKhThsWU5+p
 github.com/theopenlane/logx v0.1.1/go.mod h1:xhSn1p6b0XUcXKv7q6NC+I5neBAgrT9G2YDJ93WrzgA=
 github.com/theopenlane/utils v0.7.4 h1:3R+Mg8rh6xwZ/2itWPOdEn0kW9ZyUygJ0pB1xWxffO0=
 github.com/theopenlane/utils v0.7.4/go.mod h1:MThjVD/86ERwVyCu5g7yZqfz+r7AO9fRvsPZUh9xpl0=
+github.com/tinylib/msgp v1.6.5 h1:iAH6XTP7BpzErjBZlujJQXxA+GmRi2YWs6M4KdLtNbE=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQD0Loo=
@@ -210,6 +219,7 @@ github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IU
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
 github.com/vmihailenco/tagparser/v2 v2.0.0/go.mod h1:Wri+At7QHww0WTrCBeu4J6bNtoV6mEfg5OIWRZA9qds=
+github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=
 github.com/xdg-go/stringprep v1.0.4 h1:XLI/Ng3O1Atzq0oBs3TWm+5ZVgkq2aqdlvP9JtoZ6c8=
 github.com/xdg-go/stringprep v1.0.4/go.mod h1:mPGuuIYwz7CmR2bT9j4GbQqutWS1zV24gijq1dTyGkM=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
@@ -231,6 +241,7 @@ go.opentelemetry.io/otel/trace v1.47.0 h1:JOjX/Oci8K94QHddo+bbfya/Ai/nf6/dt9ZfrF
 go.opentelemetry.io/otel/trace v1.47.0/go.mod h1:jNaSLa2PZEYFG6fRjJABAu+bw4FS08uDmPg28lTghu0=
 go.uber.org/atomic v1.12.0 h1:BvcXdFKuviU4fTL/f+SxdQ5qJX/Jix8pAkgdUcb3XOE=
 go.uber.org/atomic v1.12.0/go.mod h1:I6c4cg+6HCxRjfjSsYtApoFILnpc0CGUdGkXVqbYVNk=
+go.uber.org/mock v0.6.0 h1:hyF9dfmbgIX5EfOdasqLsWD6xqpNZlXblLB/Dbnwv3Y=
 go.yaml.in/yaml/v3 v3.0.4/go.mod h1:DhzuOOF2ATzADvBadXxruRBLzYTpT36CKvDb3+aBEFg=
 go.yaml.in/yaml/v3 v3.0.6 h1:zcDfvjXEqTQmpjniUBLc91xYJMB2c4QOFxEF/LCEckM=
 go.yaml.in/yaml/v3 v3.0.6/go.mod h1:HVTZu1O7/Vkt2N+BFy8Zza+lnLsABggaTM2ZpNIGuKg=
