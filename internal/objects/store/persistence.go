@@ -9,6 +9,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 
 	"github.com/theopenlane/core/v2/internal/consts"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -16,7 +17,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
-	"github.com/theopenlane/logx"
 )
 
 // CreateFileRecord creates a file record in the database and returns the resulting ent.File entity.
