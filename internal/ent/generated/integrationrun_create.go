@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 )
@@ -489,6 +490,21 @@ func (_c *IntegrationRunCreate) AddProcedures(v ...*Procedure) *IntegrationRunCr
 	return _c.AddProcedureIDs(ids...)
 }
 
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *IntegrationRunCreate) AddRemediationIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *IntegrationRunCreate) AddRemediations(v ...*Remediation) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
+}
+
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (_c *IntegrationRunCreate) AddRiskIDs(ids ...string) *IntegrationRunCreate {
 	_c.mutation.AddRiskIDs(ids...)
@@ -929,6 +945,22 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RemediationsTable,
+			Columns: integrationrun.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

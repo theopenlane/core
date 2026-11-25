@@ -227,6 +227,9 @@
         },
         "fileorphan": {
           "$ref": "#/$defs/system.FileOrphanConfig"
+        },
+        "vulnintel": {
+          "$ref": "#/$defs/vulnintel.Config"
         }
       },
       "additionalProperties": false,
@@ -2548,6 +2551,17 @@
       "additionalProperties": false,
       "type": "object",
       "description": "EmailVerificationConfig is the configuration for email verification"
+    },
+    "vulnintel.Config": {
+      "properties": {
+        "maxperrun": {
+          "type": "integer",
+          "description": "Maximum OSV advisory lookups per enrichment run",
+          "default": 500
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "webauthn.ProviderConfig": {
       "properties": {

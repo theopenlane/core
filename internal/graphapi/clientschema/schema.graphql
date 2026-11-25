@@ -41648,6 +41648,37 @@ type IntegrationRun implements Node @modules(names: ["any_module"]) {
 		"""
 		where: ProcedureWhereInput
 	): ProcedureConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
 	risks(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -42066,6 +42097,11 @@ input IntegrationRunWhereInput {
 	"""
 	hasProcedures: Boolean
 	hasProceduresWith: [ProcedureWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
 	"""
 	risks edge predicates
 	"""

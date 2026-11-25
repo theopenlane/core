@@ -22,7 +22,7 @@ func TestBuilderRegisters(t *testing.T) {
 	def, err := Builder(&RuntimeConfig{}, "", Config{})()
 	assert.NilError(t, err)
 	assert.Equal(t, DefinitionID.ID(), def.ID)
-	assert.Equal(t, 3, len(def.Operations))
+	assert.Equal(t, 4, len(def.Operations))
 	assert.Equal(t, len(recordSchemas), len(def.Mappings))
 	assert.Equal(t, 5, len(def.ConnectionList()))
 	assert.Assert(t, def.RuntimeIntegration == nil)

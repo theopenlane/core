@@ -2781,6 +2781,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "remediations": {
+	ObjectType:          "remediation",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 }, "risks": {
 	ObjectType:          "risk",
 	SkipEditCheck:       false,

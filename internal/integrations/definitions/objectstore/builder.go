@@ -88,10 +88,15 @@ func Builder(runtime *RuntimeConfig, federationIssuer string, cfg Config) regist
 					Variables(jsonx.SchemaFrom[DatasetBuiltinVariables]()).
 					Description("Import the JSON records under a bucket prefix object by object as the schema each directory names, moving each imported object aside when configured, or a manifest-described dataset as the dispatching organization").
 					Registration(),
-				types.OperationPayloadOf[WriteObject]().
+				WriteObjectOp.
 					Handles(runWriteObject).
 					Policy(types.ExecutionPolicy{Inline: true}).
 					Description("Write a document into the bucket under a key").
+					Registration(),
+				ReadObjectOp.
+					Handles(runReadObject).
+					Policy(types.ExecutionPolicy{Inline: true}).
+					Description("Read a document from the bucket under a key").
 					Registration(),
 				operations.DeleteSourceOp.Registration(),
 			},

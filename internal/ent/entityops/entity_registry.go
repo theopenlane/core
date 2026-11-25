@@ -1460,7 +1460,7 @@ func (s *Schema) applyIngestFill(ctx context.Context, client *generated.Client, 
 		return true
 	})
 
-	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.rekeyEdgesForUpdate(stripped))
+	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.dropLinkedEdgeIDs(ctx, client, entityID(row), s.rekeyEdgesForUpdate(stripped)))
 
 	mutation, save, err := s.Ingest.buildUpdate(ctx, client, row, rekeyed)
 	if err != nil {
@@ -1505,7 +1505,7 @@ func (s *Schema) applyIngestUpdate(ctx context.Context, client *generated.Client
 
 	payload = s.applyIngestResurrect(row, payload)
 
-	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.rekeyEdgesForUpdate(payload))
+	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.dropLinkedEdgeIDs(ctx, client, entityID(row), s.rekeyEdgesForUpdate(payload)))
 
 	mutation, save, err := s.Ingest.buildUpdate(ctx, client, row, rekeyed)
 	if err != nil {
@@ -1564,6 +1564,74 @@ func (s *Schema) rekeyEdgesForUpdate(payload json.RawMessage) json.RawMessage {
 		}
 
 		return changed
+	})
+}
+
+// dropLinkedEdgeIDs removes the link ids the row already has from a rekeyed update payload, dropping an edge key
+// left with no new ids, so re-sending existing links on every re-ingest is not reported as a change. When the current
+// links cannot be read, a many-to-many or through edge keeps its ids since re-adding those links is a no-op, while a
+// one-to-many edge drops its key since re-adding an existing one-to-many link fails the save with a constraint error
+func (s *Schema) dropLinkedEdgeIDs(ctx context.Context, client *generated.Client, sourceID string, payload json.RawMessage) json.RawMessage {
+	if sourceID == "" {
+		return payload
+	}
+
+	remaining := map[string][]string{}
+
+	for _, edge := range s.Edges {
+		if edge.LinkedIDs == nil {
+			continue
+		}
+
+		key := edge.AddField
+		if edge.Through {
+			key = edge.CreateField
+		}
+
+		ids, ok := jsonx.DecodeObjectKey[[]string](payload, key)
+		if !ok || len(ids) == 0 {
+			continue
+		}
+
+		linked, err := edge.LinkedIDs(ctx, client, sourceID, ids)
+		if err != nil {
+			if edge.ManyToMany || edge.Through {
+				logx.FromContext(ctx).Warn().Err(err).Str(FieldSchema, s.Snake).Str("edge", edge.Name).Msg("entityops: could not read existing links, re-adding them on the update")
+
+				continue
+			}
+
+			logx.FromContext(ctx).Warn().Err(err).Str(FieldSchema, s.Snake).Str("edge", edge.Name).Msg("entityops: could not read existing links, skipping the edge on the update")
+
+			remaining[key] = nil
+
+			continue
+		}
+
+		remaining[key] = lo.Without(ids, linked...)
+	}
+
+	if len(remaining) == 0 {
+		return payload
+	}
+
+	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+		for key, ids := range remaining {
+			if len(ids) == 0 {
+				delete(doc, key)
+
+				continue
+			}
+
+			raw, err := json.Marshal(ids)
+			if err != nil {
+				continue
+			}
+
+			doc[key] = raw
+		}
+
+		return true
 	})
 }
 
@@ -1805,7 +1873,7 @@ func (s *Schema) reconcileHit(ctx context.Context, client *generated.Client, own
 		return err
 	}
 
-	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.rekeyEdgesForUpdate(dropCatalogPointer(linked)))
+	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.dropLinkedEdgeIDs(ctx, client, entityID(row), s.rekeyEdgesForUpdate(dropCatalogPointer(linked))))
 
 	mutation, save, err := s.Ingest.buildUpdate(ctx, client, row, rekeyed)
 	if err != nil {
@@ -11007,6 +11075,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -11015,6 +11091,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:             "delegate",
@@ -11033,6 +11117,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "file",
@@ -11050,6 +11142,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -11058,6 +11158,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -11066,6 +11174,14 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_owner_group",
@@ -11110,6 +11226,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -11118,6 +11242,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviews",
@@ -11126,6 +11258,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -11134,6 +11274,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -11142,6 +11290,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -11150,6 +11306,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -11158,6 +11322,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -11166,14 +11338,29 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "workflow_object_refs",
-			Label:            "WorkflowObjectRefs",
-			Target:           SchemaWorkflowObjectRef,
-			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflow_object_ref_ids",
-			AddField:         "add_workflow_object_ref_ids",
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ActionPlan.Query().
+					Where(predicate.ActionPlan(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 	}
@@ -11185,6 +11372,13 @@ func init() {
 			TargetType:  "AssessmentResponse",
 			CreateField: "assessment_response_ids",
 			AddField:    "add_assessment_response_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryAssessmentResponses().
+					Where(predicate.AssessmentResponse(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -11193,6 +11387,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -11201,6 +11402,13 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -11209,6 +11417,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -11217,6 +11432,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -11225,6 +11448,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -11258,6 +11488,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.AssessmentPolicy.Query().
+					Where(assessmentpolicy.AssessmentID(sourceID), assessmentpolicy.InternalPolicyIDIn(targetIDs...)).
+					Select(assessmentpolicy.FieldInternalPolicyID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -11275,6 +11511,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "policy_attestations",
@@ -11283,6 +11527,13 @@ func init() {
 			TargetType:  "AssessmentPolicy",
 			CreateField: "policy_attestation_ids",
 			AddField:    "add_policy_attestation_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryPolicyAttestations().
+					Where(predicate.AssessmentPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "template",
@@ -11300,6 +11551,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -11308,6 +11566,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Assessment.Query().
+					Where(predicate.Assessment(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaAssessmentPolicy.Edges = []EdgeDescriptor{
@@ -11327,6 +11592,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.AssessmentPolicy.Query().
+					Where(predicate.AssessmentPolicy(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policy",
@@ -11409,6 +11681,13 @@ func init() {
 			TargetType:  "VendorRiskScore",
 			CreateField: "vendor_risk_score_ids",
 			AddField:    "add_vendor_risk_score_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.AssessmentResponse.Query().
+					Where(predicate.AssessmentResponse(sql.FieldEQ("id", sourceID))).
+					QueryVendorRiskScores().
+					Where(predicate.VendorRiskScore(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -11417,6 +11696,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.AssessmentResponse.Query().
+					Where(predicate.AssessmentResponse(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaAsset.Edges = []EdgeDescriptor{
@@ -11454,6 +11740,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "connected_assets",
@@ -11462,6 +11755,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "connected_asset_ids",
 			AddField:    "add_connected_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryConnectedAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "connected_from",
@@ -11470,6 +11771,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "connected_from_ids",
 			AddField:    "add_connected_from_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryConnectedFrom().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -11478,6 +11787,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "criticality",
@@ -11495,6 +11812,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "encryption_status",
@@ -11512,6 +11836,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -11529,6 +11861,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -11537,6 +11877,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration",
@@ -11554,6 +11902,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_owner_group",
@@ -11589,6 +11945,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "out_of_scope_platforms",
@@ -11597,6 +11961,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "out_of_scope_platform_ids",
 			AddField:    "add_out_of_scope_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryOutOfScopePlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -11614,6 +11986,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -11622,6 +12002,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviews",
@@ -11630,6 +12018,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -11638,6 +12034,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -11673,6 +12077,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "system_details",
@@ -11681,6 +12093,14 @@ func init() {
 			TargetType:  "SystemDetail",
 			CreateField: "system_detail_ids",
 			AddField:    "add_system_detail_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QuerySystemDetails().
+					Where(predicate.SystemDetail(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -11689,6 +12109,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -11697,6 +12124,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Asset.Query().
+					Where(predicate.Asset(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaCampaign.Edges = []EdgeDescriptor{
@@ -11716,6 +12151,13 @@ func init() {
 			TargetType:  "AssessmentResponse",
 			CreateField: "assessment_response_ids",
 			AddField:    "add_assessment_response_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryAssessmentResponses().
+					Where(predicate.AssessmentResponse(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -11724,6 +12166,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaign_targets",
@@ -11732,6 +12182,13 @@ func init() {
 			TargetType:  "CampaignTarget",
 			CreateField: "campaign_target_ids",
 			AddField:    "add_campaign_target_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryCampaignTargets().
+					Where(predicate.CampaignTarget(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "contacts",
@@ -11740,6 +12197,14 @@ func init() {
 			TargetType:  "Contact",
 			CreateField: "contact_ids",
 			AddField:    "add_contact_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryContacts().
+					Where(predicate.Contact(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -11748,6 +12213,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -11756,6 +12229,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "email_template",
@@ -11782,6 +12263,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_ids",
 			AddField:    "add_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -11790,6 +12279,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration",
@@ -11807,6 +12304,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_owner_group",
@@ -11869,6 +12373,14 @@ func init() {
 			TargetType:  "User",
 			CreateField: "user_ids",
 			AddField:    "add_user_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryUsers().
+					Where(predicate.User(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -11877,6 +12389,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -11885,6 +12405,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Campaign.Query().
+					Where(predicate.Campaign(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaCampaignTarget.Edges = []EdgeDescriptor{
@@ -11949,6 +12476,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CampaignTarget.Query().
+					Where(predicate.CampaignTarget(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaCheckResult.Edges = []EdgeDescriptor{
@@ -11959,6 +12493,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CheckResult.Query().
+					Where(predicate.CheckResult(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -11967,6 +12508,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CheckResult.Query().
+					Where(predicate.CheckResult(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -11975,6 +12524,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CheckResult.Query().
+					Where(predicate.CheckResult(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -11983,6 +12539,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CheckResult.Query().
+					Where(predicate.CheckResult(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration",
@@ -12000,6 +12564,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CheckResult.Query().
+					Where(predicate.CheckResult(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -12017,6 +12589,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CheckResult.Query().
+					Where(predicate.CheckResult(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaContact.Edges = []EdgeDescriptor{
@@ -12027,6 +12606,13 @@ func init() {
 			TargetType:  "CampaignTarget",
 			CreateField: "campaign_target_ids",
 			AddField:    "add_campaign_target_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Contact.Query().
+					Where(predicate.Contact(sql.FieldEQ("id", sourceID))).
+					QueryCampaignTargets().
+					Where(predicate.CampaignTarget(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -12035,6 +12621,14 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Contact.Query().
+					Where(predicate.Contact(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -12043,6 +12637,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Contact.Query().
+					Where(predicate.Contact(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -12051,6 +12653,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Contact.Query().
+					Where(predicate.Contact(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -12059,6 +12669,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Contact.Query().
+					Where(predicate.Contact(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -12076,16 +12694,31 @@ func init() {
 			TargetType:  "Subscriber",
 			CreateField: "subscriber_ids",
 			AddField:    "add_subscriber_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Contact.Query().
+					Where(predicate.Contact(sql.FieldEQ("id", sourceID))).
+					QuerySubscribers().
+					Where(predicate.Subscriber(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaControl.Edges = []EdgeDescriptor{
 		{
-			Name:             "action_plans",
-			Label:            "ActionPlans",
-			Target:           SchemaActionPlan,
-			TargetType:       "ActionPlan",
-			CreateField:      "action_plan_ids",
-			AddField:         "add_action_plan_ids",
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12095,6 +12728,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -12103,6 +12744,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -12111,6 +12760,14 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "check_results",
@@ -12119,14 +12776,29 @@ func init() {
 			TargetType:  "CheckResult",
 			CreateField: "check_result_ids",
 			AddField:    "add_check_result_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryCheckResults().
+					Where(predicate.CheckResult(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "comments",
-			Label:            "Comments",
-			Target:           SchemaNote,
-			TargetType:       "Note",
-			CreateField:      "comment_ids",
-			AddField:         "add_comment_ids",
+			Name:        "comments",
+			Label:       "Comments",
+			Target:      SchemaNote,
+			TargetType:  "Note",
+			CreateField: "comment_ids",
+			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12136,6 +12808,14 @@ func init() {
 			TargetType:  "ControlImplementation",
 			CreateField: "control_implementation_ids",
 			AddField:    "add_control_implementation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementations().
+					Where(predicate.ControlImplementation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_kind",
@@ -12153,14 +12833,29 @@ func init() {
 			TargetType:  "FindingControl",
 			CreateField: "control_mapping_ids",
 			AddField:    "add_control_mapping_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryControlMappings().
+					Where(predicate.FindingControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "control_objectives",
-			Label:            "ControlObjectives",
-			Target:           SchemaControlObjective,
-			TargetType:       "ControlObjective",
-			CreateField:      "control_objective_ids",
-			AddField:         "add_control_objective_ids",
+			Name:        "control_objectives",
+			Label:       "ControlObjectives",
+			Target:      SchemaControlObjective,
+			TargetType:  "ControlObjective",
+			CreateField: "control_objective_ids",
+			AddField:    "add_control_objective_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectives().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12193,12 +12888,19 @@ func init() {
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "discussions",
-			Label:            "Discussions",
-			Target:           SchemaDiscussion,
-			TargetType:       "Discussion",
-			CreateField:      "discussion_ids",
-			AddField:         "add_discussion_ids",
+			Name:        "discussions",
+			Label:       "Discussions",
+			Target:      SchemaDiscussion,
+			TargetType:  "Discussion",
+			CreateField: "discussion_ids",
+			AddField:    "add_discussion_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryDiscussions().
+					Where(predicate.Discussion(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12208,6 +12910,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -12216,6 +12926,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -12227,12 +12945,20 @@ func init() {
 			Field:       "environment_id",
 		},
 		{
-			Name:             "evidence",
-			Label:            "Evidence",
-			Target:           SchemaEvidence,
-			TargetType:       "Evidence",
-			CreateField:      "evidence_ids",
-			AddField:         "add_evidence_ids",
+			Name:        "evidence",
+			Label:       "Evidence",
+			Target:      SchemaEvidence,
+			TargetType:  "Evidence",
+			CreateField: "evidence_ids",
+			AddField:    "add_evidence_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryEvidence().
+					Where(predicate.Evidence(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12267,6 +12993,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.FindingControl.Query().
+					Where(findingcontrol.ControlID(sourceID), findingcontrol.FindingIDIn(targetIDs...)).
+					Select(findingcontrol.FieldFindingID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -12275,6 +13007,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -12283,14 +13023,29 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "internal_policies",
-			Label:            "InternalPolicies",
-			Target:           SchemaInternalPolicy,
-			TargetType:       "InternalPolicy",
-			CreateField:      "internal_policy_ids",
-			AddField:         "add_internal_policy_ids",
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12300,6 +13055,14 @@ func init() {
 			TargetType:  "MappedControl",
 			CreateField: "mapped_from_control_ids",
 			AddField:    "add_mapped_from_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryMappedFromControls().
+					Where(predicate.MappedControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "mapped_to_controls",
@@ -12308,14 +13071,30 @@ func init() {
 			TargetType:  "MappedControl",
 			CreateField: "mapped_to_control_ids",
 			AddField:    "add_mapped_to_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryMappedToControls().
+					Where(predicate.MappedControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "narratives",
-			Label:            "Narratives",
-			Target:           SchemaNarrative,
-			TargetType:       "Narrative",
-			CreateField:      "narrative_ids",
-			AddField:         "add_narrative_ids",
+			Name:        "narratives",
+			Label:       "Narratives",
+			Target:      SchemaNarrative,
+			TargetType:  "Narrative",
+			CreateField: "narrative_ids",
+			AddField:    "add_narrative_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryNarratives().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12334,14 +13113,30 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "procedures",
-			Label:            "Procedures",
-			Target:           SchemaProcedure,
-			TargetType:       "Procedure",
-			CreateField:      "procedure_ids",
-			AddField:         "add_procedure_ids",
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12351,6 +13146,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -12359,6 +13162,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:             "responsible_party",
@@ -12377,14 +13188,30 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "risks",
-			Label:            "Risks",
-			Target:           SchemaRisk,
-			TargetType:       "Risk",
-			CreateField:      "risk_ids",
-			AddField:         "add_risk_ids",
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12394,6 +13221,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -12420,14 +13255,29 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "tasks",
-			Label:            "Tasks",
-			Target:           SchemaTask,
-			TargetType:       "Task",
-			CreateField:      "task_ids",
-			AddField:         "add_task_ids",
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -12437,14 +13287,29 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "workflow_object_refs",
-			Label:            "WorkflowObjectRefs",
-			Target:           SchemaWorkflowObjectRef,
-			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflow_object_ref_ids",
-			AddField:         "add_workflow_object_ref_ids",
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Control.Query().
+					Where(predicate.Control(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 	}
@@ -12456,6 +13321,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlImplementation.Query().
+					Where(predicate.ControlImplementation(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -12464,6 +13337,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlImplementation.Query().
+					Where(predicate.ControlImplementation(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -12472,6 +13353,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlImplementation.Query().
+					Where(predicate.ControlImplementation(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -12480,6 +13369,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlImplementation.Query().
+					Where(predicate.ControlImplementation(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -12497,6 +13393,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlImplementation.Query().
+					Where(predicate.ControlImplementation(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -12505,6 +13409,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlImplementation.Query().
+					Where(predicate.ControlImplementation(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -12513,6 +13425,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlImplementation.Query().
+					Where(predicate.ControlImplementation(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaControlObjective.Edges = []EdgeDescriptor{
@@ -12523,6 +13443,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -12531,6 +13459,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -12539,6 +13475,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "evidence",
@@ -12547,6 +13491,14 @@ func init() {
 			TargetType:  "Evidence",
 			CreateField: "evidence_ids",
 			AddField:    "add_evidence_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryEvidence().
+					Where(predicate.Evidence(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -12555,6 +13507,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -12563,6 +13522,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "narratives",
@@ -12571,6 +13538,13 @@ func init() {
 			TargetType:  "Narrative",
 			CreateField: "narrative_ids",
 			AddField:    "add_narrative_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryNarratives().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -12588,6 +13562,13 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -12596,6 +13577,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -12604,6 +13593,13 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subcontrols",
@@ -12612,6 +13608,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -12620,6 +13624,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -12628,6 +13640,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ControlObjective.Query().
+					Where(predicate.ControlObjective(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaCustomDomain.Edges = []EdgeDescriptor{
@@ -12667,6 +13687,13 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -12675,6 +13702,13 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -12683,6 +13717,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -12691,6 +13732,13 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -12708,6 +13756,13 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "procedures",
@@ -12716,6 +13771,13 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -12724,6 +13786,13 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risk_categories",
@@ -12732,6 +13801,13 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_category_ids",
 			AddField:    "add_risk_category_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryRiskCategories().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -12740,6 +13816,13 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subcontrols",
@@ -12748,6 +13831,13 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -12756,6 +13846,13 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(predicate.CustomTypeEnum(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaDNSVerification.Edges = []EdgeDescriptor{
@@ -12766,6 +13863,13 @@ func init() {
 			TargetType:  "CustomDomain",
 			CreateField: "custom_domain_ids",
 			AddField:    "add_custom_domain_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DNSVerification.Query().
+					Where(predicate.DNSVerification(sql.FieldEQ("id", sourceID))).
+					QueryCustomDomains().
+					Where(predicate.CustomDomain(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -12803,6 +13907,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryAccount.Query().
+					Where(predicate.DirectoryAccount(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "groups",
@@ -12836,6 +13948,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryMembership.Query().
+					Where(directorymembership.DirectoryAccountID(sourceID), directorymembership.DirectoryGroupIDIn(targetIDs...)).
+					Select(directorymembership.FieldDirectoryGroupID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "identity_holder",
@@ -12862,6 +13980,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryAccount.Query().
+					Where(predicate.DirectoryAccount(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "memberships",
@@ -12870,6 +13996,13 @@ func init() {
 			TargetType:  "DirectoryMembership",
 			CreateField: "membership_ids",
 			AddField:    "add_membership_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryAccount.Query().
+					Where(predicate.DirectoryAccount(sql.FieldEQ("id", sourceID))).
+					QueryMemberships().
+					Where(predicate.DirectoryMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -12905,6 +14038,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryAccount.Query().
+					Where(predicate.DirectoryAccount(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaDirectoryGroup.Edges = []EdgeDescriptor{
@@ -12940,6 +14080,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryMembership.Query().
+					Where(directorymembership.DirectoryGroupID(sourceID), directorymembership.DirectoryAccountIDIn(targetIDs...)).
+					Select(directorymembership.FieldDirectoryAccountID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -12966,6 +14112,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryGroup.Query().
+					Where(predicate.DirectoryGroup(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "members",
@@ -12974,6 +14128,13 @@ func init() {
 			TargetType:  "DirectoryMembership",
 			CreateField: "member_ids",
 			AddField:    "add_member_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryGroup.Query().
+					Where(predicate.DirectoryGroup(sql.FieldEQ("id", sourceID))).
+					QueryMembers().
+					Where(predicate.DirectoryMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -13009,6 +14170,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryGroup.Query().
+					Where(predicate.DirectoryGroup(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaDirectoryMembership.Edges = []EdgeDescriptor{
@@ -13046,6 +14214,13 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryMembership.Query().
+					Where(predicate.DirectoryMembership(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration",
@@ -13063,6 +14238,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryMembership.Query().
+					Where(predicate.DirectoryMembership(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -13098,6 +14281,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DirectoryMembership.Query().
+					Where(predicate.DirectoryMembership(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaDiscussion.Edges = []EdgeDescriptor{
@@ -13108,6 +14298,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "comment_ids",
 			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Discussion.Query().
+					Where(predicate.Discussion(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control",
@@ -13172,6 +14369,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DocumentData.Query().
+					Where(predicate.DocumentData(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -13189,6 +14394,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.DocumentData.Query().
+					Where(predicate.DocumentData(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -13226,6 +14439,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.EmailTemplate.Query().
+					Where(predicate.EmailTemplate(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -13234,6 +14454,13 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.EmailTemplate.Query().
+					Where(predicate.EmailTemplate(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -13242,6 +14469,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.EmailTemplate.Query().
+					Where(predicate.EmailTemplate(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -13250,6 +14484,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.EmailTemplate.Query().
+					Where(predicate.EmailTemplate(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration",
@@ -13267,6 +14508,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.EmailTemplate.Query().
+					Where(predicate.EmailTemplate(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "notification_templates",
@@ -13275,6 +14523,13 @@ func init() {
 			TargetType:  "NotificationTemplate",
 			CreateField: "notification_template_ids",
 			AddField:    "add_notification_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.EmailTemplate.Query().
+					Where(predicate.EmailTemplate(sql.FieldEQ("id", sourceID))).
+					QueryNotificationTemplates().
+					Where(predicate.NotificationTemplate(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -13301,6 +14556,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.EmailTemplate.Query().
+					Where(predicate.EmailTemplate(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_definition",
@@ -13340,6 +14602,13 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "adopted_ids",
 			AddField:    "add_adopted_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryAdopted().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assessment_responses",
@@ -13348,6 +14617,13 @@ func init() {
 			TargetType:  "AssessmentResponse",
 			CreateField: "assessment_response_ids",
 			AddField:    "add_assessment_response_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryAssessmentResponses().
+					Where(predicate.AssessmentResponse(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -13356,6 +14632,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "auth_methods",
@@ -13364,6 +14648,13 @@ func init() {
 			TargetType:  "CustomTypeEnum",
 			CreateField: "auth_method_ids",
 			AddField:    "add_auth_method_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryAuthMethods().
+					Where(predicate.CustomTypeEnum(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -13372,6 +14663,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -13380,6 +14679,13 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "catalog",
@@ -13397,6 +14703,14 @@ func init() {
 			TargetType:  "Contact",
 			CreateField: "contact_ids",
 			AddField:    "add_contact_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryContacts().
+					Where(predicate.Contact(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -13405,6 +14719,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "documents",
@@ -13413,6 +14735,14 @@ func init() {
 			TargetType:  "DocumentData",
 			CreateField: "document_ids",
 			AddField:    "add_document_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryDocuments().
+					Where(predicate.DocumentData(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -13421,6 +14751,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "employer_identity_holders",
@@ -13429,6 +14767,13 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "employer_identity_holder_ids",
 			AddField:    "add_employer_identity_holder_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryEmployerIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entity_relationship_state",
@@ -13482,6 +14827,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -13490,6 +14843,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -13498,6 +14859,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -13506,6 +14875,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -13514,6 +14891,14 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_owner_group",
@@ -13549,6 +14934,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "logo_file",
@@ -13566,6 +14959,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "note_ids",
 			AddField:    "add_note_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryNotes().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "out_of_scope_platforms",
@@ -13574,6 +14974,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "out_of_scope_platform_ids",
 			AddField:    "add_out_of_scope_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryOutOfScopePlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -13591,6 +14999,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -13599,6 +15015,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviewed_by_group",
@@ -13634,6 +15058,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -13642,6 +15074,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -13650,6 +15090,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -13667,6 +15115,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "source_platform_ids",
 			AddField:    "add_source_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QuerySourcePlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subcontrols",
@@ -13675,6 +15131,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subprocessors",
@@ -13683,6 +15147,14 @@ func init() {
 			TargetType:  "Subprocessor",
 			CreateField: "subprocessor_ids",
 			AddField:    "add_subprocessor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QuerySubprocessors().
+					Where(predicate.Subprocessor(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "system_details",
@@ -13691,6 +15163,14 @@ func init() {
 			TargetType:  "SystemDetail",
 			CreateField: "system_detail_ids",
 			AddField:    "add_system_detail_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QuerySystemDetails().
+					Where(predicate.SystemDetail(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vendor_risk_scores",
@@ -13699,6 +15179,13 @@ func init() {
 			TargetType:  "VendorRiskScore",
 			CreateField: "vendor_risk_score_ids",
 			AddField:    "add_vendor_risk_score_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryVendorRiskScores().
+					Where(predicate.VendorRiskScore(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -13707,6 +15194,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Entity.Query().
+					Where(predicate.Entity(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaEntityType.Edges = []EdgeDescriptor{
@@ -13717,6 +15212,13 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.EntityType.Query().
+					Where(predicate.EntityType(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -13736,6 +15238,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "group_memberships",
@@ -13744,6 +15254,14 @@ func init() {
 			TargetType:  "GroupMembership",
 			CreateField: "group_membership_ids",
 			AddField:    "add_group_membership_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryGroupMemberships().
+					Where(predicate.GroupMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "groups",
@@ -13752,6 +15270,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_ids",
 			AddField:    "add_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -13760,6 +15286,14 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "invites",
@@ -13768,6 +15302,14 @@ func init() {
 			TargetType:  "Invite",
 			CreateField: "invite_ids",
 			AddField:    "add_invite_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryInvites().
+					Where(predicate.Invite(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_memberships",
@@ -13776,6 +15318,14 @@ func init() {
 			TargetType:  "OrgMembership",
 			CreateField: "org_membership_ids",
 			AddField:    "add_org_membership_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryOrgMemberships().
+					Where(predicate.OrgMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_subscriptions",
@@ -13784,6 +15334,14 @@ func init() {
 			TargetType:  "OrgSubscription",
 			CreateField: "org_subscription_ids",
 			AddField:    "add_org_subscription_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryOrgSubscriptions().
+					Where(predicate.OrgSubscription(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "organizations",
@@ -13792,6 +15350,14 @@ func init() {
 			TargetType:  "Organization",
 			CreateField: "organization_ids",
 			AddField:    "add_organization_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryOrganizations().
+					Where(predicate.Organization(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "personal_access_tokens",
@@ -13800,6 +15366,14 @@ func init() {
 			TargetType:  "PersonalAccessToken",
 			CreateField: "personal_access_token_ids",
 			AddField:    "add_personal_access_token_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryPersonalAccessTokens().
+					Where(predicate.PersonalAccessToken(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "secrets",
@@ -13808,6 +15382,14 @@ func init() {
 			TargetType:  "Hush",
 			CreateField: "secret_ids",
 			AddField:    "add_secret_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QuerySecrets().
+					Where(predicate.Hush(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subscribers",
@@ -13816,6 +15398,14 @@ func init() {
 			TargetType:  "Subscriber",
 			CreateField: "subscriber_ids",
 			AddField:    "add_subscriber_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QuerySubscribers().
+					Where(predicate.Subscriber(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "users",
@@ -13824,6 +15414,14 @@ func init() {
 			TargetType:  "User",
 			CreateField: "user_ids",
 			AddField:    "add_user_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Event.Query().
+					Where(predicate.Event(sql.FieldEQ("id", sourceID))).
+					QueryUsers().
+					Where(predicate.User(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaEvidence.Edges = []EdgeDescriptor{
@@ -13834,6 +15432,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "comment_ids",
 			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_implementations",
@@ -13842,6 +15447,13 @@ func init() {
 			TargetType:  "ControlImplementation",
 			CreateField: "control_implementation_ids",
 			AddField:    "add_control_implementation_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementations().
+					Where(predicate.ControlImplementation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_objectives",
@@ -13850,6 +15462,14 @@ func init() {
 			TargetType:  "ControlObjective",
 			CreateField: "control_objective_ids",
 			AddField:    "add_control_objective_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectives().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -13858,6 +15478,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -13875,6 +15503,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -13883,6 +15519,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -13891,6 +15534,13 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -13908,6 +15558,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "procedures",
@@ -13916,6 +15574,13 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -13924,6 +15589,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -13932,6 +15605,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -13949,6 +15630,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -13957,14 +15646,29 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "workflow_object_refs",
-			Label:            "WorkflowObjectRefs",
-			Target:           SchemaWorkflowObjectRef,
-			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflow_object_ref_ids",
-			AddField:         "add_workflow_object_ref_ids",
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Evidence.Query().
+					Where(predicate.Evidence(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 	}
@@ -13976,6 +15680,13 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Export.Query().
+					Where(predicate.Export(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -13984,6 +15695,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Export.Query().
+					Where(predicate.Export(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -14012,6 +15730,14 @@ func init() {
 			TargetType:  "Contact",
 			CreateField: "contact_ids",
 			AddField:    "add_contact_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryContact().
+					Where(predicate.Contact(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "document",
@@ -14020,6 +15746,14 @@ func init() {
 			TargetType:  "DocumentData",
 			CreateField: "document_ids",
 			AddField:    "add_document_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryDocument().
+					Where(predicate.DocumentData(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entity",
@@ -14028,6 +15762,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryEntity().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -14045,6 +15787,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "evidence",
@@ -14053,6 +15803,14 @@ func init() {
 			TargetType:  "Evidence",
 			CreateField: "evidence_ids",
 			AddField:    "add_evidence_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryEvidence().
+					Where(predicate.Evidence(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "groups",
@@ -14061,6 +15819,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_ids",
 			AddField:    "add_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holder",
@@ -14069,6 +15835,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolder().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -14077,6 +15851,13 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "organization",
@@ -14085,6 +15866,14 @@ func init() {
 			TargetType:  "Organization",
 			CreateField: "organization_ids",
 			AddField:    "add_organization_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryOrganization().
+					Where(predicate.Organization(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "organization_setting",
@@ -14093,6 +15882,14 @@ func init() {
 			TargetType:  "OrganizationSetting",
 			CreateField: "organization_setting_ids",
 			AddField:    "add_organization_setting_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryOrganizationSetting().
+					Where(predicate.OrganizationSetting(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "original_trust_center_doc",
@@ -14101,6 +15898,13 @@ func init() {
 			TargetType:  "TrustCenterDoc",
 			CreateField: "original_trust_center_doc_ids",
 			AddField:    "add_original_trust_center_doc_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryOriginalTrustCenterDoc().
+					Where(predicate.TrustCenterDoc(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "platform",
@@ -14109,6 +15913,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryPlatform().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "program",
@@ -14117,6 +15929,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryProgram().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scan",
@@ -14125,6 +15945,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryScan().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -14142,6 +15970,14 @@ func init() {
 			TargetType:  "Hush",
 			CreateField: "secret_ids",
 			AddField:    "add_secret_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QuerySecrets().
+					Where(predicate.Hush(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "share_links",
@@ -14150,6 +15986,14 @@ func init() {
 			TargetType:  "ShareLink",
 			CreateField: "share_link_ids",
 			AddField:    "add_share_link_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryShareLinks().
+					Where(predicate.ShareLink(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "standard_logo",
@@ -14158,6 +16002,13 @@ func init() {
 			TargetType:  "Standard",
 			CreateField: "standard_logo_ids",
 			AddField:    "add_standard_logo_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryStandardLogo().
+					Where(predicate.Standard(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subprocessor_logo",
@@ -14166,6 +16017,13 @@ func init() {
 			TargetType:  "Subprocessor",
 			CreateField: "subprocessor_logo_ids",
 			AddField:    "add_subprocessor_logo_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QuerySubprocessorLogo().
+					Where(predicate.Subprocessor(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "template",
@@ -14174,6 +16032,14 @@ func init() {
 			TargetType:  "Template",
 			CreateField: "template_ids",
 			AddField:    "add_template_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryTemplate().
+					Where(predicate.Template(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_doc",
@@ -14182,6 +16048,13 @@ func init() {
 			TargetType:  "TrustCenterDoc",
 			CreateField: "trust_center_doc_ids",
 			AddField:    "add_trust_center_doc_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterDoc().
+					Where(predicate.TrustCenterDoc(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_entities",
@@ -14190,6 +16063,13 @@ func init() {
 			TargetType:  "TrustCenterEntity",
 			CreateField: "trust_center_entity_ids",
 			AddField:    "add_trust_center_entity_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterEntities().
+					Where(predicate.TrustCenterEntity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_entity_logo",
@@ -14198,6 +16078,13 @@ func init() {
 			TargetType:  "TrustCenterEntity",
 			CreateField: "trust_center_entity_logo_ids",
 			AddField:    "add_trust_center_entity_logo_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterEntityLogo().
+					Where(predicate.TrustCenterEntity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_setting_favicon",
@@ -14206,6 +16093,13 @@ func init() {
 			TargetType:  "TrustCenterSetting",
 			CreateField: "trust_center_setting_favicon_ids",
 			AddField:    "add_trust_center_setting_favicon_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterSettingFavicon().
+					Where(predicate.TrustCenterSetting(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_setting_hero_image",
@@ -14214,6 +16108,13 @@ func init() {
 			TargetType:  "TrustCenterSetting",
 			CreateField: "trust_center_setting_hero_image_ids",
 			AddField:    "add_trust_center_setting_hero_image_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterSettingHeroImage().
+					Where(predicate.TrustCenterSetting(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_setting_logo",
@@ -14222,6 +16123,13 @@ func init() {
 			TargetType:  "TrustCenterSetting",
 			CreateField: "trust_center_setting_logo_ids",
 			AddField:    "add_trust_center_setting_logo_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.File.Query().
+					Where(predicate.File(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterSettingLogo().
+					Where(predicate.TrustCenterSetting(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaFileDownloadToken.Edges = []EdgeDescriptor{
@@ -14243,6 +16151,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -14251,6 +16167,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assigned_to_group",
@@ -14286,6 +16210,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "check_results",
@@ -14294,6 +16226,14 @@ func init() {
 			TargetType:  "CheckResult",
 			CreateField: "check_result_ids",
 			AddField:    "add_check_result_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryCheckResults().
+					Where(predicate.CheckResult(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "comments",
@@ -14302,6 +16242,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "comment_ids",
 			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_mappings",
@@ -14310,6 +16257,13 @@ func init() {
 			TargetType:  "FindingControl",
 			CreateField: "control_mapping_ids",
 			AddField:    "add_control_mapping_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryControlMappings().
+					Where(predicate.FindingControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -14343,6 +16297,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.FindingControl.Query().
+					Where(findingcontrol.FindingID(sourceID), findingcontrol.ControlIDIn(targetIDs...)).
+					Select(findingcontrol.FieldControlID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "directory_accounts",
@@ -14351,6 +16311,14 @@ func init() {
 			TargetType:  "DirectoryAccount",
 			CreateField: "directory_account_ids",
 			AddField:    "add_directory_account_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryAccounts().
+					Where(predicate.DirectoryAccount(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -14359,6 +16327,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -14367,6 +16343,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -14384,6 +16368,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "finding_status",
@@ -14401,6 +16392,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -14409,6 +16408,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -14417,6 +16424,14 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_owner_group",
@@ -14461,6 +16476,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -14469,6 +16492,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviewed_by_group",
@@ -14504,6 +16535,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -14512,6 +16551,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -14520,6 +16567,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -14537,6 +16592,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -14545,6 +16608,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -14553,6 +16624,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -14561,6 +16640,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Finding.Query().
+					Where(predicate.Finding(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaFindingControl.Edges = []EdgeDescriptor{
@@ -14609,6 +16695,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_blocked_group_ids",
 			AddField:    "add_action_plan_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryActionPlanBlockedGroups().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "action_plan_editors",
@@ -14617,6 +16711,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_editor_ids",
 			AddField:    "add_action_plan_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryActionPlanEditors().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "action_plan_viewers",
@@ -14625,6 +16727,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_viewer_ids",
 			AddField:    "add_action_plan_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryActionPlanViewers().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "avatar_file",
@@ -14642,6 +16752,14 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_blocked_group_ids",
 			AddField:    "add_campaign_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryCampaignBlockedGroups().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaign_editors",
@@ -14650,6 +16768,14 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_editor_ids",
 			AddField:    "add_campaign_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryCampaignEditors().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaign_targets",
@@ -14658,6 +16784,13 @@ func init() {
 			TargetType:  "CampaignTarget",
 			CreateField: "campaign_target_ids",
 			AddField:    "add_campaign_target_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryCampaignTargets().
+					Where(predicate.CampaignTarget(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaign_viewers",
@@ -14666,6 +16799,14 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_viewer_ids",
 			AddField:    "add_campaign_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryCampaignViewers().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -14674,6 +16815,14 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_blocked_groups",
@@ -14682,6 +16831,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_blocked_group_ids",
 			AddField:    "add_control_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryControlBlockedGroups().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_editors",
@@ -14690,6 +16847,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_editor_ids",
 			AddField:    "add_control_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryControlEditors().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_implementation_blocked_groups",
@@ -14698,6 +16863,14 @@ func init() {
 			TargetType:  "ControlImplementation",
 			CreateField: "control_implementation_blocked_group_ids",
 			AddField:    "add_control_implementation_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementationBlockedGroups().
+					Where(predicate.ControlImplementation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_implementation_editors",
@@ -14706,6 +16879,14 @@ func init() {
 			TargetType:  "ControlImplementation",
 			CreateField: "control_implementation_editor_ids",
 			AddField:    "add_control_implementation_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementationEditors().
+					Where(predicate.ControlImplementation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_implementation_viewers",
@@ -14714,6 +16895,14 @@ func init() {
 			TargetType:  "ControlImplementation",
 			CreateField: "control_implementation_viewer_ids",
 			AddField:    "add_control_implementation_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementationViewers().
+					Where(predicate.ControlImplementation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_objective_blocked_groups",
@@ -14722,6 +16911,14 @@ func init() {
 			TargetType:  "ControlObjective",
 			CreateField: "control_objective_blocked_group_ids",
 			AddField:    "add_control_objective_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectiveBlockedGroups().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_objective_editors",
@@ -14730,6 +16927,14 @@ func init() {
 			TargetType:  "ControlObjective",
 			CreateField: "control_objective_editor_ids",
 			AddField:    "add_control_objective_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectiveEditors().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_objective_viewers",
@@ -14738,6 +16943,14 @@ func init() {
 			TargetType:  "ControlObjective",
 			CreateField: "control_objective_viewer_ids",
 			AddField:    "add_control_objective_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectiveViewers().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entity_blocked_groups",
@@ -14746,6 +16959,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_blocked_group_ids",
 			AddField:    "add_entity_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryEntityBlockedGroups().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entity_editors",
@@ -14754,6 +16975,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_editor_ids",
 			AddField:    "add_entity_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryEntityEditors().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "events",
@@ -14762,6 +16991,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -14770,6 +17007,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "finding_blocked_groups",
@@ -14778,6 +17023,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_blocked_group_ids",
 			AddField:    "add_finding_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryFindingBlockedGroups().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "finding_editors",
@@ -14786,6 +17039,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_editor_ids",
 			AddField:    "add_finding_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryFindingEditors().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -14794,6 +17055,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -14802,6 +17070,13 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policy_blocked_groups",
@@ -14810,6 +17085,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_blocked_group_ids",
 			AddField:    "add_internal_policy_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicyBlockedGroups().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policy_editors",
@@ -14818,6 +17101,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_editor_ids",
 			AddField:    "add_internal_policy_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicyEditors().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "invites",
@@ -14826,6 +17117,14 @@ func init() {
 			TargetType:  "Invite",
 			CreateField: "invite_ids",
 			AddField:    "add_invite_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryInvites().
+					Where(predicate.Invite(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "mapped_control_blocked_groups",
@@ -14834,6 +17133,14 @@ func init() {
 			TargetType:  "MappedControl",
 			CreateField: "mapped_control_blocked_group_ids",
 			AddField:    "add_mapped_control_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryMappedControlBlockedGroups().
+					Where(predicate.MappedControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "mapped_control_editors",
@@ -14842,6 +17149,14 @@ func init() {
 			TargetType:  "MappedControl",
 			CreateField: "mapped_control_editor_ids",
 			AddField:    "add_mapped_control_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryMappedControlEditors().
+					Where(predicate.MappedControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "members",
@@ -14850,6 +17165,13 @@ func init() {
 			TargetType:  "GroupMembership",
 			CreateField: "member_ids",
 			AddField:    "add_member_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryMembers().
+					Where(predicate.GroupMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "narrative_blocked_groups",
@@ -14858,6 +17180,14 @@ func init() {
 			TargetType:  "Narrative",
 			CreateField: "narrative_blocked_group_ids",
 			AddField:    "add_narrative_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryNarrativeBlockedGroups().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "narrative_editors",
@@ -14866,6 +17196,14 @@ func init() {
 			TargetType:  "Narrative",
 			CreateField: "narrative_editor_ids",
 			AddField:    "add_narrative_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryNarrativeEditors().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "narrative_viewers",
@@ -14874,6 +17212,14 @@ func init() {
 			TargetType:  "Narrative",
 			CreateField: "narrative_viewer_ids",
 			AddField:    "add_narrative_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryNarrativeViewers().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -14891,6 +17237,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_blocked_group_ids",
 			AddField:    "add_platform_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryPlatformBlockedGroups().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "platform_editors",
@@ -14899,6 +17253,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_editor_ids",
 			AddField:    "add_platform_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryPlatformEditors().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "platform_viewers",
@@ -14907,6 +17269,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_viewer_ids",
 			AddField:    "add_platform_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryPlatformViewers().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "procedure_blocked_groups",
@@ -14915,6 +17285,14 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_blocked_group_ids",
 			AddField:    "add_procedure_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryProcedureBlockedGroups().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "procedure_editors",
@@ -14923,6 +17301,14 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_editor_ids",
 			AddField:    "add_procedure_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryProcedureEditors().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "program_blocked_groups",
@@ -14931,6 +17317,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_blocked_group_ids",
 			AddField:    "add_program_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryProgramBlockedGroups().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "program_editors",
@@ -14939,6 +17333,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_editor_ids",
 			AddField:    "add_program_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryProgramEditors().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "program_viewers",
@@ -14947,6 +17349,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_viewer_ids",
 			AddField:    "add_program_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryProgramViewers().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediation_blocked_groups",
@@ -14955,6 +17365,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_blocked_group_ids",
 			AddField:    "add_remediation_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryRemediationBlockedGroups().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediation_editors",
@@ -14963,6 +17381,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_editor_ids",
 			AddField:    "add_remediation_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryRemediationEditors().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "report_blocked_groups",
@@ -14971,6 +17397,14 @@ func init() {
 			TargetType:  "Report",
 			CreateField: "report_blocked_group_ids",
 			AddField:    "add_report_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryReportBlockedGroups().
+					Where(predicate.Report(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "report_editors",
@@ -14979,6 +17413,14 @@ func init() {
 			TargetType:  "Report",
 			CreateField: "report_editor_ids",
 			AddField:    "add_report_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryReportEditors().
+					Where(predicate.Report(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "report_viewers",
@@ -14987,6 +17429,14 @@ func init() {
 			TargetType:  "Report",
 			CreateField: "report_viewer_ids",
 			AddField:    "add_report_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryReportViewers().
+					Where(predicate.Report(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "review_blocked_groups",
@@ -14995,6 +17445,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_blocked_group_ids",
 			AddField:    "add_review_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryReviewBlockedGroups().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "review_editors",
@@ -15003,6 +17461,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_editor_ids",
 			AddField:    "add_review_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryReviewEditors().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risk_blocked_groups",
@@ -15011,6 +17477,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_blocked_group_ids",
 			AddField:    "add_risk_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryRiskBlockedGroups().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risk_editors",
@@ -15019,6 +17493,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_editor_ids",
 			AddField:    "add_risk_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryRiskEditors().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risk_viewers",
@@ -15027,6 +17509,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_viewer_ids",
 			AddField:    "add_risk_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryRiskViewers().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scan_blocked_groups",
@@ -15035,6 +17525,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_blocked_group_ids",
 			AddField:    "add_scan_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryScanBlockedGroups().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scan_editors",
@@ -15043,6 +17541,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_editor_ids",
 			AddField:    "add_scan_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryScanEditors().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "setting",
@@ -15059,6 +17565,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Group.Query().
+					Where(predicate.Group(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "users",
@@ -15092,6 +17606,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.GroupMembership.Query().
+					Where(groupmembership.GroupID(sourceID), groupmembership.UserIDIn(targetIDs...)).
+					Select(groupmembership.FieldUserID).
+					Strings(ctx)
+			},
 		},
 	}
 	SchemaGroupMembership.Edges = []EdgeDescriptor{
@@ -15102,6 +17622,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.GroupMembership.Query().
+					Where(predicate.GroupMembership(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "group",
@@ -15150,6 +17678,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Hush.Query().
+					Where(predicate.Hush(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -15158,6 +17694,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Hush.Query().
+					Where(predicate.Hush(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -15166,6 +17710,14 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Hush.Query().
+					Where(predicate.Hush(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -15185,6 +17737,13 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "access_platform_ids",
 			AddField:    "add_access_platform_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryAccessPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assessment_responses",
@@ -15193,6 +17752,13 @@ func init() {
 			TargetType:  "AssessmentResponse",
 			CreateField: "assessment_response_ids",
 			AddField:    "add_assessment_response_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryAssessmentResponses().
+					Where(predicate.AssessmentResponse(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assessments",
@@ -15201,6 +17767,14 @@ func init() {
 			TargetType:  "Assessment",
 			CreateField: "assessment_ids",
 			AddField:    "add_assessment_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryAssessments().
+					Where(predicate.Assessment(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -15209,6 +17783,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -15217,6 +17799,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -15225,6 +17814,14 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -15233,6 +17830,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_accounts",
@@ -15241,6 +17846,13 @@ func init() {
 			TargetType:  "DirectoryAccount",
 			CreateField: "directory_account_ids",
 			AddField:    "add_directory_account_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryAccounts().
+					Where(predicate.DirectoryAccount(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -15249,6 +17861,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "employer",
@@ -15266,6 +17885,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -15283,6 +17910,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -15291,6 +17926,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -15299,6 +17942,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_owner_group",
@@ -15334,6 +17984,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -15351,6 +18009,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -15368,6 +18034,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -15376,6 +18050,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "templates",
@@ -15384,6 +18066,14 @@ func init() {
 			TargetType:  "Template",
 			CreateField: "template_ids",
 			AddField:    "add_template_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryTemplates().
+					Where(predicate.Template(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "user",
@@ -15401,6 +18091,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -15409,6 +18106,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IdentityHolder.Query().
+					Where(predicate.IdentityHolder(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaImpersonationEvent.Edges = []EdgeDescriptor{
@@ -15448,6 +18152,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -15456,6 +18168,13 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -15464,6 +18183,13 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "check_results",
@@ -15472,6 +18198,13 @@ func init() {
 			TargetType:  "CheckResult",
 			CreateField: "check_result_ids",
 			AddField:    "add_check_result_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryCheckResults().
+					Where(predicate.CheckResult(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_accounts",
@@ -15480,6 +18213,13 @@ func init() {
 			TargetType:  "DirectoryAccount",
 			CreateField: "directory_account_ids",
 			AddField:    "add_directory_account_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryAccounts().
+					Where(predicate.DirectoryAccount(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_groups",
@@ -15488,6 +18228,13 @@ func init() {
 			TargetType:  "DirectoryGroup",
 			CreateField: "directory_group_ids",
 			AddField:    "add_directory_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryGroups().
+					Where(predicate.DirectoryGroup(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_memberships",
@@ -15496,6 +18243,13 @@ func init() {
 			TargetType:  "DirectoryMembership",
 			CreateField: "directory_membership_ids",
 			AddField:    "add_directory_membership_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryMemberships().
+					Where(predicate.DirectoryMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "email_templates",
@@ -15504,6 +18258,13 @@ func init() {
 			TargetType:  "EmailTemplate",
 			CreateField: "email_template_ids",
 			AddField:    "add_email_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryEmailTemplates().
+					Where(predicate.EmailTemplate(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -15512,6 +18273,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -15529,6 +18298,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -15537,6 +18314,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -15545,6 +18329,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -15553,6 +18345,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_webhooks",
@@ -15561,6 +18360,13 @@ func init() {
 			TargetType:  "IntegrationWebhook",
 			CreateField: "integration_webhook_ids",
 			AddField:    "add_integration_webhook_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationWebhooks().
+					Where(predicate.IntegrationWebhook(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -15569,6 +18375,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "notification_templates",
@@ -15577,6 +18391,13 @@ func init() {
 			TargetType:  "NotificationTemplate",
 			CreateField: "notification_template_ids",
 			AddField:    "add_notification_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryNotificationTemplates().
+					Where(predicate.NotificationTemplate(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -15603,6 +18424,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviews",
@@ -15611,6 +18440,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -15628,6 +18465,14 @@ func init() {
 			TargetType:  "Hush",
 			CreateField: "secret_ids",
 			AddField:    "add_secret_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QuerySecrets().
+					Where(predicate.Hush(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -15636,6 +18481,13 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -15644,6 +18496,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Integration.Query().
+					Where(predicate.Integration(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaIntegrationRun.Edges = []EdgeDescriptor{
@@ -15654,6 +18514,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -15662,6 +18530,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "check_results",
@@ -15670,6 +18546,14 @@ func init() {
 			TargetType:  "CheckResult",
 			CreateField: "check_result_ids",
 			AddField:    "add_check_result_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryCheckResults().
+					Where(predicate.CheckResult(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "contacts",
@@ -15678,6 +18562,14 @@ func init() {
 			TargetType:  "Contact",
 			CreateField: "contact_ids",
 			AddField:    "add_contact_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryContacts().
+					Where(predicate.Contact(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_accounts",
@@ -15686,6 +18578,14 @@ func init() {
 			TargetType:  "DirectoryAccount",
 			CreateField: "directory_account_ids",
 			AddField:    "add_directory_account_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryAccounts().
+					Where(predicate.DirectoryAccount(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_groups",
@@ -15694,6 +18594,14 @@ func init() {
 			TargetType:  "DirectoryGroup",
 			CreateField: "directory_group_ids",
 			AddField:    "add_directory_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryGroups().
+					Where(predicate.DirectoryGroup(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_memberships",
@@ -15702,6 +18610,14 @@ func init() {
 			TargetType:  "DirectoryMembership",
 			CreateField: "directory_membership_ids",
 			AddField:    "add_directory_membership_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryMemberships().
+					Where(predicate.DirectoryMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -15710,6 +18626,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -15718,6 +18642,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration",
@@ -15735,6 +18667,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -15752,6 +18692,30 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
+		},
+		{
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -15760,6 +18724,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -15768,6 +18740,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.IntegrationRun.Query().
+					Where(predicate.IntegrationRun(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaIntegrationWebhook.Edges = []EdgeDescriptor{
@@ -15833,6 +18813,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.AssessmentPolicy.Query().
+					Where(assessmentpolicy.InternalPolicyID(sourceID), assessmentpolicy.AssessmentIDIn(targetIDs...)).
+					Select(assessmentpolicy.FieldAssessmentID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -15841,6 +18827,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -15849,14 +18843,29 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "comments",
-			Label:            "Comments",
-			Target:           SchemaNote,
-			TargetType:       "Note",
-			CreateField:      "comment_ids",
-			AddField:         "add_comment_ids",
+			Name:        "comments",
+			Label:       "Comments",
+			Target:      SchemaNote,
+			TargetType:  "Note",
+			CreateField: "comment_ids",
+			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -15866,6 +18875,13 @@ func init() {
 			TargetType:  "ControlImplementation",
 			CreateField: "control_implementation_ids",
 			AddField:    "add_control_implementation_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementations().
+					Where(predicate.ControlImplementation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_objectives",
@@ -15874,6 +18890,14 @@ func init() {
 			TargetType:  "ControlObjective",
 			CreateField: "control_objective_ids",
 			AddField:    "add_control_objective_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectives().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -15882,6 +18906,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:             "delegate",
@@ -15894,12 +18926,19 @@ func init() {
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "discussions",
-			Label:            "Discussions",
-			Target:           SchemaDiscussion,
-			TargetType:       "Discussion",
-			CreateField:      "discussion_ids",
-			AddField:         "add_discussion_ids",
+			Name:        "discussions",
+			Label:       "Discussions",
+			Target:      SchemaDiscussion,
+			TargetType:  "Discussion",
+			CreateField: "discussion_ids",
+			AddField:    "add_discussion_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryDiscussions().
+					Where(predicate.Discussion(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -15909,6 +18948,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -15917,6 +18964,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -15944,6 +18999,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -15952,6 +19015,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -15960,6 +19031,14 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policy_kind",
@@ -15977,6 +19056,14 @@ func init() {
 			TargetType:  "Narrative",
 			CreateField: "narrative_ids",
 			AddField:    "add_narrative_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryNarratives().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -15994,6 +19081,13 @@ func init() {
 			TargetType:  "AssessmentPolicy",
 			CreateField: "policy_attestation_ids",
 			AddField:    "add_policy_attestation_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryPolicyAttestations().
+					Where(predicate.AssessmentPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "procedures",
@@ -16002,6 +19096,14 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -16010,6 +19112,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviews",
@@ -16018,6 +19128,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -16026,6 +19144,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -16043,6 +19169,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -16051,14 +19185,29 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "workflow_object_refs",
-			Label:            "WorkflowObjectRefs",
-			Target:           SchemaWorkflowObjectRef,
-			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflow_object_ref_ids",
-			AddField:         "add_workflow_object_ref_ids",
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.InternalPolicy.Query().
+					Where(predicate.InternalPolicy(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 	}
@@ -16070,6 +19219,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Invite.Query().
+					Where(predicate.Invite(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "groups",
@@ -16078,6 +19235,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_ids",
 			AddField:    "add_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Invite.Query().
+					Where(predicate.Invite(sql.FieldEQ("id", sourceID))).
+					QueryGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -16097,6 +19262,13 @@ func init() {
 			TargetType:  "CustomDomain",
 			CreateField: "custom_domain_ids",
 			AddField:    "add_custom_domain_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.MappableDomain.Query().
+					Where(predicate.MappableDomain(sql.FieldEQ("id", sourceID))).
+					QueryCustomDomains().
+					Where(predicate.CustomDomain(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaMappedControl.Edges = []EdgeDescriptor{
@@ -16107,6 +19279,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.MappedControl.Query().
+					Where(predicate.MappedControl(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -16115,6 +19295,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.MappedControl.Query().
+					Where(predicate.MappedControl(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "from_controls",
@@ -16123,6 +19311,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "from_control_ids",
 			AddField:    "add_from_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.MappedControl.Query().
+					Where(predicate.MappedControl(sql.FieldEQ("id", sourceID))).
+					QueryFromControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "from_subcontrols",
@@ -16131,6 +19327,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "from_subcontrol_ids",
 			AddField:    "add_from_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.MappedControl.Query().
+					Where(predicate.MappedControl(sql.FieldEQ("id", sourceID))).
+					QueryFromSubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -16139,6 +19343,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.MappedControl.Query().
+					Where(predicate.MappedControl(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -16156,6 +19367,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "to_control_ids",
 			AddField:    "add_to_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.MappedControl.Query().
+					Where(predicate.MappedControl(sql.FieldEQ("id", sourceID))).
+					QueryToControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "to_subcontrols",
@@ -16164,6 +19383,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "to_subcontrol_ids",
 			AddField:    "add_to_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.MappedControl.Query().
+					Where(predicate.MappedControl(sql.FieldEQ("id", sourceID))).
+					QueryToSubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaNarrative.Edges = []EdgeDescriptor{
@@ -16174,6 +19401,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Narrative.Query().
+					Where(predicate.Narrative(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -16182,6 +19417,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Narrative.Query().
+					Where(predicate.Narrative(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -16190,6 +19433,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Narrative.Query().
+					Where(predicate.Narrative(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -16198,6 +19448,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Narrative.Query().
+					Where(predicate.Narrative(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -16215,6 +19473,14 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Narrative.Query().
+					Where(predicate.Narrative(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -16223,6 +19489,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Narrative.Query().
+					Where(predicate.Narrative(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "satisfies",
@@ -16231,6 +19505,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "satisfy_ids",
 			AddField:    "add_satisfy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Narrative.Query().
+					Where(predicate.Narrative(sql.FieldEQ("id", sourceID))).
+					QuerySatisfies().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -16239,6 +19521,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Narrative.Query().
+					Where(predicate.Narrative(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaNote.Edges = []EdgeDescriptor{
@@ -16276,6 +19566,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Note.Query().
+					Where(predicate.Note(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "finding",
@@ -16365,6 +19662,13 @@ func init() {
 			TargetType:  "TrustCenterFAQ",
 			CreateField: "trust_center_faq_ids",
 			AddField:    "add_trust_center_faq_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Note.Query().
+					Where(predicate.Note(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterFaqs().
+					Where(predicate.TrustCenterFAQ(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerability",
@@ -16451,6 +19755,13 @@ func init() {
 			TargetType:  "Notification",
 			CreateField: "notification_ids",
 			AddField:    "add_notification_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.NotificationTemplate.Query().
+					Where(predicate.NotificationTemplate(sql.FieldEQ("id", sourceID))).
+					QueryNotifications().
+					Where(predicate.Notification(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -16490,6 +19801,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgMembership.Query().
+					Where(predicate.OrgMembership(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "organization",
@@ -16518,6 +19837,14 @@ func init() {
 			TargetType:  "OrgPrice",
 			CreateField: "org_price_ids",
 			AddField:    "add_org_price_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgModule.Query().
+					Where(predicate.OrgModule(sql.FieldEQ("id", sourceID))).
+					QueryOrgPrices().
+					Where(predicate.OrgPrice(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_products",
@@ -16526,6 +19853,13 @@ func init() {
 			TargetType:  "OrgProduct",
 			CreateField: "org_product_ids",
 			AddField:    "add_org_product_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgModule.Query().
+					Where(predicate.OrgModule(sql.FieldEQ("id", sourceID))).
+					QueryOrgProducts().
+					Where(predicate.OrgProduct(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_subscription",
@@ -16554,6 +19888,14 @@ func init() {
 			TargetType:  "OrgModule",
 			CreateField: "org_module_ids",
 			AddField:    "add_org_module_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgPrice.Query().
+					Where(predicate.OrgPrice(sql.FieldEQ("id", sourceID))).
+					QueryOrgModules().
+					Where(predicate.OrgModule(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_products",
@@ -16562,6 +19904,14 @@ func init() {
 			TargetType:  "OrgProduct",
 			CreateField: "org_product_ids",
 			AddField:    "add_org_product_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgPrice.Query().
+					Where(predicate.OrgPrice(sql.FieldEQ("id", sourceID))).
+					QueryOrgProducts().
+					Where(predicate.OrgProduct(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_subscription",
@@ -16590,6 +19940,13 @@ func init() {
 			TargetType:  "OrgModule",
 			CreateField: "org_module_ids",
 			AddField:    "add_org_module_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgProduct.Query().
+					Where(predicate.OrgProduct(sql.FieldEQ("id", sourceID))).
+					QueryOrgModules().
+					Where(predicate.OrgModule(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_prices",
@@ -16598,6 +19955,14 @@ func init() {
 			TargetType:  "OrgPrice",
 			CreateField: "org_price_ids",
 			AddField:    "add_org_price_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgProduct.Query().
+					Where(predicate.OrgProduct(sql.FieldEQ("id", sourceID))).
+					QueryOrgPrices().
+					Where(predicate.OrgPrice(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_subscription",
@@ -16626,6 +19991,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgSubscription.Query().
+					Where(predicate.OrgSubscription(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "modules",
@@ -16634,6 +20007,13 @@ func init() {
 			TargetType:  "OrgModule",
 			CreateField: "module_ids",
 			AddField:    "add_module_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgSubscription.Query().
+					Where(predicate.OrgSubscription(sql.FieldEQ("id", sourceID))).
+					QueryModules().
+					Where(predicate.OrgModule(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -16651,6 +20031,13 @@ func init() {
 			TargetType:  "OrgPrice",
 			CreateField: "price_ids",
 			AddField:    "add_price_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgSubscription.Query().
+					Where(predicate.OrgSubscription(sql.FieldEQ("id", sourceID))).
+					QueryPrices().
+					Where(predicate.OrgPrice(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "products",
@@ -16659,6 +20046,13 @@ func init() {
 			TargetType:  "OrgProduct",
 			CreateField: "product_ids",
 			AddField:    "add_product_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgSubscription.Query().
+					Where(predicate.OrgSubscription(sql.FieldEQ("id", sourceID))).
+					QueryProducts().
+					Where(predicate.OrgProduct(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaOrganization.Edges = []EdgeDescriptor{
@@ -16669,6 +20063,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "action_plan_creator_ids",
 			AddField:    "add_action_plan_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryActionPlanCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "action_plans",
@@ -16677,6 +20078,13 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "api_token_creators",
@@ -16685,6 +20093,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "api_token_creator_ids",
 			AddField:    "add_api_token_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryAPITokenCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "api_tokens",
@@ -16693,6 +20108,13 @@ func init() {
 			TargetType:  "APIToken",
 			CreateField: "api_token_ids",
 			AddField:    "add_api_token_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryAPITokens().
+					Where(predicate.APIToken(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assessment_creators",
@@ -16701,6 +20123,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "assessment_creator_ids",
 			AddField:    "add_assessment_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryAssessmentCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assessment_policies",
@@ -16709,6 +20138,13 @@ func init() {
 			TargetType:  "AssessmentPolicy",
 			CreateField: "assessment_policy_ids",
 			AddField:    "add_assessment_policy_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryAssessmentPolicies().
+					Where(predicate.AssessmentPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assessment_policy_creators",
@@ -16717,6 +20153,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "assessment_policy_creator_ids",
 			AddField:    "add_assessment_policy_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryAssessmentPolicyCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assessment_responses",
@@ -16725,6 +20168,13 @@ func init() {
 			TargetType:  "AssessmentResponse",
 			CreateField: "assessment_response_ids",
 			AddField:    "add_assessment_response_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryAssessmentResponses().
+					Where(predicate.AssessmentResponse(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assessments",
@@ -16733,6 +20183,13 @@ func init() {
 			TargetType:  "Assessment",
 			CreateField: "assessment_ids",
 			AddField:    "add_assessment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryAssessments().
+					Where(predicate.Assessment(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "asset_creators",
@@ -16741,6 +20198,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "asset_creator_ids",
 			AddField:    "add_asset_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryAssetCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -16749,6 +20213,13 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "avatar_file",
@@ -16774,6 +20245,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "campaign_creator_ids",
 			AddField:    "add_campaign_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCampaignCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaign_manager",
@@ -16782,6 +20260,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "campaign_manager_ids",
 			AddField:    "add_campaign_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCampaignManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaign_target_creators",
@@ -16790,6 +20275,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "campaign_target_creator_ids",
 			AddField:    "add_campaign_target_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCampaignTargetCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaign_targets",
@@ -16798,6 +20290,13 @@ func init() {
 			TargetType:  "CampaignTarget",
 			CreateField: "campaign_target_ids",
 			AddField:    "add_campaign_target_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCampaignTargets().
+					Where(predicate.CampaignTarget(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -16806,6 +20305,13 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "check_result_creators",
@@ -16814,6 +20320,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "check_result_creator_ids",
 			AddField:    "add_check_result_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCheckResultCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "check_results",
@@ -16822,6 +20335,13 @@ func init() {
 			TargetType:  "CheckResult",
 			CreateField: "check_result_ids",
 			AddField:    "add_check_result_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCheckResults().
+					Where(predicate.CheckResult(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "children",
@@ -16830,6 +20350,13 @@ func init() {
 			TargetType:  "Organization",
 			CreateField: "children_ids",
 			AddField:    "add_children_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryChildren().
+					Where(predicate.Organization(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "compliance_manager",
@@ -16838,6 +20365,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "compliance_manager_ids",
 			AddField:    "add_compliance_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryComplianceManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "contact_creators",
@@ -16846,6 +20380,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "contact_creator_ids",
 			AddField:    "add_contact_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryContactCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "contacts",
@@ -16854,6 +20395,13 @@ func init() {
 			TargetType:  "Contact",
 			CreateField: "contact_ids",
 			AddField:    "add_contact_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryContacts().
+					Where(predicate.Contact(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_creators",
@@ -16862,6 +20410,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "control_creator_ids",
 			AddField:    "add_control_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryControlCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_implementation_creators",
@@ -16870,6 +20425,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "control_implementation_creator_ids",
 			AddField:    "add_control_implementation_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementationCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_implementations",
@@ -16878,6 +20440,13 @@ func init() {
 			TargetType:  "ControlImplementation",
 			CreateField: "control_implementation_ids",
 			AddField:    "add_control_implementation_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementations().
+					Where(predicate.ControlImplementation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_objective_creators",
@@ -16886,6 +20455,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "control_objective_creator_ids",
 			AddField:    "add_control_objective_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectiveCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_objectives",
@@ -16894,6 +20470,13 @@ func init() {
 			TargetType:  "ControlObjective",
 			CreateField: "control_objective_ids",
 			AddField:    "add_control_objective_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectives().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -16902,6 +20485,13 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "custom_domain_creators",
@@ -16910,6 +20500,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "custom_domain_creator_ids",
 			AddField:    "add_custom_domain_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCustomDomainCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "custom_domains",
@@ -16918,6 +20515,13 @@ func init() {
 			TargetType:  "CustomDomain",
 			CreateField: "custom_domain_ids",
 			AddField:    "add_custom_domain_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCustomDomains().
+					Where(predicate.CustomDomain(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "custom_type_enum_creators",
@@ -16926,6 +20530,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "custom_type_enum_creator_ids",
 			AddField:    "add_custom_type_enum_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCustomTypeEnumCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "custom_type_enums",
@@ -16934,6 +20545,13 @@ func init() {
 			TargetType:  "CustomTypeEnum",
 			CreateField: "custom_type_enum_ids",
 			AddField:    "add_custom_type_enum_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryCustomTypeEnums().
+					Where(predicate.CustomTypeEnum(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_account_creators",
@@ -16942,6 +20560,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "directory_account_creator_ids",
 			AddField:    "add_directory_account_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryAccountCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_accounts",
@@ -16950,6 +20575,13 @@ func init() {
 			TargetType:  "DirectoryAccount",
 			CreateField: "directory_account_ids",
 			AddField:    "add_directory_account_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryAccounts().
+					Where(predicate.DirectoryAccount(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_group_creators",
@@ -16958,6 +20590,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "directory_group_creator_ids",
 			AddField:    "add_directory_group_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryGroupCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_groups",
@@ -16966,6 +20605,13 @@ func init() {
 			TargetType:  "DirectoryGroup",
 			CreateField: "directory_group_ids",
 			AddField:    "add_directory_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryGroups().
+					Where(predicate.DirectoryGroup(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_membership_creators",
@@ -16974,6 +20620,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "directory_membership_creator_ids",
 			AddField:    "add_directory_membership_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryMembershipCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_memberships",
@@ -16982,6 +20635,13 @@ func init() {
 			TargetType:  "DirectoryMembership",
 			CreateField: "directory_membership_ids",
 			AddField:    "add_directory_membership_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryMemberships().
+					Where(predicate.DirectoryMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "discussion_creators",
@@ -16990,6 +20650,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "discussion_creator_ids",
 			AddField:    "add_discussion_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDiscussionCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "discussions",
@@ -16998,6 +20665,13 @@ func init() {
 			TargetType:  "Discussion",
 			CreateField: "discussion_ids",
 			AddField:    "add_discussion_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDiscussions().
+					Where(predicate.Discussion(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "dns_verifications",
@@ -17006,6 +20680,13 @@ func init() {
 			TargetType:  "DNSVerification",
 			CreateField: "dns_verification_ids",
 			AddField:    "add_dns_verification_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDNSVerifications().
+					Where(predicate.DNSVerification(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "document_data_creators",
@@ -17014,6 +20695,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "document_data_creator_ids",
 			AddField:    "add_document_data_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDocumentDataCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "documents",
@@ -17022,6 +20710,13 @@ func init() {
 			TargetType:  "DocumentData",
 			CreateField: "document_ids",
 			AddField:    "add_document_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryDocuments().
+					Where(predicate.DocumentData(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "email_template_creators",
@@ -17030,6 +20725,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "email_template_creator_ids",
 			AddField:    "add_email_template_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryEmailTemplateCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "email_templates",
@@ -17038,6 +20740,13 @@ func init() {
 			TargetType:  "EmailTemplate",
 			CreateField: "email_template_ids",
 			AddField:    "add_email_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryEmailTemplates().
+					Where(predicate.EmailTemplate(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -17046,6 +20755,13 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entity_creators",
@@ -17054,6 +20770,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "entity_creator_ids",
 			AddField:    "add_entity_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryEntityCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entity_type_creators",
@@ -17062,6 +20785,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "entity_type_creator_ids",
 			AddField:    "add_entity_type_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryEntityTypeCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entity_types",
@@ -17070,6 +20800,13 @@ func init() {
 			TargetType:  "EntityType",
 			CreateField: "entity_type_ids",
 			AddField:    "add_entity_type_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryEntityTypes().
+					Where(predicate.EntityType(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "events",
@@ -17078,6 +20815,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "evidence",
@@ -17086,6 +20831,13 @@ func init() {
 			TargetType:  "Evidence",
 			CreateField: "evidence_ids",
 			AddField:    "add_evidence_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryEvidence().
+					Where(predicate.Evidence(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "evidence_creators",
@@ -17094,6 +20846,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "evidence_creator_ids",
 			AddField:    "add_evidence_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryEvidenceCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "exports",
@@ -17102,6 +20861,13 @@ func init() {
 			TargetType:  "Export",
 			CreateField: "export_ids",
 			AddField:    "add_export_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryExports().
+					Where(predicate.Export(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "file_creators",
@@ -17110,6 +20876,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "file_creator_ids",
 			AddField:    "add_file_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryFileCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -17118,6 +20891,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "finding_control_creators",
@@ -17126,6 +20907,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "finding_control_creator_ids",
 			AddField:    "add_finding_control_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryFindingControlCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "finding_controls",
@@ -17134,6 +20922,13 @@ func init() {
 			TargetType:  "FindingControl",
 			CreateField: "finding_control_ids",
 			AddField:    "add_finding_control_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryFindingControls().
+					Where(predicate.FindingControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "finding_creators",
@@ -17142,6 +20937,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "finding_creator_ids",
 			AddField:    "add_finding_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryFindingCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -17150,6 +20952,13 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "group_creators",
@@ -17158,6 +20967,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_creator_ids",
 			AddField:    "add_group_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryGroupCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "group_manager",
@@ -17166,6 +20982,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_manager_ids",
 			AddField:    "add_group_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryGroupManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "group_membership_creators",
@@ -17174,6 +20997,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_membership_creator_ids",
 			AddField:    "add_group_membership_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryGroupMembershipCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "group_setting_creators",
@@ -17182,6 +21012,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_setting_creator_ids",
 			AddField:    "add_group_setting_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryGroupSettingCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "groups",
@@ -17190,6 +21027,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_ids",
 			AddField:    "add_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "hush_creators",
@@ -17198,6 +21042,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "hush_creator_ids",
 			AddField:    "add_hush_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryHushCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holder_creators",
@@ -17206,6 +21057,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "identity_holder_creator_ids",
 			AddField:    "add_identity_holder_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolderCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -17214,6 +21072,13 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "impersonation_events",
@@ -17222,6 +21087,13 @@ func init() {
 			TargetType:  "ImpersonationEvent",
 			CreateField: "impersonation_event_ids",
 			AddField:    "add_impersonation_event_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryImpersonationEvents().
+					Where(predicate.ImpersonationEvent(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_manager",
@@ -17230,6 +21102,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "integration_manager_ids",
 			AddField:    "add_integration_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -17238,6 +21117,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_webhooks",
@@ -17246,6 +21132,13 @@ func init() {
 			TargetType:  "IntegrationWebhook",
 			CreateField: "integration_webhook_ids",
 			AddField:    "add_integration_webhook_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationWebhooks().
+					Where(predicate.IntegrationWebhook(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -17254,6 +21147,13 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -17262,6 +21162,13 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policy_creators",
@@ -17270,6 +21177,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "internal_policy_creator_ids",
 			AddField:    "add_internal_policy_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicyCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "invite_creators",
@@ -17278,6 +21192,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "invite_creator_ids",
 			AddField:    "add_invite_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryInviteCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "invites",
@@ -17286,6 +21207,13 @@ func init() {
 			TargetType:  "Invite",
 			CreateField: "invite_ids",
 			AddField:    "add_invite_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryInvites().
+					Where(predicate.Invite(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "mapped_control_creators",
@@ -17294,6 +21222,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "mapped_control_creator_ids",
 			AddField:    "add_mapped_control_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryMappedControlCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "mapped_controls",
@@ -17302,6 +21237,13 @@ func init() {
 			TargetType:  "MappedControl",
 			CreateField: "mapped_control_ids",
 			AddField:    "add_mapped_control_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryMappedControls().
+					Where(predicate.MappedControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "members",
@@ -17310,6 +21252,13 @@ func init() {
 			TargetType:  "OrgMembership",
 			CreateField: "member_ids",
 			AddField:    "add_member_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryMembers().
+					Where(predicate.OrgMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "narrative_creators",
@@ -17318,6 +21267,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "narrative_creator_ids",
 			AddField:    "add_narrative_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryNarrativeCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "narratives",
@@ -17326,6 +21282,13 @@ func init() {
 			TargetType:  "Narrative",
 			CreateField: "narrative_ids",
 			AddField:    "add_narrative_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryNarratives().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "note_creators",
@@ -17334,6 +21297,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "note_creator_ids",
 			AddField:    "add_note_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryNoteCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "notes",
@@ -17342,6 +21312,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "note_ids",
 			AddField:    "add_note_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryNotes().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "notification_preferences",
@@ -17350,6 +21327,13 @@ func init() {
 			TargetType:  "NotificationPreference",
 			CreateField: "notification_preference_ids",
 			AddField:    "add_notification_preference_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryNotificationPreferences().
+					Where(predicate.NotificationPreference(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "notification_template_creators",
@@ -17358,6 +21342,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "notification_template_creator_ids",
 			AddField:    "add_notification_template_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryNotificationTemplateCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "notification_templates",
@@ -17366,6 +21357,13 @@ func init() {
 			TargetType:  "NotificationTemplate",
 			CreateField: "notification_template_ids",
 			AddField:    "add_notification_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryNotificationTemplates().
+					Where(predicate.NotificationTemplate(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "notifications",
@@ -17374,6 +21372,13 @@ func init() {
 			TargetType:  "Notification",
 			CreateField: "notification_ids",
 			AddField:    "add_notification_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryNotifications().
+					Where(predicate.Notification(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_membership_creators",
@@ -17382,6 +21387,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "org_membership_creator_ids",
 			AddField:    "add_org_membership_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryOrgMembershipCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_modules",
@@ -17390,6 +21402,13 @@ func init() {
 			TargetType:  "OrgModule",
 			CreateField: "org_module_ids",
 			AddField:    "add_org_module_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryOrgModules().
+					Where(predicate.OrgModule(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_prices",
@@ -17398,6 +21417,13 @@ func init() {
 			TargetType:  "OrgPrice",
 			CreateField: "org_price_ids",
 			AddField:    "add_org_price_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryOrgPrices().
+					Where(predicate.OrgPrice(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_products",
@@ -17406,6 +21432,13 @@ func init() {
 			TargetType:  "OrgProduct",
 			CreateField: "org_product_ids",
 			AddField:    "add_org_product_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryOrgProducts().
+					Where(predicate.OrgProduct(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_subscriptions",
@@ -17414,6 +21447,13 @@ func init() {
 			TargetType:  "OrgSubscription",
 			CreateField: "org_subscription_ids",
 			AddField:    "add_org_subscription_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryOrgSubscriptions().
+					Where(predicate.OrgSubscription(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "parent",
@@ -17431,6 +21471,14 @@ func init() {
 			TargetType:  "PersonalAccessToken",
 			CreateField: "personal_access_token_ids",
 			AddField:    "add_personal_access_token_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryPersonalAccessTokens().
+					Where(predicate.PersonalAccessToken(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "platform_creators",
@@ -17439,6 +21487,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "platform_creator_ids",
 			AddField:    "add_platform_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryPlatformCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "platforms",
@@ -17447,6 +21502,13 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "policy_manager",
@@ -17455,6 +21517,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "policy_manager_ids",
 			AddField:    "add_policy_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryPolicyManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "procedure_creators",
@@ -17463,6 +21532,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "procedure_creator_ids",
 			AddField:    "add_procedure_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryProcedureCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "procedures",
@@ -17471,6 +21547,13 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "program_creators",
@@ -17479,6 +21562,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "program_creator_ids",
 			AddField:    "add_program_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryProgramCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "program_membership_creators",
@@ -17487,6 +21577,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "program_membership_creator_ids",
 			AddField:    "add_program_membership_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryProgramMembershipCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -17495,6 +21592,13 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "registry_manager",
@@ -17503,6 +21607,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "registry_manager_ids",
 			AddField:    "add_registry_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryRegistryManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediation_creators",
@@ -17511,6 +21622,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "remediation_creator_ids",
 			AddField:    "add_remediation_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryRemediationCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -17519,6 +21637,13 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "report_creators",
@@ -17527,6 +21652,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "report_creator_ids",
 			AddField:    "add_report_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryReportCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "report_membership_creators",
@@ -17535,6 +21667,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "report_membership_creator_ids",
 			AddField:    "add_report_membership_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryReportMembershipCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reports",
@@ -17543,6 +21682,13 @@ func init() {
 			TargetType:  "Report",
 			CreateField: "report_ids",
 			AddField:    "add_report_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryReports().
+					Where(predicate.Report(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "review_creators",
@@ -17551,6 +21697,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "review_creator_ids",
 			AddField:    "add_review_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryReviewCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviews",
@@ -17559,6 +21712,13 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risk_creators",
@@ -17567,6 +21727,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "risk_creator_ids",
 			AddField:    "add_risk_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryRiskCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risk_manager",
@@ -17575,6 +21742,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "risk_manager_ids",
 			AddField:    "add_risk_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryRiskManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -17583,6 +21757,13 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scan_creators",
@@ -17591,6 +21772,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "scan_creator_ids",
 			AddField:    "add_scan_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryScanCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -17599,6 +21787,13 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "secrets",
@@ -17607,6 +21802,13 @@ func init() {
 			TargetType:  "Hush",
 			CreateField: "secret_ids",
 			AddField:    "add_secret_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySecrets().
+					Where(predicate.Hush(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "setting",
@@ -17623,6 +21825,13 @@ func init() {
 			TargetType:  "ShareLinkAccessEvent",
 			CreateField: "share_link_access_event_ids",
 			AddField:    "add_share_link_access_event_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryShareLinkAccessEvents().
+					Where(predicate.ShareLinkAccessEvent(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "share_link_creators",
@@ -17631,6 +21840,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "share_link_creator_ids",
 			AddField:    "add_share_link_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryShareLinkCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "share_link_manager",
@@ -17639,6 +21855,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "share_link_manager_ids",
 			AddField:    "add_share_link_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryShareLinkManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "share_links",
@@ -17647,6 +21870,13 @@ func init() {
 			TargetType:  "ShareLink",
 			CreateField: "share_link_ids",
 			AddField:    "add_share_link_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryShareLinks().
+					Where(predicate.ShareLink(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "sla_definition_creators",
@@ -17655,6 +21885,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "sla_definition_creator_ids",
 			AddField:    "add_sla_definition_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySLADefinitionCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "sla_definitions",
@@ -17663,6 +21900,13 @@ func init() {
 			TargetType:  "SLADefinition",
 			CreateField: "sla_definition_ids",
 			AddField:    "add_sla_definition_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySLADefinitions().
+					Where(predicate.SLADefinition(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "standard_creators",
@@ -17671,6 +21915,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "standard_creator_ids",
 			AddField:    "add_standard_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryStandardCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "standards",
@@ -17679,6 +21930,13 @@ func init() {
 			TargetType:  "Standard",
 			CreateField: "standard_ids",
 			AddField:    "add_standard_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryStandards().
+					Where(predicate.Standard(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subcontrol_creators",
@@ -17687,6 +21945,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "subcontrol_creator_ids",
 			AddField:    "add_subcontrol_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrolCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subcontrols",
@@ -17695,6 +21960,13 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subprocessor_creators",
@@ -17703,6 +21975,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "subprocessor_creator_ids",
 			AddField:    "add_subprocessor_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySubprocessorCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subprocessors",
@@ -17711,6 +21990,13 @@ func init() {
 			TargetType:  "Subprocessor",
 			CreateField: "subprocessor_ids",
 			AddField:    "add_subprocessor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySubprocessors().
+					Where(predicate.Subprocessor(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subscriber_creators",
@@ -17719,6 +22005,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "subscriber_creator_ids",
 			AddField:    "add_subscriber_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySubscriberCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subscribers",
@@ -17727,6 +22020,13 @@ func init() {
 			TargetType:  "Subscriber",
 			CreateField: "subscriber_ids",
 			AddField:    "add_subscriber_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySubscribers().
+					Where(predicate.Subscriber(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "system_detail_creators",
@@ -17735,6 +22035,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "system_detail_creator_ids",
 			AddField:    "add_system_detail_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySystemDetailCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "system_details",
@@ -17743,6 +22050,13 @@ func init() {
 			TargetType:  "SystemDetail",
 			CreateField: "system_detail_ids",
 			AddField:    "add_system_detail_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QuerySystemDetails().
+					Where(predicate.SystemDetail(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tag_definition_creators",
@@ -17751,6 +22065,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "tag_definition_creator_ids",
 			AddField:    "add_tag_definition_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTagDefinitionCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tag_definitions",
@@ -17759,6 +22080,13 @@ func init() {
 			TargetType:  "TagDefinition",
 			CreateField: "tag_definition_ids",
 			AddField:    "add_tag_definition_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTagDefinitions().
+					Where(predicate.TagDefinition(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "task_creators",
@@ -17767,6 +22095,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "task_creator_ids",
 			AddField:    "add_task_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTaskCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -17775,6 +22110,13 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "template_creators",
@@ -17783,6 +22125,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "template_creator_ids",
 			AddField:    "add_template_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTemplateCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "templates",
@@ -17791,6 +22140,13 @@ func init() {
 			TargetType:  "Template",
 			CreateField: "template_ids",
 			AddField:    "add_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTemplates().
+					Where(predicate.Template(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_compliance_creators",
@@ -17799,6 +22155,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "trust_center_compliance_creator_ids",
 			AddField:    "add_trust_center_compliance_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterComplianceCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_creators",
@@ -17807,6 +22170,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "trust_center_creator_ids",
 			AddField:    "add_trust_center_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_doc_creators",
@@ -17815,6 +22185,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "trust_center_doc_creator_ids",
 			AddField:    "add_trust_center_doc_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterDocCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_entity_creators",
@@ -17823,6 +22200,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "trust_center_entity_creator_ids",
 			AddField:    "add_trust_center_entity_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterEntityCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_faq_creators",
@@ -17831,6 +22215,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "trust_center_faq_creator_ids",
 			AddField:    "add_trust_center_faq_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterFaqCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_manager",
@@ -17839,6 +22230,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "trust_center_manager_ids",
 			AddField:    "add_trust_center_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_nda_request_creators",
@@ -17847,6 +22245,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "trust_center_nda_request_creator_ids",
 			AddField:    "add_trust_center_nda_request_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterNdaRequestCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_subprocessor_creators",
@@ -17855,6 +22260,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "trust_center_subprocessor_creator_ids",
 			AddField:    "add_trust_center_subprocessor_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterSubprocessorCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_watermark_config_creators",
@@ -17863,6 +22275,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "trust_center_watermark_config_creator_ids",
 			AddField:    "add_trust_center_watermark_config_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterWatermarkConfigCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_watermark_configs",
@@ -17871,6 +22290,13 @@ func init() {
 			TargetType:  "TrustCenterWatermarkConfig",
 			CreateField: "trust_center_watermark_config_ids",
 			AddField:    "add_trust_center_watermark_config_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterWatermarkConfigs().
+					Where(predicate.TrustCenterWatermarkConfig(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_centers",
@@ -17879,6 +22305,13 @@ func init() {
 			TargetType:  "TrustCenter",
 			CreateField: "trust_center_ids",
 			AddField:    "add_trust_center_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenters().
+					Where(predicate.TrustCenter(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "users",
@@ -17912,6 +22345,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgMembership.Query().
+					Where(orgmembership.OrganizationID(sourceID), orgmembership.UserIDIn(targetIDs...)).
+					Select(orgmembership.FieldUserID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "vendor_risk_score_creators",
@@ -17920,6 +22359,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "vendor_risk_score_creator_ids",
 			AddField:    "add_vendor_risk_score_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryVendorRiskScoreCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vendor_risk_scores",
@@ -17928,6 +22374,13 @@ func init() {
 			TargetType:  "VendorRiskScore",
 			CreateField: "vendor_risk_score_ids",
 			AddField:    "add_vendor_risk_score_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryVendorRiskScores().
+					Where(predicate.VendorRiskScore(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vendor_scoring_config_creators",
@@ -17936,6 +22389,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "vendor_scoring_config_creator_ids",
 			AddField:    "add_vendor_scoring_config_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryVendorScoringConfigCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vendor_scoring_configs",
@@ -17944,6 +22404,13 @@ func init() {
 			TargetType:  "VendorScoringConfig",
 			CreateField: "vendor_scoring_config_ids",
 			AddField:    "add_vendor_scoring_config_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryVendorScoringConfigs().
+					Where(predicate.VendorScoringConfig(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -17952,6 +22419,13 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerability_creators",
@@ -17960,6 +22434,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "vulnerability_creator_ids",
 			AddField:    "add_vulnerability_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilityCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_assignment_targets",
@@ -17968,6 +22449,13 @@ func init() {
 			TargetType:  "WorkflowAssignmentTarget",
 			CreateField: "workflow_assignment_target_ids",
 			AddField:    "add_workflow_assignment_target_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowAssignmentTargets().
+					Where(predicate.WorkflowAssignmentTarget(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_assignments",
@@ -17976,6 +22464,13 @@ func init() {
 			TargetType:  "WorkflowAssignment",
 			CreateField: "workflow_assignment_ids",
 			AddField:    "add_workflow_assignment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowAssignments().
+					Where(predicate.WorkflowAssignment(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_definition_creators",
@@ -17984,6 +22479,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "workflow_definition_creator_ids",
 			AddField:    "add_workflow_definition_creator_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowDefinitionCreators().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_definitions",
@@ -17992,6 +22494,13 @@ func init() {
 			TargetType:  "WorkflowDefinition",
 			CreateField: "workflow_definition_ids",
 			AddField:    "add_workflow_definition_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowDefinitions().
+					Where(predicate.WorkflowDefinition(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_events",
@@ -18000,6 +22509,13 @@ func init() {
 			TargetType:  "WorkflowEvent",
 			CreateField: "workflow_event_ids",
 			AddField:    "add_workflow_event_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowEvents().
+					Where(predicate.WorkflowEvent(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_instances",
@@ -18008,6 +22524,13 @@ func init() {
 			TargetType:  "WorkflowInstance",
 			CreateField: "workflow_instance_ids",
 			AddField:    "add_workflow_instance_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowInstances().
+					Where(predicate.WorkflowInstance(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_manager",
@@ -18016,6 +22539,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "workflow_manager_ids",
 			AddField:    "add_workflow_manager_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowManager().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -18024,6 +22554,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_proposals",
@@ -18032,6 +22569,13 @@ func init() {
 			TargetType:  "WorkflowProposal",
 			CreateField: "workflow_proposal_ids",
 			AddField:    "add_workflow_proposal_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Organization.Query().
+					Where(predicate.Organization(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowProposals().
+					Where(predicate.WorkflowProposal(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaOrganizationBrandingSetting.Edges = []EdgeDescriptor{
@@ -18053,6 +22597,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrganizationSetting.Query().
+					Where(predicate.OrganizationSetting(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "organization",
@@ -18083,6 +22635,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.PersonalAccessToken.Query().
+					Where(predicate.PersonalAccessToken(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "organizations",
@@ -18091,6 +22651,14 @@ func init() {
 			TargetType:  "Organization",
 			CreateField: "organization_ids",
 			AddField:    "add_organization_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.PersonalAccessToken.Query().
+					Where(predicate.PersonalAccessToken(sql.FieldEQ("id", sourceID))).
+					QueryOrganizations().
+					Where(predicate.Organization(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -18119,6 +22687,14 @@ func init() {
 			TargetType:  "Standard",
 			CreateField: "applicable_framework_ids",
 			AddField:    "add_applicable_framework_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryApplicableFrameworks().
+					Where(predicate.Standard(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "architecture_diagrams",
@@ -18127,6 +22703,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "architecture_diagram_ids",
 			AddField:    "add_architecture_diagram_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryArchitectureDiagrams().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assessments",
@@ -18135,6 +22718,14 @@ func init() {
 			TargetType:  "Assessment",
 			CreateField: "assessment_ids",
 			AddField:    "add_assessment_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryAssessments().
+					Where(predicate.Assessment(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -18143,6 +22734,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -18151,6 +22750,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "business_owner_group",
@@ -18186,6 +22793,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "criticality",
@@ -18203,6 +22818,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "data_flow_diagram_ids",
 			AddField:    "add_data_flow_diagram_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryDataFlowDiagrams().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_accounts",
@@ -18211,6 +22833,13 @@ func init() {
 			TargetType:  "DirectoryAccount",
 			CreateField: "directory_account_ids",
 			AddField:    "add_directory_account_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryAccounts().
+					Where(predicate.DirectoryAccount(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_groups",
@@ -18219,6 +22848,13 @@ func init() {
 			TargetType:  "DirectoryGroup",
 			CreateField: "directory_group_ids",
 			AddField:    "add_directory_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryGroups().
+					Where(predicate.DirectoryGroup(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "directory_memberships",
@@ -18227,6 +22863,13 @@ func init() {
 			TargetType:  "DirectoryMembership",
 			CreateField: "directory_membership_ids",
 			AddField:    "add_directory_membership_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryDirectoryMemberships().
+					Where(predicate.DirectoryMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -18235,6 +22878,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "encryption_status",
@@ -18252,6 +22903,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -18269,6 +22928,14 @@ func init() {
 			TargetType:  "Evidence",
 			CreateField: "evidence_ids",
 			AddField:    "add_evidence_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryEvidence().
+					Where(predicate.Evidence(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -18277,6 +22944,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "generated_scans",
@@ -18285,6 +22960,13 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "generated_scan_ids",
 			AddField:    "add_generated_scan_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryGeneratedScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -18293,6 +22975,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -18301,6 +22991,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -18309,6 +23006,13 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_owner_group",
@@ -18344,6 +23048,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "out_of_scope_asset_ids",
 			AddField:    "add_out_of_scope_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryOutOfScopeAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "out_of_scope_vendors",
@@ -18352,6 +23064,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "out_of_scope_vendor_ids",
 			AddField:    "add_out_of_scope_vendor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryOutOfScopeVendors().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -18396,6 +23116,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -18404,6 +23132,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -18457,6 +23193,13 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "source_asset_ids",
 			AddField:    "add_source_asset_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QuerySourceAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "source_entities",
@@ -18465,6 +23208,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "source_entity_ids",
 			AddField:    "add_source_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QuerySourceEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "system_details",
@@ -18473,6 +23224,14 @@ func init() {
 			TargetType:  "SystemDetail",
 			CreateField: "system_detail_ids",
 			AddField:    "add_system_detail_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QuerySystemDetails().
+					Where(predicate.SystemDetail(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -18481,6 +23240,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "technical_owner_group",
@@ -18516,6 +23283,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "trust_boundary_diagram_ids",
 			AddField:    "add_trust_boundary_diagram_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryTrustBoundaryDiagrams().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -18524,6 +23298,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -18532,6 +23314,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Platform.Query().
+					Where(predicate.Platform(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaProcedure.Edges = []EdgeDescriptor{
@@ -18552,23 +23341,46 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "comments",
-			Label:            "Comments",
-			Target:           SchemaNote,
-			TargetType:       "Note",
-			CreateField:      "comment_ids",
-			AddField:         "add_comment_ids",
+			Name:        "comments",
+			Label:       "Comments",
+			Target:      SchemaNote,
+			TargetType:  "Note",
+			CreateField: "comment_ids",
+			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "controls",
-			Label:            "Controls",
-			Target:           SchemaControl,
-			TargetType:       "Control",
-			CreateField:      "control_ids",
-			AddField:         "add_control_ids",
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -18582,12 +23394,19 @@ func init() {
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "discussions",
-			Label:            "Discussions",
-			Target:           SchemaDiscussion,
-			TargetType:       "Discussion",
-			CreateField:      "discussion_ids",
-			AddField:         "add_discussion_ids",
+			Name:        "discussions",
+			Label:       "Discussions",
+			Target:      SchemaDiscussion,
+			TargetType:  "Discussion",
+			CreateField: "discussion_ids",
+			AddField:    "add_discussion_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryDiscussions().
+					Where(predicate.Discussion(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -18597,6 +23416,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -18624,23 +23451,47 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "internal_policies",
-			Label:            "InternalPolicies",
-			Target:           SchemaInternalPolicy,
-			TargetType:       "InternalPolicy",
-			CreateField:      "internal_policy_ids",
-			AddField:         "add_internal_policy_ids",
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "narratives",
-			Label:            "Narratives",
-			Target:           SchemaNarrative,
-			TargetType:       "Narrative",
-			CreateField:      "narrative_ids",
-			AddField:         "add_narrative_ids",
+			Name:        "narratives",
+			Label:       "Narratives",
+			Target:      SchemaNarrative,
+			TargetType:  "Narrative",
+			CreateField: "narrative_ids",
+			AddField:    "add_narrative_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryNarratives().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -18662,21 +23513,37 @@ func init() {
 			Field:       "procedure_kind_id",
 		},
 		{
-			Name:             "programs",
-			Label:            "Programs",
-			Target:           SchemaProgram,
-			TargetType:       "Program",
-			CreateField:      "program_ids",
-			AddField:         "add_program_ids",
+			Name:        "programs",
+			Label:       "Programs",
+			Target:      SchemaProgram,
+			TargetType:  "Program",
+			CreateField: "program_ids",
+			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "risks",
-			Label:            "Risks",
-			Target:           SchemaRisk,
-			TargetType:       "Risk",
-			CreateField:      "risk_ids",
-			AddField:         "add_risk_ids",
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -18689,30 +23556,53 @@ func init() {
 			Field:       "scope_id",
 		},
 		{
-			Name:             "subcontrols",
-			Label:            "Subcontrols",
-			Target:           SchemaSubcontrol,
-			TargetType:       "Subcontrol",
-			CreateField:      "subcontrol_ids",
-			AddField:         "add_subcontrol_ids",
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "tasks",
-			Label:            "Tasks",
-			Target:           SchemaTask,
-			TargetType:       "Task",
-			CreateField:      "task_ids",
-			AddField:         "add_task_ids",
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "workflow_object_refs",
-			Label:            "WorkflowObjectRefs",
-			Target:           SchemaWorkflowObjectRef,
-			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflow_object_ref_ids",
-			AddField:         "add_workflow_object_ref_ids",
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Procedure.Query().
+					Where(predicate.Procedure(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 	}
@@ -18724,6 +23614,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -18732,6 +23630,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_objectives",
@@ -18740,6 +23646,14 @@ func init() {
 			TargetType:  "ControlObjective",
 			CreateField: "control_objective_ids",
 			AddField:    "add_control_objective_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectives().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -18748,6 +23662,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -18756,6 +23678,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "evidence",
@@ -18764,6 +23694,14 @@ func init() {
 			TargetType:  "Evidence",
 			CreateField: "evidence_ids",
 			AddField:    "add_evidence_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryEvidence().
+					Where(predicate.Evidence(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -18772,6 +23710,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -18780,6 +23726,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -18788,6 +23742,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -18796,6 +23757,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "members",
@@ -18804,6 +23773,13 @@ func init() {
 			TargetType:  "ProgramMembership",
 			CreateField: "member_ids",
 			AddField:    "add_member_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryMembers().
+					Where(predicate.ProgramMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "narratives",
@@ -18812,6 +23788,14 @@ func init() {
 			TargetType:  "Narrative",
 			CreateField: "narrative_ids",
 			AddField:    "add_narrative_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryNarratives().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "notes",
@@ -18820,6 +23804,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "note_ids",
 			AddField:    "add_note_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryNotes().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -18837,6 +23828,14 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "program_kind",
@@ -18863,6 +23862,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviews",
@@ -18871,6 +23878,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -18879,6 +23894,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subcontrols",
@@ -18887,6 +23910,13 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "system_details",
@@ -18895,6 +23925,14 @@ func init() {
 			TargetType:  "SystemDetail",
 			CreateField: "system_detail_ids",
 			AddField:    "add_system_detail_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QuerySystemDetails().
+					Where(predicate.SystemDetail(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -18903,6 +23941,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "users",
@@ -18936,6 +23982,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ProgramMembership.Query().
+					Where(programmembership.ProgramID(sourceID), programmembership.UserIDIn(targetIDs...)).
+					Select(programmembership.FieldUserID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -18944,6 +23996,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -18952,6 +24012,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Program.Query().
+					Where(predicate.Program(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaProgramMembership.Edges = []EdgeDescriptor{
@@ -18991,6 +24059,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -18999,6 +24075,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -19007,6 +24091,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "comments",
@@ -19015,6 +24107,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "comment_ids",
 			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -19023,6 +24122,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -19031,6 +24138,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -19039,6 +24154,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -19056,6 +24179,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -19064,6 +24194,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -19072,6 +24210,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -19080,6 +24226,14 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -19097,6 +24251,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviews",
@@ -19105,6 +24267,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -19113,6 +24283,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -19121,6 +24299,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -19138,6 +24324,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -19146,6 +24340,13 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -19154,6 +24355,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -19162,6 +24371,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Remediation.Query().
+					Where(predicate.Remediation(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaReport.Edges = []EdgeDescriptor{
@@ -19172,6 +24388,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Report.Query().
+					Where(predicate.Report(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -19180,6 +24404,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Report.Query().
+					Where(predicate.Report(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "members",
@@ -19188,6 +24420,13 @@ func init() {
 			TargetType:  "ReportMembership",
 			CreateField: "member_ids",
 			AddField:    "add_member_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Report.Query().
+					Where(predicate.Report(sql.FieldEQ("id", sourceID))).
+					QueryMembers().
+					Where(predicate.ReportMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -19248,6 +24487,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ReportMembership.Query().
+					Where(reportmembership.ReportID(sourceID), reportmembership.UserIDIn(targetIDs...)).
+					Select(reportmembership.FieldUserID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -19256,6 +24501,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Report.Query().
+					Where(predicate.Report(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaReportMembership.Edges = []EdgeDescriptor{
@@ -19295,6 +24548,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -19303,6 +24564,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -19311,6 +24580,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "comments",
@@ -19319,6 +24596,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "comment_ids",
 			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -19327,6 +24611,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -19335,6 +24627,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -19343,6 +24643,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -19360,6 +24668,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -19368,6 +24683,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -19376,6 +24699,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -19384,6 +24714,14 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -19392,6 +24730,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -19409,6 +24755,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -19417,6 +24771,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviewer",
@@ -19434,6 +24796,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -19451,6 +24821,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -19459,6 +24837,13 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -19467,6 +24852,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Review.Query().
+					Where(predicate.Review(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaRisk.Edges = []EdgeDescriptor{
@@ -19477,6 +24870,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -19485,6 +24886,13 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "blocked_groups",
@@ -19493,6 +24901,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "comments",
@@ -19501,6 +24917,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "comment_ids",
 			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -19509,6 +24932,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "delegate",
@@ -19553,6 +24984,13 @@ func init() {
 			TargetType:  "Discussion",
 			CreateField: "discussion_ids",
 			AddField:    "add_discussion_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryDiscussions().
+					Where(predicate.Discussion(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -19561,6 +24999,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -19569,6 +25015,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -19586,6 +25040,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -19594,6 +25056,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -19602,6 +25072,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "legacy_entities",
@@ -19610,6 +25088,13 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "legacy_entity_ids",
 			AddField:    "add_legacy_entity_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryLegacyEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -19627,6 +25112,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "procedures",
@@ -19635,6 +25128,14 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -19643,6 +25144,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -19651,6 +25160,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviews",
@@ -19659,6 +25176,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risk_category",
@@ -19685,6 +25210,13 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -19738,6 +25270,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -19746,6 +25286,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -19754,6 +25302,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -19762,6 +25318,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -19770,6 +25334,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Risk.Query().
+					Where(predicate.Risk(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaSLADefinition.Edges = []EdgeDescriptor{
@@ -19780,6 +25351,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.SLADefinition.Query().
+					Where(predicate.SLADefinition(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -19788,6 +25366,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.SLADefinition.Query().
+					Where(predicate.SLADefinition(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -19807,6 +25392,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -19815,6 +25408,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assigned_to_group",
@@ -19850,6 +25451,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -19858,6 +25467,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -19866,6 +25483,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -19874,6 +25499,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -19891,6 +25524,14 @@ func init() {
 			TargetType:  "Evidence",
 			CreateField: "evidence_ids",
 			AddField:    "add_evidence_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryEvidence().
+					Where(predicate.Evidence(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "files",
@@ -19899,6 +25540,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -19907,6 +25556,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "generated_by_platform",
@@ -19924,6 +25581,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -19959,6 +25623,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -19967,6 +25639,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviewed_by_group",
@@ -20011,6 +25691,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -20019,6 +25707,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -20027,6 +25723,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Scan.Query().
+					Where(predicate.Scan(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaShareLink.Edges = []EdgeDescriptor{
@@ -20053,6 +25757,13 @@ func init() {
 			TargetType:  "ShareLinkAccessEvent",
 			CreateField: "share_link_access_event_ids",
 			AddField:    "add_share_link_access_event_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ShareLink.Query().
+					Where(predicate.ShareLink(sql.FieldEQ("id", sourceID))).
+					QueryShareLinkAccessEvents().
+					Where(predicate.ShareLinkAccessEvent(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaShareLinkAccessEvent.Edges = []EdgeDescriptor{
@@ -20083,6 +25794,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "applicable_platform_ids",
 			AddField:    "add_applicable_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Standard.Query().
+					Where(predicate.Standard(sql.FieldEQ("id", sourceID))).
+					QueryApplicablePlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -20091,6 +25810,13 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Standard.Query().
+					Where(predicate.Standard(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "logo_file",
@@ -20117,6 +25843,13 @@ func init() {
 			TargetType:  "TrustCenterCompliance",
 			CreateField: "trust_center_compliance_ids",
 			AddField:    "add_trust_center_compliance_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Standard.Query().
+					Where(predicate.Standard(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterCompliances().
+					Where(predicate.TrustCenterCompliance(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_docs",
@@ -20125,16 +25858,30 @@ func init() {
 			TargetType:  "TrustCenterDoc",
 			CreateField: "trust_center_doc_ids",
 			AddField:    "add_trust_center_doc_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Standard.Query().
+					Where(predicate.Standard(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterDocs().
+					Where(predicate.TrustCenterDoc(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaSubcontrol.Edges = []EdgeDescriptor{
 		{
-			Name:             "action_plans",
-			Label:            "ActionPlans",
-			Target:           SchemaActionPlan,
-			TargetType:       "ActionPlan",
-			CreateField:      "action_plan_ids",
-			AddField:         "add_action_plan_ids",
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -20144,14 +25891,29 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "comments",
-			Label:            "Comments",
-			Target:           SchemaNote,
-			TargetType:       "Note",
-			CreateField:      "comment_ids",
-			AddField:         "add_comment_ids",
+			Name:        "comments",
+			Label:       "Comments",
+			Target:      SchemaNote,
+			TargetType:  "Note",
+			CreateField: "comment_ids",
+			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -20165,21 +25927,37 @@ func init() {
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "control_implementations",
-			Label:            "ControlImplementations",
-			Target:           SchemaControlImplementation,
-			TargetType:       "ControlImplementation",
-			CreateField:      "control_implementation_ids",
-			AddField:         "add_control_implementation_ids",
+			Name:        "control_implementations",
+			Label:       "ControlImplementations",
+			Target:      SchemaControlImplementation,
+			TargetType:  "ControlImplementation",
+			CreateField: "control_implementation_ids",
+			AddField:    "add_control_implementation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementations().
+					Where(predicate.ControlImplementation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "control_objectives",
-			Label:            "ControlObjectives",
-			Target:           SchemaControlObjective,
-			TargetType:       "ControlObjective",
-			CreateField:      "control_objective_ids",
-			AddField:         "add_control_objective_ids",
+			Name:        "control_objectives",
+			Label:       "ControlObjectives",
+			Target:      SchemaControlObjective,
+			TargetType:  "ControlObjective",
+			CreateField: "control_objective_ids",
+			AddField:    "add_control_objective_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectives().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -20212,12 +25990,19 @@ func init() {
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "discussions",
-			Label:            "Discussions",
-			Target:           SchemaDiscussion,
-			TargetType:       "Discussion",
-			CreateField:      "discussion_ids",
-			AddField:         "add_discussion_ids",
+			Name:        "discussions",
+			Label:       "Discussions",
+			Target:      SchemaDiscussion,
+			TargetType:  "Discussion",
+			CreateField: "discussion_ids",
+			AddField:    "add_discussion_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryDiscussions().
+					Where(predicate.Discussion(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -20227,14 +26012,30 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "evidence",
-			Label:            "Evidence",
-			Target:           SchemaEvidence,
-			TargetType:       "Evidence",
-			CreateField:      "evidence_ids",
-			AddField:         "add_evidence_ids",
+			Name:        "evidence",
+			Label:       "Evidence",
+			Target:      SchemaEvidence,
+			TargetType:  "Evidence",
+			CreateField: "evidence_ids",
+			AddField:    "add_evidence_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryEvidence().
+					Where(predicate.Evidence(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -20244,6 +26045,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -20252,6 +26061,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -20260,41 +26077,79 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "internal_policies",
-			Label:            "InternalPolicies",
-			Target:           SchemaInternalPolicy,
-			TargetType:       "InternalPolicy",
-			CreateField:      "internal_policy_ids",
-			AddField:         "add_internal_policy_ids",
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "mapped_from_subcontrols",
-			Label:            "MappedFromSubcontrols",
-			Target:           SchemaMappedControl,
-			TargetType:       "MappedControl",
-			CreateField:      "mapped_from_subcontrol_ids",
-			AddField:         "add_mapped_from_subcontrol_ids",
+			Name:        "mapped_from_subcontrols",
+			Label:       "MappedFromSubcontrols",
+			Target:      SchemaMappedControl,
+			TargetType:  "MappedControl",
+			CreateField: "mapped_from_subcontrol_ids",
+			AddField:    "add_mapped_from_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryMappedFromSubcontrols().
+					Where(predicate.MappedControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "mapped_to_subcontrols",
-			Label:            "MappedToSubcontrols",
-			Target:           SchemaMappedControl,
-			TargetType:       "MappedControl",
-			CreateField:      "mapped_to_subcontrol_ids",
-			AddField:         "add_mapped_to_subcontrol_ids",
+			Name:        "mapped_to_subcontrols",
+			Label:       "MappedToSubcontrols",
+			Target:      SchemaMappedControl,
+			TargetType:  "MappedControl",
+			CreateField: "mapped_to_subcontrol_ids",
+			AddField:    "add_mapped_to_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryMappedToSubcontrols().
+					Where(predicate.MappedControl(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
-			Name:             "narratives",
-			Label:            "Narratives",
-			Target:           SchemaNarrative,
-			TargetType:       "Narrative",
-			CreateField:      "narrative_ids",
-			AddField:         "add_narrative_ids",
+			Name:        "narratives",
+			Label:       "Narratives",
+			Target:      SchemaNarrative,
+			TargetType:  "Narrative",
+			CreateField: "narrative_ids",
+			AddField:    "add_narrative_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryNarratives().
+					Where(predicate.Narrative(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -20307,12 +26162,20 @@ func init() {
 			Field:       "owner_id",
 		},
 		{
-			Name:             "procedures",
-			Label:            "Procedures",
-			Target:           SchemaProcedure,
-			TargetType:       "Procedure",
-			CreateField:      "procedure_ids",
-			AddField:         "add_procedure_ids",
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -20322,6 +26185,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:             "responsible_party",
@@ -20340,14 +26211,30 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "risks",
-			Label:            "Risks",
-			Target:           SchemaRisk,
-			TargetType:       "Risk",
-			CreateField:      "risk_ids",
-			AddField:         "add_risk_ids",
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -20357,6 +26244,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subcontrol_kind",
@@ -20368,12 +26263,20 @@ func init() {
 			Field:       "subcontrol_kind_id",
 		},
 		{
-			Name:             "tasks",
-			Label:            "Tasks",
-			Target:           SchemaTask,
-			TargetType:       "Task",
-			CreateField:      "task_ids",
-			AddField:         "add_task_ids",
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 		{
@@ -20383,14 +26286,29 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
-			Name:             "workflow_object_refs",
-			Label:            "WorkflowObjectRefs",
-			Target:           SchemaWorkflowObjectRef,
-			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflow_object_ref_ids",
-			AddField:         "add_workflow_object_ref_ids",
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subcontrol.Query().
+					Where(predicate.Subcontrol(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 			WorkflowEligible: true,
 		},
 	}
@@ -20402,6 +26320,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subprocessor.Query().
+					Where(predicate.Subprocessor(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "logo_file",
@@ -20428,6 +26354,13 @@ func init() {
 			TargetType:  "TrustCenterSubprocessor",
 			CreateField: "trust_center_subprocessor_ids",
 			AddField:    "add_trust_center_subprocessor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subprocessor.Query().
+					Where(predicate.Subprocessor(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterSubprocessors().
+					Where(predicate.TrustCenterSubprocessor(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaSubscriber.Edges = []EdgeDescriptor{
@@ -20438,6 +26371,13 @@ func init() {
 			TargetType:  "CampaignTarget",
 			CreateField: "campaign_target_ids",
 			AddField:    "add_campaign_target_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subscriber.Query().
+					Where(predicate.Subscriber(sql.FieldEQ("id", sourceID))).
+					QueryCampaignTargets().
+					Where(predicate.CampaignTarget(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "contact",
@@ -20455,6 +26395,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Subscriber.Query().
+					Where(predicate.Subscriber(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -20492,6 +26440,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.SystemDetail.Query().
+					Where(predicate.SystemDetail(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -20500,6 +26456,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.SystemDetail.Query().
+					Where(predicate.SystemDetail(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -20508,6 +26472,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.SystemDetail.Query().
+					Where(predicate.SystemDetail(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -20525,6 +26496,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.SystemDetail.Query().
+					Where(predicate.SystemDetail(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -20533,6 +26512,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.SystemDetail.Query().
+					Where(predicate.SystemDetail(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaTFASetting.Edges = []EdgeDescriptor{
@@ -20554,6 +26541,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TagDefinition.Query().
+					Where(predicate.TagDefinition(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -20573,6 +26567,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assignee",
@@ -20599,6 +26601,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "comment_ids",
 			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_implementations",
@@ -20607,6 +26616,14 @@ func init() {
 			TargetType:  "ControlImplementation",
 			CreateField: "control_implementation_ids",
 			AddField:    "add_control_implementation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryControlImplementations().
+					Where(predicate.ControlImplementation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "control_objectives",
@@ -20615,6 +26632,14 @@ func init() {
 			TargetType:  "ControlObjective",
 			CreateField: "control_objective_ids",
 			AddField:    "add_control_objective_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryControlObjectives().
+					Where(predicate.ControlObjective(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -20623,6 +26648,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -20640,6 +26673,14 @@ func init() {
 			TargetType:  "Evidence",
 			CreateField: "evidence_ids",
 			AddField:    "add_evidence_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryEvidence().
+					Where(predicate.Evidence(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -20648,6 +26689,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "groups",
@@ -20656,6 +26705,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_ids",
 			AddField:    "add_group_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -20664,6 +26721,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -20672,6 +26737,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_policies",
@@ -20680,6 +26752,14 @@ func init() {
 			TargetType:  "InternalPolicy",
 			CreateField: "internal_policy_ids",
 			AddField:    "add_internal_policy_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryInternalPolicies().
+					Where(predicate.InternalPolicy(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -20706,6 +26786,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryPlatforms().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "procedures",
@@ -20714,6 +26802,14 @@ func init() {
 			TargetType:  "Procedure",
 			CreateField: "procedure_ids",
 			AddField:    "add_procedure_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryProcedures().
+					Where(predicate.Procedure(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -20722,6 +26818,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -20730,6 +26834,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -20738,6 +26850,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -20755,6 +26875,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "task_kind",
@@ -20772,6 +26900,13 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerabilities",
@@ -20780,6 +26915,14 @@ func init() {
 			TargetType:  "Vulnerability",
 			CreateField: "vulnerability_ids",
 			AddField:    "add_vulnerability_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryVulnerabilities().
+					Where(predicate.Vulnerability(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -20788,6 +26931,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Task.Query().
+					Where(predicate.Task(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaTemplate.Edges = []EdgeDescriptor{
@@ -20798,6 +26948,13 @@ func init() {
 			TargetType:  "Assessment",
 			CreateField: "assessment_ids",
 			AddField:    "add_assessment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Template.Query().
+					Where(predicate.Template(sql.FieldEQ("id", sourceID))).
+					QueryAssessments().
+					Where(predicate.Assessment(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -20806,6 +26963,13 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Template.Query().
+					Where(predicate.Template(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "documents",
@@ -20814,6 +26978,13 @@ func init() {
 			TargetType:  "DocumentData",
 			CreateField: "document_ids",
 			AddField:    "add_document_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Template.Query().
+					Where(predicate.Template(sql.FieldEQ("id", sourceID))).
+					QueryDocuments().
+					Where(predicate.DocumentData(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -20831,6 +27002,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Template.Query().
+					Where(predicate.Template(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "identity_holders",
@@ -20839,6 +27018,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Template.Query().
+					Where(predicate.Template(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolders().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -20847,6 +27034,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Template.Query().
+					Where(predicate.Template(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -20884,6 +27078,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -20892,6 +27093,13 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "custom_domain",
@@ -20909,6 +27117,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "email_templates",
@@ -20917,6 +27132,13 @@ func init() {
 			TargetType:  "EmailTemplate",
 			CreateField: "email_template_ids",
 			AddField:    "add_email_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryEmailTemplates().
+					Where(predicate.EmailTemplate(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -20934,6 +27156,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "post_ids",
 			AddField:    "add_post_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryPosts().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "preview_domain",
@@ -20969,6 +27198,13 @@ func init() {
 			TargetType:  "Subscriber",
 			CreateField: "subscriber_ids",
 			AddField:    "add_subscriber_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QuerySubscribers().
+					Where(predicate.Subscriber(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "templates",
@@ -20977,6 +27213,13 @@ func init() {
 			TargetType:  "Template",
 			CreateField: "template_ids",
 			AddField:    "add_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryTemplates().
+					Where(predicate.Template(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_compliances",
@@ -20985,6 +27228,13 @@ func init() {
 			TargetType:  "TrustCenterCompliance",
 			CreateField: "trust_center_compliance_ids",
 			AddField:    "add_trust_center_compliance_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterCompliances().
+					Where(predicate.TrustCenterCompliance(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_docs",
@@ -20993,6 +27243,13 @@ func init() {
 			TargetType:  "TrustCenterDoc",
 			CreateField: "trust_center_doc_ids",
 			AddField:    "add_trust_center_doc_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterDocs().
+					Where(predicate.TrustCenterDoc(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_entities",
@@ -21001,6 +27258,13 @@ func init() {
 			TargetType:  "TrustCenterEntity",
 			CreateField: "trust_center_entity_ids",
 			AddField:    "add_trust_center_entity_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterEntities().
+					Where(predicate.TrustCenterEntity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_faqs",
@@ -21009,6 +27273,13 @@ func init() {
 			TargetType:  "TrustCenterFAQ",
 			CreateField: "trust_center_faq_ids",
 			AddField:    "add_trust_center_faq_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterFaqs().
+					Where(predicate.TrustCenterFAQ(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_nda_requests",
@@ -21017,6 +27288,13 @@ func init() {
 			TargetType:  "TrustCenterNDARequest",
 			CreateField: "trust_center_nda_request_ids",
 			AddField:    "add_trust_center_nda_request_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterNdaRequests().
+					Where(predicate.TrustCenterNDARequest(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "trust_center_subprocessors",
@@ -21025,6 +27303,13 @@ func init() {
 			TargetType:  "TrustCenterSubprocessor",
 			CreateField: "trust_center_subprocessor_ids",
 			AddField:    "add_trust_center_subprocessor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenter.Query().
+					Where(predicate.TrustCenter(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterSubprocessors().
+					Where(predicate.TrustCenterSubprocessor(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "watermark_config",
@@ -21044,6 +27329,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterCompliance.Query().
+					Where(predicate.TrustCenterCompliance(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -21052,6 +27344,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterCompliance.Query().
+					Where(predicate.TrustCenterCompliance(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "standard",
@@ -21080,6 +27379,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterDoc.Query().
+					Where(predicate.TrustCenterDoc(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -21088,6 +27394,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterDoc.Query().
+					Where(predicate.TrustCenterDoc(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "file",
@@ -21143,6 +27456,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterEntity.Query().
+					Where(predicate.TrustCenterEntity(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -21151,6 +27471,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterEntity.Query().
+					Where(predicate.TrustCenterEntity(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entity_type",
@@ -21188,6 +27515,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterFAQ.Query().
+					Where(predicate.TrustCenterFAQ(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -21196,6 +27530,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterFAQ.Query().
+					Where(predicate.TrustCenterFAQ(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "note",
@@ -21242,6 +27583,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterNDARequest.Query().
+					Where(predicate.TrustCenterNDARequest(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "document",
@@ -21259,6 +27607,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterNDARequest.Query().
+					Where(predicate.TrustCenterNDARequest(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "file",
@@ -21285,6 +27640,13 @@ func init() {
 			TargetType:  "TrustCenterDoc",
 			CreateField: "trust_center_doc_ids",
 			AddField:    "add_trust_center_doc_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterNDARequest.Query().
+					Where(predicate.TrustCenterNDARequest(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenterDocs().
+					Where(predicate.TrustCenterDoc(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaTrustCenterSetting.Edges = []EdgeDescriptor{
@@ -21295,6 +27657,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterSetting.Query().
+					Where(predicate.TrustCenterSetting(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -21303,6 +27672,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterSetting.Query().
+					Where(predicate.TrustCenterSetting(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "favicon_file",
@@ -21349,6 +27725,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterSubprocessor.Query().
+					Where(predicate.TrustCenterSubprocessor(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -21357,6 +27740,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterSubprocessor.Query().
+					Where(predicate.TrustCenterSubprocessor(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subprocessor",
@@ -21394,6 +27784,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterWatermarkConfig.Query().
+					Where(predicate.TrustCenterWatermarkConfig(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -21402,6 +27799,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterWatermarkConfig.Query().
+					Where(predicate.TrustCenterWatermarkConfig(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "file",
@@ -21428,6 +27832,13 @@ func init() {
 			TargetType:  "TrustCenter",
 			CreateField: "trust_center_ids",
 			AddField:    "add_trust_center_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.TrustCenterWatermarkConfig.Query().
+					Where(predicate.TrustCenterWatermarkConfig(sql.FieldEQ("id", sourceID))).
+					QueryTrustCenter().
+					Where(predicate.TrustCenter(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaUser.Edges = []EdgeDescriptor{
@@ -21438,6 +27849,13 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assignee_tasks",
@@ -21446,6 +27864,13 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "assignee_task_ids",
 			AddField:    "add_assignee_task_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryAssigneeTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assigner_tasks",
@@ -21454,6 +27879,13 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "assigner_task_ids",
 			AddField:    "add_assigner_task_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryAssignerTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "avatar_file",
@@ -21471,6 +27903,13 @@ func init() {
 			TargetType:  "CampaignTarget",
 			CreateField: "campaign_target_ids",
 			AddField:    "add_campaign_target_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryCampaignTargets().
+					Where(predicate.CampaignTarget(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "campaigns",
@@ -21479,6 +27918,14 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryCampaigns().
+					Where(predicate.Campaign(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "email_verification_tokens",
@@ -21487,6 +27934,13 @@ func init() {
 			TargetType:  "EmailVerificationToken",
 			CreateField: "email_verification_token_ids",
 			AddField:    "add_email_verification_token_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryEmailVerificationTokens().
+					Where(predicate.EmailVerificationToken(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "events",
@@ -21495,6 +27949,14 @@ func init() {
 			TargetType:  "Event",
 			CreateField: "event_ids",
 			AddField:    "add_event_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryEvents().
+					Where(predicate.Event(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "file_download_tokens",
@@ -21503,6 +27965,13 @@ func init() {
 			TargetType:  "FileDownloadToken",
 			CreateField: "file_download_token_ids",
 			AddField:    "add_file_download_token_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryFileDownloadTokens().
+					Where(predicate.FileDownloadToken(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "group_memberships",
@@ -21511,6 +27980,13 @@ func init() {
 			TargetType:  "GroupMembership",
 			CreateField: "group_membership_ids",
 			AddField:    "add_group_membership_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryGroupMemberships().
+					Where(predicate.GroupMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "groups",
@@ -21544,6 +28020,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.GroupMembership.Query().
+					Where(groupmembership.UserID(sourceID), groupmembership.GroupIDIn(targetIDs...)).
+					Select(groupmembership.FieldGroupID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "identity_holder_profiles",
@@ -21552,6 +28034,13 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_profile_ids",
 			AddField:    "add_identity_holder_profile_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryIdentityHolderProfiles().
+					Where(predicate.IdentityHolder(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "impersonation_events",
@@ -21560,6 +28049,13 @@ func init() {
 			TargetType:  "ImpersonationEvent",
 			CreateField: "impersonation_event_ids",
 			AddField:    "add_impersonation_event_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryImpersonationEvents().
+					Where(predicate.ImpersonationEvent(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "org_memberships",
@@ -21568,6 +28064,13 @@ func init() {
 			TargetType:  "OrgMembership",
 			CreateField: "org_membership_ids",
 			AddField:    "add_org_membership_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryOrgMemberships().
+					Where(predicate.OrgMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "organizations",
@@ -21601,6 +28104,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.OrgMembership.Query().
+					Where(orgmembership.UserID(sourceID), orgmembership.OrganizationIDIn(targetIDs...)).
+					Select(orgmembership.FieldOrganizationID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "password_reset_tokens",
@@ -21609,6 +28118,13 @@ func init() {
 			TargetType:  "PasswordResetToken",
 			CreateField: "password_reset_token_ids",
 			AddField:    "add_password_reset_token_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryPasswordResetTokens().
+					Where(predicate.PasswordResetToken(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "personal_access_tokens",
@@ -21617,6 +28133,13 @@ func init() {
 			TargetType:  "PersonalAccessToken",
 			CreateField: "personal_access_token_ids",
 			AddField:    "add_personal_access_token_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryPersonalAccessTokens().
+					Where(predicate.PersonalAccessToken(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "platforms_owned",
@@ -21625,6 +28148,13 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platforms_owned_ids",
 			AddField:    "add_platforms_owned_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryPlatformsOwned().
+					Where(predicate.Platform(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "program_memberships",
@@ -21633,6 +28163,13 @@ func init() {
 			TargetType:  "ProgramMembership",
 			CreateField: "program_membership_ids",
 			AddField:    "add_program_membership_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryProgramMemberships().
+					Where(predicate.ProgramMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "programs",
@@ -21666,6 +28203,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ProgramMembership.Query().
+					Where(programmembership.UserID(sourceID), programmembership.ProgramIDIn(targetIDs...)).
+					Select(programmembership.FieldProgramID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "programs_owned",
@@ -21674,6 +28217,13 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "programs_owned_ids",
 			AddField:    "add_programs_owned_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryProgramsOwned().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "report_memberships",
@@ -21682,6 +28232,13 @@ func init() {
 			TargetType:  "ReportMembership",
 			CreateField: "report_membership_ids",
 			AddField:    "add_report_membership_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryReportMemberships().
+					Where(predicate.ReportMembership(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reports",
@@ -21715,6 +28272,12 @@ func init() {
 
 				return nil
 			},
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.ReportMembership.Query().
+					Where(reportmembership.UserID(sourceID), reportmembership.ReportIDIn(targetIDs...)).
+					Select(reportmembership.FieldReportID).
+					Strings(ctx)
+			},
 		},
 		{
 			Name:        "reports_owned",
@@ -21723,6 +28286,13 @@ func init() {
 			TargetType:  "Report",
 			CreateField: "reports_owned_ids",
 			AddField:    "add_reports_owned_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryReportsOwned().
+					Where(predicate.Report(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "setting",
@@ -21739,6 +28309,13 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "subscribers",
@@ -21747,6 +28324,13 @@ func init() {
 			TargetType:  "Subscriber",
 			CreateField: "subscriber_ids",
 			AddField:    "add_subscriber_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QuerySubscribers().
+					Where(predicate.Subscriber(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "targeted_impersonations",
@@ -21755,6 +28339,13 @@ func init() {
 			TargetType:  "ImpersonationEvent",
 			CreateField: "targeted_impersonation_ids",
 			AddField:    "add_targeted_impersonation_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryTargetedImpersonations().
+					Where(predicate.ImpersonationEvent(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tfa_settings",
@@ -21763,6 +28354,13 @@ func init() {
 			TargetType:  "TFASetting",
 			CreateField: "tfa_setting_ids",
 			AddField:    "add_tfa_setting_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryTfaSettings().
+					Where(predicate.TFASetting(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "webauthns",
@@ -21771,6 +28369,13 @@ func init() {
 			TargetType:  "Webauthn",
 			CreateField: "webauthn_ids",
 			AddField:    "add_webauthn_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.User.Query().
+					Where(predicate.User(sql.FieldEQ("id", sourceID))).
+					QueryWebauthns().
+					Where(predicate.Webauthn(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaUserSetting.Edges = []EdgeDescriptor{
@@ -21819,6 +28424,13 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.VendorRiskScore.Query().
+					Where(predicate.VendorRiskScore(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -21856,6 +28468,13 @@ func init() {
 			TargetType:  "VendorRiskScore",
 			CreateField: "vendor_risk_score_ids",
 			AddField:    "add_vendor_risk_score_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.VendorScoringConfig.Query().
+					Where(predicate.VendorScoringConfig(sql.FieldEQ("id", sourceID))).
+					QueryVendorRiskScores().
+					Where(predicate.VendorRiskScore(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaVulnerability.Edges = []EdgeDescriptor{
@@ -21866,6 +28485,14 @@ func init() {
 			TargetType:  "ActionPlan",
 			CreateField: "action_plan_ids",
 			AddField:    "add_action_plan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryActionPlans().
+					Where(predicate.ActionPlan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assets",
@@ -21874,6 +28501,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryAssets().
+					Where(predicate.Asset(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "assigned_to_group",
@@ -21909,6 +28544,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "comments",
@@ -21917,6 +28559,13 @@ func init() {
 			TargetType:  "Note",
 			CreateField: "comment_ids",
 			AddField:    "add_comment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryComments().
+					Where(predicate.Note(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "controls",
@@ -21925,6 +28574,14 @@ func init() {
 			TargetType:  "Control",
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryControls().
+					Where(predicate.Control(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -21933,6 +28590,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "entities",
@@ -21941,6 +28605,14 @@ func init() {
 			TargetType:  "Entity",
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryEntities().
+					Where(predicate.Entity(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "environment",
@@ -21958,6 +28630,13 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryFiles().
+					Where(predicate.File(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "findings",
@@ -21966,6 +28645,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryFindings().
+					Where(predicate.Finding(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integration_runs",
@@ -21974,6 +28661,14 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryIntegrationRuns().
+					Where(predicate.IntegrationRun(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "integrations",
@@ -21982,6 +28677,14 @@ func init() {
 			TargetType:  "Integration",
 			CreateField: "integration_ids",
 			AddField:    "add_integration_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryIntegrations().
+					Where(predicate.Integration(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "internal_owner_group",
@@ -22026,6 +28729,14 @@ func init() {
 			TargetType:  "Program",
 			CreateField: "program_ids",
 			AddField:    "add_program_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryPrograms().
+					Where(predicate.Program(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "remediations",
@@ -22034,6 +28745,14 @@ func init() {
 			TargetType:  "Remediation",
 			CreateField: "remediation_ids",
 			AddField:    "add_remediation_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryRemediations().
+					Where(predicate.Remediation(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "reviewed_by_group",
@@ -22069,6 +28788,14 @@ func init() {
 			TargetType:  "Review",
 			CreateField: "review_ids",
 			AddField:    "add_review_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryReviews().
+					Where(predicate.Review(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "risks",
@@ -22077,6 +28804,14 @@ func init() {
 			TargetType:  "Risk",
 			CreateField: "risk_ids",
 			AddField:    "add_risk_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryRisks().
+					Where(predicate.Risk(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scans",
@@ -22085,6 +28820,14 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryScans().
+					Where(predicate.Scan(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "scope",
@@ -22102,6 +28845,14 @@ func init() {
 			TargetType:  "Subcontrol",
 			CreateField: "subcontrol_ids",
 			AddField:    "add_subcontrol_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QuerySubcontrols().
+					Where(predicate.Subcontrol(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "tasks",
@@ -22110,6 +28861,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "task_ids",
 			AddField:    "add_task_ids",
+			ManyToMany:  true,
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryTasks().
+					Where(predicate.Task(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -22118,6 +28877,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "vulnerability_status",
@@ -22135,6 +28901,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.Vulnerability.Query().
+					Where(predicate.Vulnerability(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaWebauthn.Edges = []EdgeDescriptor{
@@ -22183,6 +28956,13 @@ func init() {
 			TargetType:  "WorkflowAssignmentTarget",
 			CreateField: "workflow_assignment_target_ids",
 			AddField:    "add_workflow_assignment_target_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowAssignment.Query().
+					Where(predicate.WorkflowAssignment(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowAssignmentTargets().
+					Where(predicate.WorkflowAssignmentTarget(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_instance",
@@ -22240,6 +29020,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowDefinition.Query().
+					Where(predicate.WorkflowDefinition(sql.FieldEQ("id", sourceID))).
+					QueryBlockedGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "editors",
@@ -22248,6 +29035,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "editor_ids",
 			AddField:    "add_editor_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowDefinition.Query().
+					Where(predicate.WorkflowDefinition(sql.FieldEQ("id", sourceID))).
+					QueryEditors().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "email_templates",
@@ -22256,6 +29050,13 @@ func init() {
 			TargetType:  "EmailTemplate",
 			CreateField: "email_template_ids",
 			AddField:    "add_email_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowDefinition.Query().
+					Where(predicate.WorkflowDefinition(sql.FieldEQ("id", sourceID))).
+					QueryEmailTemplates().
+					Where(predicate.EmailTemplate(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "groups",
@@ -22264,6 +29065,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "group_ids",
 			AddField:    "add_group_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowDefinition.Query().
+					Where(predicate.WorkflowDefinition(sql.FieldEQ("id", sourceID))).
+					QueryGroups().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "notification_templates",
@@ -22272,6 +29080,13 @@ func init() {
 			TargetType:  "NotificationTemplate",
 			CreateField: "notification_template_ids",
 			AddField:    "add_notification_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowDefinition.Query().
+					Where(predicate.WorkflowDefinition(sql.FieldEQ("id", sourceID))).
+					QueryNotificationTemplates().
+					Where(predicate.NotificationTemplate(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "owner",
@@ -22289,6 +29104,13 @@ func init() {
 			TargetType:  "TagDefinition",
 			CreateField: "tag_definition_ids",
 			AddField:    "add_tag_definition_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowDefinition.Query().
+					Where(predicate.WorkflowDefinition(sql.FieldEQ("id", sourceID))).
+					QueryTagDefinitions().
+					Where(predicate.TagDefinition(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "viewers",
@@ -22297,6 +29119,13 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "viewer_ids",
 			AddField:    "add_viewer_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowDefinition.Query().
+					Where(predicate.WorkflowDefinition(sql.FieldEQ("id", sourceID))).
+					QueryViewers().
+					Where(predicate.Group(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_instances",
@@ -22305,6 +29134,13 @@ func init() {
 			TargetType:  "WorkflowInstance",
 			CreateField: "workflow_instance_ids",
 			AddField:    "add_workflow_instance_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowDefinition.Query().
+					Where(predicate.WorkflowDefinition(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowInstances().
+					Where(predicate.WorkflowInstance(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaWorkflowEvent.Edges = []EdgeDescriptor{
@@ -22389,6 +29225,13 @@ func init() {
 			TargetType:  "EmailTemplate",
 			CreateField: "email_template_ids",
 			AddField:    "add_email_template_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowInstance.Query().
+					Where(predicate.WorkflowInstance(sql.FieldEQ("id", sourceID))).
+					QueryEmailTemplates().
+					Where(predicate.EmailTemplate(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "evidence",
@@ -22514,6 +29357,13 @@ func init() {
 			TargetType:  "WorkflowAssignment",
 			CreateField: "workflow_assignment_ids",
 			AddField:    "add_workflow_assignment_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowInstance.Query().
+					Where(predicate.WorkflowInstance(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowAssignments().
+					Where(predicate.WorkflowAssignment(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_definition",
@@ -22531,6 +29381,13 @@ func init() {
 			TargetType:  "WorkflowEvent",
 			CreateField: "workflow_event_ids",
 			AddField:    "add_workflow_event_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowInstance.Query().
+					Where(predicate.WorkflowInstance(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowEvents().
+					Where(predicate.WorkflowEvent(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_refs",
@@ -22539,6 +29396,13 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowInstance.Query().
+					Where(predicate.WorkflowInstance(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowObjectRefs().
+					Where(predicate.WorkflowObjectRef(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_proposal",
@@ -22756,6 +29620,13 @@ func init() {
 			TargetType:  "WorkflowProposal",
 			CreateField: "workflow_proposal_ids",
 			AddField:    "add_workflow_proposal_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowObjectRef.Query().
+					Where(predicate.WorkflowObjectRef(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowProposals().
+					Where(predicate.WorkflowProposal(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 	}
 	SchemaWorkflowProposal.Edges = []EdgeDescriptor{
@@ -22784,6 +29655,13 @@ func init() {
 			TargetType:  "WorkflowInstance",
 			CreateField: "workflow_instance_ids",
 			AddField:    "add_workflow_instance_ids",
+			LinkedIDs: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) ([]string, error) {
+				return client.WorkflowProposal.Query().
+					Where(predicate.WorkflowProposal(sql.FieldEQ("id", sourceID))).
+					QueryWorkflowInstances().
+					Where(predicate.WorkflowInstance(sql.FieldIn("id", targetIDs...))).
+					IDs(ctx)
+			},
 		},
 		{
 			Name:        "workflow_object_ref",

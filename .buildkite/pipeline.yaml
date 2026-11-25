@@ -155,7 +155,7 @@ common:
     propagate-uid-gid: true
   # multi-arch images for lint and tests, task comes from the go.mod tool block
   go-image: &go-image
-    image: "golang:1.27.3-alpine"
+    image: "golang:1.27-alpine"
     always-pull: true
     propagate-environment: true
     propagate-uid-gid: true

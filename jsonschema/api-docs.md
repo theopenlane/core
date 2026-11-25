@@ -207,6 +207,9 @@ Config contains the configuration for the core server
             "enabled": true,
             "dryrun": true,
             "maxperrun": 500
+        },
+        "vulnintel": {
+            "maxperrun": 500
         }
     },
     "workflows": {
@@ -1896,6 +1899,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**organizationdelete**](#defssystemorganizationdeleteconfig)|`object`|||
 |[**integrationlifecycle**](#defssystemintegrationlifecycleconfig)|`object`|||
 |[**fileorphan**](#defssystemfileorphanconfig)|`object`|||
+|[**vulnintel**](#defsvulnintelconfig)|`object`|||
 
 **Additional Properties:** not allowed   
 **Example**
@@ -1968,6 +1972,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "fileorphan": {
         "enabled": true,
         "dryrun": true,
+        "maxperrun": 500
+    },
+    "vulnintel": {
         "maxperrun": 500
     }
 }
@@ -2799,6 +2806,25 @@ supplies the region, endpoint, and credentials
 {
     "enabled": true,
     "dryrun": true,
+    "maxperrun": 500
+}
+```
+
+   
+<a name="defsvulnintelconfig"></a>
+### $defs/vulnintel\.Config: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**maxperrun**|`integer`|Maximum OSV advisory lookups per enrichment run<br/>Default: `500`<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
     "maxperrun": 500
 }
 ```
