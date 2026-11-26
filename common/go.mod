@@ -12,7 +12,7 @@ require (
 	github.com/stoewer/go-strcase v1.4.0
 	github.com/theopenlane/core/v2 v2.17.10
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.38.6
+	github.com/theopenlane/entx v0.38.7-0.20261125222852-b20bd4d71dbf
 	github.com/theopenlane/utils v0.7.4
 	github.com/zitadel/oidc/v3 v3.52.0
 	golang.org/x/oauth2 v0.38.0
