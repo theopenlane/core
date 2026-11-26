@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/consts"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
@@ -76,7 +77,7 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 			Str("setting_id", setting.ID).
 			Logger()
 
-		if err := db.Organization.DeleteOneID(org.ID).Exec(systemCtx); err != nil {
+		if err := db.Organization.DeleteOneID(org.ID).Exec(rule.WithOrganizationSweepContext(systemCtx)); err != nil {
 			orgLogger.Error().Err(err).Msg("failed to delete organization")
 			return len(deletedOrgs), err
 		}

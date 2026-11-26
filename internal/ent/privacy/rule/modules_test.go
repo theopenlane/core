@@ -12,9 +12,10 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"

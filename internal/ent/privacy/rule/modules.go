@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	openfga "github.com/openfga/go-sdk"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -298,6 +299,22 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 	return HasPublicFlowToken(ctx)
 }
 
+var organizationSweepKey = contextx.NewKey[struct{}]()
+
+// WithOrganizationSweepContext marks cleanup that were triggered by the organization deletion sweep.
+func WithOrganizationSweepContext(ctx context.Context) context.Context {
+	return organizationSweepKey.Set(ctx, struct{}{})
+}
+
+func isOrganizationSweep(ctx context.Context) bool {
+	_, ok := organizationSweepKey.Get(ctx)
+	return ok
+}
+
+func isDeleteOp(ctx context.Context, m ent.Mutation) bool {
+	return entx.CheckIsSoftDeleteType(ctx, m.Type()) || m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne)
+}
+
 // DenyIfMissingAllModules acts as a prerequisite check - denies if features missing, Allows if present
 func DenyIfMissingAllModules() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
@@ -308,6 +325,10 @@ func DenyIfMissingAllModules() privacy.MutationRule {
 		}
 
 		mutationType := m.Type()
+
+		if isOrganizationSweep(ctx) && mutationType == generated.TypeFile && isDeleteOp(ctx, m) {
+			return privacy.Skip
+		}
 
 		if strings.HasSuffix(mutationType, "History") {
 			return privacy.Skip
