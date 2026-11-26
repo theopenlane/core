@@ -338,7 +338,7 @@ func getOrgMembershipUserField(ctx context.Context) (graphql.CollectedField, boo
 	return field, true
 }
 
-// withOrgMembershipHistoryModifier modifies the query to include the org_membership_history while perserving the
+// withOrgMembershipHistoryModifier modifies the query to include the org_membership_history while preserving the
 // pagination among others else we'd need to change how pagination loading works for history
 // but since this is one off, we don't need to do that and others will ideally just go through the history
 // schemas directly
