@@ -1262,3 +1262,99 @@ func (suite *graphTestSuite) assertDefaultOrgUpdate(ctx context.Context, t *test
 		assert.Check(t, orgID != userSettingResp.UserSettings.Edges[0].Node.DefaultOrg.ID)
 	}
 }
+
+func TestQueryOrgMembers_IncludesHistory(t *testing.T) {
+	t.Parallel()
+
+	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+	otherOrg := suite.SeedOrgOwner(t)
+
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(otherOrg.Owner.UserCtx, t)
+	})
+
+	internalCtx := auth.WithInternalOperationContext(localTestOrg.Owner.UserCtx)
+
+	memberUser := (&th.UserBuilder{Client: suite.Client}).MustNew(internalCtx, t)
+	memberUserCtx := auth.NewTestContextWithOrgID(memberUser.ID, memberUser.Edges.Setting.Edges.DefaultOrg.ID)
+
+	// add user to org
+	resp, err := suite.Client.API.AddUserToOrgWithRole(localTestOrg.Owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: localTestOrg.Owner.OrganizationID,
+		UserID:         memberUser.ID,
+		Role:           &enums.RoleMember,
+	})
+	assert.NilError(t, err)
+
+	// then remove the user again
+	_, err = suite.Client.API.RemoveUserFromOrg(localTestOrg.Owner.UserCtx, resp.CreateOrgMembership.OrgMembership.ID)
+	assert.NilError(t, err)
+
+	t.Run("removed user excluded without includeDeleted", func(t *testing.T) {
+		members, err := suite.Client.API.GetOrgMembersByOrgID(localTestOrg.Member.UserCtx, &testclient.OrgMembershipWhereInput{})
+		assert.NilError(t, err)
+		assert.Check(t, !lo.ContainsBy(members.OrgMemberships.Edges, func(edge *testclient.GetOrgMembersByOrgID_OrgMemberships_Edges) bool {
+			return edge.Node.UserID == memberUser.ID
+		}))
+	})
+
+	t.Run("removed user can still be retrieved", func(t *testing.T) {
+		resp, err := suite.Client.API.GetOrgMembersByOrgID(localTestOrg.Member.UserCtx, &testclient.OrgMembershipWhereInput{
+			Or: []*testclient.OrgMembershipWhereInput{
+				{
+					UserID: &localTestOrg.Owner.ID,
+				},
+				{
+					UserID: &memberUser.ID,
+				},
+			},
+			IncludeDeleted: new(true),
+		})
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(resp.OrgMemberships.Edges, 2))
+
+		member, ok := lo.Find(resp.OrgMemberships.Edges, func(edge *testclient.GetOrgMembersByOrgID_OrgMemberships_Edges) bool {
+			return edge.Node.UserID == memberUser.ID
+		})
+
+		assert.Assert(t, ok)
+		assert.Check(t, is.Equal(memberUser.ID, member.Node.User.ID))
+		assert.Check(t, is.Equal(memberUser.Email, member.Node.User.Email))
+		assert.Check(t, lo.FromPtr(member.Node.IsDeleted))
+
+		owner, ok := lo.Find(resp.OrgMemberships.Edges, func(edge *testclient.GetOrgMembersByOrgID_OrgMemberships_Edges) bool {
+			return edge.Node.UserID == localTestOrg.Owner.ID
+		})
+		assert.Assert(t, ok)
+		assert.Check(t, !lo.FromPtr(owner.Node.IsDeleted))
+	})
+
+	t.Run("another org cannot view removed member", func(t *testing.T) {
+		otherResp, err := suite.Client.API.GetOrgMembersByOrgID(otherOrg.Owner.UserCtx, &testclient.OrgMembershipWhereInput{
+			UserID:         &memberUser.ID,
+			IncludeDeleted: new(true),
+		})
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(otherResp.OrgMemberships.Edges, 0))
+	})
+
+	t.Run("soft-deleted user are included still", func(t *testing.T) {
+		_, err := suite.Client.API.DeleteUser(memberUserCtx, memberUser.ID)
+		assert.NilError(t, err)
+
+		resp, err := suite.Client.API.GetOrgMembersByOrgID(localTestOrg.Member.UserCtx, &testclient.OrgMembershipWhereInput{
+			UserID:         &memberUser.ID,
+			IncludeDeleted: new(true),
+		})
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(resp.OrgMemberships.Edges, 1))
+
+		member, ok := lo.Find(resp.OrgMemberships.Edges, func(edge *testclient.GetOrgMembersByOrgID_OrgMemberships_Edges) bool {
+			return edge.Node.UserID == memberUser.ID
+		})
+		assert.Assert(t, ok)
+		assert.Check(t, is.Equal(memberUser.ID, member.Node.User.ID))
+		assert.Check(t, lo.FromPtr(member.Node.IsDeleted))
+	})
+}

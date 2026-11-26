@@ -116739,6 +116739,29 @@ func (ec *executionContext) fieldContext_OrgMembership_additionalRoles(_ context
 	return graphql.NewScalarFieldContext("OrgMembership", field, false, false, "String")
 }
 
+func (ec *executionContext) _OrgMembership_isDeleted(ctx context.Context, field graphql.CollectedField, obj *generated.OrgMembership) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OrgMembership_isDeleted(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsDeleted, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OrgMembership_isDeleted(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OrgMembership", field, false, false, "Boolean")
+}
+
 func (ec *executionContext) _OrgMembershipConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.OrgMembershipConnection) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -297319,7 +297342,7 @@ func (ec *executionContext) unmarshalInputOrgMembershipWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "ssoExempt", "ssoExemptNEQ", "ssoExemptIsNil", "ssoExemptNotNil", "ssoExemptReason", "ssoExemptReasonNEQ", "ssoExemptReasonIn", "ssoExemptReasonNotIn", "ssoExemptReasonContains", "ssoExemptReasonHasPrefix", "ssoExemptReasonHasSuffix", "ssoExemptReasonIsNil", "ssoExemptReasonNotNil", "ssoExemptReasonEqualFold", "ssoExemptReasonContainsFold", "ssoExemptGrantedBy", "ssoExemptGrantedByNEQ", "ssoExemptGrantedByIn", "ssoExemptGrantedByNotIn", "ssoExemptGrantedByContains", "ssoExemptGrantedByHasPrefix", "ssoExemptGrantedByHasSuffix", "ssoExemptGrantedByIsNil", "ssoExemptGrantedByNotNil", "ssoExemptGrantedByEqualFold", "ssoExemptGrantedByContainsFold", "ssoExemptGrantedAt", "ssoExemptGrantedAtGT", "ssoExemptGrantedAtGTE", "ssoExemptGrantedAtLT", "ssoExemptGrantedAtLTE", "ssoExemptGrantedAtIsNil", "ssoExemptGrantedAtNotNil", "tfaEnforced", "tfaEnforcedNEQ", "tfaEnforcedIsNil", "tfaEnforcedNotNil", "tfaEnforcedReason", "tfaEnforcedReasonNEQ", "tfaEnforcedReasonIn", "tfaEnforcedReasonNotIn", "tfaEnforcedReasonContains", "tfaEnforcedReasonHasPrefix", "tfaEnforcedReasonHasSuffix", "tfaEnforcedReasonIsNil", "tfaEnforcedReasonNotNil", "tfaEnforcedReasonEqualFold", "tfaEnforcedReasonContainsFold", "tfaEnforcedBy", "tfaEnforcedByNEQ", "tfaEnforcedByIn", "tfaEnforcedByNotIn", "tfaEnforcedByContains", "tfaEnforcedByHasPrefix", "tfaEnforcedByHasSuffix", "tfaEnforcedByIsNil", "tfaEnforcedByNotNil", "tfaEnforcedByEqualFold", "tfaEnforcedByContainsFold", "tfaEnforcedAt", "tfaEnforcedAtGT", "tfaEnforcedAtGTE", "tfaEnforcedAtLT", "tfaEnforcedAtLTE", "tfaEnforcedAtIsNil", "tfaEnforcedAtNotNil", "organizationID", "userID", "hasUserWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "ssoExempt", "ssoExemptNEQ", "ssoExemptIsNil", "ssoExemptNotNil", "ssoExemptReason", "ssoExemptReasonNEQ", "ssoExemptReasonIn", "ssoExemptReasonNotIn", "ssoExemptReasonContains", "ssoExemptReasonHasPrefix", "ssoExemptReasonHasSuffix", "ssoExemptReasonIsNil", "ssoExemptReasonNotNil", "ssoExemptReasonEqualFold", "ssoExemptReasonContainsFold", "ssoExemptGrantedBy", "ssoExemptGrantedByNEQ", "ssoExemptGrantedByIn", "ssoExemptGrantedByNotIn", "ssoExemptGrantedByContains", "ssoExemptGrantedByHasPrefix", "ssoExemptGrantedByHasSuffix", "ssoExemptGrantedByIsNil", "ssoExemptGrantedByNotNil", "ssoExemptGrantedByEqualFold", "ssoExemptGrantedByContainsFold", "ssoExemptGrantedAt", "ssoExemptGrantedAtGT", "ssoExemptGrantedAtGTE", "ssoExemptGrantedAtLT", "ssoExemptGrantedAtLTE", "ssoExemptGrantedAtIsNil", "ssoExemptGrantedAtNotNil", "tfaEnforced", "tfaEnforcedNEQ", "tfaEnforcedIsNil", "tfaEnforcedNotNil", "tfaEnforcedReason", "tfaEnforcedReasonNEQ", "tfaEnforcedReasonIn", "tfaEnforcedReasonNotIn", "tfaEnforcedReasonContains", "tfaEnforcedReasonHasPrefix", "tfaEnforcedReasonHasSuffix", "tfaEnforcedReasonIsNil", "tfaEnforcedReasonNotNil", "tfaEnforcedReasonEqualFold", "tfaEnforcedReasonContainsFold", "tfaEnforcedBy", "tfaEnforcedByNEQ", "tfaEnforcedByIn", "tfaEnforcedByNotIn", "tfaEnforcedByContains", "tfaEnforcedByHasPrefix", "tfaEnforcedByHasSuffix", "tfaEnforcedByIsNil", "tfaEnforcedByNotNil", "tfaEnforcedByEqualFold", "tfaEnforcedByContainsFold", "tfaEnforcedAt", "tfaEnforcedAtGT", "tfaEnforcedAtGTE", "tfaEnforcedAtLT", "tfaEnforcedAtLTE", "tfaEnforcedAtIsNil", "tfaEnforcedAtNotNil", "organizationID", "userID", "hasUserWith", "includeDeleted"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -298229,6 +298252,13 @@ func (ec *executionContext) unmarshalInputOrgMembershipWhereInput(ctx context.Co
 				return it, err
 			}
 			it.HasUserWith = data
+		case "includeDeleted":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("includeDeleted"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IncludeDeleted = data
 		}
 	}
 	return it, nil
@@ -439119,6 +439149,11 @@ func (ec *executionContext) _OrgMembership(ctx context.Context, sel ast.Selectio
 				})
 		case "additionalRoles":
 			out.Values[i] = ec._OrgMembership_additionalRoles(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "isDeleted":
+			out.Values[i] = ec._OrgMembership_isDeleted(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

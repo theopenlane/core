@@ -123,6 +123,9 @@ import (
 			{{- $names := nodePaginationNames $e.Type }}
 			{{ $field }} []*{{ $names.WhereInput }} `json:"{{ camel $jsonTag }},omitempty"`
 		{{- end }}
+		{{- if eq $n.Name "OrgMembership" }}
+			IncludeDeleted *bool `json:"includeDeleted,omitempty"`
+		{{- end }}
 	}
 
 	// AddPredicates adds custom predicates to the where input to be used during the filtering phase.

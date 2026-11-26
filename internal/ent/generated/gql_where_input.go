@@ -64608,8 +64608,9 @@ type OrgMembershipWhereInput struct {
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
 
 	// "events" edge predicates.
-	HasEvents     *bool              `json:"hasEvents,omitempty"`
-	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	HasEvents      *bool              `json:"hasEvents,omitempty"`
+	HasEventsWith  []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	IncludeDeleted *bool              `json:"includeDeleted,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.

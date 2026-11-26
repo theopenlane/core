@@ -4523,6 +4523,7 @@ type ComplexityRoot struct {
 		CreatedBy             func(childComplexity int) int
 		Events                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ID                    func(childComplexity int) int
+		IsDeleted             func(childComplexity int) int
 		Organization          func(childComplexity int) int
 		OrganizationID        func(childComplexity int) int
 		Role                  func(childComplexity int) int
@@ -33400,6 +33401,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrgMembership.ID(childComplexity), true
+	case "OrgMembership.isDeleted":
+		if e.ComplexityRoot.OrgMembership.IsDeleted == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembership.IsDeleted(childComplexity), true
 	case "OrgMembership.organization":
 		if e.ComplexityRoot.OrgMembership.Organization == nil {
 			break
@@ -156794,6 +156801,11 @@ type OrgMembershipBulkUpdatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/orgmembershipextended.graphql", Input: `extend type OrgMembership {
     additionalRoles: [String!]
+    isDeleted: Boolean
+}
+
+extend input OrgMembershipWhereInput {
+    includeDeleted: Boolean
 }`, BuiltIn: false},
 	{Name: "../schema/orgsubscription.graphql", Input: `extend type Query {
     """
@@ -172159,6 +172171,8 @@ func (ec *executionContext) childFields_OrgMembership(ctx context.Context, field
 		return ec.fieldContext_OrgMembership_events(ctx, field)
 	case "additionalRoles":
 		return ec.fieldContext_OrgMembership_additionalRoles(ctx, field)
+	case "isDeleted":
+		return ec.fieldContext_OrgMembership_isDeleted(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type OrgMembership", field.Name)
 }

@@ -89611,6 +89611,7 @@ func (t *GetOrgMembersByOrgID_OrgMemberships_Edges_Node_User) GetLastName() *str
 type GetOrgMembersByOrgID_OrgMemberships_Edges_Node struct {
 	AdditionalRoles []string                                            "json:\"additionalRoles,omitempty\" graphql:\"additionalRoles\""
 	ID              string                                              "json:\"id\" graphql:\"id\""
+	IsDeleted       *bool                                               "json:\"isDeleted,omitempty\" graphql:\"isDeleted\""
 	OrganizationID  string                                              "json:\"organizationID\" graphql:\"organizationID\""
 	Role            enums.Role                                          "json:\"role\" graphql:\"role\""
 	User            GetOrgMembersByOrgID_OrgMemberships_Edges_Node_User "json:\"user\" graphql:\"user\""
@@ -89628,6 +89629,12 @@ func (t *GetOrgMembersByOrgID_OrgMemberships_Edges_Node) GetID() string {
 		t = &GetOrgMembersByOrgID_OrgMemberships_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetOrgMembersByOrgID_OrgMemberships_Edges_Node) GetIsDeleted() *bool {
+	if t == nil {
+		t = &GetOrgMembersByOrgID_OrgMemberships_Edges_Node{}
+	}
+	return t.IsDeleted
 }
 func (t *GetOrgMembersByOrgID_OrgMemberships_Edges_Node) GetOrganizationID() string {
 	if t == nil {
@@ -209066,6 +209073,7 @@ const GetOrgMembersByOrgIDDocument = `query GetOrgMembersByOrgID ($where: OrgMem
 					email
 				}
 				additionalRoles
+				isDeleted
 			}
 		}
 	}

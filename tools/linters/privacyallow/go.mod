@@ -4,7 +4,7 @@ go 1.27.3
 
 require (
 	github.com/golangci/plugin-module-register v0.1.2
-	golang.org/x/tools v0.52.1-0.20261106145633-d407941a339a
+	golang.org/x/tools v0.53.0
 	gotest.tools/v3 v3.5.2
 )
 
