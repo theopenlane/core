@@ -19,7 +19,7 @@ import (
 const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapSystemSweep | auth.CapInternalOperation | auth.CapBypassManagedGroup
 
 // backfillBatchSize is the size for each backfill operation
-const backfillBatchSize = 50
+const backfillBatchSize = 50 //nolint:unused
 
 // BackfillCaller is the capability-only caller every backfill routine runs as
 func BackfillCaller() *auth.Caller {

@@ -263,27 +263,31 @@ func isRequestIncludingHistory(ctx context.Context) bool {
 }
 
 func includeRemovedUserEdges(ctx context.Context, members []*generated.OrgMembership) error {
-	f, ok := findNestedField(ctx, "user")
+	missingMembers := lo.Filter(members, func(om *generated.OrgMembership, _ int) bool {
+		_, err := om.Edges.UserOrErr()
+		return om.UserID != "" && generated.IsNotFound(err)
+	})
+	if len(missingMembers) == 0 {
+		return nil
+	}
+
+	userField, ok := getOrgMembershipUserField(ctx)
 	if !ok {
 		return nil
 	}
 
-	// non deleted users will always be loaded so redundant to do that again
-	deletedOrgMembers := lo.FilterMap(members, func(om *generated.OrgMembership, _ int) (string, bool) {
-		return om.UserID, om.Edges.User == nil && om.UserID != ""
+	userIDs := lo.Map(missingMembers, func(om *generated.OrgMembership, _ int) string {
+		return om.UserID
 	})
-	if len(deletedOrgMembers) == 0 {
-		return nil
-	}
 
 	readCtx := entx.SkipSoftDelete(auth.WithInternalReadContext(ctx))
 
 	userCtx := graphql.WithFieldContext(readCtx, &graphql.FieldContext{
-		Field: *f,
+		Field: userField,
 	})
 
 	uq, err := generated.FromContext(ctx).User.Query().
-		Where(user.IDIn(lo.Uniq(deletedOrgMembers)...)).
+		Where(user.IDIn(lo.Uniq(userIDs)...)).
 		CollectFields(userCtx)
 	if err != nil {
 		return err
@@ -298,41 +302,40 @@ func includeRemovedUserEdges(ctx context.Context, members []*generated.OrgMember
 		return u.ID
 	})
 
-	for _, om := range members {
-		if om.Edges.User != nil {
-			continue
-		}
-
+	for _, om := range missingMembers {
 		om.Edges.User = groupByID[om.UserID]
 	}
 
 	return nil
 }
 
-// findNestedField checks if a field is requested in the nested query. because of the history merging,
-// we need to include the user nodes too unlike others where they would already be resolved
-func findNestedField(ctx context.Context, fieldName string) (*graphql.CollectedField, bool) {
-
+func getOrgMembershipUserField(ctx context.Context) (graphql.CollectedField, bool) {
 	opCtx := graphql.GetOperationContext(ctx)
-	fc := graphql.GetFieldContext(ctx)
+	field := graphql.GetFieldContext(ctx).Field
 
-	if opCtx == nil || fc == nil {
-		return nil, false
-	}
+	for _, name := range []string{"edges", "node", "user"} {
+		var match graphql.CollectedField
 
-	fields := graphql.CollectFields(opCtx, fc.Field.Selections, nil)
-	for len(fields) > 0 {
-		f := fields[0]
-		fields = fields[1:]
+		for _, child := range graphql.CollectFields(opCtx, field.Selections, nil) {
+			if child.Name != name {
+				continue
+			}
 
-		if f.Name == fieldName {
-			return &f, true
+			if match.Field == nil {
+				match.Field = child.Field
+			}
+
+			match.Selections = append(match.Selections, child.Selections...)
 		}
 
-		fields = append(fields, graphql.CollectFields(opCtx, f.Selections, nil)...)
+		if match.Field == nil {
+			return graphql.CollectedField{}, false
+		}
+
+		field = match
 	}
 
-	return nil, false
+	return field, true
 }
 
 // withOrgMembershipHistoryModifier modifies the query to include the org_membership_history while perserving the
