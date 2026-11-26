@@ -60,6 +60,22 @@ type ControlImplementationHistory struct {
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the internal owner for the control implementation when no user, group, or identity holder is linked
+	InternalOwner string `json:"internal_owner,omitempty"`
+	// the internal owner user id for the control implementation
+	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
+	// the internal owner group id for the control implementation
+	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the control implementation
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
+	// the delegate for the control implementation when no user, group, or identity holder is linked
+	DelegateName string `json:"delegate_name,omitempty"`
+	// the delegate user id for the control implementation
+	DelegateUserID string `json:"delegate_user_id,omitempty"`
+	// the delegate group id for the control implementation
+	DelegateGroupID string `json:"delegate_group_id,omitempty"`
+	// the delegate identity holder id for the control implementation
+	DelegateIdentityHolderID string `json:"delegate_identity_holder_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -92,7 +108,7 @@ func (*ControlImplementationHistory) scanValues(columns []string) ([]any, error)
 			values[i] = new(history.OpType)
 		case controlimplementationhistory.FieldSystemOwned, controlimplementationhistory.FieldVerified:
 			values[i] = new(sql.NullBool)
-		case controlimplementationhistory.FieldID, controlimplementationhistory.FieldRef, controlimplementationhistory.FieldCreatedBy, controlimplementationhistory.FieldUpdatedBy, controlimplementationhistory.FieldUpdatedByImpersonator, controlimplementationhistory.FieldDeletedBy, controlimplementationhistory.FieldSourceDefinitionID, controlimplementationhistory.FieldSourceDefinitionVersion, controlimplementationhistory.FieldSourceInstanceID, controlimplementationhistory.FieldManagedBy, controlimplementationhistory.FieldIntegrationRunID, controlimplementationhistory.FieldSourceKey, controlimplementationhistory.FieldExternalID, controlimplementationhistory.FieldOwnerID, controlimplementationhistory.FieldInternalNotes, controlimplementationhistory.FieldSystemInternalID, controlimplementationhistory.FieldStatus, controlimplementationhistory.FieldDetails:
+		case controlimplementationhistory.FieldID, controlimplementationhistory.FieldRef, controlimplementationhistory.FieldCreatedBy, controlimplementationhistory.FieldUpdatedBy, controlimplementationhistory.FieldUpdatedByImpersonator, controlimplementationhistory.FieldDeletedBy, controlimplementationhistory.FieldSourceDefinitionID, controlimplementationhistory.FieldSourceDefinitionVersion, controlimplementationhistory.FieldSourceInstanceID, controlimplementationhistory.FieldManagedBy, controlimplementationhistory.FieldIntegrationRunID, controlimplementationhistory.FieldSourceKey, controlimplementationhistory.FieldExternalID, controlimplementationhistory.FieldOwnerID, controlimplementationhistory.FieldInternalOwner, controlimplementationhistory.FieldInternalOwnerUserID, controlimplementationhistory.FieldInternalOwnerGroupID, controlimplementationhistory.FieldInternalOwnerIdentityHolderID, controlimplementationhistory.FieldDelegateName, controlimplementationhistory.FieldDelegateUserID, controlimplementationhistory.FieldDelegateGroupID, controlimplementationhistory.FieldDelegateIdentityHolderID, controlimplementationhistory.FieldInternalNotes, controlimplementationhistory.FieldSystemInternalID, controlimplementationhistory.FieldStatus, controlimplementationhistory.FieldDetails:
 			values[i] = new(sql.NullString)
 		case controlimplementationhistory.FieldHistoryTime, controlimplementationhistory.FieldCreatedAt, controlimplementationhistory.FieldUpdatedAt, controlimplementationhistory.FieldDeletedAt, controlimplementationhistory.FieldImplementationDate, controlimplementationhistory.FieldVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -233,6 +249,54 @@ func (_m *ControlImplementationHistory) assignValues(columns []string, values []
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case controlimplementationhistory.FieldInternalOwner:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner", values[i])
+			} else if value.Valid {
+				_m.InternalOwner = value.String
+			}
+		case controlimplementationhistory.FieldInternalOwnerUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_user_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerUserID = value.String
+			}
+		case controlimplementationhistory.FieldInternalOwnerGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerGroupID = value.String
+			}
+		case controlimplementationhistory.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
+			}
+		case controlimplementationhistory.FieldDelegateName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_name", values[i])
+			} else if value.Valid {
+				_m.DelegateName = value.String
+			}
+		case controlimplementationhistory.FieldDelegateUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_user_id", values[i])
+			} else if value.Valid {
+				_m.DelegateUserID = value.String
+			}
+		case controlimplementationhistory.FieldDelegateGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_group_id", values[i])
+			} else if value.Valid {
+				_m.DelegateGroupID = value.String
+			}
+		case controlimplementationhistory.FieldDelegateIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.DelegateIdentityHolderID = value.String
 			}
 		case controlimplementationhistory.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -386,6 +450,30 @@ func (_m *ControlImplementationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner=")
+	builder.WriteString(_m.InternalOwner)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_user_id=")
+	builder.WriteString(_m.InternalOwnerUserID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_group_id=")
+	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_name=")
+	builder.WriteString(_m.DelegateName)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_user_id=")
+	builder.WriteString(_m.DelegateUserID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_group_id=")
+	builder.WriteString(_m.DelegateGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_identity_holder_id=")
+	builder.WriteString(_m.DelegateIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))

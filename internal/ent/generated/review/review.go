@@ -50,12 +50,48 @@ const (
 	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
+	FieldInternalOwner = "internal_owner"
+	// FieldInternalOwnerUserID holds the string denoting the internal_owner_user_id field in the database.
+	FieldInternalOwnerUserID = "internal_owner_user_id"
+	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
+	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
+	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
+	FieldReviewedBy = "reviewed_by"
+	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
+	FieldReviewedByUserID = "reviewed_by_user_id"
+	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
+	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldReviewedByIdentityHolderID holds the string denoting the reviewed_by_identity_holder_id field in the database.
+	FieldReviewedByIdentityHolderID = "reviewed_by_identity_holder_id"
+	// FieldDelegateName holds the string denoting the delegate_name field in the database.
+	FieldDelegateName = "delegate_name"
+	// FieldDelegateUserID holds the string denoting the delegate_user_id field in the database.
+	FieldDelegateUserID = "delegate_user_id"
+	// FieldDelegateGroupID holds the string denoting the delegate_group_id field in the database.
+	FieldDelegateGroupID = "delegate_group_id"
+	// FieldDelegateIdentityHolderID holds the string denoting the delegate_identity_holder_id field in the database.
+	FieldDelegateIdentityHolderID = "delegate_identity_holder_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldReviewKindName holds the string denoting the review_kind_name field in the database.
+	FieldReviewKindName = "review_kind_name"
+	// FieldReviewKindID holds the string denoting the review_kind_id field in the database.
+	FieldReviewKindID = "review_kind_id"
+	// FieldReviewClassificationName holds the string denoting the review_classification_name field in the database.
+	FieldReviewClassificationName = "review_classification_name"
+	// FieldReviewClassificationID holds the string denoting the review_classification_id field in the database.
+	FieldReviewClassificationID = "review_classification_id"
+	// FieldReviewStateName holds the string denoting the review_state_name field in the database.
+	FieldReviewStateName = "review_state_name"
+	// FieldReviewStateID holds the string denoting the review_state_id field in the database.
+	FieldReviewStateID = "review_state_id"
 	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
 	FieldEnvironmentName = "environment_name"
 	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
@@ -108,6 +144,30 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
+	// EdgeInternalOwnerUser holds the string denoting the internal_owner_user edge name in mutations.
+	EdgeInternalOwnerUser = "internal_owner_user"
+	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
+	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeInternalOwnerIdentityHolder holds the string denoting the internal_owner_identity_holder edge name in mutations.
+	EdgeInternalOwnerIdentityHolder = "internal_owner_identity_holder"
+	// EdgeReviewedByUser holds the string denoting the reviewed_by_user edge name in mutations.
+	EdgeReviewedByUser = "reviewed_by_user"
+	// EdgeReviewedByGroup holds the string denoting the reviewed_by_group edge name in mutations.
+	EdgeReviewedByGroup = "reviewed_by_group"
+	// EdgeReviewedByIdentityHolder holds the string denoting the reviewed_by_identity_holder edge name in mutations.
+	EdgeReviewedByIdentityHolder = "reviewed_by_identity_holder"
+	// EdgeDelegateUser holds the string denoting the delegate_user edge name in mutations.
+	EdgeDelegateUser = "delegate_user"
+	// EdgeDelegateGroup holds the string denoting the delegate_group edge name in mutations.
+	EdgeDelegateGroup = "delegate_group"
+	// EdgeDelegateIdentityHolder holds the string denoting the delegate_identity_holder edge name in mutations.
+	EdgeDelegateIdentityHolder = "delegate_identity_holder"
+	// EdgeReviewKind holds the string denoting the review_kind edge name in mutations.
+	EdgeReviewKind = "review_kind"
+	// EdgeReviewClassification holds the string denoting the review_classification edge name in mutations.
+	EdgeReviewClassification = "review_classification"
+	// EdgeReviewState holds the string denoting the review_state edge name in mutations.
+	EdgeReviewState = "review_state"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
@@ -142,6 +202,10 @@ const (
 	EdgeComments = "comments"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeSystemDetails holds the string denoting the system_details edge name in mutations.
+	EdgeSystemDetails = "system_details"
 	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
 	EdgeInternalPolicies = "internal_policies"
 	// Table holds the table name of the review in the database.
@@ -170,6 +234,90 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
+	// InternalOwnerUserTable is the table that holds the internal_owner_user relation/edge.
+	InternalOwnerUserTable = "reviews"
+	// InternalOwnerUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	InternalOwnerUserInverseTable = "users"
+	// InternalOwnerUserColumn is the table column denoting the internal_owner_user relation/edge.
+	InternalOwnerUserColumn = "internal_owner_user_id"
+	// InternalOwnerGroupTable is the table that holds the internal_owner_group relation/edge.
+	InternalOwnerGroupTable = "reviews"
+	// InternalOwnerGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	InternalOwnerGroupInverseTable = "groups"
+	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
+	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// InternalOwnerIdentityHolderTable is the table that holds the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderTable = "reviews"
+	// InternalOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	InternalOwnerIdentityHolderInverseTable = "identity_holders"
+	// InternalOwnerIdentityHolderColumn is the table column denoting the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderColumn = "internal_owner_identity_holder_id"
+	// ReviewedByUserTable is the table that holds the reviewed_by_user relation/edge.
+	ReviewedByUserTable = "reviews"
+	// ReviewedByUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	ReviewedByUserInverseTable = "users"
+	// ReviewedByUserColumn is the table column denoting the reviewed_by_user relation/edge.
+	ReviewedByUserColumn = "reviewed_by_user_id"
+	// ReviewedByGroupTable is the table that holds the reviewed_by_group relation/edge.
+	ReviewedByGroupTable = "reviews"
+	// ReviewedByGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ReviewedByGroupInverseTable = "groups"
+	// ReviewedByGroupColumn is the table column denoting the reviewed_by_group relation/edge.
+	ReviewedByGroupColumn = "reviewed_by_group_id"
+	// ReviewedByIdentityHolderTable is the table that holds the reviewed_by_identity_holder relation/edge.
+	ReviewedByIdentityHolderTable = "reviews"
+	// ReviewedByIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	ReviewedByIdentityHolderInverseTable = "identity_holders"
+	// ReviewedByIdentityHolderColumn is the table column denoting the reviewed_by_identity_holder relation/edge.
+	ReviewedByIdentityHolderColumn = "reviewed_by_identity_holder_id"
+	// DelegateUserTable is the table that holds the delegate_user relation/edge.
+	DelegateUserTable = "reviews"
+	// DelegateUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	DelegateUserInverseTable = "users"
+	// DelegateUserColumn is the table column denoting the delegate_user relation/edge.
+	DelegateUserColumn = "delegate_user_id"
+	// DelegateGroupTable is the table that holds the delegate_group relation/edge.
+	DelegateGroupTable = "reviews"
+	// DelegateGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	DelegateGroupInverseTable = "groups"
+	// DelegateGroupColumn is the table column denoting the delegate_group relation/edge.
+	DelegateGroupColumn = "delegate_group_id"
+	// DelegateIdentityHolderTable is the table that holds the delegate_identity_holder relation/edge.
+	DelegateIdentityHolderTable = "reviews"
+	// DelegateIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	DelegateIdentityHolderInverseTable = "identity_holders"
+	// DelegateIdentityHolderColumn is the table column denoting the delegate_identity_holder relation/edge.
+	DelegateIdentityHolderColumn = "delegate_identity_holder_id"
+	// ReviewKindTable is the table that holds the review_kind relation/edge.
+	ReviewKindTable = "reviews"
+	// ReviewKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ReviewKindInverseTable = "custom_type_enums"
+	// ReviewKindColumn is the table column denoting the review_kind relation/edge.
+	ReviewKindColumn = "review_kind_id"
+	// ReviewClassificationTable is the table that holds the review_classification relation/edge.
+	ReviewClassificationTable = "reviews"
+	// ReviewClassificationInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ReviewClassificationInverseTable = "custom_type_enums"
+	// ReviewClassificationColumn is the table column denoting the review_classification relation/edge.
+	ReviewClassificationColumn = "review_classification_id"
+	// ReviewStateTable is the table that holds the review_state relation/edge.
+	ReviewStateTable = "reviews"
+	// ReviewStateInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ReviewStateInverseTable = "custom_type_enums"
+	// ReviewStateColumn is the table column denoting the review_state relation/edge.
+	ReviewStateColumn = "review_state_id"
 	// EnvironmentTable is the table that holds the environment relation/edge.
 	EnvironmentTable = "reviews"
 	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
@@ -267,6 +415,16 @@ const (
 	FilesInverseTable = "files"
 	// FilesColumn is the table column denoting the files relation/edge.
 	FilesColumn = "review_files"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_reviews"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// SystemDetailsTable is the table that holds the system_details relation/edge. The primary key declared below.
+	SystemDetailsTable = "system_detail_reviews"
+	// SystemDetailsInverseTable is the table name for the SystemDetail entity.
+	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
+	SystemDetailsInverseTable = "system_details"
 	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
 	InternalPoliciesTable = "review_internal_policies"
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
@@ -293,9 +451,27 @@ var Columns = []string{
 	FieldSourceKey,
 	FieldExternalID,
 	FieldOwnerID,
+	FieldInternalOwner,
+	FieldInternalOwnerUserID,
+	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
+	FieldReviewedBy,
+	FieldReviewedByUserID,
+	FieldReviewedByGroupID,
+	FieldReviewedByIdentityHolderID,
+	FieldDelegateName,
+	FieldDelegateUserID,
+	FieldDelegateGroupID,
+	FieldDelegateIdentityHolderID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldReviewKindName,
+	FieldReviewKindID,
+	FieldReviewClassificationName,
+	FieldReviewClassificationID,
+	FieldReviewStateName,
+	FieldReviewStateID,
 	FieldEnvironmentName,
 	FieldEnvironmentID,
 	FieldScopeName,
@@ -360,6 +536,12 @@ var (
 	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
 	// primary key for the entities relation (M2M).
 	EntitiesPrimaryKey = []string{"review_id", "entity_id"}
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "review_id"}
+	// SystemDetailsPrimaryKey and SystemDetailsColumn2 are the table columns denoting the
+	// primary key for the system_details relation (M2M).
+	SystemDetailsPrimaryKey = []string{"system_detail_id", "review_id"}
 	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
 	// primary key for the internal_policies relation (M2M).
 	InternalPoliciesPrimaryKey = []string{"review_id", "internal_policy_id"}
@@ -381,7 +563,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [14]ent.Hook
+	Hooks        [17]ent.Hook
 	Interceptors [5]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -499,6 +681,66 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByInternalOwner orders the results by the internal_owner field.
+func ByInternalOwner(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwner, opts...).ToFunc()
+}
+
+// ByInternalOwnerUserID orders the results by the internal_owner_user_id field.
+func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerUserID, opts...).ToFunc()
+}
+
+// ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
+func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
+// ByReviewedBy orders the results by the reviewed_by field.
+func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
+}
+
+// ByReviewedByUserID orders the results by the reviewed_by_user_id field.
+func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByUserID, opts...).ToFunc()
+}
+
+// ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
+func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByReviewedByIdentityHolderID orders the results by the reviewed_by_identity_holder_id field.
+func ByReviewedByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByIdentityHolderID, opts...).ToFunc()
+}
+
+// ByDelegateName orders the results by the delegate_name field.
+func ByDelegateName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateName, opts...).ToFunc()
+}
+
+// ByDelegateUserID orders the results by the delegate_user_id field.
+func ByDelegateUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateUserID, opts...).ToFunc()
+}
+
+// ByDelegateGroupID orders the results by the delegate_group_id field.
+func ByDelegateGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateGroupID, opts...).ToFunc()
+}
+
+// ByDelegateIdentityHolderID orders the results by the delegate_identity_holder_id field.
+func ByDelegateIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateIdentityHolderID, opts...).ToFunc()
+}
+
 // BySystemOwned orders the results by the system_owned field.
 func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
@@ -512,6 +754,36 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByReviewKindName orders the results by the review_kind_name field.
+func ByReviewKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewKindName, opts...).ToFunc()
+}
+
+// ByReviewKindID orders the results by the review_kind_id field.
+func ByReviewKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewKindID, opts...).ToFunc()
+}
+
+// ByReviewClassificationName orders the results by the review_classification_name field.
+func ByReviewClassificationName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewClassificationName, opts...).ToFunc()
+}
+
+// ByReviewClassificationID orders the results by the review_classification_id field.
+func ByReviewClassificationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewClassificationID, opts...).ToFunc()
+}
+
+// ByReviewStateName orders the results by the review_state_name field.
+func ByReviewStateName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewStateName, opts...).ToFunc()
+}
+
+// ByReviewStateID orders the results by the review_state_id field.
+func ByReviewStateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewStateID, opts...).ToFunc()
 }
 
 // ByEnvironmentName orders the results by the environment_name field.
@@ -660,6 +932,90 @@ func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalOwnerUserField orders the results by internal_owner_user field.
+func ByInternalOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalOwnerGroupField orders the results by internal_owner_group field.
+func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalOwnerIdentityHolderField orders the results by internal_owner_identity_holder field.
+func ByInternalOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByUserField orders the results by reviewed_by_user field.
+func ByReviewedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByGroupField orders the results by reviewed_by_group field.
+func ByReviewedByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByIdentityHolderField orders the results by reviewed_by_identity_holder field.
+func ByReviewedByIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateUserField orders the results by delegate_user field.
+func ByDelegateUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateGroupField orders the results by delegate_group field.
+func ByDelegateGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateIdentityHolderField orders the results by delegate_identity_holder field.
+func ByDelegateIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewKindField orders the results by review_kind field.
+func ByReviewKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewKindStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewClassificationField orders the results by review_classification field.
+func ByReviewClassificationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewClassificationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewStateField orders the results by review_state field.
+func ByReviewStateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewStateStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -880,6 +1236,34 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySystemDetailsCount orders the results by system_details count.
+func BySystemDetailsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSystemDetailsStep(), opts...)
+	}
+}
+
+// BySystemDetails orders the results by system_details terms.
+func BySystemDetails(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByInternalPoliciesCount orders the results by internal_policies count.
 func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -919,6 +1303,90 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EditorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
+	)
+}
+func newInternalOwnerUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerUserTable, InternalOwnerUserColumn),
+	)
+}
+func newInternalOwnerGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
+	)
+}
+func newInternalOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+	)
+}
+func newReviewedByUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByUserTable, ReviewedByUserColumn),
+	)
+}
+func newReviewedByGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+	)
+}
+func newReviewedByIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByIdentityHolderTable, ReviewedByIdentityHolderColumn),
+	)
+}
+func newDelegateUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateUserTable, DelegateUserColumn),
+	)
+}
+func newDelegateGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateGroupTable, DelegateGroupColumn),
+	)
+}
+func newDelegateIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateIdentityHolderTable, DelegateIdentityHolderColumn),
+	)
+}
+func newReviewKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewKindTable, ReviewKindColumn),
+	)
+}
+func newReviewClassificationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewClassificationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewClassificationTable, ReviewClassificationColumn),
+	)
+}
+func newReviewStateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewStateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewStateTable, ReviewStateColumn),
 	)
 }
 func newEnvironmentStep() *sqlgraph.Step {
@@ -1038,6 +1506,20 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
+	)
+}
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newSystemDetailsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SystemDetailsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SystemDetailsTable, SystemDetailsPrimaryKey...),
 	)
 }
 func newInternalPoliciesStep() *sqlgraph.Step {

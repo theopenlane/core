@@ -2738,6 +2738,46 @@ func (_q *ControlImplementationHistoryQuery) collectField(ctx context.Context, o
 				selectedFields = append(selectedFields, controlimplementationhistory.FieldOwnerID)
 				fieldSeen[controlimplementationhistory.FieldOwnerID] = struct{}{}
 			}
+		case "internalOwner":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldInternalOwner]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldInternalOwner)
+				fieldSeen[controlimplementationhistory.FieldInternalOwner] = struct{}{}
+			}
+		case "internalOwnerUserID":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldInternalOwnerUserID]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldInternalOwnerUserID)
+				fieldSeen[controlimplementationhistory.FieldInternalOwnerUserID] = struct{}{}
+			}
+		case "internalOwnerGroupID":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldInternalOwnerGroupID]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldInternalOwnerGroupID)
+				fieldSeen[controlimplementationhistory.FieldInternalOwnerGroupID] = struct{}{}
+			}
+		case "internalOwnerIdentityHolderID":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldInternalOwnerIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldInternalOwnerIdentityHolderID)
+				fieldSeen[controlimplementationhistory.FieldInternalOwnerIdentityHolderID] = struct{}{}
+			}
+		case "delegateName":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldDelegateName]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldDelegateName)
+				fieldSeen[controlimplementationhistory.FieldDelegateName] = struct{}{}
+			}
+		case "delegateUserID":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldDelegateUserID]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldDelegateUserID)
+				fieldSeen[controlimplementationhistory.FieldDelegateUserID] = struct{}{}
+			}
+		case "delegateGroupID":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldDelegateGroupID]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldDelegateGroupID)
+				fieldSeen[controlimplementationhistory.FieldDelegateGroupID] = struct{}{}
+			}
+		case "delegateIdentityHolderID":
+			if _, ok := fieldSeen[controlimplementationhistory.FieldDelegateIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, controlimplementationhistory.FieldDelegateIdentityHolderID)
+				fieldSeen[controlimplementationhistory.FieldDelegateIdentityHolderID] = struct{}{}
+			}
 		case "systemOwned":
 			if _, ok := fieldSeen[controlimplementationhistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, controlimplementationhistory.FieldSystemOwned)
@@ -10908,6 +10948,66 @@ func (_q *ReviewHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, reviewhistory.FieldOwnerID)
 				fieldSeen[reviewhistory.FieldOwnerID] = struct{}{}
 			}
+		case "internalOwner":
+			if _, ok := fieldSeen[reviewhistory.FieldInternalOwner]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldInternalOwner)
+				fieldSeen[reviewhistory.FieldInternalOwner] = struct{}{}
+			}
+		case "internalOwnerUserID":
+			if _, ok := fieldSeen[reviewhistory.FieldInternalOwnerUserID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldInternalOwnerUserID)
+				fieldSeen[reviewhistory.FieldInternalOwnerUserID] = struct{}{}
+			}
+		case "internalOwnerGroupID":
+			if _, ok := fieldSeen[reviewhistory.FieldInternalOwnerGroupID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldInternalOwnerGroupID)
+				fieldSeen[reviewhistory.FieldInternalOwnerGroupID] = struct{}{}
+			}
+		case "internalOwnerIdentityHolderID":
+			if _, ok := fieldSeen[reviewhistory.FieldInternalOwnerIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldInternalOwnerIdentityHolderID)
+				fieldSeen[reviewhistory.FieldInternalOwnerIdentityHolderID] = struct{}{}
+			}
+		case "reviewedBy":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewedBy]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewedBy)
+				fieldSeen[reviewhistory.FieldReviewedBy] = struct{}{}
+			}
+		case "reviewedByUserID":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewedByUserID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewedByUserID)
+				fieldSeen[reviewhistory.FieldReviewedByUserID] = struct{}{}
+			}
+		case "reviewedByGroupID":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewedByGroupID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewedByGroupID)
+				fieldSeen[reviewhistory.FieldReviewedByGroupID] = struct{}{}
+			}
+		case "reviewedByIdentityHolderID":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewedByIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewedByIdentityHolderID)
+				fieldSeen[reviewhistory.FieldReviewedByIdentityHolderID] = struct{}{}
+			}
+		case "delegateName":
+			if _, ok := fieldSeen[reviewhistory.FieldDelegateName]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldDelegateName)
+				fieldSeen[reviewhistory.FieldDelegateName] = struct{}{}
+			}
+		case "delegateUserID":
+			if _, ok := fieldSeen[reviewhistory.FieldDelegateUserID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldDelegateUserID)
+				fieldSeen[reviewhistory.FieldDelegateUserID] = struct{}{}
+			}
+		case "delegateGroupID":
+			if _, ok := fieldSeen[reviewhistory.FieldDelegateGroupID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldDelegateGroupID)
+				fieldSeen[reviewhistory.FieldDelegateGroupID] = struct{}{}
+			}
+		case "delegateIdentityHolderID":
+			if _, ok := fieldSeen[reviewhistory.FieldDelegateIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldDelegateIdentityHolderID)
+				fieldSeen[reviewhistory.FieldDelegateIdentityHolderID] = struct{}{}
+			}
 		case "systemOwned":
 			if _, ok := fieldSeen[reviewhistory.FieldSystemOwned]; !ok {
 				selectedFields = append(selectedFields, reviewhistory.FieldSystemOwned)
@@ -10922,6 +11022,36 @@ func (_q *ReviewHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[reviewhistory.FieldSystemInternalID]; !ok {
 				selectedFields = append(selectedFields, reviewhistory.FieldSystemInternalID)
 				fieldSeen[reviewhistory.FieldSystemInternalID] = struct{}{}
+			}
+		case "reviewKindName":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewKindName]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewKindName)
+				fieldSeen[reviewhistory.FieldReviewKindName] = struct{}{}
+			}
+		case "reviewKindID":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewKindID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewKindID)
+				fieldSeen[reviewhistory.FieldReviewKindID] = struct{}{}
+			}
+		case "reviewClassificationName":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewClassificationName]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewClassificationName)
+				fieldSeen[reviewhistory.FieldReviewClassificationName] = struct{}{}
+			}
+		case "reviewClassificationID":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewClassificationID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewClassificationID)
+				fieldSeen[reviewhistory.FieldReviewClassificationID] = struct{}{}
+			}
+		case "reviewStateName":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewStateName]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewStateName)
+				fieldSeen[reviewhistory.FieldReviewStateName] = struct{}{}
+			}
+		case "reviewStateID":
+			if _, ok := fieldSeen[reviewhistory.FieldReviewStateID]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldReviewStateID)
+				fieldSeen[reviewhistory.FieldReviewStateID] = struct{}{}
 			}
 		case "environmentName":
 			if _, ok := fieldSeen[reviewhistory.FieldEnvironmentName]; !ok {

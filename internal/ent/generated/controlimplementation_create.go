@@ -13,10 +13,15 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // ControlImplementationCreate is the builder for creating a ControlImplementation entity.
@@ -242,6 +247,118 @@ func (_c *ControlImplementationCreate) SetNillableOwnerID(v *string) *ControlImp
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *ControlImplementationCreate) SetInternalOwner(v string) *ControlImplementationCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableInternalOwner(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *ControlImplementationCreate) SetInternalOwnerUserID(v string) *ControlImplementationCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableInternalOwnerUserID(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *ControlImplementationCreate) SetInternalOwnerGroupID(v string) *ControlImplementationCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableInternalOwnerGroupID(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *ControlImplementationCreate) SetInternalOwnerIdentityHolderID(v string) *ControlImplementationCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_c *ControlImplementationCreate) SetDelegateName(v string) *ControlImplementationCreate {
+	_c.mutation.SetDelegateName(v)
+	return _c
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableDelegateName(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetDelegateName(*v)
+	}
+	return _c
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_c *ControlImplementationCreate) SetDelegateUserID(v string) *ControlImplementationCreate {
+	_c.mutation.SetDelegateUserID(v)
+	return _c
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableDelegateUserID(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetDelegateUserID(*v)
+	}
+	return _c
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_c *ControlImplementationCreate) SetDelegateGroupID(v string) *ControlImplementationCreate {
+	_c.mutation.SetDelegateGroupID(v)
+	return _c
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableDelegateGroupID(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetDelegateGroupID(*v)
+	}
+	return _c
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_c *ControlImplementationCreate) SetDelegateIdentityHolderID(v string) *ControlImplementationCreate {
+	_c.mutation.SetDelegateIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_c *ControlImplementationCreate) SetNillableDelegateIdentityHolderID(v *string) *ControlImplementationCreate {
+	if v != nil {
+		_c.SetDelegateIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *ControlImplementationCreate) SetSystemOwned(v bool) *ControlImplementationCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -439,6 +556,36 @@ func (_c *ControlImplementationCreate) AddViewers(v ...*Group) *ControlImplement
 	return _c.AddViewerIDs(ids...)
 }
 
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_c *ControlImplementationCreate) SetInternalOwnerUser(v *User) *ControlImplementationCreate {
+	return _c.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_c *ControlImplementationCreate) SetInternalOwnerGroup(v *Group) *ControlImplementationCreate {
+	return _c.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *ControlImplementationCreate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *ControlImplementationCreate {
+	return _c.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
+// SetDelegateUser sets the "delegate_user" edge to the User entity.
+func (_c *ControlImplementationCreate) SetDelegateUser(v *User) *ControlImplementationCreate {
+	return _c.SetDelegateUserID(v.ID)
+}
+
+// SetDelegateGroup sets the "delegate_group" edge to the Group entity.
+func (_c *ControlImplementationCreate) SetDelegateGroup(v *Group) *ControlImplementationCreate {
+	return _c.SetDelegateGroupID(v.ID)
+}
+
+// SetDelegateIdentityHolder sets the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_c *ControlImplementationCreate) SetDelegateIdentityHolder(v *IdentityHolder) *ControlImplementationCreate {
+	return _c.SetDelegateIdentityHolderID(v.ID)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_c *ControlImplementationCreate) AddControlIDs(ids ...string) *ControlImplementationCreate {
 	_c.mutation.AddControlIDs(ids...)
@@ -482,6 +629,51 @@ func (_c *ControlImplementationCreate) AddTasks(v ...*Task) *ControlImplementati
 		ids[i] = v[i].ID
 	}
 	return _c.AddTaskIDs(ids...)
+}
+
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *ControlImplementationCreate) AddPlatformIDs(ids ...string) *ControlImplementationCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *ControlImplementationCreate) AddPlatforms(v ...*Platform) *ControlImplementationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_c *ControlImplementationCreate) AddSystemDetailIDs(ids ...string) *ControlImplementationCreate {
+	_c.mutation.AddSystemDetailIDs(ids...)
+	return _c
+}
+
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_c *ControlImplementationCreate) AddSystemDetails(v ...*SystemDetail) *ControlImplementationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSystemDetailIDs(ids...)
+}
+
+// AddCommentIDs adds the "comments" edge to the Note entity by IDs.
+func (_c *ControlImplementationCreate) AddCommentIDs(ids ...string) *ControlImplementationCreate {
+	_c.mutation.AddCommentIDs(ids...)
+	return _c
+}
+
+// AddComments adds the "comments" edges to the Note entity.
+func (_c *ControlImplementationCreate) AddComments(v ...*Note) *ControlImplementationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCommentIDs(ids...)
 }
 
 // Mutation returns the ControlImplementationMutation object of the builder.
@@ -664,6 +856,14 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 		_spec.SetField(controlimplementation.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
 	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(controlimplementation.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.DelegateName(); ok {
+		_spec.SetField(controlimplementation.FieldDelegateName, field.TypeString, value)
+		_node.DelegateName = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(controlimplementation.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -781,6 +981,108 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.InternalOwnerUserTable,
+			Columns: []string{controlimplementation.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.InternalOwnerGroupTable,
+			Columns: []string{controlimplementation.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.InternalOwnerIdentityHolderTable,
+			Columns: []string{controlimplementation.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DelegateUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.DelegateUserTable,
+			Columns: []string{controlimplementation.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DelegateUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DelegateGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.DelegateGroupTable,
+			Columns: []string{controlimplementation.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DelegateGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DelegateIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.DelegateIdentityHolderTable,
+			Columns: []string{controlimplementation.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DelegateIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -822,6 +1124,54 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.PlatformsTable,
+			Columns: controlimplementation.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.SystemDetailsTable,
+			Columns: controlimplementation.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CommentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlimplementation.CommentsTable,
+			Columns: []string{controlimplementation.CommentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

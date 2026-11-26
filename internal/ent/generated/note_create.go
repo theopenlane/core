@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
@@ -453,6 +454,25 @@ func (_c *NoteCreate) SetFinding(v *Finding) *NoteCreate {
 	return _c.SetFindingID(v.ID)
 }
 
+// SetControlImplementationID sets the "control_implementation" edge to the ControlImplementation entity by ID.
+func (_c *NoteCreate) SetControlImplementationID(id string) *NoteCreate {
+	_c.mutation.SetControlImplementationID(id)
+	return _c
+}
+
+// SetNillableControlImplementationID sets the "control_implementation" edge to the ControlImplementation entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableControlImplementationID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetControlImplementationID(*id)
+	}
+	return _c
+}
+
+// SetControlImplementation sets the "control_implementation" edge to the ControlImplementation entity.
+func (_c *NoteCreate) SetControlImplementation(v *ControlImplementation) *NoteCreate {
+	return _c.SetControlImplementationID(v.ID)
+}
+
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
 func (_c *NoteCreate) SetEvidenceID(id string) *NoteCreate {
 	_c.mutation.SetEvidenceID(id)
@@ -870,6 +890,23 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.finding_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlImplementationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlImplementationTable,
+			Columns: []string{note.ControlImplementationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.control_implementation_comments = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {

@@ -14,12 +14,14 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 
 	"github.com/theopenlane/logx"
@@ -28,23 +30,27 @@ import (
 // SystemDetailQuery is the builder for querying SystemDetail entities.
 type SystemDetailQuery struct {
 	config
-	ctx                      *QueryContext
-	order                    []systemdetail.OrderOption
-	inters                   []Interceptor
-	predicates               []predicate.SystemDetail
-	withIntegrationRuns      *IntegrationRunQuery
-	withOwner                *OrganizationQuery
-	withPrograms             *ProgramQuery
-	withPlatforms            *PlatformQuery
-	withEntities             *EntityQuery
-	withAssets               *AssetQuery
-	loadTotal                []func(context.Context, []*SystemDetail) error
-	modifiers                []func(*sql.Selector)
-	withNamedIntegrationRuns map[string]*IntegrationRunQuery
-	withNamedPrograms        map[string]*ProgramQuery
-	withNamedPlatforms       map[string]*PlatformQuery
-	withNamedEntities        map[string]*EntityQuery
-	withNamedAssets          map[string]*AssetQuery
+	ctx                             *QueryContext
+	order                           []systemdetail.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.SystemDetail
+	withIntegrationRuns             *IntegrationRunQuery
+	withOwner                       *OrganizationQuery
+	withPrograms                    *ProgramQuery
+	withPlatforms                   *PlatformQuery
+	withEntities                    *EntityQuery
+	withAssets                      *AssetQuery
+	withControlImplementations      *ControlImplementationQuery
+	withReviews                     *ReviewQuery
+	loadTotal                       []func(context.Context, []*SystemDetail) error
+	modifiers                       []func(*sql.Selector)
+	withNamedIntegrationRuns        map[string]*IntegrationRunQuery
+	withNamedPrograms               map[string]*ProgramQuery
+	withNamedPlatforms              map[string]*PlatformQuery
+	withNamedEntities               map[string]*EntityQuery
+	withNamedAssets                 map[string]*AssetQuery
+	withNamedControlImplementations map[string]*ControlImplementationQuery
+	withNamedReviews                map[string]*ReviewQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -206,6 +212,50 @@ func (_q *SystemDetailQuery) QueryAssets() *AssetQuery {
 			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, selector),
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, systemdetail.AssetsTable, systemdetail.AssetsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlImplementations chains the current query on the "control_implementations" edge.
+func (_q *SystemDetailQuery) QueryControlImplementations() *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, selector),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, systemdetail.ControlImplementationsTable, systemdetail.ControlImplementationsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviews chains the current query on the "reviews" edge.
+func (_q *SystemDetailQuery) QueryReviews() *ReviewQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, selector),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, systemdetail.ReviewsTable, systemdetail.ReviewsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -400,17 +450,19 @@ func (_q *SystemDetailQuery) Clone() *SystemDetailQuery {
 		return nil
 	}
 	return &SystemDetailQuery{
-		config:              _q.config,
-		ctx:                 _q.ctx.Clone(),
-		order:               append([]systemdetail.OrderOption{}, _q.order...),
-		inters:              append([]Interceptor{}, _q.inters...),
-		predicates:          append([]predicate.SystemDetail{}, _q.predicates...),
-		withIntegrationRuns: _q.withIntegrationRuns.Clone(),
-		withOwner:           _q.withOwner.Clone(),
-		withPrograms:        _q.withPrograms.Clone(),
-		withPlatforms:       _q.withPlatforms.Clone(),
-		withEntities:        _q.withEntities.Clone(),
-		withAssets:          _q.withAssets.Clone(),
+		config:                     _q.config,
+		ctx:                        _q.ctx.Clone(),
+		order:                      append([]systemdetail.OrderOption{}, _q.order...),
+		inters:                     append([]Interceptor{}, _q.inters...),
+		predicates:                 append([]predicate.SystemDetail{}, _q.predicates...),
+		withIntegrationRuns:        _q.withIntegrationRuns.Clone(),
+		withOwner:                  _q.withOwner.Clone(),
+		withPrograms:               _q.withPrograms.Clone(),
+		withPlatforms:              _q.withPlatforms.Clone(),
+		withEntities:               _q.withEntities.Clone(),
+		withAssets:                 _q.withAssets.Clone(),
+		withControlImplementations: _q.withControlImplementations.Clone(),
+		withReviews:                _q.withReviews.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -481,6 +533,28 @@ func (_q *SystemDetailQuery) WithAssets(opts ...func(*AssetQuery)) *SystemDetail
 		opt(query)
 	}
 	_q.withAssets = query
+	return _q
+}
+
+// WithControlImplementations tells the query-builder to eager-load the nodes that are connected to
+// the "control_implementations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithControlImplementations(opts ...func(*ControlImplementationQuery)) *SystemDetailQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControlImplementations = query
+	return _q
+}
+
+// WithReviews tells the query-builder to eager-load the nodes that are connected to
+// the "reviews" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithReviews(opts ...func(*ReviewQuery)) *SystemDetailQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviews = query
 	return _q
 }
 
@@ -568,13 +642,15 @@ func (_q *SystemDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*SystemDetail{}
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [8]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withPrograms != nil,
 			_q.withPlatforms != nil,
 			_q.withEntities != nil,
 			_q.withAssets != nil,
+			_q.withControlImplementations != nil,
+			_q.withReviews != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -639,6 +715,22 @@ func (_q *SystemDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withControlImplementations; query != nil {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *SystemDetail) { n.Edges.ControlImplementations = []*ControlImplementation{} },
+			func(n *SystemDetail, e *ControlImplementation) {
+				n.Edges.ControlImplementations = append(n.Edges.ControlImplementations, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviews; query != nil {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *SystemDetail) { n.Edges.Reviews = []*Review{} },
+			func(n *SystemDetail, e *Review) { n.Edges.Reviews = append(n.Edges.Reviews, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedIntegrationRuns {
 		if err := _q.loadIntegrationRuns(ctx, query, nodes,
 			func(n *SystemDetail) { n.appendNamedIntegrationRuns(name) },
@@ -671,6 +763,20 @@ func (_q *SystemDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAssets(ctx, query, nodes,
 			func(n *SystemDetail) { n.appendNamedAssets(name) },
 			func(n *SystemDetail, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControlImplementations {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *SystemDetail) { n.appendNamedControlImplementations(name) },
+			func(n *SystemDetail, e *ControlImplementation) { n.appendNamedControlImplementations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReviews {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *SystemDetail) { n.appendNamedReviews(name) },
+			func(n *SystemDetail, e *Review) { n.appendNamedReviews(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -986,6 +1092,128 @@ func (_q *SystemDetailQuery) loadAssets(ctx context.Context, query *AssetQuery, 
 	}
 	return nil
 }
+func (_q *SystemDetailQuery) loadControlImplementations(ctx context.Context, query *ControlImplementationQuery, nodes []*SystemDetail, init func(*SystemDetail), assign func(*SystemDetail, *ControlImplementation)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*SystemDetail)
+	nids := make(map[string]map[*SystemDetail]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(systemdetail.ControlImplementationsTable)
+		s.Join(joinT).On(s.C(controlimplementation.FieldID), joinT.C(systemdetail.ControlImplementationsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(systemdetail.ControlImplementationsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(systemdetail.ControlImplementationsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*SystemDetail]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ControlImplementation](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "control_implementations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *SystemDetailQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*SystemDetail, init func(*SystemDetail), assign func(*SystemDetail, *Review)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*SystemDetail)
+	nids := make(map[string]map[*SystemDetail]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(systemdetail.ReviewsTable)
+		s.Join(joinT).On(s.C(review.FieldID), joinT.C(systemdetail.ReviewsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(systemdetail.ReviewsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(systemdetail.ReviewsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*SystemDetail]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Review](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "reviews" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *SystemDetailQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1151,6 +1379,34 @@ func (_q *SystemDetailQuery) WithNamedAssets(name string, opts ...func(*AssetQue
 		_q.withNamedAssets = make(map[string]*AssetQuery)
 	}
 	_q.withNamedAssets[name] = query
+	return _q
+}
+
+// WithNamedControlImplementations tells the query-builder to eager-load the nodes that are connected to the "control_implementations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithNamedControlImplementations(name string, opts ...func(*ControlImplementationQuery)) *SystemDetailQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControlImplementations == nil {
+		_q.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
+	}
+	_q.withNamedControlImplementations[name] = query
+	return _q
+}
+
+// WithNamedReviews tells the query-builder to eager-load the nodes that are connected to the "reviews"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SystemDetailQuery) WithNamedReviews(name string, opts ...func(*ReviewQuery)) *SystemDetailQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReviews == nil {
+		_q.withNamedReviews = make(map[string]*ReviewQuery)
+	}
+	_q.withNamedReviews[name] = query
 	return _q
 }
 

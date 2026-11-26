@@ -531,33 +531,41 @@ type ComplexityRoot struct {
 	}
 
 	ControlImplementationHistory struct {
-		CreatedAt               func(childComplexity int) int
-		CreatedBy               func(childComplexity int) int
-		Details                 func(childComplexity int) int
-		DetailsJSON             func(childComplexity int) int
-		ExternalID              func(childComplexity int) int
-		HistoryTime             func(childComplexity int) int
-		ID                      func(childComplexity int) int
-		ImplementationDate      func(childComplexity int) int
-		IntegrationRunID        func(childComplexity int) int
-		InternalNotes           func(childComplexity int) int
-		ManagedBy               func(childComplexity int) int
-		Operation               func(childComplexity int) int
-		OwnerID                 func(childComplexity int) int
-		Ref                     func(childComplexity int) int
-		SourceDefinitionID      func(childComplexity int) int
-		SourceDefinitionVersion func(childComplexity int) int
-		SourceInstanceID        func(childComplexity int) int
-		SourceKey               func(childComplexity int) int
-		Status                  func(childComplexity int) int
-		SystemInternalID        func(childComplexity int) int
-		SystemOwned             func(childComplexity int) int
-		Tags                    func(childComplexity int) int
-		UpdatedAt               func(childComplexity int) int
-		UpdatedBy               func(childComplexity int) int
-		UpdatedByImpersonator   func(childComplexity int) int
-		VerificationDate        func(childComplexity int) int
-		Verified                func(childComplexity int) int
+		CreatedAt                     func(childComplexity int) int
+		CreatedBy                     func(childComplexity int) int
+		DelegateGroupID               func(childComplexity int) int
+		DelegateIdentityHolderID      func(childComplexity int) int
+		DelegateName                  func(childComplexity int) int
+		DelegateUserID                func(childComplexity int) int
+		Details                       func(childComplexity int) int
+		DetailsJSON                   func(childComplexity int) int
+		ExternalID                    func(childComplexity int) int
+		HistoryTime                   func(childComplexity int) int
+		ID                            func(childComplexity int) int
+		ImplementationDate            func(childComplexity int) int
+		IntegrationRunID              func(childComplexity int) int
+		InternalNotes                 func(childComplexity int) int
+		InternalOwner                 func(childComplexity int) int
+		InternalOwnerGroupID          func(childComplexity int) int
+		InternalOwnerIdentityHolderID func(childComplexity int) int
+		InternalOwnerUserID           func(childComplexity int) int
+		ManagedBy                     func(childComplexity int) int
+		Operation                     func(childComplexity int) int
+		OwnerID                       func(childComplexity int) int
+		Ref                           func(childComplexity int) int
+		SourceDefinitionID            func(childComplexity int) int
+		SourceDefinitionVersion       func(childComplexity int) int
+		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
+		Status                        func(childComplexity int) int
+		SystemInternalID              func(childComplexity int) int
+		SystemOwned                   func(childComplexity int) int
+		Tags                          func(childComplexity int) int
+		UpdatedAt                     func(childComplexity int) int
+		UpdatedBy                     func(childComplexity int) int
+		UpdatedByImpersonator         func(childComplexity int) int
+		VerificationDate              func(childComplexity int) int
+		Verified                      func(childComplexity int) int
 	}
 
 	ControlImplementationHistoryConnection struct {
@@ -2184,49 +2192,67 @@ type ComplexityRoot struct {
 	}
 
 	ReviewHistory struct {
-		Approved                func(childComplexity int) int
-		ApprovedAt              func(childComplexity int) int
-		Category                func(childComplexity int) int
-		Classification          func(childComplexity int) int
-		CreatedAt               func(childComplexity int) int
-		CreatedBy               func(childComplexity int) int
-		Details                 func(childComplexity int) int
-		EnvironmentID           func(childComplexity int) int
-		EnvironmentName         func(childComplexity int) int
-		ExternalID              func(childComplexity int) int
-		ExternalOwnerID         func(childComplexity int) int
-		ExternalURI             func(childComplexity int) int
-		HistoryTime             func(childComplexity int) int
-		ID                      func(childComplexity int) int
-		IntegrationRunID        func(childComplexity int) int
-		InternalNotes           func(childComplexity int) int
-		ManagedBy               func(childComplexity int) int
-		Metadata                func(childComplexity int) int
-		Operation               func(childComplexity int) int
-		OwnerID                 func(childComplexity int) int
-		RawPayload              func(childComplexity int) int
-		Ref                     func(childComplexity int) int
-		ReportedAt              func(childComplexity int) int
-		Reporter                func(childComplexity int) int
-		ReviewedAt              func(childComplexity int) int
-		ReviewerID              func(childComplexity int) int
-		ScopeID                 func(childComplexity int) int
-		ScopeName               func(childComplexity int) int
-		Source                  func(childComplexity int) int
-		SourceDefinitionID      func(childComplexity int) int
-		SourceDefinitionVersion func(childComplexity int) int
-		SourceInstanceID        func(childComplexity int) int
-		SourceKey               func(childComplexity int) int
-		State                   func(childComplexity int) int
-		Status                  func(childComplexity int) int
-		Summary                 func(childComplexity int) int
-		SystemInternalID        func(childComplexity int) int
-		SystemOwned             func(childComplexity int) int
-		Tags                    func(childComplexity int) int
-		Title                   func(childComplexity int) int
-		UpdatedAt               func(childComplexity int) int
-		UpdatedBy               func(childComplexity int) int
-		UpdatedByImpersonator   func(childComplexity int) int
+		Approved                      func(childComplexity int) int
+		ApprovedAt                    func(childComplexity int) int
+		Category                      func(childComplexity int) int
+		Classification                func(childComplexity int) int
+		CreatedAt                     func(childComplexity int) int
+		CreatedBy                     func(childComplexity int) int
+		DelegateGroupID               func(childComplexity int) int
+		DelegateIdentityHolderID      func(childComplexity int) int
+		DelegateName                  func(childComplexity int) int
+		DelegateUserID                func(childComplexity int) int
+		Details                       func(childComplexity int) int
+		EnvironmentID                 func(childComplexity int) int
+		EnvironmentName               func(childComplexity int) int
+		ExternalID                    func(childComplexity int) int
+		ExternalOwnerID               func(childComplexity int) int
+		ExternalURI                   func(childComplexity int) int
+		HistoryTime                   func(childComplexity int) int
+		ID                            func(childComplexity int) int
+		IntegrationRunID              func(childComplexity int) int
+		InternalNotes                 func(childComplexity int) int
+		InternalOwner                 func(childComplexity int) int
+		InternalOwnerGroupID          func(childComplexity int) int
+		InternalOwnerIdentityHolderID func(childComplexity int) int
+		InternalOwnerUserID           func(childComplexity int) int
+		ManagedBy                     func(childComplexity int) int
+		Metadata                      func(childComplexity int) int
+		Operation                     func(childComplexity int) int
+		OwnerID                       func(childComplexity int) int
+		RawPayload                    func(childComplexity int) int
+		Ref                           func(childComplexity int) int
+		ReportedAt                    func(childComplexity int) int
+		Reporter                      func(childComplexity int) int
+		ReviewClassificationID        func(childComplexity int) int
+		ReviewClassificationName      func(childComplexity int) int
+		ReviewKindID                  func(childComplexity int) int
+		ReviewKindName                func(childComplexity int) int
+		ReviewStateID                 func(childComplexity int) int
+		ReviewStateName               func(childComplexity int) int
+		ReviewedAt                    func(childComplexity int) int
+		ReviewedBy                    func(childComplexity int) int
+		ReviewedByGroupID             func(childComplexity int) int
+		ReviewedByIdentityHolderID    func(childComplexity int) int
+		ReviewedByUserID              func(childComplexity int) int
+		ReviewerID                    func(childComplexity int) int
+		ScopeID                       func(childComplexity int) int
+		ScopeName                     func(childComplexity int) int
+		Source                        func(childComplexity int) int
+		SourceDefinitionID            func(childComplexity int) int
+		SourceDefinitionVersion       func(childComplexity int) int
+		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
+		State                         func(childComplexity int) int
+		Status                        func(childComplexity int) int
+		Summary                       func(childComplexity int) int
+		SystemInternalID              func(childComplexity int) int
+		SystemOwned                   func(childComplexity int) int
+		Tags                          func(childComplexity int) int
+		Title                         func(childComplexity int) int
+		UpdatedAt                     func(childComplexity int) int
+		UpdatedBy                     func(childComplexity int) int
+		UpdatedByImpersonator         func(childComplexity int) int
 	}
 
 	ReviewHistoryConnection struct {
@@ -5831,6 +5857,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementationHistory.CreatedBy(childComplexity), true
+	case "ControlImplementationHistory.delegateGroupID":
+		if e.ComplexityRoot.ControlImplementationHistory.DelegateGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.DelegateGroupID(childComplexity), true
+	case "ControlImplementationHistory.delegateIdentityHolderID":
+		if e.ComplexityRoot.ControlImplementationHistory.DelegateIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.DelegateIdentityHolderID(childComplexity), true
+	case "ControlImplementationHistory.delegateName":
+		if e.ComplexityRoot.ControlImplementationHistory.DelegateName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.DelegateName(childComplexity), true
+	case "ControlImplementationHistory.delegateUserID":
+		if e.ComplexityRoot.ControlImplementationHistory.DelegateUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.DelegateUserID(childComplexity), true
 	case "ControlImplementationHistory.details":
 		if e.ComplexityRoot.ControlImplementationHistory.Details == nil {
 			break
@@ -5879,6 +5929,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementationHistory.InternalNotes(childComplexity), true
+	case "ControlImplementationHistory.internalOwner":
+		if e.ComplexityRoot.ControlImplementationHistory.InternalOwner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.InternalOwner(childComplexity), true
+	case "ControlImplementationHistory.internalOwnerGroupID":
+		if e.ComplexityRoot.ControlImplementationHistory.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.InternalOwnerGroupID(childComplexity), true
+	case "ControlImplementationHistory.internalOwnerIdentityHolderID":
+		if e.ComplexityRoot.ControlImplementationHistory.InternalOwnerIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.InternalOwnerIdentityHolderID(childComplexity), true
+	case "ControlImplementationHistory.internalOwnerUserID":
+		if e.ComplexityRoot.ControlImplementationHistory.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.InternalOwnerUserID(childComplexity), true
 	case "ControlImplementationHistory.managedBy":
 		if e.ComplexityRoot.ControlImplementationHistory.ManagedBy == nil {
 			break
@@ -14315,6 +14389,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewHistory.CreatedBy(childComplexity), true
+	case "ReviewHistory.delegateGroupID":
+		if e.ComplexityRoot.ReviewHistory.DelegateGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.DelegateGroupID(childComplexity), true
+	case "ReviewHistory.delegateIdentityHolderID":
+		if e.ComplexityRoot.ReviewHistory.DelegateIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.DelegateIdentityHolderID(childComplexity), true
+	case "ReviewHistory.delegateName":
+		if e.ComplexityRoot.ReviewHistory.DelegateName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.DelegateName(childComplexity), true
+	case "ReviewHistory.delegateUserID":
+		if e.ComplexityRoot.ReviewHistory.DelegateUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.DelegateUserID(childComplexity), true
 	case "ReviewHistory.details":
 		if e.ComplexityRoot.ReviewHistory.Details == nil {
 			break
@@ -14375,6 +14473,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewHistory.InternalNotes(childComplexity), true
+	case "ReviewHistory.internalOwner":
+		if e.ComplexityRoot.ReviewHistory.InternalOwner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.InternalOwner(childComplexity), true
+	case "ReviewHistory.internalOwnerGroupID":
+		if e.ComplexityRoot.ReviewHistory.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.InternalOwnerGroupID(childComplexity), true
+	case "ReviewHistory.internalOwnerIdentityHolderID":
+		if e.ComplexityRoot.ReviewHistory.InternalOwnerIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.InternalOwnerIdentityHolderID(childComplexity), true
+	case "ReviewHistory.internalOwnerUserID":
+		if e.ComplexityRoot.ReviewHistory.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.InternalOwnerUserID(childComplexity), true
 	case "ReviewHistory.managedBy":
 		if e.ComplexityRoot.ReviewHistory.ManagedBy == nil {
 			break
@@ -14423,12 +14545,72 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewHistory.Reporter(childComplexity), true
+	case "ReviewHistory.reviewClassificationID":
+		if e.ComplexityRoot.ReviewHistory.ReviewClassificationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewClassificationID(childComplexity), true
+	case "ReviewHistory.reviewClassificationName":
+		if e.ComplexityRoot.ReviewHistory.ReviewClassificationName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewClassificationName(childComplexity), true
+	case "ReviewHistory.reviewKindID":
+		if e.ComplexityRoot.ReviewHistory.ReviewKindID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewKindID(childComplexity), true
+	case "ReviewHistory.reviewKindName":
+		if e.ComplexityRoot.ReviewHistory.ReviewKindName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewKindName(childComplexity), true
+	case "ReviewHistory.reviewStateID":
+		if e.ComplexityRoot.ReviewHistory.ReviewStateID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewStateID(childComplexity), true
+	case "ReviewHistory.reviewStateName":
+		if e.ComplexityRoot.ReviewHistory.ReviewStateName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewStateName(childComplexity), true
 	case "ReviewHistory.reviewedAt":
 		if e.ComplexityRoot.ReviewHistory.ReviewedAt == nil {
 			break
 		}
 
 		return e.ComplexityRoot.ReviewHistory.ReviewedAt(childComplexity), true
+	case "ReviewHistory.reviewedBy":
+		if e.ComplexityRoot.ReviewHistory.ReviewedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewedBy(childComplexity), true
+	case "ReviewHistory.reviewedByGroupID":
+		if e.ComplexityRoot.ReviewHistory.ReviewedByGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewedByGroupID(childComplexity), true
+	case "ReviewHistory.reviewedByIdentityHolderID":
+		if e.ComplexityRoot.ReviewHistory.ReviewedByIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewedByIdentityHolderID(childComplexity), true
+	case "ReviewHistory.reviewedByUserID":
+		if e.ComplexityRoot.ReviewHistory.ReviewedByUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ReviewedByUserID(childComplexity), true
 	case "ReviewHistory.reviewerID":
 		if e.ComplexityRoot.ReviewHistory.ReviewerID == nil {
 			break
@@ -23262,6 +23444,38 @@ type ControlImplementationHistory implements Node {
   """
   ownerID: String
   """
+  the internal owner for the control implementation when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the control implementation
+  """
+  internalOwnerUserID: String
+  """
+  the internal owner group id for the control implementation
+  """
+  internalOwnerGroupID: String
+  """
+  the internal owner identity holder id for the control implementation
+  """
+  internalOwnerIdentityHolderID: String
+  """
+  the delegate for the control implementation when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
+  the delegate user id for the control implementation
+  """
+  delegateUserID: String
+  """
+  the delegate group id for the control implementation
+  """
+  delegateGroupID: String
+  """
+  the delegate identity holder id for the control implementation
+  """
+  delegateIdentityHolderID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -23368,6 +23582,8 @@ enum ControlImplementationHistoryOrderField {
   created_at
   updated_at
   external_id
+  internal_owner
+  delegate_name
   STATUS
   implementation_date
   verified
@@ -35890,6 +36106,54 @@ type ReviewHistory implements Node {
   """
   ownerID: String
   """
+  the internal owner for the review when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the review
+  """
+  internalOwnerUserID: String
+  """
+  the internal owner group id for the review
+  """
+  internalOwnerGroupID: String
+  """
+  the internal owner identity holder id for the review
+  """
+  internalOwnerIdentityHolderID: String
+  """
+  who reviewed the review when no user, group, or identity holder is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the review
+  """
+  reviewedByUserID: String
+  """
+  the group id that reviewed the review
+  """
+  reviewedByGroupID: String
+  """
+  the identity holder id that reviewed the review
+  """
+  reviewedByIdentityHolderID: String
+  """
+  the delegate for the review when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
+  the delegate user id for the review
+  """
+  delegateUserID: String
+  """
+  the delegate group id for the review
+  """
+  delegateGroupID: String
+  """
+  the delegate identity holder id for the review
+  """
+  delegateIdentityHolderID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -35901,6 +36165,30 @@ type ReviewHistory implements Node {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the kind of the review
+  """
+  reviewKindName: String
+  """
+  the kind of the review
+  """
+  reviewKindID: String
+  """
+  the classification of the review
+  """
+  reviewClassificationName: String
+  """
+  the classification of the review
+  """
+  reviewClassificationID: String
+  """
+  the state of the review
+  """
+  reviewStateName: String
+  """
+  the state of the review
+  """
+  reviewStateID: String
   """
   the environment of the review
   """
@@ -35928,7 +36216,7 @@ type ReviewHistory implements Node {
   """
   state of the review
   """
-  state: String
+  state: String @deprecated(reason: "use review_state_name instead")
   """
   status of the review
   """
@@ -35936,11 +36224,11 @@ type ReviewHistory implements Node {
   """
   category for the review record
   """
-  category: String
+  category: String @deprecated(reason: "use review_kind_name instead")
   """
   classification or sensitivity of the review record
   """
-  classification: String
+  classification: String @deprecated(reason: "use review_classification_name instead")
   """
   summary text for the review
   """
@@ -35952,7 +36240,7 @@ type ReviewHistory implements Node {
   """
   person or system that created the review
   """
-  reporter: String
+  reporter: String @deprecated(reason: "use created_by or responsibility fields instead")
   """
   true when the review has been approved
   """
@@ -35972,7 +36260,7 @@ type ReviewHistory implements Node {
   """
   identifier for the user primarily responsible for the review
   """
-  reviewerID: String
+  reviewerID: String @deprecated(reason: "use reviewed_by_user_id instead")
   """
   system that produced the review record
   """
@@ -36049,6 +36337,8 @@ enum ReviewHistoryOrderField {
   created_at
   updated_at
   external_id
+  internal_owner
+  delegate_name
   external_owner_id
   title
   state
@@ -44335,6 +44625,22 @@ func (ec *executionContext) childFields_ControlImplementationHistory(ctx context
 		return ec.fieldContext_ControlImplementationHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ControlImplementationHistory_ownerID(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_ControlImplementationHistory_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_ControlImplementationHistory_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_ControlImplementationHistory_internalOwnerGroupID(ctx, field)
+	case "internalOwnerIdentityHolderID":
+		return ec.fieldContext_ControlImplementationHistory_internalOwnerIdentityHolderID(ctx, field)
+	case "delegateName":
+		return ec.fieldContext_ControlImplementationHistory_delegateName(ctx, field)
+	case "delegateUserID":
+		return ec.fieldContext_ControlImplementationHistory_delegateUserID(ctx, field)
+	case "delegateGroupID":
+		return ec.fieldContext_ControlImplementationHistory_delegateGroupID(ctx, field)
+	case "delegateIdentityHolderID":
+		return ec.fieldContext_ControlImplementationHistory_delegateIdentityHolderID(ctx, field)
 	case "systemOwned":
 		return ec.fieldContext_ControlImplementationHistory_systemOwned(ctx, field)
 	case "internalNotes":
@@ -47491,12 +47797,48 @@ func (ec *executionContext) childFields_ReviewHistory(ctx context.Context, field
 		return ec.fieldContext_ReviewHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ReviewHistory_ownerID(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_ReviewHistory_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_ReviewHistory_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_ReviewHistory_internalOwnerGroupID(ctx, field)
+	case "internalOwnerIdentityHolderID":
+		return ec.fieldContext_ReviewHistory_internalOwnerIdentityHolderID(ctx, field)
+	case "reviewedBy":
+		return ec.fieldContext_ReviewHistory_reviewedBy(ctx, field)
+	case "reviewedByUserID":
+		return ec.fieldContext_ReviewHistory_reviewedByUserID(ctx, field)
+	case "reviewedByGroupID":
+		return ec.fieldContext_ReviewHistory_reviewedByGroupID(ctx, field)
+	case "reviewedByIdentityHolderID":
+		return ec.fieldContext_ReviewHistory_reviewedByIdentityHolderID(ctx, field)
+	case "delegateName":
+		return ec.fieldContext_ReviewHistory_delegateName(ctx, field)
+	case "delegateUserID":
+		return ec.fieldContext_ReviewHistory_delegateUserID(ctx, field)
+	case "delegateGroupID":
+		return ec.fieldContext_ReviewHistory_delegateGroupID(ctx, field)
+	case "delegateIdentityHolderID":
+		return ec.fieldContext_ReviewHistory_delegateIdentityHolderID(ctx, field)
 	case "systemOwned":
 		return ec.fieldContext_ReviewHistory_systemOwned(ctx, field)
 	case "internalNotes":
 		return ec.fieldContext_ReviewHistory_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_ReviewHistory_systemInternalID(ctx, field)
+	case "reviewKindName":
+		return ec.fieldContext_ReviewHistory_reviewKindName(ctx, field)
+	case "reviewKindID":
+		return ec.fieldContext_ReviewHistory_reviewKindID(ctx, field)
+	case "reviewClassificationName":
+		return ec.fieldContext_ReviewHistory_reviewClassificationName(ctx, field)
+	case "reviewClassificationID":
+		return ec.fieldContext_ReviewHistory_reviewClassificationID(ctx, field)
+	case "reviewStateName":
+		return ec.fieldContext_ReviewHistory_reviewStateName(ctx, field)
+	case "reviewStateID":
+		return ec.fieldContext_ReviewHistory_reviewStateID(ctx, field)
 	case "environmentName":
 		return ec.fieldContext_ReviewHistory_environmentName(ctx, field)
 	case "environmentID":

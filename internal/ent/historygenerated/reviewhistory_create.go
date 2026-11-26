@@ -275,6 +275,174 @@ func (_c *ReviewHistoryCreate) SetNillableOwnerID(v *string) *ReviewHistoryCreat
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *ReviewHistoryCreate) SetInternalOwner(v string) *ReviewHistoryCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableInternalOwner(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *ReviewHistoryCreate) SetInternalOwnerUserID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableInternalOwnerUserID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *ReviewHistoryCreate) SetInternalOwnerGroupID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *ReviewHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_c *ReviewHistoryCreate) SetReviewedBy(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewedBy(v)
+	return _c
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewedBy(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewedBy(*v)
+	}
+	return _c
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_c *ReviewHistoryCreate) SetReviewedByUserID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewedByUserID(v)
+	return _c
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewedByUserID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByUserID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_c *ReviewHistoryCreate) SetReviewedByGroupID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewedByGroupID(v)
+	return _c
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewedByGroupID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_c *ReviewHistoryCreate) SetReviewedByIdentityHolderID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewedByIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewedByIdentityHolderID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_c *ReviewHistoryCreate) SetDelegateName(v string) *ReviewHistoryCreate {
+	_c.mutation.SetDelegateName(v)
+	return _c
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableDelegateName(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetDelegateName(*v)
+	}
+	return _c
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_c *ReviewHistoryCreate) SetDelegateUserID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetDelegateUserID(v)
+	return _c
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableDelegateUserID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetDelegateUserID(*v)
+	}
+	return _c
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_c *ReviewHistoryCreate) SetDelegateGroupID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetDelegateGroupID(v)
+	return _c
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableDelegateGroupID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetDelegateGroupID(*v)
+	}
+	return _c
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_c *ReviewHistoryCreate) SetDelegateIdentityHolderID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetDelegateIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableDelegateIdentityHolderID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetDelegateIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *ReviewHistoryCreate) SetSystemOwned(v bool) *ReviewHistoryCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -313,6 +481,90 @@ func (_c *ReviewHistoryCreate) SetSystemInternalID(v string) *ReviewHistoryCreat
 func (_c *ReviewHistoryCreate) SetNillableSystemInternalID(v *string) *ReviewHistoryCreate {
 	if v != nil {
 		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
+// SetReviewKindName sets the "review_kind_name" field.
+func (_c *ReviewHistoryCreate) SetReviewKindName(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewKindName(v)
+	return _c
+}
+
+// SetNillableReviewKindName sets the "review_kind_name" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewKindName(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewKindName(*v)
+	}
+	return _c
+}
+
+// SetReviewKindID sets the "review_kind_id" field.
+func (_c *ReviewHistoryCreate) SetReviewKindID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewKindID(v)
+	return _c
+}
+
+// SetNillableReviewKindID sets the "review_kind_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewKindID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewKindID(*v)
+	}
+	return _c
+}
+
+// SetReviewClassificationName sets the "review_classification_name" field.
+func (_c *ReviewHistoryCreate) SetReviewClassificationName(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewClassificationName(v)
+	return _c
+}
+
+// SetNillableReviewClassificationName sets the "review_classification_name" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewClassificationName(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewClassificationName(*v)
+	}
+	return _c
+}
+
+// SetReviewClassificationID sets the "review_classification_id" field.
+func (_c *ReviewHistoryCreate) SetReviewClassificationID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewClassificationID(v)
+	return _c
+}
+
+// SetNillableReviewClassificationID sets the "review_classification_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewClassificationID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewClassificationID(*v)
+	}
+	return _c
+}
+
+// SetReviewStateName sets the "review_state_name" field.
+func (_c *ReviewHistoryCreate) SetReviewStateName(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewStateName(v)
+	return _c
+}
+
+// SetNillableReviewStateName sets the "review_state_name" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewStateName(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewStateName(*v)
+	}
+	return _c
+}
+
+// SetReviewStateID sets the "review_state_id" field.
+func (_c *ReviewHistoryCreate) SetReviewStateID(v string) *ReviewHistoryCreate {
+	_c.mutation.SetReviewStateID(v)
+	return _c
+}
+
+// SetNillableReviewStateID sets the "review_state_id" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableReviewStateID(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetReviewStateID(*v)
 	}
 	return _c
 }
@@ -831,6 +1083,54 @@ func (_c *ReviewHistoryCreate) createSpec() (*ReviewHistory, *sqlgraph.CreateSpe
 		_spec.SetField(reviewhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(reviewhistory.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(reviewhistory.FieldInternalOwnerUserID, field.TypeString, value)
+		_node.InternalOwnerUserID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(reviewhistory.FieldInternalOwnerGroupID, field.TypeString, value)
+		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(reviewhistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
+	}
+	if value, ok := _c.mutation.ReviewedBy(); ok {
+		_spec.SetField(reviewhistory.FieldReviewedBy, field.TypeString, value)
+		_node.ReviewedBy = value
+	}
+	if value, ok := _c.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(reviewhistory.FieldReviewedByUserID, field.TypeString, value)
+		_node.ReviewedByUserID = value
+	}
+	if value, ok := _c.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(reviewhistory.FieldReviewedByGroupID, field.TypeString, value)
+		_node.ReviewedByGroupID = value
+	}
+	if value, ok := _c.mutation.ReviewedByIdentityHolderID(); ok {
+		_spec.SetField(reviewhistory.FieldReviewedByIdentityHolderID, field.TypeString, value)
+		_node.ReviewedByIdentityHolderID = value
+	}
+	if value, ok := _c.mutation.DelegateName(); ok {
+		_spec.SetField(reviewhistory.FieldDelegateName, field.TypeString, value)
+		_node.DelegateName = value
+	}
+	if value, ok := _c.mutation.DelegateUserID(); ok {
+		_spec.SetField(reviewhistory.FieldDelegateUserID, field.TypeString, value)
+		_node.DelegateUserID = value
+	}
+	if value, ok := _c.mutation.DelegateGroupID(); ok {
+		_spec.SetField(reviewhistory.FieldDelegateGroupID, field.TypeString, value)
+		_node.DelegateGroupID = value
+	}
+	if value, ok := _c.mutation.DelegateIdentityHolderID(); ok {
+		_spec.SetField(reviewhistory.FieldDelegateIdentityHolderID, field.TypeString, value)
+		_node.DelegateIdentityHolderID = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(reviewhistory.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -842,6 +1142,30 @@ func (_c *ReviewHistoryCreate) createSpec() (*ReviewHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(reviewhistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.ReviewKindName(); ok {
+		_spec.SetField(reviewhistory.FieldReviewKindName, field.TypeString, value)
+		_node.ReviewKindName = value
+	}
+	if value, ok := _c.mutation.ReviewKindID(); ok {
+		_spec.SetField(reviewhistory.FieldReviewKindID, field.TypeString, value)
+		_node.ReviewKindID = value
+	}
+	if value, ok := _c.mutation.ReviewClassificationName(); ok {
+		_spec.SetField(reviewhistory.FieldReviewClassificationName, field.TypeString, value)
+		_node.ReviewClassificationName = value
+	}
+	if value, ok := _c.mutation.ReviewClassificationID(); ok {
+		_spec.SetField(reviewhistory.FieldReviewClassificationID, field.TypeString, value)
+		_node.ReviewClassificationID = value
+	}
+	if value, ok := _c.mutation.ReviewStateName(); ok {
+		_spec.SetField(reviewhistory.FieldReviewStateName, field.TypeString, value)
+		_node.ReviewStateName = value
+	}
+	if value, ok := _c.mutation.ReviewStateID(); ok {
+		_spec.SetField(reviewhistory.FieldReviewStateID, field.TypeString, value)
+		_node.ReviewStateID = value
 	}
 	if value, ok := _c.mutation.EnvironmentName(); ok {
 		_spec.SetField(reviewhistory.FieldEnvironmentName, field.TypeString, value)

@@ -544,7 +544,7 @@ func init() {
 	// controlimplementationhistory.DefaultTags holds the default value on creation for the tags field.
 	controlimplementationhistory.DefaultTags = controlimplementationhistoryDescTags.Default.([]string)
 	// controlimplementationhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	controlimplementationhistoryDescSystemOwned := controlimplementationhistoryFields[20].Descriptor()
+	controlimplementationhistoryDescSystemOwned := controlimplementationhistoryFields[28].Descriptor()
 	// controlimplementationhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlimplementationhistory.DefaultSystemOwned = controlimplementationhistoryDescSystemOwned.Default.(bool)
 	// controlimplementationhistoryDescID is the schema descriptor for id field.
@@ -2051,11 +2051,11 @@ func init() {
 	// reviewhistory.DefaultTags holds the default value on creation for the tags field.
 	reviewhistory.DefaultTags = reviewhistoryDescTags.Default.([]string)
 	// reviewhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	reviewhistoryDescSystemOwned := reviewhistoryFields[20].Descriptor()
+	reviewhistoryDescSystemOwned := reviewhistoryFields[32].Descriptor()
 	// reviewhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	reviewhistory.DefaultSystemOwned = reviewhistoryDescSystemOwned.Default.(bool)
 	// reviewhistoryDescApproved is the schema descriptor for approved field.
-	reviewhistoryDescApproved := reviewhistoryFields[36].Descriptor()
+	reviewhistoryDescApproved := reviewhistoryFields[54].Descriptor()
 	// reviewhistory.DefaultApproved holds the default value on creation for the approved field.
 	reviewhistory.DefaultApproved = reviewhistoryDescApproved.Default.(bool)
 	// reviewhistoryDescID is the schema descriptor for id field.

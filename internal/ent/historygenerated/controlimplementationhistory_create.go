@@ -274,6 +274,118 @@ func (_c *ControlImplementationHistoryCreate) SetNillableOwnerID(v *string) *Con
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *ControlImplementationHistoryCreate) SetInternalOwner(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *ControlImplementationHistoryCreate) SetNillableInternalOwner(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *ControlImplementationHistoryCreate) SetInternalOwnerUserID(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *ControlImplementationHistoryCreate) SetNillableInternalOwnerUserID(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *ControlImplementationHistoryCreate) SetInternalOwnerGroupID(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *ControlImplementationHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *ControlImplementationHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *ControlImplementationHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_c *ControlImplementationHistoryCreate) SetDelegateName(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetDelegateName(v)
+	return _c
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_c *ControlImplementationHistoryCreate) SetNillableDelegateName(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetDelegateName(*v)
+	}
+	return _c
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_c *ControlImplementationHistoryCreate) SetDelegateUserID(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetDelegateUserID(v)
+	return _c
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_c *ControlImplementationHistoryCreate) SetNillableDelegateUserID(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetDelegateUserID(*v)
+	}
+	return _c
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_c *ControlImplementationHistoryCreate) SetDelegateGroupID(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetDelegateGroupID(v)
+	return _c
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_c *ControlImplementationHistoryCreate) SetNillableDelegateGroupID(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetDelegateGroupID(*v)
+	}
+	return _c
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_c *ControlImplementationHistoryCreate) SetDelegateIdentityHolderID(v string) *ControlImplementationHistoryCreate {
+	_c.mutation.SetDelegateIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_c *ControlImplementationHistoryCreate) SetNillableDelegateIdentityHolderID(v *string) *ControlImplementationHistoryCreate {
+	if v != nil {
+		_c.SetDelegateIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *ControlImplementationHistoryCreate) SetSystemOwned(v bool) *ControlImplementationHistoryCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -614,6 +726,38 @@ func (_c *ControlImplementationHistoryCreate) createSpec() (*ControlImplementati
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(controlimplementationhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(controlimplementationhistory.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(controlimplementationhistory.FieldInternalOwnerUserID, field.TypeString, value)
+		_node.InternalOwnerUserID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(controlimplementationhistory.FieldInternalOwnerGroupID, field.TypeString, value)
+		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(controlimplementationhistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
+	}
+	if value, ok := _c.mutation.DelegateName(); ok {
+		_spec.SetField(controlimplementationhistory.FieldDelegateName, field.TypeString, value)
+		_node.DelegateName = value
+	}
+	if value, ok := _c.mutation.DelegateUserID(); ok {
+		_spec.SetField(controlimplementationhistory.FieldDelegateUserID, field.TypeString, value)
+		_node.DelegateUserID = value
+	}
+	if value, ok := _c.mutation.DelegateGroupID(); ok {
+		_spec.SetField(controlimplementationhistory.FieldDelegateGroupID, field.TypeString, value)
+		_node.DelegateGroupID = value
+	}
+	if value, ok := _c.mutation.DelegateIdentityHolderID(); ok {
+		_spec.SetField(controlimplementationhistory.FieldDelegateIdentityHolderID, field.TypeString, value)
+		_node.DelegateIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(controlimplementationhistory.FieldSystemOwned, field.TypeBool, value)

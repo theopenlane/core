@@ -121,6 +121,30 @@ func (_u *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldOwnerID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldInternalOwner, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDelegateName, field.TypeString)
+	}
+	if _u.mutation.DelegateUserIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDelegateUserID, field.TypeString)
+	}
+	if _u.mutation.DelegateGroupIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDelegateGroupID, field.TypeString)
+	}
+	if _u.mutation.DelegateIdentityHolderIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDelegateIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -289,6 +313,30 @@ func (_u *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldInternalOwner, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDelegateName, field.TypeString)
+	}
+	if _u.mutation.DelegateUserIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDelegateUserID, field.TypeString)
+	}
+	if _u.mutation.DelegateGroupIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDelegateGroupID, field.TypeString)
+	}
+	if _u.mutation.DelegateIdentityHolderIDCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDelegateIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldSystemOwned, field.TypeBool)

@@ -165,6 +165,43 @@
       "isSlice": false
     }
   ],
+  "ControlImplementation": [
+    {
+      "csvColumn": "DelegateGroupName",
+      "targetField": "DelegateGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "DelegateIdentityHolderEmail",
+      "targetField": "DelegateIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "DelegateUserEmail",
+      "targetField": "DelegateUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "Comment",
+      "targetField": "Note.Text",
+      "isSlice": false
+    }
+  ],
   "DirectoryAccount": [
     {
       "csvColumn": "DirectoryAccountIdentityHolderEmail",
@@ -469,6 +506,51 @@
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "DelegateGroupName",
+      "targetField": "DelegateGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "DelegateIdentityHolderEmail",
+      "targetField": "DelegateIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "DelegateUserEmail",
+      "targetField": "DelegateUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByGroupName",
+      "targetField": "ReviewedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByIdentityHolderEmail",
+      "targetField": "ReviewedByIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByUserEmail",
+      "targetField": "ReviewedByUserID",
+      "isSlice": false
     },
     {
       "csvColumn": "Comment",

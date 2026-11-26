@@ -114,7 +114,7 @@ type control_implementation
     define parent_editor: can_edit from parent_context or can_edit_control_implementation from parent_context or can_edit from parent
     define parent_viewer: can_view_control_implementation from parent_context or can_view from parent
     define parent_context: [organization]
-    define parent: [control, subcontrol]
+    define parent: [control, subcontrol, platform, system_detail]
 
 # mapped controls inherit access based on the parent_context organization
 type mapped_control

@@ -5293,6 +5293,34 @@ var (
 			}
 		},
 	}
+	// ControlImplementationHistoryOrderFieldInternalOwner orders ControlImplementationHistory by internal_owner.
+	ControlImplementationHistoryOrderFieldInternalOwner = &ControlImplementationHistoryOrderField{
+		Value: func(_m *ControlImplementationHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: controlimplementationhistory.FieldInternalOwner,
+		toTerm: controlimplementationhistory.ByInternalOwner,
+		toCursor: func(_m *ControlImplementationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// ControlImplementationHistoryOrderFieldDelegateName orders ControlImplementationHistory by delegate_name.
+	ControlImplementationHistoryOrderFieldDelegateName = &ControlImplementationHistoryOrderField{
+		Value: func(_m *ControlImplementationHistory) (ent.Value, error) {
+			return _m.DelegateName, nil
+		},
+		column: controlimplementationhistory.FieldDelegateName,
+		toTerm: controlimplementationhistory.ByDelegateName,
+		toCursor: func(_m *ControlImplementationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DelegateName,
+			}
+		},
+	}
 	// ControlImplementationHistoryOrderFieldStatus orders ControlImplementationHistory by status.
 	ControlImplementationHistoryOrderFieldStatus = &ControlImplementationHistoryOrderField{
 		Value: func(_m *ControlImplementationHistory) (ent.Value, error) {
@@ -5363,6 +5391,10 @@ func (f ControlImplementationHistoryOrderField) String() string {
 		str = "updated_at"
 	case ControlImplementationHistoryOrderFieldExternalID.column:
 		str = "external_id"
+	case ControlImplementationHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case ControlImplementationHistoryOrderFieldDelegateName.column:
+		str = "delegate_name"
 	case ControlImplementationHistoryOrderFieldStatus.column:
 		str = "STATUS"
 	case ControlImplementationHistoryOrderFieldImplementationDate.column:
@@ -5395,6 +5427,10 @@ func (f *ControlImplementationHistoryOrderField) UnmarshalGQL(v interface{}) err
 		*f = *ControlImplementationHistoryOrderFieldUpdatedAt
 	case "external_id":
 		*f = *ControlImplementationHistoryOrderFieldExternalID
+	case "internal_owner":
+		*f = *ControlImplementationHistoryOrderFieldInternalOwner
+	case "delegate_name":
+		*f = *ControlImplementationHistoryOrderFieldDelegateName
 	case "STATUS":
 		*f = *ControlImplementationHistoryOrderFieldStatus
 	case "implementation_date":
@@ -20560,6 +20596,34 @@ var (
 			}
 		},
 	}
+	// ReviewHistoryOrderFieldInternalOwner orders ReviewHistory by internal_owner.
+	ReviewHistoryOrderFieldInternalOwner = &ReviewHistoryOrderField{
+		Value: func(_m *ReviewHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: reviewhistory.FieldInternalOwner,
+		toTerm: reviewhistory.ByInternalOwner,
+		toCursor: func(_m *ReviewHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// ReviewHistoryOrderFieldDelegateName orders ReviewHistory by delegate_name.
+	ReviewHistoryOrderFieldDelegateName = &ReviewHistoryOrderField{
+		Value: func(_m *ReviewHistory) (ent.Value, error) {
+			return _m.DelegateName, nil
+		},
+		column: reviewhistory.FieldDelegateName,
+		toTerm: reviewhistory.ByDelegateName,
+		toCursor: func(_m *ReviewHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DelegateName,
+			}
+		},
+	}
 	// ReviewHistoryOrderFieldExternalOwnerID orders ReviewHistory by external_owner_id.
 	ReviewHistoryOrderFieldExternalOwnerID = &ReviewHistoryOrderField{
 		Value: func(_m *ReviewHistory) (ent.Value, error) {
@@ -20616,6 +20680,10 @@ func (f ReviewHistoryOrderField) String() string {
 		str = "updated_at"
 	case ReviewHistoryOrderFieldExternalID.column:
 		str = "external_id"
+	case ReviewHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case ReviewHistoryOrderFieldDelegateName.column:
+		str = "delegate_name"
 	case ReviewHistoryOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case ReviewHistoryOrderFieldTitle.column:
@@ -20646,6 +20714,10 @@ func (f *ReviewHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ReviewHistoryOrderFieldUpdatedAt
 	case "external_id":
 		*f = *ReviewHistoryOrderFieldExternalID
+	case "internal_owner":
+		*f = *ReviewHistoryOrderFieldInternalOwner
+	case "delegate_name":
+		*f = *ReviewHistoryOrderFieldDelegateName
 	case "external_owner_id":
 		*f = *ReviewHistoryOrderFieldExternalOwnerID
 	case "title":

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
@@ -37,30 +38,31 @@ import (
 // NoteQuery is the builder for querying Note entities.
 type NoteQuery struct {
 	config
-	ctx                      *QueryContext
-	order                    []note.OrderOption
-	inters                   []Interceptor
-	predicates               []predicate.Note
-	withOwner                *OrganizationQuery
-	withTask                 *TaskQuery
-	withControl              *ControlQuery
-	withSubcontrol           *SubcontrolQuery
-	withProcedure            *ProcedureQuery
-	withRisk                 *RiskQuery
-	withInternalPolicy       *InternalPolicyQuery
-	withReview               *ReviewQuery
-	withVulnerability        *VulnerabilityQuery
-	withFinding              *FindingQuery
-	withEvidence             *EvidenceQuery
-	withTrustCenter          *TrustCenterQuery
-	withDiscussion           *DiscussionQuery
-	withTrustCenterFaqs      *TrustCenterFAQQuery
-	withFiles                *FileQuery
-	withFKs                  bool
-	loadTotal                []func(context.Context, []*Note) error
-	modifiers                []func(*sql.Selector)
-	withNamedTrustCenterFaqs map[string]*TrustCenterFAQQuery
-	withNamedFiles           map[string]*FileQuery
+	ctx                       *QueryContext
+	order                     []note.OrderOption
+	inters                    []Interceptor
+	predicates                []predicate.Note
+	withOwner                 *OrganizationQuery
+	withTask                  *TaskQuery
+	withControl               *ControlQuery
+	withSubcontrol            *SubcontrolQuery
+	withProcedure             *ProcedureQuery
+	withRisk                  *RiskQuery
+	withInternalPolicy        *InternalPolicyQuery
+	withReview                *ReviewQuery
+	withVulnerability         *VulnerabilityQuery
+	withFinding               *FindingQuery
+	withControlImplementation *ControlImplementationQuery
+	withEvidence              *EvidenceQuery
+	withTrustCenter           *TrustCenterQuery
+	withDiscussion            *DiscussionQuery
+	withTrustCenterFaqs       *TrustCenterFAQQuery
+	withFiles                 *FileQuery
+	withFKs                   bool
+	loadTotal                 []func(context.Context, []*Note) error
+	modifiers                 []func(*sql.Selector)
+	withNamedTrustCenterFaqs  map[string]*TrustCenterFAQQuery
+	withNamedFiles            map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -310,6 +312,28 @@ func (_q *NoteQuery) QueryFinding() *FindingQuery {
 			sqlgraph.From(note.Table, note.FieldID, selector),
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, note.FindingTable, note.FindingColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlImplementation chains the current query on the "control_implementation" edge.
+func (_q *NoteQuery) QueryControlImplementation() *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.ControlImplementationTable, note.ControlImplementationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -614,26 +638,27 @@ func (_q *NoteQuery) Clone() *NoteQuery {
 		return nil
 	}
 	return &NoteQuery{
-		config:              _q.config,
-		ctx:                 _q.ctx.Clone(),
-		order:               append([]note.OrderOption{}, _q.order...),
-		inters:              append([]Interceptor{}, _q.inters...),
-		predicates:          append([]predicate.Note{}, _q.predicates...),
-		withOwner:           _q.withOwner.Clone(),
-		withTask:            _q.withTask.Clone(),
-		withControl:         _q.withControl.Clone(),
-		withSubcontrol:      _q.withSubcontrol.Clone(),
-		withProcedure:       _q.withProcedure.Clone(),
-		withRisk:            _q.withRisk.Clone(),
-		withInternalPolicy:  _q.withInternalPolicy.Clone(),
-		withReview:          _q.withReview.Clone(),
-		withVulnerability:   _q.withVulnerability.Clone(),
-		withFinding:         _q.withFinding.Clone(),
-		withEvidence:        _q.withEvidence.Clone(),
-		withTrustCenter:     _q.withTrustCenter.Clone(),
-		withDiscussion:      _q.withDiscussion.Clone(),
-		withTrustCenterFaqs: _q.withTrustCenterFaqs.Clone(),
-		withFiles:           _q.withFiles.Clone(),
+		config:                    _q.config,
+		ctx:                       _q.ctx.Clone(),
+		order:                     append([]note.OrderOption{}, _q.order...),
+		inters:                    append([]Interceptor{}, _q.inters...),
+		predicates:                append([]predicate.Note{}, _q.predicates...),
+		withOwner:                 _q.withOwner.Clone(),
+		withTask:                  _q.withTask.Clone(),
+		withControl:               _q.withControl.Clone(),
+		withSubcontrol:            _q.withSubcontrol.Clone(),
+		withProcedure:             _q.withProcedure.Clone(),
+		withRisk:                  _q.withRisk.Clone(),
+		withInternalPolicy:        _q.withInternalPolicy.Clone(),
+		withReview:                _q.withReview.Clone(),
+		withVulnerability:         _q.withVulnerability.Clone(),
+		withFinding:               _q.withFinding.Clone(),
+		withControlImplementation: _q.withControlImplementation.Clone(),
+		withEvidence:              _q.withEvidence.Clone(),
+		withTrustCenter:           _q.withTrustCenter.Clone(),
+		withDiscussion:            _q.withDiscussion.Clone(),
+		withTrustCenterFaqs:       _q.withTrustCenterFaqs.Clone(),
+		withFiles:                 _q.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -748,6 +773,17 @@ func (_q *NoteQuery) WithFinding(opts ...func(*FindingQuery)) *NoteQuery {
 		opt(query)
 	}
 	_q.withFinding = query
+	return _q
+}
+
+// WithControlImplementation tells the query-builder to eager-load the nodes that are connected to
+// the "control_implementation" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NoteQuery) WithControlImplementation(opts ...func(*ControlImplementationQuery)) *NoteQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControlImplementation = query
 	return _q
 }
 
@@ -891,7 +927,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [15]bool{
+		loadedTypes = [16]bool{
 			_q.withOwner != nil,
 			_q.withTask != nil,
 			_q.withControl != nil,
@@ -902,6 +938,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			_q.withReview != nil,
 			_q.withVulnerability != nil,
 			_q.withFinding != nil,
+			_q.withControlImplementation != nil,
 			_q.withEvidence != nil,
 			_q.withTrustCenter != nil,
 			_q.withDiscussion != nil,
@@ -909,7 +946,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			_q.withFiles != nil,
 		}
 	)
-	if _q.withTask != nil || _q.withControl != nil || _q.withSubcontrol != nil || _q.withProcedure != nil || _q.withRisk != nil || _q.withInternalPolicy != nil || _q.withReview != nil || _q.withVulnerability != nil || _q.withFinding != nil || _q.withEvidence != nil {
+	if _q.withTask != nil || _q.withControl != nil || _q.withSubcontrol != nil || _q.withProcedure != nil || _q.withRisk != nil || _q.withInternalPolicy != nil || _q.withReview != nil || _q.withVulnerability != nil || _q.withFinding != nil || _q.withControlImplementation != nil || _q.withEvidence != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -993,6 +1030,12 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	if query := _q.withFinding; query != nil {
 		if err := _q.loadFinding(ctx, query, nodes, nil,
 			func(n *Note, e *Finding) { n.Edges.Finding = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withControlImplementation; query != nil {
+		if err := _q.loadControlImplementation(ctx, query, nodes, nil,
+			func(n *Note, e *ControlImplementation) { n.Edges.ControlImplementation = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1360,6 +1403,38 @@ func (_q *NoteQuery) loadFinding(ctx context.Context, query *FindingQuery, nodes
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "finding_comments" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *NoteQuery) loadControlImplementation(ctx context.Context, query *ControlImplementationQuery, nodes []*Note, init func(*Note), assign func(*Note, *ControlImplementation)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		if nodes[i].control_implementation_comments == nil {
+			continue
+		}
+		fk := *nodes[i].control_implementation_comments
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(controlimplementation.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "control_implementation_comments" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

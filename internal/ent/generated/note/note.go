@@ -71,6 +71,8 @@ const (
 	EdgeVulnerability = "vulnerability"
 	// EdgeFinding holds the string denoting the finding edge name in mutations.
 	EdgeFinding = "finding"
+	// EdgeControlImplementation holds the string denoting the control_implementation edge name in mutations.
+	EdgeControlImplementation = "control_implementation"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
@@ -153,6 +155,13 @@ const (
 	FindingInverseTable = "findings"
 	// FindingColumn is the table column denoting the finding relation/edge.
 	FindingColumn = "finding_comments"
+	// ControlImplementationTable is the table that holds the control_implementation relation/edge.
+	ControlImplementationTable = "notes"
+	// ControlImplementationInverseTable is the table name for the ControlImplementation entity.
+	// It exists in this package in order to avoid circular dependency with the "controlimplementation" package.
+	ControlImplementationInverseTable = "control_implementations"
+	// ControlImplementationColumn is the table column denoting the control_implementation relation/edge.
+	ControlImplementationColumn = "control_implementation_comments"
 	// EvidenceTable is the table that holds the evidence relation/edge.
 	EvidenceTable = "notes"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -217,6 +226,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_comments",
+	"control_implementation_comments",
 	"entity_notes",
 	"evidence_comments",
 	"finding_comments",
@@ -438,6 +448,13 @@ func ByFindingField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByControlImplementationField orders the results by control_implementation field.
+func ByControlImplementationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlImplementationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByEvidenceField orders the results by evidence field.
 func ByEvidenceField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -554,6 +571,13 @@ func newFindingStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FindingInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, FindingTable, FindingColumn),
+	)
+}
+func newControlImplementationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlImplementationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ControlImplementationTable, ControlImplementationColumn),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {

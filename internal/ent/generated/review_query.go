@@ -21,17 +21,20 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
@@ -42,52 +45,68 @@ import (
 // ReviewQuery is the builder for querying Review entities.
 type ReviewQuery struct {
 	config
-	ctx                       *QueryContext
-	order                     []review.OrderOption
-	inters                    []Interceptor
-	predicates                []predicate.Review
-	withIntegrationRuns       *IntegrationRunQuery
-	withOwner                 *OrganizationQuery
-	withBlockedGroups         *GroupQuery
-	withEditors               *GroupQuery
-	withEnvironment           *CustomTypeEnumQuery
-	withScope                 *CustomTypeEnumQuery
-	withIntegrations          *IntegrationQuery
-	withFindings              *FindingQuery
-	withVulnerabilities       *VulnerabilityQuery
-	withActionPlans           *ActionPlanQuery
-	withRemediations          *RemediationQuery
-	withControls              *ControlQuery
-	withSubcontrols           *SubcontrolQuery
-	withRisks                 *RiskQuery
-	withPrograms              *ProgramQuery
-	withAssets                *AssetQuery
-	withEntities              *EntityQuery
-	withTasks                 *TaskQuery
-	withReviewer              *UserQuery
-	withComments              *NoteQuery
-	withFiles                 *FileQuery
-	withInternalPolicies      *InternalPolicyQuery
-	loadTotal                 []func(context.Context, []*Review) error
-	modifiers                 []func(*sql.Selector)
-	withNamedIntegrationRuns  map[string]*IntegrationRunQuery
-	withNamedBlockedGroups    map[string]*GroupQuery
-	withNamedEditors          map[string]*GroupQuery
-	withNamedIntegrations     map[string]*IntegrationQuery
-	withNamedFindings         map[string]*FindingQuery
-	withNamedVulnerabilities  map[string]*VulnerabilityQuery
-	withNamedActionPlans      map[string]*ActionPlanQuery
-	withNamedRemediations     map[string]*RemediationQuery
-	withNamedControls         map[string]*ControlQuery
-	withNamedSubcontrols      map[string]*SubcontrolQuery
-	withNamedRisks            map[string]*RiskQuery
-	withNamedPrograms         map[string]*ProgramQuery
-	withNamedAssets           map[string]*AssetQuery
-	withNamedEntities         map[string]*EntityQuery
-	withNamedTasks            map[string]*TaskQuery
-	withNamedComments         map[string]*NoteQuery
-	withNamedFiles            map[string]*FileQuery
-	withNamedInternalPolicies map[string]*InternalPolicyQuery
+	ctx                             *QueryContext
+	order                           []review.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.Review
+	withIntegrationRuns             *IntegrationRunQuery
+	withOwner                       *OrganizationQuery
+	withBlockedGroups               *GroupQuery
+	withEditors                     *GroupQuery
+	withInternalOwnerUser           *UserQuery
+	withInternalOwnerGroup          *GroupQuery
+	withInternalOwnerIdentityHolder *IdentityHolderQuery
+	withReviewedByUser              *UserQuery
+	withReviewedByGroup             *GroupQuery
+	withReviewedByIdentityHolder    *IdentityHolderQuery
+	withDelegateUser                *UserQuery
+	withDelegateGroup               *GroupQuery
+	withDelegateIdentityHolder      *IdentityHolderQuery
+	withReviewKind                  *CustomTypeEnumQuery
+	withReviewClassification        *CustomTypeEnumQuery
+	withReviewState                 *CustomTypeEnumQuery
+	withEnvironment                 *CustomTypeEnumQuery
+	withScope                       *CustomTypeEnumQuery
+	withIntegrations                *IntegrationQuery
+	withFindings                    *FindingQuery
+	withVulnerabilities             *VulnerabilityQuery
+	withActionPlans                 *ActionPlanQuery
+	withRemediations                *RemediationQuery
+	withControls                    *ControlQuery
+	withSubcontrols                 *SubcontrolQuery
+	withRisks                       *RiskQuery
+	withPrograms                    *ProgramQuery
+	withAssets                      *AssetQuery
+	withEntities                    *EntityQuery
+	withTasks                       *TaskQuery
+	withReviewer                    *UserQuery
+	withComments                    *NoteQuery
+	withFiles                       *FileQuery
+	withPlatforms                   *PlatformQuery
+	withSystemDetails               *SystemDetailQuery
+	withInternalPolicies            *InternalPolicyQuery
+	loadTotal                       []func(context.Context, []*Review) error
+	modifiers                       []func(*sql.Selector)
+	withNamedIntegrationRuns        map[string]*IntegrationRunQuery
+	withNamedBlockedGroups          map[string]*GroupQuery
+	withNamedEditors                map[string]*GroupQuery
+	withNamedIntegrations           map[string]*IntegrationQuery
+	withNamedFindings               map[string]*FindingQuery
+	withNamedVulnerabilities        map[string]*VulnerabilityQuery
+	withNamedActionPlans            map[string]*ActionPlanQuery
+	withNamedRemediations           map[string]*RemediationQuery
+	withNamedControls               map[string]*ControlQuery
+	withNamedSubcontrols            map[string]*SubcontrolQuery
+	withNamedRisks                  map[string]*RiskQuery
+	withNamedPrograms               map[string]*ProgramQuery
+	withNamedAssets                 map[string]*AssetQuery
+	withNamedEntities               map[string]*EntityQuery
+	withNamedTasks                  map[string]*TaskQuery
+	withNamedComments               map[string]*NoteQuery
+	withNamedFiles                  map[string]*FileQuery
+	withNamedPlatforms              map[string]*PlatformQuery
+	withNamedSystemDetails          map[string]*SystemDetailQuery
+	withNamedInternalPolicies       map[string]*InternalPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -205,6 +224,270 @@ func (_q *ReviewQuery) QueryEditors() *GroupQuery {
 			sqlgraph.From(review.Table, review.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.EditorsTable, review.EditorsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerUser chains the current query on the "internal_owner_user" edge.
+func (_q *ReviewQuery) QueryInternalOwnerUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.InternalOwnerUserTable, review.InternalOwnerUserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup chains the current query on the "internal_owner_group" edge.
+func (_q *ReviewQuery) QueryInternalOwnerGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.InternalOwnerGroupTable, review.InternalOwnerGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder chains the current query on the "internal_owner_identity_holder" edge.
+func (_q *ReviewQuery) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.InternalOwnerIdentityHolderTable, review.InternalOwnerIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByUser chains the current query on the "reviewed_by_user" edge.
+func (_q *ReviewQuery) QueryReviewedByUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.ReviewedByUserTable, review.ReviewedByUserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByGroup chains the current query on the "reviewed_by_group" edge.
+func (_q *ReviewQuery) QueryReviewedByGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.ReviewedByGroupTable, review.ReviewedByGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByIdentityHolder chains the current query on the "reviewed_by_identity_holder" edge.
+func (_q *ReviewQuery) QueryReviewedByIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.ReviewedByIdentityHolderTable, review.ReviewedByIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegateUser chains the current query on the "delegate_user" edge.
+func (_q *ReviewQuery) QueryDelegateUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.DelegateUserTable, review.DelegateUserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegateGroup chains the current query on the "delegate_group" edge.
+func (_q *ReviewQuery) QueryDelegateGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.DelegateGroupTable, review.DelegateGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegateIdentityHolder chains the current query on the "delegate_identity_holder" edge.
+func (_q *ReviewQuery) QueryDelegateIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.DelegateIdentityHolderTable, review.DelegateIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewKind chains the current query on the "review_kind" edge.
+func (_q *ReviewQuery) QueryReviewKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.ReviewKindTable, review.ReviewKindColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewClassification chains the current query on the "review_classification" edge.
+func (_q *ReviewQuery) QueryReviewClassification() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.ReviewClassificationTable, review.ReviewClassificationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewState chains the current query on the "review_state" edge.
+func (_q *ReviewQuery) QueryReviewState() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.ReviewStateTable, review.ReviewStateColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -586,6 +869,50 @@ func (_q *ReviewQuery) QueryFiles() *FileQuery {
 	return query
 }
 
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *ReviewQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, review.PlatformsTable, review.PlatformsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySystemDetails chains the current query on the "system_details" edge.
+func (_q *ReviewQuery) QuerySystemDetails() *SystemDetailQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, review.SystemDetailsTable, review.SystemDetailsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryInternalPolicies chains the current query on the "internal_policies" edge.
 func (_q *ReviewQuery) QueryInternalPolicies() *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: _q.config}).Query()
@@ -795,33 +1122,47 @@ func (_q *ReviewQuery) Clone() *ReviewQuery {
 		return nil
 	}
 	return &ReviewQuery{
-		config:               _q.config,
-		ctx:                  _q.ctx.Clone(),
-		order:                append([]review.OrderOption{}, _q.order...),
-		inters:               append([]Interceptor{}, _q.inters...),
-		predicates:           append([]predicate.Review{}, _q.predicates...),
-		withIntegrationRuns:  _q.withIntegrationRuns.Clone(),
-		withOwner:            _q.withOwner.Clone(),
-		withBlockedGroups:    _q.withBlockedGroups.Clone(),
-		withEditors:          _q.withEditors.Clone(),
-		withEnvironment:      _q.withEnvironment.Clone(),
-		withScope:            _q.withScope.Clone(),
-		withIntegrations:     _q.withIntegrations.Clone(),
-		withFindings:         _q.withFindings.Clone(),
-		withVulnerabilities:  _q.withVulnerabilities.Clone(),
-		withActionPlans:      _q.withActionPlans.Clone(),
-		withRemediations:     _q.withRemediations.Clone(),
-		withControls:         _q.withControls.Clone(),
-		withSubcontrols:      _q.withSubcontrols.Clone(),
-		withRisks:            _q.withRisks.Clone(),
-		withPrograms:         _q.withPrograms.Clone(),
-		withAssets:           _q.withAssets.Clone(),
-		withEntities:         _q.withEntities.Clone(),
-		withTasks:            _q.withTasks.Clone(),
-		withReviewer:         _q.withReviewer.Clone(),
-		withComments:         _q.withComments.Clone(),
-		withFiles:            _q.withFiles.Clone(),
-		withInternalPolicies: _q.withInternalPolicies.Clone(),
+		config:                          _q.config,
+		ctx:                             _q.ctx.Clone(),
+		order:                           append([]review.OrderOption{}, _q.order...),
+		inters:                          append([]Interceptor{}, _q.inters...),
+		predicates:                      append([]predicate.Review{}, _q.predicates...),
+		withIntegrationRuns:             _q.withIntegrationRuns.Clone(),
+		withOwner:                       _q.withOwner.Clone(),
+		withBlockedGroups:               _q.withBlockedGroups.Clone(),
+		withEditors:                     _q.withEditors.Clone(),
+		withInternalOwnerUser:           _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:          _q.withInternalOwnerGroup.Clone(),
+		withInternalOwnerIdentityHolder: _q.withInternalOwnerIdentityHolder.Clone(),
+		withReviewedByUser:              _q.withReviewedByUser.Clone(),
+		withReviewedByGroup:             _q.withReviewedByGroup.Clone(),
+		withReviewedByIdentityHolder:    _q.withReviewedByIdentityHolder.Clone(),
+		withDelegateUser:                _q.withDelegateUser.Clone(),
+		withDelegateGroup:               _q.withDelegateGroup.Clone(),
+		withDelegateIdentityHolder:      _q.withDelegateIdentityHolder.Clone(),
+		withReviewKind:                  _q.withReviewKind.Clone(),
+		withReviewClassification:        _q.withReviewClassification.Clone(),
+		withReviewState:                 _q.withReviewState.Clone(),
+		withEnvironment:                 _q.withEnvironment.Clone(),
+		withScope:                       _q.withScope.Clone(),
+		withIntegrations:                _q.withIntegrations.Clone(),
+		withFindings:                    _q.withFindings.Clone(),
+		withVulnerabilities:             _q.withVulnerabilities.Clone(),
+		withActionPlans:                 _q.withActionPlans.Clone(),
+		withRemediations:                _q.withRemediations.Clone(),
+		withControls:                    _q.withControls.Clone(),
+		withSubcontrols:                 _q.withSubcontrols.Clone(),
+		withRisks:                       _q.withRisks.Clone(),
+		withPrograms:                    _q.withPrograms.Clone(),
+		withAssets:                      _q.withAssets.Clone(),
+		withEntities:                    _q.withEntities.Clone(),
+		withTasks:                       _q.withTasks.Clone(),
+		withReviewer:                    _q.withReviewer.Clone(),
+		withComments:                    _q.withComments.Clone(),
+		withFiles:                       _q.withFiles.Clone(),
+		withPlatforms:                   _q.withPlatforms.Clone(),
+		withSystemDetails:               _q.withSystemDetails.Clone(),
+		withInternalPolicies:            _q.withInternalPolicies.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -870,6 +1211,138 @@ func (_q *ReviewQuery) WithEditors(opts ...func(*GroupQuery)) *ReviewQuery {
 		opt(query)
 	}
 	_q.withEditors = query
+	return _q
+}
+
+// WithInternalOwnerUser tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithInternalOwnerUser(opts ...func(*UserQuery)) *ReviewQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerUser = query
+	return _q
+}
+
+// WithInternalOwnerGroup tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery)) *ReviewQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerGroup = query
+	return _q
+}
+
+// WithInternalOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithInternalOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *ReviewQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerIdentityHolder = query
+	return _q
+}
+
+// WithReviewedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithReviewedByUser(opts ...func(*UserQuery)) *ReviewQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByUser = query
+	return _q
+}
+
+// WithReviewedByGroup tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithReviewedByGroup(opts ...func(*GroupQuery)) *ReviewQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByGroup = query
+	return _q
+}
+
+// WithReviewedByIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithReviewedByIdentityHolder(opts ...func(*IdentityHolderQuery)) *ReviewQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByIdentityHolder = query
+	return _q
+}
+
+// WithDelegateUser tells the query-builder to eager-load the nodes that are connected to
+// the "delegate_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithDelegateUser(opts ...func(*UserQuery)) *ReviewQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDelegateUser = query
+	return _q
+}
+
+// WithDelegateGroup tells the query-builder to eager-load the nodes that are connected to
+// the "delegate_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithDelegateGroup(opts ...func(*GroupQuery)) *ReviewQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDelegateGroup = query
+	return _q
+}
+
+// WithDelegateIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "delegate_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithDelegateIdentityHolder(opts ...func(*IdentityHolderQuery)) *ReviewQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDelegateIdentityHolder = query
+	return _q
+}
+
+// WithReviewKind tells the query-builder to eager-load the nodes that are connected to
+// the "review_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithReviewKind(opts ...func(*CustomTypeEnumQuery)) *ReviewQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewKind = query
+	return _q
+}
+
+// WithReviewClassification tells the query-builder to eager-load the nodes that are connected to
+// the "review_classification" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithReviewClassification(opts ...func(*CustomTypeEnumQuery)) *ReviewQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewClassification = query
+	return _q
+}
+
+// WithReviewState tells the query-builder to eager-load the nodes that are connected to
+// the "review_state" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithReviewState(opts ...func(*CustomTypeEnumQuery)) *ReviewQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewState = query
 	return _q
 }
 
@@ -1060,6 +1533,28 @@ func (_q *ReviewQuery) WithFiles(opts ...func(*FileQuery)) *ReviewQuery {
 	return _q
 }
 
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithPlatforms(opts ...func(*PlatformQuery)) *ReviewQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
+	return _q
+}
+
+// WithSystemDetails tells the query-builder to eager-load the nodes that are connected to
+// the "system_details" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithSystemDetails(opts ...func(*SystemDetailQuery)) *ReviewQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSystemDetails = query
+	return _q
+}
+
 // WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
 // the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ReviewQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *ReviewQuery {
@@ -1155,11 +1650,23 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 	var (
 		nodes       = []*Review{}
 		_spec       = _q.querySpec()
-		loadedTypes = [22]bool{
+		loadedTypes = [36]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
+			_q.withInternalOwnerUser != nil,
+			_q.withInternalOwnerGroup != nil,
+			_q.withInternalOwnerIdentityHolder != nil,
+			_q.withReviewedByUser != nil,
+			_q.withReviewedByGroup != nil,
+			_q.withReviewedByIdentityHolder != nil,
+			_q.withDelegateUser != nil,
+			_q.withDelegateGroup != nil,
+			_q.withDelegateIdentityHolder != nil,
+			_q.withReviewKind != nil,
+			_q.withReviewClassification != nil,
+			_q.withReviewState != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withIntegrations != nil,
@@ -1177,6 +1684,8 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 			_q.withReviewer != nil,
 			_q.withComments != nil,
 			_q.withFiles != nil,
+			_q.withPlatforms != nil,
+			_q.withSystemDetails != nil,
 			_q.withInternalPolicies != nil,
 		}
 	)
@@ -1225,6 +1734,78 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Review) { n.Edges.Editors = []*Group{} },
 			func(n *Review, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerUser; query != nil {
+		if err := _q.loadInternalOwnerUser(ctx, query, nodes, nil,
+			func(n *Review, e *User) { n.Edges.InternalOwnerUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerGroup; query != nil {
+		if err := _q.loadInternalOwnerGroup(ctx, query, nodes, nil,
+			func(n *Review, e *Group) { n.Edges.InternalOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerIdentityHolder; query != nil {
+		if err := _q.loadInternalOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *Review, e *IdentityHolder) { n.Edges.InternalOwnerIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByUser; query != nil {
+		if err := _q.loadReviewedByUser(ctx, query, nodes, nil,
+			func(n *Review, e *User) { n.Edges.ReviewedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByGroup; query != nil {
+		if err := _q.loadReviewedByGroup(ctx, query, nodes, nil,
+			func(n *Review, e *Group) { n.Edges.ReviewedByGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByIdentityHolder; query != nil {
+		if err := _q.loadReviewedByIdentityHolder(ctx, query, nodes, nil,
+			func(n *Review, e *IdentityHolder) { n.Edges.ReviewedByIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDelegateUser; query != nil {
+		if err := _q.loadDelegateUser(ctx, query, nodes, nil,
+			func(n *Review, e *User) { n.Edges.DelegateUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDelegateGroup; query != nil {
+		if err := _q.loadDelegateGroup(ctx, query, nodes, nil,
+			func(n *Review, e *Group) { n.Edges.DelegateGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDelegateIdentityHolder; query != nil {
+		if err := _q.loadDelegateIdentityHolder(ctx, query, nodes, nil,
+			func(n *Review, e *IdentityHolder) { n.Edges.DelegateIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewKind; query != nil {
+		if err := _q.loadReviewKind(ctx, query, nodes, nil,
+			func(n *Review, e *CustomTypeEnum) { n.Edges.ReviewKind = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewClassification; query != nil {
+		if err := _q.loadReviewClassification(ctx, query, nodes, nil,
+			func(n *Review, e *CustomTypeEnum) { n.Edges.ReviewClassification = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewState; query != nil {
+		if err := _q.loadReviewState(ctx, query, nodes, nil,
+			func(n *Review, e *CustomTypeEnum) { n.Edges.ReviewState = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1341,6 +1922,20 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Review) { n.Edges.Files = []*File{} },
 			func(n *Review, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Review) { n.Edges.Platforms = []*Platform{} },
+			func(n *Review, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSystemDetails; query != nil {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Review) { n.Edges.SystemDetails = []*SystemDetail{} },
+			func(n *Review, e *SystemDetail) { n.Edges.SystemDetails = append(n.Edges.SystemDetails, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1467,6 +2062,20 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Review) { n.appendNamedFiles(name) },
 			func(n *Review, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *Review) { n.appendNamedPlatforms(name) },
+			func(n *Review, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSystemDetails {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Review) { n.appendNamedSystemDetails(name) },
+			func(n *Review, e *SystemDetail) { n.appendNamedSystemDetails(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1663,6 +2272,354 @@ func (_q *ReviewQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadInternalOwnerUser(ctx context.Context, query *UserQuery, nodes []*Review, init func(*Review), assign func(*Review, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadInternalOwnerGroup(ctx context.Context, query *GroupQuery, nodes []*Review, init func(*Review), assign func(*Review, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadInternalOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Review, init func(*Review), assign func(*Review, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadReviewedByUser(ctx context.Context, query *UserQuery, nodes []*Review, init func(*Review), assign func(*Review, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadReviewedByGroup(ctx context.Context, query *GroupQuery, nodes []*Review, init func(*Review), assign func(*Review, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadReviewedByIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Review, init func(*Review), assign func(*Review, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadDelegateUser(ctx context.Context, query *UserQuery, nodes []*Review, init func(*Review), assign func(*Review, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].DelegateUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "delegate_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadDelegateGroup(ctx context.Context, query *GroupQuery, nodes []*Review, init func(*Review), assign func(*Review, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].DelegateGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "delegate_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadDelegateIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Review, init func(*Review), assign func(*Review, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].DelegateIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "delegate_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadReviewKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Review, init func(*Review), assign func(*Review, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].ReviewKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "review_kind_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadReviewClassification(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Review, init func(*Review), assign func(*Review, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].ReviewClassificationID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "review_classification_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadReviewState(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Review, init func(*Review), assign func(*Review, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Review)
+	for i := range nodes {
+		fk := nodes[i].ReviewStateID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "review_state_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -2518,6 +3475,128 @@ func (_q *ReviewQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []
 	}
 	return nil
 }
+func (_q *ReviewQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Review, init func(*Review), assign func(*Review, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.PlatformsTable)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(review.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(review.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadSystemDetails(ctx context.Context, query *SystemDetailQuery, nodes []*Review, init func(*Review), assign func(*Review, *SystemDetail)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.SystemDetailsTable)
+		s.Join(joinT).On(s.C(systemdetail.FieldID), joinT.C(review.SystemDetailsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(review.SystemDetailsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.SystemDetailsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*SystemDetail](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "system_details" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *ReviewQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Review, init func(*Review), assign func(*Review, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Review)
@@ -2610,6 +3689,42 @@ func (_q *ReviewQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(review.FieldOwnerID)
+		}
+		if _q.withInternalOwnerUser != nil {
+			_spec.Node.AddColumnOnce(review.FieldInternalOwnerUserID)
+		}
+		if _q.withInternalOwnerGroup != nil {
+			_spec.Node.AddColumnOnce(review.FieldInternalOwnerGroupID)
+		}
+		if _q.withInternalOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(review.FieldInternalOwnerIdentityHolderID)
+		}
+		if _q.withReviewedByUser != nil {
+			_spec.Node.AddColumnOnce(review.FieldReviewedByUserID)
+		}
+		if _q.withReviewedByGroup != nil {
+			_spec.Node.AddColumnOnce(review.FieldReviewedByGroupID)
+		}
+		if _q.withReviewedByIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(review.FieldReviewedByIdentityHolderID)
+		}
+		if _q.withDelegateUser != nil {
+			_spec.Node.AddColumnOnce(review.FieldDelegateUserID)
+		}
+		if _q.withDelegateGroup != nil {
+			_spec.Node.AddColumnOnce(review.FieldDelegateGroupID)
+		}
+		if _q.withDelegateIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(review.FieldDelegateIdentityHolderID)
+		}
+		if _q.withReviewKind != nil {
+			_spec.Node.AddColumnOnce(review.FieldReviewKindID)
+		}
+		if _q.withReviewClassification != nil {
+			_spec.Node.AddColumnOnce(review.FieldReviewClassificationID)
+		}
+		if _q.withReviewState != nil {
+			_spec.Node.AddColumnOnce(review.FieldReviewStateID)
 		}
 		if _q.withEnvironment != nil {
 			_spec.Node.AddColumnOnce(review.FieldEnvironmentID)
@@ -2921,6 +4036,34 @@ func (_q *ReviewQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *Re
 		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
 	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *ReviewQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedSystemDetails tells the query-builder to eager-load the nodes that are connected to the "system_details"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithNamedSystemDetails(name string, opts ...func(*SystemDetailQuery)) *ReviewQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSystemDetails == nil {
+		_q.withNamedSystemDetails = make(map[string]*SystemDetailQuery)
+	}
+	_q.withNamedSystemDetails[name] = query
 	return _q
 }
 

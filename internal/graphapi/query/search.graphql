@@ -144,6 +144,23 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    controlImplementations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          delegateName
+          id
+          internalOwner
+          tags
+        }
+      }
+    }
     controlObjectives {
       totalCount
       pageInfo {
@@ -492,9 +509,11 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          delegateName
           externalID
           externalOwnerID
           id
+          internalOwner
           tags
           title
         }

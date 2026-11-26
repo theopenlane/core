@@ -69,6 +69,7 @@ func (Review) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("state"),
+				entgql.Directives(entgql.Deprecated("use review_state_name instead")),
 			),
 		field.Enum("status").
 			GoType(enums.ReviewStatus("")).
@@ -77,10 +78,16 @@ func (Review) Fields() []ent.Field {
 			Optional(),
 		field.String("category").
 			Comment("category for the review record").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Directives(entgql.Deprecated("use review_kind_name instead")),
+			),
 		field.String("classification").
 			Comment("classification or sensitivity of the review record").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Directives(entgql.Deprecated("use review_classification_name instead")),
+			),
 		field.Text("summary").
 			Comment("summary text for the review").
 			Optional(),
@@ -89,7 +96,10 @@ func (Review) Fields() []ent.Field {
 			Optional(),
 		field.String("reporter").
 			Comment("person or system that created the review").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Directives(entgql.Deprecated("use created_by or responsibility fields instead")),
+			),
 		field.Bool("approved").
 			Comment("true when the review has been approved").
 			Default(false).
@@ -114,6 +124,7 @@ func (Review) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entgql.Directives(entgql.Deprecated("use reviewed_by_user_id instead")),
 			),
 		field.String("source").
 			Comment("system that produced the review record").
@@ -215,6 +226,7 @@ func (r Review) Edges() []ent.Edge {
 			comment:    "primary reviewer responsible for the record",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(User{}.Name()),
+				entgql.Directives(entgql.Deprecated("use reviewed_by_user instead")),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -232,6 +244,8 @@ func (r Review) Edges() []ent.Edge {
 			edgeSchema: File{},
 			comment:    "supporting files or evidence for the review",
 		}),
+		defaultEdgeFromWithPagination(r, Platform{}),
+		defaultEdgeFromWithPagination(r, SystemDetail{}),
 		defaultEdgeToWithPagination(r, InternalPolicy{}),
 	}
 }
@@ -254,13 +268,19 @@ func (r Review) Mixin() []ent.Mixin {
 					Asset{},
 					Entity{},
 					Task{},
+					Platform{},
+					SystemDetail{},
 				),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
 				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
+			newResponsibilityMixin(r, withInternalOwner(), withDelegate(), withReviewedBy()),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
+			newCustomEnumMixin(r),
+			newCustomEnumMixin(r, withEnumFieldName("classification")),
+			newCustomEnumMixin(r, withEnumFieldName("state")),
 			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(r, withEnumFieldName("scope"), withGlobalEnum()),
 		},

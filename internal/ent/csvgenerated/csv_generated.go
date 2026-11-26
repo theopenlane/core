@@ -1134,7 +1134,56 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	},
 	"ControlImplementation": {
 		SchemaName: "ControlImplementation",
-		Rules:      []CSVReferenceRule{},
+		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "DelegateGroupName",
+				TargetField:     "DelegateGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "DelegateIdentityHolderEmail",
+				TargetField:     "DelegateIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "DelegateUserEmail",
+				TargetField:     "DelegateUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerGroupName",
+				TargetField:     "InternalOwnerGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerIdentityHolderEmail",
+				TargetField:     "InternalOwnerIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerUserEmail",
+				TargetField:     "InternalOwnerUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+		},
 	},
 	"ControlObjective": {
 		SchemaName: "ControlObjective",
@@ -1732,6 +1781,78 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				TargetEntity:    "Control",
 				MatchField:      "ref_code",
 				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "DelegateGroupName",
+				TargetField:     "DelegateGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "DelegateIdentityHolderEmail",
+				TargetField:     "DelegateIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "DelegateUserEmail",
+				TargetField:     "DelegateUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerGroupName",
+				TargetField:     "InternalOwnerGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerIdentityHolderEmail",
+				TargetField:     "InternalOwnerIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerUserEmail",
+				TargetField:     "InternalOwnerUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ReviewedByGroupName",
+				TargetField:     "ReviewedByGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ReviewedByIdentityHolderEmail",
+				TargetField:     "ReviewedByIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ReviewedByUserEmail",
+				TargetField:     "ReviewedByUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
 				CreateIfMissing: false,
 			},
 		},
@@ -2493,21 +2614,56 @@ func createControlCSVChildren(ctx context.Context, client *generated.Client, par
 
 // ControlImplementationCSVInput wraps CreateControlImplementationInput with CSV reference columns.
 type ControlImplementationCSVInput struct {
-	Input generated.CreateControlImplementationInput
+	Input                            generated.CreateControlImplementationInput
+	DelegateGroupName                string `csv:"DelegateGroupName"`
+	DelegateIdentityHolderEmail      string `csv:"DelegateIdentityHolderEmail"`
+	DelegateUserEmail                string `csv:"DelegateUserEmail"`
+	InternalOwnerGroupName           string `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string `csv:"InternalOwnerUserEmail"`
+	Comment                          string `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ControlImplementationCSVInput for CSV header preprocessing.
 func (ControlImplementationCSVInput) CSVInputWrapper() {}
 
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i ControlImplementationCSVInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createControlImplementationCSVChildren(ctx, client, parentID, i.Comment)
+}
+
 // ControlImplementationCSVUpdateInput wraps UpdateControlImplementationInput with CSV reference columns for bulk updates.
 type ControlImplementationCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateControlImplementationInput
+	ID                               string `csv:"ID"`
+	Input                            generated.UpdateControlImplementationInput
+	DelegateGroupName                string `csv:"DelegateGroupName"`
+	DelegateIdentityHolderEmail      string `csv:"DelegateIdentityHolderEmail"`
+	DelegateUserEmail                string `csv:"DelegateUserEmail"`
+	InternalOwnerGroupName           string `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string `csv:"InternalOwnerUserEmail"`
+	Comment                          string `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ControlImplementationCSVUpdateInput for CSV header preprocessing.
 func (ControlImplementationCSVUpdateInput) CSVInputWrapper() {}
+
+// CreateCSVChildren creates the child records named by the CSV child columns on this row.
+func (i ControlImplementationCSVUpdateInput) CreateCSVChildren(ctx context.Context, client *generated.Client, parentID string) error {
+	return createControlImplementationCSVChildren(ctx, client, parentID, i.Comment)
+}
+
+// createControlImplementationCSVChildren creates one linked child record for each non-empty CSV child column on a ControlImplementation row.
+func createControlImplementationCSVChildren(ctx context.Context, client *generated.Client, parentID string, comment string) error {
+	if v := strings.TrimSpace(comment); v != "" {
+		if err := client.Note.Create().SetText(v).SetControlImplementationID(parentID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // ControlObjectiveCSVInput wraps CreateControlObjectiveInput with CSV reference columns.
 type ControlObjectiveCSVInput struct {
@@ -3508,9 +3664,18 @@ func (ReportMembershipCSVUpdateInput) CSVInputWrapper() {}
 
 // ReviewCSVInput wraps CreateReviewInput with CSV reference columns.
 type ReviewCSVInput struct {
-	Input           generated.CreateReviewInput
-	ControlRefCodes []string `csv:"ControlRefCodes"`
-	Comment         string   `csv:"Comment"`
+	Input                            generated.CreateReviewInput
+	ControlRefCodes                  []string `csv:"ControlRefCodes"`
+	DelegateGroupName                string   `csv:"DelegateGroupName"`
+	DelegateIdentityHolderEmail      string   `csv:"DelegateIdentityHolderEmail"`
+	DelegateUserEmail                string   `csv:"DelegateUserEmail"`
+	InternalOwnerGroupName           string   `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string   `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string   `csv:"InternalOwnerUserEmail"`
+	ReviewedByGroupName              string   `csv:"ReviewedByGroupName"`
+	ReviewedByIdentityHolderEmail    string   `csv:"ReviewedByIdentityHolderEmail"`
+	ReviewedByUserEmail              string   `csv:"ReviewedByUserEmail"`
+	Comment                          string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ReviewCSVInput for CSV header preprocessing.
@@ -3524,10 +3689,19 @@ func (i ReviewCSVInput) CreateCSVChildren(ctx context.Context, client *generated
 // ReviewCSVUpdateInput wraps UpdateReviewInput with CSV reference columns for bulk updates.
 type ReviewCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID              string `csv:"ID"`
-	Input           generated.UpdateReviewInput
-	ControlRefCodes []string `csv:"ControlRefCodes"`
-	Comment         string   `csv:"Comment"`
+	ID                               string `csv:"ID"`
+	Input                            generated.UpdateReviewInput
+	ControlRefCodes                  []string `csv:"ControlRefCodes"`
+	DelegateGroupName                string   `csv:"DelegateGroupName"`
+	DelegateIdentityHolderEmail      string   `csv:"DelegateIdentityHolderEmail"`
+	DelegateUserEmail                string   `csv:"DelegateUserEmail"`
+	InternalOwnerGroupName           string   `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string   `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string   `csv:"InternalOwnerUserEmail"`
+	ReviewedByGroupName              string   `csv:"ReviewedByGroupName"`
+	ReviewedByIdentityHolderEmail    string   `csv:"ReviewedByIdentityHolderEmail"`
+	ReviewedByUserEmail              string   `csv:"ReviewedByUserEmail"`
+	Comment                          string   `csv:"Comment"`
 }
 
 // CSVInputWrapper marks ReviewCSVUpdateInput for CSV header preprocessing.

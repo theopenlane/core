@@ -1463,6 +1463,8 @@ var (
 		{Name: "integration_run_id", Type: field.TypeString, Nullable: true},
 		{Name: "source_key", Type: field.TypeString, Nullable: true},
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_name", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
@@ -1472,6 +1474,12 @@ var (
 		{Name: "verification_date", Type: field.TypeTime, Nullable: true},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
+		{Name: "internal_owner_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "evidence_control_implementations", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_control_implementations", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -1483,20 +1491,56 @@ var (
 		PrimaryKey: []*schema.Column{ControlImplementationsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
+				Symbol:     "control_implementations_users_internal_owner_user",
+				Columns:    []*schema.Column{ControlImplementationsColumns[27]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_implementations_groups_internal_owner_group",
+				Columns:    []*schema.Column{ControlImplementationsColumns[28]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_implementations_identity_holders_internal_owner_identity_holder",
+				Columns:    []*schema.Column{ControlImplementationsColumns[29]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_implementations_users_delegate_user",
+				Columns:    []*schema.Column{ControlImplementationsColumns[30]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_implementations_groups_delegate_group",
+				Columns:    []*schema.Column{ControlImplementationsColumns[31]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_implementations_identity_holders_delegate_identity_holder",
+				Columns:    []*schema.Column{ControlImplementationsColumns[32]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "control_implementations_evidences_control_implementations",
-				Columns:    []*schema.Column{ControlImplementationsColumns[25]},
+				Columns:    []*schema.Column{ControlImplementationsColumns[33]},
 				RefColumns: []*schema.Column{EvidencesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "control_implementations_internal_policies_control_implementations",
-				Columns:    []*schema.Column{ControlImplementationsColumns[26]},
+				Columns:    []*schema.Column{ControlImplementationsColumns[34]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "control_implementations_organizations_control_implementations",
-				Columns:    []*schema.Column{ControlImplementationsColumns[27]},
+				Columns:    []*schema.Column{ControlImplementationsColumns[35]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1520,7 +1564,7 @@ var (
 			{
 				Name:    "controlimplementation_external_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlImplementationsColumns[15], ControlImplementationsColumns[27]},
+				Columns: []*schema.Column{ControlImplementationsColumns[15], ControlImplementationsColumns[35]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1528,7 +1572,7 @@ var (
 			{
 				Name:    "control_implementation_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ControlImplementationsColumns[27]},
+				Columns: []*schema.Column{ControlImplementationsColumns[35]},
 			},
 		},
 	}
@@ -5739,6 +5783,7 @@ var (
 		{Name: "notify_subscribers", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "control_comments", Type: field.TypeString, Nullable: true},
+		{Name: "control_implementation_comments", Type: field.TypeString, Nullable: true},
 		{Name: "discussion_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_notes", Type: field.TypeString, Nullable: true},
 		{Name: "evidence_comments", Type: field.TypeString, Nullable: true},
@@ -5768,92 +5813,98 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_discussions_comments",
+				Symbol:     "notes_control_implementations_comments",
 				Columns:    []*schema.Column{NotesColumns[17]},
+				RefColumns: []*schema.Column{ControlImplementationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_discussions_comments",
+				Columns:    []*schema.Column{NotesColumns[18]},
 				RefColumns: []*schema.Column{DiscussionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_entities_notes",
-				Columns:    []*schema.Column{NotesColumns[18]},
+				Columns:    []*schema.Column{NotesColumns[19]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_evidences_comments",
-				Columns:    []*schema.Column{NotesColumns[19]},
+				Columns:    []*schema.Column{NotesColumns[20]},
 				RefColumns: []*schema.Column{EvidencesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_findings_comments",
-				Columns:    []*schema.Column{NotesColumns[20]},
+				Columns:    []*schema.Column{NotesColumns[21]},
 				RefColumns: []*schema.Column{FindingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_internal_policies_comments",
-				Columns:    []*schema.Column{NotesColumns[21]},
+				Columns:    []*schema.Column{NotesColumns[22]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_organizations_notes",
-				Columns:    []*schema.Column{NotesColumns[22]},
+				Columns:    []*schema.Column{NotesColumns[23]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_procedures_comments",
-				Columns:    []*schema.Column{NotesColumns[23]},
+				Columns:    []*schema.Column{NotesColumns[24]},
 				RefColumns: []*schema.Column{ProceduresColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_programs_notes",
-				Columns:    []*schema.Column{NotesColumns[24]},
+				Columns:    []*schema.Column{NotesColumns[25]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_remediations_comments",
-				Columns:    []*schema.Column{NotesColumns[25]},
+				Columns:    []*schema.Column{NotesColumns[26]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_reviews_comments",
-				Columns:    []*schema.Column{NotesColumns[26]},
+				Columns:    []*schema.Column{NotesColumns[27]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_risks_comments",
-				Columns:    []*schema.Column{NotesColumns[27]},
+				Columns:    []*schema.Column{NotesColumns[28]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_subcontrols_comments",
-				Columns:    []*schema.Column{NotesColumns[28]},
+				Columns:    []*schema.Column{NotesColumns[29]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_tasks_comments",
-				Columns:    []*schema.Column{NotesColumns[29]},
+				Columns:    []*schema.Column{NotesColumns[30]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_trust_centers_posts",
-				Columns:    []*schema.Column{NotesColumns[30]},
+				Columns:    []*schema.Column{NotesColumns[31]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_vulnerabilities_comments",
-				Columns:    []*schema.Column{NotesColumns[31]},
+				Columns:    []*schema.Column{NotesColumns[32]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5862,22 +5913,22 @@ var (
 			{
 				Name:    "note_trust_center_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{NotesColumns[30]},
+				Columns: []*schema.Column{NotesColumns[31]},
 			},
 			{
 				Name:    "note_discussion_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{NotesColumns[17]},
+				Columns: []*schema.Column{NotesColumns[18]},
 			},
 			{
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{NotesColumns[8], NotesColumns[22]},
+				Columns: []*schema.Column{NotesColumns[8], NotesColumns[23]},
 			},
 			{
 				Name:    "note_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{NotesColumns[22]},
+				Columns: []*schema.Column{NotesColumns[23]},
 			},
 		},
 	}
@@ -7572,9 +7623,15 @@ var (
 		{Name: "integration_run_id", Type: field.TypeString, Nullable: true},
 		{Name: "source_key", Type: field.TypeString, Nullable: true},
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner", Type: field.TypeString, Nullable: true},
+		{Name: "reviewed_by", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_name", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
+		{Name: "review_kind_name", Type: field.TypeString, Nullable: true},
+		{Name: "review_classification_name", Type: field.TypeString, Nullable: true},
+		{Name: "review_state_name", Type: field.TypeString, Nullable: true},
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
@@ -7595,6 +7652,18 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
+		{Name: "reviewed_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "reviewed_by_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "reviewed_by_identity_holder_id", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_identity_holder_id", Type: field.TypeString, Nullable: true},
+		{Name: "review_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "review_classification_id", Type: field.TypeString, Nullable: true},
+		{Name: "review_state_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewer_id", Type: field.TypeString, Nullable: true},
@@ -7607,25 +7676,97 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "reviews_organizations_reviews",
-				Columns:    []*schema.Column{ReviewsColumns[38]},
+				Columns:    []*schema.Column{ReviewsColumns[44]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "reviews_users_internal_owner_user",
+				Columns:    []*schema.Column{ReviewsColumns[45]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_groups_internal_owner_group",
+				Columns:    []*schema.Column{ReviewsColumns[46]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_identity_holders_internal_owner_identity_holder",
+				Columns:    []*schema.Column{ReviewsColumns[47]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_users_reviewed_by_user",
+				Columns:    []*schema.Column{ReviewsColumns[48]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_groups_reviewed_by_group",
+				Columns:    []*schema.Column{ReviewsColumns[49]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_identity_holders_reviewed_by_identity_holder",
+				Columns:    []*schema.Column{ReviewsColumns[50]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_users_delegate_user",
+				Columns:    []*schema.Column{ReviewsColumns[51]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_groups_delegate_group",
+				Columns:    []*schema.Column{ReviewsColumns[52]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_identity_holders_delegate_identity_holder",
+				Columns:    []*schema.Column{ReviewsColumns[53]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_custom_type_enums_review_kind",
+				Columns:    []*schema.Column{ReviewsColumns[54]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_custom_type_enums_review_classification",
+				Columns:    []*schema.Column{ReviewsColumns[55]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_custom_type_enums_review_state",
+				Columns:    []*schema.Column{ReviewsColumns[56]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "reviews_custom_type_enums_environment",
-				Columns:    []*schema.Column{ReviewsColumns[39]},
+				Columns:    []*schema.Column{ReviewsColumns[57]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "reviews_custom_type_enums_scope",
-				Columns:    []*schema.Column{ReviewsColumns[40]},
+				Columns:    []*schema.Column{ReviewsColumns[58]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "reviews_users_reviewer",
-				Columns:    []*schema.Column{ReviewsColumns[41]},
+				Columns:    []*schema.Column{ReviewsColumns[59]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7634,7 +7775,7 @@ var (
 			{
 				Name:    "review_reviewer_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ReviewsColumns[41]},
+				Columns: []*schema.Column{ReviewsColumns[59]},
 			},
 			{
 				Name:    "review_source_instance_id",
@@ -7654,12 +7795,12 @@ var (
 			{
 				Name:    "review_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ReviewsColumns[38]},
+				Columns: []*schema.Column{ReviewsColumns[44]},
 			},
 			{
 				Name:    "review_external_id_external_owner_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ReviewsColumns[15], ReviewsColumns[21], ReviewsColumns[38]},
+				Columns: []*schema.Column{ReviewsColumns[15], ReviewsColumns[27], ReviewsColumns[44]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7667,7 +7808,7 @@ var (
 			{
 				Name:    "review_external_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ReviewsColumns[15], ReviewsColumns[38]},
+				Columns: []*schema.Column{ReviewsColumns[15], ReviewsColumns[44]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND external_owner_id is NULL",
 				},
@@ -14806,6 +14947,56 @@ var (
 			},
 		},
 	}
+	// PlatformControlImplementationsColumns holds the columns for the "platform_control_implementations" table.
+	PlatformControlImplementationsColumns = []*schema.Column{
+		{Name: "platform_id", Type: field.TypeString},
+		{Name: "control_implementation_id", Type: field.TypeString},
+	}
+	// PlatformControlImplementationsTable holds the schema information for the "platform_control_implementations" table.
+	PlatformControlImplementationsTable = &schema.Table{
+		Name:       "platform_control_implementations",
+		Columns:    PlatformControlImplementationsColumns,
+		PrimaryKey: []*schema.Column{PlatformControlImplementationsColumns[0], PlatformControlImplementationsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "platform_control_implementations_platform_id",
+				Columns:    []*schema.Column{PlatformControlImplementationsColumns[0]},
+				RefColumns: []*schema.Column{PlatformsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "platform_control_implementations_control_implementation_id",
+				Columns:    []*schema.Column{PlatformControlImplementationsColumns[1]},
+				RefColumns: []*schema.Column{ControlImplementationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// PlatformReviewsColumns holds the columns for the "platform_reviews" table.
+	PlatformReviewsColumns = []*schema.Column{
+		{Name: "platform_id", Type: field.TypeString},
+		{Name: "review_id", Type: field.TypeString},
+	}
+	// PlatformReviewsTable holds the schema information for the "platform_reviews" table.
+	PlatformReviewsTable = &schema.Table{
+		Name:       "platform_reviews",
+		Columns:    PlatformReviewsColumns,
+		PrimaryKey: []*schema.Column{PlatformReviewsColumns[0], PlatformReviewsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "platform_reviews_platform_id",
+				Columns:    []*schema.Column{PlatformReviewsColumns[0]},
+				RefColumns: []*schema.Column{PlatformsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "platform_reviews_review_id",
+				Columns:    []*schema.Column{PlatformReviewsColumns[1]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// PlatformAssessmentsColumns holds the columns for the "platform_assessments" table.
 	PlatformAssessmentsColumns = []*schema.Column{
 		{Name: "platform_id", Type: field.TypeString},
@@ -16906,6 +17097,56 @@ var (
 			},
 		},
 	}
+	// SystemDetailControlImplementationsColumns holds the columns for the "system_detail_control_implementations" table.
+	SystemDetailControlImplementationsColumns = []*schema.Column{
+		{Name: "system_detail_id", Type: field.TypeString},
+		{Name: "control_implementation_id", Type: field.TypeString},
+	}
+	// SystemDetailControlImplementationsTable holds the schema information for the "system_detail_control_implementations" table.
+	SystemDetailControlImplementationsTable = &schema.Table{
+		Name:       "system_detail_control_implementations",
+		Columns:    SystemDetailControlImplementationsColumns,
+		PrimaryKey: []*schema.Column{SystemDetailControlImplementationsColumns[0], SystemDetailControlImplementationsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "system_detail_control_implementations_system_detail_id",
+				Columns:    []*schema.Column{SystemDetailControlImplementationsColumns[0]},
+				RefColumns: []*schema.Column{SystemDetailsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "system_detail_control_implementations_control_implementation_id",
+				Columns:    []*schema.Column{SystemDetailControlImplementationsColumns[1]},
+				RefColumns: []*schema.Column{ControlImplementationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// SystemDetailReviewsColumns holds the columns for the "system_detail_reviews" table.
+	SystemDetailReviewsColumns = []*schema.Column{
+		{Name: "system_detail_id", Type: field.TypeString},
+		{Name: "review_id", Type: field.TypeString},
+	}
+	// SystemDetailReviewsTable holds the schema information for the "system_detail_reviews" table.
+	SystemDetailReviewsTable = &schema.Table{
+		Name:       "system_detail_reviews",
+		Columns:    SystemDetailReviewsColumns,
+		PrimaryKey: []*schema.Column{SystemDetailReviewsColumns[0], SystemDetailReviewsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "system_detail_reviews_system_detail_id",
+				Columns:    []*schema.Column{SystemDetailReviewsColumns[0]},
+				RefColumns: []*schema.Column{SystemDetailsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "system_detail_reviews_review_id",
+				Columns:    []*schema.Column{SystemDetailReviewsColumns[1]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// TaskEvidenceColumns holds the columns for the "task_evidence" table.
 	TaskEvidenceColumns = []*schema.Column{
 		{Name: "task_id", Type: field.TypeString},
@@ -17474,6 +17715,8 @@ var (
 		PlatformFilesTable,
 		PlatformRisksTable,
 		PlatformControlsTable,
+		PlatformControlImplementationsTable,
+		PlatformReviewsTable,
 		PlatformAssessmentsTable,
 		PlatformScansTable,
 		PlatformTasksTable,
@@ -17558,6 +17801,8 @@ var (
 		SubcontrolIdentityHoldersTable,
 		SubscriberEventsTable,
 		SystemDetailAssetsTable,
+		SystemDetailControlImplementationsTable,
+		SystemDetailReviewsTable,
 		TaskEvidenceTable,
 		TemplateFilesTable,
 		UserEventsTable,
@@ -17642,9 +17887,15 @@ func init() {
 	ControlsTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
 	ControlsTable.ForeignKeys[8].RefTable = OrganizationsTable
 	ControlsTable.ForeignKeys[9].RefTable = StandardsTable
-	ControlImplementationsTable.ForeignKeys[0].RefTable = EvidencesTable
-	ControlImplementationsTable.ForeignKeys[1].RefTable = InternalPoliciesTable
-	ControlImplementationsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ControlImplementationsTable.ForeignKeys[0].RefTable = UsersTable
+	ControlImplementationsTable.ForeignKeys[1].RefTable = GroupsTable
+	ControlImplementationsTable.ForeignKeys[2].RefTable = IdentityHoldersTable
+	ControlImplementationsTable.ForeignKeys[3].RefTable = UsersTable
+	ControlImplementationsTable.ForeignKeys[4].RefTable = GroupsTable
+	ControlImplementationsTable.ForeignKeys[5].RefTable = IdentityHoldersTable
+	ControlImplementationsTable.ForeignKeys[6].RefTable = EvidencesTable
+	ControlImplementationsTable.ForeignKeys[7].RefTable = InternalPoliciesTable
+	ControlImplementationsTable.ForeignKeys[8].RefTable = OrganizationsTable
 	ControlObjectivesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	CustomDomainsTable.ForeignKeys[0].RefTable = MappableDomainsTable
 	CustomDomainsTable.ForeignKeys[1].RefTable = DNSVerificationsTable
@@ -17934,21 +18185,22 @@ func init() {
 	NarrativesTable.ForeignKeys[1].RefTable = OrganizationsTable
 	NarrativesTable.ForeignKeys[2].RefTable = SubcontrolsTable
 	NotesTable.ForeignKeys[0].RefTable = ControlsTable
-	NotesTable.ForeignKeys[1].RefTable = DiscussionsTable
-	NotesTable.ForeignKeys[2].RefTable = EntitiesTable
-	NotesTable.ForeignKeys[3].RefTable = EvidencesTable
-	NotesTable.ForeignKeys[4].RefTable = FindingsTable
-	NotesTable.ForeignKeys[5].RefTable = InternalPoliciesTable
-	NotesTable.ForeignKeys[6].RefTable = OrganizationsTable
-	NotesTable.ForeignKeys[7].RefTable = ProceduresTable
-	NotesTable.ForeignKeys[8].RefTable = ProgramsTable
-	NotesTable.ForeignKeys[9].RefTable = RemediationsTable
-	NotesTable.ForeignKeys[10].RefTable = ReviewsTable
-	NotesTable.ForeignKeys[11].RefTable = RisksTable
-	NotesTable.ForeignKeys[12].RefTable = SubcontrolsTable
-	NotesTable.ForeignKeys[13].RefTable = TasksTable
-	NotesTable.ForeignKeys[14].RefTable = TrustCentersTable
-	NotesTable.ForeignKeys[15].RefTable = VulnerabilitiesTable
+	NotesTable.ForeignKeys[1].RefTable = ControlImplementationsTable
+	NotesTable.ForeignKeys[2].RefTable = DiscussionsTable
+	NotesTable.ForeignKeys[3].RefTable = EntitiesTable
+	NotesTable.ForeignKeys[4].RefTable = EvidencesTable
+	NotesTable.ForeignKeys[5].RefTable = FindingsTable
+	NotesTable.ForeignKeys[6].RefTable = InternalPoliciesTable
+	NotesTable.ForeignKeys[7].RefTable = OrganizationsTable
+	NotesTable.ForeignKeys[8].RefTable = ProceduresTable
+	NotesTable.ForeignKeys[9].RefTable = ProgramsTable
+	NotesTable.ForeignKeys[10].RefTable = RemediationsTable
+	NotesTable.ForeignKeys[11].RefTable = ReviewsTable
+	NotesTable.ForeignKeys[12].RefTable = RisksTable
+	NotesTable.ForeignKeys[13].RefTable = SubcontrolsTable
+	NotesTable.ForeignKeys[14].RefTable = TasksTable
+	NotesTable.ForeignKeys[15].RefTable = TrustCentersTable
+	NotesTable.ForeignKeys[16].RefTable = VulnerabilitiesTable
 	NotificationsTable.ForeignKeys[0].RefTable = NotificationTemplatesTable
 	NotificationsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	NotificationPreferencesTable.ForeignKeys[0].RefTable = UsersTable
@@ -18027,9 +18279,21 @@ func init() {
 	ReportMembershipsTable.ForeignKeys[1].RefTable = UsersTable
 	ReportMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable
 	ReviewsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	ReviewsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
-	ReviewsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
-	ReviewsTable.ForeignKeys[3].RefTable = UsersTable
+	ReviewsTable.ForeignKeys[1].RefTable = UsersTable
+	ReviewsTable.ForeignKeys[2].RefTable = GroupsTable
+	ReviewsTable.ForeignKeys[3].RefTable = IdentityHoldersTable
+	ReviewsTable.ForeignKeys[4].RefTable = UsersTable
+	ReviewsTable.ForeignKeys[5].RefTable = GroupsTable
+	ReviewsTable.ForeignKeys[6].RefTable = IdentityHoldersTable
+	ReviewsTable.ForeignKeys[7].RefTable = UsersTable
+	ReviewsTable.ForeignKeys[8].RefTable = GroupsTable
+	ReviewsTable.ForeignKeys[9].RefTable = IdentityHoldersTable
+	ReviewsTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
+	ReviewsTable.ForeignKeys[11].RefTable = CustomTypeEnumsTable
+	ReviewsTable.ForeignKeys[12].RefTable = CustomTypeEnumsTable
+	ReviewsTable.ForeignKeys[13].RefTable = CustomTypeEnumsTable
+	ReviewsTable.ForeignKeys[14].RefTable = CustomTypeEnumsTable
+	ReviewsTable.ForeignKeys[15].RefTable = UsersTable
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	RisksTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	RisksTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
@@ -18502,6 +18766,10 @@ func init() {
 	PlatformRisksTable.ForeignKeys[1].RefTable = RisksTable
 	PlatformControlsTable.ForeignKeys[0].RefTable = PlatformsTable
 	PlatformControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	PlatformControlImplementationsTable.ForeignKeys[0].RefTable = PlatformsTable
+	PlatformControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
+	PlatformReviewsTable.ForeignKeys[0].RefTable = PlatformsTable
+	PlatformReviewsTable.ForeignKeys[1].RefTable = ReviewsTable
 	PlatformAssessmentsTable.ForeignKeys[0].RefTable = PlatformsTable
 	PlatformAssessmentsTable.ForeignKeys[1].RefTable = AssessmentsTable
 	PlatformScansTable.ForeignKeys[0].RefTable = PlatformsTable
@@ -18670,6 +18938,10 @@ func init() {
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
 	SystemDetailAssetsTable.ForeignKeys[0].RefTable = SystemDetailsTable
 	SystemDetailAssetsTable.ForeignKeys[1].RefTable = AssetsTable
+	SystemDetailControlImplementationsTable.ForeignKeys[0].RefTable = SystemDetailsTable
+	SystemDetailControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
+	SystemDetailReviewsTable.ForeignKeys[0].RefTable = SystemDetailsTable
+	SystemDetailReviewsTable.ForeignKeys[1].RefTable = ReviewsTable
 	TaskEvidenceTable.ForeignKeys[0].RefTable = TasksTable
 	TaskEvidenceTable.ForeignKeys[1].RefTable = EvidencesTable
 	TemplateFilesTable.ForeignKeys[0].RefTable = TemplatesTable

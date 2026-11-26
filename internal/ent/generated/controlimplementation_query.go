@@ -16,11 +16,16 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 
 	"github.com/theopenlane/logx"
 )
@@ -28,28 +33,40 @@ import (
 // ControlImplementationQuery is the builder for querying ControlImplementation entities.
 type ControlImplementationQuery struct {
 	config
-	ctx                      *QueryContext
-	order                    []controlimplementation.OrderOption
-	inters                   []Interceptor
-	predicates               []predicate.ControlImplementation
-	withIntegrationRuns      *IntegrationRunQuery
-	withOwner                *OrganizationQuery
-	withBlockedGroups        *GroupQuery
-	withEditors              *GroupQuery
-	withViewers              *GroupQuery
-	withControls             *ControlQuery
-	withSubcontrols          *SubcontrolQuery
-	withTasks                *TaskQuery
-	withFKs                  bool
-	loadTotal                []func(context.Context, []*ControlImplementation) error
-	modifiers                []func(*sql.Selector)
-	withNamedIntegrationRuns map[string]*IntegrationRunQuery
-	withNamedBlockedGroups   map[string]*GroupQuery
-	withNamedEditors         map[string]*GroupQuery
-	withNamedViewers         map[string]*GroupQuery
-	withNamedControls        map[string]*ControlQuery
-	withNamedSubcontrols     map[string]*SubcontrolQuery
-	withNamedTasks           map[string]*TaskQuery
+	ctx                             *QueryContext
+	order                           []controlimplementation.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.ControlImplementation
+	withIntegrationRuns             *IntegrationRunQuery
+	withOwner                       *OrganizationQuery
+	withBlockedGroups               *GroupQuery
+	withEditors                     *GroupQuery
+	withViewers                     *GroupQuery
+	withInternalOwnerUser           *UserQuery
+	withInternalOwnerGroup          *GroupQuery
+	withInternalOwnerIdentityHolder *IdentityHolderQuery
+	withDelegateUser                *UserQuery
+	withDelegateGroup               *GroupQuery
+	withDelegateIdentityHolder      *IdentityHolderQuery
+	withControls                    *ControlQuery
+	withSubcontrols                 *SubcontrolQuery
+	withTasks                       *TaskQuery
+	withPlatforms                   *PlatformQuery
+	withSystemDetails               *SystemDetailQuery
+	withComments                    *NoteQuery
+	withFKs                         bool
+	loadTotal                       []func(context.Context, []*ControlImplementation) error
+	modifiers                       []func(*sql.Selector)
+	withNamedIntegrationRuns        map[string]*IntegrationRunQuery
+	withNamedBlockedGroups          map[string]*GroupQuery
+	withNamedEditors                map[string]*GroupQuery
+	withNamedViewers                map[string]*GroupQuery
+	withNamedControls               map[string]*ControlQuery
+	withNamedSubcontrols            map[string]*SubcontrolQuery
+	withNamedTasks                  map[string]*TaskQuery
+	withNamedPlatforms              map[string]*PlatformQuery
+	withNamedSystemDetails          map[string]*SystemDetailQuery
+	withNamedComments               map[string]*NoteQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -196,6 +213,138 @@ func (_q *ControlImplementationQuery) QueryViewers() *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerUser chains the current query on the "internal_owner_user" edge.
+func (_q *ControlImplementationQuery) QueryInternalOwnerUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlimplementation.InternalOwnerUserTable, controlimplementation.InternalOwnerUserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup chains the current query on the "internal_owner_group" edge.
+func (_q *ControlImplementationQuery) QueryInternalOwnerGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlimplementation.InternalOwnerGroupTable, controlimplementation.InternalOwnerGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder chains the current query on the "internal_owner_identity_holder" edge.
+func (_q *ControlImplementationQuery) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlimplementation.InternalOwnerIdentityHolderTable, controlimplementation.InternalOwnerIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegateUser chains the current query on the "delegate_user" edge.
+func (_q *ControlImplementationQuery) QueryDelegateUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlimplementation.DelegateUserTable, controlimplementation.DelegateUserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegateGroup chains the current query on the "delegate_group" edge.
+func (_q *ControlImplementationQuery) QueryDelegateGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlimplementation.DelegateGroupTable, controlimplementation.DelegateGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegateIdentityHolder chains the current query on the "delegate_identity_holder" edge.
+func (_q *ControlImplementationQuery) QueryDelegateIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlimplementation.DelegateIdentityHolderTable, controlimplementation.DelegateIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControls chains the current query on the "controls" edge.
 func (_q *ControlImplementationQuery) QueryControls() *ControlQuery {
 	query := (&ControlClient{config: _q.config}).Query()
@@ -255,6 +404,72 @@ func (_q *ControlImplementationQuery) QueryTasks() *TaskQuery {
 			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.TasksTable, controlimplementation.TasksPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *ControlImplementationQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlimplementation.PlatformsTable, controlimplementation.PlatformsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySystemDetails chains the current query on the "system_details" edge.
+func (_q *ControlImplementationQuery) QuerySystemDetails() *SystemDetailQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlimplementation.SystemDetailsTable, controlimplementation.SystemDetailsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryComments chains the current query on the "comments" edge.
+func (_q *ControlImplementationQuery) QueryComments() *NoteQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, controlimplementation.CommentsTable, controlimplementation.CommentsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -449,19 +664,28 @@ func (_q *ControlImplementationQuery) Clone() *ControlImplementationQuery {
 		return nil
 	}
 	return &ControlImplementationQuery{
-		config:              _q.config,
-		ctx:                 _q.ctx.Clone(),
-		order:               append([]controlimplementation.OrderOption{}, _q.order...),
-		inters:              append([]Interceptor{}, _q.inters...),
-		predicates:          append([]predicate.ControlImplementation{}, _q.predicates...),
-		withIntegrationRuns: _q.withIntegrationRuns.Clone(),
-		withOwner:           _q.withOwner.Clone(),
-		withBlockedGroups:   _q.withBlockedGroups.Clone(),
-		withEditors:         _q.withEditors.Clone(),
-		withViewers:         _q.withViewers.Clone(),
-		withControls:        _q.withControls.Clone(),
-		withSubcontrols:     _q.withSubcontrols.Clone(),
-		withTasks:           _q.withTasks.Clone(),
+		config:                          _q.config,
+		ctx:                             _q.ctx.Clone(),
+		order:                           append([]controlimplementation.OrderOption{}, _q.order...),
+		inters:                          append([]Interceptor{}, _q.inters...),
+		predicates:                      append([]predicate.ControlImplementation{}, _q.predicates...),
+		withIntegrationRuns:             _q.withIntegrationRuns.Clone(),
+		withOwner:                       _q.withOwner.Clone(),
+		withBlockedGroups:               _q.withBlockedGroups.Clone(),
+		withEditors:                     _q.withEditors.Clone(),
+		withViewers:                     _q.withViewers.Clone(),
+		withInternalOwnerUser:           _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:          _q.withInternalOwnerGroup.Clone(),
+		withInternalOwnerIdentityHolder: _q.withInternalOwnerIdentityHolder.Clone(),
+		withDelegateUser:                _q.withDelegateUser.Clone(),
+		withDelegateGroup:               _q.withDelegateGroup.Clone(),
+		withDelegateIdentityHolder:      _q.withDelegateIdentityHolder.Clone(),
+		withControls:                    _q.withControls.Clone(),
+		withSubcontrols:                 _q.withSubcontrols.Clone(),
+		withTasks:                       _q.withTasks.Clone(),
+		withPlatforms:                   _q.withPlatforms.Clone(),
+		withSystemDetails:               _q.withSystemDetails.Clone(),
+		withComments:                    _q.withComments.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -524,6 +748,72 @@ func (_q *ControlImplementationQuery) WithViewers(opts ...func(*GroupQuery)) *Co
 	return _q
 }
 
+// WithInternalOwnerUser tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithInternalOwnerUser(opts ...func(*UserQuery)) *ControlImplementationQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerUser = query
+	return _q
+}
+
+// WithInternalOwnerGroup tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery)) *ControlImplementationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerGroup = query
+	return _q
+}
+
+// WithInternalOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithInternalOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *ControlImplementationQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerIdentityHolder = query
+	return _q
+}
+
+// WithDelegateUser tells the query-builder to eager-load the nodes that are connected to
+// the "delegate_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithDelegateUser(opts ...func(*UserQuery)) *ControlImplementationQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDelegateUser = query
+	return _q
+}
+
+// WithDelegateGroup tells the query-builder to eager-load the nodes that are connected to
+// the "delegate_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithDelegateGroup(opts ...func(*GroupQuery)) *ControlImplementationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDelegateGroup = query
+	return _q
+}
+
+// WithDelegateIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "delegate_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithDelegateIdentityHolder(opts ...func(*IdentityHolderQuery)) *ControlImplementationQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDelegateIdentityHolder = query
+	return _q
+}
+
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlImplementationQuery) WithControls(opts ...func(*ControlQuery)) *ControlImplementationQuery {
@@ -554,6 +844,39 @@ func (_q *ControlImplementationQuery) WithTasks(opts ...func(*TaskQuery)) *Contr
 		opt(query)
 	}
 	_q.withTasks = query
+	return _q
+}
+
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithPlatforms(opts ...func(*PlatformQuery)) *ControlImplementationQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
+	return _q
+}
+
+// WithSystemDetails tells the query-builder to eager-load the nodes that are connected to
+// the "system_details" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithSystemDetails(opts ...func(*SystemDetailQuery)) *ControlImplementationQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSystemDetails = query
+	return _q
+}
+
+// WithComments tells the query-builder to eager-load the nodes that are connected to
+// the "comments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithComments(opts ...func(*NoteQuery)) *ControlImplementationQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withComments = query
 	return _q
 }
 
@@ -642,15 +965,24 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 		nodes       = []*ControlImplementation{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [17]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
+			_q.withInternalOwnerUser != nil,
+			_q.withInternalOwnerGroup != nil,
+			_q.withInternalOwnerIdentityHolder != nil,
+			_q.withDelegateUser != nil,
+			_q.withDelegateGroup != nil,
+			_q.withDelegateIdentityHolder != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withTasks != nil,
+			_q.withPlatforms != nil,
+			_q.withSystemDetails != nil,
+			_q.withComments != nil,
 		}
 	)
 	if withFKs {
@@ -713,6 +1045,42 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 			return nil, err
 		}
 	}
+	if query := _q.withInternalOwnerUser; query != nil {
+		if err := _q.loadInternalOwnerUser(ctx, query, nodes, nil,
+			func(n *ControlImplementation, e *User) { n.Edges.InternalOwnerUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerGroup; query != nil {
+		if err := _q.loadInternalOwnerGroup(ctx, query, nodes, nil,
+			func(n *ControlImplementation, e *Group) { n.Edges.InternalOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerIdentityHolder; query != nil {
+		if err := _q.loadInternalOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *ControlImplementation, e *IdentityHolder) { n.Edges.InternalOwnerIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDelegateUser; query != nil {
+		if err := _q.loadDelegateUser(ctx, query, nodes, nil,
+			func(n *ControlImplementation, e *User) { n.Edges.DelegateUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDelegateGroup; query != nil {
+		if err := _q.loadDelegateGroup(ctx, query, nodes, nil,
+			func(n *ControlImplementation, e *Group) { n.Edges.DelegateGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDelegateIdentityHolder; query != nil {
+		if err := _q.loadDelegateIdentityHolder(ctx, query, nodes, nil,
+			func(n *ControlImplementation, e *IdentityHolder) { n.Edges.DelegateIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControls; query != nil {
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *ControlImplementation) { n.Edges.Controls = []*Control{} },
@@ -731,6 +1099,29 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *ControlImplementation) { n.Edges.Tasks = []*Task{} },
 			func(n *ControlImplementation, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *ControlImplementation) { n.Edges.Platforms = []*Platform{} },
+			func(n *ControlImplementation, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSystemDetails; query != nil {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *ControlImplementation) { n.Edges.SystemDetails = []*SystemDetail{} },
+			func(n *ControlImplementation, e *SystemDetail) {
+				n.Edges.SystemDetails = append(n.Edges.SystemDetails, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withComments; query != nil {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *ControlImplementation) { n.Edges.Comments = []*Note{} },
+			func(n *ControlImplementation, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -780,6 +1171,27 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *ControlImplementation) { n.appendNamedTasks(name) },
 			func(n *ControlImplementation, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *ControlImplementation) { n.appendNamedPlatforms(name) },
+			func(n *ControlImplementation, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSystemDetails {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *ControlImplementation) { n.appendNamedSystemDetails(name) },
+			func(n *ControlImplementation, e *SystemDetail) { n.appendNamedSystemDetails(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedComments {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *ControlImplementation) { n.appendNamedComments(name) },
+			func(n *ControlImplementation, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1034,6 +1446,180 @@ func (_q *ControlImplementationQuery) loadViewers(ctx context.Context, query *Gr
 	}
 	return nil
 }
+func (_q *ControlImplementationQuery) loadInternalOwnerUser(ctx context.Context, query *UserQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlImplementation)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ControlImplementationQuery) loadInternalOwnerGroup(ctx context.Context, query *GroupQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlImplementation)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ControlImplementationQuery) loadInternalOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlImplementation)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ControlImplementationQuery) loadDelegateUser(ctx context.Context, query *UserQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlImplementation)
+	for i := range nodes {
+		fk := nodes[i].DelegateUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "delegate_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ControlImplementationQuery) loadDelegateGroup(ctx context.Context, query *GroupQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlImplementation)
+	for i := range nodes {
+		fk := nodes[i].DelegateGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "delegate_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ControlImplementationQuery) loadDelegateIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlImplementation)
+	for i := range nodes {
+		fk := nodes[i].DelegateIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "delegate_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *ControlImplementationQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*ControlImplementation)
@@ -1217,6 +1803,159 @@ func (_q *ControlImplementationQuery) loadTasks(ctx context.Context, query *Task
 	}
 	return nil
 }
+func (_q *ControlImplementationQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ControlImplementation)
+	nids := make(map[string]map[*ControlImplementation]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(controlimplementation.PlatformsTable)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(controlimplementation.PlatformsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(controlimplementation.PlatformsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(controlimplementation.PlatformsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ControlImplementation]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platforms" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ControlImplementationQuery) loadSystemDetails(ctx context.Context, query *SystemDetailQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *SystemDetail)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ControlImplementation)
+	nids := make(map[string]map[*ControlImplementation]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(controlimplementation.SystemDetailsTable)
+		s.Join(joinT).On(s.C(systemdetail.FieldID), joinT.C(controlimplementation.SystemDetailsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(controlimplementation.SystemDetailsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(controlimplementation.SystemDetailsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ControlImplementation]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*SystemDetail](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "system_details" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ControlImplementationQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Note)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ControlImplementation)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Note(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(controlimplementation.CommentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.control_implementation_comments
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "control_implementation_comments" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "control_implementation_comments" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *ControlImplementationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1248,6 +1987,24 @@ func (_q *ControlImplementationQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(controlimplementation.FieldOwnerID)
+		}
+		if _q.withInternalOwnerUser != nil {
+			_spec.Node.AddColumnOnce(controlimplementation.FieldInternalOwnerUserID)
+		}
+		if _q.withInternalOwnerGroup != nil {
+			_spec.Node.AddColumnOnce(controlimplementation.FieldInternalOwnerGroupID)
+		}
+		if _q.withInternalOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(controlimplementation.FieldInternalOwnerIdentityHolderID)
+		}
+		if _q.withDelegateUser != nil {
+			_spec.Node.AddColumnOnce(controlimplementation.FieldDelegateUserID)
+		}
+		if _q.withDelegateGroup != nil {
+			_spec.Node.AddColumnOnce(controlimplementation.FieldDelegateGroupID)
+		}
+		if _q.withDelegateIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(controlimplementation.FieldDelegateIdentityHolderID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -1410,6 +2167,48 @@ func (_q *ControlImplementationQuery) WithNamedTasks(name string, opts ...func(*
 		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	_q.withNamedTasks[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *ControlImplementationQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedSystemDetails tells the query-builder to eager-load the nodes that are connected to the "system_details"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithNamedSystemDetails(name string, opts ...func(*SystemDetailQuery)) *ControlImplementationQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSystemDetails == nil {
+		_q.withNamedSystemDetails = make(map[string]*SystemDetailQuery)
+	}
+	_q.withNamedSystemDetails[name] = query
+	return _q
+}
+
+// WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *ControlImplementationQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedComments == nil {
+		_q.withNamedComments = make(map[string]*NoteQuery)
+	}
+	_q.withNamedComments[name] = query
 	return _q
 }
 

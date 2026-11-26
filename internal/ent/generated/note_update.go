@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
@@ -473,6 +474,25 @@ func (_u *NoteUpdate) SetFinding(v *Finding) *NoteUpdate {
 	return _u.SetFindingID(v.ID)
 }
 
+// SetControlImplementationID sets the "control_implementation" edge to the ControlImplementation entity by ID.
+func (_u *NoteUpdate) SetControlImplementationID(id string) *NoteUpdate {
+	_u.mutation.SetControlImplementationID(id)
+	return _u
+}
+
+// SetNillableControlImplementationID sets the "control_implementation" edge to the ControlImplementation entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableControlImplementationID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetControlImplementationID(*id)
+	}
+	return _u
+}
+
+// SetControlImplementation sets the "control_implementation" edge to the ControlImplementation entity.
+func (_u *NoteUpdate) SetControlImplementation(v *ControlImplementation) *NoteUpdate {
+	return _u.SetControlImplementationID(v.ID)
+}
+
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
 func (_u *NoteUpdate) SetEvidenceID(id string) *NoteUpdate {
 	_u.mutation.SetEvidenceID(id)
@@ -588,6 +608,12 @@ func (_u *NoteUpdate) ClearVulnerability() *NoteUpdate {
 // ClearFinding clears the "finding" edge to the Finding entity.
 func (_u *NoteUpdate) ClearFinding() *NoteUpdate {
 	_u.mutation.ClearFinding()
+	return _u
+}
+
+// ClearControlImplementation clears the "control_implementation" edge to the ControlImplementation entity.
+func (_u *NoteUpdate) ClearControlImplementation() *NoteUpdate {
+	_u.mutation.ClearControlImplementation()
 	return _u
 }
 
@@ -1052,6 +1078,35 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlImplementationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlImplementationTable,
+			Columns: []string{note.ControlImplementationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlImplementationTable,
+			Columns: []string{note.ControlImplementationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1687,6 +1742,25 @@ func (_u *NoteUpdateOne) SetFinding(v *Finding) *NoteUpdateOne {
 	return _u.SetFindingID(v.ID)
 }
 
+// SetControlImplementationID sets the "control_implementation" edge to the ControlImplementation entity by ID.
+func (_u *NoteUpdateOne) SetControlImplementationID(id string) *NoteUpdateOne {
+	_u.mutation.SetControlImplementationID(id)
+	return _u
+}
+
+// SetNillableControlImplementationID sets the "control_implementation" edge to the ControlImplementation entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableControlImplementationID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetControlImplementationID(*id)
+	}
+	return _u
+}
+
+// SetControlImplementation sets the "control_implementation" edge to the ControlImplementation entity.
+func (_u *NoteUpdateOne) SetControlImplementation(v *ControlImplementation) *NoteUpdateOne {
+	return _u.SetControlImplementationID(v.ID)
+}
+
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
 func (_u *NoteUpdateOne) SetEvidenceID(id string) *NoteUpdateOne {
 	_u.mutation.SetEvidenceID(id)
@@ -1802,6 +1876,12 @@ func (_u *NoteUpdateOne) ClearVulnerability() *NoteUpdateOne {
 // ClearFinding clears the "finding" edge to the Finding entity.
 func (_u *NoteUpdateOne) ClearFinding() *NoteUpdateOne {
 	_u.mutation.ClearFinding()
+	return _u
+}
+
+// ClearControlImplementation clears the "control_implementation" edge to the ControlImplementation entity.
+func (_u *NoteUpdateOne) ClearControlImplementation() *NoteUpdateOne {
+	_u.mutation.ClearControlImplementation()
 	return _u
 }
 
@@ -2296,6 +2376,35 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlImplementationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlImplementationTable,
+			Columns: []string{note.ControlImplementationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlImplementationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlImplementationTable,
+			Columns: []string{note.ControlImplementationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

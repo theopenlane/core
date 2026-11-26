@@ -241,6 +241,10 @@ type PlatformEdges struct {
 	Risks []*Risk `json:"risks,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// ControlImplementations holds the value of the control_implementations edge.
+	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
+	// Reviews holds the value of the reviews edge.
+	Reviews []*Review `json:"reviews,omitempty"`
 	// Assessments holds the value of the assessments edge.
 	Assessments []*Assessment `json:"assessments,omitempty"`
 	// Scans holds the value of the scans edge.
@@ -277,39 +281,41 @@ type PlatformEdges struct {
 	SystemDetails []*SystemDetail `json:"system_details,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [51]bool
+	loadedTypes [53]bool
 	// totalCount holds the count of the edges above.
-	totalCount [51]map[string]int
+	totalCount [53]map[string]int
 
-	namedIntegrationRuns       map[string][]*IntegrationRun
-	namedBlockedGroups         map[string][]*Group
-	namedEditors               map[string][]*Group
-	namedViewers               map[string][]*Group
-	namedAssets                map[string][]*Asset
-	namedEntities              map[string][]*Entity
-	namedEvidence              map[string][]*Evidence
-	namedFiles                 map[string][]*File
-	namedArchitectureDiagrams  map[string][]*File
-	namedDataFlowDiagrams      map[string][]*File
-	namedTrustBoundaryDiagrams map[string][]*File
-	namedRisks                 map[string][]*Risk
-	namedControls              map[string][]*Control
-	namedAssessments           map[string][]*Assessment
-	namedScans                 map[string][]*Scan
-	namedTasks                 map[string][]*Task
-	namedIdentityHolders       map[string][]*IdentityHolder
-	namedIntegrations          map[string][]*Integration
-	namedDirectoryAccounts     map[string][]*DirectoryAccount
-	namedDirectoryGroups       map[string][]*DirectoryGroup
-	namedDirectoryMemberships  map[string][]*DirectoryMembership
-	namedWorkflowObjectRefs    map[string][]*WorkflowObjectRef
-	namedSourceAssets          map[string][]*Asset
-	namedSourceEntities        map[string][]*Entity
-	namedOutOfScopeAssets      map[string][]*Asset
-	namedOutOfScopeVendors     map[string][]*Entity
-	namedApplicableFrameworks  map[string][]*Standard
-	namedGeneratedScans        map[string][]*Scan
-	namedSystemDetails         map[string][]*SystemDetail
+	namedIntegrationRuns        map[string][]*IntegrationRun
+	namedBlockedGroups          map[string][]*Group
+	namedEditors                map[string][]*Group
+	namedViewers                map[string][]*Group
+	namedAssets                 map[string][]*Asset
+	namedEntities               map[string][]*Entity
+	namedEvidence               map[string][]*Evidence
+	namedFiles                  map[string][]*File
+	namedArchitectureDiagrams   map[string][]*File
+	namedDataFlowDiagrams       map[string][]*File
+	namedTrustBoundaryDiagrams  map[string][]*File
+	namedRisks                  map[string][]*Risk
+	namedControls               map[string][]*Control
+	namedControlImplementations map[string][]*ControlImplementation
+	namedReviews                map[string][]*Review
+	namedAssessments            map[string][]*Assessment
+	namedScans                  map[string][]*Scan
+	namedTasks                  map[string][]*Task
+	namedIdentityHolders        map[string][]*IdentityHolder
+	namedIntegrations           map[string][]*Integration
+	namedDirectoryAccounts      map[string][]*DirectoryAccount
+	namedDirectoryGroups        map[string][]*DirectoryGroup
+	namedDirectoryMemberships   map[string][]*DirectoryMembership
+	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
+	namedSourceAssets           map[string][]*Asset
+	namedSourceEntities         map[string][]*Entity
+	namedOutOfScopeAssets       map[string][]*Asset
+	namedOutOfScopeVendors      map[string][]*Entity
+	namedApplicableFrameworks   map[string][]*Standard
+	namedGeneratedScans         map[string][]*Scan
+	namedSystemDetails          map[string][]*SystemDetail
 }
 
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
@@ -660,10 +666,28 @@ func (e PlatformEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
+	if e.loadedTypes[34] {
+		return e.ControlImplementations, nil
+	}
+	return nil, &NotLoadedError{edge: "control_implementations"}
+}
+
+// ReviewsOrErr returns the Reviews value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) ReviewsOrErr() ([]*Review, error) {
+	if e.loadedTypes[35] {
+		return e.Reviews, nil
+	}
+	return nil, &NotLoadedError{edge: "reviews"}
+}
+
 // AssessmentsOrErr returns the Assessments value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) AssessmentsOrErr() ([]*Assessment, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[36] {
 		return e.Assessments, nil
 	}
 	return nil, &NotLoadedError{edge: "assessments"}
@@ -672,7 +696,7 @@ func (e PlatformEdges) AssessmentsOrErr() ([]*Assessment, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[37] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -681,7 +705,7 @@ func (e PlatformEdges) ScansOrErr() ([]*Scan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[38] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -690,7 +714,7 @@ func (e PlatformEdges) TasksOrErr() ([]*Task, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[37] {
+	if e.loadedTypes[39] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -699,7 +723,7 @@ func (e PlatformEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[38] {
+	if e.loadedTypes[40] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -708,7 +732,7 @@ func (e PlatformEdges) IntegrationsOrErr() ([]*Integration, error) {
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[39] {
+	if e.loadedTypes[41] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -717,7 +741,7 @@ func (e PlatformEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
 // DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[40] {
+	if e.loadedTypes[42] {
 		return e.DirectoryGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_groups"}
@@ -726,7 +750,7 @@ func (e PlatformEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
 // DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[41] {
+	if e.loadedTypes[43] {
 		return e.DirectoryMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_memberships"}
@@ -735,7 +759,7 @@ func (e PlatformEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, erro
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[42] {
+	if e.loadedTypes[44] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -744,7 +768,7 @@ func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // SourceAssetsOrErr returns the SourceAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[43] {
+	if e.loadedTypes[45] {
 		return e.SourceAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "source_assets"}
@@ -753,7 +777,7 @@ func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
 // SourceEntitiesOrErr returns the SourceEntities value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[44] {
+	if e.loadedTypes[46] {
 		return e.SourceEntities, nil
 	}
 	return nil, &NotLoadedError{edge: "source_entities"}
@@ -762,7 +786,7 @@ func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
 // OutOfScopeAssetsOrErr returns the OutOfScopeAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[45] {
+	if e.loadedTypes[47] {
 		return e.OutOfScopeAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_assets"}
@@ -771,7 +795,7 @@ func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
 // OutOfScopeVendorsOrErr returns the OutOfScopeVendors value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
-	if e.loadedTypes[46] {
+	if e.loadedTypes[48] {
 		return e.OutOfScopeVendors, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_vendors"}
@@ -780,7 +804,7 @@ func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
 // ApplicableFrameworksOrErr returns the ApplicableFrameworks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
-	if e.loadedTypes[47] {
+	if e.loadedTypes[49] {
 		return e.ApplicableFrameworks, nil
 	}
 	return nil, &NotLoadedError{edge: "applicable_frameworks"}
@@ -789,7 +813,7 @@ func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
 // GeneratedScansOrErr returns the GeneratedScans value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[48] {
+	if e.loadedTypes[50] {
 		return e.GeneratedScans, nil
 	}
 	return nil, &NotLoadedError{edge: "generated_scans"}
@@ -800,7 +824,7 @@ func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
 func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 	if e.PlatformOwner != nil {
 		return e.PlatformOwner, nil
-	} else if e.loadedTypes[49] {
+	} else if e.loadedTypes[51] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform_owner"}
@@ -809,7 +833,7 @@ func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 // SystemDetailsOrErr returns the SystemDetails value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
-	if e.loadedTypes[50] {
+	if e.loadedTypes[52] {
 		return e.SystemDetails, nil
 	}
 	return nil, &NotLoadedError{edge: "system_details"}
@@ -1475,6 +1499,16 @@ func (_m *Platform) QueryControls() *ControlQuery {
 	return NewPlatformClient(_m.config).QueryControls(_m)
 }
 
+// QueryControlImplementations queries the "control_implementations" edge of the Platform entity.
+func (_m *Platform) QueryControlImplementations() *ControlImplementationQuery {
+	return NewPlatformClient(_m.config).QueryControlImplementations(_m)
+}
+
+// QueryReviews queries the "reviews" edge of the Platform entity.
+func (_m *Platform) QueryReviews() *ReviewQuery {
+	return NewPlatformClient(_m.config).QueryReviews(_m)
+}
+
 // QueryAssessments queries the "assessments" edge of the Platform entity.
 func (_m *Platform) QueryAssessments() *AssessmentQuery {
 	return NewPlatformClient(_m.config).QueryAssessments(_m)
@@ -2108,6 +2142,54 @@ func (_m *Platform) appendNamedControls(name string, edges ...*Control) {
 		_m.Edges.namedControls[name] = []*Control{}
 	} else {
 		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControlImplementations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementations == nil {
+		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
+	} else {
+		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
+	}
+}
+
+// NamedReviews returns the Reviews named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedReviews(name string) ([]*Review, error) {
+	if _m.Edges.namedReviews == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReviews[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedReviews(name string, edges ...*Review) {
+	if _m.Edges.namedReviews == nil {
+		_m.Edges.namedReviews = make(map[string][]*Review)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReviews[name] = []*Review{}
+	} else {
+		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
 	}
 }
 

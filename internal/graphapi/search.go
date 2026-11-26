@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
@@ -200,6 +201,24 @@ func searchControls(ctx context.Context, query string, after *entgql.Cursor[stri
 					s.Where(sql.ExprP("(tags)::text LIKE $10", likeQuery)) // search by Tags
 				},
 				control.TitleContainsFold(query), // search by Title
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchControlImplementation searches for ControlImplementation based on the query string looking for matches
+func searchControlImplementations(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlImplementationConnection, error) {
+	request := withTransactionalMutation(ctx).ControlImplementation.Query().
+		Where(
+			controlimplementation.Or(
+				controlimplementation.DelegateNameContainsFold(query),  // search by DelegateName
+				controlimplementation.ID(query),                        // search equal to ID
+				controlimplementation.InternalOwnerContainsFold(query), // search by InternalOwner
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+				},
 			),
 		)
 
@@ -559,12 +578,14 @@ func searchReviews(ctx context.Context, query string, after *entgql.Cursor[strin
 	request := withTransactionalMutation(ctx).Review.Query().
 		Where(
 			review.Or(
+				review.DelegateNameContainsFold(query),    // search by DelegateName
 				review.ExternalIDContainsFold(query),      // search by ExternalID
 				review.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
 				review.ID(query),                          // search equal to ID
+				review.InternalOwnerContainsFold(query),   // search by InternalOwner
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $6", likeQuery)) // search by Tags
 				},
 				review.TitleContainsFold(query), // search by Title
 			),

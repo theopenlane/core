@@ -121,6 +121,42 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldOwnerID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalOwner, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewedBy, field.TypeString)
+	}
+	if _u.mutation.ReviewedByUserIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewedByUserID, field.TypeString)
+	}
+	if _u.mutation.ReviewedByGroupIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if _u.mutation.ReviewedByIdentityHolderIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewedByIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(reviewhistory.FieldDelegateName, field.TypeString)
+	}
+	if _u.mutation.DelegateUserIDCleared() {
+		_spec.ClearField(reviewhistory.FieldDelegateUserID, field.TypeString)
+	}
+	if _u.mutation.DelegateGroupIDCleared() {
+		_spec.ClearField(reviewhistory.FieldDelegateGroupID, field.TypeString)
+	}
+	if _u.mutation.DelegateIdentityHolderIDCleared() {
+		_spec.ClearField(reviewhistory.FieldDelegateIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(reviewhistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -129,6 +165,24 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(reviewhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if _u.mutation.ReviewKindNameCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewKindName, field.TypeString)
+	}
+	if _u.mutation.ReviewKindIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewKindID, field.TypeString)
+	}
+	if _u.mutation.ReviewClassificationNameCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewClassificationName, field.TypeString)
+	}
+	if _u.mutation.ReviewClassificationIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewClassificationID, field.TypeString)
+	}
+	if _u.mutation.ReviewStateNameCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewStateName, field.TypeString)
+	}
+	if _u.mutation.ReviewStateIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewStateID, field.TypeString)
 	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(reviewhistory.FieldEnvironmentName, field.TypeString)
@@ -335,6 +389,42 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldOwnerID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalOwner, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(reviewhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewedBy, field.TypeString)
+	}
+	if _u.mutation.ReviewedByUserIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewedByUserID, field.TypeString)
+	}
+	if _u.mutation.ReviewedByGroupIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if _u.mutation.ReviewedByIdentityHolderIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewedByIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(reviewhistory.FieldDelegateName, field.TypeString)
+	}
+	if _u.mutation.DelegateUserIDCleared() {
+		_spec.ClearField(reviewhistory.FieldDelegateUserID, field.TypeString)
+	}
+	if _u.mutation.DelegateGroupIDCleared() {
+		_spec.ClearField(reviewhistory.FieldDelegateGroupID, field.TypeString)
+	}
+	if _u.mutation.DelegateIdentityHolderIDCleared() {
+		_spec.ClearField(reviewhistory.FieldDelegateIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(reviewhistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -343,6 +433,24 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(reviewhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if _u.mutation.ReviewKindNameCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewKindName, field.TypeString)
+	}
+	if _u.mutation.ReviewKindIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewKindID, field.TypeString)
+	}
+	if _u.mutation.ReviewClassificationNameCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewClassificationName, field.TypeString)
+	}
+	if _u.mutation.ReviewClassificationIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewClassificationID, field.TypeString)
+	}
+	if _u.mutation.ReviewStateNameCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewStateName, field.TypeString)
+	}
+	if _u.mutation.ReviewStateIDCleared() {
+		_spec.ClearField(reviewhistory.FieldReviewStateID, field.TypeString)
 	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(reviewhistory.FieldEnvironmentName, field.TypeString)

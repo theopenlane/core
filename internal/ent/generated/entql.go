@@ -663,31 +663,39 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ControlImplementation",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			controlimplementation.FieldCreatedAt:               {Type: field.TypeTime, Column: controlimplementation.FieldCreatedAt},
-			controlimplementation.FieldUpdatedAt:               {Type: field.TypeTime, Column: controlimplementation.FieldUpdatedAt},
-			controlimplementation.FieldCreatedBy:               {Type: field.TypeString, Column: controlimplementation.FieldCreatedBy},
-			controlimplementation.FieldUpdatedBy:               {Type: field.TypeString, Column: controlimplementation.FieldUpdatedBy},
-			controlimplementation.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: controlimplementation.FieldUpdatedByImpersonator},
-			controlimplementation.FieldDeletedAt:               {Type: field.TypeTime, Column: controlimplementation.FieldDeletedAt},
-			controlimplementation.FieldDeletedBy:               {Type: field.TypeString, Column: controlimplementation.FieldDeletedBy},
-			controlimplementation.FieldTags:                    {Type: field.TypeJSON, Column: controlimplementation.FieldTags},
-			controlimplementation.FieldSourceDefinitionID:      {Type: field.TypeString, Column: controlimplementation.FieldSourceDefinitionID},
-			controlimplementation.FieldSourceDefinitionVersion: {Type: field.TypeString, Column: controlimplementation.FieldSourceDefinitionVersion},
-			controlimplementation.FieldSourceInstanceID:        {Type: field.TypeString, Column: controlimplementation.FieldSourceInstanceID},
-			controlimplementation.FieldManagedBy:               {Type: field.TypeString, Column: controlimplementation.FieldManagedBy},
-			controlimplementation.FieldIntegrationRunID:        {Type: field.TypeString, Column: controlimplementation.FieldIntegrationRunID},
-			controlimplementation.FieldSourceKey:               {Type: field.TypeString, Column: controlimplementation.FieldSourceKey},
-			controlimplementation.FieldExternalID:              {Type: field.TypeString, Column: controlimplementation.FieldExternalID},
-			controlimplementation.FieldOwnerID:                 {Type: field.TypeString, Column: controlimplementation.FieldOwnerID},
-			controlimplementation.FieldSystemOwned:             {Type: field.TypeBool, Column: controlimplementation.FieldSystemOwned},
-			controlimplementation.FieldInternalNotes:           {Type: field.TypeString, Column: controlimplementation.FieldInternalNotes},
-			controlimplementation.FieldSystemInternalID:        {Type: field.TypeString, Column: controlimplementation.FieldSystemInternalID},
-			controlimplementation.FieldStatus:                  {Type: field.TypeEnum, Column: controlimplementation.FieldStatus},
-			controlimplementation.FieldImplementationDate:      {Type: field.TypeTime, Column: controlimplementation.FieldImplementationDate},
-			controlimplementation.FieldVerified:                {Type: field.TypeBool, Column: controlimplementation.FieldVerified},
-			controlimplementation.FieldVerificationDate:        {Type: field.TypeTime, Column: controlimplementation.FieldVerificationDate},
-			controlimplementation.FieldDetails:                 {Type: field.TypeString, Column: controlimplementation.FieldDetails},
-			controlimplementation.FieldDetailsJSON:             {Type: field.TypeJSON, Column: controlimplementation.FieldDetailsJSON},
+			controlimplementation.FieldCreatedAt:                     {Type: field.TypeTime, Column: controlimplementation.FieldCreatedAt},
+			controlimplementation.FieldUpdatedAt:                     {Type: field.TypeTime, Column: controlimplementation.FieldUpdatedAt},
+			controlimplementation.FieldCreatedBy:                     {Type: field.TypeString, Column: controlimplementation.FieldCreatedBy},
+			controlimplementation.FieldUpdatedBy:                     {Type: field.TypeString, Column: controlimplementation.FieldUpdatedBy},
+			controlimplementation.FieldUpdatedByImpersonator:         {Type: field.TypeString, Column: controlimplementation.FieldUpdatedByImpersonator},
+			controlimplementation.FieldDeletedAt:                     {Type: field.TypeTime, Column: controlimplementation.FieldDeletedAt},
+			controlimplementation.FieldDeletedBy:                     {Type: field.TypeString, Column: controlimplementation.FieldDeletedBy},
+			controlimplementation.FieldTags:                          {Type: field.TypeJSON, Column: controlimplementation.FieldTags},
+			controlimplementation.FieldSourceDefinitionID:            {Type: field.TypeString, Column: controlimplementation.FieldSourceDefinitionID},
+			controlimplementation.FieldSourceDefinitionVersion:       {Type: field.TypeString, Column: controlimplementation.FieldSourceDefinitionVersion},
+			controlimplementation.FieldSourceInstanceID:              {Type: field.TypeString, Column: controlimplementation.FieldSourceInstanceID},
+			controlimplementation.FieldManagedBy:                     {Type: field.TypeString, Column: controlimplementation.FieldManagedBy},
+			controlimplementation.FieldIntegrationRunID:              {Type: field.TypeString, Column: controlimplementation.FieldIntegrationRunID},
+			controlimplementation.FieldSourceKey:                     {Type: field.TypeString, Column: controlimplementation.FieldSourceKey},
+			controlimplementation.FieldExternalID:                    {Type: field.TypeString, Column: controlimplementation.FieldExternalID},
+			controlimplementation.FieldOwnerID:                       {Type: field.TypeString, Column: controlimplementation.FieldOwnerID},
+			controlimplementation.FieldInternalOwner:                 {Type: field.TypeString, Column: controlimplementation.FieldInternalOwner},
+			controlimplementation.FieldInternalOwnerUserID:           {Type: field.TypeString, Column: controlimplementation.FieldInternalOwnerUserID},
+			controlimplementation.FieldInternalOwnerGroupID:          {Type: field.TypeString, Column: controlimplementation.FieldInternalOwnerGroupID},
+			controlimplementation.FieldInternalOwnerIdentityHolderID: {Type: field.TypeString, Column: controlimplementation.FieldInternalOwnerIdentityHolderID},
+			controlimplementation.FieldDelegateName:                  {Type: field.TypeString, Column: controlimplementation.FieldDelegateName},
+			controlimplementation.FieldDelegateUserID:                {Type: field.TypeString, Column: controlimplementation.FieldDelegateUserID},
+			controlimplementation.FieldDelegateGroupID:               {Type: field.TypeString, Column: controlimplementation.FieldDelegateGroupID},
+			controlimplementation.FieldDelegateIdentityHolderID:      {Type: field.TypeString, Column: controlimplementation.FieldDelegateIdentityHolderID},
+			controlimplementation.FieldSystemOwned:                   {Type: field.TypeBool, Column: controlimplementation.FieldSystemOwned},
+			controlimplementation.FieldInternalNotes:                 {Type: field.TypeString, Column: controlimplementation.FieldInternalNotes},
+			controlimplementation.FieldSystemInternalID:              {Type: field.TypeString, Column: controlimplementation.FieldSystemInternalID},
+			controlimplementation.FieldStatus:                        {Type: field.TypeEnum, Column: controlimplementation.FieldStatus},
+			controlimplementation.FieldImplementationDate:            {Type: field.TypeTime, Column: controlimplementation.FieldImplementationDate},
+			controlimplementation.FieldVerified:                      {Type: field.TypeBool, Column: controlimplementation.FieldVerified},
+			controlimplementation.FieldVerificationDate:              {Type: field.TypeTime, Column: controlimplementation.FieldVerificationDate},
+			controlimplementation.FieldDetails:                       {Type: field.TypeString, Column: controlimplementation.FieldDetails},
+			controlimplementation.FieldDetailsJSON:                   {Type: field.TypeJSON, Column: controlimplementation.FieldDetailsJSON},
 		},
 	}
 	graph.Nodes[12] = &sqlgraph.Node{
@@ -2858,47 +2866,65 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Review",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			review.FieldCreatedAt:               {Type: field.TypeTime, Column: review.FieldCreatedAt},
-			review.FieldUpdatedAt:               {Type: field.TypeTime, Column: review.FieldUpdatedAt},
-			review.FieldCreatedBy:               {Type: field.TypeString, Column: review.FieldCreatedBy},
-			review.FieldUpdatedBy:               {Type: field.TypeString, Column: review.FieldUpdatedBy},
-			review.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: review.FieldUpdatedByImpersonator},
-			review.FieldDeletedAt:               {Type: field.TypeTime, Column: review.FieldDeletedAt},
-			review.FieldDeletedBy:               {Type: field.TypeString, Column: review.FieldDeletedBy},
-			review.FieldTags:                    {Type: field.TypeJSON, Column: review.FieldTags},
-			review.FieldSourceDefinitionID:      {Type: field.TypeString, Column: review.FieldSourceDefinitionID},
-			review.FieldSourceDefinitionVersion: {Type: field.TypeString, Column: review.FieldSourceDefinitionVersion},
-			review.FieldSourceInstanceID:        {Type: field.TypeString, Column: review.FieldSourceInstanceID},
-			review.FieldManagedBy:               {Type: field.TypeString, Column: review.FieldManagedBy},
-			review.FieldIntegrationRunID:        {Type: field.TypeString, Column: review.FieldIntegrationRunID},
-			review.FieldSourceKey:               {Type: field.TypeString, Column: review.FieldSourceKey},
-			review.FieldExternalID:              {Type: field.TypeString, Column: review.FieldExternalID},
-			review.FieldOwnerID:                 {Type: field.TypeString, Column: review.FieldOwnerID},
-			review.FieldSystemOwned:             {Type: field.TypeBool, Column: review.FieldSystemOwned},
-			review.FieldInternalNotes:           {Type: field.TypeString, Column: review.FieldInternalNotes},
-			review.FieldSystemInternalID:        {Type: field.TypeString, Column: review.FieldSystemInternalID},
-			review.FieldEnvironmentName:         {Type: field.TypeString, Column: review.FieldEnvironmentName},
-			review.FieldEnvironmentID:           {Type: field.TypeString, Column: review.FieldEnvironmentID},
-			review.FieldScopeName:               {Type: field.TypeString, Column: review.FieldScopeName},
-			review.FieldScopeID:                 {Type: field.TypeString, Column: review.FieldScopeID},
-			review.FieldExternalOwnerID:         {Type: field.TypeString, Column: review.FieldExternalOwnerID},
-			review.FieldTitle:                   {Type: field.TypeString, Column: review.FieldTitle},
-			review.FieldState:                   {Type: field.TypeString, Column: review.FieldState},
-			review.FieldStatus:                  {Type: field.TypeEnum, Column: review.FieldStatus},
-			review.FieldCategory:                {Type: field.TypeString, Column: review.FieldCategory},
-			review.FieldClassification:          {Type: field.TypeString, Column: review.FieldClassification},
-			review.FieldSummary:                 {Type: field.TypeString, Column: review.FieldSummary},
-			review.FieldDetails:                 {Type: field.TypeString, Column: review.FieldDetails},
-			review.FieldReporter:                {Type: field.TypeString, Column: review.FieldReporter},
-			review.FieldApproved:                {Type: field.TypeBool, Column: review.FieldApproved},
-			review.FieldReviewedAt:              {Type: field.TypeTime, Column: review.FieldReviewedAt},
-			review.FieldReportedAt:              {Type: field.TypeTime, Column: review.FieldReportedAt},
-			review.FieldApprovedAt:              {Type: field.TypeTime, Column: review.FieldApprovedAt},
-			review.FieldReviewerID:              {Type: field.TypeString, Column: review.FieldReviewerID},
-			review.FieldSource:                  {Type: field.TypeString, Column: review.FieldSource},
-			review.FieldExternalURI:             {Type: field.TypeString, Column: review.FieldExternalURI},
-			review.FieldMetadata:                {Type: field.TypeJSON, Column: review.FieldMetadata},
-			review.FieldRawPayload:              {Type: field.TypeJSON, Column: review.FieldRawPayload},
+			review.FieldCreatedAt:                     {Type: field.TypeTime, Column: review.FieldCreatedAt},
+			review.FieldUpdatedAt:                     {Type: field.TypeTime, Column: review.FieldUpdatedAt},
+			review.FieldCreatedBy:                     {Type: field.TypeString, Column: review.FieldCreatedBy},
+			review.FieldUpdatedBy:                     {Type: field.TypeString, Column: review.FieldUpdatedBy},
+			review.FieldUpdatedByImpersonator:         {Type: field.TypeString, Column: review.FieldUpdatedByImpersonator},
+			review.FieldDeletedAt:                     {Type: field.TypeTime, Column: review.FieldDeletedAt},
+			review.FieldDeletedBy:                     {Type: field.TypeString, Column: review.FieldDeletedBy},
+			review.FieldTags:                          {Type: field.TypeJSON, Column: review.FieldTags},
+			review.FieldSourceDefinitionID:            {Type: field.TypeString, Column: review.FieldSourceDefinitionID},
+			review.FieldSourceDefinitionVersion:       {Type: field.TypeString, Column: review.FieldSourceDefinitionVersion},
+			review.FieldSourceInstanceID:              {Type: field.TypeString, Column: review.FieldSourceInstanceID},
+			review.FieldManagedBy:                     {Type: field.TypeString, Column: review.FieldManagedBy},
+			review.FieldIntegrationRunID:              {Type: field.TypeString, Column: review.FieldIntegrationRunID},
+			review.FieldSourceKey:                     {Type: field.TypeString, Column: review.FieldSourceKey},
+			review.FieldExternalID:                    {Type: field.TypeString, Column: review.FieldExternalID},
+			review.FieldOwnerID:                       {Type: field.TypeString, Column: review.FieldOwnerID},
+			review.FieldInternalOwner:                 {Type: field.TypeString, Column: review.FieldInternalOwner},
+			review.FieldInternalOwnerUserID:           {Type: field.TypeString, Column: review.FieldInternalOwnerUserID},
+			review.FieldInternalOwnerGroupID:          {Type: field.TypeString, Column: review.FieldInternalOwnerGroupID},
+			review.FieldInternalOwnerIdentityHolderID: {Type: field.TypeString, Column: review.FieldInternalOwnerIdentityHolderID},
+			review.FieldReviewedBy:                    {Type: field.TypeString, Column: review.FieldReviewedBy},
+			review.FieldReviewedByUserID:              {Type: field.TypeString, Column: review.FieldReviewedByUserID},
+			review.FieldReviewedByGroupID:             {Type: field.TypeString, Column: review.FieldReviewedByGroupID},
+			review.FieldReviewedByIdentityHolderID:    {Type: field.TypeString, Column: review.FieldReviewedByIdentityHolderID},
+			review.FieldDelegateName:                  {Type: field.TypeString, Column: review.FieldDelegateName},
+			review.FieldDelegateUserID:                {Type: field.TypeString, Column: review.FieldDelegateUserID},
+			review.FieldDelegateGroupID:               {Type: field.TypeString, Column: review.FieldDelegateGroupID},
+			review.FieldDelegateIdentityHolderID:      {Type: field.TypeString, Column: review.FieldDelegateIdentityHolderID},
+			review.FieldSystemOwned:                   {Type: field.TypeBool, Column: review.FieldSystemOwned},
+			review.FieldInternalNotes:                 {Type: field.TypeString, Column: review.FieldInternalNotes},
+			review.FieldSystemInternalID:              {Type: field.TypeString, Column: review.FieldSystemInternalID},
+			review.FieldReviewKindName:                {Type: field.TypeString, Column: review.FieldReviewKindName},
+			review.FieldReviewKindID:                  {Type: field.TypeString, Column: review.FieldReviewKindID},
+			review.FieldReviewClassificationName:      {Type: field.TypeString, Column: review.FieldReviewClassificationName},
+			review.FieldReviewClassificationID:        {Type: field.TypeString, Column: review.FieldReviewClassificationID},
+			review.FieldReviewStateName:               {Type: field.TypeString, Column: review.FieldReviewStateName},
+			review.FieldReviewStateID:                 {Type: field.TypeString, Column: review.FieldReviewStateID},
+			review.FieldEnvironmentName:               {Type: field.TypeString, Column: review.FieldEnvironmentName},
+			review.FieldEnvironmentID:                 {Type: field.TypeString, Column: review.FieldEnvironmentID},
+			review.FieldScopeName:                     {Type: field.TypeString, Column: review.FieldScopeName},
+			review.FieldScopeID:                       {Type: field.TypeString, Column: review.FieldScopeID},
+			review.FieldExternalOwnerID:               {Type: field.TypeString, Column: review.FieldExternalOwnerID},
+			review.FieldTitle:                         {Type: field.TypeString, Column: review.FieldTitle},
+			review.FieldState:                         {Type: field.TypeString, Column: review.FieldState},
+			review.FieldStatus:                        {Type: field.TypeEnum, Column: review.FieldStatus},
+			review.FieldCategory:                      {Type: field.TypeString, Column: review.FieldCategory},
+			review.FieldClassification:                {Type: field.TypeString, Column: review.FieldClassification},
+			review.FieldSummary:                       {Type: field.TypeString, Column: review.FieldSummary},
+			review.FieldDetails:                       {Type: field.TypeString, Column: review.FieldDetails},
+			review.FieldReporter:                      {Type: field.TypeString, Column: review.FieldReporter},
+			review.FieldApproved:                      {Type: field.TypeBool, Column: review.FieldApproved},
+			review.FieldReviewedAt:                    {Type: field.TypeTime, Column: review.FieldReviewedAt},
+			review.FieldReportedAt:                    {Type: field.TypeTime, Column: review.FieldReportedAt},
+			review.FieldApprovedAt:                    {Type: field.TypeTime, Column: review.FieldApprovedAt},
+			review.FieldReviewerID:                    {Type: field.TypeString, Column: review.FieldReviewerID},
+			review.FieldSource:                        {Type: field.TypeString, Column: review.FieldSource},
+			review.FieldExternalURI:                   {Type: field.TypeString, Column: review.FieldExternalURI},
+			review.FieldMetadata:                      {Type: field.TypeJSON, Column: review.FieldMetadata},
+			review.FieldRawPayload:                    {Type: field.TypeJSON, Column: review.FieldRawPayload},
 		},
 	}
 	graph.Nodes[69] = &sqlgraph.Node{
@@ -6332,6 +6358,78 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"internal_owner_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.InternalOwnerUserTable,
+			Columns: []string{controlimplementation.InternalOwnerUserColumn},
+			Bidi:    false,
+		},
+		"ControlImplementation",
+		"User",
+	)
+	graph.MustAddE(
+		"internal_owner_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.InternalOwnerGroupTable,
+			Columns: []string{controlimplementation.InternalOwnerGroupColumn},
+			Bidi:    false,
+		},
+		"ControlImplementation",
+		"Group",
+	)
+	graph.MustAddE(
+		"internal_owner_identity_holder",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.InternalOwnerIdentityHolderTable,
+			Columns: []string{controlimplementation.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+		},
+		"ControlImplementation",
+		"IdentityHolder",
+	)
+	graph.MustAddE(
+		"delegate_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.DelegateUserTable,
+			Columns: []string{controlimplementation.DelegateUserColumn},
+			Bidi:    false,
+		},
+		"ControlImplementation",
+		"User",
+	)
+	graph.MustAddE(
+		"delegate_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.DelegateGroupTable,
+			Columns: []string{controlimplementation.DelegateGroupColumn},
+			Bidi:    false,
+		},
+		"ControlImplementation",
+		"Group",
+	)
+	graph.MustAddE(
+		"delegate_identity_holder",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlimplementation.DelegateIdentityHolderTable,
+			Columns: []string{controlimplementation.DelegateIdentityHolderColumn},
+			Bidi:    false,
+		},
+		"ControlImplementation",
+		"IdentityHolder",
+	)
+	graph.MustAddE(
 		"controls",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -6366,6 +6464,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ControlImplementation",
 		"Task",
+	)
+	graph.MustAddE(
+		"platforms",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.PlatformsTable,
+			Columns: controlimplementation.PlatformsPrimaryKey,
+			Bidi:    false,
+		},
+		"ControlImplementation",
+		"Platform",
+	)
+	graph.MustAddE(
+		"system_details",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlimplementation.SystemDetailsTable,
+			Columns: controlimplementation.SystemDetailsPrimaryKey,
+			Bidi:    false,
+		},
+		"ControlImplementation",
+		"SystemDetail",
+	)
+	graph.MustAddE(
+		"comments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlimplementation.CommentsTable,
+			Columns: []string{controlimplementation.CommentsColumn},
+			Bidi:    false,
+		},
+		"ControlImplementation",
+		"Note",
 	)
 	graph.MustAddE(
 		"integration_runs",
@@ -11600,6 +11734,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Finding",
 	)
 	graph.MustAddE(
+		"control_implementation",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ControlImplementationTable,
+			Columns: []string{note.ControlImplementationColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"ControlImplementation",
+	)
+	graph.MustAddE(
 		"evidence",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -14540,6 +14686,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
+		"control_implementations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   platform.ControlImplementationsTable,
+			Columns: platform.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Platform",
+		"ControlImplementation",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   platform.ReviewsTable,
+			Columns: platform.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"Platform",
+		"Review",
+	)
+	graph.MustAddE(
 		"assessments",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -15776,6 +15946,150 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"internal_owner_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerUserTable,
+			Columns: []string{review.InternalOwnerUserColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"User",
+	)
+	graph.MustAddE(
+		"internal_owner_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerGroupTable,
+			Columns: []string{review.InternalOwnerGroupColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Group",
+	)
+	graph.MustAddE(
+		"internal_owner_identity_holder",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerIdentityHolderTable,
+			Columns: []string{review.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"IdentityHolder",
+	)
+	graph.MustAddE(
+		"reviewed_by_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByUserTable,
+			Columns: []string{review.ReviewedByUserColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"User",
+	)
+	graph.MustAddE(
+		"reviewed_by_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByGroupTable,
+			Columns: []string{review.ReviewedByGroupColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Group",
+	)
+	graph.MustAddE(
+		"reviewed_by_identity_holder",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByIdentityHolderTable,
+			Columns: []string{review.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"IdentityHolder",
+	)
+	graph.MustAddE(
+		"delegate_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateUserTable,
+			Columns: []string{review.DelegateUserColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"User",
+	)
+	graph.MustAddE(
+		"delegate_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateGroupTable,
+			Columns: []string{review.DelegateGroupColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Group",
+	)
+	graph.MustAddE(
+		"delegate_identity_holder",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateIdentityHolderTable,
+			Columns: []string{review.DelegateIdentityHolderColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"IdentityHolder",
+	)
+	graph.MustAddE(
+		"review_kind",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewKindTable,
+			Columns: []string{review.ReviewKindColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
+		"review_classification",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewClassificationTable,
+			Columns: []string{review.ReviewClassificationColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
+		"review_state",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewStateTable,
+			Columns: []string{review.ReviewStateColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
 		"environment",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -15978,6 +16292,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Review",
 		"File",
+	)
+	graph.MustAddE(
+		"platforms",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.PlatformsTable,
+			Columns: review.PlatformsPrimaryKey,
+			Bidi:    false,
+		},
+		"Review",
+		"Platform",
+	)
+	graph.MustAddE(
+		"system_details",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.SystemDetailsTable,
+			Columns: review.SystemDetailsPrimaryKey,
+			Bidi:    false,
+		},
+		"Review",
+		"SystemDetail",
 	)
 	graph.MustAddE(
 		"internal_policies",
@@ -17466,6 +17804,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"SystemDetail",
 		"Asset",
+	)
+	graph.MustAddE(
+		"control_implementations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   systemdetail.ControlImplementationsTable,
+			Columns: systemdetail.ControlImplementationsPrimaryKey,
+			Bidi:    false,
+		},
+		"SystemDetail",
+		"ControlImplementation",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   systemdetail.ReviewsTable,
+			Columns: systemdetail.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"SystemDetail",
+		"Review",
 	)
 	graph.MustAddE(
 		"owner",
@@ -25286,6 +25648,46 @@ func (f *ControlImplementationFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(controlimplementation.FieldOwnerID))
 }
 
+// WhereInternalOwner applies the entql string predicate on the internal_owner field.
+func (f *ControlImplementationFilter) WhereInternalOwner(p entql.StringP) {
+	f.Where(p.Field(controlimplementation.FieldInternalOwner))
+}
+
+// WhereInternalOwnerUserID applies the entql string predicate on the internal_owner_user_id field.
+func (f *ControlImplementationFilter) WhereInternalOwnerUserID(p entql.StringP) {
+	f.Where(p.Field(controlimplementation.FieldInternalOwnerUserID))
+}
+
+// WhereInternalOwnerGroupID applies the entql string predicate on the internal_owner_group_id field.
+func (f *ControlImplementationFilter) WhereInternalOwnerGroupID(p entql.StringP) {
+	f.Where(p.Field(controlimplementation.FieldInternalOwnerGroupID))
+}
+
+// WhereInternalOwnerIdentityHolderID applies the entql string predicate on the internal_owner_identity_holder_id field.
+func (f *ControlImplementationFilter) WhereInternalOwnerIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(controlimplementation.FieldInternalOwnerIdentityHolderID))
+}
+
+// WhereDelegateName applies the entql string predicate on the delegate_name field.
+func (f *ControlImplementationFilter) WhereDelegateName(p entql.StringP) {
+	f.Where(p.Field(controlimplementation.FieldDelegateName))
+}
+
+// WhereDelegateUserID applies the entql string predicate on the delegate_user_id field.
+func (f *ControlImplementationFilter) WhereDelegateUserID(p entql.StringP) {
+	f.Where(p.Field(controlimplementation.FieldDelegateUserID))
+}
+
+// WhereDelegateGroupID applies the entql string predicate on the delegate_group_id field.
+func (f *ControlImplementationFilter) WhereDelegateGroupID(p entql.StringP) {
+	f.Where(p.Field(controlimplementation.FieldDelegateGroupID))
+}
+
+// WhereDelegateIdentityHolderID applies the entql string predicate on the delegate_identity_holder_id field.
+func (f *ControlImplementationFilter) WhereDelegateIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(controlimplementation.FieldDelegateIdentityHolderID))
+}
+
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.
 func (f *ControlImplementationFilter) WhereSystemOwned(p entql.BoolP) {
 	f.Where(p.Field(controlimplementation.FieldSystemOwned))
@@ -25401,6 +25803,90 @@ func (f *ControlImplementationFilter) WhereHasViewersWith(preds ...predicate.Gro
 	})))
 }
 
+// WhereHasInternalOwnerUser applies a predicate to check if query has an edge internal_owner_user.
+func (f *ControlImplementationFilter) WhereHasInternalOwnerUser() {
+	f.Where(entql.HasEdge("internal_owner_user"))
+}
+
+// WhereHasInternalOwnerUserWith applies a predicate to check if query has an edge internal_owner_user with a given conditions (other predicates).
+func (f *ControlImplementationFilter) WhereHasInternalOwnerUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("internal_owner_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerGroup applies a predicate to check if query has an edge internal_owner_group.
+func (f *ControlImplementationFilter) WhereHasInternalOwnerGroup() {
+	f.Where(entql.HasEdge("internal_owner_group"))
+}
+
+// WhereHasInternalOwnerGroupWith applies a predicate to check if query has an edge internal_owner_group with a given conditions (other predicates).
+func (f *ControlImplementationFilter) WhereHasInternalOwnerGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("internal_owner_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerIdentityHolder applies a predicate to check if query has an edge internal_owner_identity_holder.
+func (f *ControlImplementationFilter) WhereHasInternalOwnerIdentityHolder() {
+	f.Where(entql.HasEdge("internal_owner_identity_holder"))
+}
+
+// WhereHasInternalOwnerIdentityHolderWith applies a predicate to check if query has an edge internal_owner_identity_holder with a given conditions (other predicates).
+func (f *ControlImplementationFilter) WhereHasInternalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("internal_owner_identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDelegateUser applies a predicate to check if query has an edge delegate_user.
+func (f *ControlImplementationFilter) WhereHasDelegateUser() {
+	f.Where(entql.HasEdge("delegate_user"))
+}
+
+// WhereHasDelegateUserWith applies a predicate to check if query has an edge delegate_user with a given conditions (other predicates).
+func (f *ControlImplementationFilter) WhereHasDelegateUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("delegate_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDelegateGroup applies a predicate to check if query has an edge delegate_group.
+func (f *ControlImplementationFilter) WhereHasDelegateGroup() {
+	f.Where(entql.HasEdge("delegate_group"))
+}
+
+// WhereHasDelegateGroupWith applies a predicate to check if query has an edge delegate_group with a given conditions (other predicates).
+func (f *ControlImplementationFilter) WhereHasDelegateGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("delegate_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDelegateIdentityHolder applies a predicate to check if query has an edge delegate_identity_holder.
+func (f *ControlImplementationFilter) WhereHasDelegateIdentityHolder() {
+	f.Where(entql.HasEdge("delegate_identity_holder"))
+}
+
+// WhereHasDelegateIdentityHolderWith applies a predicate to check if query has an edge delegate_identity_holder with a given conditions (other predicates).
+func (f *ControlImplementationFilter) WhereHasDelegateIdentityHolderWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("delegate_identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasControls applies a predicate to check if query has an edge controls.
 func (f *ControlImplementationFilter) WhereHasControls() {
 	f.Where(entql.HasEdge("controls"))
@@ -25437,6 +25923,48 @@ func (f *ControlImplementationFilter) WhereHasTasks() {
 // WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
 func (f *ControlImplementationFilter) WhereHasTasksWith(preds ...predicate.Task) {
 	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPlatforms applies a predicate to check if query has an edge platforms.
+func (f *ControlImplementationFilter) WhereHasPlatforms() {
+	f.Where(entql.HasEdge("platforms"))
+}
+
+// WhereHasPlatformsWith applies a predicate to check if query has an edge platforms with a given conditions (other predicates).
+func (f *ControlImplementationFilter) WhereHasPlatformsWith(preds ...predicate.Platform) {
+	f.Where(entql.HasEdgeWith("platforms", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSystemDetails applies a predicate to check if query has an edge system_details.
+func (f *ControlImplementationFilter) WhereHasSystemDetails() {
+	f.Where(entql.HasEdge("system_details"))
+}
+
+// WhereHasSystemDetailsWith applies a predicate to check if query has an edge system_details with a given conditions (other predicates).
+func (f *ControlImplementationFilter) WhereHasSystemDetailsWith(preds ...predicate.SystemDetail) {
+	f.Where(entql.HasEdgeWith("system_details", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasComments applies a predicate to check if query has an edge comments.
+func (f *ControlImplementationFilter) WhereHasComments() {
+	f.Where(entql.HasEdge("comments"))
+}
+
+// WhereHasCommentsWith applies a predicate to check if query has an edge comments with a given conditions (other predicates).
+func (f *ControlImplementationFilter) WhereHasCommentsWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("comments", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -37562,6 +38090,20 @@ func (f *NoteFilter) WhereHasFindingWith(preds ...predicate.Finding) {
 	})))
 }
 
+// WhereHasControlImplementation applies a predicate to check if query has an edge control_implementation.
+func (f *NoteFilter) WhereHasControlImplementation() {
+	f.Where(entql.HasEdge("control_implementation"))
+}
+
+// WhereHasControlImplementationWith applies a predicate to check if query has an edge control_implementation with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasControlImplementationWith(preds ...predicate.ControlImplementation) {
+	f.Where(entql.HasEdgeWith("control_implementation", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasEvidence applies a predicate to check if query has an edge evidence.
 func (f *NoteFilter) WhereHasEvidence() {
 	f.Where(entql.HasEdge("evidence"))
@@ -43297,6 +43839,34 @@ func (f *PlatformFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	})))
 }
 
+// WhereHasControlImplementations applies a predicate to check if query has an edge control_implementations.
+func (f *PlatformFilter) WhereHasControlImplementations() {
+	f.Where(entql.HasEdge("control_implementations"))
+}
+
+// WhereHasControlImplementationsWith applies a predicate to check if query has an edge control_implementations with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasControlImplementationsWith(preds ...predicate.ControlImplementation) {
+	f.Where(entql.HasEdgeWith("control_implementations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *PlatformFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasAssessments applies a predicate to check if query has an edge assessments.
 func (f *PlatformFilter) WhereHasAssessments() {
 	f.Where(entql.HasEdge("assessments"))
@@ -45868,6 +46438,66 @@ func (f *ReviewFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(review.FieldOwnerID))
 }
 
+// WhereInternalOwner applies the entql string predicate on the internal_owner field.
+func (f *ReviewFilter) WhereInternalOwner(p entql.StringP) {
+	f.Where(p.Field(review.FieldInternalOwner))
+}
+
+// WhereInternalOwnerUserID applies the entql string predicate on the internal_owner_user_id field.
+func (f *ReviewFilter) WhereInternalOwnerUserID(p entql.StringP) {
+	f.Where(p.Field(review.FieldInternalOwnerUserID))
+}
+
+// WhereInternalOwnerGroupID applies the entql string predicate on the internal_owner_group_id field.
+func (f *ReviewFilter) WhereInternalOwnerGroupID(p entql.StringP) {
+	f.Where(p.Field(review.FieldInternalOwnerGroupID))
+}
+
+// WhereInternalOwnerIdentityHolderID applies the entql string predicate on the internal_owner_identity_holder_id field.
+func (f *ReviewFilter) WhereInternalOwnerIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(review.FieldInternalOwnerIdentityHolderID))
+}
+
+// WhereReviewedBy applies the entql string predicate on the reviewed_by field.
+func (f *ReviewFilter) WhereReviewedBy(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewedBy))
+}
+
+// WhereReviewedByUserID applies the entql string predicate on the reviewed_by_user_id field.
+func (f *ReviewFilter) WhereReviewedByUserID(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewedByUserID))
+}
+
+// WhereReviewedByGroupID applies the entql string predicate on the reviewed_by_group_id field.
+func (f *ReviewFilter) WhereReviewedByGroupID(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewedByGroupID))
+}
+
+// WhereReviewedByIdentityHolderID applies the entql string predicate on the reviewed_by_identity_holder_id field.
+func (f *ReviewFilter) WhereReviewedByIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewedByIdentityHolderID))
+}
+
+// WhereDelegateName applies the entql string predicate on the delegate_name field.
+func (f *ReviewFilter) WhereDelegateName(p entql.StringP) {
+	f.Where(p.Field(review.FieldDelegateName))
+}
+
+// WhereDelegateUserID applies the entql string predicate on the delegate_user_id field.
+func (f *ReviewFilter) WhereDelegateUserID(p entql.StringP) {
+	f.Where(p.Field(review.FieldDelegateUserID))
+}
+
+// WhereDelegateGroupID applies the entql string predicate on the delegate_group_id field.
+func (f *ReviewFilter) WhereDelegateGroupID(p entql.StringP) {
+	f.Where(p.Field(review.FieldDelegateGroupID))
+}
+
+// WhereDelegateIdentityHolderID applies the entql string predicate on the delegate_identity_holder_id field.
+func (f *ReviewFilter) WhereDelegateIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(review.FieldDelegateIdentityHolderID))
+}
+
 // WhereSystemOwned applies the entql bool predicate on the system_owned field.
 func (f *ReviewFilter) WhereSystemOwned(p entql.BoolP) {
 	f.Where(p.Field(review.FieldSystemOwned))
@@ -45881,6 +46511,36 @@ func (f *ReviewFilter) WhereInternalNotes(p entql.StringP) {
 // WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
 func (f *ReviewFilter) WhereSystemInternalID(p entql.StringP) {
 	f.Where(p.Field(review.FieldSystemInternalID))
+}
+
+// WhereReviewKindName applies the entql string predicate on the review_kind_name field.
+func (f *ReviewFilter) WhereReviewKindName(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewKindName))
+}
+
+// WhereReviewKindID applies the entql string predicate on the review_kind_id field.
+func (f *ReviewFilter) WhereReviewKindID(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewKindID))
+}
+
+// WhereReviewClassificationName applies the entql string predicate on the review_classification_name field.
+func (f *ReviewFilter) WhereReviewClassificationName(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewClassificationName))
+}
+
+// WhereReviewClassificationID applies the entql string predicate on the review_classification_id field.
+func (f *ReviewFilter) WhereReviewClassificationID(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewClassificationID))
+}
+
+// WhereReviewStateName applies the entql string predicate on the review_state_name field.
+func (f *ReviewFilter) WhereReviewStateName(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewStateName))
+}
+
+// WhereReviewStateID applies the entql string predicate on the review_state_id field.
+func (f *ReviewFilter) WhereReviewStateID(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewStateID))
 }
 
 // WhereEnvironmentName applies the entql string predicate on the environment_name field.
@@ -46043,6 +46703,174 @@ func (f *ReviewFilter) WhereHasEditors() {
 // WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
 func (f *ReviewFilter) WhereHasEditorsWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerUser applies a predicate to check if query has an edge internal_owner_user.
+func (f *ReviewFilter) WhereHasInternalOwnerUser() {
+	f.Where(entql.HasEdge("internal_owner_user"))
+}
+
+// WhereHasInternalOwnerUserWith applies a predicate to check if query has an edge internal_owner_user with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasInternalOwnerUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("internal_owner_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerGroup applies a predicate to check if query has an edge internal_owner_group.
+func (f *ReviewFilter) WhereHasInternalOwnerGroup() {
+	f.Where(entql.HasEdge("internal_owner_group"))
+}
+
+// WhereHasInternalOwnerGroupWith applies a predicate to check if query has an edge internal_owner_group with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasInternalOwnerGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("internal_owner_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerIdentityHolder applies a predicate to check if query has an edge internal_owner_identity_holder.
+func (f *ReviewFilter) WhereHasInternalOwnerIdentityHolder() {
+	f.Where(entql.HasEdge("internal_owner_identity_holder"))
+}
+
+// WhereHasInternalOwnerIdentityHolderWith applies a predicate to check if query has an edge internal_owner_identity_holder with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasInternalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("internal_owner_identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewedByUser applies a predicate to check if query has an edge reviewed_by_user.
+func (f *ReviewFilter) WhereHasReviewedByUser() {
+	f.Where(entql.HasEdge("reviewed_by_user"))
+}
+
+// WhereHasReviewedByUserWith applies a predicate to check if query has an edge reviewed_by_user with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasReviewedByUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("reviewed_by_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewedByGroup applies a predicate to check if query has an edge reviewed_by_group.
+func (f *ReviewFilter) WhereHasReviewedByGroup() {
+	f.Where(entql.HasEdge("reviewed_by_group"))
+}
+
+// WhereHasReviewedByGroupWith applies a predicate to check if query has an edge reviewed_by_group with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasReviewedByGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("reviewed_by_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewedByIdentityHolder applies a predicate to check if query has an edge reviewed_by_identity_holder.
+func (f *ReviewFilter) WhereHasReviewedByIdentityHolder() {
+	f.Where(entql.HasEdge("reviewed_by_identity_holder"))
+}
+
+// WhereHasReviewedByIdentityHolderWith applies a predicate to check if query has an edge reviewed_by_identity_holder with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasReviewedByIdentityHolderWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("reviewed_by_identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDelegateUser applies a predicate to check if query has an edge delegate_user.
+func (f *ReviewFilter) WhereHasDelegateUser() {
+	f.Where(entql.HasEdge("delegate_user"))
+}
+
+// WhereHasDelegateUserWith applies a predicate to check if query has an edge delegate_user with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasDelegateUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("delegate_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDelegateGroup applies a predicate to check if query has an edge delegate_group.
+func (f *ReviewFilter) WhereHasDelegateGroup() {
+	f.Where(entql.HasEdge("delegate_group"))
+}
+
+// WhereHasDelegateGroupWith applies a predicate to check if query has an edge delegate_group with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasDelegateGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("delegate_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDelegateIdentityHolder applies a predicate to check if query has an edge delegate_identity_holder.
+func (f *ReviewFilter) WhereHasDelegateIdentityHolder() {
+	f.Where(entql.HasEdge("delegate_identity_holder"))
+}
+
+// WhereHasDelegateIdentityHolderWith applies a predicate to check if query has an edge delegate_identity_holder with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasDelegateIdentityHolderWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("delegate_identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewKind applies a predicate to check if query has an edge review_kind.
+func (f *ReviewFilter) WhereHasReviewKind() {
+	f.Where(entql.HasEdge("review_kind"))
+}
+
+// WhereHasReviewKindWith applies a predicate to check if query has an edge review_kind with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasReviewKindWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("review_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewClassification applies a predicate to check if query has an edge review_classification.
+func (f *ReviewFilter) WhereHasReviewClassification() {
+	f.Where(entql.HasEdge("review_classification"))
+}
+
+// WhereHasReviewClassificationWith applies a predicate to check if query has an edge review_classification with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasReviewClassificationWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("review_classification", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewState applies a predicate to check if query has an edge review_state.
+func (f *ReviewFilter) WhereHasReviewState() {
+	f.Where(entql.HasEdge("review_state"))
+}
+
+// WhereHasReviewStateWith applies a predicate to check if query has an edge review_state with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasReviewStateWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("review_state", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -46281,6 +47109,34 @@ func (f *ReviewFilter) WhereHasFiles() {
 // WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
 func (f *ReviewFilter) WhereHasFilesWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPlatforms applies a predicate to check if query has an edge platforms.
+func (f *ReviewFilter) WhereHasPlatforms() {
+	f.Where(entql.HasEdge("platforms"))
+}
+
+// WhereHasPlatformsWith applies a predicate to check if query has an edge platforms with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasPlatformsWith(preds ...predicate.Platform) {
+	f.Where(entql.HasEdgeWith("platforms", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSystemDetails applies a predicate to check if query has an edge system_details.
+func (f *ReviewFilter) WhereHasSystemDetails() {
+	f.Where(entql.HasEdge("system_details"))
+}
+
+// WhereHasSystemDetailsWith applies a predicate to check if query has an edge system_details with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasSystemDetailsWith(preds ...predicate.SystemDetail) {
+	f.Where(entql.HasEdgeWith("system_details", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -49882,6 +50738,34 @@ func (f *SystemDetailFilter) WhereHasAssets() {
 // WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
 func (f *SystemDetailFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
 	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControlImplementations applies a predicate to check if query has an edge control_implementations.
+func (f *SystemDetailFilter) WhereHasControlImplementations() {
+	f.Where(entql.HasEdge("control_implementations"))
+}
+
+// WhereHasControlImplementationsWith applies a predicate to check if query has an edge control_implementations with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasControlImplementationsWith(preds ...predicate.ControlImplementation) {
+	f.Where(entql.HasEdgeWith("control_implementations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *SystemDetailFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

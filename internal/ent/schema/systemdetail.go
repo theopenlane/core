@@ -98,6 +98,8 @@ func (s SystemDetail) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(s, Platform{}),
 		defaultEdgeFromWithPagination(s, Entity{}),
 		defaultEdgeToWithPagination(s, Asset{}),
+		defaultEdgeToWithPagination(s, ControlImplementation{}),
+		defaultEdgeToWithPagination(s, Review{}),
 	}
 }
 

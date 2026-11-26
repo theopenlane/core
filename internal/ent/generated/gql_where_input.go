@@ -18539,6 +18539,110 @@ type ControlImplementationWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "internal_owner" field predicates.
+	InternalOwner             *string  `json:"internalOwner,omitempty"`
+	InternalOwnerNEQ          *string  `json:"internalOwnerNEQ,omitempty"`
+	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
+	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
+	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
+	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
+	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
+	InternalOwnerIsNil        bool     `json:"internalOwnerIsNil,omitempty"`
+	InternalOwnerNotNil       bool     `json:"internalOwnerNotNil,omitempty"`
+	InternalOwnerEqualFold    *string  `json:"internalOwnerEqualFold,omitempty"`
+	InternalOwnerContainsFold *string  `json:"internalOwnerContainsFold,omitempty"`
+
+	// "internal_owner_user_id" field predicates.
+	InternalOwnerUserID             *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerUserIDNEQ          *string  `json:"internalOwnerUserIDNEQ,omitempty"`
+	InternalOwnerUserIDIn           []string `json:"internalOwnerUserIDIn,omitempty"`
+	InternalOwnerUserIDNotIn        []string `json:"internalOwnerUserIDNotIn,omitempty"`
+	InternalOwnerUserIDContains     *string  `json:"internalOwnerUserIDContains,omitempty"`
+	InternalOwnerUserIDHasPrefix    *string  `json:"internalOwnerUserIDHasPrefix,omitempty"`
+	InternalOwnerUserIDHasSuffix    *string  `json:"internalOwnerUserIDHasSuffix,omitempty"`
+	InternalOwnerUserIDIsNil        bool     `json:"internalOwnerUserIDIsNil,omitempty"`
+	InternalOwnerUserIDNotNil       bool     `json:"internalOwnerUserIDNotNil,omitempty"`
+	InternalOwnerUserIDEqualFold    *string  `json:"internalOwnerUserIDEqualFold,omitempty"`
+	InternalOwnerUserIDContainsFold *string  `json:"internalOwnerUserIDContainsFold,omitempty"`
+
+	// "internal_owner_group_id" field predicates.
+	InternalOwnerGroupID             *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerGroupIDNEQ          *string  `json:"internalOwnerGroupIDNEQ,omitempty"`
+	InternalOwnerGroupIDIn           []string `json:"internalOwnerGroupIDIn,omitempty"`
+	InternalOwnerGroupIDNotIn        []string `json:"internalOwnerGroupIDNotIn,omitempty"`
+	InternalOwnerGroupIDContains     *string  `json:"internalOwnerGroupIDContains,omitempty"`
+	InternalOwnerGroupIDHasPrefix    *string  `json:"internalOwnerGroupIDHasPrefix,omitempty"`
+	InternalOwnerGroupIDHasSuffix    *string  `json:"internalOwnerGroupIDHasSuffix,omitempty"`
+	InternalOwnerGroupIDIsNil        bool     `json:"internalOwnerGroupIDIsNil,omitempty"`
+	InternalOwnerGroupIDNotNil       bool     `json:"internalOwnerGroupIDNotNil,omitempty"`
+	InternalOwnerGroupIDEqualFold    *string  `json:"internalOwnerGroupIDEqualFold,omitempty"`
+	InternalOwnerGroupIDContainsFold *string  `json:"internalOwnerGroupIDContainsFold,omitempty"`
+
+	// "internal_owner_identity_holder_id" field predicates.
+	InternalOwnerIdentityHolderID             *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	InternalOwnerIdentityHolderIDNEQ          *string  `json:"internalOwnerIdentityHolderIDNEQ,omitempty"`
+	InternalOwnerIdentityHolderIDIn           []string `json:"internalOwnerIdentityHolderIDIn,omitempty"`
+	InternalOwnerIdentityHolderIDNotIn        []string `json:"internalOwnerIdentityHolderIDNotIn,omitempty"`
+	InternalOwnerIdentityHolderIDContains     *string  `json:"internalOwnerIdentityHolderIDContains,omitempty"`
+	InternalOwnerIdentityHolderIDHasPrefix    *string  `json:"internalOwnerIdentityHolderIDHasPrefix,omitempty"`
+	InternalOwnerIdentityHolderIDHasSuffix    *string  `json:"internalOwnerIdentityHolderIDHasSuffix,omitempty"`
+	InternalOwnerIdentityHolderIDIsNil        bool     `json:"internalOwnerIdentityHolderIDIsNil,omitempty"`
+	InternalOwnerIdentityHolderIDNotNil       bool     `json:"internalOwnerIdentityHolderIDNotNil,omitempty"`
+	InternalOwnerIdentityHolderIDEqualFold    *string  `json:"internalOwnerIdentityHolderIDEqualFold,omitempty"`
+	InternalOwnerIdentityHolderIDContainsFold *string  `json:"internalOwnerIdentityHolderIDContainsFold,omitempty"`
+
+	// "delegate_name" field predicates.
+	DelegateName             *string  `json:"delegateName,omitempty"`
+	DelegateNameNEQ          *string  `json:"delegateNameNEQ,omitempty"`
+	DelegateNameIn           []string `json:"delegateNameIn,omitempty"`
+	DelegateNameNotIn        []string `json:"delegateNameNotIn,omitempty"`
+	DelegateNameContains     *string  `json:"delegateNameContains,omitempty"`
+	DelegateNameHasPrefix    *string  `json:"delegateNameHasPrefix,omitempty"`
+	DelegateNameHasSuffix    *string  `json:"delegateNameHasSuffix,omitempty"`
+	DelegateNameIsNil        bool     `json:"delegateNameIsNil,omitempty"`
+	DelegateNameNotNil       bool     `json:"delegateNameNotNil,omitempty"`
+	DelegateNameEqualFold    *string  `json:"delegateNameEqualFold,omitempty"`
+	DelegateNameContainsFold *string  `json:"delegateNameContainsFold,omitempty"`
+
+	// "delegate_user_id" field predicates.
+	DelegateUserID             *string  `json:"delegateUserID,omitempty"`
+	DelegateUserIDNEQ          *string  `json:"delegateUserIDNEQ,omitempty"`
+	DelegateUserIDIn           []string `json:"delegateUserIDIn,omitempty"`
+	DelegateUserIDNotIn        []string `json:"delegateUserIDNotIn,omitempty"`
+	DelegateUserIDContains     *string  `json:"delegateUserIDContains,omitempty"`
+	DelegateUserIDHasPrefix    *string  `json:"delegateUserIDHasPrefix,omitempty"`
+	DelegateUserIDHasSuffix    *string  `json:"delegateUserIDHasSuffix,omitempty"`
+	DelegateUserIDIsNil        bool     `json:"delegateUserIDIsNil,omitempty"`
+	DelegateUserIDNotNil       bool     `json:"delegateUserIDNotNil,omitempty"`
+	DelegateUserIDEqualFold    *string  `json:"delegateUserIDEqualFold,omitempty"`
+	DelegateUserIDContainsFold *string  `json:"delegateUserIDContainsFold,omitempty"`
+
+	// "delegate_group_id" field predicates.
+	DelegateGroupID             *string  `json:"delegateGroupID,omitempty"`
+	DelegateGroupIDNEQ          *string  `json:"delegateGroupIDNEQ,omitempty"`
+	DelegateGroupIDIn           []string `json:"delegateGroupIDIn,omitempty"`
+	DelegateGroupIDNotIn        []string `json:"delegateGroupIDNotIn,omitempty"`
+	DelegateGroupIDContains     *string  `json:"delegateGroupIDContains,omitempty"`
+	DelegateGroupIDHasPrefix    *string  `json:"delegateGroupIDHasPrefix,omitempty"`
+	DelegateGroupIDHasSuffix    *string  `json:"delegateGroupIDHasSuffix,omitempty"`
+	DelegateGroupIDIsNil        bool     `json:"delegateGroupIDIsNil,omitempty"`
+	DelegateGroupIDNotNil       bool     `json:"delegateGroupIDNotNil,omitempty"`
+	DelegateGroupIDEqualFold    *string  `json:"delegateGroupIDEqualFold,omitempty"`
+	DelegateGroupIDContainsFold *string  `json:"delegateGroupIDContainsFold,omitempty"`
+
+	// "delegate_identity_holder_id" field predicates.
+	DelegateIdentityHolderID             *string  `json:"delegateIdentityHolderID,omitempty"`
+	DelegateIdentityHolderIDNEQ          *string  `json:"delegateIdentityHolderIDNEQ,omitempty"`
+	DelegateIdentityHolderIDIn           []string `json:"delegateIdentityHolderIDIn,omitempty"`
+	DelegateIdentityHolderIDNotIn        []string `json:"delegateIdentityHolderIDNotIn,omitempty"`
+	DelegateIdentityHolderIDContains     *string  `json:"delegateIdentityHolderIDContains,omitempty"`
+	DelegateIdentityHolderIDHasPrefix    *string  `json:"delegateIdentityHolderIDHasPrefix,omitempty"`
+	DelegateIdentityHolderIDHasSuffix    *string  `json:"delegateIdentityHolderIDHasSuffix,omitempty"`
+	DelegateIdentityHolderIDIsNil        bool     `json:"delegateIdentityHolderIDIsNil,omitempty"`
+	DelegateIdentityHolderIDNotNil       bool     `json:"delegateIdentityHolderIDNotNil,omitempty"`
+	DelegateIdentityHolderIDEqualFold    *string  `json:"delegateIdentityHolderIDEqualFold,omitempty"`
+	DelegateIdentityHolderIDContainsFold *string  `json:"delegateIdentityHolderIDContainsFold,omitempty"`
+
 	// "system_owned" field predicates.
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -18639,6 +18743,30 @@ type ControlImplementationWhereInput struct {
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 
+	// "internal_owner_user" edge predicates.
+	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
+	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
+
+	// "internal_owner_group" edge predicates.
+	HasInternalOwnerGroup     *bool              `json:"hasInternalOwnerGroup,omitempty"`
+	HasInternalOwnerGroupWith []*GroupWhereInput `json:"hasInternalOwnerGroupWith,omitempty"`
+
+	// "internal_owner_identity_holder" edge predicates.
+	HasInternalOwnerIdentityHolder     *bool                       `json:"hasInternalOwnerIdentityHolder,omitempty"`
+	HasInternalOwnerIdentityHolderWith []*IdentityHolderWhereInput `json:"hasInternalOwnerIdentityHolderWith,omitempty"`
+
+	// "delegate_user" edge predicates.
+	HasDelegateUser     *bool             `json:"hasDelegateUser,omitempty"`
+	HasDelegateUserWith []*UserWhereInput `json:"hasDelegateUserWith,omitempty"`
+
+	// "delegate_group" edge predicates.
+	HasDelegateGroup     *bool              `json:"hasDelegateGroup,omitempty"`
+	HasDelegateGroupWith []*GroupWhereInput `json:"hasDelegateGroupWith,omitempty"`
+
+	// "delegate_identity_holder" edge predicates.
+	HasDelegateIdentityHolder     *bool                       `json:"hasDelegateIdentityHolder,omitempty"`
+	HasDelegateIdentityHolderWith []*IdentityHolderWhereInput `json:"hasDelegateIdentityHolderWith,omitempty"`
+
 	// "controls" edge predicates.
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -18650,6 +18778,18 @@ type ControlImplementationWhereInput struct {
 	// "tasks" edge predicates.
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+
+	// "platforms" edge predicates.
+	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
+	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
+
+	// "system_details" edge predicates.
+	HasSystemDetails     *bool                     `json:"hasSystemDetails,omitempty"`
+	HasSystemDetailsWith []*SystemDetailWhereInput `json:"hasSystemDetailsWith,omitempty"`
+
+	// "comments" edge predicates.
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -19146,6 +19286,270 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, controlimplementation.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
+	if i.InternalOwner != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerEQ(*i.InternalOwner))
+	}
+	if i.InternalOwnerNEQ != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerNEQ(*i.InternalOwnerNEQ))
+	}
+	if len(i.InternalOwnerIn) > 0 {
+		predicates = append(predicates, controlimplementation.InternalOwnerIn(i.InternalOwnerIn...))
+	}
+	if len(i.InternalOwnerNotIn) > 0 {
+		predicates = append(predicates, controlimplementation.InternalOwnerNotIn(i.InternalOwnerNotIn...))
+	}
+	if i.InternalOwnerContains != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerContains(*i.InternalOwnerContains))
+	}
+	if i.InternalOwnerHasPrefix != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerHasPrefix(*i.InternalOwnerHasPrefix))
+	}
+	if i.InternalOwnerHasSuffix != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerHasSuffix(*i.InternalOwnerHasSuffix))
+	}
+	if i.InternalOwnerIsNil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIsNil())
+	}
+	if i.InternalOwnerNotNil {
+		predicates = append(predicates, controlimplementation.InternalOwnerNotNil())
+	}
+	if i.InternalOwnerEqualFold != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerEqualFold(*i.InternalOwnerEqualFold))
+	}
+	if i.InternalOwnerContainsFold != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerContainsFold(*i.InternalOwnerContainsFold))
+	}
+	if i.InternalOwnerUserID != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDEQ(*i.InternalOwnerUserID))
+	}
+	if i.InternalOwnerUserIDNEQ != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDNEQ(*i.InternalOwnerUserIDNEQ))
+	}
+	if len(i.InternalOwnerUserIDIn) > 0 {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDIn(i.InternalOwnerUserIDIn...))
+	}
+	if len(i.InternalOwnerUserIDNotIn) > 0 {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDNotIn(i.InternalOwnerUserIDNotIn...))
+	}
+	if i.InternalOwnerUserIDContains != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDContains(*i.InternalOwnerUserIDContains))
+	}
+	if i.InternalOwnerUserIDHasPrefix != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDHasPrefix(*i.InternalOwnerUserIDHasPrefix))
+	}
+	if i.InternalOwnerUserIDHasSuffix != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDHasSuffix(*i.InternalOwnerUserIDHasSuffix))
+	}
+	if i.InternalOwnerUserIDIsNil {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDIsNil())
+	}
+	if i.InternalOwnerUserIDNotNil {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDNotNil())
+	}
+	if i.InternalOwnerUserIDEqualFold != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDEqualFold(*i.InternalOwnerUserIDEqualFold))
+	}
+	if i.InternalOwnerUserIDContainsFold != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerUserIDContainsFold(*i.InternalOwnerUserIDContainsFold))
+	}
+	if i.InternalOwnerGroupID != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDEQ(*i.InternalOwnerGroupID))
+	}
+	if i.InternalOwnerGroupIDNEQ != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDNEQ(*i.InternalOwnerGroupIDNEQ))
+	}
+	if len(i.InternalOwnerGroupIDIn) > 0 {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDIn(i.InternalOwnerGroupIDIn...))
+	}
+	if len(i.InternalOwnerGroupIDNotIn) > 0 {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDNotIn(i.InternalOwnerGroupIDNotIn...))
+	}
+	if i.InternalOwnerGroupIDContains != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDContains(*i.InternalOwnerGroupIDContains))
+	}
+	if i.InternalOwnerGroupIDHasPrefix != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDHasPrefix(*i.InternalOwnerGroupIDHasPrefix))
+	}
+	if i.InternalOwnerGroupIDHasSuffix != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDHasSuffix(*i.InternalOwnerGroupIDHasSuffix))
+	}
+	if i.InternalOwnerGroupIDIsNil {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDIsNil())
+	}
+	if i.InternalOwnerGroupIDNotNil {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDNotNil())
+	}
+	if i.InternalOwnerGroupIDEqualFold != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDEqualFold(*i.InternalOwnerGroupIDEqualFold))
+	}
+	if i.InternalOwnerGroupIDContainsFold != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerGroupIDContainsFold(*i.InternalOwnerGroupIDContainsFold))
+	}
+	if i.InternalOwnerIdentityHolderID != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDEQ(*i.InternalOwnerIdentityHolderID))
+	}
+	if i.InternalOwnerIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDNEQ(*i.InternalOwnerIdentityHolderIDNEQ))
+	}
+	if len(i.InternalOwnerIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDIn(i.InternalOwnerIdentityHolderIDIn...))
+	}
+	if len(i.InternalOwnerIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDNotIn(i.InternalOwnerIdentityHolderIDNotIn...))
+	}
+	if i.InternalOwnerIdentityHolderIDContains != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDContains(*i.InternalOwnerIdentityHolderIDContains))
+	}
+	if i.InternalOwnerIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDHasPrefix(*i.InternalOwnerIdentityHolderIDHasPrefix))
+	}
+	if i.InternalOwnerIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDHasSuffix(*i.InternalOwnerIdentityHolderIDHasSuffix))
+	}
+	if i.InternalOwnerIdentityHolderIDIsNil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDIsNil())
+	}
+	if i.InternalOwnerIdentityHolderIDNotNil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDNotNil())
+	}
+	if i.InternalOwnerIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDEqualFold(*i.InternalOwnerIdentityHolderIDEqualFold))
+	}
+	if i.InternalOwnerIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, controlimplementation.InternalOwnerIdentityHolderIDContainsFold(*i.InternalOwnerIdentityHolderIDContainsFold))
+	}
+	if i.DelegateName != nil {
+		predicates = append(predicates, controlimplementation.DelegateNameEQ(*i.DelegateName))
+	}
+	if i.DelegateNameNEQ != nil {
+		predicates = append(predicates, controlimplementation.DelegateNameNEQ(*i.DelegateNameNEQ))
+	}
+	if len(i.DelegateNameIn) > 0 {
+		predicates = append(predicates, controlimplementation.DelegateNameIn(i.DelegateNameIn...))
+	}
+	if len(i.DelegateNameNotIn) > 0 {
+		predicates = append(predicates, controlimplementation.DelegateNameNotIn(i.DelegateNameNotIn...))
+	}
+	if i.DelegateNameContains != nil {
+		predicates = append(predicates, controlimplementation.DelegateNameContains(*i.DelegateNameContains))
+	}
+	if i.DelegateNameHasPrefix != nil {
+		predicates = append(predicates, controlimplementation.DelegateNameHasPrefix(*i.DelegateNameHasPrefix))
+	}
+	if i.DelegateNameHasSuffix != nil {
+		predicates = append(predicates, controlimplementation.DelegateNameHasSuffix(*i.DelegateNameHasSuffix))
+	}
+	if i.DelegateNameIsNil {
+		predicates = append(predicates, controlimplementation.DelegateNameIsNil())
+	}
+	if i.DelegateNameNotNil {
+		predicates = append(predicates, controlimplementation.DelegateNameNotNil())
+	}
+	if i.DelegateNameEqualFold != nil {
+		predicates = append(predicates, controlimplementation.DelegateNameEqualFold(*i.DelegateNameEqualFold))
+	}
+	if i.DelegateNameContainsFold != nil {
+		predicates = append(predicates, controlimplementation.DelegateNameContainsFold(*i.DelegateNameContainsFold))
+	}
+	if i.DelegateUserID != nil {
+		predicates = append(predicates, controlimplementation.DelegateUserIDEQ(*i.DelegateUserID))
+	}
+	if i.DelegateUserIDNEQ != nil {
+		predicates = append(predicates, controlimplementation.DelegateUserIDNEQ(*i.DelegateUserIDNEQ))
+	}
+	if len(i.DelegateUserIDIn) > 0 {
+		predicates = append(predicates, controlimplementation.DelegateUserIDIn(i.DelegateUserIDIn...))
+	}
+	if len(i.DelegateUserIDNotIn) > 0 {
+		predicates = append(predicates, controlimplementation.DelegateUserIDNotIn(i.DelegateUserIDNotIn...))
+	}
+	if i.DelegateUserIDContains != nil {
+		predicates = append(predicates, controlimplementation.DelegateUserIDContains(*i.DelegateUserIDContains))
+	}
+	if i.DelegateUserIDHasPrefix != nil {
+		predicates = append(predicates, controlimplementation.DelegateUserIDHasPrefix(*i.DelegateUserIDHasPrefix))
+	}
+	if i.DelegateUserIDHasSuffix != nil {
+		predicates = append(predicates, controlimplementation.DelegateUserIDHasSuffix(*i.DelegateUserIDHasSuffix))
+	}
+	if i.DelegateUserIDIsNil {
+		predicates = append(predicates, controlimplementation.DelegateUserIDIsNil())
+	}
+	if i.DelegateUserIDNotNil {
+		predicates = append(predicates, controlimplementation.DelegateUserIDNotNil())
+	}
+	if i.DelegateUserIDEqualFold != nil {
+		predicates = append(predicates, controlimplementation.DelegateUserIDEqualFold(*i.DelegateUserIDEqualFold))
+	}
+	if i.DelegateUserIDContainsFold != nil {
+		predicates = append(predicates, controlimplementation.DelegateUserIDContainsFold(*i.DelegateUserIDContainsFold))
+	}
+	if i.DelegateGroupID != nil {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDEQ(*i.DelegateGroupID))
+	}
+	if i.DelegateGroupIDNEQ != nil {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDNEQ(*i.DelegateGroupIDNEQ))
+	}
+	if len(i.DelegateGroupIDIn) > 0 {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDIn(i.DelegateGroupIDIn...))
+	}
+	if len(i.DelegateGroupIDNotIn) > 0 {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDNotIn(i.DelegateGroupIDNotIn...))
+	}
+	if i.DelegateGroupIDContains != nil {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDContains(*i.DelegateGroupIDContains))
+	}
+	if i.DelegateGroupIDHasPrefix != nil {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDHasPrefix(*i.DelegateGroupIDHasPrefix))
+	}
+	if i.DelegateGroupIDHasSuffix != nil {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDHasSuffix(*i.DelegateGroupIDHasSuffix))
+	}
+	if i.DelegateGroupIDIsNil {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDIsNil())
+	}
+	if i.DelegateGroupIDNotNil {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDNotNil())
+	}
+	if i.DelegateGroupIDEqualFold != nil {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDEqualFold(*i.DelegateGroupIDEqualFold))
+	}
+	if i.DelegateGroupIDContainsFold != nil {
+		predicates = append(predicates, controlimplementation.DelegateGroupIDContainsFold(*i.DelegateGroupIDContainsFold))
+	}
+	if i.DelegateIdentityHolderID != nil {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDEQ(*i.DelegateIdentityHolderID))
+	}
+	if i.DelegateIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDNEQ(*i.DelegateIdentityHolderIDNEQ))
+	}
+	if len(i.DelegateIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDIn(i.DelegateIdentityHolderIDIn...))
+	}
+	if len(i.DelegateIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDNotIn(i.DelegateIdentityHolderIDNotIn...))
+	}
+	if i.DelegateIdentityHolderIDContains != nil {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDContains(*i.DelegateIdentityHolderIDContains))
+	}
+	if i.DelegateIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDHasPrefix(*i.DelegateIdentityHolderIDHasPrefix))
+	}
+	if i.DelegateIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDHasSuffix(*i.DelegateIdentityHolderIDHasSuffix))
+	}
+	if i.DelegateIdentityHolderIDIsNil {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDIsNil())
+	}
+	if i.DelegateIdentityHolderIDNotNil {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDNotNil())
+	}
+	if i.DelegateIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDEqualFold(*i.DelegateIdentityHolderIDEqualFold))
+	}
+	if i.DelegateIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, controlimplementation.DelegateIdentityHolderIDContainsFold(*i.DelegateIdentityHolderIDContainsFold))
+	}
 	if i.SystemOwned != nil {
 		predicates = append(predicates, controlimplementation.SystemOwnedEQ(*i.SystemOwned))
 	}
@@ -19432,6 +19836,120 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 		}
 		predicates = append(predicates, controlimplementation.HasViewersWith(with...))
 	}
+	if i.HasInternalOwnerUser != nil {
+		p := controlimplementation.HasInternalOwnerUser()
+		if !*i.HasInternalOwnerUser {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasInternalOwnerUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasInternalOwnerUserWith(with...))
+	}
+	if i.HasInternalOwnerGroup != nil {
+		p := controlimplementation.HasInternalOwnerGroup()
+		if !*i.HasInternalOwnerGroup {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasInternalOwnerGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasInternalOwnerGroupWith(with...))
+	}
+	if i.HasInternalOwnerIdentityHolder != nil {
+		p := controlimplementation.HasInternalOwnerIdentityHolder()
+		if !*i.HasInternalOwnerIdentityHolder {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasInternalOwnerIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasInternalOwnerIdentityHolderWith(with...))
+	}
+	if i.HasDelegateUser != nil {
+		p := controlimplementation.HasDelegateUser()
+		if !*i.HasDelegateUser {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDelegateUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasDelegateUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasDelegateUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDelegateUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasDelegateUserWith(with...))
+	}
+	if i.HasDelegateGroup != nil {
+		p := controlimplementation.HasDelegateGroup()
+		if !*i.HasDelegateGroup {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDelegateGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasDelegateGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasDelegateGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDelegateGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasDelegateGroupWith(with...))
+	}
+	if i.HasDelegateIdentityHolder != nil {
+		p := controlimplementation.HasDelegateIdentityHolder()
+		if !*i.HasDelegateIdentityHolder {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDelegateIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasDelegateIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasDelegateIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDelegateIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasDelegateIdentityHolderWith(with...))
+	}
 	if i.HasControls != nil {
 		p := controlimplementation.HasControls()
 		if !*i.HasControls {
@@ -19488,6 +20006,63 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 			with = append(with, p)
 		}
 		predicates = append(predicates, controlimplementation.HasTasksWith(with...))
+	}
+	if i.HasPlatforms != nil {
+		p := controlimplementation.HasPlatforms()
+		if !*i.HasPlatforms {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPlatformsWith) > 0 {
+		with := make([]predicate.Platform, 0, len(i.HasPlatformsWith))
+		with = append(with, platform.DeletedAtIsNil())
+		for _, w := range i.HasPlatformsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPlatformsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasPlatformsWith(with...))
+	}
+	if i.HasSystemDetails != nil {
+		p := controlimplementation.HasSystemDetails()
+		if !*i.HasSystemDetails {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSystemDetailsWith) > 0 {
+		with := make([]predicate.SystemDetail, 0, len(i.HasSystemDetailsWith))
+		with = append(with, systemdetail.DeletedAtIsNil())
+		for _, w := range i.HasSystemDetailsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSystemDetailsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasSystemDetailsWith(with...))
+	}
+	if i.HasComments != nil {
+		p := controlimplementation.HasComments()
+		if !*i.HasComments {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCommentsWith) > 0 {
+		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
+		for _, w := range i.HasCommentsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCommentsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasCommentsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -61117,6 +61692,10 @@ type NoteWhereInput struct {
 	HasFinding     *bool                `json:"hasFinding,omitempty"`
 	HasFindingWith []*FindingWhereInput `json:"hasFindingWith,omitempty"`
 
+	// "control_implementation" edge predicates.
+	HasControlImplementation     *bool                              `json:"hasControlImplementation,omitempty"`
+	HasControlImplementationWith []*ControlImplementationWhereInput `json:"hasControlImplementationWith,omitempty"`
+
 	// "evidence" edge predicates.
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -61816,6 +62395,25 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, note.HasFindingWith(with...))
+	}
+	if i.HasControlImplementation != nil {
+		p := note.HasControlImplementation()
+		if !*i.HasControlImplementation {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
+		for _, w := range i.HasControlImplementationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasControlImplementationWith(with...))
 	}
 	if i.HasEvidence != nil {
 		p := note.HasEvidence()
@@ -71866,6 +72464,14 @@ type PlatformWhereInput struct {
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 
+	// "control_implementations" edge predicates.
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+
+	// "reviews" edge predicates.
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+
 	// "assessments" edge predicates.
 	HasAssessments     *bool                   `json:"hasAssessments,omitempty"`
 	HasAssessmentsWith []*AssessmentWhereInput `json:"hasAssessmentsWith,omitempty"`
@@ -74588,6 +75194,44 @@ func (i *PlatformWhereInput) P() (predicate.Platform, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, platform.HasControlsWith(with...))
+	}
+	if i.HasControlImplementations != nil {
+		p := platform.HasControlImplementations()
+		if !*i.HasControlImplementations {
+			p = platform.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationsWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
+		for _, w := range i.HasControlImplementationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, platform.HasControlImplementationsWith(with...))
+	}
+	if i.HasReviews != nil {
+		p := platform.HasReviews()
+		if !*i.HasReviews {
+			p = platform.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasReviewsWith) > 0 {
+		with := make([]predicate.Review, 0, len(i.HasReviewsWith))
+		with = append(with, review.DeletedAtIsNil())
+		for _, w := range i.HasReviewsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasReviewsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, platform.HasReviewsWith(with...))
 	}
 	if i.HasAssessments != nil {
 		p := platform.HasAssessments()
@@ -83396,6 +84040,162 @@ type ReviewWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "internal_owner" field predicates.
+	InternalOwner             *string  `json:"internalOwner,omitempty"`
+	InternalOwnerNEQ          *string  `json:"internalOwnerNEQ,omitempty"`
+	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
+	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
+	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
+	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
+	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
+	InternalOwnerIsNil        bool     `json:"internalOwnerIsNil,omitempty"`
+	InternalOwnerNotNil       bool     `json:"internalOwnerNotNil,omitempty"`
+	InternalOwnerEqualFold    *string  `json:"internalOwnerEqualFold,omitempty"`
+	InternalOwnerContainsFold *string  `json:"internalOwnerContainsFold,omitempty"`
+
+	// "internal_owner_user_id" field predicates.
+	InternalOwnerUserID             *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerUserIDNEQ          *string  `json:"internalOwnerUserIDNEQ,omitempty"`
+	InternalOwnerUserIDIn           []string `json:"internalOwnerUserIDIn,omitempty"`
+	InternalOwnerUserIDNotIn        []string `json:"internalOwnerUserIDNotIn,omitempty"`
+	InternalOwnerUserIDContains     *string  `json:"internalOwnerUserIDContains,omitempty"`
+	InternalOwnerUserIDHasPrefix    *string  `json:"internalOwnerUserIDHasPrefix,omitempty"`
+	InternalOwnerUserIDHasSuffix    *string  `json:"internalOwnerUserIDHasSuffix,omitempty"`
+	InternalOwnerUserIDIsNil        bool     `json:"internalOwnerUserIDIsNil,omitempty"`
+	InternalOwnerUserIDNotNil       bool     `json:"internalOwnerUserIDNotNil,omitempty"`
+	InternalOwnerUserIDEqualFold    *string  `json:"internalOwnerUserIDEqualFold,omitempty"`
+	InternalOwnerUserIDContainsFold *string  `json:"internalOwnerUserIDContainsFold,omitempty"`
+
+	// "internal_owner_group_id" field predicates.
+	InternalOwnerGroupID             *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerGroupIDNEQ          *string  `json:"internalOwnerGroupIDNEQ,omitempty"`
+	InternalOwnerGroupIDIn           []string `json:"internalOwnerGroupIDIn,omitempty"`
+	InternalOwnerGroupIDNotIn        []string `json:"internalOwnerGroupIDNotIn,omitempty"`
+	InternalOwnerGroupIDContains     *string  `json:"internalOwnerGroupIDContains,omitempty"`
+	InternalOwnerGroupIDHasPrefix    *string  `json:"internalOwnerGroupIDHasPrefix,omitempty"`
+	InternalOwnerGroupIDHasSuffix    *string  `json:"internalOwnerGroupIDHasSuffix,omitempty"`
+	InternalOwnerGroupIDIsNil        bool     `json:"internalOwnerGroupIDIsNil,omitempty"`
+	InternalOwnerGroupIDNotNil       bool     `json:"internalOwnerGroupIDNotNil,omitempty"`
+	InternalOwnerGroupIDEqualFold    *string  `json:"internalOwnerGroupIDEqualFold,omitempty"`
+	InternalOwnerGroupIDContainsFold *string  `json:"internalOwnerGroupIDContainsFold,omitempty"`
+
+	// "internal_owner_identity_holder_id" field predicates.
+	InternalOwnerIdentityHolderID             *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	InternalOwnerIdentityHolderIDNEQ          *string  `json:"internalOwnerIdentityHolderIDNEQ,omitempty"`
+	InternalOwnerIdentityHolderIDIn           []string `json:"internalOwnerIdentityHolderIDIn,omitempty"`
+	InternalOwnerIdentityHolderIDNotIn        []string `json:"internalOwnerIdentityHolderIDNotIn,omitempty"`
+	InternalOwnerIdentityHolderIDContains     *string  `json:"internalOwnerIdentityHolderIDContains,omitempty"`
+	InternalOwnerIdentityHolderIDHasPrefix    *string  `json:"internalOwnerIdentityHolderIDHasPrefix,omitempty"`
+	InternalOwnerIdentityHolderIDHasSuffix    *string  `json:"internalOwnerIdentityHolderIDHasSuffix,omitempty"`
+	InternalOwnerIdentityHolderIDIsNil        bool     `json:"internalOwnerIdentityHolderIDIsNil,omitempty"`
+	InternalOwnerIdentityHolderIDNotNil       bool     `json:"internalOwnerIdentityHolderIDNotNil,omitempty"`
+	InternalOwnerIdentityHolderIDEqualFold    *string  `json:"internalOwnerIdentityHolderIDEqualFold,omitempty"`
+	InternalOwnerIdentityHolderIDContainsFold *string  `json:"internalOwnerIdentityHolderIDContainsFold,omitempty"`
+
+	// "reviewed_by" field predicates.
+	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
+	ReviewedByNEQ          *string  `json:"reviewedByNEQ,omitempty"`
+	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
+	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
+	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
+	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
+	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
+	ReviewedByIsNil        bool     `json:"reviewedByIsNil,omitempty"`
+	ReviewedByNotNil       bool     `json:"reviewedByNotNil,omitempty"`
+	ReviewedByEqualFold    *string  `json:"reviewedByEqualFold,omitempty"`
+	ReviewedByContainsFold *string  `json:"reviewedByContainsFold,omitempty"`
+
+	// "reviewed_by_user_id" field predicates.
+	ReviewedByUserID             *string  `json:"reviewedByUserID,omitempty"`
+	ReviewedByUserIDNEQ          *string  `json:"reviewedByUserIDNEQ,omitempty"`
+	ReviewedByUserIDIn           []string `json:"reviewedByUserIDIn,omitempty"`
+	ReviewedByUserIDNotIn        []string `json:"reviewedByUserIDNotIn,omitempty"`
+	ReviewedByUserIDContains     *string  `json:"reviewedByUserIDContains,omitempty"`
+	ReviewedByUserIDHasPrefix    *string  `json:"reviewedByUserIDHasPrefix,omitempty"`
+	ReviewedByUserIDHasSuffix    *string  `json:"reviewedByUserIDHasSuffix,omitempty"`
+	ReviewedByUserIDIsNil        bool     `json:"reviewedByUserIDIsNil,omitempty"`
+	ReviewedByUserIDNotNil       bool     `json:"reviewedByUserIDNotNil,omitempty"`
+	ReviewedByUserIDEqualFold    *string  `json:"reviewedByUserIDEqualFold,omitempty"`
+	ReviewedByUserIDContainsFold *string  `json:"reviewedByUserIDContainsFold,omitempty"`
+
+	// "reviewed_by_group_id" field predicates.
+	ReviewedByGroupID             *string  `json:"reviewedByGroupID,omitempty"`
+	ReviewedByGroupIDNEQ          *string  `json:"reviewedByGroupIDNEQ,omitempty"`
+	ReviewedByGroupIDIn           []string `json:"reviewedByGroupIDIn,omitempty"`
+	ReviewedByGroupIDNotIn        []string `json:"reviewedByGroupIDNotIn,omitempty"`
+	ReviewedByGroupIDContains     *string  `json:"reviewedByGroupIDContains,omitempty"`
+	ReviewedByGroupIDHasPrefix    *string  `json:"reviewedByGroupIDHasPrefix,omitempty"`
+	ReviewedByGroupIDHasSuffix    *string  `json:"reviewedByGroupIDHasSuffix,omitempty"`
+	ReviewedByGroupIDIsNil        bool     `json:"reviewedByGroupIDIsNil,omitempty"`
+	ReviewedByGroupIDNotNil       bool     `json:"reviewedByGroupIDNotNil,omitempty"`
+	ReviewedByGroupIDEqualFold    *string  `json:"reviewedByGroupIDEqualFold,omitempty"`
+	ReviewedByGroupIDContainsFold *string  `json:"reviewedByGroupIDContainsFold,omitempty"`
+
+	// "reviewed_by_identity_holder_id" field predicates.
+	ReviewedByIdentityHolderID             *string  `json:"reviewedByIdentityHolderID,omitempty"`
+	ReviewedByIdentityHolderIDNEQ          *string  `json:"reviewedByIdentityHolderIDNEQ,omitempty"`
+	ReviewedByIdentityHolderIDIn           []string `json:"reviewedByIdentityHolderIDIn,omitempty"`
+	ReviewedByIdentityHolderIDNotIn        []string `json:"reviewedByIdentityHolderIDNotIn,omitempty"`
+	ReviewedByIdentityHolderIDContains     *string  `json:"reviewedByIdentityHolderIDContains,omitempty"`
+	ReviewedByIdentityHolderIDHasPrefix    *string  `json:"reviewedByIdentityHolderIDHasPrefix,omitempty"`
+	ReviewedByIdentityHolderIDHasSuffix    *string  `json:"reviewedByIdentityHolderIDHasSuffix,omitempty"`
+	ReviewedByIdentityHolderIDIsNil        bool     `json:"reviewedByIdentityHolderIDIsNil,omitempty"`
+	ReviewedByIdentityHolderIDNotNil       bool     `json:"reviewedByIdentityHolderIDNotNil,omitempty"`
+	ReviewedByIdentityHolderIDEqualFold    *string  `json:"reviewedByIdentityHolderIDEqualFold,omitempty"`
+	ReviewedByIdentityHolderIDContainsFold *string  `json:"reviewedByIdentityHolderIDContainsFold,omitempty"`
+
+	// "delegate_name" field predicates.
+	DelegateName             *string  `json:"delegateName,omitempty"`
+	DelegateNameNEQ          *string  `json:"delegateNameNEQ,omitempty"`
+	DelegateNameIn           []string `json:"delegateNameIn,omitempty"`
+	DelegateNameNotIn        []string `json:"delegateNameNotIn,omitempty"`
+	DelegateNameContains     *string  `json:"delegateNameContains,omitempty"`
+	DelegateNameHasPrefix    *string  `json:"delegateNameHasPrefix,omitempty"`
+	DelegateNameHasSuffix    *string  `json:"delegateNameHasSuffix,omitempty"`
+	DelegateNameIsNil        bool     `json:"delegateNameIsNil,omitempty"`
+	DelegateNameNotNil       bool     `json:"delegateNameNotNil,omitempty"`
+	DelegateNameEqualFold    *string  `json:"delegateNameEqualFold,omitempty"`
+	DelegateNameContainsFold *string  `json:"delegateNameContainsFold,omitempty"`
+
+	// "delegate_user_id" field predicates.
+	DelegateUserID             *string  `json:"delegateUserID,omitempty"`
+	DelegateUserIDNEQ          *string  `json:"delegateUserIDNEQ,omitempty"`
+	DelegateUserIDIn           []string `json:"delegateUserIDIn,omitempty"`
+	DelegateUserIDNotIn        []string `json:"delegateUserIDNotIn,omitempty"`
+	DelegateUserIDContains     *string  `json:"delegateUserIDContains,omitempty"`
+	DelegateUserIDHasPrefix    *string  `json:"delegateUserIDHasPrefix,omitempty"`
+	DelegateUserIDHasSuffix    *string  `json:"delegateUserIDHasSuffix,omitempty"`
+	DelegateUserIDIsNil        bool     `json:"delegateUserIDIsNil,omitempty"`
+	DelegateUserIDNotNil       bool     `json:"delegateUserIDNotNil,omitempty"`
+	DelegateUserIDEqualFold    *string  `json:"delegateUserIDEqualFold,omitempty"`
+	DelegateUserIDContainsFold *string  `json:"delegateUserIDContainsFold,omitempty"`
+
+	// "delegate_group_id" field predicates.
+	DelegateGroupID             *string  `json:"delegateGroupID,omitempty"`
+	DelegateGroupIDNEQ          *string  `json:"delegateGroupIDNEQ,omitempty"`
+	DelegateGroupIDIn           []string `json:"delegateGroupIDIn,omitempty"`
+	DelegateGroupIDNotIn        []string `json:"delegateGroupIDNotIn,omitempty"`
+	DelegateGroupIDContains     *string  `json:"delegateGroupIDContains,omitempty"`
+	DelegateGroupIDHasPrefix    *string  `json:"delegateGroupIDHasPrefix,omitempty"`
+	DelegateGroupIDHasSuffix    *string  `json:"delegateGroupIDHasSuffix,omitempty"`
+	DelegateGroupIDIsNil        bool     `json:"delegateGroupIDIsNil,omitempty"`
+	DelegateGroupIDNotNil       bool     `json:"delegateGroupIDNotNil,omitempty"`
+	DelegateGroupIDEqualFold    *string  `json:"delegateGroupIDEqualFold,omitempty"`
+	DelegateGroupIDContainsFold *string  `json:"delegateGroupIDContainsFold,omitempty"`
+
+	// "delegate_identity_holder_id" field predicates.
+	DelegateIdentityHolderID             *string  `json:"delegateIdentityHolderID,omitempty"`
+	DelegateIdentityHolderIDNEQ          *string  `json:"delegateIdentityHolderIDNEQ,omitempty"`
+	DelegateIdentityHolderIDIn           []string `json:"delegateIdentityHolderIDIn,omitempty"`
+	DelegateIdentityHolderIDNotIn        []string `json:"delegateIdentityHolderIDNotIn,omitempty"`
+	DelegateIdentityHolderIDContains     *string  `json:"delegateIdentityHolderIDContains,omitempty"`
+	DelegateIdentityHolderIDHasPrefix    *string  `json:"delegateIdentityHolderIDHasPrefix,omitempty"`
+	DelegateIdentityHolderIDHasSuffix    *string  `json:"delegateIdentityHolderIDHasSuffix,omitempty"`
+	DelegateIdentityHolderIDIsNil        bool     `json:"delegateIdentityHolderIDIsNil,omitempty"`
+	DelegateIdentityHolderIDNotNil       bool     `json:"delegateIdentityHolderIDNotNil,omitempty"`
+	DelegateIdentityHolderIDEqualFold    *string  `json:"delegateIdentityHolderIDEqualFold,omitempty"`
+	DelegateIdentityHolderIDContainsFold *string  `json:"delegateIdentityHolderIDContainsFold,omitempty"`
+
 	// "system_owned" field predicates.
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -83427,6 +84227,84 @@ type ReviewWhereInput struct {
 	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
 	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
 	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
+	// "review_kind_name" field predicates.
+	ReviewKindName             *string  `json:"reviewKindName,omitempty"`
+	ReviewKindNameNEQ          *string  `json:"reviewKindNameNEQ,omitempty"`
+	ReviewKindNameIn           []string `json:"reviewKindNameIn,omitempty"`
+	ReviewKindNameNotIn        []string `json:"reviewKindNameNotIn,omitempty"`
+	ReviewKindNameContains     *string  `json:"reviewKindNameContains,omitempty"`
+	ReviewKindNameHasPrefix    *string  `json:"reviewKindNameHasPrefix,omitempty"`
+	ReviewKindNameHasSuffix    *string  `json:"reviewKindNameHasSuffix,omitempty"`
+	ReviewKindNameIsNil        bool     `json:"reviewKindNameIsNil,omitempty"`
+	ReviewKindNameNotNil       bool     `json:"reviewKindNameNotNil,omitempty"`
+	ReviewKindNameEqualFold    *string  `json:"reviewKindNameEqualFold,omitempty"`
+	ReviewKindNameContainsFold *string  `json:"reviewKindNameContainsFold,omitempty"`
+
+	// "review_kind_id" field predicates.
+	ReviewKindID             *string  `json:"reviewKindID,omitempty"`
+	ReviewKindIDNEQ          *string  `json:"reviewKindIDNEQ,omitempty"`
+	ReviewKindIDIn           []string `json:"reviewKindIDIn,omitempty"`
+	ReviewKindIDNotIn        []string `json:"reviewKindIDNotIn,omitempty"`
+	ReviewKindIDContains     *string  `json:"reviewKindIDContains,omitempty"`
+	ReviewKindIDHasPrefix    *string  `json:"reviewKindIDHasPrefix,omitempty"`
+	ReviewKindIDHasSuffix    *string  `json:"reviewKindIDHasSuffix,omitempty"`
+	ReviewKindIDIsNil        bool     `json:"reviewKindIDIsNil,omitempty"`
+	ReviewKindIDNotNil       bool     `json:"reviewKindIDNotNil,omitempty"`
+	ReviewKindIDEqualFold    *string  `json:"reviewKindIDEqualFold,omitempty"`
+	ReviewKindIDContainsFold *string  `json:"reviewKindIDContainsFold,omitempty"`
+
+	// "review_classification_name" field predicates.
+	ReviewClassificationName             *string  `json:"reviewClassificationName,omitempty"`
+	ReviewClassificationNameNEQ          *string  `json:"reviewClassificationNameNEQ,omitempty"`
+	ReviewClassificationNameIn           []string `json:"reviewClassificationNameIn,omitempty"`
+	ReviewClassificationNameNotIn        []string `json:"reviewClassificationNameNotIn,omitempty"`
+	ReviewClassificationNameContains     *string  `json:"reviewClassificationNameContains,omitempty"`
+	ReviewClassificationNameHasPrefix    *string  `json:"reviewClassificationNameHasPrefix,omitempty"`
+	ReviewClassificationNameHasSuffix    *string  `json:"reviewClassificationNameHasSuffix,omitempty"`
+	ReviewClassificationNameIsNil        bool     `json:"reviewClassificationNameIsNil,omitempty"`
+	ReviewClassificationNameNotNil       bool     `json:"reviewClassificationNameNotNil,omitempty"`
+	ReviewClassificationNameEqualFold    *string  `json:"reviewClassificationNameEqualFold,omitempty"`
+	ReviewClassificationNameContainsFold *string  `json:"reviewClassificationNameContainsFold,omitempty"`
+
+	// "review_classification_id" field predicates.
+	ReviewClassificationID             *string  `json:"reviewClassificationID,omitempty"`
+	ReviewClassificationIDNEQ          *string  `json:"reviewClassificationIDNEQ,omitempty"`
+	ReviewClassificationIDIn           []string `json:"reviewClassificationIDIn,omitempty"`
+	ReviewClassificationIDNotIn        []string `json:"reviewClassificationIDNotIn,omitempty"`
+	ReviewClassificationIDContains     *string  `json:"reviewClassificationIDContains,omitempty"`
+	ReviewClassificationIDHasPrefix    *string  `json:"reviewClassificationIDHasPrefix,omitempty"`
+	ReviewClassificationIDHasSuffix    *string  `json:"reviewClassificationIDHasSuffix,omitempty"`
+	ReviewClassificationIDIsNil        bool     `json:"reviewClassificationIDIsNil,omitempty"`
+	ReviewClassificationIDNotNil       bool     `json:"reviewClassificationIDNotNil,omitempty"`
+	ReviewClassificationIDEqualFold    *string  `json:"reviewClassificationIDEqualFold,omitempty"`
+	ReviewClassificationIDContainsFold *string  `json:"reviewClassificationIDContainsFold,omitempty"`
+
+	// "review_state_name" field predicates.
+	ReviewStateName             *string  `json:"reviewStateName,omitempty"`
+	ReviewStateNameNEQ          *string  `json:"reviewStateNameNEQ,omitempty"`
+	ReviewStateNameIn           []string `json:"reviewStateNameIn,omitempty"`
+	ReviewStateNameNotIn        []string `json:"reviewStateNameNotIn,omitempty"`
+	ReviewStateNameContains     *string  `json:"reviewStateNameContains,omitempty"`
+	ReviewStateNameHasPrefix    *string  `json:"reviewStateNameHasPrefix,omitempty"`
+	ReviewStateNameHasSuffix    *string  `json:"reviewStateNameHasSuffix,omitempty"`
+	ReviewStateNameIsNil        bool     `json:"reviewStateNameIsNil,omitempty"`
+	ReviewStateNameNotNil       bool     `json:"reviewStateNameNotNil,omitempty"`
+	ReviewStateNameEqualFold    *string  `json:"reviewStateNameEqualFold,omitempty"`
+	ReviewStateNameContainsFold *string  `json:"reviewStateNameContainsFold,omitempty"`
+
+	// "review_state_id" field predicates.
+	ReviewStateID             *string  `json:"reviewStateID,omitempty"`
+	ReviewStateIDNEQ          *string  `json:"reviewStateIDNEQ,omitempty"`
+	ReviewStateIDIn           []string `json:"reviewStateIDIn,omitempty"`
+	ReviewStateIDNotIn        []string `json:"reviewStateIDNotIn,omitempty"`
+	ReviewStateIDContains     *string  `json:"reviewStateIDContains,omitempty"`
+	ReviewStateIDHasPrefix    *string  `json:"reviewStateIDHasPrefix,omitempty"`
+	ReviewStateIDHasSuffix    *string  `json:"reviewStateIDHasSuffix,omitempty"`
+	ReviewStateIDIsNil        bool     `json:"reviewStateIDIsNil,omitempty"`
+	ReviewStateIDNotNil       bool     `json:"reviewStateIDNotNil,omitempty"`
+	ReviewStateIDEqualFold    *string  `json:"reviewStateIDEqualFold,omitempty"`
+	ReviewStateIDContainsFold *string  `json:"reviewStateIDContainsFold,omitempty"`
 
 	// "environment_name" field predicates.
 	EnvironmentName             *string  `json:"environmentName,omitempty"`
@@ -83681,6 +84559,54 @@ type ReviewWhereInput struct {
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
+	// "internal_owner_user" edge predicates.
+	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
+	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
+
+	// "internal_owner_group" edge predicates.
+	HasInternalOwnerGroup     *bool              `json:"hasInternalOwnerGroup,omitempty"`
+	HasInternalOwnerGroupWith []*GroupWhereInput `json:"hasInternalOwnerGroupWith,omitempty"`
+
+	// "internal_owner_identity_holder" edge predicates.
+	HasInternalOwnerIdentityHolder     *bool                       `json:"hasInternalOwnerIdentityHolder,omitempty"`
+	HasInternalOwnerIdentityHolderWith []*IdentityHolderWhereInput `json:"hasInternalOwnerIdentityHolderWith,omitempty"`
+
+	// "reviewed_by_user" edge predicates.
+	HasReviewedByUser     *bool             `json:"hasReviewedByUser,omitempty"`
+	HasReviewedByUserWith []*UserWhereInput `json:"hasReviewedByUserWith,omitempty"`
+
+	// "reviewed_by_group" edge predicates.
+	HasReviewedByGroup     *bool              `json:"hasReviewedByGroup,omitempty"`
+	HasReviewedByGroupWith []*GroupWhereInput `json:"hasReviewedByGroupWith,omitempty"`
+
+	// "reviewed_by_identity_holder" edge predicates.
+	HasReviewedByIdentityHolder     *bool                       `json:"hasReviewedByIdentityHolder,omitempty"`
+	HasReviewedByIdentityHolderWith []*IdentityHolderWhereInput `json:"hasReviewedByIdentityHolderWith,omitempty"`
+
+	// "delegate_user" edge predicates.
+	HasDelegateUser     *bool             `json:"hasDelegateUser,omitempty"`
+	HasDelegateUserWith []*UserWhereInput `json:"hasDelegateUserWith,omitempty"`
+
+	// "delegate_group" edge predicates.
+	HasDelegateGroup     *bool              `json:"hasDelegateGroup,omitempty"`
+	HasDelegateGroupWith []*GroupWhereInput `json:"hasDelegateGroupWith,omitempty"`
+
+	// "delegate_identity_holder" edge predicates.
+	HasDelegateIdentityHolder     *bool                       `json:"hasDelegateIdentityHolder,omitempty"`
+	HasDelegateIdentityHolderWith []*IdentityHolderWhereInput `json:"hasDelegateIdentityHolderWith,omitempty"`
+
+	// "review_kind" edge predicates.
+	HasReviewKind     *bool                       `json:"hasReviewKind,omitempty"`
+	HasReviewKindWith []*CustomTypeEnumWhereInput `json:"hasReviewKindWith,omitempty"`
+
+	// "review_classification" edge predicates.
+	HasReviewClassification     *bool                       `json:"hasReviewClassification,omitempty"`
+	HasReviewClassificationWith []*CustomTypeEnumWhereInput `json:"hasReviewClassificationWith,omitempty"`
+
+	// "review_state" edge predicates.
+	HasReviewState     *bool                       `json:"hasReviewState,omitempty"`
+	HasReviewStateWith []*CustomTypeEnumWhereInput `json:"hasReviewStateWith,omitempty"`
+
 	// "environment" edge predicates.
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
 	HasEnvironmentWith []*CustomTypeEnumWhereInput `json:"hasEnvironmentWith,omitempty"`
@@ -83748,6 +84674,14 @@ type ReviewWhereInput struct {
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+
+	// "platforms" edge predicates.
+	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
+	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
+
+	// "system_details" edge predicates.
+	HasSystemDetails     *bool                     `json:"hasSystemDetails,omitempty"`
+	HasSystemDetailsWith []*SystemDetailWhereInput `json:"hasSystemDetailsWith,omitempty"`
 
 	// "internal_policies" edge predicates.
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
@@ -84248,6 +85182,402 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, review.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
+	if i.InternalOwner != nil {
+		predicates = append(predicates, review.InternalOwnerEQ(*i.InternalOwner))
+	}
+	if i.InternalOwnerNEQ != nil {
+		predicates = append(predicates, review.InternalOwnerNEQ(*i.InternalOwnerNEQ))
+	}
+	if len(i.InternalOwnerIn) > 0 {
+		predicates = append(predicates, review.InternalOwnerIn(i.InternalOwnerIn...))
+	}
+	if len(i.InternalOwnerNotIn) > 0 {
+		predicates = append(predicates, review.InternalOwnerNotIn(i.InternalOwnerNotIn...))
+	}
+	if i.InternalOwnerContains != nil {
+		predicates = append(predicates, review.InternalOwnerContains(*i.InternalOwnerContains))
+	}
+	if i.InternalOwnerHasPrefix != nil {
+		predicates = append(predicates, review.InternalOwnerHasPrefix(*i.InternalOwnerHasPrefix))
+	}
+	if i.InternalOwnerHasSuffix != nil {
+		predicates = append(predicates, review.InternalOwnerHasSuffix(*i.InternalOwnerHasSuffix))
+	}
+	if i.InternalOwnerIsNil {
+		predicates = append(predicates, review.InternalOwnerIsNil())
+	}
+	if i.InternalOwnerNotNil {
+		predicates = append(predicates, review.InternalOwnerNotNil())
+	}
+	if i.InternalOwnerEqualFold != nil {
+		predicates = append(predicates, review.InternalOwnerEqualFold(*i.InternalOwnerEqualFold))
+	}
+	if i.InternalOwnerContainsFold != nil {
+		predicates = append(predicates, review.InternalOwnerContainsFold(*i.InternalOwnerContainsFold))
+	}
+	if i.InternalOwnerUserID != nil {
+		predicates = append(predicates, review.InternalOwnerUserIDEQ(*i.InternalOwnerUserID))
+	}
+	if i.InternalOwnerUserIDNEQ != nil {
+		predicates = append(predicates, review.InternalOwnerUserIDNEQ(*i.InternalOwnerUserIDNEQ))
+	}
+	if len(i.InternalOwnerUserIDIn) > 0 {
+		predicates = append(predicates, review.InternalOwnerUserIDIn(i.InternalOwnerUserIDIn...))
+	}
+	if len(i.InternalOwnerUserIDNotIn) > 0 {
+		predicates = append(predicates, review.InternalOwnerUserIDNotIn(i.InternalOwnerUserIDNotIn...))
+	}
+	if i.InternalOwnerUserIDContains != nil {
+		predicates = append(predicates, review.InternalOwnerUserIDContains(*i.InternalOwnerUserIDContains))
+	}
+	if i.InternalOwnerUserIDHasPrefix != nil {
+		predicates = append(predicates, review.InternalOwnerUserIDHasPrefix(*i.InternalOwnerUserIDHasPrefix))
+	}
+	if i.InternalOwnerUserIDHasSuffix != nil {
+		predicates = append(predicates, review.InternalOwnerUserIDHasSuffix(*i.InternalOwnerUserIDHasSuffix))
+	}
+	if i.InternalOwnerUserIDIsNil {
+		predicates = append(predicates, review.InternalOwnerUserIDIsNil())
+	}
+	if i.InternalOwnerUserIDNotNil {
+		predicates = append(predicates, review.InternalOwnerUserIDNotNil())
+	}
+	if i.InternalOwnerUserIDEqualFold != nil {
+		predicates = append(predicates, review.InternalOwnerUserIDEqualFold(*i.InternalOwnerUserIDEqualFold))
+	}
+	if i.InternalOwnerUserIDContainsFold != nil {
+		predicates = append(predicates, review.InternalOwnerUserIDContainsFold(*i.InternalOwnerUserIDContainsFold))
+	}
+	if i.InternalOwnerGroupID != nil {
+		predicates = append(predicates, review.InternalOwnerGroupIDEQ(*i.InternalOwnerGroupID))
+	}
+	if i.InternalOwnerGroupIDNEQ != nil {
+		predicates = append(predicates, review.InternalOwnerGroupIDNEQ(*i.InternalOwnerGroupIDNEQ))
+	}
+	if len(i.InternalOwnerGroupIDIn) > 0 {
+		predicates = append(predicates, review.InternalOwnerGroupIDIn(i.InternalOwnerGroupIDIn...))
+	}
+	if len(i.InternalOwnerGroupIDNotIn) > 0 {
+		predicates = append(predicates, review.InternalOwnerGroupIDNotIn(i.InternalOwnerGroupIDNotIn...))
+	}
+	if i.InternalOwnerGroupIDContains != nil {
+		predicates = append(predicates, review.InternalOwnerGroupIDContains(*i.InternalOwnerGroupIDContains))
+	}
+	if i.InternalOwnerGroupIDHasPrefix != nil {
+		predicates = append(predicates, review.InternalOwnerGroupIDHasPrefix(*i.InternalOwnerGroupIDHasPrefix))
+	}
+	if i.InternalOwnerGroupIDHasSuffix != nil {
+		predicates = append(predicates, review.InternalOwnerGroupIDHasSuffix(*i.InternalOwnerGroupIDHasSuffix))
+	}
+	if i.InternalOwnerGroupIDIsNil {
+		predicates = append(predicates, review.InternalOwnerGroupIDIsNil())
+	}
+	if i.InternalOwnerGroupIDNotNil {
+		predicates = append(predicates, review.InternalOwnerGroupIDNotNil())
+	}
+	if i.InternalOwnerGroupIDEqualFold != nil {
+		predicates = append(predicates, review.InternalOwnerGroupIDEqualFold(*i.InternalOwnerGroupIDEqualFold))
+	}
+	if i.InternalOwnerGroupIDContainsFold != nil {
+		predicates = append(predicates, review.InternalOwnerGroupIDContainsFold(*i.InternalOwnerGroupIDContainsFold))
+	}
+	if i.InternalOwnerIdentityHolderID != nil {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDEQ(*i.InternalOwnerIdentityHolderID))
+	}
+	if i.InternalOwnerIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDNEQ(*i.InternalOwnerIdentityHolderIDNEQ))
+	}
+	if len(i.InternalOwnerIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDIn(i.InternalOwnerIdentityHolderIDIn...))
+	}
+	if len(i.InternalOwnerIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDNotIn(i.InternalOwnerIdentityHolderIDNotIn...))
+	}
+	if i.InternalOwnerIdentityHolderIDContains != nil {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDContains(*i.InternalOwnerIdentityHolderIDContains))
+	}
+	if i.InternalOwnerIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDHasPrefix(*i.InternalOwnerIdentityHolderIDHasPrefix))
+	}
+	if i.InternalOwnerIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDHasSuffix(*i.InternalOwnerIdentityHolderIDHasSuffix))
+	}
+	if i.InternalOwnerIdentityHolderIDIsNil {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDIsNil())
+	}
+	if i.InternalOwnerIdentityHolderIDNotNil {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDNotNil())
+	}
+	if i.InternalOwnerIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDEqualFold(*i.InternalOwnerIdentityHolderIDEqualFold))
+	}
+	if i.InternalOwnerIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, review.InternalOwnerIdentityHolderIDContainsFold(*i.InternalOwnerIdentityHolderIDContainsFold))
+	}
+	if i.ReviewedBy != nil {
+		predicates = append(predicates, review.ReviewedByEQ(*i.ReviewedBy))
+	}
+	if i.ReviewedByNEQ != nil {
+		predicates = append(predicates, review.ReviewedByNEQ(*i.ReviewedByNEQ))
+	}
+	if len(i.ReviewedByIn) > 0 {
+		predicates = append(predicates, review.ReviewedByIn(i.ReviewedByIn...))
+	}
+	if len(i.ReviewedByNotIn) > 0 {
+		predicates = append(predicates, review.ReviewedByNotIn(i.ReviewedByNotIn...))
+	}
+	if i.ReviewedByContains != nil {
+		predicates = append(predicates, review.ReviewedByContains(*i.ReviewedByContains))
+	}
+	if i.ReviewedByHasPrefix != nil {
+		predicates = append(predicates, review.ReviewedByHasPrefix(*i.ReviewedByHasPrefix))
+	}
+	if i.ReviewedByHasSuffix != nil {
+		predicates = append(predicates, review.ReviewedByHasSuffix(*i.ReviewedByHasSuffix))
+	}
+	if i.ReviewedByIsNil {
+		predicates = append(predicates, review.ReviewedByIsNil())
+	}
+	if i.ReviewedByNotNil {
+		predicates = append(predicates, review.ReviewedByNotNil())
+	}
+	if i.ReviewedByEqualFold != nil {
+		predicates = append(predicates, review.ReviewedByEqualFold(*i.ReviewedByEqualFold))
+	}
+	if i.ReviewedByContainsFold != nil {
+		predicates = append(predicates, review.ReviewedByContainsFold(*i.ReviewedByContainsFold))
+	}
+	if i.ReviewedByUserID != nil {
+		predicates = append(predicates, review.ReviewedByUserIDEQ(*i.ReviewedByUserID))
+	}
+	if i.ReviewedByUserIDNEQ != nil {
+		predicates = append(predicates, review.ReviewedByUserIDNEQ(*i.ReviewedByUserIDNEQ))
+	}
+	if len(i.ReviewedByUserIDIn) > 0 {
+		predicates = append(predicates, review.ReviewedByUserIDIn(i.ReviewedByUserIDIn...))
+	}
+	if len(i.ReviewedByUserIDNotIn) > 0 {
+		predicates = append(predicates, review.ReviewedByUserIDNotIn(i.ReviewedByUserIDNotIn...))
+	}
+	if i.ReviewedByUserIDContains != nil {
+		predicates = append(predicates, review.ReviewedByUserIDContains(*i.ReviewedByUserIDContains))
+	}
+	if i.ReviewedByUserIDHasPrefix != nil {
+		predicates = append(predicates, review.ReviewedByUserIDHasPrefix(*i.ReviewedByUserIDHasPrefix))
+	}
+	if i.ReviewedByUserIDHasSuffix != nil {
+		predicates = append(predicates, review.ReviewedByUserIDHasSuffix(*i.ReviewedByUserIDHasSuffix))
+	}
+	if i.ReviewedByUserIDIsNil {
+		predicates = append(predicates, review.ReviewedByUserIDIsNil())
+	}
+	if i.ReviewedByUserIDNotNil {
+		predicates = append(predicates, review.ReviewedByUserIDNotNil())
+	}
+	if i.ReviewedByUserIDEqualFold != nil {
+		predicates = append(predicates, review.ReviewedByUserIDEqualFold(*i.ReviewedByUserIDEqualFold))
+	}
+	if i.ReviewedByUserIDContainsFold != nil {
+		predicates = append(predicates, review.ReviewedByUserIDContainsFold(*i.ReviewedByUserIDContainsFold))
+	}
+	if i.ReviewedByGroupID != nil {
+		predicates = append(predicates, review.ReviewedByGroupIDEQ(*i.ReviewedByGroupID))
+	}
+	if i.ReviewedByGroupIDNEQ != nil {
+		predicates = append(predicates, review.ReviewedByGroupIDNEQ(*i.ReviewedByGroupIDNEQ))
+	}
+	if len(i.ReviewedByGroupIDIn) > 0 {
+		predicates = append(predicates, review.ReviewedByGroupIDIn(i.ReviewedByGroupIDIn...))
+	}
+	if len(i.ReviewedByGroupIDNotIn) > 0 {
+		predicates = append(predicates, review.ReviewedByGroupIDNotIn(i.ReviewedByGroupIDNotIn...))
+	}
+	if i.ReviewedByGroupIDContains != nil {
+		predicates = append(predicates, review.ReviewedByGroupIDContains(*i.ReviewedByGroupIDContains))
+	}
+	if i.ReviewedByGroupIDHasPrefix != nil {
+		predicates = append(predicates, review.ReviewedByGroupIDHasPrefix(*i.ReviewedByGroupIDHasPrefix))
+	}
+	if i.ReviewedByGroupIDHasSuffix != nil {
+		predicates = append(predicates, review.ReviewedByGroupIDHasSuffix(*i.ReviewedByGroupIDHasSuffix))
+	}
+	if i.ReviewedByGroupIDIsNil {
+		predicates = append(predicates, review.ReviewedByGroupIDIsNil())
+	}
+	if i.ReviewedByGroupIDNotNil {
+		predicates = append(predicates, review.ReviewedByGroupIDNotNil())
+	}
+	if i.ReviewedByGroupIDEqualFold != nil {
+		predicates = append(predicates, review.ReviewedByGroupIDEqualFold(*i.ReviewedByGroupIDEqualFold))
+	}
+	if i.ReviewedByGroupIDContainsFold != nil {
+		predicates = append(predicates, review.ReviewedByGroupIDContainsFold(*i.ReviewedByGroupIDContainsFold))
+	}
+	if i.ReviewedByIdentityHolderID != nil {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDEQ(*i.ReviewedByIdentityHolderID))
+	}
+	if i.ReviewedByIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDNEQ(*i.ReviewedByIdentityHolderIDNEQ))
+	}
+	if len(i.ReviewedByIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDIn(i.ReviewedByIdentityHolderIDIn...))
+	}
+	if len(i.ReviewedByIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDNotIn(i.ReviewedByIdentityHolderIDNotIn...))
+	}
+	if i.ReviewedByIdentityHolderIDContains != nil {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDContains(*i.ReviewedByIdentityHolderIDContains))
+	}
+	if i.ReviewedByIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDHasPrefix(*i.ReviewedByIdentityHolderIDHasPrefix))
+	}
+	if i.ReviewedByIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDHasSuffix(*i.ReviewedByIdentityHolderIDHasSuffix))
+	}
+	if i.ReviewedByIdentityHolderIDIsNil {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDIsNil())
+	}
+	if i.ReviewedByIdentityHolderIDNotNil {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDNotNil())
+	}
+	if i.ReviewedByIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDEqualFold(*i.ReviewedByIdentityHolderIDEqualFold))
+	}
+	if i.ReviewedByIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, review.ReviewedByIdentityHolderIDContainsFold(*i.ReviewedByIdentityHolderIDContainsFold))
+	}
+	if i.DelegateName != nil {
+		predicates = append(predicates, review.DelegateNameEQ(*i.DelegateName))
+	}
+	if i.DelegateNameNEQ != nil {
+		predicates = append(predicates, review.DelegateNameNEQ(*i.DelegateNameNEQ))
+	}
+	if len(i.DelegateNameIn) > 0 {
+		predicates = append(predicates, review.DelegateNameIn(i.DelegateNameIn...))
+	}
+	if len(i.DelegateNameNotIn) > 0 {
+		predicates = append(predicates, review.DelegateNameNotIn(i.DelegateNameNotIn...))
+	}
+	if i.DelegateNameContains != nil {
+		predicates = append(predicates, review.DelegateNameContains(*i.DelegateNameContains))
+	}
+	if i.DelegateNameHasPrefix != nil {
+		predicates = append(predicates, review.DelegateNameHasPrefix(*i.DelegateNameHasPrefix))
+	}
+	if i.DelegateNameHasSuffix != nil {
+		predicates = append(predicates, review.DelegateNameHasSuffix(*i.DelegateNameHasSuffix))
+	}
+	if i.DelegateNameIsNil {
+		predicates = append(predicates, review.DelegateNameIsNil())
+	}
+	if i.DelegateNameNotNil {
+		predicates = append(predicates, review.DelegateNameNotNil())
+	}
+	if i.DelegateNameEqualFold != nil {
+		predicates = append(predicates, review.DelegateNameEqualFold(*i.DelegateNameEqualFold))
+	}
+	if i.DelegateNameContainsFold != nil {
+		predicates = append(predicates, review.DelegateNameContainsFold(*i.DelegateNameContainsFold))
+	}
+	if i.DelegateUserID != nil {
+		predicates = append(predicates, review.DelegateUserIDEQ(*i.DelegateUserID))
+	}
+	if i.DelegateUserIDNEQ != nil {
+		predicates = append(predicates, review.DelegateUserIDNEQ(*i.DelegateUserIDNEQ))
+	}
+	if len(i.DelegateUserIDIn) > 0 {
+		predicates = append(predicates, review.DelegateUserIDIn(i.DelegateUserIDIn...))
+	}
+	if len(i.DelegateUserIDNotIn) > 0 {
+		predicates = append(predicates, review.DelegateUserIDNotIn(i.DelegateUserIDNotIn...))
+	}
+	if i.DelegateUserIDContains != nil {
+		predicates = append(predicates, review.DelegateUserIDContains(*i.DelegateUserIDContains))
+	}
+	if i.DelegateUserIDHasPrefix != nil {
+		predicates = append(predicates, review.DelegateUserIDHasPrefix(*i.DelegateUserIDHasPrefix))
+	}
+	if i.DelegateUserIDHasSuffix != nil {
+		predicates = append(predicates, review.DelegateUserIDHasSuffix(*i.DelegateUserIDHasSuffix))
+	}
+	if i.DelegateUserIDIsNil {
+		predicates = append(predicates, review.DelegateUserIDIsNil())
+	}
+	if i.DelegateUserIDNotNil {
+		predicates = append(predicates, review.DelegateUserIDNotNil())
+	}
+	if i.DelegateUserIDEqualFold != nil {
+		predicates = append(predicates, review.DelegateUserIDEqualFold(*i.DelegateUserIDEqualFold))
+	}
+	if i.DelegateUserIDContainsFold != nil {
+		predicates = append(predicates, review.DelegateUserIDContainsFold(*i.DelegateUserIDContainsFold))
+	}
+	if i.DelegateGroupID != nil {
+		predicates = append(predicates, review.DelegateGroupIDEQ(*i.DelegateGroupID))
+	}
+	if i.DelegateGroupIDNEQ != nil {
+		predicates = append(predicates, review.DelegateGroupIDNEQ(*i.DelegateGroupIDNEQ))
+	}
+	if len(i.DelegateGroupIDIn) > 0 {
+		predicates = append(predicates, review.DelegateGroupIDIn(i.DelegateGroupIDIn...))
+	}
+	if len(i.DelegateGroupIDNotIn) > 0 {
+		predicates = append(predicates, review.DelegateGroupIDNotIn(i.DelegateGroupIDNotIn...))
+	}
+	if i.DelegateGroupIDContains != nil {
+		predicates = append(predicates, review.DelegateGroupIDContains(*i.DelegateGroupIDContains))
+	}
+	if i.DelegateGroupIDHasPrefix != nil {
+		predicates = append(predicates, review.DelegateGroupIDHasPrefix(*i.DelegateGroupIDHasPrefix))
+	}
+	if i.DelegateGroupIDHasSuffix != nil {
+		predicates = append(predicates, review.DelegateGroupIDHasSuffix(*i.DelegateGroupIDHasSuffix))
+	}
+	if i.DelegateGroupIDIsNil {
+		predicates = append(predicates, review.DelegateGroupIDIsNil())
+	}
+	if i.DelegateGroupIDNotNil {
+		predicates = append(predicates, review.DelegateGroupIDNotNil())
+	}
+	if i.DelegateGroupIDEqualFold != nil {
+		predicates = append(predicates, review.DelegateGroupIDEqualFold(*i.DelegateGroupIDEqualFold))
+	}
+	if i.DelegateGroupIDContainsFold != nil {
+		predicates = append(predicates, review.DelegateGroupIDContainsFold(*i.DelegateGroupIDContainsFold))
+	}
+	if i.DelegateIdentityHolderID != nil {
+		predicates = append(predicates, review.DelegateIdentityHolderIDEQ(*i.DelegateIdentityHolderID))
+	}
+	if i.DelegateIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, review.DelegateIdentityHolderIDNEQ(*i.DelegateIdentityHolderIDNEQ))
+	}
+	if len(i.DelegateIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, review.DelegateIdentityHolderIDIn(i.DelegateIdentityHolderIDIn...))
+	}
+	if len(i.DelegateIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, review.DelegateIdentityHolderIDNotIn(i.DelegateIdentityHolderIDNotIn...))
+	}
+	if i.DelegateIdentityHolderIDContains != nil {
+		predicates = append(predicates, review.DelegateIdentityHolderIDContains(*i.DelegateIdentityHolderIDContains))
+	}
+	if i.DelegateIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, review.DelegateIdentityHolderIDHasPrefix(*i.DelegateIdentityHolderIDHasPrefix))
+	}
+	if i.DelegateIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, review.DelegateIdentityHolderIDHasSuffix(*i.DelegateIdentityHolderIDHasSuffix))
+	}
+	if i.DelegateIdentityHolderIDIsNil {
+		predicates = append(predicates, review.DelegateIdentityHolderIDIsNil())
+	}
+	if i.DelegateIdentityHolderIDNotNil {
+		predicates = append(predicates, review.DelegateIdentityHolderIDNotNil())
+	}
+	if i.DelegateIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, review.DelegateIdentityHolderIDEqualFold(*i.DelegateIdentityHolderIDEqualFold))
+	}
+	if i.DelegateIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, review.DelegateIdentityHolderIDContainsFold(*i.DelegateIdentityHolderIDContainsFold))
+	}
 	if i.SystemOwned != nil {
 		predicates = append(predicates, review.SystemOwnedEQ(*i.SystemOwned))
 	}
@@ -84325,6 +85655,204 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if i.SystemInternalIDContainsFold != nil {
 		predicates = append(predicates, review.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
+	}
+	if i.ReviewKindName != nil {
+		predicates = append(predicates, review.ReviewKindNameEQ(*i.ReviewKindName))
+	}
+	if i.ReviewKindNameNEQ != nil {
+		predicates = append(predicates, review.ReviewKindNameNEQ(*i.ReviewKindNameNEQ))
+	}
+	if len(i.ReviewKindNameIn) > 0 {
+		predicates = append(predicates, review.ReviewKindNameIn(i.ReviewKindNameIn...))
+	}
+	if len(i.ReviewKindNameNotIn) > 0 {
+		predicates = append(predicates, review.ReviewKindNameNotIn(i.ReviewKindNameNotIn...))
+	}
+	if i.ReviewKindNameContains != nil {
+		predicates = append(predicates, review.ReviewKindNameContains(*i.ReviewKindNameContains))
+	}
+	if i.ReviewKindNameHasPrefix != nil {
+		predicates = append(predicates, review.ReviewKindNameHasPrefix(*i.ReviewKindNameHasPrefix))
+	}
+	if i.ReviewKindNameHasSuffix != nil {
+		predicates = append(predicates, review.ReviewKindNameHasSuffix(*i.ReviewKindNameHasSuffix))
+	}
+	if i.ReviewKindNameIsNil {
+		predicates = append(predicates, review.ReviewKindNameIsNil())
+	}
+	if i.ReviewKindNameNotNil {
+		predicates = append(predicates, review.ReviewKindNameNotNil())
+	}
+	if i.ReviewKindNameEqualFold != nil {
+		predicates = append(predicates, review.ReviewKindNameEqualFold(*i.ReviewKindNameEqualFold))
+	}
+	if i.ReviewKindNameContainsFold != nil {
+		predicates = append(predicates, review.ReviewKindNameContainsFold(*i.ReviewKindNameContainsFold))
+	}
+	if i.ReviewKindID != nil {
+		predicates = append(predicates, review.ReviewKindIDEQ(*i.ReviewKindID))
+	}
+	if i.ReviewKindIDNEQ != nil {
+		predicates = append(predicates, review.ReviewKindIDNEQ(*i.ReviewKindIDNEQ))
+	}
+	if len(i.ReviewKindIDIn) > 0 {
+		predicates = append(predicates, review.ReviewKindIDIn(i.ReviewKindIDIn...))
+	}
+	if len(i.ReviewKindIDNotIn) > 0 {
+		predicates = append(predicates, review.ReviewKindIDNotIn(i.ReviewKindIDNotIn...))
+	}
+	if i.ReviewKindIDContains != nil {
+		predicates = append(predicates, review.ReviewKindIDContains(*i.ReviewKindIDContains))
+	}
+	if i.ReviewKindIDHasPrefix != nil {
+		predicates = append(predicates, review.ReviewKindIDHasPrefix(*i.ReviewKindIDHasPrefix))
+	}
+	if i.ReviewKindIDHasSuffix != nil {
+		predicates = append(predicates, review.ReviewKindIDHasSuffix(*i.ReviewKindIDHasSuffix))
+	}
+	if i.ReviewKindIDIsNil {
+		predicates = append(predicates, review.ReviewKindIDIsNil())
+	}
+	if i.ReviewKindIDNotNil {
+		predicates = append(predicates, review.ReviewKindIDNotNil())
+	}
+	if i.ReviewKindIDEqualFold != nil {
+		predicates = append(predicates, review.ReviewKindIDEqualFold(*i.ReviewKindIDEqualFold))
+	}
+	if i.ReviewKindIDContainsFold != nil {
+		predicates = append(predicates, review.ReviewKindIDContainsFold(*i.ReviewKindIDContainsFold))
+	}
+	if i.ReviewClassificationName != nil {
+		predicates = append(predicates, review.ReviewClassificationNameEQ(*i.ReviewClassificationName))
+	}
+	if i.ReviewClassificationNameNEQ != nil {
+		predicates = append(predicates, review.ReviewClassificationNameNEQ(*i.ReviewClassificationNameNEQ))
+	}
+	if len(i.ReviewClassificationNameIn) > 0 {
+		predicates = append(predicates, review.ReviewClassificationNameIn(i.ReviewClassificationNameIn...))
+	}
+	if len(i.ReviewClassificationNameNotIn) > 0 {
+		predicates = append(predicates, review.ReviewClassificationNameNotIn(i.ReviewClassificationNameNotIn...))
+	}
+	if i.ReviewClassificationNameContains != nil {
+		predicates = append(predicates, review.ReviewClassificationNameContains(*i.ReviewClassificationNameContains))
+	}
+	if i.ReviewClassificationNameHasPrefix != nil {
+		predicates = append(predicates, review.ReviewClassificationNameHasPrefix(*i.ReviewClassificationNameHasPrefix))
+	}
+	if i.ReviewClassificationNameHasSuffix != nil {
+		predicates = append(predicates, review.ReviewClassificationNameHasSuffix(*i.ReviewClassificationNameHasSuffix))
+	}
+	if i.ReviewClassificationNameIsNil {
+		predicates = append(predicates, review.ReviewClassificationNameIsNil())
+	}
+	if i.ReviewClassificationNameNotNil {
+		predicates = append(predicates, review.ReviewClassificationNameNotNil())
+	}
+	if i.ReviewClassificationNameEqualFold != nil {
+		predicates = append(predicates, review.ReviewClassificationNameEqualFold(*i.ReviewClassificationNameEqualFold))
+	}
+	if i.ReviewClassificationNameContainsFold != nil {
+		predicates = append(predicates, review.ReviewClassificationNameContainsFold(*i.ReviewClassificationNameContainsFold))
+	}
+	if i.ReviewClassificationID != nil {
+		predicates = append(predicates, review.ReviewClassificationIDEQ(*i.ReviewClassificationID))
+	}
+	if i.ReviewClassificationIDNEQ != nil {
+		predicates = append(predicates, review.ReviewClassificationIDNEQ(*i.ReviewClassificationIDNEQ))
+	}
+	if len(i.ReviewClassificationIDIn) > 0 {
+		predicates = append(predicates, review.ReviewClassificationIDIn(i.ReviewClassificationIDIn...))
+	}
+	if len(i.ReviewClassificationIDNotIn) > 0 {
+		predicates = append(predicates, review.ReviewClassificationIDNotIn(i.ReviewClassificationIDNotIn...))
+	}
+	if i.ReviewClassificationIDContains != nil {
+		predicates = append(predicates, review.ReviewClassificationIDContains(*i.ReviewClassificationIDContains))
+	}
+	if i.ReviewClassificationIDHasPrefix != nil {
+		predicates = append(predicates, review.ReviewClassificationIDHasPrefix(*i.ReviewClassificationIDHasPrefix))
+	}
+	if i.ReviewClassificationIDHasSuffix != nil {
+		predicates = append(predicates, review.ReviewClassificationIDHasSuffix(*i.ReviewClassificationIDHasSuffix))
+	}
+	if i.ReviewClassificationIDIsNil {
+		predicates = append(predicates, review.ReviewClassificationIDIsNil())
+	}
+	if i.ReviewClassificationIDNotNil {
+		predicates = append(predicates, review.ReviewClassificationIDNotNil())
+	}
+	if i.ReviewClassificationIDEqualFold != nil {
+		predicates = append(predicates, review.ReviewClassificationIDEqualFold(*i.ReviewClassificationIDEqualFold))
+	}
+	if i.ReviewClassificationIDContainsFold != nil {
+		predicates = append(predicates, review.ReviewClassificationIDContainsFold(*i.ReviewClassificationIDContainsFold))
+	}
+	if i.ReviewStateName != nil {
+		predicates = append(predicates, review.ReviewStateNameEQ(*i.ReviewStateName))
+	}
+	if i.ReviewStateNameNEQ != nil {
+		predicates = append(predicates, review.ReviewStateNameNEQ(*i.ReviewStateNameNEQ))
+	}
+	if len(i.ReviewStateNameIn) > 0 {
+		predicates = append(predicates, review.ReviewStateNameIn(i.ReviewStateNameIn...))
+	}
+	if len(i.ReviewStateNameNotIn) > 0 {
+		predicates = append(predicates, review.ReviewStateNameNotIn(i.ReviewStateNameNotIn...))
+	}
+	if i.ReviewStateNameContains != nil {
+		predicates = append(predicates, review.ReviewStateNameContains(*i.ReviewStateNameContains))
+	}
+	if i.ReviewStateNameHasPrefix != nil {
+		predicates = append(predicates, review.ReviewStateNameHasPrefix(*i.ReviewStateNameHasPrefix))
+	}
+	if i.ReviewStateNameHasSuffix != nil {
+		predicates = append(predicates, review.ReviewStateNameHasSuffix(*i.ReviewStateNameHasSuffix))
+	}
+	if i.ReviewStateNameIsNil {
+		predicates = append(predicates, review.ReviewStateNameIsNil())
+	}
+	if i.ReviewStateNameNotNil {
+		predicates = append(predicates, review.ReviewStateNameNotNil())
+	}
+	if i.ReviewStateNameEqualFold != nil {
+		predicates = append(predicates, review.ReviewStateNameEqualFold(*i.ReviewStateNameEqualFold))
+	}
+	if i.ReviewStateNameContainsFold != nil {
+		predicates = append(predicates, review.ReviewStateNameContainsFold(*i.ReviewStateNameContainsFold))
+	}
+	if i.ReviewStateID != nil {
+		predicates = append(predicates, review.ReviewStateIDEQ(*i.ReviewStateID))
+	}
+	if i.ReviewStateIDNEQ != nil {
+		predicates = append(predicates, review.ReviewStateIDNEQ(*i.ReviewStateIDNEQ))
+	}
+	if len(i.ReviewStateIDIn) > 0 {
+		predicates = append(predicates, review.ReviewStateIDIn(i.ReviewStateIDIn...))
+	}
+	if len(i.ReviewStateIDNotIn) > 0 {
+		predicates = append(predicates, review.ReviewStateIDNotIn(i.ReviewStateIDNotIn...))
+	}
+	if i.ReviewStateIDContains != nil {
+		predicates = append(predicates, review.ReviewStateIDContains(*i.ReviewStateIDContains))
+	}
+	if i.ReviewStateIDHasPrefix != nil {
+		predicates = append(predicates, review.ReviewStateIDHasPrefix(*i.ReviewStateIDHasPrefix))
+	}
+	if i.ReviewStateIDHasSuffix != nil {
+		predicates = append(predicates, review.ReviewStateIDHasSuffix(*i.ReviewStateIDHasSuffix))
+	}
+	if i.ReviewStateIDIsNil {
+		predicates = append(predicates, review.ReviewStateIDIsNil())
+	}
+	if i.ReviewStateIDNotNil {
+		predicates = append(predicates, review.ReviewStateIDNotNil())
+	}
+	if i.ReviewStateIDEqualFold != nil {
+		predicates = append(predicates, review.ReviewStateIDEqualFold(*i.ReviewStateIDEqualFold))
+	}
+	if i.ReviewStateIDContainsFold != nil {
+		predicates = append(predicates, review.ReviewStateIDContainsFold(*i.ReviewStateIDContainsFold))
 	}
 	if i.EnvironmentName != nil {
 		predicates = append(predicates, review.EnvironmentNameEQ(*i.EnvironmentName))
@@ -84992,6 +86520,234 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 		}
 		predicates = append(predicates, review.HasEditorsWith(with...))
 	}
+	if i.HasInternalOwnerUser != nil {
+		p := review.HasInternalOwnerUser()
+		if !*i.HasInternalOwnerUser {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasInternalOwnerUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasInternalOwnerUserWith(with...))
+	}
+	if i.HasInternalOwnerGroup != nil {
+		p := review.HasInternalOwnerGroup()
+		if !*i.HasInternalOwnerGroup {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasInternalOwnerGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasInternalOwnerGroupWith(with...))
+	}
+	if i.HasInternalOwnerIdentityHolder != nil {
+		p := review.HasInternalOwnerIdentityHolder()
+		if !*i.HasInternalOwnerIdentityHolder {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasInternalOwnerIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasInternalOwnerIdentityHolderWith(with...))
+	}
+	if i.HasReviewedByUser != nil {
+		p := review.HasReviewedByUser()
+		if !*i.HasReviewedByUser {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasReviewedByUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasReviewedByUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasReviewedByUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasReviewedByUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasReviewedByUserWith(with...))
+	}
+	if i.HasReviewedByGroup != nil {
+		p := review.HasReviewedByGroup()
+		if !*i.HasReviewedByGroup {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasReviewedByGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasReviewedByGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasReviewedByGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasReviewedByGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasReviewedByGroupWith(with...))
+	}
+	if i.HasReviewedByIdentityHolder != nil {
+		p := review.HasReviewedByIdentityHolder()
+		if !*i.HasReviewedByIdentityHolder {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasReviewedByIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasReviewedByIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasReviewedByIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasReviewedByIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasReviewedByIdentityHolderWith(with...))
+	}
+	if i.HasDelegateUser != nil {
+		p := review.HasDelegateUser()
+		if !*i.HasDelegateUser {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDelegateUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasDelegateUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasDelegateUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDelegateUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasDelegateUserWith(with...))
+	}
+	if i.HasDelegateGroup != nil {
+		p := review.HasDelegateGroup()
+		if !*i.HasDelegateGroup {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDelegateGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasDelegateGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasDelegateGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDelegateGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasDelegateGroupWith(with...))
+	}
+	if i.HasDelegateIdentityHolder != nil {
+		p := review.HasDelegateIdentityHolder()
+		if !*i.HasDelegateIdentityHolder {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDelegateIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasDelegateIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasDelegateIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDelegateIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasDelegateIdentityHolderWith(with...))
+	}
+	if i.HasReviewKind != nil {
+		p := review.HasReviewKind()
+		if !*i.HasReviewKind {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasReviewKindWith) > 0 {
+		with := make([]predicate.CustomTypeEnum, 0, len(i.HasReviewKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
+		for _, w := range i.HasReviewKindWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasReviewKindWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasReviewKindWith(with...))
+	}
+	if i.HasReviewClassification != nil {
+		p := review.HasReviewClassification()
+		if !*i.HasReviewClassification {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasReviewClassificationWith) > 0 {
+		with := make([]predicate.CustomTypeEnum, 0, len(i.HasReviewClassificationWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
+		for _, w := range i.HasReviewClassificationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasReviewClassificationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasReviewClassificationWith(with...))
+	}
+	if i.HasReviewState != nil {
+		p := review.HasReviewState()
+		if !*i.HasReviewState {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasReviewStateWith) > 0 {
+		with := make([]predicate.CustomTypeEnum, 0, len(i.HasReviewStateWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
+		for _, w := range i.HasReviewStateWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasReviewStateWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasReviewStateWith(with...))
+	}
 	if i.HasEnvironment != nil {
 		p := review.HasEnvironment()
 		if !*i.HasEnvironment {
@@ -85314,6 +87070,44 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, review.HasFilesWith(with...))
+	}
+	if i.HasPlatforms != nil {
+		p := review.HasPlatforms()
+		if !*i.HasPlatforms {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPlatformsWith) > 0 {
+		with := make([]predicate.Platform, 0, len(i.HasPlatformsWith))
+		with = append(with, platform.DeletedAtIsNil())
+		for _, w := range i.HasPlatformsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPlatformsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasPlatformsWith(with...))
+	}
+	if i.HasSystemDetails != nil {
+		p := review.HasSystemDetails()
+		if !*i.HasSystemDetails {
+			p = review.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSystemDetailsWith) > 0 {
+		with := make([]predicate.SystemDetail, 0, len(i.HasSystemDetailsWith))
+		with = append(with, systemdetail.DeletedAtIsNil())
+		for _, w := range i.HasSystemDetailsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSystemDetailsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, review.HasSystemDetailsWith(with...))
 	}
 	if i.HasInternalPolicies != nil {
 		p := review.HasInternalPolicies()
@@ -98045,6 +99839,14 @@ type SystemDetailWhereInput struct {
 	// "assets" edge predicates.
 	HasAssets     *bool              `json:"hasAssets,omitempty"`
 	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
+
+	// "control_implementations" edge predicates.
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+
+	// "reviews" edge predicates.
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -98854,6 +100656,44 @@ func (i *SystemDetailWhereInput) P() (predicate.SystemDetail, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, systemdetail.HasAssetsWith(with...))
+	}
+	if i.HasControlImplementations != nil {
+		p := systemdetail.HasControlImplementations()
+		if !*i.HasControlImplementations {
+			p = systemdetail.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationsWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
+		for _, w := range i.HasControlImplementationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, systemdetail.HasControlImplementationsWith(with...))
+	}
+	if i.HasReviews != nil {
+		p := systemdetail.HasReviews()
+		if !*i.HasReviews {
+			p = systemdetail.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasReviewsWith) > 0 {
+		with := make([]predicate.Review, 0, len(i.HasReviewsWith))
+		with = append(with, review.DeletedAtIsNil())
+		for _, w := range i.HasReviewsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasReviewsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, systemdetail.HasReviewsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

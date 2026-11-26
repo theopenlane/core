@@ -7,6 +7,10 @@ mutation CreateBulkCSVReview ($input: Upload!) {
 			classification
 			createdAt
 			createdBy
+			delegateGroupID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			environmentID
 			environmentName
@@ -16,13 +20,27 @@ mutation CreateBulkCSVReview ($input: Upload!) {
 			id
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			ownerID
 			rawPayload
 			reportedAt
 			reporter
+			reviewClassificationID
+			reviewClassificationName
+			reviewKindID
+			reviewKindName
+			reviewStateID
+			reviewStateName
 			reviewedAt
+			reviewedBy
+			reviewedByGroupID
+			reviewedByIdentityHolderID
+			reviewedByUserID
 			reviewerID
 			scopeID
 			scopeName
@@ -53,6 +71,10 @@ mutation CreateBulkReview ($input: [CreateReviewInput!]) {
 			classification
 			createdAt
 			createdBy
+			delegateGroupID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			environmentID
 			environmentName
@@ -62,13 +84,27 @@ mutation CreateBulkReview ($input: [CreateReviewInput!]) {
 			id
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			ownerID
 			rawPayload
 			reportedAt
 			reporter
+			reviewClassificationID
+			reviewClassificationName
+			reviewKindID
+			reviewKindName
+			reviewStateID
+			reviewStateName
 			reviewedAt
+			reviewedBy
+			reviewedByGroupID
+			reviewedByIdentityHolderID
+			reviewedByUserID
 			reviewerID
 			scopeID
 			scopeName
@@ -99,6 +135,10 @@ mutation CreateReview ($input: CreateReviewInput!) {
 			classification
 			createdAt
 			createdBy
+			delegateGroupID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			environmentID
 			environmentName
@@ -108,13 +148,27 @@ mutation CreateReview ($input: CreateReviewInput!) {
 			id
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			ownerID
 			rawPayload
 			reportedAt
 			reporter
+			reviewClassificationID
+			reviewClassificationName
+			reviewKindID
+			reviewKindName
+			reviewStateID
+			reviewStateName
 			reviewedAt
+			reviewedBy
+			reviewedByGroupID
+			reviewedByIdentityHolderID
+			reviewedByUserID
 			reviewerID
 			scopeID
 			scopeName
@@ -195,6 +249,10 @@ query GetReviewByID ($reviewId: ID!) {
 		classification
 		createdAt
 		createdBy
+		delegateGroupID
+		delegateIdentityHolderID
+		delegateName
+		delegateUserID
 		details
 		environmentID
 		environmentName
@@ -204,13 +262,27 @@ query GetReviewByID ($reviewId: ID!) {
 		id
 		integrationRunID
 		internalNotes
+		internalOwner
+		internalOwnerGroupID
+		internalOwnerIdentityHolderID
+		internalOwnerUserID
 		managedBy
 		metadata
 		ownerID
 		rawPayload
 		reportedAt
 		reporter
+		reviewClassificationID
+		reviewClassificationName
+		reviewKindID
+		reviewKindName
+		reviewStateID
+		reviewStateName
 		reviewedAt
+		reviewedBy
+		reviewedByGroupID
+		reviewedByIdentityHolderID
+		reviewedByUserID
 		reviewerID
 		scopeID
 		scopeName
@@ -279,6 +351,10 @@ mutation UpdateBulkCSVReview ($input: Upload!) {
 			classification
 			createdAt
 			createdBy
+			delegateGroupID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			environmentID
 			environmentName
@@ -288,13 +364,27 @@ mutation UpdateBulkCSVReview ($input: Upload!) {
 			id
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			ownerID
 			rawPayload
 			reportedAt
 			reporter
+			reviewClassificationID
+			reviewClassificationName
+			reviewKindID
+			reviewKindName
+			reviewStateID
+			reviewStateName
 			reviewedAt
+			reviewedBy
+			reviewedByGroupID
+			reviewedByIdentityHolderID
+			reviewedByUserID
 			reviewerID
 			scopeID
 			scopeName
@@ -328,6 +418,10 @@ mutation UpdateBulkReview ($ids: [ID!]!, $input: UpdateReviewInput!) {
 			classification
 			createdAt
 			createdBy
+			delegateGroupID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			environmentID
 			environmentName
@@ -337,13 +431,27 @@ mutation UpdateBulkReview ($ids: [ID!]!, $input: UpdateReviewInput!) {
 			id
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			ownerID
 			rawPayload
 			reportedAt
 			reporter
+			reviewClassificationID
+			reviewClassificationName
+			reviewKindID
+			reviewKindName
+			reviewStateID
+			reviewStateName
 			reviewedAt
+			reviewedBy
+			reviewedByGroupID
+			reviewedByIdentityHolderID
+			reviewedByUserID
 			reviewerID
 			scopeID
 			scopeName

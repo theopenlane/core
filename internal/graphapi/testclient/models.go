@@ -5314,6 +5314,22 @@ type ControlImplementation struct {
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// the internal owner for the control implementation when no user, group, or identity holder is linked
+	InternalOwner *string `json:"internalOwner,omitempty"`
+	// the internal owner user id for the control implementation
+	InternalOwnerUserID *string `json:"internalOwnerUserID,omitempty"`
+	// the internal owner group id for the control implementation
+	InternalOwnerGroupID *string `json:"internalOwnerGroupID,omitempty"`
+	// the internal owner identity holder id for the control implementation
+	InternalOwnerIdentityHolderID *string `json:"internalOwnerIdentityHolderID,omitempty"`
+	// the delegate for the control implementation when no user, group, or identity holder is linked
+	DelegateName *string `json:"delegateName,omitempty"`
+	// the delegate user id for the control implementation
+	DelegateUserID *string `json:"delegateUserID,omitempty"`
+	// the delegate group id for the control implementation
+	DelegateGroupID *string `json:"delegateGroupID,omitempty"`
+	// the delegate identity holder id for the control implementation
+	DelegateIdentityHolderID *string `json:"delegateIdentityHolderID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -5331,15 +5347,24 @@ type ControlImplementation struct {
 	// details of the control implementation
 	Details *string `json:"details,omitempty"`
 	// structured details of the control implementation in JSON format
-	DetailsJSON     []any                     `json:"detailsJSON,omitempty"`
-	IntegrationRuns *IntegrationRunConnection `json:"integrationRuns"`
-	Owner           *Organization             `json:"owner,omitempty"`
-	BlockedGroups   *GroupConnection          `json:"blockedGroups"`
-	Editors         *GroupConnection          `json:"editors"`
-	Viewers         *GroupConnection          `json:"viewers"`
-	Controls        *ControlConnection        `json:"controls"`
-	Subcontrols     *SubcontrolConnection     `json:"subcontrols"`
-	Tasks           *TaskConnection           `json:"tasks"`
+	DetailsJSON                 []any                     `json:"detailsJSON,omitempty"`
+	IntegrationRuns             *IntegrationRunConnection `json:"integrationRuns"`
+	Owner                       *Organization             `json:"owner,omitempty"`
+	BlockedGroups               *GroupConnection          `json:"blockedGroups"`
+	Editors                     *GroupConnection          `json:"editors"`
+	Viewers                     *GroupConnection          `json:"viewers"`
+	InternalOwnerUser           *User                     `json:"internalOwnerUser,omitempty"`
+	InternalOwnerGroup          *Group                    `json:"internalOwnerGroup,omitempty"`
+	InternalOwnerIdentityHolder *IdentityHolder           `json:"internalOwnerIdentityHolder,omitempty"`
+	DelegateUser                *User                     `json:"delegateUser,omitempty"`
+	DelegateGroup               *Group                    `json:"delegateGroup,omitempty"`
+	DelegateIdentityHolder      *IdentityHolder           `json:"delegateIdentityHolder,omitempty"`
+	Controls                    *ControlConnection        `json:"controls"`
+	Subcontrols                 *SubcontrolConnection     `json:"subcontrols"`
+	Tasks                       *TaskConnection           `json:"tasks"`
+	Platforms                   *PlatformConnection       `json:"platforms"`
+	SystemDetails               *SystemDetailConnection   `json:"systemDetails"`
+	Comments                    *NoteConnection           `json:"comments"`
 }
 
 func (ControlImplementation) IsNode() {}
@@ -5577,6 +5602,102 @@ type ControlImplementationWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// internal_owner field predicates
+	InternalOwner             *string  `json:"internalOwner,omitempty"`
+	InternalOwnerNeq          *string  `json:"internalOwnerNEQ,omitempty"`
+	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
+	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
+	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
+	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
+	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
+	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
+	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
+	InternalOwnerEqualFold    *string  `json:"internalOwnerEqualFold,omitempty"`
+	InternalOwnerContainsFold *string  `json:"internalOwnerContainsFold,omitempty"`
+	// internal_owner_user_id field predicates
+	InternalOwnerUserID             *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerUserIdneq          *string  `json:"internalOwnerUserIDNEQ,omitempty"`
+	InternalOwnerUserIDIn           []string `json:"internalOwnerUserIDIn,omitempty"`
+	InternalOwnerUserIDNotIn        []string `json:"internalOwnerUserIDNotIn,omitempty"`
+	InternalOwnerUserIDContains     *string  `json:"internalOwnerUserIDContains,omitempty"`
+	InternalOwnerUserIDHasPrefix    *string  `json:"internalOwnerUserIDHasPrefix,omitempty"`
+	InternalOwnerUserIDHasSuffix    *string  `json:"internalOwnerUserIDHasSuffix,omitempty"`
+	InternalOwnerUserIDIsNil        *bool    `json:"internalOwnerUserIDIsNil,omitempty"`
+	InternalOwnerUserIDNotNil       *bool    `json:"internalOwnerUserIDNotNil,omitempty"`
+	InternalOwnerUserIDEqualFold    *string  `json:"internalOwnerUserIDEqualFold,omitempty"`
+	InternalOwnerUserIDContainsFold *string  `json:"internalOwnerUserIDContainsFold,omitempty"`
+	// internal_owner_group_id field predicates
+	InternalOwnerGroupID             *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerGroupIdneq          *string  `json:"internalOwnerGroupIDNEQ,omitempty"`
+	InternalOwnerGroupIDIn           []string `json:"internalOwnerGroupIDIn,omitempty"`
+	InternalOwnerGroupIDNotIn        []string `json:"internalOwnerGroupIDNotIn,omitempty"`
+	InternalOwnerGroupIDContains     *string  `json:"internalOwnerGroupIDContains,omitempty"`
+	InternalOwnerGroupIDHasPrefix    *string  `json:"internalOwnerGroupIDHasPrefix,omitempty"`
+	InternalOwnerGroupIDHasSuffix    *string  `json:"internalOwnerGroupIDHasSuffix,omitempty"`
+	InternalOwnerGroupIDIsNil        *bool    `json:"internalOwnerGroupIDIsNil,omitempty"`
+	InternalOwnerGroupIDNotNil       *bool    `json:"internalOwnerGroupIDNotNil,omitempty"`
+	InternalOwnerGroupIDEqualFold    *string  `json:"internalOwnerGroupIDEqualFold,omitempty"`
+	InternalOwnerGroupIDContainsFold *string  `json:"internalOwnerGroupIDContainsFold,omitempty"`
+	// internal_owner_identity_holder_id field predicates
+	InternalOwnerIdentityHolderID             *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	InternalOwnerIdentityHolderIdneq          *string  `json:"internalOwnerIdentityHolderIDNEQ,omitempty"`
+	InternalOwnerIdentityHolderIDIn           []string `json:"internalOwnerIdentityHolderIDIn,omitempty"`
+	InternalOwnerIdentityHolderIDNotIn        []string `json:"internalOwnerIdentityHolderIDNotIn,omitempty"`
+	InternalOwnerIdentityHolderIDContains     *string  `json:"internalOwnerIdentityHolderIDContains,omitempty"`
+	InternalOwnerIdentityHolderIDHasPrefix    *string  `json:"internalOwnerIdentityHolderIDHasPrefix,omitempty"`
+	InternalOwnerIdentityHolderIDHasSuffix    *string  `json:"internalOwnerIdentityHolderIDHasSuffix,omitempty"`
+	InternalOwnerIdentityHolderIDIsNil        *bool    `json:"internalOwnerIdentityHolderIDIsNil,omitempty"`
+	InternalOwnerIdentityHolderIDNotNil       *bool    `json:"internalOwnerIdentityHolderIDNotNil,omitempty"`
+	InternalOwnerIdentityHolderIDEqualFold    *string  `json:"internalOwnerIdentityHolderIDEqualFold,omitempty"`
+	InternalOwnerIdentityHolderIDContainsFold *string  `json:"internalOwnerIdentityHolderIDContainsFold,omitempty"`
+	// delegate_name field predicates
+	DelegateName             *string  `json:"delegateName,omitempty"`
+	DelegateNameNeq          *string  `json:"delegateNameNEQ,omitempty"`
+	DelegateNameIn           []string `json:"delegateNameIn,omitempty"`
+	DelegateNameNotIn        []string `json:"delegateNameNotIn,omitempty"`
+	DelegateNameContains     *string  `json:"delegateNameContains,omitempty"`
+	DelegateNameHasPrefix    *string  `json:"delegateNameHasPrefix,omitempty"`
+	DelegateNameHasSuffix    *string  `json:"delegateNameHasSuffix,omitempty"`
+	DelegateNameIsNil        *bool    `json:"delegateNameIsNil,omitempty"`
+	DelegateNameNotNil       *bool    `json:"delegateNameNotNil,omitempty"`
+	DelegateNameEqualFold    *string  `json:"delegateNameEqualFold,omitempty"`
+	DelegateNameContainsFold *string  `json:"delegateNameContainsFold,omitempty"`
+	// delegate_user_id field predicates
+	DelegateUserID             *string  `json:"delegateUserID,omitempty"`
+	DelegateUserIdneq          *string  `json:"delegateUserIDNEQ,omitempty"`
+	DelegateUserIDIn           []string `json:"delegateUserIDIn,omitempty"`
+	DelegateUserIDNotIn        []string `json:"delegateUserIDNotIn,omitempty"`
+	DelegateUserIDContains     *string  `json:"delegateUserIDContains,omitempty"`
+	DelegateUserIDHasPrefix    *string  `json:"delegateUserIDHasPrefix,omitempty"`
+	DelegateUserIDHasSuffix    *string  `json:"delegateUserIDHasSuffix,omitempty"`
+	DelegateUserIDIsNil        *bool    `json:"delegateUserIDIsNil,omitempty"`
+	DelegateUserIDNotNil       *bool    `json:"delegateUserIDNotNil,omitempty"`
+	DelegateUserIDEqualFold    *string  `json:"delegateUserIDEqualFold,omitempty"`
+	DelegateUserIDContainsFold *string  `json:"delegateUserIDContainsFold,omitempty"`
+	// delegate_group_id field predicates
+	DelegateGroupID             *string  `json:"delegateGroupID,omitempty"`
+	DelegateGroupIdneq          *string  `json:"delegateGroupIDNEQ,omitempty"`
+	DelegateGroupIDIn           []string `json:"delegateGroupIDIn,omitempty"`
+	DelegateGroupIDNotIn        []string `json:"delegateGroupIDNotIn,omitempty"`
+	DelegateGroupIDContains     *string  `json:"delegateGroupIDContains,omitempty"`
+	DelegateGroupIDHasPrefix    *string  `json:"delegateGroupIDHasPrefix,omitempty"`
+	DelegateGroupIDHasSuffix    *string  `json:"delegateGroupIDHasSuffix,omitempty"`
+	DelegateGroupIDIsNil        *bool    `json:"delegateGroupIDIsNil,omitempty"`
+	DelegateGroupIDNotNil       *bool    `json:"delegateGroupIDNotNil,omitempty"`
+	DelegateGroupIDEqualFold    *string  `json:"delegateGroupIDEqualFold,omitempty"`
+	DelegateGroupIDContainsFold *string  `json:"delegateGroupIDContainsFold,omitempty"`
+	// delegate_identity_holder_id field predicates
+	DelegateIdentityHolderID             *string  `json:"delegateIdentityHolderID,omitempty"`
+	DelegateIdentityHolderIdneq          *string  `json:"delegateIdentityHolderIDNEQ,omitempty"`
+	DelegateIdentityHolderIDIn           []string `json:"delegateIdentityHolderIDIn,omitempty"`
+	DelegateIdentityHolderIDNotIn        []string `json:"delegateIdentityHolderIDNotIn,omitempty"`
+	DelegateIdentityHolderIDContains     *string  `json:"delegateIdentityHolderIDContains,omitempty"`
+	DelegateIdentityHolderIDHasPrefix    *string  `json:"delegateIdentityHolderIDHasPrefix,omitempty"`
+	DelegateIdentityHolderIDHasSuffix    *string  `json:"delegateIdentityHolderIDHasSuffix,omitempty"`
+	DelegateIdentityHolderIDIsNil        *bool    `json:"delegateIdentityHolderIDIsNil,omitempty"`
+	DelegateIdentityHolderIDNotNil       *bool    `json:"delegateIdentityHolderIDNotNil,omitempty"`
+	DelegateIdentityHolderIDEqualFold    *string  `json:"delegateIdentityHolderIDEqualFold,omitempty"`
+	DelegateIdentityHolderIDContainsFold *string  `json:"delegateIdentityHolderIDContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -5661,6 +5782,24 @@ type ControlImplementationWhereInput struct {
 	// viewers edge predicates
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// internal_owner_user edge predicates
+	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
+	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
+	// internal_owner_group edge predicates
+	HasInternalOwnerGroup     *bool              `json:"hasInternalOwnerGroup,omitempty"`
+	HasInternalOwnerGroupWith []*GroupWhereInput `json:"hasInternalOwnerGroupWith,omitempty"`
+	// internal_owner_identity_holder edge predicates
+	HasInternalOwnerIdentityHolder     *bool                       `json:"hasInternalOwnerIdentityHolder,omitempty"`
+	HasInternalOwnerIdentityHolderWith []*IdentityHolderWhereInput `json:"hasInternalOwnerIdentityHolderWith,omitempty"`
+	// delegate_user edge predicates
+	HasDelegateUser     *bool             `json:"hasDelegateUser,omitempty"`
+	HasDelegateUserWith []*UserWhereInput `json:"hasDelegateUserWith,omitempty"`
+	// delegate_group edge predicates
+	HasDelegateGroup     *bool              `json:"hasDelegateGroup,omitempty"`
+	HasDelegateGroupWith []*GroupWhereInput `json:"hasDelegateGroupWith,omitempty"`
+	// delegate_identity_holder edge predicates
+	HasDelegateIdentityHolder     *bool                       `json:"hasDelegateIdentityHolder,omitempty"`
+	HasDelegateIdentityHolderWith []*IdentityHolderWhereInput `json:"hasDelegateIdentityHolderWith,omitempty"`
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -5670,6 +5809,15 @@ type ControlImplementationWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// platforms edge predicates
+	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
+	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
+	// system_details edge predicates
+	HasSystemDetails     *bool                     `json:"hasSystemDetails,omitempty"`
+	HasSystemDetailsWith []*SystemDetailWhereInput `json:"hasSystemDetailsWith,omitempty"`
+	// comments edge predicates
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -7442,6 +7590,10 @@ type CreateControlImplementationInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
+	// the internal owner for the control implementation when no user, group, or identity holder is linked
+	InternalOwner *string `json:"internalOwner,omitempty"`
+	// the delegate for the control implementation when no user, group, or identity holder is linked
+	DelegateName *string `json:"delegateName,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
@@ -7457,15 +7609,24 @@ type CreateControlImplementationInput struct {
 	// details of the control implementation
 	Details *string `json:"details,omitempty"`
 	// structured details of the control implementation in JSON format
-	DetailsJSON       []any    `json:"detailsJSON,omitempty"`
-	IntegrationRunIDs []string `json:"integrationRunIDs,omitempty"`
-	OwnerID           *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string `json:"editorIDs,omitempty"`
-	ViewerIDs         []string `json:"viewerIDs,omitempty"`
-	ControlIDs        []string `json:"controlIDs,omitempty"`
-	SubcontrolIDs     []string `json:"subcontrolIDs,omitempty"`
-	TaskIDs           []string `json:"taskIDs,omitempty"`
+	DetailsJSON                   []any    `json:"detailsJSON,omitempty"`
+	IntegrationRunIDs             []string `json:"integrationRunIDs,omitempty"`
+	OwnerID                       *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs               []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                     []string `json:"editorIDs,omitempty"`
+	ViewerIDs                     []string `json:"viewerIDs,omitempty"`
+	InternalOwnerUserID           *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerGroupID          *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerIdentityHolderID *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	DelegateUserID                *string  `json:"delegateUserID,omitempty"`
+	DelegateGroupID               *string  `json:"delegateGroupID,omitempty"`
+	DelegateIdentityHolderID      *string  `json:"delegateIdentityHolderID,omitempty"`
+	ControlIDs                    []string `json:"controlIDs,omitempty"`
+	SubcontrolIDs                 []string `json:"subcontrolIDs,omitempty"`
+	TaskIDs                       []string `json:"taskIDs,omitempty"`
+	PlatformIDs                   []string `json:"platformIDs,omitempty"`
+	SystemDetailIDs               []string `json:"systemDetailIDs,omitempty"`
+	CommentIDs                    []string `json:"commentIDs,omitempty"`
 }
 
 // CreateControlInput is used for create Control object.
@@ -8873,22 +9034,23 @@ type CreateNoteInput struct {
 	// whether the note has been edited
 	IsEdited *bool `json:"isEdited,omitempty"`
 	// when set on a trust center post, sends the published update to the trust center's subscribers
-	NotifySubscribers *bool    `json:"notifySubscribers,omitempty"`
-	OwnerID           *string  `json:"ownerID,omitempty"`
-	TaskID            *string  `json:"taskID,omitempty"`
-	ControlID         *string  `json:"controlID,omitempty"`
-	SubcontrolID      *string  `json:"subcontrolID,omitempty"`
-	ProcedureID       *string  `json:"procedureID,omitempty"`
-	RiskID            *string  `json:"riskID,omitempty"`
-	InternalPolicyID  *string  `json:"internalPolicyID,omitempty"`
-	ReviewID          *string  `json:"reviewID,omitempty"`
-	VulnerabilityID   *string  `json:"vulnerabilityID,omitempty"`
-	FindingID         *string  `json:"findingID,omitempty"`
-	EvidenceID        *string  `json:"evidenceID,omitempty"`
-	TrustCenterID     *string  `json:"trustCenterID,omitempty"`
-	DiscussionID      *string  `json:"discussionID,omitempty"`
-	TrustCenterFaqIDs []string `json:"trustCenterFaqIDs,omitempty"`
-	FileIDs           []string `json:"fileIDs,omitempty"`
+	NotifySubscribers       *bool    `json:"notifySubscribers,omitempty"`
+	OwnerID                 *string  `json:"ownerID,omitempty"`
+	TaskID                  *string  `json:"taskID,omitempty"`
+	ControlID               *string  `json:"controlID,omitempty"`
+	SubcontrolID            *string  `json:"subcontrolID,omitempty"`
+	ProcedureID             *string  `json:"procedureID,omitempty"`
+	RiskID                  *string  `json:"riskID,omitempty"`
+	InternalPolicyID        *string  `json:"internalPolicyID,omitempty"`
+	ReviewID                *string  `json:"reviewID,omitempty"`
+	VulnerabilityID         *string  `json:"vulnerabilityID,omitempty"`
+	FindingID               *string  `json:"findingID,omitempty"`
+	ControlImplementationID *string  `json:"controlImplementationID,omitempty"`
+	EvidenceID              *string  `json:"evidenceID,omitempty"`
+	TrustCenterID           *string  `json:"trustCenterID,omitempty"`
+	DiscussionID            *string  `json:"discussionID,omitempty"`
+	TrustCenterFaqIDs       []string `json:"trustCenterFaqIDs,omitempty"`
+	FileIDs                 []string `json:"fileIDs,omitempty"`
 }
 
 // CreateNotificationInput is used for create Notification object.
@@ -9363,6 +9525,8 @@ type CreatePlatformInput struct {
 	TrustBoundaryDiagramIDs        []string       `json:"trustBoundaryDiagramIDs,omitempty"`
 	RiskIDs                        []string       `json:"riskIDs,omitempty"`
 	ControlIDs                     []string       `json:"controlIDs,omitempty"`
+	ControlImplementationIDs       []string       `json:"controlImplementationIDs,omitempty"`
+	ReviewIDs                      []string       `json:"reviewIDs,omitempty"`
 	AssessmentIDs                  []string       `json:"assessmentIDs,omitempty"`
 	ScanIDs                        []string       `json:"scanIDs,omitempty"`
 	TaskIDs                        []string       `json:"taskIDs,omitempty"`
@@ -9667,10 +9831,22 @@ type CreateReviewInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// identifier of the record in an external system
 	ExternalID *string `json:"externalID,omitempty"`
+	// the internal owner for the review when no user, group, or identity holder is linked
+	InternalOwner *string `json:"internalOwner,omitempty"`
+	// who reviewed the review when no user, group, or identity holder is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// the delegate for the review when no user, group, or identity holder is linked
+	DelegateName *string `json:"delegateName,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// the kind of the review
+	ReviewKindName *string `json:"reviewKindName,omitempty"`
+	// the classification of the review
+	ReviewClassificationName *string `json:"reviewClassificationName,omitempty"`
+	// the state of the review
+	ReviewStateName *string `json:"reviewStateName,omitempty"`
 	// the environment of the review
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the review
@@ -9708,29 +9884,43 @@ type CreateReviewInput struct {
 	// raw metadata payload for the review from the source system
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload        map[string]any `json:"rawPayload,omitempty"`
-	IntegrationRunIDs []string       `json:"integrationRunIDs,omitempty"`
-	OwnerID           *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs   []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string       `json:"editorIDs,omitempty"`
-	EnvironmentID     *string        `json:"environmentID,omitempty"`
-	ScopeID           *string        `json:"scopeID,omitempty"`
-	IntegrationIDs    []string       `json:"integrationIDs,omitempty"`
-	FindingIDs        []string       `json:"findingIDs,omitempty"`
-	VulnerabilityIDs  []string       `json:"vulnerabilityIDs,omitempty"`
-	ActionPlanIDs     []string       `json:"actionPlanIDs,omitempty"`
-	RemediationIDs    []string       `json:"remediationIDs,omitempty"`
-	ControlIDs        []string       `json:"controlIDs,omitempty"`
-	SubcontrolIDs     []string       `json:"subcontrolIDs,omitempty"`
-	RiskIDs           []string       `json:"riskIDs,omitempty"`
-	ProgramIDs        []string       `json:"programIDs,omitempty"`
-	AssetIDs          []string       `json:"assetIDs,omitempty"`
-	EntityIDs         []string       `json:"entityIDs,omitempty"`
-	TaskIDs           []string       `json:"taskIDs,omitempty"`
-	ReviewerID        *string        `json:"reviewerID,omitempty"`
-	CommentIDs        []string       `json:"commentIDs,omitempty"`
-	FileIDs           []string       `json:"fileIDs,omitempty"`
-	InternalPolicyIDs []string       `json:"internalPolicyIDs,omitempty"`
+	RawPayload                    map[string]any `json:"rawPayload,omitempty"`
+	IntegrationRunIDs             []string       `json:"integrationRunIDs,omitempty"`
+	OwnerID                       *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs               []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                     []string       `json:"editorIDs,omitempty"`
+	InternalOwnerUserID           *string        `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerGroupID          *string        `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerIdentityHolderID *string        `json:"internalOwnerIdentityHolderID,omitempty"`
+	ReviewedByUserID              *string        `json:"reviewedByUserID,omitempty"`
+	ReviewedByGroupID             *string        `json:"reviewedByGroupID,omitempty"`
+	ReviewedByIdentityHolderID    *string        `json:"reviewedByIdentityHolderID,omitempty"`
+	DelegateUserID                *string        `json:"delegateUserID,omitempty"`
+	DelegateGroupID               *string        `json:"delegateGroupID,omitempty"`
+	DelegateIdentityHolderID      *string        `json:"delegateIdentityHolderID,omitempty"`
+	ReviewKindID                  *string        `json:"reviewKindID,omitempty"`
+	ReviewClassificationID        *string        `json:"reviewClassificationID,omitempty"`
+	ReviewStateID                 *string        `json:"reviewStateID,omitempty"`
+	EnvironmentID                 *string        `json:"environmentID,omitempty"`
+	ScopeID                       *string        `json:"scopeID,omitempty"`
+	IntegrationIDs                []string       `json:"integrationIDs,omitempty"`
+	FindingIDs                    []string       `json:"findingIDs,omitempty"`
+	VulnerabilityIDs              []string       `json:"vulnerabilityIDs,omitempty"`
+	ActionPlanIDs                 []string       `json:"actionPlanIDs,omitempty"`
+	RemediationIDs                []string       `json:"remediationIDs,omitempty"`
+	ControlIDs                    []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs                 []string       `json:"subcontrolIDs,omitempty"`
+	RiskIDs                       []string       `json:"riskIDs,omitempty"`
+	ProgramIDs                    []string       `json:"programIDs,omitempty"`
+	AssetIDs                      []string       `json:"assetIDs,omitempty"`
+	EntityIDs                     []string       `json:"entityIDs,omitempty"`
+	TaskIDs                       []string       `json:"taskIDs,omitempty"`
+	ReviewerID                    *string        `json:"reviewerID,omitempty"`
+	CommentIDs                    []string       `json:"commentIDs,omitempty"`
+	FileIDs                       []string       `json:"fileIDs,omitempty"`
+	PlatformIDs                   []string       `json:"platformIDs,omitempty"`
+	SystemDetailIDs               []string       `json:"systemDetailIDs,omitempty"`
+	InternalPolicyIDs             []string       `json:"internalPolicyIDs,omitempty"`
 }
 
 // CreateRiskInput is used for create Risk object.
@@ -10144,13 +10334,15 @@ type CreateSystemDetailInput struct {
 	// structured revision history for OSCAL metadata
 	RevisionHistory []any `json:"revisionHistory,omitempty"`
 	// optional escape hatch for additional OSCAL metadata fields
-	OscalMetadataJSON map[string]any `json:"oscalMetadataJSON,omitempty"`
-	IntegrationRunIDs []string       `json:"integrationRunIDs,omitempty"`
-	OwnerID           *string        `json:"ownerID,omitempty"`
-	ProgramIDs        []string       `json:"programIDs,omitempty"`
-	PlatformIDs       []string       `json:"platformIDs,omitempty"`
-	EntityIDs         []string       `json:"entityIDs,omitempty"`
-	AssetIDs          []string       `json:"assetIDs,omitempty"`
+	OscalMetadataJSON        map[string]any `json:"oscalMetadataJSON,omitempty"`
+	IntegrationRunIDs        []string       `json:"integrationRunIDs,omitempty"`
+	OwnerID                  *string        `json:"ownerID,omitempty"`
+	ProgramIDs               []string       `json:"programIDs,omitempty"`
+	PlatformIDs              []string       `json:"platformIDs,omitempty"`
+	EntityIDs                []string       `json:"entityIDs,omitempty"`
+	AssetIDs                 []string       `json:"assetIDs,omitempty"`
+	ControlImplementationIDs []string       `json:"controlImplementationIDs,omitempty"`
+	ReviewIDs                []string       `json:"reviewIDs,omitempty"`
 }
 
 // CreateTFASettingInput is used for create TFASetting object.
@@ -23589,22 +23781,23 @@ type Note struct {
 	// when set on a trust center post, sends the published update to the trust center's subscribers
 	NotifySubscribers *bool `json:"notifySubscribers,omitempty"`
 	// when subscribers were notified about this post
-	NotifiedAt      *time.Time                `json:"notifiedAt,omitempty"`
-	Owner           *Organization             `json:"owner,omitempty"`
-	Task            *Task                     `json:"task,omitempty"`
-	Control         *Control                  `json:"control,omitempty"`
-	Subcontrol      *Subcontrol               `json:"subcontrol,omitempty"`
-	Procedure       *Procedure                `json:"procedure,omitempty"`
-	Risk            *Risk                     `json:"risk,omitempty"`
-	InternalPolicy  *InternalPolicy           `json:"internalPolicy,omitempty"`
-	Review          *Review                   `json:"review,omitempty"`
-	Vulnerability   *Vulnerability            `json:"vulnerability,omitempty"`
-	Finding         *Finding                  `json:"finding,omitempty"`
-	Evidence        *Evidence                 `json:"evidence,omitempty"`
-	TrustCenter     *TrustCenter              `json:"trustCenter,omitempty"`
-	Discussion      *Discussion               `json:"discussion,omitempty"`
-	TrustCenterFaqs *TrustCenterFAQConnection `json:"trustCenterFaqs"`
-	Files           *FileConnection           `json:"files"`
+	NotifiedAt            *time.Time                `json:"notifiedAt,omitempty"`
+	Owner                 *Organization             `json:"owner,omitempty"`
+	Task                  *Task                     `json:"task,omitempty"`
+	Control               *Control                  `json:"control,omitempty"`
+	Subcontrol            *Subcontrol               `json:"subcontrol,omitempty"`
+	Procedure             *Procedure                `json:"procedure,omitempty"`
+	Risk                  *Risk                     `json:"risk,omitempty"`
+	InternalPolicy        *InternalPolicy           `json:"internalPolicy,omitempty"`
+	Review                *Review                   `json:"review,omitempty"`
+	Vulnerability         *Vulnerability            `json:"vulnerability,omitempty"`
+	Finding               *Finding                  `json:"finding,omitempty"`
+	ControlImplementation *ControlImplementation    `json:"controlImplementation,omitempty"`
+	Evidence              *Evidence                 `json:"evidence,omitempty"`
+	TrustCenter           *TrustCenter              `json:"trustCenter,omitempty"`
+	Discussion            *Discussion               `json:"discussion,omitempty"`
+	TrustCenterFaqs       *TrustCenterFAQConnection `json:"trustCenterFaqs"`
+	Files                 *FileConnection           `json:"files"`
 }
 
 func (Note) IsNode() {}
@@ -23832,6 +24025,9 @@ type NoteWhereInput struct {
 	// finding edge predicates
 	HasFinding     *bool                `json:"hasFinding,omitempty"`
 	HasFindingWith []*FindingWhereInput `json:"hasFindingWith,omitempty"`
+	// control_implementation edge predicates
+	HasControlImplementation     *bool                              `json:"hasControlImplementation,omitempty"`
+	HasControlImplementationWith []*ControlImplementationWhereInput `json:"hasControlImplementationWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -26898,58 +27094,60 @@ type Platform struct {
 	// external identifier for the platform from an upstream inventory
 	ExternalReferenceID *string `json:"externalReferenceID,omitempty"`
 	// additional metadata about the platform
-	Metadata                     map[string]any                 `json:"metadata,omitempty"`
-	IntegrationRuns              *IntegrationRunConnection      `json:"integrationRuns"`
-	Owner                        *Organization                  `json:"owner,omitempty"`
-	BlockedGroups                *GroupConnection               `json:"blockedGroups"`
-	Editors                      *GroupConnection               `json:"editors"`
-	Viewers                      *GroupConnection               `json:"viewers"`
-	InternalOwnerUser            *User                          `json:"internalOwnerUser,omitempty"`
-	InternalOwnerGroup           *Group                         `json:"internalOwnerGroup,omitempty"`
-	InternalOwnerIdentityHolder  *IdentityHolder                `json:"internalOwnerIdentityHolder,omitempty"`
-	BusinessOwnerUser            *User                          `json:"businessOwnerUser,omitempty"`
-	BusinessOwnerGroup           *Group                         `json:"businessOwnerGroup,omitempty"`
-	BusinessOwnerIdentityHolder  *IdentityHolder                `json:"businessOwnerIdentityHolder,omitempty"`
-	TechnicalOwnerUser           *User                          `json:"technicalOwnerUser,omitempty"`
-	TechnicalOwnerGroup          *Group                         `json:"technicalOwnerGroup,omitempty"`
-	TechnicalOwnerIdentityHolder *IdentityHolder                `json:"technicalOwnerIdentityHolder,omitempty"`
-	SecurityOwnerUser            *User                          `json:"securityOwnerUser,omitempty"`
-	SecurityOwnerGroup           *Group                         `json:"securityOwnerGroup,omitempty"`
-	SecurityOwnerIdentityHolder  *IdentityHolder                `json:"securityOwnerIdentityHolder,omitempty"`
-	PlatformKind                 *CustomTypeEnum                `json:"platformKind,omitempty"`
-	PlatformDataClassification   *CustomTypeEnum                `json:"platformDataClassification,omitempty"`
-	Environment                  *CustomTypeEnum                `json:"environment,omitempty"`
-	Scope                        *CustomTypeEnum                `json:"scope,omitempty"`
-	AccessModel                  *CustomTypeEnum                `json:"accessModel,omitempty"`
-	EncryptionStatus             *CustomTypeEnum                `json:"encryptionStatus,omitempty"`
-	SecurityTier                 *CustomTypeEnum                `json:"securityTier,omitempty"`
-	Criticality                  *CustomTypeEnum                `json:"criticality,omitempty"`
-	Assets                       *AssetConnection               `json:"assets"`
-	Entities                     *EntityConnection              `json:"entities"`
-	Evidence                     *EvidenceConnection            `json:"evidence"`
-	Files                        *FileConnection                `json:"files"`
-	ArchitectureDiagrams         *FileConnection                `json:"architectureDiagrams"`
-	DataFlowDiagrams             *FileConnection                `json:"dataFlowDiagrams"`
-	TrustBoundaryDiagrams        *FileConnection                `json:"trustBoundaryDiagrams"`
-	Risks                        *RiskConnection                `json:"risks"`
-	Controls                     *ControlConnection             `json:"controls"`
-	Assessments                  *AssessmentConnection          `json:"assessments"`
-	Scans                        *ScanConnection                `json:"scans"`
-	Tasks                        *TaskConnection                `json:"tasks"`
-	IdentityHolders              *IdentityHolderConnection      `json:"identityHolders"`
-	Integrations                 *IntegrationConnection         `json:"integrations"`
-	DirectoryAccounts            *DirectoryAccountConnection    `json:"directoryAccounts"`
-	DirectoryGroups              *DirectoryGroupConnection      `json:"directoryGroups"`
-	DirectoryMemberships         *DirectoryMembershipConnection `json:"directoryMemberships"`
-	WorkflowObjectRefs           *WorkflowObjectRefConnection   `json:"workflowObjectRefs"`
-	SourceAssets                 *AssetConnection               `json:"sourceAssets"`
-	SourceEntities               *EntityConnection              `json:"sourceEntities"`
-	OutOfScopeAssets             *AssetConnection               `json:"outOfScopeAssets"`
-	OutOfScopeVendors            *EntityConnection              `json:"outOfScopeVendors"`
-	ApplicableFrameworks         *StandardConnection            `json:"applicableFrameworks"`
-	GeneratedScans               *ScanConnection                `json:"generatedScans"`
-	PlatformOwner                *User                          `json:"platformOwner,omitempty"`
-	SystemDetails                *SystemDetailConnection        `json:"systemDetails"`
+	Metadata                     map[string]any                   `json:"metadata,omitempty"`
+	IntegrationRuns              *IntegrationRunConnection        `json:"integrationRuns"`
+	Owner                        *Organization                    `json:"owner,omitempty"`
+	BlockedGroups                *GroupConnection                 `json:"blockedGroups"`
+	Editors                      *GroupConnection                 `json:"editors"`
+	Viewers                      *GroupConnection                 `json:"viewers"`
+	InternalOwnerUser            *User                            `json:"internalOwnerUser,omitempty"`
+	InternalOwnerGroup           *Group                           `json:"internalOwnerGroup,omitempty"`
+	InternalOwnerIdentityHolder  *IdentityHolder                  `json:"internalOwnerIdentityHolder,omitempty"`
+	BusinessOwnerUser            *User                            `json:"businessOwnerUser,omitempty"`
+	BusinessOwnerGroup           *Group                           `json:"businessOwnerGroup,omitempty"`
+	BusinessOwnerIdentityHolder  *IdentityHolder                  `json:"businessOwnerIdentityHolder,omitempty"`
+	TechnicalOwnerUser           *User                            `json:"technicalOwnerUser,omitempty"`
+	TechnicalOwnerGroup          *Group                           `json:"technicalOwnerGroup,omitempty"`
+	TechnicalOwnerIdentityHolder *IdentityHolder                  `json:"technicalOwnerIdentityHolder,omitempty"`
+	SecurityOwnerUser            *User                            `json:"securityOwnerUser,omitempty"`
+	SecurityOwnerGroup           *Group                           `json:"securityOwnerGroup,omitempty"`
+	SecurityOwnerIdentityHolder  *IdentityHolder                  `json:"securityOwnerIdentityHolder,omitempty"`
+	PlatformKind                 *CustomTypeEnum                  `json:"platformKind,omitempty"`
+	PlatformDataClassification   *CustomTypeEnum                  `json:"platformDataClassification,omitempty"`
+	Environment                  *CustomTypeEnum                  `json:"environment,omitempty"`
+	Scope                        *CustomTypeEnum                  `json:"scope,omitempty"`
+	AccessModel                  *CustomTypeEnum                  `json:"accessModel,omitempty"`
+	EncryptionStatus             *CustomTypeEnum                  `json:"encryptionStatus,omitempty"`
+	SecurityTier                 *CustomTypeEnum                  `json:"securityTier,omitempty"`
+	Criticality                  *CustomTypeEnum                  `json:"criticality,omitempty"`
+	Assets                       *AssetConnection                 `json:"assets"`
+	Entities                     *EntityConnection                `json:"entities"`
+	Evidence                     *EvidenceConnection              `json:"evidence"`
+	Files                        *FileConnection                  `json:"files"`
+	ArchitectureDiagrams         *FileConnection                  `json:"architectureDiagrams"`
+	DataFlowDiagrams             *FileConnection                  `json:"dataFlowDiagrams"`
+	TrustBoundaryDiagrams        *FileConnection                  `json:"trustBoundaryDiagrams"`
+	Risks                        *RiskConnection                  `json:"risks"`
+	Controls                     *ControlConnection               `json:"controls"`
+	ControlImplementations       *ControlImplementationConnection `json:"controlImplementations"`
+	Reviews                      *ReviewConnection                `json:"reviews"`
+	Assessments                  *AssessmentConnection            `json:"assessments"`
+	Scans                        *ScanConnection                  `json:"scans"`
+	Tasks                        *TaskConnection                  `json:"tasks"`
+	IdentityHolders              *IdentityHolderConnection        `json:"identityHolders"`
+	Integrations                 *IntegrationConnection           `json:"integrations"`
+	DirectoryAccounts            *DirectoryAccountConnection      `json:"directoryAccounts"`
+	DirectoryGroups              *DirectoryGroupConnection        `json:"directoryGroups"`
+	DirectoryMemberships         *DirectoryMembershipConnection   `json:"directoryMemberships"`
+	WorkflowObjectRefs           *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	SourceAssets                 *AssetConnection                 `json:"sourceAssets"`
+	SourceEntities               *EntityConnection                `json:"sourceEntities"`
+	OutOfScopeAssets             *AssetConnection                 `json:"outOfScopeAssets"`
+	OutOfScopeVendors            *EntityConnection                `json:"outOfScopeVendors"`
+	ApplicableFrameworks         *StandardConnection              `json:"applicableFrameworks"`
+	GeneratedScans               *ScanConnection                  `json:"generatedScans"`
+	PlatformOwner                *User                            `json:"platformOwner,omitempty"`
+	SystemDetails                *SystemDetailConnection          `json:"systemDetails"`
 	// Indicates if this platform has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this platform has any workflow history (completed or failed instances)
@@ -27826,6 +28024,12 @@ type PlatformWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// control_implementations edge predicates
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
 	// assessments edge predicates
 	HasAssessments     *bool                   `json:"hasAssessments,omitempty"`
 	HasAssessmentsWith []*AssessmentWhereInput `json:"hasAssessmentsWith,omitempty"`
@@ -30550,12 +30754,48 @@ type Review struct {
 	ExternalID *string `json:"externalID,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// the internal owner for the review when no user, group, or identity holder is linked
+	InternalOwner *string `json:"internalOwner,omitempty"`
+	// the internal owner user id for the review
+	InternalOwnerUserID *string `json:"internalOwnerUserID,omitempty"`
+	// the internal owner group id for the review
+	InternalOwnerGroupID *string `json:"internalOwnerGroupID,omitempty"`
+	// the internal owner identity holder id for the review
+	InternalOwnerIdentityHolderID *string `json:"internalOwnerIdentityHolderID,omitempty"`
+	// who reviewed the review when no user, group, or identity holder is linked
+	ReviewedBy *string `json:"reviewedBy,omitempty"`
+	// the user id that reviewed the review
+	ReviewedByUserID *string `json:"reviewedByUserID,omitempty"`
+	// the group id that reviewed the review
+	ReviewedByGroupID *string `json:"reviewedByGroupID,omitempty"`
+	// the identity holder id that reviewed the review
+	ReviewedByIdentityHolderID *string `json:"reviewedByIdentityHolderID,omitempty"`
+	// the delegate for the review when no user, group, or identity holder is linked
+	DelegateName *string `json:"delegateName,omitempty"`
+	// the delegate user id for the review
+	DelegateUserID *string `json:"delegateUserID,omitempty"`
+	// the delegate group id for the review
+	DelegateGroupID *string `json:"delegateGroupID,omitempty"`
+	// the delegate identity holder id for the review
+	DelegateIdentityHolderID *string `json:"delegateIdentityHolderID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
+	// the kind of the review
+	ReviewKindName *string `json:"reviewKindName,omitempty"`
+	// the kind of the review
+	ReviewKindID *string `json:"reviewKindID,omitempty"`
+	// the classification of the review
+	ReviewClassificationName *string `json:"reviewClassificationName,omitempty"`
+	// the classification of the review
+	ReviewClassificationID *string `json:"reviewClassificationID,omitempty"`
+	// the state of the review
+	ReviewStateName *string `json:"reviewStateName,omitempty"`
+	// the state of the review
+	ReviewStateID *string `json:"reviewStateID,omitempty"`
 	// the environment of the review
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the environment of the review
@@ -30599,29 +30839,43 @@ type Review struct {
 	// raw metadata payload for the review from the source system
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload      map[string]any            `json:"rawPayload,omitempty"`
-	IntegrationRuns *IntegrationRunConnection `json:"integrationRuns"`
-	Owner           *Organization             `json:"owner,omitempty"`
-	BlockedGroups   *GroupConnection          `json:"blockedGroups"`
-	Editors         *GroupConnection          `json:"editors"`
-	Environment     *CustomTypeEnum           `json:"environment,omitempty"`
-	Scope           *CustomTypeEnum           `json:"scope,omitempty"`
-	Integrations    *IntegrationConnection    `json:"integrations"`
-	Findings        *FindingConnection        `json:"findings"`
-	Vulnerabilities *VulnerabilityConnection  `json:"vulnerabilities"`
-	ActionPlans     *ActionPlanConnection     `json:"actionPlans"`
-	Remediations    *RemediationConnection    `json:"remediations"`
-	Controls        *ControlConnection        `json:"controls"`
-	Subcontrols     *SubcontrolConnection     `json:"subcontrols"`
-	Risks           *RiskConnection           `json:"risks"`
-	Programs        *ProgramConnection        `json:"programs"`
-	Assets          *AssetConnection          `json:"assets"`
-	Entities        *EntityConnection         `json:"entities"`
-	Tasks           *TaskConnection           `json:"tasks"`
+	RawPayload                  map[string]any            `json:"rawPayload,omitempty"`
+	IntegrationRuns             *IntegrationRunConnection `json:"integrationRuns"`
+	Owner                       *Organization             `json:"owner,omitempty"`
+	BlockedGroups               *GroupConnection          `json:"blockedGroups"`
+	Editors                     *GroupConnection          `json:"editors"`
+	InternalOwnerUser           *User                     `json:"internalOwnerUser,omitempty"`
+	InternalOwnerGroup          *Group                    `json:"internalOwnerGroup,omitempty"`
+	InternalOwnerIdentityHolder *IdentityHolder           `json:"internalOwnerIdentityHolder,omitempty"`
+	ReviewedByUser              *User                     `json:"reviewedByUser,omitempty"`
+	ReviewedByGroup             *Group                    `json:"reviewedByGroup,omitempty"`
+	ReviewedByIdentityHolder    *IdentityHolder           `json:"reviewedByIdentityHolder,omitempty"`
+	DelegateUser                *User                     `json:"delegateUser,omitempty"`
+	DelegateGroup               *Group                    `json:"delegateGroup,omitempty"`
+	DelegateIdentityHolder      *IdentityHolder           `json:"delegateIdentityHolder,omitempty"`
+	ReviewKind                  *CustomTypeEnum           `json:"reviewKind,omitempty"`
+	ReviewClassification        *CustomTypeEnum           `json:"reviewClassification,omitempty"`
+	ReviewState                 *CustomTypeEnum           `json:"reviewState,omitempty"`
+	Environment                 *CustomTypeEnum           `json:"environment,omitempty"`
+	Scope                       *CustomTypeEnum           `json:"scope,omitempty"`
+	Integrations                *IntegrationConnection    `json:"integrations"`
+	Findings                    *FindingConnection        `json:"findings"`
+	Vulnerabilities             *VulnerabilityConnection  `json:"vulnerabilities"`
+	ActionPlans                 *ActionPlanConnection     `json:"actionPlans"`
+	Remediations                *RemediationConnection    `json:"remediations"`
+	Controls                    *ControlConnection        `json:"controls"`
+	Subcontrols                 *SubcontrolConnection     `json:"subcontrols"`
+	Risks                       *RiskConnection           `json:"risks"`
+	Programs                    *ProgramConnection        `json:"programs"`
+	Assets                      *AssetConnection          `json:"assets"`
+	Entities                    *EntityConnection         `json:"entities"`
+	Tasks                       *TaskConnection           `json:"tasks"`
 	// primary reviewer responsible for the record
 	Reviewer         *User                     `json:"reviewer,omitempty"`
 	Comments         *NoteConnection           `json:"comments"`
 	Files            *FileConnection           `json:"files"`
+	Platforms        *PlatformConnection       `json:"platforms"`
+	SystemDetails    *SystemDetailConnection   `json:"systemDetails"`
 	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
 }
 
@@ -30860,6 +31114,150 @@ type ReviewWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// internal_owner field predicates
+	InternalOwner             *string  `json:"internalOwner,omitempty"`
+	InternalOwnerNeq          *string  `json:"internalOwnerNEQ,omitempty"`
+	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
+	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
+	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
+	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
+	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
+	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
+	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
+	InternalOwnerEqualFold    *string  `json:"internalOwnerEqualFold,omitempty"`
+	InternalOwnerContainsFold *string  `json:"internalOwnerContainsFold,omitempty"`
+	// internal_owner_user_id field predicates
+	InternalOwnerUserID             *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerUserIdneq          *string  `json:"internalOwnerUserIDNEQ,omitempty"`
+	InternalOwnerUserIDIn           []string `json:"internalOwnerUserIDIn,omitempty"`
+	InternalOwnerUserIDNotIn        []string `json:"internalOwnerUserIDNotIn,omitempty"`
+	InternalOwnerUserIDContains     *string  `json:"internalOwnerUserIDContains,omitempty"`
+	InternalOwnerUserIDHasPrefix    *string  `json:"internalOwnerUserIDHasPrefix,omitempty"`
+	InternalOwnerUserIDHasSuffix    *string  `json:"internalOwnerUserIDHasSuffix,omitempty"`
+	InternalOwnerUserIDIsNil        *bool    `json:"internalOwnerUserIDIsNil,omitempty"`
+	InternalOwnerUserIDNotNil       *bool    `json:"internalOwnerUserIDNotNil,omitempty"`
+	InternalOwnerUserIDEqualFold    *string  `json:"internalOwnerUserIDEqualFold,omitempty"`
+	InternalOwnerUserIDContainsFold *string  `json:"internalOwnerUserIDContainsFold,omitempty"`
+	// internal_owner_group_id field predicates
+	InternalOwnerGroupID             *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerGroupIdneq          *string  `json:"internalOwnerGroupIDNEQ,omitempty"`
+	InternalOwnerGroupIDIn           []string `json:"internalOwnerGroupIDIn,omitempty"`
+	InternalOwnerGroupIDNotIn        []string `json:"internalOwnerGroupIDNotIn,omitempty"`
+	InternalOwnerGroupIDContains     *string  `json:"internalOwnerGroupIDContains,omitempty"`
+	InternalOwnerGroupIDHasPrefix    *string  `json:"internalOwnerGroupIDHasPrefix,omitempty"`
+	InternalOwnerGroupIDHasSuffix    *string  `json:"internalOwnerGroupIDHasSuffix,omitempty"`
+	InternalOwnerGroupIDIsNil        *bool    `json:"internalOwnerGroupIDIsNil,omitempty"`
+	InternalOwnerGroupIDNotNil       *bool    `json:"internalOwnerGroupIDNotNil,omitempty"`
+	InternalOwnerGroupIDEqualFold    *string  `json:"internalOwnerGroupIDEqualFold,omitempty"`
+	InternalOwnerGroupIDContainsFold *string  `json:"internalOwnerGroupIDContainsFold,omitempty"`
+	// internal_owner_identity_holder_id field predicates
+	InternalOwnerIdentityHolderID             *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	InternalOwnerIdentityHolderIdneq          *string  `json:"internalOwnerIdentityHolderIDNEQ,omitempty"`
+	InternalOwnerIdentityHolderIDIn           []string `json:"internalOwnerIdentityHolderIDIn,omitempty"`
+	InternalOwnerIdentityHolderIDNotIn        []string `json:"internalOwnerIdentityHolderIDNotIn,omitempty"`
+	InternalOwnerIdentityHolderIDContains     *string  `json:"internalOwnerIdentityHolderIDContains,omitempty"`
+	InternalOwnerIdentityHolderIDHasPrefix    *string  `json:"internalOwnerIdentityHolderIDHasPrefix,omitempty"`
+	InternalOwnerIdentityHolderIDHasSuffix    *string  `json:"internalOwnerIdentityHolderIDHasSuffix,omitempty"`
+	InternalOwnerIdentityHolderIDIsNil        *bool    `json:"internalOwnerIdentityHolderIDIsNil,omitempty"`
+	InternalOwnerIdentityHolderIDNotNil       *bool    `json:"internalOwnerIdentityHolderIDNotNil,omitempty"`
+	InternalOwnerIdentityHolderIDEqualFold    *string  `json:"internalOwnerIdentityHolderIDEqualFold,omitempty"`
+	InternalOwnerIdentityHolderIDContainsFold *string  `json:"internalOwnerIdentityHolderIDContainsFold,omitempty"`
+	// reviewed_by field predicates
+	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
+	ReviewedByNeq          *string  `json:"reviewedByNEQ,omitempty"`
+	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
+	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
+	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
+	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
+	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
+	ReviewedByIsNil        *bool    `json:"reviewedByIsNil,omitempty"`
+	ReviewedByNotNil       *bool    `json:"reviewedByNotNil,omitempty"`
+	ReviewedByEqualFold    *string  `json:"reviewedByEqualFold,omitempty"`
+	ReviewedByContainsFold *string  `json:"reviewedByContainsFold,omitempty"`
+	// reviewed_by_user_id field predicates
+	ReviewedByUserID             *string  `json:"reviewedByUserID,omitempty"`
+	ReviewedByUserIdneq          *string  `json:"reviewedByUserIDNEQ,omitempty"`
+	ReviewedByUserIDIn           []string `json:"reviewedByUserIDIn,omitempty"`
+	ReviewedByUserIDNotIn        []string `json:"reviewedByUserIDNotIn,omitempty"`
+	ReviewedByUserIDContains     *string  `json:"reviewedByUserIDContains,omitempty"`
+	ReviewedByUserIDHasPrefix    *string  `json:"reviewedByUserIDHasPrefix,omitempty"`
+	ReviewedByUserIDHasSuffix    *string  `json:"reviewedByUserIDHasSuffix,omitempty"`
+	ReviewedByUserIDIsNil        *bool    `json:"reviewedByUserIDIsNil,omitempty"`
+	ReviewedByUserIDNotNil       *bool    `json:"reviewedByUserIDNotNil,omitempty"`
+	ReviewedByUserIDEqualFold    *string  `json:"reviewedByUserIDEqualFold,omitempty"`
+	ReviewedByUserIDContainsFold *string  `json:"reviewedByUserIDContainsFold,omitempty"`
+	// reviewed_by_group_id field predicates
+	ReviewedByGroupID             *string  `json:"reviewedByGroupID,omitempty"`
+	ReviewedByGroupIdneq          *string  `json:"reviewedByGroupIDNEQ,omitempty"`
+	ReviewedByGroupIDIn           []string `json:"reviewedByGroupIDIn,omitempty"`
+	ReviewedByGroupIDNotIn        []string `json:"reviewedByGroupIDNotIn,omitempty"`
+	ReviewedByGroupIDContains     *string  `json:"reviewedByGroupIDContains,omitempty"`
+	ReviewedByGroupIDHasPrefix    *string  `json:"reviewedByGroupIDHasPrefix,omitempty"`
+	ReviewedByGroupIDHasSuffix    *string  `json:"reviewedByGroupIDHasSuffix,omitempty"`
+	ReviewedByGroupIDIsNil        *bool    `json:"reviewedByGroupIDIsNil,omitempty"`
+	ReviewedByGroupIDNotNil       *bool    `json:"reviewedByGroupIDNotNil,omitempty"`
+	ReviewedByGroupIDEqualFold    *string  `json:"reviewedByGroupIDEqualFold,omitempty"`
+	ReviewedByGroupIDContainsFold *string  `json:"reviewedByGroupIDContainsFold,omitempty"`
+	// reviewed_by_identity_holder_id field predicates
+	ReviewedByIdentityHolderID             *string  `json:"reviewedByIdentityHolderID,omitempty"`
+	ReviewedByIdentityHolderIdneq          *string  `json:"reviewedByIdentityHolderIDNEQ,omitempty"`
+	ReviewedByIdentityHolderIDIn           []string `json:"reviewedByIdentityHolderIDIn,omitempty"`
+	ReviewedByIdentityHolderIDNotIn        []string `json:"reviewedByIdentityHolderIDNotIn,omitempty"`
+	ReviewedByIdentityHolderIDContains     *string  `json:"reviewedByIdentityHolderIDContains,omitempty"`
+	ReviewedByIdentityHolderIDHasPrefix    *string  `json:"reviewedByIdentityHolderIDHasPrefix,omitempty"`
+	ReviewedByIdentityHolderIDHasSuffix    *string  `json:"reviewedByIdentityHolderIDHasSuffix,omitempty"`
+	ReviewedByIdentityHolderIDIsNil        *bool    `json:"reviewedByIdentityHolderIDIsNil,omitempty"`
+	ReviewedByIdentityHolderIDNotNil       *bool    `json:"reviewedByIdentityHolderIDNotNil,omitempty"`
+	ReviewedByIdentityHolderIDEqualFold    *string  `json:"reviewedByIdentityHolderIDEqualFold,omitempty"`
+	ReviewedByIdentityHolderIDContainsFold *string  `json:"reviewedByIdentityHolderIDContainsFold,omitempty"`
+	// delegate_name field predicates
+	DelegateName             *string  `json:"delegateName,omitempty"`
+	DelegateNameNeq          *string  `json:"delegateNameNEQ,omitempty"`
+	DelegateNameIn           []string `json:"delegateNameIn,omitempty"`
+	DelegateNameNotIn        []string `json:"delegateNameNotIn,omitempty"`
+	DelegateNameContains     *string  `json:"delegateNameContains,omitempty"`
+	DelegateNameHasPrefix    *string  `json:"delegateNameHasPrefix,omitempty"`
+	DelegateNameHasSuffix    *string  `json:"delegateNameHasSuffix,omitempty"`
+	DelegateNameIsNil        *bool    `json:"delegateNameIsNil,omitempty"`
+	DelegateNameNotNil       *bool    `json:"delegateNameNotNil,omitempty"`
+	DelegateNameEqualFold    *string  `json:"delegateNameEqualFold,omitempty"`
+	DelegateNameContainsFold *string  `json:"delegateNameContainsFold,omitempty"`
+	// delegate_user_id field predicates
+	DelegateUserID             *string  `json:"delegateUserID,omitempty"`
+	DelegateUserIdneq          *string  `json:"delegateUserIDNEQ,omitempty"`
+	DelegateUserIDIn           []string `json:"delegateUserIDIn,omitempty"`
+	DelegateUserIDNotIn        []string `json:"delegateUserIDNotIn,omitempty"`
+	DelegateUserIDContains     *string  `json:"delegateUserIDContains,omitempty"`
+	DelegateUserIDHasPrefix    *string  `json:"delegateUserIDHasPrefix,omitempty"`
+	DelegateUserIDHasSuffix    *string  `json:"delegateUserIDHasSuffix,omitempty"`
+	DelegateUserIDIsNil        *bool    `json:"delegateUserIDIsNil,omitempty"`
+	DelegateUserIDNotNil       *bool    `json:"delegateUserIDNotNil,omitempty"`
+	DelegateUserIDEqualFold    *string  `json:"delegateUserIDEqualFold,omitempty"`
+	DelegateUserIDContainsFold *string  `json:"delegateUserIDContainsFold,omitempty"`
+	// delegate_group_id field predicates
+	DelegateGroupID             *string  `json:"delegateGroupID,omitempty"`
+	DelegateGroupIdneq          *string  `json:"delegateGroupIDNEQ,omitempty"`
+	DelegateGroupIDIn           []string `json:"delegateGroupIDIn,omitempty"`
+	DelegateGroupIDNotIn        []string `json:"delegateGroupIDNotIn,omitempty"`
+	DelegateGroupIDContains     *string  `json:"delegateGroupIDContains,omitempty"`
+	DelegateGroupIDHasPrefix    *string  `json:"delegateGroupIDHasPrefix,omitempty"`
+	DelegateGroupIDHasSuffix    *string  `json:"delegateGroupIDHasSuffix,omitempty"`
+	DelegateGroupIDIsNil        *bool    `json:"delegateGroupIDIsNil,omitempty"`
+	DelegateGroupIDNotNil       *bool    `json:"delegateGroupIDNotNil,omitempty"`
+	DelegateGroupIDEqualFold    *string  `json:"delegateGroupIDEqualFold,omitempty"`
+	DelegateGroupIDContainsFold *string  `json:"delegateGroupIDContainsFold,omitempty"`
+	// delegate_identity_holder_id field predicates
+	DelegateIdentityHolderID             *string  `json:"delegateIdentityHolderID,omitempty"`
+	DelegateIdentityHolderIdneq          *string  `json:"delegateIdentityHolderIDNEQ,omitempty"`
+	DelegateIdentityHolderIDIn           []string `json:"delegateIdentityHolderIDIn,omitempty"`
+	DelegateIdentityHolderIDNotIn        []string `json:"delegateIdentityHolderIDNotIn,omitempty"`
+	DelegateIdentityHolderIDContains     *string  `json:"delegateIdentityHolderIDContains,omitempty"`
+	DelegateIdentityHolderIDHasPrefix    *string  `json:"delegateIdentityHolderIDHasPrefix,omitempty"`
+	DelegateIdentityHolderIDHasSuffix    *string  `json:"delegateIdentityHolderIDHasSuffix,omitempty"`
+	DelegateIdentityHolderIDIsNil        *bool    `json:"delegateIdentityHolderIDIsNil,omitempty"`
+	DelegateIdentityHolderIDNotNil       *bool    `json:"delegateIdentityHolderIDNotNil,omitempty"`
+	DelegateIdentityHolderIDEqualFold    *string  `json:"delegateIdentityHolderIDEqualFold,omitempty"`
+	DelegateIdentityHolderIDContainsFold *string  `json:"delegateIdentityHolderIDContainsFold,omitempty"`
 	// system_owned field predicates
 	SystemOwned       *bool `json:"systemOwned,omitempty"`
 	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
@@ -30889,6 +31287,78 @@ type ReviewWhereInput struct {
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
 	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
 	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+	// review_kind_name field predicates
+	ReviewKindName             *string  `json:"reviewKindName,omitempty"`
+	ReviewKindNameNeq          *string  `json:"reviewKindNameNEQ,omitempty"`
+	ReviewKindNameIn           []string `json:"reviewKindNameIn,omitempty"`
+	ReviewKindNameNotIn        []string `json:"reviewKindNameNotIn,omitempty"`
+	ReviewKindNameContains     *string  `json:"reviewKindNameContains,omitempty"`
+	ReviewKindNameHasPrefix    *string  `json:"reviewKindNameHasPrefix,omitempty"`
+	ReviewKindNameHasSuffix    *string  `json:"reviewKindNameHasSuffix,omitempty"`
+	ReviewKindNameIsNil        *bool    `json:"reviewKindNameIsNil,omitempty"`
+	ReviewKindNameNotNil       *bool    `json:"reviewKindNameNotNil,omitempty"`
+	ReviewKindNameEqualFold    *string  `json:"reviewKindNameEqualFold,omitempty"`
+	ReviewKindNameContainsFold *string  `json:"reviewKindNameContainsFold,omitempty"`
+	// review_kind_id field predicates
+	ReviewKindID             *string  `json:"reviewKindID,omitempty"`
+	ReviewKindIdneq          *string  `json:"reviewKindIDNEQ,omitempty"`
+	ReviewKindIDIn           []string `json:"reviewKindIDIn,omitempty"`
+	ReviewKindIDNotIn        []string `json:"reviewKindIDNotIn,omitempty"`
+	ReviewKindIDContains     *string  `json:"reviewKindIDContains,omitempty"`
+	ReviewKindIDHasPrefix    *string  `json:"reviewKindIDHasPrefix,omitempty"`
+	ReviewKindIDHasSuffix    *string  `json:"reviewKindIDHasSuffix,omitempty"`
+	ReviewKindIDIsNil        *bool    `json:"reviewKindIDIsNil,omitempty"`
+	ReviewKindIDNotNil       *bool    `json:"reviewKindIDNotNil,omitempty"`
+	ReviewKindIDEqualFold    *string  `json:"reviewKindIDEqualFold,omitempty"`
+	ReviewKindIDContainsFold *string  `json:"reviewKindIDContainsFold,omitempty"`
+	// review_classification_name field predicates
+	ReviewClassificationName             *string  `json:"reviewClassificationName,omitempty"`
+	ReviewClassificationNameNeq          *string  `json:"reviewClassificationNameNEQ,omitempty"`
+	ReviewClassificationNameIn           []string `json:"reviewClassificationNameIn,omitempty"`
+	ReviewClassificationNameNotIn        []string `json:"reviewClassificationNameNotIn,omitempty"`
+	ReviewClassificationNameContains     *string  `json:"reviewClassificationNameContains,omitempty"`
+	ReviewClassificationNameHasPrefix    *string  `json:"reviewClassificationNameHasPrefix,omitempty"`
+	ReviewClassificationNameHasSuffix    *string  `json:"reviewClassificationNameHasSuffix,omitempty"`
+	ReviewClassificationNameIsNil        *bool    `json:"reviewClassificationNameIsNil,omitempty"`
+	ReviewClassificationNameNotNil       *bool    `json:"reviewClassificationNameNotNil,omitempty"`
+	ReviewClassificationNameEqualFold    *string  `json:"reviewClassificationNameEqualFold,omitempty"`
+	ReviewClassificationNameContainsFold *string  `json:"reviewClassificationNameContainsFold,omitempty"`
+	// review_classification_id field predicates
+	ReviewClassificationID             *string  `json:"reviewClassificationID,omitempty"`
+	ReviewClassificationIdneq          *string  `json:"reviewClassificationIDNEQ,omitempty"`
+	ReviewClassificationIDIn           []string `json:"reviewClassificationIDIn,omitempty"`
+	ReviewClassificationIDNotIn        []string `json:"reviewClassificationIDNotIn,omitempty"`
+	ReviewClassificationIDContains     *string  `json:"reviewClassificationIDContains,omitempty"`
+	ReviewClassificationIDHasPrefix    *string  `json:"reviewClassificationIDHasPrefix,omitempty"`
+	ReviewClassificationIDHasSuffix    *string  `json:"reviewClassificationIDHasSuffix,omitempty"`
+	ReviewClassificationIDIsNil        *bool    `json:"reviewClassificationIDIsNil,omitempty"`
+	ReviewClassificationIDNotNil       *bool    `json:"reviewClassificationIDNotNil,omitempty"`
+	ReviewClassificationIDEqualFold    *string  `json:"reviewClassificationIDEqualFold,omitempty"`
+	ReviewClassificationIDContainsFold *string  `json:"reviewClassificationIDContainsFold,omitempty"`
+	// review_state_name field predicates
+	ReviewStateName             *string  `json:"reviewStateName,omitempty"`
+	ReviewStateNameNeq          *string  `json:"reviewStateNameNEQ,omitempty"`
+	ReviewStateNameIn           []string `json:"reviewStateNameIn,omitempty"`
+	ReviewStateNameNotIn        []string `json:"reviewStateNameNotIn,omitempty"`
+	ReviewStateNameContains     *string  `json:"reviewStateNameContains,omitempty"`
+	ReviewStateNameHasPrefix    *string  `json:"reviewStateNameHasPrefix,omitempty"`
+	ReviewStateNameHasSuffix    *string  `json:"reviewStateNameHasSuffix,omitempty"`
+	ReviewStateNameIsNil        *bool    `json:"reviewStateNameIsNil,omitempty"`
+	ReviewStateNameNotNil       *bool    `json:"reviewStateNameNotNil,omitempty"`
+	ReviewStateNameEqualFold    *string  `json:"reviewStateNameEqualFold,omitempty"`
+	ReviewStateNameContainsFold *string  `json:"reviewStateNameContainsFold,omitempty"`
+	// review_state_id field predicates
+	ReviewStateID             *string  `json:"reviewStateID,omitempty"`
+	ReviewStateIdneq          *string  `json:"reviewStateIDNEQ,omitempty"`
+	ReviewStateIDIn           []string `json:"reviewStateIDIn,omitempty"`
+	ReviewStateIDNotIn        []string `json:"reviewStateIDNotIn,omitempty"`
+	ReviewStateIDContains     *string  `json:"reviewStateIDContains,omitempty"`
+	ReviewStateIDHasPrefix    *string  `json:"reviewStateIDHasPrefix,omitempty"`
+	ReviewStateIDHasSuffix    *string  `json:"reviewStateIDHasSuffix,omitempty"`
+	ReviewStateIDIsNil        *bool    `json:"reviewStateIDIsNil,omitempty"`
+	ReviewStateIDNotNil       *bool    `json:"reviewStateIDNotNil,omitempty"`
+	ReviewStateIDEqualFold    *string  `json:"reviewStateIDEqualFold,omitempty"`
+	ReviewStateIDContainsFold *string  `json:"reviewStateIDContainsFold,omitempty"`
 	// environment_name field predicates
 	EnvironmentName             *string  `json:"environmentName,omitempty"`
 	EnvironmentNameNeq          *string  `json:"environmentNameNEQ,omitempty"`
@@ -31115,6 +31585,42 @@ type ReviewWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// internal_owner_user edge predicates
+	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
+	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
+	// internal_owner_group edge predicates
+	HasInternalOwnerGroup     *bool              `json:"hasInternalOwnerGroup,omitempty"`
+	HasInternalOwnerGroupWith []*GroupWhereInput `json:"hasInternalOwnerGroupWith,omitempty"`
+	// internal_owner_identity_holder edge predicates
+	HasInternalOwnerIdentityHolder     *bool                       `json:"hasInternalOwnerIdentityHolder,omitempty"`
+	HasInternalOwnerIdentityHolderWith []*IdentityHolderWhereInput `json:"hasInternalOwnerIdentityHolderWith,omitempty"`
+	// reviewed_by_user edge predicates
+	HasReviewedByUser     *bool             `json:"hasReviewedByUser,omitempty"`
+	HasReviewedByUserWith []*UserWhereInput `json:"hasReviewedByUserWith,omitempty"`
+	// reviewed_by_group edge predicates
+	HasReviewedByGroup     *bool              `json:"hasReviewedByGroup,omitempty"`
+	HasReviewedByGroupWith []*GroupWhereInput `json:"hasReviewedByGroupWith,omitempty"`
+	// reviewed_by_identity_holder edge predicates
+	HasReviewedByIdentityHolder     *bool                       `json:"hasReviewedByIdentityHolder,omitempty"`
+	HasReviewedByIdentityHolderWith []*IdentityHolderWhereInput `json:"hasReviewedByIdentityHolderWith,omitempty"`
+	// delegate_user edge predicates
+	HasDelegateUser     *bool             `json:"hasDelegateUser,omitempty"`
+	HasDelegateUserWith []*UserWhereInput `json:"hasDelegateUserWith,omitempty"`
+	// delegate_group edge predicates
+	HasDelegateGroup     *bool              `json:"hasDelegateGroup,omitempty"`
+	HasDelegateGroupWith []*GroupWhereInput `json:"hasDelegateGroupWith,omitempty"`
+	// delegate_identity_holder edge predicates
+	HasDelegateIdentityHolder     *bool                       `json:"hasDelegateIdentityHolder,omitempty"`
+	HasDelegateIdentityHolderWith []*IdentityHolderWhereInput `json:"hasDelegateIdentityHolderWith,omitempty"`
+	// review_kind edge predicates
+	HasReviewKind     *bool                       `json:"hasReviewKind,omitempty"`
+	HasReviewKindWith []*CustomTypeEnumWhereInput `json:"hasReviewKindWith,omitempty"`
+	// review_classification edge predicates
+	HasReviewClassification     *bool                       `json:"hasReviewClassification,omitempty"`
+	HasReviewClassificationWith []*CustomTypeEnumWhereInput `json:"hasReviewClassificationWith,omitempty"`
+	// review_state edge predicates
+	HasReviewState     *bool                       `json:"hasReviewState,omitempty"`
+	HasReviewStateWith []*CustomTypeEnumWhereInput `json:"hasReviewStateWith,omitempty"`
 	// environment edge predicates
 	HasEnvironment     *bool                       `json:"hasEnvironment,omitempty"`
 	HasEnvironmentWith []*CustomTypeEnumWhereInput `json:"hasEnvironmentWith,omitempty"`
@@ -31166,6 +31672,12 @@ type ReviewWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// platforms edge predicates
+	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
+	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
+	// system_details edge predicates
+	HasSystemDetails     *bool                     `json:"hasSystemDetails,omitempty"`
+	HasSystemDetailsWith []*SystemDetailWhereInput `json:"hasSystemDetailsWith,omitempty"`
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
@@ -32989,48 +33501,49 @@ type SearchResults struct {
 	// Information to aid in pagination.
 	Page *PageInfo `json:"page"`
 	// Identifies the total count of items in the connection.
-	TotalCount            int64                           `json:"totalCount"`
-	ActionPlans           *ActionPlanConnection           `json:"actionPlans,omitempty"`
-	Assessments           *AssessmentConnection           `json:"assessments,omitempty"`
-	AssessmentResponses   *AssessmentResponseConnection   `json:"assessmentResponses,omitempty"`
-	Assets                *AssetConnection                `json:"assets,omitempty"`
-	Campaigns             *CampaignConnection             `json:"campaigns,omitempty"`
-	CampaignTargets       *CampaignTargetConnection       `json:"campaignTargets,omitempty"`
-	Contacts              *ContactConnection              `json:"contacts,omitempty"`
-	Controls              *ControlConnection              `json:"controls,omitempty"`
-	ControlObjectives     *ControlObjectiveConnection     `json:"controlObjectives,omitempty"`
-	CustomTypeEnums       *CustomTypeEnumConnection       `json:"customTypeEnums,omitempty"`
-	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates,omitempty"`
-	Entities              *EntityConnection               `json:"entities,omitempty"`
-	Evidences             *EvidenceConnection             `json:"evidences,omitempty"`
-	Findings              *FindingConnection              `json:"findings,omitempty"`
-	Groups                *GroupConnection                `json:"groups,omitempty"`
-	IdentityHolders       *IdentityHolderConnection       `json:"identityHolders,omitempty"`
-	Integrations          *IntegrationConnection          `json:"integrations,omitempty"`
-	InternalPolicies      *InternalPolicyConnection       `json:"internalPolicies,omitempty"`
-	Invites               *InviteConnection               `json:"invites,omitempty"`
-	Narratives            *NarrativeConnection            `json:"narratives,omitempty"`
-	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates,omitempty"`
-	Organizations         *OrganizationConnection         `json:"organizations,omitempty"`
-	Platforms             *PlatformConnection             `json:"platforms,omitempty"`
-	Procedures            *ProcedureConnection            `json:"procedures,omitempty"`
-	Programs              *ProgramConnection              `json:"programs,omitempty"`
-	Remediations          *RemediationConnection          `json:"remediations,omitempty"`
-	Reports               *ReportConnection               `json:"reports,omitempty"`
-	Reviews               *ReviewConnection               `json:"reviews,omitempty"`
-	Risks                 *RiskConnection                 `json:"risks,omitempty"`
-	Scans                 *ScanConnection                 `json:"scans,omitempty"`
-	Standards             *StandardConnection             `json:"standards,omitempty"`
-	Subcontrols           *SubcontrolConnection           `json:"subcontrols,omitempty"`
-	Subprocessors         *SubprocessorConnection         `json:"subprocessors,omitempty"`
-	Subscribers           *SubscriberConnection           `json:"subscribers,omitempty"`
-	SystemDetails         *SystemDetailConnection         `json:"systemDetails,omitempty"`
-	TagDefinitions        *TagDefinitionConnection        `json:"tagDefinitions,omitempty"`
-	Tasks                 *TaskConnection                 `json:"tasks,omitempty"`
-	Templates             *TemplateConnection             `json:"templates,omitempty"`
-	TrustCenterEntities   *TrustCenterEntityConnection    `json:"trustCenterEntities,omitempty"`
-	Vulnerabilities       *VulnerabilityConnection        `json:"vulnerabilities,omitempty"`
-	SearchContext         []*SearchContext                `json:"searchContext,omitempty"`
+	TotalCount             int64                            `json:"totalCount"`
+	ActionPlans            *ActionPlanConnection            `json:"actionPlans,omitempty"`
+	Assessments            *AssessmentConnection            `json:"assessments,omitempty"`
+	AssessmentResponses    *AssessmentResponseConnection    `json:"assessmentResponses,omitempty"`
+	Assets                 *AssetConnection                 `json:"assets,omitempty"`
+	Campaigns              *CampaignConnection              `json:"campaigns,omitempty"`
+	CampaignTargets        *CampaignTargetConnection        `json:"campaignTargets,omitempty"`
+	Contacts               *ContactConnection               `json:"contacts,omitempty"`
+	Controls               *ControlConnection               `json:"controls,omitempty"`
+	ControlImplementations *ControlImplementationConnection `json:"controlImplementations,omitempty"`
+	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives,omitempty"`
+	CustomTypeEnums        *CustomTypeEnumConnection        `json:"customTypeEnums,omitempty"`
+	EmailTemplates         *EmailTemplateConnection         `json:"emailTemplates,omitempty"`
+	Entities               *EntityConnection                `json:"entities,omitempty"`
+	Evidences              *EvidenceConnection              `json:"evidences,omitempty"`
+	Findings               *FindingConnection               `json:"findings,omitempty"`
+	Groups                 *GroupConnection                 `json:"groups,omitempty"`
+	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders,omitempty"`
+	Integrations           *IntegrationConnection           `json:"integrations,omitempty"`
+	InternalPolicies       *InternalPolicyConnection        `json:"internalPolicies,omitempty"`
+	Invites                *InviteConnection                `json:"invites,omitempty"`
+	Narratives             *NarrativeConnection             `json:"narratives,omitempty"`
+	NotificationTemplates  *NotificationTemplateConnection  `json:"notificationTemplates,omitempty"`
+	Organizations          *OrganizationConnection          `json:"organizations,omitempty"`
+	Platforms              *PlatformConnection              `json:"platforms,omitempty"`
+	Procedures             *ProcedureConnection             `json:"procedures,omitempty"`
+	Programs               *ProgramConnection               `json:"programs,omitempty"`
+	Remediations           *RemediationConnection           `json:"remediations,omitempty"`
+	Reports                *ReportConnection                `json:"reports,omitempty"`
+	Reviews                *ReviewConnection                `json:"reviews,omitempty"`
+	Risks                  *RiskConnection                  `json:"risks,omitempty"`
+	Scans                  *ScanConnection                  `json:"scans,omitempty"`
+	Standards              *StandardConnection              `json:"standards,omitempty"`
+	Subcontrols            *SubcontrolConnection            `json:"subcontrols,omitempty"`
+	Subprocessors          *SubprocessorConnection          `json:"subprocessors,omitempty"`
+	Subscribers            *SubscriberConnection            `json:"subscribers,omitempty"`
+	SystemDetails          *SystemDetailConnection          `json:"systemDetails,omitempty"`
+	TagDefinitions         *TagDefinitionConnection         `json:"tagDefinitions,omitempty"`
+	Tasks                  *TaskConnection                  `json:"tasks,omitempty"`
+	Templates              *TemplateConnection              `json:"templates,omitempty"`
+	TrustCenterEntities    *TrustCenterEntityConnection     `json:"trustCenterEntities,omitempty"`
+	Vulnerabilities        *VulnerabilityConnection         `json:"vulnerabilities,omitempty"`
+	SearchContext          []*SearchContext                 `json:"searchContext,omitempty"`
 }
 
 // SearchSnippet represents a piece of matched content with surrounding context
@@ -35256,13 +35769,15 @@ type SystemDetail struct {
 	// structured revision history for OSCAL metadata
 	RevisionHistory []any `json:"revisionHistory,omitempty"`
 	// optional escape hatch for additional OSCAL metadata fields
-	OscalMetadataJSON map[string]any            `json:"oscalMetadataJSON,omitempty"`
-	IntegrationRuns   *IntegrationRunConnection `json:"integrationRuns"`
-	Owner             *Organization             `json:"owner,omitempty"`
-	Programs          *ProgramConnection        `json:"programs"`
-	Platforms         *PlatformConnection       `json:"platforms"`
-	Entities          *EntityConnection         `json:"entities"`
-	Assets            *AssetConnection          `json:"assets"`
+	OscalMetadataJSON      map[string]any                   `json:"oscalMetadataJSON,omitempty"`
+	IntegrationRuns        *IntegrationRunConnection        `json:"integrationRuns"`
+	Owner                  *Organization                    `json:"owner,omitempty"`
+	Programs               *ProgramConnection               `json:"programs"`
+	Platforms              *PlatformConnection              `json:"platforms"`
+	Entities               *EntityConnection                `json:"entities"`
+	Assets                 *AssetConnection                 `json:"assets"`
+	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
+	Reviews                *ReviewConnection                `json:"reviews"`
 }
 
 func (SystemDetail) IsNode() {}
@@ -35589,6 +36104,12 @@ type SystemDetailWhereInput struct {
 	// assets edge predicates
 	HasAssets     *bool              `json:"hasAssets,omitempty"`
 	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
+	// control_implementations edge predicates
+	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
+	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -40648,6 +41169,12 @@ type UpdateControlImplementationInput struct {
 	// identifier of the record in an external system
 	ExternalID      *string `json:"externalID,omitempty"`
 	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// the internal owner for the control implementation when no user, group, or identity holder is linked
+	InternalOwner      *string `json:"internalOwner,omitempty"`
+	ClearInternalOwner *bool   `json:"clearInternalOwner,omitempty"`
+	// the delegate for the control implementation when no user, group, or identity holder is linked
+	DelegateName      *string `json:"delegateName,omitempty"`
+	ClearDelegateName *bool   `json:"clearDelegateName,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
@@ -40670,30 +41197,53 @@ type UpdateControlImplementationInput struct {
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
 	// structured details of the control implementation in JSON format
-	DetailsJSON             []any    `json:"detailsJSON,omitempty"`
-	AppendDetailsJSON       []any    `json:"appendDetailsJSON,omitempty"`
-	ClearDetailsJSON        *bool    `json:"clearDetailsJSON,omitempty"`
-	AddIntegrationRunIDs    []string `json:"addIntegrationRunIDs,omitempty"`
-	RemoveIntegrationRunIDs []string `json:"removeIntegrationRunIDs,omitempty"`
-	ClearIntegrationRuns    *bool    `json:"clearIntegrationRuns,omitempty"`
-	AddBlockedGroupIDs      []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs            []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs         []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers            *bool    `json:"clearViewers,omitempty"`
-	AddControlIDs           []string `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool    `json:"clearControls,omitempty"`
-	AddSubcontrolIDs        []string `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs     []string `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols        *bool    `json:"clearSubcontrols,omitempty"`
-	AddTaskIDs              []string `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool    `json:"clearTasks,omitempty"`
+	DetailsJSON                      []any            `json:"detailsJSON,omitempty"`
+	AppendDetailsJSON                []any            `json:"appendDetailsJSON,omitempty"`
+	ClearDetailsJSON                 *bool            `json:"clearDetailsJSON,omitempty"`
+	AddIntegrationRunIDs             []string         `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs          []string         `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns             *bool            `json:"clearIntegrationRuns,omitempty"`
+	AddBlockedGroupIDs               []string         `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs            []string         `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups               *bool            `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                     []string         `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs                  []string         `json:"removeEditorIDs,omitempty"`
+	ClearEditors                     *bool            `json:"clearEditors,omitempty"`
+	AddViewerIDs                     []string         `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs                  []string         `json:"removeViewerIDs,omitempty"`
+	ClearViewers                     *bool            `json:"clearViewers,omitempty"`
+	InternalOwnerUserID              *string          `json:"internalOwnerUserID,omitempty"`
+	ClearInternalOwnerUser           *bool            `json:"clearInternalOwnerUser,omitempty"`
+	InternalOwnerGroupID             *string          `json:"internalOwnerGroupID,omitempty"`
+	ClearInternalOwnerGroup          *bool            `json:"clearInternalOwnerGroup,omitempty"`
+	InternalOwnerIdentityHolderID    *string          `json:"internalOwnerIdentityHolderID,omitempty"`
+	ClearInternalOwnerIdentityHolder *bool            `json:"clearInternalOwnerIdentityHolder,omitempty"`
+	DelegateUserID                   *string          `json:"delegateUserID,omitempty"`
+	ClearDelegateUser                *bool            `json:"clearDelegateUser,omitempty"`
+	DelegateGroupID                  *string          `json:"delegateGroupID,omitempty"`
+	ClearDelegateGroup               *bool            `json:"clearDelegateGroup,omitempty"`
+	DelegateIdentityHolderID         *string          `json:"delegateIdentityHolderID,omitempty"`
+	ClearDelegateIdentityHolder      *bool            `json:"clearDelegateIdentityHolder,omitempty"`
+	AddControlIDs                    []string         `json:"addControlIDs,omitempty"`
+	RemoveControlIDs                 []string         `json:"removeControlIDs,omitempty"`
+	ClearControls                    *bool            `json:"clearControls,omitempty"`
+	AddSubcontrolIDs                 []string         `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs              []string         `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols                 *bool            `json:"clearSubcontrols,omitempty"`
+	AddTaskIDs                       []string         `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                    []string         `json:"removeTaskIDs,omitempty"`
+	ClearTasks                       *bool            `json:"clearTasks,omitempty"`
+	AddPlatformIDs                   []string         `json:"addPlatformIDs,omitempty"`
+	RemovePlatformIDs                []string         `json:"removePlatformIDs,omitempty"`
+	ClearPlatforms                   *bool            `json:"clearPlatforms,omitempty"`
+	AddSystemDetailIDs               []string         `json:"addSystemDetailIDs,omitempty"`
+	RemoveSystemDetailIDs            []string         `json:"removeSystemDetailIDs,omitempty"`
+	ClearSystemDetails               *bool            `json:"clearSystemDetails,omitempty"`
+	AddCommentIDs                    []string         `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs                 []string         `json:"removeCommentIDs,omitempty"`
+	ClearComments                    *bool            `json:"clearComments,omitempty"`
+	AddComment                       *CreateNoteInput `json:"addComment,omitempty"`
+	DeleteComment                    *string          `json:"deleteComment,omitempty"`
 }
 
 // UpdateControlInput is used for update Control object.
@@ -43092,37 +43642,39 @@ type UpdateNoteInput struct {
 	NoteRef      *string `json:"noteRef,omitempty"`
 	ClearNoteRef *bool   `json:"clearNoteRef,omitempty"`
 	// whether the note has been edited
-	IsEdited                *bool    `json:"isEdited,omitempty"`
-	TaskID                  *string  `json:"taskID,omitempty"`
-	ClearTask               *bool    `json:"clearTask,omitempty"`
-	ControlID               *string  `json:"controlID,omitempty"`
-	ClearControl            *bool    `json:"clearControl,omitempty"`
-	SubcontrolID            *string  `json:"subcontrolID,omitempty"`
-	ClearSubcontrol         *bool    `json:"clearSubcontrol,omitempty"`
-	ProcedureID             *string  `json:"procedureID,omitempty"`
-	ClearProcedure          *bool    `json:"clearProcedure,omitempty"`
-	RiskID                  *string  `json:"riskID,omitempty"`
-	ClearRisk               *bool    `json:"clearRisk,omitempty"`
-	InternalPolicyID        *string  `json:"internalPolicyID,omitempty"`
-	ClearInternalPolicy     *bool    `json:"clearInternalPolicy,omitempty"`
-	ReviewID                *string  `json:"reviewID,omitempty"`
-	ClearReview             *bool    `json:"clearReview,omitempty"`
-	VulnerabilityID         *string  `json:"vulnerabilityID,omitempty"`
-	ClearVulnerability      *bool    `json:"clearVulnerability,omitempty"`
-	FindingID               *string  `json:"findingID,omitempty"`
-	ClearFinding            *bool    `json:"clearFinding,omitempty"`
-	EvidenceID              *string  `json:"evidenceID,omitempty"`
-	ClearEvidence           *bool    `json:"clearEvidence,omitempty"`
-	TrustCenterID           *string  `json:"trustCenterID,omitempty"`
-	ClearTrustCenter        *bool    `json:"clearTrustCenter,omitempty"`
-	DiscussionID            *string  `json:"discussionID,omitempty"`
-	ClearDiscussion         *bool    `json:"clearDiscussion,omitempty"`
-	AddTrustCenterFaqIDs    []string `json:"addTrustCenterFaqIDs,omitempty"`
-	RemoveTrustCenterFaqIDs []string `json:"removeTrustCenterFaqIDs,omitempty"`
-	ClearTrustCenterFaqs    *bool    `json:"clearTrustCenterFaqs,omitempty"`
-	AddFileIDs              []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs           []string `json:"removeFileIDs,omitempty"`
-	ClearFiles              *bool    `json:"clearFiles,omitempty"`
+	IsEdited                   *bool    `json:"isEdited,omitempty"`
+	TaskID                     *string  `json:"taskID,omitempty"`
+	ClearTask                  *bool    `json:"clearTask,omitempty"`
+	ControlID                  *string  `json:"controlID,omitempty"`
+	ClearControl               *bool    `json:"clearControl,omitempty"`
+	SubcontrolID               *string  `json:"subcontrolID,omitempty"`
+	ClearSubcontrol            *bool    `json:"clearSubcontrol,omitempty"`
+	ProcedureID                *string  `json:"procedureID,omitempty"`
+	ClearProcedure             *bool    `json:"clearProcedure,omitempty"`
+	RiskID                     *string  `json:"riskID,omitempty"`
+	ClearRisk                  *bool    `json:"clearRisk,omitempty"`
+	InternalPolicyID           *string  `json:"internalPolicyID,omitempty"`
+	ClearInternalPolicy        *bool    `json:"clearInternalPolicy,omitempty"`
+	ReviewID                   *string  `json:"reviewID,omitempty"`
+	ClearReview                *bool    `json:"clearReview,omitempty"`
+	VulnerabilityID            *string  `json:"vulnerabilityID,omitempty"`
+	ClearVulnerability         *bool    `json:"clearVulnerability,omitempty"`
+	FindingID                  *string  `json:"findingID,omitempty"`
+	ClearFinding               *bool    `json:"clearFinding,omitempty"`
+	ControlImplementationID    *string  `json:"controlImplementationID,omitempty"`
+	ClearControlImplementation *bool    `json:"clearControlImplementation,omitempty"`
+	EvidenceID                 *string  `json:"evidenceID,omitempty"`
+	ClearEvidence              *bool    `json:"clearEvidence,omitempty"`
+	TrustCenterID              *string  `json:"trustCenterID,omitempty"`
+	ClearTrustCenter           *bool    `json:"clearTrustCenter,omitempty"`
+	DiscussionID               *string  `json:"discussionID,omitempty"`
+	ClearDiscussion            *bool    `json:"clearDiscussion,omitempty"`
+	AddTrustCenterFaqIDs       []string `json:"addTrustCenterFaqIDs,omitempty"`
+	RemoveTrustCenterFaqIDs    []string `json:"removeTrustCenterFaqIDs,omitempty"`
+	ClearTrustCenterFaqs       *bool    `json:"clearTrustCenterFaqs,omitempty"`
+	AddFileIDs                 []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs              []string `json:"removeFileIDs,omitempty"`
+	ClearFiles                 *bool    `json:"clearFiles,omitempty"`
 }
 
 // UpdateNotificationInput is used for update Notification object.
@@ -43915,6 +44467,12 @@ type UpdatePlatformInput struct {
 	AddControlIDs                     []string       `json:"addControlIDs,omitempty"`
 	RemoveControlIDs                  []string       `json:"removeControlIDs,omitempty"`
 	ClearControls                     *bool          `json:"clearControls,omitempty"`
+	AddControlImplementationIDs       []string       `json:"addControlImplementationIDs,omitempty"`
+	RemoveControlImplementationIDs    []string       `json:"removeControlImplementationIDs,omitempty"`
+	ClearControlImplementations       *bool          `json:"clearControlImplementations,omitempty"`
+	AddReviewIDs                      []string       `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs                   []string       `json:"removeReviewIDs,omitempty"`
+	ClearReviews                      *bool          `json:"clearReviews,omitempty"`
 	AddAssessmentIDs                  []string       `json:"addAssessmentIDs,omitempty"`
 	RemoveAssessmentIDs               []string       `json:"removeAssessmentIDs,omitempty"`
 	ClearAssessments                  *bool          `json:"clearAssessments,omitempty"`
@@ -44449,12 +45007,30 @@ type UpdateReviewInput struct {
 	// identifier of the record in an external system
 	ExternalID      *string `json:"externalID,omitempty"`
 	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// the internal owner for the review when no user, group, or identity holder is linked
+	InternalOwner      *string `json:"internalOwner,omitempty"`
+	ClearInternalOwner *bool   `json:"clearInternalOwner,omitempty"`
+	// who reviewed the review when no user, group, or identity holder is linked
+	ReviewedBy      *string `json:"reviewedBy,omitempty"`
+	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
+	// the delegate for the review when no user, group, or identity holder is linked
+	DelegateName      *string `json:"delegateName,omitempty"`
+	ClearDelegateName *bool   `json:"clearDelegateName,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
+	// the kind of the review
+	ReviewKindName      *string `json:"reviewKindName,omitempty"`
+	ClearReviewKindName *bool   `json:"clearReviewKindName,omitempty"`
+	// the classification of the review
+	ReviewClassificationName      *string `json:"reviewClassificationName,omitempty"`
+	ClearReviewClassificationName *bool   `json:"clearReviewClassificationName,omitempty"`
+	// the state of the review
+	ReviewStateName      *string `json:"reviewStateName,omitempty"`
+	ClearReviewStateName *bool   `json:"clearReviewStateName,omitempty"`
 	// the environment of the review
 	EnvironmentName      *string `json:"environmentName,omitempty"`
 	ClearEnvironmentName *bool   `json:"clearEnvironmentName,omitempty"`
@@ -44509,70 +45085,100 @@ type UpdateReviewInput struct {
 	Metadata      map[string]any `json:"metadata,omitempty"`
 	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload              map[string]any   `json:"rawPayload,omitempty"`
-	ClearRawPayload         *bool            `json:"clearRawPayload,omitempty"`
-	AddIntegrationRunIDs    []string         `json:"addIntegrationRunIDs,omitempty"`
-	RemoveIntegrationRunIDs []string         `json:"removeIntegrationRunIDs,omitempty"`
-	ClearIntegrationRuns    *bool            `json:"clearIntegrationRuns,omitempty"`
-	AddBlockedGroupIDs      []string         `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string         `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool            `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string         `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string         `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool            `json:"clearEditors,omitempty"`
-	EnvironmentID           *string          `json:"environmentID,omitempty"`
-	ClearEnvironment        *bool            `json:"clearEnvironment,omitempty"`
-	ScopeID                 *string          `json:"scopeID,omitempty"`
-	ClearScope              *bool            `json:"clearScope,omitempty"`
-	AddIntegrationIDs       []string         `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs    []string         `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations       *bool            `json:"clearIntegrations,omitempty"`
-	AddFindingIDs           []string         `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs        []string         `json:"removeFindingIDs,omitempty"`
-	ClearFindings           *bool            `json:"clearFindings,omitempty"`
-	AddVulnerabilityIDs     []string         `json:"addVulnerabilityIDs,omitempty"`
-	RemoveVulnerabilityIDs  []string         `json:"removeVulnerabilityIDs,omitempty"`
-	ClearVulnerabilities    *bool            `json:"clearVulnerabilities,omitempty"`
-	AddActionPlanIDs        []string         `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs     []string         `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans        *bool            `json:"clearActionPlans,omitempty"`
-	AddRemediationIDs       []string         `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs    []string         `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations       *bool            `json:"clearRemediations,omitempty"`
-	AddControlIDs           []string         `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string         `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool            `json:"clearControls,omitempty"`
-	AddSubcontrolIDs        []string         `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs     []string         `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols        *bool            `json:"clearSubcontrols,omitempty"`
-	AddRiskIDs              []string         `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs           []string         `json:"removeRiskIDs,omitempty"`
-	ClearRisks              *bool            `json:"clearRisks,omitempty"`
-	AddProgramIDs           []string         `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string         `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool            `json:"clearPrograms,omitempty"`
-	AddAssetIDs             []string         `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs          []string         `json:"removeAssetIDs,omitempty"`
-	ClearAssets             *bool            `json:"clearAssets,omitempty"`
-	AddEntityIDs            []string         `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs         []string         `json:"removeEntityIDs,omitempty"`
-	ClearEntities           *bool            `json:"clearEntities,omitempty"`
-	AddTaskIDs              []string         `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string         `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool            `json:"clearTasks,omitempty"`
-	ReviewerID              *string          `json:"reviewerID,omitempty"`
-	ClearReviewer           *bool            `json:"clearReviewer,omitempty"`
-	AddCommentIDs           []string         `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs        []string         `json:"removeCommentIDs,omitempty"`
-	ClearComments           *bool            `json:"clearComments,omitempty"`
-	AddFileIDs              []string         `json:"addFileIDs,omitempty"`
-	RemoveFileIDs           []string         `json:"removeFileIDs,omitempty"`
-	ClearFiles              *bool            `json:"clearFiles,omitempty"`
-	AddInternalPolicyIDs    []string         `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string         `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool            `json:"clearInternalPolicies,omitempty"`
-	AddComment              *CreateNoteInput `json:"addComment,omitempty"`
-	DeleteComment           *string          `json:"deleteComment,omitempty"`
+	RawPayload                       map[string]any   `json:"rawPayload,omitempty"`
+	ClearRawPayload                  *bool            `json:"clearRawPayload,omitempty"`
+	AddIntegrationRunIDs             []string         `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs          []string         `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns             *bool            `json:"clearIntegrationRuns,omitempty"`
+	AddBlockedGroupIDs               []string         `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs            []string         `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups               *bool            `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                     []string         `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs                  []string         `json:"removeEditorIDs,omitempty"`
+	ClearEditors                     *bool            `json:"clearEditors,omitempty"`
+	InternalOwnerUserID              *string          `json:"internalOwnerUserID,omitempty"`
+	ClearInternalOwnerUser           *bool            `json:"clearInternalOwnerUser,omitempty"`
+	InternalOwnerGroupID             *string          `json:"internalOwnerGroupID,omitempty"`
+	ClearInternalOwnerGroup          *bool            `json:"clearInternalOwnerGroup,omitempty"`
+	InternalOwnerIdentityHolderID    *string          `json:"internalOwnerIdentityHolderID,omitempty"`
+	ClearInternalOwnerIdentityHolder *bool            `json:"clearInternalOwnerIdentityHolder,omitempty"`
+	ReviewedByUserID                 *string          `json:"reviewedByUserID,omitempty"`
+	ClearReviewedByUser              *bool            `json:"clearReviewedByUser,omitempty"`
+	ReviewedByGroupID                *string          `json:"reviewedByGroupID,omitempty"`
+	ClearReviewedByGroup             *bool            `json:"clearReviewedByGroup,omitempty"`
+	ReviewedByIdentityHolderID       *string          `json:"reviewedByIdentityHolderID,omitempty"`
+	ClearReviewedByIdentityHolder    *bool            `json:"clearReviewedByIdentityHolder,omitempty"`
+	DelegateUserID                   *string          `json:"delegateUserID,omitempty"`
+	ClearDelegateUser                *bool            `json:"clearDelegateUser,omitempty"`
+	DelegateGroupID                  *string          `json:"delegateGroupID,omitempty"`
+	ClearDelegateGroup               *bool            `json:"clearDelegateGroup,omitempty"`
+	DelegateIdentityHolderID         *string          `json:"delegateIdentityHolderID,omitempty"`
+	ClearDelegateIdentityHolder      *bool            `json:"clearDelegateIdentityHolder,omitempty"`
+	ReviewKindID                     *string          `json:"reviewKindID,omitempty"`
+	ClearReviewKind                  *bool            `json:"clearReviewKind,omitempty"`
+	ReviewClassificationID           *string          `json:"reviewClassificationID,omitempty"`
+	ClearReviewClassification        *bool            `json:"clearReviewClassification,omitempty"`
+	ReviewStateID                    *string          `json:"reviewStateID,omitempty"`
+	ClearReviewState                 *bool            `json:"clearReviewState,omitempty"`
+	EnvironmentID                    *string          `json:"environmentID,omitempty"`
+	ClearEnvironment                 *bool            `json:"clearEnvironment,omitempty"`
+	ScopeID                          *string          `json:"scopeID,omitempty"`
+	ClearScope                       *bool            `json:"clearScope,omitempty"`
+	AddIntegrationIDs                []string         `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs             []string         `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations                *bool            `json:"clearIntegrations,omitempty"`
+	AddFindingIDs                    []string         `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs                 []string         `json:"removeFindingIDs,omitempty"`
+	ClearFindings                    *bool            `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs              []string         `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs           []string         `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities             *bool            `json:"clearVulnerabilities,omitempty"`
+	AddActionPlanIDs                 []string         `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs              []string         `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans                 *bool            `json:"clearActionPlans,omitempty"`
+	AddRemediationIDs                []string         `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs             []string         `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations                *bool            `json:"clearRemediations,omitempty"`
+	AddControlIDs                    []string         `json:"addControlIDs,omitempty"`
+	RemoveControlIDs                 []string         `json:"removeControlIDs,omitempty"`
+	ClearControls                    *bool            `json:"clearControls,omitempty"`
+	AddSubcontrolIDs                 []string         `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs              []string         `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols                 *bool            `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs                       []string         `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs                    []string         `json:"removeRiskIDs,omitempty"`
+	ClearRisks                       *bool            `json:"clearRisks,omitempty"`
+	AddProgramIDs                    []string         `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs                 []string         `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                    *bool            `json:"clearPrograms,omitempty"`
+	AddAssetIDs                      []string         `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs                   []string         `json:"removeAssetIDs,omitempty"`
+	ClearAssets                      *bool            `json:"clearAssets,omitempty"`
+	AddEntityIDs                     []string         `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs                  []string         `json:"removeEntityIDs,omitempty"`
+	ClearEntities                    *bool            `json:"clearEntities,omitempty"`
+	AddTaskIDs                       []string         `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                    []string         `json:"removeTaskIDs,omitempty"`
+	ClearTasks                       *bool            `json:"clearTasks,omitempty"`
+	ReviewerID                       *string          `json:"reviewerID,omitempty"`
+	ClearReviewer                    *bool            `json:"clearReviewer,omitempty"`
+	AddCommentIDs                    []string         `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs                 []string         `json:"removeCommentIDs,omitempty"`
+	ClearComments                    *bool            `json:"clearComments,omitempty"`
+	AddFileIDs                       []string         `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                    []string         `json:"removeFileIDs,omitempty"`
+	ClearFiles                       *bool            `json:"clearFiles,omitempty"`
+	AddPlatformIDs                   []string         `json:"addPlatformIDs,omitempty"`
+	RemovePlatformIDs                []string         `json:"removePlatformIDs,omitempty"`
+	ClearPlatforms                   *bool            `json:"clearPlatforms,omitempty"`
+	AddSystemDetailIDs               []string         `json:"addSystemDetailIDs,omitempty"`
+	RemoveSystemDetailIDs            []string         `json:"removeSystemDetailIDs,omitempty"`
+	ClearSystemDetails               *bool            `json:"clearSystemDetails,omitempty"`
+	AddInternalPolicyIDs             []string         `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs          []string         `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies            *bool            `json:"clearInternalPolicies,omitempty"`
+	AddComment                       *CreateNoteInput `json:"addComment,omitempty"`
+	DeleteComment                    *string          `json:"deleteComment,omitempty"`
 }
 
 // UpdateRiskInput is used for update Risk object.
@@ -45292,23 +45898,29 @@ type UpdateSystemDetailInput struct {
 	AppendRevisionHistory []any `json:"appendRevisionHistory,omitempty"`
 	ClearRevisionHistory  *bool `json:"clearRevisionHistory,omitempty"`
 	// optional escape hatch for additional OSCAL metadata fields
-	OscalMetadataJSON       map[string]any `json:"oscalMetadataJSON,omitempty"`
-	ClearOscalMetadataJSON  *bool          `json:"clearOscalMetadataJSON,omitempty"`
-	AddIntegrationRunIDs    []string       `json:"addIntegrationRunIDs,omitempty"`
-	RemoveIntegrationRunIDs []string       `json:"removeIntegrationRunIDs,omitempty"`
-	ClearIntegrationRuns    *bool          `json:"clearIntegrationRuns,omitempty"`
-	AddProgramIDs           []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool          `json:"clearPrograms,omitempty"`
-	AddPlatformIDs          []string       `json:"addPlatformIDs,omitempty"`
-	RemovePlatformIDs       []string       `json:"removePlatformIDs,omitempty"`
-	ClearPlatforms          *bool          `json:"clearPlatforms,omitempty"`
-	AddEntityIDs            []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs         []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities           *bool          `json:"clearEntities,omitempty"`
-	AddAssetIDs             []string       `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs          []string       `json:"removeAssetIDs,omitempty"`
-	ClearAssets             *bool          `json:"clearAssets,omitempty"`
+	OscalMetadataJSON              map[string]any `json:"oscalMetadataJSON,omitempty"`
+	ClearOscalMetadataJSON         *bool          `json:"clearOscalMetadataJSON,omitempty"`
+	AddIntegrationRunIDs           []string       `json:"addIntegrationRunIDs,omitempty"`
+	RemoveIntegrationRunIDs        []string       `json:"removeIntegrationRunIDs,omitempty"`
+	ClearIntegrationRuns           *bool          `json:"clearIntegrationRuns,omitempty"`
+	AddProgramIDs                  []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs               []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                  *bool          `json:"clearPrograms,omitempty"`
+	AddPlatformIDs                 []string       `json:"addPlatformIDs,omitempty"`
+	RemovePlatformIDs              []string       `json:"removePlatformIDs,omitempty"`
+	ClearPlatforms                 *bool          `json:"clearPlatforms,omitempty"`
+	AddEntityIDs                   []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs                []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities                  *bool          `json:"clearEntities,omitempty"`
+	AddAssetIDs                    []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs                 []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets                    *bool          `json:"clearAssets,omitempty"`
+	AddControlImplementationIDs    []string       `json:"addControlImplementationIDs,omitempty"`
+	RemoveControlImplementationIDs []string       `json:"removeControlImplementationIDs,omitempty"`
+	ClearControlImplementations    *bool          `json:"clearControlImplementations,omitempty"`
+	AddReviewIDs                   []string       `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs                []string       `json:"removeReviewIDs,omitempty"`
+	ClearReviews                   *bool          `json:"clearReviews,omitempty"`
 }
 
 // UpdateTFASettingInput is used for update TFASetting object.
@@ -52066,6 +52678,8 @@ const (
 	ControlImplementationOrderFieldCreatedAt          ControlImplementationOrderField = "created_at"
 	ControlImplementationOrderFieldUpdatedAt          ControlImplementationOrderField = "updated_at"
 	ControlImplementationOrderFieldExternalID         ControlImplementationOrderField = "external_id"
+	ControlImplementationOrderFieldInternalOwner      ControlImplementationOrderField = "internal_owner"
+	ControlImplementationOrderFieldDelegateName       ControlImplementationOrderField = "delegate_name"
 	ControlImplementationOrderFieldStatus             ControlImplementationOrderField = "STATUS"
 	ControlImplementationOrderFieldImplementationDate ControlImplementationOrderField = "implementation_date"
 	ControlImplementationOrderFieldVerified           ControlImplementationOrderField = "verified"
@@ -52076,6 +52690,8 @@ var AllControlImplementationOrderField = []ControlImplementationOrderField{
 	ControlImplementationOrderFieldCreatedAt,
 	ControlImplementationOrderFieldUpdatedAt,
 	ControlImplementationOrderFieldExternalID,
+	ControlImplementationOrderFieldInternalOwner,
+	ControlImplementationOrderFieldDelegateName,
 	ControlImplementationOrderFieldStatus,
 	ControlImplementationOrderFieldImplementationDate,
 	ControlImplementationOrderFieldVerified,
@@ -52084,7 +52700,7 @@ var AllControlImplementationOrderField = []ControlImplementationOrderField{
 
 func (e ControlImplementationOrderField) IsValid() bool {
 	switch e {
-	case ControlImplementationOrderFieldCreatedAt, ControlImplementationOrderFieldUpdatedAt, ControlImplementationOrderFieldExternalID, ControlImplementationOrderFieldStatus, ControlImplementationOrderFieldImplementationDate, ControlImplementationOrderFieldVerified, ControlImplementationOrderFieldVerificationDate:
+	case ControlImplementationOrderFieldCreatedAt, ControlImplementationOrderFieldUpdatedAt, ControlImplementationOrderFieldExternalID, ControlImplementationOrderFieldInternalOwner, ControlImplementationOrderFieldDelegateName, ControlImplementationOrderFieldStatus, ControlImplementationOrderFieldImplementationDate, ControlImplementationOrderFieldVerified, ControlImplementationOrderFieldVerificationDate:
 		return true
 	}
 	return false
@@ -55439,6 +56055,8 @@ const (
 	ReviewOrderFieldCreatedAt       ReviewOrderField = "created_at"
 	ReviewOrderFieldUpdatedAt       ReviewOrderField = "updated_at"
 	ReviewOrderFieldExternalID      ReviewOrderField = "external_id"
+	ReviewOrderFieldInternalOwner   ReviewOrderField = "internal_owner"
+	ReviewOrderFieldDelegateName    ReviewOrderField = "delegate_name"
 	ReviewOrderFieldExternalOwnerID ReviewOrderField = "external_owner_id"
 	ReviewOrderFieldTitle           ReviewOrderField = "title"
 	ReviewOrderFieldState           ReviewOrderField = "state"
@@ -55448,6 +56066,8 @@ var AllReviewOrderField = []ReviewOrderField{
 	ReviewOrderFieldCreatedAt,
 	ReviewOrderFieldUpdatedAt,
 	ReviewOrderFieldExternalID,
+	ReviewOrderFieldInternalOwner,
+	ReviewOrderFieldDelegateName,
 	ReviewOrderFieldExternalOwnerID,
 	ReviewOrderFieldTitle,
 	ReviewOrderFieldState,
@@ -55455,7 +56075,7 @@ var AllReviewOrderField = []ReviewOrderField{
 
 func (e ReviewOrderField) IsValid() bool {
 	switch e {
-	case ReviewOrderFieldCreatedAt, ReviewOrderFieldUpdatedAt, ReviewOrderFieldExternalID, ReviewOrderFieldExternalOwnerID, ReviewOrderFieldTitle, ReviewOrderFieldState:
+	case ReviewOrderFieldCreatedAt, ReviewOrderFieldUpdatedAt, ReviewOrderFieldExternalID, ReviewOrderFieldInternalOwner, ReviewOrderFieldDelegateName, ReviewOrderFieldExternalOwnerID, ReviewOrderFieldTitle, ReviewOrderFieldState:
 		return true
 	}
 	return false
