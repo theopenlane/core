@@ -12,7 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // ControlImplementation is the model entity for the ControlImplementation schema.
@@ -52,6 +55,22 @@ type ControlImplementation struct {
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the internal owner for the control implementation when no user, group, or identity holder is linked
+	InternalOwner string `json:"internal_owner,omitempty"`
+	// the internal owner user id for the control implementation
+	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
+	// the internal owner group id for the control implementation
+	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the control implementation
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
+	// the delegate for the control implementation when no user, group, or identity holder is linked
+	DelegateName string `json:"delegate_name,omitempty"`
+	// the delegate user id for the control implementation
+	DelegateUserID string `json:"delegate_user_id,omitempty"`
+	// the delegate group id for the control implementation
+	DelegateGroupID string `json:"delegate_group_id,omitempty"`
+	// the delegate identity holder id for the control implementation
+	DelegateIdentityHolderID string `json:"delegate_identity_holder_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -90,17 +109,35 @@ type ControlImplementationEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
+	// InternalOwnerUser holds the value of the internal_owner_user edge.
+	InternalOwnerUser *User `json:"internal_owner_user,omitempty"`
+	// InternalOwnerGroup holds the value of the internal_owner_group edge.
+	InternalOwnerGroup *Group `json:"internal_owner_group,omitempty"`
+	// InternalOwnerIdentityHolder holds the value of the internal_owner_identity_holder edge.
+	InternalOwnerIdentityHolder *IdentityHolder `json:"internal_owner_identity_holder,omitempty"`
+	// DelegateUser holds the value of the delegate_user edge.
+	DelegateUser *User `json:"delegate_user,omitempty"`
+	// DelegateGroup holds the value of the delegate_group edge.
+	DelegateGroup *Group `json:"delegate_group,omitempty"`
+	// DelegateIdentityHolder holds the value of the delegate_identity_holder edge.
+	DelegateIdentityHolder *IdentityHolder `json:"delegate_identity_holder,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Platforms holds the value of the platforms edge.
+	Platforms []*Platform `json:"platforms,omitempty"`
+	// SystemDetails holds the value of the system_details edge.
+	SystemDetails []*SystemDetail `json:"system_details,omitempty"`
+	// discussion threads captured during the control implementation
+	Comments []*Note `json:"comments,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [17]map[string]int
 
 	namedIntegrationRuns map[string][]*IntegrationRun
 	namedBlockedGroups   map[string][]*Group
@@ -109,6 +146,9 @@ type ControlImplementationEdges struct {
 	namedControls        map[string][]*Control
 	namedSubcontrols     map[string][]*Subcontrol
 	namedTasks           map[string][]*Task
+	namedPlatforms       map[string][]*Platform
+	namedSystemDetails   map[string][]*SystemDetail
+	namedComments        map[string][]*Note
 }
 
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
@@ -158,10 +198,76 @@ func (e ControlImplementationEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
+// InternalOwnerUserOrErr returns the InternalOwnerUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlImplementationEdges) InternalOwnerUserOrErr() (*User, error) {
+	if e.InternalOwnerUser != nil {
+		return e.InternalOwnerUser, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_user"}
+}
+
+// InternalOwnerGroupOrErr returns the InternalOwnerGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlImplementationEdges) InternalOwnerGroupOrErr() (*Group, error) {
+	if e.InternalOwnerGroup != nil {
+		return e.InternalOwnerGroup, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_group"}
+}
+
+// InternalOwnerIdentityHolderOrErr returns the InternalOwnerIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlImplementationEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.InternalOwnerIdentityHolder != nil {
+		return e.InternalOwnerIdentityHolder, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_identity_holder"}
+}
+
+// DelegateUserOrErr returns the DelegateUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlImplementationEdges) DelegateUserOrErr() (*User, error) {
+	if e.DelegateUser != nil {
+		return e.DelegateUser, nil
+	} else if e.loadedTypes[8] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate_user"}
+}
+
+// DelegateGroupOrErr returns the DelegateGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlImplementationEdges) DelegateGroupOrErr() (*Group, error) {
+	if e.DelegateGroup != nil {
+		return e.DelegateGroup, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate_group"}
+}
+
+// DelegateIdentityHolderOrErr returns the DelegateIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlImplementationEdges) DelegateIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.DelegateIdentityHolder != nil {
+		return e.DelegateIdentityHolder, nil
+	} else if e.loadedTypes[10] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate_identity_holder"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[11] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -170,7 +276,7 @@ func (e ControlImplementationEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[12] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -179,10 +285,37 @@ func (e ControlImplementationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[13] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// PlatformsOrErr returns the Platforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlImplementationEdges) PlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[14] {
+		return e.Platforms, nil
+	}
+	return nil, &NotLoadedError{edge: "platforms"}
+}
+
+// SystemDetailsOrErr returns the SystemDetails value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlImplementationEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
+	if e.loadedTypes[15] {
+		return e.SystemDetails, nil
+	}
+	return nil, &NotLoadedError{edge: "system_details"}
+}
+
+// CommentsOrErr returns the Comments value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlImplementationEdges) CommentsOrErr() ([]*Note, error) {
+	if e.loadedTypes[16] {
+		return e.Comments, nil
+	}
+	return nil, &NotLoadedError{edge: "comments"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -194,7 +327,7 @@ func (*ControlImplementation) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlimplementation.FieldSystemOwned, controlimplementation.FieldVerified:
 			values[i] = new(sql.NullBool)
-		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldUpdatedByImpersonator, controlimplementation.FieldDeletedBy, controlimplementation.FieldSourceDefinitionID, controlimplementation.FieldSourceDefinitionVersion, controlimplementation.FieldSourceInstanceID, controlimplementation.FieldManagedBy, controlimplementation.FieldIntegrationRunID, controlimplementation.FieldSourceKey, controlimplementation.FieldExternalID, controlimplementation.FieldOwnerID, controlimplementation.FieldInternalNotes, controlimplementation.FieldSystemInternalID, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
+		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldUpdatedByImpersonator, controlimplementation.FieldDeletedBy, controlimplementation.FieldSourceDefinitionID, controlimplementation.FieldSourceDefinitionVersion, controlimplementation.FieldSourceInstanceID, controlimplementation.FieldManagedBy, controlimplementation.FieldIntegrationRunID, controlimplementation.FieldSourceKey, controlimplementation.FieldExternalID, controlimplementation.FieldOwnerID, controlimplementation.FieldInternalOwner, controlimplementation.FieldInternalOwnerUserID, controlimplementation.FieldInternalOwnerGroupID, controlimplementation.FieldInternalOwnerIdentityHolderID, controlimplementation.FieldDelegateName, controlimplementation.FieldDelegateUserID, controlimplementation.FieldDelegateGroupID, controlimplementation.FieldDelegateIdentityHolderID, controlimplementation.FieldInternalNotes, controlimplementation.FieldSystemInternalID, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
 			values[i] = new(sql.NullString)
 		case controlimplementation.FieldCreatedAt, controlimplementation.FieldUpdatedAt, controlimplementation.FieldDeletedAt, controlimplementation.FieldImplementationDate, controlimplementation.FieldVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -322,6 +455,54 @@ func (_m *ControlImplementation) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case controlimplementation.FieldInternalOwner:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner", values[i])
+			} else if value.Valid {
+				_m.InternalOwner = value.String
+			}
+		case controlimplementation.FieldInternalOwnerUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_user_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerUserID = value.String
+			}
+		case controlimplementation.FieldInternalOwnerGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerGroupID = value.String
+			}
+		case controlimplementation.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
+			}
+		case controlimplementation.FieldDelegateName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_name", values[i])
+			} else if value.Valid {
+				_m.DelegateName = value.String
+			}
+		case controlimplementation.FieldDelegateUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_user_id", values[i])
+			} else if value.Valid {
+				_m.DelegateUserID = value.String
+			}
+		case controlimplementation.FieldDelegateGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_group_id", values[i])
+			} else if value.Valid {
+				_m.DelegateGroupID = value.String
+			}
+		case controlimplementation.FieldDelegateIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.DelegateIdentityHolderID = value.String
+			}
 		case controlimplementation.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
@@ -432,6 +613,36 @@ func (_m *ControlImplementation) QueryViewers() *GroupQuery {
 	return NewControlImplementationClient(_m.config).QueryViewers(_m)
 }
 
+// QueryInternalOwnerUser queries the "internal_owner_user" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryInternalOwnerUser() *UserQuery {
+	return NewControlImplementationClient(_m.config).QueryInternalOwnerUser(_m)
+}
+
+// QueryInternalOwnerGroup queries the "internal_owner_group" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryInternalOwnerGroup() *GroupQuery {
+	return NewControlImplementationClient(_m.config).QueryInternalOwnerGroup(_m)
+}
+
+// QueryInternalOwnerIdentityHolder queries the "internal_owner_identity_holder" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	return NewControlImplementationClient(_m.config).QueryInternalOwnerIdentityHolder(_m)
+}
+
+// QueryDelegateUser queries the "delegate_user" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryDelegateUser() *UserQuery {
+	return NewControlImplementationClient(_m.config).QueryDelegateUser(_m)
+}
+
+// QueryDelegateGroup queries the "delegate_group" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryDelegateGroup() *GroupQuery {
+	return NewControlImplementationClient(_m.config).QueryDelegateGroup(_m)
+}
+
+// QueryDelegateIdentityHolder queries the "delegate_identity_holder" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryDelegateIdentityHolder() *IdentityHolderQuery {
+	return NewControlImplementationClient(_m.config).QueryDelegateIdentityHolder(_m)
+}
+
 // QueryControls queries the "controls" edge of the ControlImplementation entity.
 func (_m *ControlImplementation) QueryControls() *ControlQuery {
 	return NewControlImplementationClient(_m.config).QueryControls(_m)
@@ -445,6 +656,21 @@ func (_m *ControlImplementation) QuerySubcontrols() *SubcontrolQuery {
 // QueryTasks queries the "tasks" edge of the ControlImplementation entity.
 func (_m *ControlImplementation) QueryTasks() *TaskQuery {
 	return NewControlImplementationClient(_m.config).QueryTasks(_m)
+}
+
+// QueryPlatforms queries the "platforms" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryPlatforms() *PlatformQuery {
+	return NewControlImplementationClient(_m.config).QueryPlatforms(_m)
+}
+
+// QuerySystemDetails queries the "system_details" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QuerySystemDetails() *SystemDetailQuery {
+	return NewControlImplementationClient(_m.config).QuerySystemDetails(_m)
+}
+
+// QueryComments queries the "comments" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryComments() *NoteQuery {
+	return NewControlImplementationClient(_m.config).QueryComments(_m)
 }
 
 // Update returns a builder for updating this ControlImplementation.
@@ -519,6 +745,30 @@ func (_m *ControlImplementation) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner=")
+	builder.WriteString(_m.InternalOwner)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_user_id=")
+	builder.WriteString(_m.InternalOwnerUserID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_group_id=")
+	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_name=")
+	builder.WriteString(_m.DelegateName)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_user_id=")
+	builder.WriteString(_m.DelegateUserID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_group_id=")
+	builder.WriteString(_m.DelegateGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_identity_holder_id=")
+	builder.WriteString(_m.DelegateIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
@@ -719,6 +969,78 @@ func (_m *ControlImplementation) appendNamedTasks(name string, edges ...*Task) {
 		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
 		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedPlatforms returns the Platforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ControlImplementation) NamedPlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ControlImplementation) appendNamedPlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatforms == nil {
+		_m.Edges.namedPlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
+	}
+}
+
+// NamedSystemDetails returns the SystemDetails named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ControlImplementation) NamedSystemDetails(name string) ([]*SystemDetail, error) {
+	if _m.Edges.namedSystemDetails == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSystemDetails[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ControlImplementation) appendNamedSystemDetails(name string, edges ...*SystemDetail) {
+	if _m.Edges.namedSystemDetails == nil {
+		_m.Edges.namedSystemDetails = make(map[string][]*SystemDetail)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSystemDetails[name] = []*SystemDetail{}
+	} else {
+		_m.Edges.namedSystemDetails[name] = append(_m.Edges.namedSystemDetails[name], edges...)
+	}
+}
+
+// NamedComments returns the Comments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ControlImplementation) NamedComments(name string) ([]*Note, error) {
+	if _m.Edges.namedComments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedComments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ControlImplementation) appendNamedComments(name string, edges ...*Note) {
+	if _m.Edges.namedComments == nil {
+		_m.Edges.namedComments = make(map[string][]*Note)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedComments[name] = []*Note{}
+	} else {
+		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
 	}
 }
 

@@ -9695,6 +9695,38 @@ type ControlImplementation implements Node @modules(names: ["compliance_module"]
   """
   ownerID: ID
   """
+  the internal owner for the control implementation when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the control implementation
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the control implementation
+  """
+  internalOwnerGroupID: ID
+  """
+  the internal owner identity holder id for the control implementation
+  """
+  internalOwnerIdentityHolderID: ID
+  """
+  the delegate for the control implementation when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
+  the delegate user id for the control implementation
+  """
+  delegateUserID: ID
+  """
+  the delegate group id for the control implementation
+  """
+  delegateGroupID: ID
+  """
+  the delegate identity holder id for the control implementation
+  """
+  delegateIdentityHolderID: ID
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -9855,6 +9887,12 @@ type ControlImplementation implements Node @modules(names: ["compliance_module"]
     """
     where: GroupWhereInput
   ): GroupConnection!
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  internalOwnerIdentityHolder: IdentityHolder
+  delegateUser: User
+  delegateGroup: Group
+  delegateIdentityHolder: IdentityHolder
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -9948,6 +9986,99 @@ type ControlImplementation implements Node @modules(names: ["compliance_module"]
     """
     where: TaskWhereInput
   ): TaskConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  systemDetails(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SystemDetails returned from the connection.
+    """
+    orderBy: [SystemDetailOrder!]
+
+    """
+    Filtering options for SystemDetails returned from the connection.
+    """
+    where: SystemDetailWhereInput
+  ): SystemDetailConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -10010,6 +10141,8 @@ enum ControlImplementationOrderField {
   created_at
   updated_at
   external_id
+  internal_owner
+  delegate_name
   STATUS
   implementation_date
   verified
@@ -10207,6 +10340,118 @@ input ControlImplementationWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: ID
+  internalOwnerIdentityHolderIDNEQ: ID
+  internalOwnerIdentityHolderIDIn: [ID!]
+  internalOwnerIdentityHolderIDNotIn: [ID!]
+  internalOwnerIdentityHolderIDContains: ID
+  internalOwnerIdentityHolderIDHasPrefix: ID
+  internalOwnerIdentityHolderIDHasSuffix: ID
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: ID
+  internalOwnerIdentityHolderIDContainsFold: ID
+  """
+  delegate_name field predicates
+  """
+  delegateName: String
+  delegateNameNEQ: String
+  delegateNameIn: [String!]
+  delegateNameNotIn: [String!]
+  delegateNameContains: String
+  delegateNameHasPrefix: String
+  delegateNameHasSuffix: String
+  delegateNameIsNil: Boolean
+  delegateNameNotNil: Boolean
+  delegateNameEqualFold: String
+  delegateNameContainsFold: String
+  """
+  delegate_user_id field predicates
+  """
+  delegateUserID: ID
+  delegateUserIDNEQ: ID
+  delegateUserIDIn: [ID!]
+  delegateUserIDNotIn: [ID!]
+  delegateUserIDContains: ID
+  delegateUserIDHasPrefix: ID
+  delegateUserIDHasSuffix: ID
+  delegateUserIDIsNil: Boolean
+  delegateUserIDNotNil: Boolean
+  delegateUserIDEqualFold: ID
+  delegateUserIDContainsFold: ID
+  """
+  delegate_group_id field predicates
+  """
+  delegateGroupID: ID
+  delegateGroupIDNEQ: ID
+  delegateGroupIDIn: [ID!]
+  delegateGroupIDNotIn: [ID!]
+  delegateGroupIDContains: ID
+  delegateGroupIDHasPrefix: ID
+  delegateGroupIDHasSuffix: ID
+  delegateGroupIDIsNil: Boolean
+  delegateGroupIDNotNil: Boolean
+  delegateGroupIDEqualFold: ID
+  delegateGroupIDContainsFold: ID
+  """
+  delegate_identity_holder_id field predicates
+  """
+  delegateIdentityHolderID: ID
+  delegateIdentityHolderIDNEQ: ID
+  delegateIdentityHolderIDIn: [ID!]
+  delegateIdentityHolderIDNotIn: [ID!]
+  delegateIdentityHolderIDContains: ID
+  delegateIdentityHolderIDHasPrefix: ID
+  delegateIdentityHolderIDHasSuffix: ID
+  delegateIdentityHolderIDIsNil: Boolean
+  delegateIdentityHolderIDNotNil: Boolean
+  delegateIdentityHolderIDEqualFold: ID
+  delegateIdentityHolderIDContainsFold: ID
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -10317,6 +10562,36 @@ input ControlImplementationWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  internal_owner_identity_holder edge predicates
+  """
+  hasInternalOwnerIdentityHolder: Boolean
+  hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  delegate_user edge predicates
+  """
+  hasDelegateUser: Boolean
+  hasDelegateUserWith: [UserWhereInput!]
+  """
+  delegate_group edge predicates
+  """
+  hasDelegateGroup: Boolean
+  hasDelegateGroupWith: [GroupWhereInput!]
+  """
+  delegate_identity_holder edge predicates
+  """
+  hasDelegateIdentityHolder: Boolean
+  hasDelegateIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
@@ -10331,6 +10606,21 @@ input ControlImplementationWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  system_details edge predicates
+  """
+  hasSystemDetails: Boolean
+  hasSystemDetailsWith: [SystemDetailWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -13008,6 +13298,14 @@ input CreateControlImplementationInput {
   """
   externalID: String
   """
+  the internal owner for the control implementation when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the delegate for the control implementation when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -13044,9 +13342,18 @@ input CreateControlImplementationInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  internalOwnerIdentityHolderID: ID
+  delegateUserID: ID
+  delegateGroupID: ID
+  delegateIdentityHolderID: ID
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   taskIDs: [ID!]
+  platformIDs: [ID!]
+  systemDetailIDs: [ID!]
+  commentIDs: [ID!]
 }
 """
 CreateControlInput is used for create Control object.
@@ -15290,6 +15597,7 @@ input CreateNoteInput {
   reviewID: ID
   vulnerabilityID: ID
   findingID: ID
+  controlImplementationID: ID
   evidenceID: ID
   trustCenterID: ID
   discussionID: ID
@@ -16054,6 +16362,8 @@ input CreatePlatformInput {
   trustBoundaryDiagramIDs: [ID!]
   riskIDs: [ID!]
   controlIDs: [ID!]
+  controlImplementationIDs: [ID!]
+  reviewIDs: [ID!]
   assessmentIDs: [ID!]
   scanIDs: [ID!]
   taskIDs: [ID!]
@@ -16509,6 +16819,18 @@ input CreateReviewInput {
   """
   externalID: String
   """
+  the internal owner for the review when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  who reviewed the review when no user, group, or identity holder is linked
+  """
+  reviewedBy: String
+  """
+  the delegate for the review when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -16516,6 +16838,18 @@ input CreateReviewInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
+  """
+  the kind of the review
+  """
+  reviewKindName: String
+  """
+  the classification of the review
+  """
+  reviewClassificationName: String
+  """
+  the state of the review
+  """
+  reviewStateName: String
   """
   the environment of the review
   """
@@ -16596,6 +16930,18 @@ input CreateReviewInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  internalOwnerIdentityHolderID: ID
+  reviewedByUserID: ID
+  reviewedByGroupID: ID
+  reviewedByIdentityHolderID: ID
+  delegateUserID: ID
+  delegateGroupID: ID
+  delegateIdentityHolderID: ID
+  reviewKindID: ID
+  reviewClassificationID: ID
+  reviewStateID: ID
   environmentID: ID
   scopeID: ID
   integrationIDs: [ID!]
@@ -16613,6 +16959,8 @@ input CreateReviewInput {
   reviewerID: ID
   commentIDs: [ID!]
   fileIDs: [ID!]
+  platformIDs: [ID!]
+  systemDetailIDs: [ID!]
   internalPolicyIDs: [ID!]
 }
 """
@@ -17299,6 +17647,8 @@ input CreateSystemDetailInput {
   platformIDs: [ID!]
   entityIDs: [ID!]
   assetIDs: [ID!]
+  controlImplementationIDs: [ID!]
+  reviewIDs: [ID!]
 }
 """
 CreateTFASettingInput is used for create TFASetting object.
@@ -42677,6 +43027,7 @@ type Note implements Node @modules(names: ["any_module"]) {
   review: Review
   vulnerability: Vulnerability
   finding: Finding
+  controlImplementation: ControlImplementation
   evidence: Evidence
   trustCenter: TrustCenter
   discussion: Discussion
@@ -43038,6 +43389,11 @@ input NoteWhereInput {
   """
   hasFinding: Boolean
   hasFindingWith: [FindingWhereInput!]
+  """
+  control_implementation edge predicates
+  """
+  hasControlImplementation: Boolean
+  hasControlImplementationWith: [ControlImplementationWhereInput!]
   """
   evidence edge predicates
   """
@@ -50368,6 +50724,68 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
     """
     where: ControlWhereInput
   ): ControlConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
   assessments(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -51960,6 +52378,16 @@ input PlatformWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
   """
   assessments edge predicates
   """
@@ -60129,6 +60557,54 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   ownerID: ID
   """
+  the internal owner for the review when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the review
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the review
+  """
+  internalOwnerGroupID: ID
+  """
+  the internal owner identity holder id for the review
+  """
+  internalOwnerIdentityHolderID: ID
+  """
+  who reviewed the review when no user, group, or identity holder is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the review
+  """
+  reviewedByUserID: ID
+  """
+  the group id that reviewed the review
+  """
+  reviewedByGroupID: ID
+  """
+  the identity holder id that reviewed the review
+  """
+  reviewedByIdentityHolderID: ID
+  """
+  the delegate for the review when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
+  the delegate user id for the review
+  """
+  delegateUserID: ID
+  """
+  the delegate group id for the review
+  """
+  delegateGroupID: ID
+  """
+  the delegate identity holder id for the review
+  """
+  delegateIdentityHolderID: ID
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -60140,6 +60616,30 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the kind of the review
+  """
+  reviewKindName: String
+  """
+  the kind of the review
+  """
+  reviewKindID: ID
+  """
+  the classification of the review
+  """
+  reviewClassificationName: String
+  """
+  the classification of the review
+  """
+  reviewClassificationID: ID
+  """
+  the state of the review
+  """
+  reviewStateName: String
+  """
+  the state of the review
+  """
+  reviewStateID: ID
   """
   the environment of the review
   """
@@ -60167,7 +60667,7 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   state of the review
   """
-  state: String
+  state: String @deprecated(reason: "use review_state_name instead")
   """
   status of the review
   """
@@ -60175,11 +60675,11 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   category for the review record
   """
-  category: String
+  category: String @deprecated(reason: "use review_kind_name instead")
   """
   classification or sensitivity of the review record
   """
-  classification: String
+  classification: String @deprecated(reason: "use review_classification_name instead")
   """
   summary text for the review
   """
@@ -60191,7 +60691,7 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   person or system that created the review
   """
-  reporter: String
+  reporter: String @deprecated(reason: "use created_by or responsibility fields instead")
   """
   true when the review has been approved
   """
@@ -60211,7 +60711,7 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   identifier for the user primarily responsible for the review
   """
-  reviewerID: ID
+  reviewerID: ID @deprecated(reason: "use reviewed_by_user_id instead")
   """
   system that produced the review record
   """
@@ -60322,6 +60822,18 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
     """
     where: GroupWhereInput
   ): GroupConnection!
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  internalOwnerIdentityHolder: IdentityHolder
+  reviewedByUser: User
+  reviewedByGroup: Group
+  reviewedByIdentityHolder: IdentityHolder
+  delegateUser: User
+  delegateGroup: Group
+  delegateIdentityHolder: IdentityHolder
+  reviewKind: CustomTypeEnum
+  reviewClassification: CustomTypeEnum
+  reviewState: CustomTypeEnum
   environment: CustomTypeEnum
   scope: CustomTypeEnum
   integrations(
@@ -60699,7 +61211,7 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   primary reviewer responsible for the record
   """
-  reviewer: User
+  reviewer: User @deprecated(reason: "use reviewed_by_user instead")
   comments(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -60762,6 +61274,68 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
     """
     where: FileWhereInput
   ): FileConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  systemDetails(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SystemDetails returned from the connection.
+    """
+    orderBy: [SystemDetailOrder!]
+
+    """
+    Filtering options for SystemDetails returned from the connection.
+    """
+    where: SystemDetailWhereInput
+  ): SystemDetailConnection!
   internalPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -60844,6 +61418,8 @@ enum ReviewOrderField {
   created_at
   updated_at
   external_id
+  internal_owner
+  delegate_name
   external_owner_id
   title
   state
@@ -61050,6 +61626,174 @@ input ReviewWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: ID
+  internalOwnerIdentityHolderIDNEQ: ID
+  internalOwnerIdentityHolderIDIn: [ID!]
+  internalOwnerIdentityHolderIDNotIn: [ID!]
+  internalOwnerIdentityHolderIDContains: ID
+  internalOwnerIdentityHolderIDHasPrefix: ID
+  internalOwnerIdentityHolderIDHasSuffix: ID
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: ID
+  internalOwnerIdentityHolderIDContainsFold: ID
+  """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: ID
+  reviewedByUserIDNEQ: ID
+  reviewedByUserIDIn: [ID!]
+  reviewedByUserIDNotIn: [ID!]
+  reviewedByUserIDContains: ID
+  reviewedByUserIDHasPrefix: ID
+  reviewedByUserIDHasSuffix: ID
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: ID
+  reviewedByUserIDContainsFold: ID
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: ID
+  reviewedByGroupIDNEQ: ID
+  reviewedByGroupIDIn: [ID!]
+  reviewedByGroupIDNotIn: [ID!]
+  reviewedByGroupIDContains: ID
+  reviewedByGroupIDHasPrefix: ID
+  reviewedByGroupIDHasSuffix: ID
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: ID
+  reviewedByGroupIDContainsFold: ID
+  """
+  reviewed_by_identity_holder_id field predicates
+  """
+  reviewedByIdentityHolderID: ID
+  reviewedByIdentityHolderIDNEQ: ID
+  reviewedByIdentityHolderIDIn: [ID!]
+  reviewedByIdentityHolderIDNotIn: [ID!]
+  reviewedByIdentityHolderIDContains: ID
+  reviewedByIdentityHolderIDHasPrefix: ID
+  reviewedByIdentityHolderIDHasSuffix: ID
+  reviewedByIdentityHolderIDIsNil: Boolean
+  reviewedByIdentityHolderIDNotNil: Boolean
+  reviewedByIdentityHolderIDEqualFold: ID
+  reviewedByIdentityHolderIDContainsFold: ID
+  """
+  delegate_name field predicates
+  """
+  delegateName: String
+  delegateNameNEQ: String
+  delegateNameIn: [String!]
+  delegateNameNotIn: [String!]
+  delegateNameContains: String
+  delegateNameHasPrefix: String
+  delegateNameHasSuffix: String
+  delegateNameIsNil: Boolean
+  delegateNameNotNil: Boolean
+  delegateNameEqualFold: String
+  delegateNameContainsFold: String
+  """
+  delegate_user_id field predicates
+  """
+  delegateUserID: ID
+  delegateUserIDNEQ: ID
+  delegateUserIDIn: [ID!]
+  delegateUserIDNotIn: [ID!]
+  delegateUserIDContains: ID
+  delegateUserIDHasPrefix: ID
+  delegateUserIDHasSuffix: ID
+  delegateUserIDIsNil: Boolean
+  delegateUserIDNotNil: Boolean
+  delegateUserIDEqualFold: ID
+  delegateUserIDContainsFold: ID
+  """
+  delegate_group_id field predicates
+  """
+  delegateGroupID: ID
+  delegateGroupIDNEQ: ID
+  delegateGroupIDIn: [ID!]
+  delegateGroupIDNotIn: [ID!]
+  delegateGroupIDContains: ID
+  delegateGroupIDHasPrefix: ID
+  delegateGroupIDHasSuffix: ID
+  delegateGroupIDIsNil: Boolean
+  delegateGroupIDNotNil: Boolean
+  delegateGroupIDEqualFold: ID
+  delegateGroupIDContainsFold: ID
+  """
+  delegate_identity_holder_id field predicates
+  """
+  delegateIdentityHolderID: ID
+  delegateIdentityHolderIDNEQ: ID
+  delegateIdentityHolderIDIn: [ID!]
+  delegateIdentityHolderIDNotIn: [ID!]
+  delegateIdentityHolderIDContains: ID
+  delegateIdentityHolderIDHasPrefix: ID
+  delegateIdentityHolderIDHasSuffix: ID
+  delegateIdentityHolderIDIsNil: Boolean
+  delegateIdentityHolderIDNotNil: Boolean
+  delegateIdentityHolderIDEqualFold: ID
+  delegateIdentityHolderIDContainsFold: ID
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -61084,6 +61828,90 @@ input ReviewWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  review_kind_name field predicates
+  """
+  reviewKindName: String
+  reviewKindNameNEQ: String
+  reviewKindNameIn: [String!]
+  reviewKindNameNotIn: [String!]
+  reviewKindNameContains: String
+  reviewKindNameHasPrefix: String
+  reviewKindNameHasSuffix: String
+  reviewKindNameIsNil: Boolean
+  reviewKindNameNotNil: Boolean
+  reviewKindNameEqualFold: String
+  reviewKindNameContainsFold: String
+  """
+  review_kind_id field predicates
+  """
+  reviewKindID: ID
+  reviewKindIDNEQ: ID
+  reviewKindIDIn: [ID!]
+  reviewKindIDNotIn: [ID!]
+  reviewKindIDContains: ID
+  reviewKindIDHasPrefix: ID
+  reviewKindIDHasSuffix: ID
+  reviewKindIDIsNil: Boolean
+  reviewKindIDNotNil: Boolean
+  reviewKindIDEqualFold: ID
+  reviewKindIDContainsFold: ID
+  """
+  review_classification_name field predicates
+  """
+  reviewClassificationName: String
+  reviewClassificationNameNEQ: String
+  reviewClassificationNameIn: [String!]
+  reviewClassificationNameNotIn: [String!]
+  reviewClassificationNameContains: String
+  reviewClassificationNameHasPrefix: String
+  reviewClassificationNameHasSuffix: String
+  reviewClassificationNameIsNil: Boolean
+  reviewClassificationNameNotNil: Boolean
+  reviewClassificationNameEqualFold: String
+  reviewClassificationNameContainsFold: String
+  """
+  review_classification_id field predicates
+  """
+  reviewClassificationID: ID
+  reviewClassificationIDNEQ: ID
+  reviewClassificationIDIn: [ID!]
+  reviewClassificationIDNotIn: [ID!]
+  reviewClassificationIDContains: ID
+  reviewClassificationIDHasPrefix: ID
+  reviewClassificationIDHasSuffix: ID
+  reviewClassificationIDIsNil: Boolean
+  reviewClassificationIDNotNil: Boolean
+  reviewClassificationIDEqualFold: ID
+  reviewClassificationIDContainsFold: ID
+  """
+  review_state_name field predicates
+  """
+  reviewStateName: String
+  reviewStateNameNEQ: String
+  reviewStateNameIn: [String!]
+  reviewStateNameNotIn: [String!]
+  reviewStateNameContains: String
+  reviewStateNameHasPrefix: String
+  reviewStateNameHasSuffix: String
+  reviewStateNameIsNil: Boolean
+  reviewStateNameNotNil: Boolean
+  reviewStateNameEqualFold: String
+  reviewStateNameContainsFold: String
+  """
+  review_state_id field predicates
+  """
+  reviewStateID: ID
+  reviewStateIDNEQ: ID
+  reviewStateIDIn: [ID!]
+  reviewStateIDNotIn: [ID!]
+  reviewStateIDContains: ID
+  reviewStateIDHasPrefix: ID
+  reviewStateIDHasSuffix: ID
+  reviewStateIDIsNil: Boolean
+  reviewStateIDNotNil: Boolean
+  reviewStateIDEqualFold: ID
+  reviewStateIDContainsFold: ID
   """
   environment_name field predicates
   """
@@ -61359,6 +62187,66 @@ input ReviewWhereInput {
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
   """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  internal_owner_identity_holder edge predicates
+  """
+  hasInternalOwnerIdentityHolder: Boolean
+  hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  reviewed_by_user edge predicates
+  """
+  hasReviewedByUser: Boolean
+  hasReviewedByUserWith: [UserWhereInput!]
+  """
+  reviewed_by_group edge predicates
+  """
+  hasReviewedByGroup: Boolean
+  hasReviewedByGroupWith: [GroupWhereInput!]
+  """
+  reviewed_by_identity_holder edge predicates
+  """
+  hasReviewedByIdentityHolder: Boolean
+  hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  delegate_user edge predicates
+  """
+  hasDelegateUser: Boolean
+  hasDelegateUserWith: [UserWhereInput!]
+  """
+  delegate_group edge predicates
+  """
+  hasDelegateGroup: Boolean
+  hasDelegateGroupWith: [GroupWhereInput!]
+  """
+  delegate_identity_holder edge predicates
+  """
+  hasDelegateIdentityHolder: Boolean
+  hasDelegateIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  review_kind edge predicates
+  """
+  hasReviewKind: Boolean
+  hasReviewKindWith: [CustomTypeEnumWhereInput!]
+  """
+  review_classification edge predicates
+  """
+  hasReviewClassification: Boolean
+  hasReviewClassificationWith: [CustomTypeEnumWhereInput!]
+  """
+  review_state edge predicates
+  """
+  hasReviewState: Boolean
+  hasReviewStateWith: [CustomTypeEnumWhereInput!]
+  """
   environment edge predicates
   """
   hasEnvironment: Boolean
@@ -61443,6 +62331,16 @@ input ReviewWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  system_details edge predicates
+  """
+  hasSystemDetails: Boolean
+  hasSystemDetailsWith: [SystemDetailWhereInput!]
   """
   internal_policies edge predicates
   """
@@ -68937,6 +69835,68 @@ type SystemDetail implements Node @modules(names: ["compliance_module","registry
     """
     where: AssetWhereInput
   ): AssetConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
 }
 """
 A connection to a list of items.
@@ -69305,6 +70265,16 @@ input SystemDetailWhereInput {
   """
   hasAssets: Boolean
   hasAssetsWith: [AssetWhereInput!]
+  """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -77301,6 +78271,16 @@ input UpdateControlImplementationInput {
   externalID: String
   clearExternalID: Boolean
   """
+  the internal owner for the control implementation when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
+  the delegate for the control implementation when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  clearDelegateName: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -77353,6 +78333,18 @@ input UpdateControlImplementationInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  internalOwnerIdentityHolderID: ID
+  clearInternalOwnerIdentityHolder: Boolean
+  delegateUserID: ID
+  clearDelegateUser: Boolean
+  delegateGroupID: ID
+  clearDelegateGroup: Boolean
+  delegateIdentityHolderID: ID
+  clearDelegateIdentityHolder: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -77362,6 +78354,15 @@ input UpdateControlImplementationInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addSystemDetailIDs: [ID!]
+  removeSystemDetailIDs: [ID!]
+  clearSystemDetails: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateControlInput is used for update Control object.
@@ -80561,6 +81562,8 @@ input UpdateNoteInput {
   clearVulnerability: Boolean
   findingID: ID
   clearFinding: Boolean
+  controlImplementationID: ID
+  clearControlImplementation: Boolean
   evidenceID: ID
   clearEvidence: Boolean
   trustCenterID: ID
@@ -81619,6 +82622,12 @@ input UpdatePlatformInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
   addAssessmentIDs: [ID!]
   removeAssessmentIDs: [ID!]
   clearAssessments: Boolean
@@ -82311,6 +83320,21 @@ input UpdateReviewInput {
   externalID: String
   clearExternalID: Boolean
   """
+  the internal owner for the review when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
+  who reviewed the review when no user, group, or identity holder is linked
+  """
+  reviewedBy: String
+  clearReviewedBy: Boolean
+  """
+  the delegate for the review when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  clearDelegateName: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -82320,6 +83344,21 @@ input UpdateReviewInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the kind of the review
+  """
+  reviewKindName: String
+  clearReviewKindName: Boolean
+  """
+  the classification of the review
+  """
+  reviewClassificationName: String
+  clearReviewClassificationName: Boolean
+  """
+  the state of the review
+  """
+  reviewStateName: String
+  clearReviewStateName: Boolean
   """
   the environment of the review
   """
@@ -82423,6 +83462,30 @@ input UpdateReviewInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  internalOwnerIdentityHolderID: ID
+  clearInternalOwnerIdentityHolder: Boolean
+  reviewedByUserID: ID
+  clearReviewedByUser: Boolean
+  reviewedByGroupID: ID
+  clearReviewedByGroup: Boolean
+  reviewedByIdentityHolderID: ID
+  clearReviewedByIdentityHolder: Boolean
+  delegateUserID: ID
+  clearDelegateUser: Boolean
+  delegateGroupID: ID
+  clearDelegateGroup: Boolean
+  delegateIdentityHolderID: ID
+  clearDelegateIdentityHolder: Boolean
+  reviewKindID: ID
+  clearReviewKind: Boolean
+  reviewClassificationID: ID
+  clearReviewClassification: Boolean
+  reviewStateID: ID
+  clearReviewState: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -82471,6 +83534,12 @@ input UpdateReviewInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addSystemDetailIDs: [ID!]
+  removeSystemDetailIDs: [ID!]
+  clearSystemDetails: Boolean
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
@@ -83454,6 +84523,12 @@ input UpdateSystemDetailInput {
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
 }
 """
 UpdateTFASettingInput is used for update TFASetting object.

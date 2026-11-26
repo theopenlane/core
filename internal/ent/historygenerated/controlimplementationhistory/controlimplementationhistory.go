@@ -58,6 +58,22 @@ const (
 	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
+	FieldInternalOwner = "internal_owner"
+	// FieldInternalOwnerUserID holds the string denoting the internal_owner_user_id field in the database.
+	FieldInternalOwnerUserID = "internal_owner_user_id"
+	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
+	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
+	// FieldDelegateName holds the string denoting the delegate_name field in the database.
+	FieldDelegateName = "delegate_name"
+	// FieldDelegateUserID holds the string denoting the delegate_user_id field in the database.
+	FieldDelegateUserID = "delegate_user_id"
+	// FieldDelegateGroupID holds the string denoting the delegate_group_id field in the database.
+	FieldDelegateGroupID = "delegate_group_id"
+	// FieldDelegateIdentityHolderID holds the string denoting the delegate_identity_holder_id field in the database.
+	FieldDelegateIdentityHolderID = "delegate_identity_holder_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
@@ -102,6 +118,14 @@ var Columns = []string{
 	FieldSourceKey,
 	FieldExternalID,
 	FieldOwnerID,
+	FieldInternalOwner,
+	FieldInternalOwnerUserID,
+	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
+	FieldDelegateName,
+	FieldDelegateUserID,
+	FieldDelegateGroupID,
+	FieldDelegateIdentityHolderID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
@@ -264,6 +288,46 @@ func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByInternalOwner orders the results by the internal_owner field.
+func ByInternalOwner(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwner, opts...).ToFunc()
+}
+
+// ByInternalOwnerUserID orders the results by the internal_owner_user_id field.
+func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerUserID, opts...).ToFunc()
+}
+
+// ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
+func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
+// ByDelegateName orders the results by the delegate_name field.
+func ByDelegateName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateName, opts...).ToFunc()
+}
+
+// ByDelegateUserID orders the results by the delegate_user_id field.
+func ByDelegateUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateUserID, opts...).ToFunc()
+}
+
+// ByDelegateGroupID orders the results by the delegate_group_id field.
+func ByDelegateGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateGroupID, opts...).ToFunc()
+}
+
+// ByDelegateIdentityHolderID orders the results by the delegate_identity_holder_id field.
+func ByDelegateIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateIdentityHolderID, opts...).ToFunc()
 }
 
 // BySystemOwned orders the results by the system_owned field.

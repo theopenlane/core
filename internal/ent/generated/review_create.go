@@ -20,16 +20,19 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
@@ -258,6 +261,174 @@ func (_c *ReviewCreate) SetNillableOwnerID(v *string) *ReviewCreate {
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *ReviewCreate) SetInternalOwner(v string) *ReviewCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableInternalOwner(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *ReviewCreate) SetInternalOwnerUserID(v string) *ReviewCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableInternalOwnerUserID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *ReviewCreate) SetInternalOwnerGroupID(v string) *ReviewCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableInternalOwnerGroupID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *ReviewCreate) SetInternalOwnerIdentityHolderID(v string) *ReviewCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_c *ReviewCreate) SetReviewedBy(v string) *ReviewCreate {
+	_c.mutation.SetReviewedBy(v)
+	return _c
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewedBy(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewedBy(*v)
+	}
+	return _c
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_c *ReviewCreate) SetReviewedByUserID(v string) *ReviewCreate {
+	_c.mutation.SetReviewedByUserID(v)
+	return _c
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewedByUserID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewedByUserID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_c *ReviewCreate) SetReviewedByGroupID(v string) *ReviewCreate {
+	_c.mutation.SetReviewedByGroupID(v)
+	return _c
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewedByGroupID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_c *ReviewCreate) SetReviewedByIdentityHolderID(v string) *ReviewCreate {
+	_c.mutation.SetReviewedByIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewedByIdentityHolderID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewedByIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_c *ReviewCreate) SetDelegateName(v string) *ReviewCreate {
+	_c.mutation.SetDelegateName(v)
+	return _c
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableDelegateName(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetDelegateName(*v)
+	}
+	return _c
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_c *ReviewCreate) SetDelegateUserID(v string) *ReviewCreate {
+	_c.mutation.SetDelegateUserID(v)
+	return _c
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableDelegateUserID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetDelegateUserID(*v)
+	}
+	return _c
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_c *ReviewCreate) SetDelegateGroupID(v string) *ReviewCreate {
+	_c.mutation.SetDelegateGroupID(v)
+	return _c
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableDelegateGroupID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetDelegateGroupID(*v)
+	}
+	return _c
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_c *ReviewCreate) SetDelegateIdentityHolderID(v string) *ReviewCreate {
+	_c.mutation.SetDelegateIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableDelegateIdentityHolderID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetDelegateIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *ReviewCreate) SetSystemOwned(v bool) *ReviewCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -296,6 +467,90 @@ func (_c *ReviewCreate) SetSystemInternalID(v string) *ReviewCreate {
 func (_c *ReviewCreate) SetNillableSystemInternalID(v *string) *ReviewCreate {
 	if v != nil {
 		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
+// SetReviewKindName sets the "review_kind_name" field.
+func (_c *ReviewCreate) SetReviewKindName(v string) *ReviewCreate {
+	_c.mutation.SetReviewKindName(v)
+	return _c
+}
+
+// SetNillableReviewKindName sets the "review_kind_name" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewKindName(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewKindName(*v)
+	}
+	return _c
+}
+
+// SetReviewKindID sets the "review_kind_id" field.
+func (_c *ReviewCreate) SetReviewKindID(v string) *ReviewCreate {
+	_c.mutation.SetReviewKindID(v)
+	return _c
+}
+
+// SetNillableReviewKindID sets the "review_kind_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewKindID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewKindID(*v)
+	}
+	return _c
+}
+
+// SetReviewClassificationName sets the "review_classification_name" field.
+func (_c *ReviewCreate) SetReviewClassificationName(v string) *ReviewCreate {
+	_c.mutation.SetReviewClassificationName(v)
+	return _c
+}
+
+// SetNillableReviewClassificationName sets the "review_classification_name" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewClassificationName(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewClassificationName(*v)
+	}
+	return _c
+}
+
+// SetReviewClassificationID sets the "review_classification_id" field.
+func (_c *ReviewCreate) SetReviewClassificationID(v string) *ReviewCreate {
+	_c.mutation.SetReviewClassificationID(v)
+	return _c
+}
+
+// SetNillableReviewClassificationID sets the "review_classification_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewClassificationID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewClassificationID(*v)
+	}
+	return _c
+}
+
+// SetReviewStateName sets the "review_state_name" field.
+func (_c *ReviewCreate) SetReviewStateName(v string) *ReviewCreate {
+	_c.mutation.SetReviewStateName(v)
+	return _c
+}
+
+// SetNillableReviewStateName sets the "review_state_name" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewStateName(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewStateName(*v)
+	}
+	return _c
+}
+
+// SetReviewStateID sets the "review_state_id" field.
+func (_c *ReviewCreate) SetReviewStateID(v string) *ReviewCreate {
+	_c.mutation.SetReviewStateID(v)
+	return _c
+}
+
+// SetNillableReviewStateID sets the "review_state_id" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableReviewStateID(v *string) *ReviewCreate {
+	if v != nil {
+		_c.SetReviewStateID(*v)
 	}
 	return _c
 }
@@ -648,6 +903,66 @@ func (_c *ReviewCreate) AddEditors(v ...*Group) *ReviewCreate {
 	return _c.AddEditorIDs(ids...)
 }
 
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_c *ReviewCreate) SetInternalOwnerUser(v *User) *ReviewCreate {
+	return _c.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_c *ReviewCreate) SetInternalOwnerGroup(v *Group) *ReviewCreate {
+	return _c.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *ReviewCreate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *ReviewCreate {
+	return _c.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_c *ReviewCreate) SetReviewedByUser(v *User) *ReviewCreate {
+	return _c.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_c *ReviewCreate) SetReviewedByGroup(v *Group) *ReviewCreate {
+	return _c.SetReviewedByGroupID(v.ID)
+}
+
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_c *ReviewCreate) SetReviewedByIdentityHolder(v *IdentityHolder) *ReviewCreate {
+	return _c.SetReviewedByIdentityHolderID(v.ID)
+}
+
+// SetDelegateUser sets the "delegate_user" edge to the User entity.
+func (_c *ReviewCreate) SetDelegateUser(v *User) *ReviewCreate {
+	return _c.SetDelegateUserID(v.ID)
+}
+
+// SetDelegateGroup sets the "delegate_group" edge to the Group entity.
+func (_c *ReviewCreate) SetDelegateGroup(v *Group) *ReviewCreate {
+	return _c.SetDelegateGroupID(v.ID)
+}
+
+// SetDelegateIdentityHolder sets the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_c *ReviewCreate) SetDelegateIdentityHolder(v *IdentityHolder) *ReviewCreate {
+	return _c.SetDelegateIdentityHolderID(v.ID)
+}
+
+// SetReviewKind sets the "review_kind" edge to the CustomTypeEnum entity.
+func (_c *ReviewCreate) SetReviewKind(v *CustomTypeEnum) *ReviewCreate {
+	return _c.SetReviewKindID(v.ID)
+}
+
+// SetReviewClassification sets the "review_classification" edge to the CustomTypeEnum entity.
+func (_c *ReviewCreate) SetReviewClassification(v *CustomTypeEnum) *ReviewCreate {
+	return _c.SetReviewClassificationID(v.ID)
+}
+
+// SetReviewState sets the "review_state" edge to the CustomTypeEnum entity.
+func (_c *ReviewCreate) SetReviewState(v *CustomTypeEnum) *ReviewCreate {
+	return _c.SetReviewStateID(v.ID)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_c *ReviewCreate) SetEnvironment(v *CustomTypeEnum) *ReviewCreate {
 	return _c.SetEnvironmentID(v.ID)
@@ -873,6 +1188,36 @@ func (_c *ReviewCreate) AddFiles(v ...*File) *ReviewCreate {
 	return _c.AddFileIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *ReviewCreate) AddPlatformIDs(ids ...string) *ReviewCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *ReviewCreate) AddPlatforms(v ...*Platform) *ReviewCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_c *ReviewCreate) AddSystemDetailIDs(ids ...string) *ReviewCreate {
+	_c.mutation.AddSystemDetailIDs(ids...)
+	return _c
+}
+
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_c *ReviewCreate) AddSystemDetails(v ...*SystemDetail) *ReviewCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSystemDetailIDs(ids...)
+}
+
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (_c *ReviewCreate) AddInternalPolicyIDs(ids ...string) *ReviewCreate {
 	_c.mutation.AddInternalPolicyIDs(ids...)
@@ -1080,6 +1425,18 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 		_spec.SetField(review.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
 	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(review.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.ReviewedBy(); ok {
+		_spec.SetField(review.FieldReviewedBy, field.TypeString, value)
+		_node.ReviewedBy = value
+	}
+	if value, ok := _c.mutation.DelegateName(); ok {
+		_spec.SetField(review.FieldDelegateName, field.TypeString, value)
+		_node.DelegateName = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(review.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -1091,6 +1448,18 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(review.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.ReviewKindName(); ok {
+		_spec.SetField(review.FieldReviewKindName, field.TypeString, value)
+		_node.ReviewKindName = value
+	}
+	if value, ok := _c.mutation.ReviewClassificationName(); ok {
+		_spec.SetField(review.FieldReviewClassificationName, field.TypeString, value)
+		_node.ReviewClassificationName = value
+	}
+	if value, ok := _c.mutation.ReviewStateName(); ok {
+		_spec.SetField(review.FieldReviewStateName, field.TypeString, value)
+		_node.ReviewStateName = value
 	}
 	if value, ok := _c.mutation.EnvironmentName(); ok {
 		_spec.SetField(review.FieldEnvironmentName, field.TypeString, value)
@@ -1231,6 +1600,210 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerUserTable,
+			Columns: []string{review.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerGroupTable,
+			Columns: []string{review.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerIdentityHolderTable,
+			Columns: []string{review.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByUserTable,
+			Columns: []string{review.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByGroupTable,
+			Columns: []string{review.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByIdentityHolderTable,
+			Columns: []string{review.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DelegateUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateUserTable,
+			Columns: []string{review.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DelegateUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DelegateGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateGroupTable,
+			Columns: []string{review.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DelegateGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DelegateIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateIdentityHolderTable,
+			Columns: []string{review.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DelegateIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewKindTable,
+			Columns: []string{review.ReviewKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewClassificationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewClassificationTable,
+			Columns: []string{review.ReviewClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewClassificationID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewStateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewStateTable,
+			Columns: []string{review.ReviewStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewStateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -1501,6 +2074,38 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.PlatformsTable,
+			Columns: review.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.SystemDetailsTable,
+			Columns: review.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

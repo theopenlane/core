@@ -86,7 +86,7 @@ type review
     define parent_editor: can_edit from parent_context or can_edit_review from parent_context or editor from parent
     define parent_viewer: can_view from parent_context or can_view_review from parent_context or viewer from parent
     define parent_context: [organization]
-    define parent: [program, control, subcontrol, risk, action_plan, finding, vulnerability, asset, entity, task]
+    define parent: [program, control, subcontrol, risk, action_plan, finding, vulnerability, asset, entity, task, platform, system_detail]
 
 # remediation permissions can be inherited from parent objects or based on the organization in context
 type remediation

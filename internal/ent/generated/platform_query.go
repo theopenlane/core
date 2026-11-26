@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
@@ -30,6 +31,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
@@ -82,6 +84,8 @@ type PlatformQuery struct {
 	withTrustBoundaryDiagrams        *FileQuery
 	withRisks                        *RiskQuery
 	withControls                     *ControlQuery
+	withControlImplementations       *ControlImplementationQuery
+	withReviews                      *ReviewQuery
 	withAssessments                  *AssessmentQuery
 	withScans                        *ScanQuery
 	withTasks                        *TaskQuery
@@ -115,6 +119,8 @@ type PlatformQuery struct {
 	withNamedTrustBoundaryDiagrams   map[string]*FileQuery
 	withNamedRisks                   map[string]*RiskQuery
 	withNamedControls                map[string]*ControlQuery
+	withNamedControlImplementations  map[string]*ControlImplementationQuery
+	withNamedReviews                 map[string]*ReviewQuery
 	withNamedAssessments             map[string]*AssessmentQuery
 	withNamedScans                   map[string]*ScanQuery
 	withNamedTasks                   map[string]*TaskQuery
@@ -915,6 +921,50 @@ func (_q *PlatformQuery) QueryControls() *ControlQuery {
 	return query
 }
 
+// QueryControlImplementations chains the current query on the "control_implementations" edge.
+func (_q *PlatformQuery) QueryControlImplementations() *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.ControlImplementationsTable, platform.ControlImplementationsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviews chains the current query on the "reviews" edge.
+func (_q *PlatformQuery) QueryReviews() *ReviewQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, platform.ReviewsTable, platform.ReviewsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryAssessments chains the current query on the "assessments" edge.
 func (_q *PlatformQuery) QueryAssessments() *AssessmentQuery {
 	query := (&AssessmentClient{config: _q.config}).Query()
@@ -1515,6 +1565,8 @@ func (_q *PlatformQuery) Clone() *PlatformQuery {
 		withTrustBoundaryDiagrams:        _q.withTrustBoundaryDiagrams.Clone(),
 		withRisks:                        _q.withRisks.Clone(),
 		withControls:                     _q.withControls.Clone(),
+		withControlImplementations:       _q.withControlImplementations.Clone(),
+		withReviews:                      _q.withReviews.Clone(),
 		withAssessments:                  _q.withAssessments.Clone(),
 		withScans:                        _q.withScans.Clone(),
 		withTasks:                        _q.withTasks.Clone(),
@@ -1913,6 +1965,28 @@ func (_q *PlatformQuery) WithControls(opts ...func(*ControlQuery)) *PlatformQuer
 	return _q
 }
 
+// WithControlImplementations tells the query-builder to eager-load the nodes that are connected to
+// the "control_implementations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithControlImplementations(opts ...func(*ControlImplementationQuery)) *PlatformQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControlImplementations = query
+	return _q
+}
+
+// WithReviews tells the query-builder to eager-load the nodes that are connected to
+// the "reviews" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithReviews(opts ...func(*ReviewQuery)) *PlatformQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviews = query
+	return _q
+}
+
 // WithAssessments tells the query-builder to eager-load the nodes that are connected to
 // the "assessments" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *PlatformQuery) WithAssessments(opts ...func(*AssessmentQuery)) *PlatformQuery {
@@ -2185,7 +2259,7 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		nodes       = []*Platform{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [51]bool{
+		loadedTypes = [53]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
@@ -2220,6 +2294,8 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			_q.withTrustBoundaryDiagrams != nil,
 			_q.withRisks != nil,
 			_q.withControls != nil,
+			_q.withControlImplementations != nil,
+			_q.withReviews != nil,
 			_q.withAssessments != nil,
 			_q.withScans != nil,
 			_q.withTasks != nil,
@@ -2480,6 +2556,22 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			return nil, err
 		}
 	}
+	if query := _q.withControlImplementations; query != nil {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *Platform) { n.Edges.ControlImplementations = []*ControlImplementation{} },
+			func(n *Platform, e *ControlImplementation) {
+				n.Edges.ControlImplementations = append(n.Edges.ControlImplementations, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviews; query != nil {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Platform) { n.Edges.Reviews = []*Review{} },
+			func(n *Platform, e *Review) { n.Edges.Reviews = append(n.Edges.Reviews, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withAssessments; query != nil {
 		if err := _q.loadAssessments(ctx, query, nodes,
 			func(n *Platform) { n.Edges.Assessments = []*Assessment{} },
@@ -2692,6 +2784,20 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Platform) { n.appendNamedControls(name) },
 			func(n *Platform, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControlImplementations {
+		if err := _q.loadControlImplementations(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedControlImplementations(name) },
+			func(n *Platform, e *ControlImplementation) { n.appendNamedControlImplementations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReviews {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedReviews(name) },
+			func(n *Platform, e *Review) { n.appendNamedReviews(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4097,6 +4203,128 @@ func (_q *PlatformQuery) loadControls(ctx context.Context, query *ControlQuery, 
 	}
 	return nil
 }
+func (_q *PlatformQuery) loadControlImplementations(ctx context.Context, query *ControlImplementationQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *ControlImplementation)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Platform)
+	nids := make(map[string]map[*Platform]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(platform.ControlImplementationsTable)
+		s.Join(joinT).On(s.C(controlimplementation.FieldID), joinT.C(platform.ControlImplementationsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(platform.ControlImplementationsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(platform.ControlImplementationsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Platform]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ControlImplementation](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "control_implementations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *Review)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Platform)
+	nids := make(map[string]map[*Platform]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(platform.ReviewsTable)
+		s.Join(joinT).On(s.C(review.FieldID), joinT.C(platform.ReviewsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(platform.ReviewsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(platform.ReviewsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Platform]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Review](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "reviews" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *PlatformQuery) loadAssessments(ctx context.Context, query *AssessmentQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *Assessment)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Platform)
@@ -5229,6 +5457,34 @@ func (_q *PlatformQuery) WithNamedControls(name string, opts ...func(*ControlQue
 		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
 	_q.withNamedControls[name] = query
+	return _q
+}
+
+// WithNamedControlImplementations tells the query-builder to eager-load the nodes that are connected to the "control_implementations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedControlImplementations(name string, opts ...func(*ControlImplementationQuery)) *PlatformQuery {
+	query := (&ControlImplementationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControlImplementations == nil {
+		_q.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
+	}
+	_q.withNamedControlImplementations[name] = query
+	return _q
+}
+
+// WithNamedReviews tells the query-builder to eager-load the nodes that are connected to the "reviews"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedReviews(name string, opts ...func(*ReviewQuery)) *PlatformQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReviews == nil {
+		_q.withNamedReviews = make(map[string]*ReviewQuery)
+	}
+	_q.withNamedReviews[name] = query
 	return _q
 }
 

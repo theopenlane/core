@@ -101,7 +101,7 @@ func (n Note) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Note](
 				n,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}, TrustCenterFAQ{}, Review{}, Vulnerability{}, Finding{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, ControlImplementation{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}, TrustCenterFAQ{}, Review{}, Vulnerability{}, Finding{}),
 				withOrganizationOwner(),
 				withOwnerRelation(fgax.OwnerRelation),
 				withAnonymousTrustCenterScope(interceptors.AnonScopeNote),
@@ -189,6 +189,14 @@ func (n Note) Edges() []ent.Edge {
 			ref:        "comments",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Finding{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: ControlImplementation{},
+			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(ControlImplementation{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{

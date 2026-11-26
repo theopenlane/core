@@ -86,6 +86,11 @@ extend input UpdateFindingInput {
     deleteComment: ID
 }
 
+extend input UpdateControlImplementationInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend input CreateTrustCenterFAQInput {
     createNote: CreateNoteInput
 }
@@ -323,6 +328,24 @@ extend type Mutation{
         noteFiles: [Upload!]
         noteFilesMetadata: [FileMetadataInput!]
     ): FindingUpdatePayload!
+    """
+    Update an existing control implementation comment
+    """
+    updateControlImplementationComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
+    ): ControlImplementationUpdatePayload!
     """
     Delete an existing note
     """

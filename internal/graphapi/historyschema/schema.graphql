@@ -3297,6 +3297,38 @@ type ControlImplementationHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	the internal owner for the control implementation when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
+	the internal owner user id for the control implementation
+	"""
+	internalOwnerUserID: String
+	"""
+	the internal owner group id for the control implementation
+	"""
+	internalOwnerGroupID: String
+	"""
+	the internal owner identity holder id for the control implementation
+	"""
+	internalOwnerIdentityHolderID: String
+	"""
+	the delegate for the control implementation when no user, group, or identity holder is linked
+	"""
+	delegateName: String
+	"""
+	the delegate user id for the control implementation
+	"""
+	delegateUserID: String
+	"""
+	the delegate group id for the control implementation
+	"""
+	delegateGroupID: String
+	"""
+	the delegate identity holder id for the control implementation
+	"""
+	delegateIdentityHolderID: String
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -3403,6 +3435,8 @@ enum ControlImplementationHistoryOrderField {
 	created_at
 	updated_at
 	external_id
+	internal_owner
+	delegate_name
 	STATUS
 	implementation_date
 	verified
@@ -15969,6 +16003,54 @@ type ReviewHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	the internal owner for the review when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
+	the internal owner user id for the review
+	"""
+	internalOwnerUserID: String
+	"""
+	the internal owner group id for the review
+	"""
+	internalOwnerGroupID: String
+	"""
+	the internal owner identity holder id for the review
+	"""
+	internalOwnerIdentityHolderID: String
+	"""
+	who reviewed the review when no user, group, or identity holder is linked
+	"""
+	reviewedBy: String
+	"""
+	the user id that reviewed the review
+	"""
+	reviewedByUserID: String
+	"""
+	the group id that reviewed the review
+	"""
+	reviewedByGroupID: String
+	"""
+	the identity holder id that reviewed the review
+	"""
+	reviewedByIdentityHolderID: String
+	"""
+	the delegate for the review when no user, group, or identity holder is linked
+	"""
+	delegateName: String
+	"""
+	the delegate user id for the review
+	"""
+	delegateUserID: String
+	"""
+	the delegate group id for the review
+	"""
+	delegateGroupID: String
+	"""
+	the delegate identity holder id for the review
+	"""
+	delegateIdentityHolderID: String
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -15980,6 +16062,30 @@ type ReviewHistory implements Node {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @hidden(if: true)
+	"""
+	the kind of the review
+	"""
+	reviewKindName: String
+	"""
+	the kind of the review
+	"""
+	reviewKindID: String
+	"""
+	the classification of the review
+	"""
+	reviewClassificationName: String
+	"""
+	the classification of the review
+	"""
+	reviewClassificationID: String
+	"""
+	the state of the review
+	"""
+	reviewStateName: String
+	"""
+	the state of the review
+	"""
+	reviewStateID: String
 	"""
 	the environment of the review
 	"""
@@ -16007,7 +16113,7 @@ type ReviewHistory implements Node {
 	"""
 	state of the review
 	"""
-	state: String
+	state: String @deprecated(reason: "use review_state_name instead")
 	"""
 	status of the review
 	"""
@@ -16015,11 +16121,11 @@ type ReviewHistory implements Node {
 	"""
 	category for the review record
 	"""
-	category: String
+	category: String @deprecated(reason: "use review_kind_name instead")
 	"""
 	classification or sensitivity of the review record
 	"""
-	classification: String
+	classification: String @deprecated(reason: "use review_classification_name instead")
 	"""
 	summary text for the review
 	"""
@@ -16031,7 +16137,7 @@ type ReviewHistory implements Node {
 	"""
 	person or system that created the review
 	"""
-	reporter: String
+	reporter: String @deprecated(reason: "use created_by or responsibility fields instead")
 	"""
 	true when the review has been approved
 	"""
@@ -16051,7 +16157,7 @@ type ReviewHistory implements Node {
 	"""
 	identifier for the user primarily responsible for the review
 	"""
-	reviewerID: String
+	reviewerID: String @deprecated(reason: "use reviewed_by_user_id instead")
 	"""
 	system that produced the review record
 	"""
@@ -16128,6 +16234,8 @@ enum ReviewHistoryOrderField {
 	created_at
 	updated_at
 	external_id
+	internal_owner
+	delegate_name
 	external_owner_id
 	title
 	state

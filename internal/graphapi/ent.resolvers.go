@@ -3370,6 +3370,11 @@ func (r *Resolver) UpdateActionPlanInput() gqlgenerated.UpdateActionPlanInputRes
 	return &updateActionPlanInputResolver{r}
 }
 
+// UpdateControlImplementationInput returns gqlgenerated.UpdateControlImplementationInputResolver implementation.
+func (r *Resolver) UpdateControlImplementationInput() gqlgenerated.UpdateControlImplementationInputResolver {
+	return &updateControlImplementationInputResolver{r}
+}
+
 // UpdateControlInput returns gqlgenerated.UpdateControlInputResolver implementation.
 func (r *Resolver) UpdateControlInput() gqlgenerated.UpdateControlInputResolver {
 	return &updateControlInputResolver{r}
@@ -3471,55 +3476,56 @@ func (r *Resolver) UpdateVulnerabilityInput() gqlgenerated.UpdateVulnerabilityIn
 }
 
 type (
-	actionPlanResolver                  struct{ *Resolver }
-	assessmentResolver                  struct{ *Resolver }
-	assessmentResponseResolver          struct{ *Resolver }
-	campaignResolver                    struct{ *Resolver }
-	campaignTargetResolver              struct{ *Resolver }
-	controlResolver                     struct{ *Resolver }
-	evidenceResolver                    struct{ *Resolver }
-	findingResolver                     struct{ *Resolver }
-	groupResolver                       struct{ *Resolver }
-	identityHolderResolver              struct{ *Resolver }
-	integrationResolver                 struct{ *Resolver }
-	internalPolicyResolver              struct{ *Resolver }
-	notificationResolver                struct{ *Resolver }
-	platformResolver                    struct{ *Resolver }
-	procedureResolver                   struct{ *Resolver }
-	queryResolver                       struct{ *Resolver }
-	remediationResolver                 struct{ *Resolver }
-	riskResolver                        struct{ *Resolver }
-	subcontrolResolver                  struct{ *Resolver }
-	taskResolver                        struct{ *Resolver }
-	vulnerabilityResolver               struct{ *Resolver }
-	workflowInstanceResolver            struct{ *Resolver }
-	workflowProposalResolver            struct{ *Resolver }
-	createDiscussionInputResolver       struct{ *Resolver }
-	createEntityInputResolver           struct{ *Resolver }
-	createGroupInputResolver            struct{ *Resolver }
-	createMappedControlInputResolver    struct{ *Resolver }
-	createNotificationInputResolver     struct{ *Resolver }
-	createOrganizationInputResolver     struct{ *Resolver }
-	createTrustCenterFAQInputResolver   struct{ *Resolver }
-	updateActionPlanInputResolver       struct{ *Resolver }
-	updateControlInputResolver          struct{ *Resolver }
-	updateControlObjectiveInputResolver struct{ *Resolver }
-	updateDiscussionInputResolver       struct{ *Resolver }
-	updateEntityInputResolver           struct{ *Resolver }
-	updateEvidenceInputResolver         struct{ *Resolver }
-	updateFindingInputResolver          struct{ *Resolver }
-	updateGroupInputResolver            struct{ *Resolver }
-	updateInternalPolicyInputResolver   struct{ *Resolver }
-	updateOrganizationInputResolver     struct{ *Resolver }
-	updateProcedureInputResolver        struct{ *Resolver }
-	updateProgramInputResolver          struct{ *Resolver }
-	updateReviewInputResolver           struct{ *Resolver }
-	updateRiskInputResolver             struct{ *Resolver }
-	updateStandardInputResolver         struct{ *Resolver }
-	updateSubcontrolInputResolver       struct{ *Resolver }
-	updateTFASettingInputResolver       struct{ *Resolver }
-	updateTaskInputResolver             struct{ *Resolver }
-	updateTrustCenterFAQInputResolver   struct{ *Resolver }
-	updateTrustCenterInputResolver      struct{ *Resolver }
-	updateVulnerabilityInputResolver    struct{ *Resolver }
+	actionPlanResolver                       struct{ *Resolver }
+	assessmentResolver                       struct{ *Resolver }
+	assessmentResponseResolver               struct{ *Resolver }
+	campaignResolver                         struct{ *Resolver }
+	campaignTargetResolver                   struct{ *Resolver }
+	controlResolver                          struct{ *Resolver }
+	evidenceResolver                         struct{ *Resolver }
+	findingResolver                          struct{ *Resolver }
+	groupResolver                            struct{ *Resolver }
+	identityHolderResolver                   struct{ *Resolver }
+	integrationResolver                      struct{ *Resolver }
+	internalPolicyResolver                   struct{ *Resolver }
+	notificationResolver                     struct{ *Resolver }
+	platformResolver                         struct{ *Resolver }
+	procedureResolver                        struct{ *Resolver }
+	queryResolver                            struct{ *Resolver }
+	remediationResolver                      struct{ *Resolver }
+	riskResolver                             struct{ *Resolver }
+	subcontrolResolver                       struct{ *Resolver }
+	taskResolver                             struct{ *Resolver }
+	vulnerabilityResolver                    struct{ *Resolver }
+	workflowInstanceResolver                 struct{ *Resolver }
+	workflowProposalResolver                 struct{ *Resolver }
+	createDiscussionInputResolver            struct{ *Resolver }
+	createEntityInputResolver                struct{ *Resolver }
+	createGroupInputResolver                 struct{ *Resolver }
+	createMappedControlInputResolver         struct{ *Resolver }
+	createNotificationInputResolver          struct{ *Resolver }
+	createOrganizationInputResolver          struct{ *Resolver }
+	createTrustCenterFAQInputResolver        struct{ *Resolver }
+	updateActionPlanInputResolver            struct{ *Resolver }
+	updateControlImplementationInputResolver struct{ *Resolver }
+	updateControlInputResolver               struct{ *Resolver }
+	updateControlObjectiveInputResolver      struct{ *Resolver }
+	updateDiscussionInputResolver            struct{ *Resolver }
+	updateEntityInputResolver                struct{ *Resolver }
+	updateEvidenceInputResolver              struct{ *Resolver }
+	updateFindingInputResolver               struct{ *Resolver }
+	updateGroupInputResolver                 struct{ *Resolver }
+	updateInternalPolicyInputResolver        struct{ *Resolver }
+	updateOrganizationInputResolver          struct{ *Resolver }
+	updateProcedureInputResolver             struct{ *Resolver }
+	updateProgramInputResolver               struct{ *Resolver }
+	updateReviewInputResolver                struct{ *Resolver }
+	updateRiskInputResolver                  struct{ *Resolver }
+	updateStandardInputResolver              struct{ *Resolver }
+	updateSubcontrolInputResolver            struct{ *Resolver }
+	updateTFASettingInputResolver            struct{ *Resolver }
+	updateTaskInputResolver                  struct{ *Resolver }
+	updateTrustCenterFAQInputResolver        struct{ *Resolver }
+	updateTrustCenterInputResolver           struct{ *Resolver }
+	updateVulnerabilityInputResolver         struct{ *Resolver }
 )

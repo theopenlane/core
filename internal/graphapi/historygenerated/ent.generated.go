@@ -14390,6 +14390,190 @@ func (ec *executionContext) fieldContext_ControlImplementationHistory_ownerID(_ 
 	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _ControlImplementationHistory_internalOwner(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementationHistory_internalOwner(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwner, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementationHistory_internalOwner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlImplementationHistory_internalOwnerUserID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementationHistory_internalOwnerUserID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerUserID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementationHistory_internalOwnerUserID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlImplementationHistory_internalOwnerGroupID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementationHistory_internalOwnerGroupID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerGroupID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementationHistory_internalOwnerGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlImplementationHistory_internalOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementationHistory_internalOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementationHistory_internalOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlImplementationHistory_delegateName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementationHistory_delegateName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DelegateName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementationHistory_delegateName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlImplementationHistory_delegateUserID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementationHistory_delegateUserID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DelegateUserID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementationHistory_delegateUserID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlImplementationHistory_delegateGroupID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementationHistory_delegateGroupID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DelegateGroupID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementationHistory_delegateGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlImplementationHistory_delegateIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementationHistory_delegateIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DelegateIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementationHistory_delegateIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementationHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _ControlImplementationHistory_systemOwned(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ControlImplementationHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -48203,6 +48387,282 @@ func (ec *executionContext) fieldContext_ReviewHistory_ownerID(_ context.Context
 	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
 }
 
+func (ec *executionContext) _ReviewHistory_internalOwner(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_internalOwner(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwner, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_internalOwner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_internalOwnerUserID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_internalOwnerUserID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerUserID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_internalOwnerUserID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_internalOwnerGroupID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_internalOwnerGroupID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerGroupID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_internalOwnerGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_internalOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_internalOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_internalOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewedBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewedByUserID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewedByUserID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByUserID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewedByUserID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewedByGroupID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewedByGroupID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByGroupID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewedByGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewedByIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewedByIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewedByIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_delegateName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_delegateName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DelegateName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_delegateName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_delegateUserID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_delegateUserID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DelegateUserID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_delegateUserID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_delegateGroupID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_delegateGroupID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DelegateGroupID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_delegateGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_delegateIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_delegateIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DelegateIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_delegateIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
 func (ec *executionContext) _ReviewHistory_systemOwned(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -48305,6 +48765,144 @@ func (ec *executionContext) _ReviewHistory_systemInternalID(ctx context.Context,
 	)
 }
 func (ec *executionContext) fieldContext_ReviewHistory_systemInternalID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewKindName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewKindName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewKindName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewKindName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewKindID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewKindID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewKindID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewKindID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewClassificationName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewClassificationName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewClassificationName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewClassificationName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewClassificationID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewClassificationID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewClassificationID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewClassificationID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewStateName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewStateName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewStateName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewStateName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReviewHistory_reviewStateID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewHistory_reviewStateID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewStateID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReviewHistory_reviewStateID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ReviewHistory", field, false, false, "String")
 }
 
@@ -120373,6 +120971,46 @@ func (ec *executionContext) _ControlImplementationHistory(ctx context.Context, s
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "internalOwner":
+			out.Values[i] = ec._ControlImplementationHistory_internalOwner(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "internalOwnerUserID":
+			out.Values[i] = ec._ControlImplementationHistory_internalOwnerUserID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "internalOwnerGroupID":
+			out.Values[i] = ec._ControlImplementationHistory_internalOwnerGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "internalOwnerIdentityHolderID":
+			out.Values[i] = ec._ControlImplementationHistory_internalOwnerIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "delegateName":
+			out.Values[i] = ec._ControlImplementationHistory_delegateName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "delegateUserID":
+			out.Values[i] = ec._ControlImplementationHistory_delegateUserID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "delegateGroupID":
+			out.Values[i] = ec._ControlImplementationHistory_delegateGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "delegateIdentityHolderID":
+			out.Values[i] = ec._ControlImplementationHistory_delegateIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "systemOwned":
 			out.Values[i] = ec._ControlImplementationHistory_systemOwned(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -130123,6 +130761,66 @@ func (ec *executionContext) _ReviewHistory(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
+		case "internalOwner":
+			out.Values[i] = ec._ReviewHistory_internalOwner(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "internalOwnerUserID":
+			out.Values[i] = ec._ReviewHistory_internalOwnerUserID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "internalOwnerGroupID":
+			out.Values[i] = ec._ReviewHistory_internalOwnerGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "internalOwnerIdentityHolderID":
+			out.Values[i] = ec._ReviewHistory_internalOwnerIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewedBy":
+			out.Values[i] = ec._ReviewHistory_reviewedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewedByUserID":
+			out.Values[i] = ec._ReviewHistory_reviewedByUserID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewedByGroupID":
+			out.Values[i] = ec._ReviewHistory_reviewedByGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewedByIdentityHolderID":
+			out.Values[i] = ec._ReviewHistory_reviewedByIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "delegateName":
+			out.Values[i] = ec._ReviewHistory_delegateName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "delegateUserID":
+			out.Values[i] = ec._ReviewHistory_delegateUserID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "delegateGroupID":
+			out.Values[i] = ec._ReviewHistory_delegateGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "delegateIdentityHolderID":
+			out.Values[i] = ec._ReviewHistory_delegateIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
 		case "systemOwned":
 			out.Values[i] = ec._ReviewHistory_systemOwned(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -130135,6 +130833,36 @@ func (ec *executionContext) _ReviewHistory(ctx context.Context, sel ast.Selectio
 			}
 		case "systemInternalID":
 			out.Values[i] = ec._ReviewHistory_systemInternalID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewKindName":
+			out.Values[i] = ec._ReviewHistory_reviewKindName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewKindID":
+			out.Values[i] = ec._ReviewHistory_reviewKindID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewClassificationName":
+			out.Values[i] = ec._ReviewHistory_reviewClassificationName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewClassificationID":
+			out.Values[i] = ec._ReviewHistory_reviewClassificationID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewStateName":
+			out.Values[i] = ec._ReviewHistory_reviewStateName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reviewStateID":
+			out.Values[i] = ec._ReviewHistory_reviewStateID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

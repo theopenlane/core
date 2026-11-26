@@ -1277,7 +1277,7 @@ func init() {
 	// control.DefaultID holds the default value on creation for the id field.
 	control.DefaultID = controlDescID.Default.(func() string)
 	controlimplementationMixin := schema.ControlImplementation{}.Mixin()
-	controlimplementation.Policy = privacy.NewPolicies(controlimplementationMixin[10], schema.ControlImplementation{})
+	controlimplementation.Policy = privacy.NewPolicies(controlimplementationMixin[11], schema.ControlImplementation{})
 	controlimplementation.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := controlimplementation.Policy.EvalMutation(ctx, m); err != nil {
@@ -1292,7 +1292,7 @@ func init() {
 	controlimplementationMixinHooks5 := controlimplementationMixin[5].Hooks()
 	controlimplementationMixinHooks8 := controlimplementationMixin[8].Hooks()
 	controlimplementationMixinHooks9 := controlimplementationMixin[9].Hooks()
-	controlimplementationMixinHooks10 := controlimplementationMixin[10].Hooks()
+	controlimplementationMixinHooks11 := controlimplementationMixin[11].Hooks()
 	controlimplementationHooks := schema.ControlImplementation{}.Hooks()
 
 	controlimplementation.Hooks[1] = controlimplementationMixinHooks0[0]
@@ -1313,7 +1313,7 @@ func init() {
 
 	controlimplementation.Hooks[9] = controlimplementationMixinHooks9[2]
 
-	controlimplementation.Hooks[10] = controlimplementationMixinHooks10[0]
+	controlimplementation.Hooks[10] = controlimplementationMixinHooks11[0]
 
 	controlimplementation.Hooks[11] = controlimplementationHooks[0]
 
@@ -1332,8 +1332,8 @@ func init() {
 	_ = controlimplementationMixinFields5
 	controlimplementationMixinFields8 := controlimplementationMixin[8].Fields()
 	_ = controlimplementationMixinFields8
-	controlimplementationMixinFields10 := controlimplementationMixin[10].Fields()
-	_ = controlimplementationMixinFields10
+	controlimplementationMixinFields11 := controlimplementationMixin[11].Fields()
+	_ = controlimplementationMixinFields11
 	controlimplementationFields := schema.ControlImplementation{}.Fields()
 	_ = controlimplementationFields
 	// controlimplementationDescCreatedAt is the schema descriptor for created_at field.
@@ -1355,7 +1355,7 @@ func init() {
 	// controlimplementation.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	controlimplementation.OwnerIDValidator = controlimplementationDescOwnerID.Validators[0].(func(string) error)
 	// controlimplementationDescSystemOwned is the schema descriptor for system_owned field.
-	controlimplementationDescSystemOwned := controlimplementationMixinFields10[0].Descriptor()
+	controlimplementationDescSystemOwned := controlimplementationMixinFields11[0].Descriptor()
 	// controlimplementation.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlimplementation.DefaultSystemOwned = controlimplementationDescSystemOwned.Default.(bool)
 	// controlimplementationDescID is the schema descriptor for id field.
@@ -6414,7 +6414,7 @@ func init() {
 	// reportmembership.DefaultID holds the default value on creation for the id field.
 	reportmembership.DefaultID = reportmembershipDescID.Default.(func() string)
 	reviewMixin := schema.Review{}.Mixin()
-	review.Policy = privacy.NewPolicies(reviewMixin[10], schema.Review{})
+	review.Policy = privacy.NewPolicies(reviewMixin[11], schema.Review{})
 	review.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := review.Policy.EvalMutation(ctx, m); err != nil {
@@ -6429,9 +6429,12 @@ func init() {
 	reviewMixinHooks5 := reviewMixin[5].Hooks()
 	reviewMixinHooks8 := reviewMixin[8].Hooks()
 	reviewMixinHooks9 := reviewMixin[9].Hooks()
-	reviewMixinHooks10 := reviewMixin[10].Hooks()
 	reviewMixinHooks11 := reviewMixin[11].Hooks()
 	reviewMixinHooks12 := reviewMixin[12].Hooks()
+	reviewMixinHooks13 := reviewMixin[13].Hooks()
+	reviewMixinHooks14 := reviewMixin[14].Hooks()
+	reviewMixinHooks15 := reviewMixin[15].Hooks()
+	reviewMixinHooks16 := reviewMixin[16].Hooks()
 	reviewHooks := schema.Review{}.Hooks()
 
 	review.Hooks[1] = reviewMixinHooks0[0]
@@ -6450,15 +6453,21 @@ func init() {
 
 	review.Hooks[8] = reviewMixinHooks9[1]
 
-	review.Hooks[9] = reviewMixinHooks10[0]
+	review.Hooks[9] = reviewMixinHooks11[0]
 
-	review.Hooks[10] = reviewMixinHooks11[0]
+	review.Hooks[10] = reviewMixinHooks12[0]
 
-	review.Hooks[11] = reviewMixinHooks12[0]
+	review.Hooks[11] = reviewMixinHooks13[0]
 
-	review.Hooks[12] = reviewHooks[0]
+	review.Hooks[12] = reviewMixinHooks14[0]
 
-	review.Hooks[13] = reviewHooks[1]
+	review.Hooks[13] = reviewMixinHooks15[0]
+
+	review.Hooks[14] = reviewMixinHooks16[0]
+
+	review.Hooks[15] = reviewHooks[0]
+
+	review.Hooks[16] = reviewHooks[1]
 	reviewMixinInters3 := reviewMixin[3].Interceptors()
 	reviewMixinInters8 := reviewMixin[8].Interceptors()
 	reviewMixinInters9 := reviewMixin[9].Interceptors()
@@ -6475,8 +6484,8 @@ func init() {
 	_ = reviewMixinFields5
 	reviewMixinFields8 := reviewMixin[8].Fields()
 	_ = reviewMixinFields8
-	reviewMixinFields10 := reviewMixin[10].Fields()
-	_ = reviewMixinFields10
+	reviewMixinFields11 := reviewMixin[11].Fields()
+	_ = reviewMixinFields11
 	reviewFields := schema.Review{}.Fields()
 	_ = reviewFields
 	// reviewDescCreatedAt is the schema descriptor for created_at field.
@@ -6498,7 +6507,7 @@ func init() {
 	// review.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	review.OwnerIDValidator = reviewDescOwnerID.Validators[0].(func(string) error)
 	// reviewDescSystemOwned is the schema descriptor for system_owned field.
-	reviewDescSystemOwned := reviewMixinFields10[0].Descriptor()
+	reviewDescSystemOwned := reviewMixinFields11[0].Descriptor()
 	// review.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	review.DefaultSystemOwned = reviewDescSystemOwned.Default.(bool)
 	// reviewDescTitle is the schema descriptor for title field.

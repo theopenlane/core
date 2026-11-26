@@ -6480,6 +6480,34 @@ var (
 			}
 		},
 	}
+	// ControlImplementationOrderFieldInternalOwner orders ControlImplementation by internal_owner.
+	ControlImplementationOrderFieldInternalOwner = &ControlImplementationOrderField{
+		Value: func(_m *ControlImplementation) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: controlimplementation.FieldInternalOwner,
+		toTerm: controlimplementation.ByInternalOwner,
+		toCursor: func(_m *ControlImplementation) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// ControlImplementationOrderFieldDelegateName orders ControlImplementation by delegate_name.
+	ControlImplementationOrderFieldDelegateName = &ControlImplementationOrderField{
+		Value: func(_m *ControlImplementation) (ent.Value, error) {
+			return _m.DelegateName, nil
+		},
+		column: controlimplementation.FieldDelegateName,
+		toTerm: controlimplementation.ByDelegateName,
+		toCursor: func(_m *ControlImplementation) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DelegateName,
+			}
+		},
+	}
 	// ControlImplementationOrderFieldStatus orders ControlImplementation by status.
 	ControlImplementationOrderFieldStatus = &ControlImplementationOrderField{
 		Value: func(_m *ControlImplementation) (ent.Value, error) {
@@ -6548,6 +6576,10 @@ func (f ControlImplementationOrderField) String() string {
 		str = "updated_at"
 	case ControlImplementationOrderFieldExternalID.column:
 		str = "external_id"
+	case ControlImplementationOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case ControlImplementationOrderFieldDelegateName.column:
+		str = "delegate_name"
 	case ControlImplementationOrderFieldStatus.column:
 		str = "STATUS"
 	case ControlImplementationOrderFieldImplementationDate.column:
@@ -6578,6 +6610,10 @@ func (f *ControlImplementationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlImplementationOrderFieldUpdatedAt
 	case "external_id":
 		*f = *ControlImplementationOrderFieldExternalID
+	case "internal_owner":
+		*f = *ControlImplementationOrderFieldInternalOwner
+	case "delegate_name":
+		*f = *ControlImplementationOrderFieldDelegateName
 	case "STATUS":
 		*f = *ControlImplementationOrderFieldStatus
 	case "implementation_date":
@@ -28091,6 +28127,34 @@ var (
 			}
 		},
 	}
+	// ReviewOrderFieldInternalOwner orders Review by internal_owner.
+	ReviewOrderFieldInternalOwner = &ReviewOrderField{
+		Value: func(_m *Review) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: review.FieldInternalOwner,
+		toTerm: review.ByInternalOwner,
+		toCursor: func(_m *Review) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// ReviewOrderFieldDelegateName orders Review by delegate_name.
+	ReviewOrderFieldDelegateName = &ReviewOrderField{
+		Value: func(_m *Review) (ent.Value, error) {
+			return _m.DelegateName, nil
+		},
+		column: review.FieldDelegateName,
+		toTerm: review.ByDelegateName,
+		toCursor: func(_m *Review) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DelegateName,
+			}
+		},
+	}
 	// ReviewOrderFieldExternalOwnerID orders Review by external_owner_id.
 	ReviewOrderFieldExternalOwnerID = &ReviewOrderField{
 		Value: func(_m *Review) (ent.Value, error) {
@@ -28145,6 +28209,10 @@ func (f ReviewOrderField) String() string {
 		str = "updated_at"
 	case ReviewOrderFieldExternalID.column:
 		str = "external_id"
+	case ReviewOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case ReviewOrderFieldDelegateName.column:
+		str = "delegate_name"
 	case ReviewOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case ReviewOrderFieldTitle.column:
@@ -28173,6 +28241,10 @@ func (f *ReviewOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ReviewOrderFieldUpdatedAt
 	case "external_id":
 		*f = *ReviewOrderFieldExternalID
+	case "internal_owner":
+		*f = *ReviewOrderFieldInternalOwner
+	case "delegate_name":
+		*f = *ReviewOrderFieldDelegateName
 	case "external_owner_id":
 		*f = *ReviewOrderFieldExternalOwnerID
 	case "title":
@@ -43929,6 +44001,12 @@ func (_q *ControlImplementationQuery) clonePage() *ControlImplementationQuery {
 			c.withNamedViewers[name] = q.clonePage()
 		}
 	}
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
+	c.withDelegateUser = _q.withDelegateUser.clonePage()
+	c.withDelegateGroup = _q.withDelegateGroup.clonePage()
+	c.withDelegateIdentityHolder = _q.withDelegateIdentityHolder.clonePage()
 	c.withControls = _q.withControls.clonePage()
 	if _q.withNamedControls != nil {
 		c.withNamedControls = make(map[string]*ControlQuery, len(_q.withNamedControls))
@@ -43948,6 +44026,27 @@ func (_q *ControlImplementationQuery) clonePage() *ControlImplementationQuery {
 		c.withNamedTasks = make(map[string]*TaskQuery, len(_q.withNamedTasks))
 		for name, q := range _q.withNamedTasks {
 			c.withNamedTasks[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withSystemDetails = _q.withSystemDetails.clonePage()
+	if _q.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_q.withNamedSystemDetails))
+		for name, q := range _q.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.clonePage()
+		}
+	}
+	c.withComments = _q.withComments.clonePage()
+	if _q.withNamedComments != nil {
+		c.withNamedComments = make(map[string]*NoteQuery, len(_q.withNamedComments))
+		for name, q := range _q.withNamedComments {
+			c.withNamedComments[name] = q.clonePage()
 		}
 	}
 	c.loadTotal = _q.loadTotal
@@ -46578,6 +46677,7 @@ func (_q *NoteQuery) clonePage() *NoteQuery {
 	c.withReview = _q.withReview.clonePage()
 	c.withVulnerability = _q.withVulnerability.clonePage()
 	c.withFinding = _q.withFinding.clonePage()
+	c.withControlImplementation = _q.withControlImplementation.clonePage()
 	c.withEvidence = _q.withEvidence.clonePage()
 	c.withTrustCenter = _q.withTrustCenter.clonePage()
 	c.withDiscussion = _q.withDiscussion.clonePage()
@@ -48137,6 +48237,20 @@ func (_q *PlatformQuery) clonePage() *PlatformQuery {
 			c.withNamedControls[name] = q.clonePage()
 		}
 	}
+	c.withControlImplementations = _q.withControlImplementations.clonePage()
+	if _q.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementations))
+		for name, q := range _q.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
+		}
+	}
 	c.withAssessments = _q.withAssessments.clonePage()
 	if _q.withNamedAssessments != nil {
 		c.withNamedAssessments = make(map[string]*AssessmentQuery, len(_q.withNamedAssessments))
@@ -48784,6 +48898,18 @@ func (_q *ReviewQuery) clonePage() *ReviewQuery {
 			c.withNamedEditors[name] = q.clonePage()
 		}
 	}
+	c.withInternalOwnerUser = _q.withInternalOwnerUser.clonePage()
+	c.withInternalOwnerGroup = _q.withInternalOwnerGroup.clonePage()
+	c.withInternalOwnerIdentityHolder = _q.withInternalOwnerIdentityHolder.clonePage()
+	c.withReviewedByUser = _q.withReviewedByUser.clonePage()
+	c.withReviewedByGroup = _q.withReviewedByGroup.clonePage()
+	c.withReviewedByIdentityHolder = _q.withReviewedByIdentityHolder.clonePage()
+	c.withDelegateUser = _q.withDelegateUser.clonePage()
+	c.withDelegateGroup = _q.withDelegateGroup.clonePage()
+	c.withDelegateIdentityHolder = _q.withDelegateIdentityHolder.clonePage()
+	c.withReviewKind = _q.withReviewKind.clonePage()
+	c.withReviewClassification = _q.withReviewClassification.clonePage()
+	c.withReviewState = _q.withReviewState.clonePage()
 	c.withEnvironment = _q.withEnvironment.clonePage()
 	c.withScope = _q.withScope.clonePage()
 	c.withIntegrations = _q.withIntegrations.clonePage()
@@ -48883,6 +49009,20 @@ func (_q *ReviewQuery) clonePage() *ReviewQuery {
 		c.withNamedFiles = make(map[string]*FileQuery, len(_q.withNamedFiles))
 		for name, q := range _q.withNamedFiles {
 			c.withNamedFiles[name] = q.clonePage()
+		}
+	}
+	c.withPlatforms = _q.withPlatforms.clonePage()
+	if _q.withNamedPlatforms != nil {
+		c.withNamedPlatforms = make(map[string]*PlatformQuery, len(_q.withNamedPlatforms))
+		for name, q := range _q.withNamedPlatforms {
+			c.withNamedPlatforms[name] = q.clonePage()
+		}
+	}
+	c.withSystemDetails = _q.withSystemDetails.clonePage()
+	if _q.withNamedSystemDetails != nil {
+		c.withNamedSystemDetails = make(map[string]*SystemDetailQuery, len(_q.withNamedSystemDetails))
+		for name, q := range _q.withNamedSystemDetails {
+			c.withNamedSystemDetails[name] = q.clonePage()
 		}
 	}
 	c.withInternalPolicies = _q.withInternalPolicies.clonePage()
@@ -49581,6 +49721,20 @@ func (_q *SystemDetailQuery) clonePage() *SystemDetailQuery {
 		c.withNamedAssets = make(map[string]*AssetQuery, len(_q.withNamedAssets))
 		for name, q := range _q.withNamedAssets {
 			c.withNamedAssets[name] = q.clonePage()
+		}
+	}
+	c.withControlImplementations = _q.withControlImplementations.clonePage()
+	if _q.withNamedControlImplementations != nil {
+		c.withNamedControlImplementations = make(map[string]*ControlImplementationQuery, len(_q.withNamedControlImplementations))
+		for name, q := range _q.withNamedControlImplementations {
+			c.withNamedControlImplementations[name] = q.clonePage()
+		}
+	}
+	c.withReviews = _q.withReviews.clonePage()
+	if _q.withNamedReviews != nil {
+		c.withNamedReviews = make(map[string]*ReviewQuery, len(_q.withNamedReviews))
+		for name, q := range _q.withNamedReviews {
+			c.withNamedReviews[name] = q.clonePage()
 		}
 	}
 	c.loadTotal = _q.loadTotal

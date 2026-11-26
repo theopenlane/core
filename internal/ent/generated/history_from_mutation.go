@@ -4942,6 +4942,38 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if internalOwner, exists := m.InternalOwner(); exists {
+		create = create.SetInternalOwner(internalOwner)
+	}
+
+	if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+		create = create.SetInternalOwnerUserID(internalOwnerUserID)
+	}
+
+	if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+		create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+	}
+
+	if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+		create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+	}
+
+	if delegateName, exists := m.DelegateName(); exists {
+		create = create.SetDelegateName(delegateName)
+	}
+
+	if delegateUserID, exists := m.DelegateUserID(); exists {
+		create = create.SetDelegateUserID(delegateUserID)
+	}
+
+	if delegateGroupID, exists := m.DelegateGroupID(); exists {
+		create = create.SetDelegateGroupID(delegateGroupID)
+	}
+
+	if delegateIdentityHolderID, exists := m.DelegateIdentityHolderID(); exists {
+		create = create.SetDelegateIdentityHolderID(delegateIdentityHolderID)
+	}
+
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
 	}
@@ -5108,6 +5140,54 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetOwnerID(controlimplementation.OwnerID)
 		}
 
+		if internalOwner, exists := m.InternalOwner(); exists {
+			create = create.SetInternalOwner(internalOwner)
+		} else {
+			create = create.SetInternalOwner(controlimplementation.InternalOwner)
+		}
+
+		if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+			create = create.SetInternalOwnerUserID(internalOwnerUserID)
+		} else {
+			create = create.SetInternalOwnerUserID(controlimplementation.InternalOwnerUserID)
+		}
+
+		if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+			create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+		} else {
+			create = create.SetInternalOwnerGroupID(controlimplementation.InternalOwnerGroupID)
+		}
+
+		if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+			create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+		} else {
+			create = create.SetInternalOwnerIdentityHolderID(controlimplementation.InternalOwnerIdentityHolderID)
+		}
+
+		if delegateName, exists := m.DelegateName(); exists {
+			create = create.SetDelegateName(delegateName)
+		} else {
+			create = create.SetDelegateName(controlimplementation.DelegateName)
+		}
+
+		if delegateUserID, exists := m.DelegateUserID(); exists {
+			create = create.SetDelegateUserID(delegateUserID)
+		} else {
+			create = create.SetDelegateUserID(controlimplementation.DelegateUserID)
+		}
+
+		if delegateGroupID, exists := m.DelegateGroupID(); exists {
+			create = create.SetDelegateGroupID(delegateGroupID)
+		} else {
+			create = create.SetDelegateGroupID(controlimplementation.DelegateGroupID)
+		}
+
+		if delegateIdentityHolderID, exists := m.DelegateIdentityHolderID(); exists {
+			create = create.SetDelegateIdentityHolderID(delegateIdentityHolderID)
+		} else {
+			create = create.SetDelegateIdentityHolderID(controlimplementation.DelegateIdentityHolderID)
+		}
+
 		if systemOwned, exists := m.SystemOwned(); exists {
 			create = create.SetSystemOwned(systemOwned)
 		} else {
@@ -5216,6 +5296,14 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetSourceKey(controlimplementation.SourceKey).
 			SetExternalID(controlimplementation.ExternalID).
 			SetOwnerID(controlimplementation.OwnerID).
+			SetInternalOwner(controlimplementation.InternalOwner).
+			SetInternalOwnerUserID(controlimplementation.InternalOwnerUserID).
+			SetInternalOwnerGroupID(controlimplementation.InternalOwnerGroupID).
+			SetInternalOwnerIdentityHolderID(controlimplementation.InternalOwnerIdentityHolderID).
+			SetDelegateName(controlimplementation.DelegateName).
+			SetDelegateUserID(controlimplementation.DelegateUserID).
+			SetDelegateGroupID(controlimplementation.DelegateGroupID).
+			SetDelegateIdentityHolderID(controlimplementation.DelegateIdentityHolderID).
 			SetSystemOwned(controlimplementation.SystemOwned).
 			SetNillableInternalNotes(controlimplementation.InternalNotes).
 			SetNillableSystemInternalID(controlimplementation.SystemInternalID).
@@ -19935,6 +20023,54 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if internalOwner, exists := m.InternalOwner(); exists {
+		create = create.SetInternalOwner(internalOwner)
+	}
+
+	if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+		create = create.SetInternalOwnerUserID(internalOwnerUserID)
+	}
+
+	if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+		create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+	}
+
+	if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+		create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+	}
+
+	if reviewedBy, exists := m.ReviewedBy(); exists {
+		create = create.SetReviewedBy(reviewedBy)
+	}
+
+	if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+		create = create.SetReviewedByUserID(reviewedByUserID)
+	}
+
+	if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+		create = create.SetReviewedByGroupID(reviewedByGroupID)
+	}
+
+	if reviewedByIdentityHolderID, exists := m.ReviewedByIdentityHolderID(); exists {
+		create = create.SetReviewedByIdentityHolderID(reviewedByIdentityHolderID)
+	}
+
+	if delegateName, exists := m.DelegateName(); exists {
+		create = create.SetDelegateName(delegateName)
+	}
+
+	if delegateUserID, exists := m.DelegateUserID(); exists {
+		create = create.SetDelegateUserID(delegateUserID)
+	}
+
+	if delegateGroupID, exists := m.DelegateGroupID(); exists {
+		create = create.SetDelegateGroupID(delegateGroupID)
+	}
+
+	if delegateIdentityHolderID, exists := m.DelegateIdentityHolderID(); exists {
+		create = create.SetDelegateIdentityHolderID(delegateIdentityHolderID)
+	}
+
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
 	}
@@ -19945,6 +20081,30 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if systemInternalID, exists := m.SystemInternalID(); exists {
 		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
+	if reviewKindName, exists := m.ReviewKindName(); exists {
+		create = create.SetReviewKindName(reviewKindName)
+	}
+
+	if reviewKindID, exists := m.ReviewKindID(); exists {
+		create = create.SetReviewKindID(reviewKindID)
+	}
+
+	if reviewClassificationName, exists := m.ReviewClassificationName(); exists {
+		create = create.SetReviewClassificationName(reviewClassificationName)
+	}
+
+	if reviewClassificationID, exists := m.ReviewClassificationID(); exists {
+		create = create.SetReviewClassificationID(reviewClassificationID)
+	}
+
+	if reviewStateName, exists := m.ReviewStateName(); exists {
+		create = create.SetReviewStateName(reviewStateName)
+	}
+
+	if reviewStateID, exists := m.ReviewStateID(); exists {
+		create = create.SetReviewStateID(reviewStateID)
 	}
 
 	if environmentName, exists := m.EnvironmentName(); exists {
@@ -20165,6 +20325,78 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(review.OwnerID)
 		}
 
+		if internalOwner, exists := m.InternalOwner(); exists {
+			create = create.SetInternalOwner(internalOwner)
+		} else {
+			create = create.SetInternalOwner(review.InternalOwner)
+		}
+
+		if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+			create = create.SetInternalOwnerUserID(internalOwnerUserID)
+		} else {
+			create = create.SetInternalOwnerUserID(review.InternalOwnerUserID)
+		}
+
+		if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+			create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+		} else {
+			create = create.SetInternalOwnerGroupID(review.InternalOwnerGroupID)
+		}
+
+		if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+			create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+		} else {
+			create = create.SetInternalOwnerIdentityHolderID(review.InternalOwnerIdentityHolderID)
+		}
+
+		if reviewedBy, exists := m.ReviewedBy(); exists {
+			create = create.SetReviewedBy(reviewedBy)
+		} else {
+			create = create.SetReviewedBy(review.ReviewedBy)
+		}
+
+		if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+			create = create.SetReviewedByUserID(reviewedByUserID)
+		} else {
+			create = create.SetReviewedByUserID(review.ReviewedByUserID)
+		}
+
+		if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+			create = create.SetReviewedByGroupID(reviewedByGroupID)
+		} else {
+			create = create.SetReviewedByGroupID(review.ReviewedByGroupID)
+		}
+
+		if reviewedByIdentityHolderID, exists := m.ReviewedByIdentityHolderID(); exists {
+			create = create.SetReviewedByIdentityHolderID(reviewedByIdentityHolderID)
+		} else {
+			create = create.SetReviewedByIdentityHolderID(review.ReviewedByIdentityHolderID)
+		}
+
+		if delegateName, exists := m.DelegateName(); exists {
+			create = create.SetDelegateName(delegateName)
+		} else {
+			create = create.SetDelegateName(review.DelegateName)
+		}
+
+		if delegateUserID, exists := m.DelegateUserID(); exists {
+			create = create.SetDelegateUserID(delegateUserID)
+		} else {
+			create = create.SetDelegateUserID(review.DelegateUserID)
+		}
+
+		if delegateGroupID, exists := m.DelegateGroupID(); exists {
+			create = create.SetDelegateGroupID(delegateGroupID)
+		} else {
+			create = create.SetDelegateGroupID(review.DelegateGroupID)
+		}
+
+		if delegateIdentityHolderID, exists := m.DelegateIdentityHolderID(); exists {
+			create = create.SetDelegateIdentityHolderID(delegateIdentityHolderID)
+		} else {
+			create = create.SetDelegateIdentityHolderID(review.DelegateIdentityHolderID)
+		}
+
 		if systemOwned, exists := m.SystemOwned(); exists {
 			create = create.SetSystemOwned(systemOwned)
 		} else {
@@ -20181,6 +20413,42 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableSystemInternalID(&systemInternalID)
 		} else {
 			create = create.SetNillableSystemInternalID(review.SystemInternalID)
+		}
+
+		if reviewKindName, exists := m.ReviewKindName(); exists {
+			create = create.SetReviewKindName(reviewKindName)
+		} else {
+			create = create.SetReviewKindName(review.ReviewKindName)
+		}
+
+		if reviewKindID, exists := m.ReviewKindID(); exists {
+			create = create.SetReviewKindID(reviewKindID)
+		} else {
+			create = create.SetReviewKindID(review.ReviewKindID)
+		}
+
+		if reviewClassificationName, exists := m.ReviewClassificationName(); exists {
+			create = create.SetReviewClassificationName(reviewClassificationName)
+		} else {
+			create = create.SetReviewClassificationName(review.ReviewClassificationName)
+		}
+
+		if reviewClassificationID, exists := m.ReviewClassificationID(); exists {
+			create = create.SetReviewClassificationID(reviewClassificationID)
+		} else {
+			create = create.SetReviewClassificationID(review.ReviewClassificationID)
+		}
+
+		if reviewStateName, exists := m.ReviewStateName(); exists {
+			create = create.SetReviewStateName(reviewStateName)
+		} else {
+			create = create.SetReviewStateName(review.ReviewStateName)
+		}
+
+		if reviewStateID, exists := m.ReviewStateID(); exists {
+			create = create.SetReviewStateID(reviewStateID)
+		} else {
+			create = create.SetReviewStateID(review.ReviewStateID)
 		}
 
 		if environmentName, exists := m.EnvironmentName(); exists {
@@ -20369,9 +20637,27 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceKey(review.SourceKey).
 			SetExternalID(review.ExternalID).
 			SetOwnerID(review.OwnerID).
+			SetInternalOwner(review.InternalOwner).
+			SetInternalOwnerUserID(review.InternalOwnerUserID).
+			SetInternalOwnerGroupID(review.InternalOwnerGroupID).
+			SetInternalOwnerIdentityHolderID(review.InternalOwnerIdentityHolderID).
+			SetReviewedBy(review.ReviewedBy).
+			SetReviewedByUserID(review.ReviewedByUserID).
+			SetReviewedByGroupID(review.ReviewedByGroupID).
+			SetReviewedByIdentityHolderID(review.ReviewedByIdentityHolderID).
+			SetDelegateName(review.DelegateName).
+			SetDelegateUserID(review.DelegateUserID).
+			SetDelegateGroupID(review.DelegateGroupID).
+			SetDelegateIdentityHolderID(review.DelegateIdentityHolderID).
 			SetSystemOwned(review.SystemOwned).
 			SetNillableInternalNotes(review.InternalNotes).
 			SetNillableSystemInternalID(review.SystemInternalID).
+			SetReviewKindName(review.ReviewKindName).
+			SetReviewKindID(review.ReviewKindID).
+			SetReviewClassificationName(review.ReviewClassificationName).
+			SetReviewClassificationID(review.ReviewClassificationID).
+			SetReviewStateName(review.ReviewStateName).
+			SetReviewStateID(review.ReviewStateID).
 			SetEnvironmentName(review.EnvironmentName).
 			SetEnvironmentID(review.EnvironmentID).
 			SetScopeName(review.ScopeName).

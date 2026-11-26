@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/oscalgen"
 
 	"github.com/theopenlane/iam/entfga"
@@ -17,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 // ControlImplementation holds the schema definition for the ControlImplementation entity
@@ -101,11 +103,12 @@ func (c ControlImplementation) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newProvenanceMixin(c),
 			newObjectOwnedMixin[generated.ControlImplementation](c,
-				withParents(Control{}, Subcontrol{}),
+				withParents(Control{}, Subcontrol{}, Platform{}, SystemDetail{}),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
 			),
 			newGroupPermissionsMixin(),
+			newResponsibilityMixin(c, withInternalOwner(), withDelegate()),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(c)
@@ -136,6 +139,18 @@ func (c ControlImplementation) Edges() []ent.Edge {
 		}),
 
 		defaultEdgeToWithPagination(c, Task{}),
+		defaultEdgeFromWithPagination(c, Platform{}),
+		defaultEdgeFromWithPagination(c, SystemDetail{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			name:       "comments",
+			t:          Note.Type,
+			comment:    "discussion threads captured during the control implementation",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.CSVRef().FromColumn("Comment").CreateChild("text"),
+			},
+		}),
 	}
 }
 
@@ -174,8 +189,11 @@ func (c ControlImplementation) Policy() ent.Policy {
 			policy.CanCreateObjectsUnderParents([]string{
 				Control{}.PluralName(),
 				Subcontrol{}.PluralName(),
+				Platform{}.PluralName(),
+				SystemDetail{}.PluralName(),
 			}),
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.ControlImplementationMutation](),
 		),
 	)

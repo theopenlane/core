@@ -142,6 +142,66 @@ func OwnerID(v string) predicate.Review {
 	return predicate.Review(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// InternalOwner applies equality check predicate on the "internal_owner" field. It's identical to InternalOwnerEQ.
+func InternalOwner(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserID applies equality check predicate on the "internal_owner_user_id" field. It's identical to InternalOwnerUserIDEQ.
+func InternalOwnerUserID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupID applies equality check predicate on the "internal_owner_group_id" field. It's identical to InternalOwnerGroupIDEQ.
+func InternalOwnerGroupID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerIdentityHolderID applies equality check predicate on the "internal_owner_identity_holder_id" field. It's identical to InternalOwnerIdentityHolderIDEQ.
+func InternalOwnerIdentityHolderID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// ReviewedBy applies equality check predicate on the "reviewed_by" field. It's identical to ReviewedByEQ.
+func ReviewedBy(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByUserID applies equality check predicate on the "reviewed_by_user_id" field. It's identical to ReviewedByUserIDEQ.
+func ReviewedByUserID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByGroupID applies equality check predicate on the "reviewed_by_group_id" field. It's identical to ReviewedByGroupIDEQ.
+func ReviewedByGroupID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByIdentityHolderID applies equality check predicate on the "reviewed_by_identity_holder_id" field. It's identical to ReviewedByIdentityHolderIDEQ.
+func ReviewedByIdentityHolderID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// DelegateName applies equality check predicate on the "delegate_name" field. It's identical to DelegateNameEQ.
+func DelegateName(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldDelegateName, v))
+}
+
+// DelegateUserID applies equality check predicate on the "delegate_user_id" field. It's identical to DelegateUserIDEQ.
+func DelegateUserID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldDelegateUserID, v))
+}
+
+// DelegateGroupID applies equality check predicate on the "delegate_group_id" field. It's identical to DelegateGroupIDEQ.
+func DelegateGroupID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldDelegateGroupID, v))
+}
+
+// DelegateIdentityHolderID applies equality check predicate on the "delegate_identity_holder_id" field. It's identical to DelegateIdentityHolderIDEQ.
+func DelegateIdentityHolderID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldDelegateIdentityHolderID, v))
+}
+
 // SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
 func SystemOwned(v bool) predicate.Review {
 	return predicate.Review(sql.FieldEQ(FieldSystemOwned, v))
@@ -155,6 +215,36 @@ func InternalNotes(v string) predicate.Review {
 // SystemInternalID applies equality check predicate on the "system_internal_id" field. It's identical to SystemInternalIDEQ.
 func SystemInternalID(v string) predicate.Review {
 	return predicate.Review(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
+// ReviewKindName applies equality check predicate on the "review_kind_name" field. It's identical to ReviewKindNameEQ.
+func ReviewKindName(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewKindName, v))
+}
+
+// ReviewKindID applies equality check predicate on the "review_kind_id" field. It's identical to ReviewKindIDEQ.
+func ReviewKindID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewKindID, v))
+}
+
+// ReviewClassificationName applies equality check predicate on the "review_classification_name" field. It's identical to ReviewClassificationNameEQ.
+func ReviewClassificationName(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationID applies equality check predicate on the "review_classification_id" field. It's identical to ReviewClassificationIDEQ.
+func ReviewClassificationID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewClassificationID, v))
+}
+
+// ReviewStateName applies equality check predicate on the "review_state_name" field. It's identical to ReviewStateNameEQ.
+func ReviewStateName(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewStateName, v))
+}
+
+// ReviewStateID applies equality check predicate on the "review_state_id" field. It's identical to ReviewStateIDEQ.
+func ReviewStateID(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewStateID, v))
 }
 
 // EnvironmentName applies equality check predicate on the "environment_name" field. It's identical to EnvironmentNameEQ.
@@ -1312,6 +1402,906 @@ func OwnerIDContainsFold(v string) predicate.Review {
 	return predicate.Review(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
+// InternalOwnerEQ applies the EQ predicate on the "internal_owner" field.
+func InternalOwnerEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerNEQ applies the NEQ predicate on the "internal_owner" field.
+func InternalOwnerNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerIn applies the In predicate on the "internal_owner" field.
+func InternalOwnerIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerNotIn applies the NotIn predicate on the "internal_owner" field.
+func InternalOwnerNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerGT applies the GT predicate on the "internal_owner" field.
+func InternalOwnerGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldInternalOwner, v))
+}
+
+// InternalOwnerGTE applies the GTE predicate on the "internal_owner" field.
+func InternalOwnerGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerLT applies the LT predicate on the "internal_owner" field.
+func InternalOwnerLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldInternalOwner, v))
+}
+
+// InternalOwnerLTE applies the LTE predicate on the "internal_owner" field.
+func InternalOwnerLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerContains applies the Contains predicate on the "internal_owner" field.
+func InternalOwnerContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasPrefix applies the HasPrefix predicate on the "internal_owner" field.
+func InternalOwnerHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasSuffix applies the HasSuffix predicate on the "internal_owner" field.
+func InternalOwnerHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldInternalOwner, v))
+}
+
+// InternalOwnerIsNil applies the IsNil predicate on the "internal_owner" field.
+func InternalOwnerIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldInternalOwner))
+}
+
+// InternalOwnerNotNil applies the NotNil predicate on the "internal_owner" field.
+func InternalOwnerNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldInternalOwner))
+}
+
+// InternalOwnerEqualFold applies the EqualFold predicate on the "internal_owner" field.
+func InternalOwnerEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerContainsFold applies the ContainsFold predicate on the "internal_owner" field.
+func InternalOwnerContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserIDEQ applies the EQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDNEQ applies the NEQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIn applies the In predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDNotIn applies the NotIn predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDGT applies the GT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDGTE applies the GTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLT applies the LT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLTE applies the LTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContains applies the Contains predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasPrefix applies the HasPrefix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasSuffix applies the HasSuffix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIsNil applies the IsNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDNotNil applies the NotNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDEqualFold applies the EqualFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContainsFold applies the ContainsFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupIDEQ applies the EQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDNEQ applies the NEQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIn applies the In predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDNotIn applies the NotIn predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDGT applies the GT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDGTE applies the GTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLT applies the LT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLTE applies the LTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContains applies the Contains predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasPrefix applies the HasPrefix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasSuffix applies the HasSuffix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIsNil applies the IsNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDNotNil applies the NotNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDEqualFold applies the EqualFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContainsFold applies the ContainsFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerIdentityHolderIDEQ applies the EQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIn applies the In predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDGT applies the GT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDGTE applies the GTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLT applies the LT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLTE applies the LTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContains applies the Contains predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// ReviewedByEQ applies the EQ predicate on the "reviewed_by" field.
+func ReviewedByEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByNEQ applies the NEQ predicate on the "reviewed_by" field.
+func ReviewedByNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewedBy, v))
+}
+
+// ReviewedByIn applies the In predicate on the "reviewed_by" field.
+func ReviewedByIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewedBy, vs...))
+}
+
+// ReviewedByNotIn applies the NotIn predicate on the "reviewed_by" field.
+func ReviewedByNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewedBy, vs...))
+}
+
+// ReviewedByGT applies the GT predicate on the "reviewed_by" field.
+func ReviewedByGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewedBy, v))
+}
+
+// ReviewedByGTE applies the GTE predicate on the "reviewed_by" field.
+func ReviewedByGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewedBy, v))
+}
+
+// ReviewedByLT applies the LT predicate on the "reviewed_by" field.
+func ReviewedByLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewedBy, v))
+}
+
+// ReviewedByLTE applies the LTE predicate on the "reviewed_by" field.
+func ReviewedByLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewedBy, v))
+}
+
+// ReviewedByContains applies the Contains predicate on the "reviewed_by" field.
+func ReviewedByContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewedBy, v))
+}
+
+// ReviewedByHasPrefix applies the HasPrefix predicate on the "reviewed_by" field.
+func ReviewedByHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewedBy, v))
+}
+
+// ReviewedByHasSuffix applies the HasSuffix predicate on the "reviewed_by" field.
+func ReviewedByHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewedBy, v))
+}
+
+// ReviewedByIsNil applies the IsNil predicate on the "reviewed_by" field.
+func ReviewedByIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewedBy))
+}
+
+// ReviewedByNotNil applies the NotNil predicate on the "reviewed_by" field.
+func ReviewedByNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewedBy))
+}
+
+// ReviewedByEqualFold applies the EqualFold predicate on the "reviewed_by" field.
+func ReviewedByEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewedBy, v))
+}
+
+// ReviewedByContainsFold applies the ContainsFold predicate on the "reviewed_by" field.
+func ReviewedByContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewedBy, v))
+}
+
+// ReviewedByUserIDEQ applies the EQ predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDNEQ applies the NEQ predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDIn applies the In predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewedByUserID, vs...))
+}
+
+// ReviewedByUserIDNotIn applies the NotIn predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewedByUserID, vs...))
+}
+
+// ReviewedByUserIDGT applies the GT predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDGTE applies the GTE predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDLT applies the LT predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDLTE applies the LTE predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDContains applies the Contains predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDIsNil applies the IsNil predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewedByUserID))
+}
+
+// ReviewedByUserIDNotNil applies the NotNil predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewedByUserID))
+}
+
+// ReviewedByUserIDEqualFold applies the EqualFold predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewedByUserID, v))
+}
+
+// ReviewedByUserIDContainsFold applies the ContainsFold predicate on the "reviewed_by_user_id" field.
+func ReviewedByUserIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewedByUserID, v))
+}
+
+// ReviewedByGroupIDEQ applies the EQ predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDNEQ applies the NEQ predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDIn applies the In predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewedByGroupID, vs...))
+}
+
+// ReviewedByGroupIDNotIn applies the NotIn predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewedByGroupID, vs...))
+}
+
+// ReviewedByGroupIDGT applies the GT predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDGTE applies the GTE predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDLT applies the LT predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDLTE applies the LTE predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDContains applies the Contains predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDIsNil applies the IsNil predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewedByGroupID))
+}
+
+// ReviewedByGroupIDNotNil applies the NotNil predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewedByGroupID))
+}
+
+// ReviewedByGroupIDEqualFold applies the EqualFold predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByGroupIDContainsFold applies the ContainsFold predicate on the "reviewed_by_group_id" field.
+func ReviewedByGroupIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByIdentityHolderIDEQ applies the EQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDNEQ applies the NEQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIn applies the In predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDNotIn applies the NotIn predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDGT applies the GT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDGTE applies the GTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLT applies the LT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLTE applies the LTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContains applies the Contains predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIsNil applies the IsNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDNotNil applies the NotNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDEqualFold applies the EqualFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContainsFold applies the ContainsFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewedByIdentityHolderID, v))
+}
+
+// DelegateNameEQ applies the EQ predicate on the "delegate_name" field.
+func DelegateNameEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldDelegateName, v))
+}
+
+// DelegateNameNEQ applies the NEQ predicate on the "delegate_name" field.
+func DelegateNameNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldDelegateName, v))
+}
+
+// DelegateNameIn applies the In predicate on the "delegate_name" field.
+func DelegateNameIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldDelegateName, vs...))
+}
+
+// DelegateNameNotIn applies the NotIn predicate on the "delegate_name" field.
+func DelegateNameNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldDelegateName, vs...))
+}
+
+// DelegateNameGT applies the GT predicate on the "delegate_name" field.
+func DelegateNameGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldDelegateName, v))
+}
+
+// DelegateNameGTE applies the GTE predicate on the "delegate_name" field.
+func DelegateNameGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldDelegateName, v))
+}
+
+// DelegateNameLT applies the LT predicate on the "delegate_name" field.
+func DelegateNameLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldDelegateName, v))
+}
+
+// DelegateNameLTE applies the LTE predicate on the "delegate_name" field.
+func DelegateNameLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldDelegateName, v))
+}
+
+// DelegateNameContains applies the Contains predicate on the "delegate_name" field.
+func DelegateNameContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldDelegateName, v))
+}
+
+// DelegateNameHasPrefix applies the HasPrefix predicate on the "delegate_name" field.
+func DelegateNameHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldDelegateName, v))
+}
+
+// DelegateNameHasSuffix applies the HasSuffix predicate on the "delegate_name" field.
+func DelegateNameHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldDelegateName, v))
+}
+
+// DelegateNameIsNil applies the IsNil predicate on the "delegate_name" field.
+func DelegateNameIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldDelegateName))
+}
+
+// DelegateNameNotNil applies the NotNil predicate on the "delegate_name" field.
+func DelegateNameNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldDelegateName))
+}
+
+// DelegateNameEqualFold applies the EqualFold predicate on the "delegate_name" field.
+func DelegateNameEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldDelegateName, v))
+}
+
+// DelegateNameContainsFold applies the ContainsFold predicate on the "delegate_name" field.
+func DelegateNameContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldDelegateName, v))
+}
+
+// DelegateUserIDEQ applies the EQ predicate on the "delegate_user_id" field.
+func DelegateUserIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDNEQ applies the NEQ predicate on the "delegate_user_id" field.
+func DelegateUserIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDIn applies the In predicate on the "delegate_user_id" field.
+func DelegateUserIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldDelegateUserID, vs...))
+}
+
+// DelegateUserIDNotIn applies the NotIn predicate on the "delegate_user_id" field.
+func DelegateUserIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldDelegateUserID, vs...))
+}
+
+// DelegateUserIDGT applies the GT predicate on the "delegate_user_id" field.
+func DelegateUserIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDGTE applies the GTE predicate on the "delegate_user_id" field.
+func DelegateUserIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDLT applies the LT predicate on the "delegate_user_id" field.
+func DelegateUserIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDLTE applies the LTE predicate on the "delegate_user_id" field.
+func DelegateUserIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDContains applies the Contains predicate on the "delegate_user_id" field.
+func DelegateUserIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDHasPrefix applies the HasPrefix predicate on the "delegate_user_id" field.
+func DelegateUserIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDHasSuffix applies the HasSuffix predicate on the "delegate_user_id" field.
+func DelegateUserIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDIsNil applies the IsNil predicate on the "delegate_user_id" field.
+func DelegateUserIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldDelegateUserID))
+}
+
+// DelegateUserIDNotNil applies the NotNil predicate on the "delegate_user_id" field.
+func DelegateUserIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldDelegateUserID))
+}
+
+// DelegateUserIDEqualFold applies the EqualFold predicate on the "delegate_user_id" field.
+func DelegateUserIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDContainsFold applies the ContainsFold predicate on the "delegate_user_id" field.
+func DelegateUserIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldDelegateUserID, v))
+}
+
+// DelegateGroupIDEQ applies the EQ predicate on the "delegate_group_id" field.
+func DelegateGroupIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDNEQ applies the NEQ predicate on the "delegate_group_id" field.
+func DelegateGroupIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDIn applies the In predicate on the "delegate_group_id" field.
+func DelegateGroupIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldDelegateGroupID, vs...))
+}
+
+// DelegateGroupIDNotIn applies the NotIn predicate on the "delegate_group_id" field.
+func DelegateGroupIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldDelegateGroupID, vs...))
+}
+
+// DelegateGroupIDGT applies the GT predicate on the "delegate_group_id" field.
+func DelegateGroupIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDGTE applies the GTE predicate on the "delegate_group_id" field.
+func DelegateGroupIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDLT applies the LT predicate on the "delegate_group_id" field.
+func DelegateGroupIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDLTE applies the LTE predicate on the "delegate_group_id" field.
+func DelegateGroupIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDContains applies the Contains predicate on the "delegate_group_id" field.
+func DelegateGroupIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDHasPrefix applies the HasPrefix predicate on the "delegate_group_id" field.
+func DelegateGroupIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDHasSuffix applies the HasSuffix predicate on the "delegate_group_id" field.
+func DelegateGroupIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDIsNil applies the IsNil predicate on the "delegate_group_id" field.
+func DelegateGroupIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldDelegateGroupID))
+}
+
+// DelegateGroupIDNotNil applies the NotNil predicate on the "delegate_group_id" field.
+func DelegateGroupIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldDelegateGroupID))
+}
+
+// DelegateGroupIDEqualFold applies the EqualFold predicate on the "delegate_group_id" field.
+func DelegateGroupIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDContainsFold applies the ContainsFold predicate on the "delegate_group_id" field.
+func DelegateGroupIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldDelegateGroupID, v))
+}
+
+// DelegateIdentityHolderIDEQ applies the EQ predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDNEQ applies the NEQ predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDIn applies the In predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldDelegateIdentityHolderID, vs...))
+}
+
+// DelegateIdentityHolderIDNotIn applies the NotIn predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldDelegateIdentityHolderID, vs...))
+}
+
+// DelegateIdentityHolderIDGT applies the GT predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDGTE applies the GTE predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDLT applies the LT predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDLTE applies the LTE predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDContains applies the Contains predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDIsNil applies the IsNil predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldDelegateIdentityHolderID))
+}
+
+// DelegateIdentityHolderIDNotNil applies the NotNil predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldDelegateIdentityHolderID))
+}
+
+// DelegateIdentityHolderIDEqualFold applies the EqualFold predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDContainsFold applies the ContainsFold predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldDelegateIdentityHolderID, v))
+}
+
 // SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
 func SystemOwnedEQ(v bool) predicate.Review {
 	return predicate.Review(sql.FieldEQ(FieldSystemOwned, v))
@@ -1480,6 +2470,456 @@ func SystemInternalIDEqualFold(v string) predicate.Review {
 // SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
 func SystemInternalIDContainsFold(v string) predicate.Review {
 	return predicate.Review(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
+// ReviewKindNameEQ applies the EQ predicate on the "review_kind_name" field.
+func ReviewKindNameEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewKindName, v))
+}
+
+// ReviewKindNameNEQ applies the NEQ predicate on the "review_kind_name" field.
+func ReviewKindNameNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewKindName, v))
+}
+
+// ReviewKindNameIn applies the In predicate on the "review_kind_name" field.
+func ReviewKindNameIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewKindName, vs...))
+}
+
+// ReviewKindNameNotIn applies the NotIn predicate on the "review_kind_name" field.
+func ReviewKindNameNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewKindName, vs...))
+}
+
+// ReviewKindNameGT applies the GT predicate on the "review_kind_name" field.
+func ReviewKindNameGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewKindName, v))
+}
+
+// ReviewKindNameGTE applies the GTE predicate on the "review_kind_name" field.
+func ReviewKindNameGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewKindName, v))
+}
+
+// ReviewKindNameLT applies the LT predicate on the "review_kind_name" field.
+func ReviewKindNameLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewKindName, v))
+}
+
+// ReviewKindNameLTE applies the LTE predicate on the "review_kind_name" field.
+func ReviewKindNameLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewKindName, v))
+}
+
+// ReviewKindNameContains applies the Contains predicate on the "review_kind_name" field.
+func ReviewKindNameContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewKindName, v))
+}
+
+// ReviewKindNameHasPrefix applies the HasPrefix predicate on the "review_kind_name" field.
+func ReviewKindNameHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewKindName, v))
+}
+
+// ReviewKindNameHasSuffix applies the HasSuffix predicate on the "review_kind_name" field.
+func ReviewKindNameHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewKindName, v))
+}
+
+// ReviewKindNameIsNil applies the IsNil predicate on the "review_kind_name" field.
+func ReviewKindNameIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewKindName))
+}
+
+// ReviewKindNameNotNil applies the NotNil predicate on the "review_kind_name" field.
+func ReviewKindNameNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewKindName))
+}
+
+// ReviewKindNameEqualFold applies the EqualFold predicate on the "review_kind_name" field.
+func ReviewKindNameEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewKindName, v))
+}
+
+// ReviewKindNameContainsFold applies the ContainsFold predicate on the "review_kind_name" field.
+func ReviewKindNameContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewKindName, v))
+}
+
+// ReviewKindIDEQ applies the EQ predicate on the "review_kind_id" field.
+func ReviewKindIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewKindID, v))
+}
+
+// ReviewKindIDNEQ applies the NEQ predicate on the "review_kind_id" field.
+func ReviewKindIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewKindID, v))
+}
+
+// ReviewKindIDIn applies the In predicate on the "review_kind_id" field.
+func ReviewKindIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewKindID, vs...))
+}
+
+// ReviewKindIDNotIn applies the NotIn predicate on the "review_kind_id" field.
+func ReviewKindIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewKindID, vs...))
+}
+
+// ReviewKindIDGT applies the GT predicate on the "review_kind_id" field.
+func ReviewKindIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewKindID, v))
+}
+
+// ReviewKindIDGTE applies the GTE predicate on the "review_kind_id" field.
+func ReviewKindIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewKindID, v))
+}
+
+// ReviewKindIDLT applies the LT predicate on the "review_kind_id" field.
+func ReviewKindIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewKindID, v))
+}
+
+// ReviewKindIDLTE applies the LTE predicate on the "review_kind_id" field.
+func ReviewKindIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewKindID, v))
+}
+
+// ReviewKindIDContains applies the Contains predicate on the "review_kind_id" field.
+func ReviewKindIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewKindID, v))
+}
+
+// ReviewKindIDHasPrefix applies the HasPrefix predicate on the "review_kind_id" field.
+func ReviewKindIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewKindID, v))
+}
+
+// ReviewKindIDHasSuffix applies the HasSuffix predicate on the "review_kind_id" field.
+func ReviewKindIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewKindID, v))
+}
+
+// ReviewKindIDIsNil applies the IsNil predicate on the "review_kind_id" field.
+func ReviewKindIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewKindID))
+}
+
+// ReviewKindIDNotNil applies the NotNil predicate on the "review_kind_id" field.
+func ReviewKindIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewKindID))
+}
+
+// ReviewKindIDEqualFold applies the EqualFold predicate on the "review_kind_id" field.
+func ReviewKindIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewKindID, v))
+}
+
+// ReviewKindIDContainsFold applies the ContainsFold predicate on the "review_kind_id" field.
+func ReviewKindIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewKindID, v))
+}
+
+// ReviewClassificationNameEQ applies the EQ predicate on the "review_classification_name" field.
+func ReviewClassificationNameEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameNEQ applies the NEQ predicate on the "review_classification_name" field.
+func ReviewClassificationNameNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameIn applies the In predicate on the "review_classification_name" field.
+func ReviewClassificationNameIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewClassificationName, vs...))
+}
+
+// ReviewClassificationNameNotIn applies the NotIn predicate on the "review_classification_name" field.
+func ReviewClassificationNameNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewClassificationName, vs...))
+}
+
+// ReviewClassificationNameGT applies the GT predicate on the "review_classification_name" field.
+func ReviewClassificationNameGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameGTE applies the GTE predicate on the "review_classification_name" field.
+func ReviewClassificationNameGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameLT applies the LT predicate on the "review_classification_name" field.
+func ReviewClassificationNameLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameLTE applies the LTE predicate on the "review_classification_name" field.
+func ReviewClassificationNameLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameContains applies the Contains predicate on the "review_classification_name" field.
+func ReviewClassificationNameContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameHasPrefix applies the HasPrefix predicate on the "review_classification_name" field.
+func ReviewClassificationNameHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameHasSuffix applies the HasSuffix predicate on the "review_classification_name" field.
+func ReviewClassificationNameHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameIsNil applies the IsNil predicate on the "review_classification_name" field.
+func ReviewClassificationNameIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewClassificationName))
+}
+
+// ReviewClassificationNameNotNil applies the NotNil predicate on the "review_classification_name" field.
+func ReviewClassificationNameNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewClassificationName))
+}
+
+// ReviewClassificationNameEqualFold applies the EqualFold predicate on the "review_classification_name" field.
+func ReviewClassificationNameEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationNameContainsFold applies the ContainsFold predicate on the "review_classification_name" field.
+func ReviewClassificationNameContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewClassificationName, v))
+}
+
+// ReviewClassificationIDEQ applies the EQ predicate on the "review_classification_id" field.
+func ReviewClassificationIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDNEQ applies the NEQ predicate on the "review_classification_id" field.
+func ReviewClassificationIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDIn applies the In predicate on the "review_classification_id" field.
+func ReviewClassificationIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewClassificationID, vs...))
+}
+
+// ReviewClassificationIDNotIn applies the NotIn predicate on the "review_classification_id" field.
+func ReviewClassificationIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewClassificationID, vs...))
+}
+
+// ReviewClassificationIDGT applies the GT predicate on the "review_classification_id" field.
+func ReviewClassificationIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDGTE applies the GTE predicate on the "review_classification_id" field.
+func ReviewClassificationIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDLT applies the LT predicate on the "review_classification_id" field.
+func ReviewClassificationIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDLTE applies the LTE predicate on the "review_classification_id" field.
+func ReviewClassificationIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDContains applies the Contains predicate on the "review_classification_id" field.
+func ReviewClassificationIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDHasPrefix applies the HasPrefix predicate on the "review_classification_id" field.
+func ReviewClassificationIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDHasSuffix applies the HasSuffix predicate on the "review_classification_id" field.
+func ReviewClassificationIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDIsNil applies the IsNil predicate on the "review_classification_id" field.
+func ReviewClassificationIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewClassificationID))
+}
+
+// ReviewClassificationIDNotNil applies the NotNil predicate on the "review_classification_id" field.
+func ReviewClassificationIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewClassificationID))
+}
+
+// ReviewClassificationIDEqualFold applies the EqualFold predicate on the "review_classification_id" field.
+func ReviewClassificationIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewClassificationID, v))
+}
+
+// ReviewClassificationIDContainsFold applies the ContainsFold predicate on the "review_classification_id" field.
+func ReviewClassificationIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewClassificationID, v))
+}
+
+// ReviewStateNameEQ applies the EQ predicate on the "review_state_name" field.
+func ReviewStateNameEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewStateName, v))
+}
+
+// ReviewStateNameNEQ applies the NEQ predicate on the "review_state_name" field.
+func ReviewStateNameNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewStateName, v))
+}
+
+// ReviewStateNameIn applies the In predicate on the "review_state_name" field.
+func ReviewStateNameIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewStateName, vs...))
+}
+
+// ReviewStateNameNotIn applies the NotIn predicate on the "review_state_name" field.
+func ReviewStateNameNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewStateName, vs...))
+}
+
+// ReviewStateNameGT applies the GT predicate on the "review_state_name" field.
+func ReviewStateNameGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewStateName, v))
+}
+
+// ReviewStateNameGTE applies the GTE predicate on the "review_state_name" field.
+func ReviewStateNameGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewStateName, v))
+}
+
+// ReviewStateNameLT applies the LT predicate on the "review_state_name" field.
+func ReviewStateNameLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewStateName, v))
+}
+
+// ReviewStateNameLTE applies the LTE predicate on the "review_state_name" field.
+func ReviewStateNameLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewStateName, v))
+}
+
+// ReviewStateNameContains applies the Contains predicate on the "review_state_name" field.
+func ReviewStateNameContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewStateName, v))
+}
+
+// ReviewStateNameHasPrefix applies the HasPrefix predicate on the "review_state_name" field.
+func ReviewStateNameHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewStateName, v))
+}
+
+// ReviewStateNameHasSuffix applies the HasSuffix predicate on the "review_state_name" field.
+func ReviewStateNameHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewStateName, v))
+}
+
+// ReviewStateNameIsNil applies the IsNil predicate on the "review_state_name" field.
+func ReviewStateNameIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewStateName))
+}
+
+// ReviewStateNameNotNil applies the NotNil predicate on the "review_state_name" field.
+func ReviewStateNameNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewStateName))
+}
+
+// ReviewStateNameEqualFold applies the EqualFold predicate on the "review_state_name" field.
+func ReviewStateNameEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewStateName, v))
+}
+
+// ReviewStateNameContainsFold applies the ContainsFold predicate on the "review_state_name" field.
+func ReviewStateNameContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewStateName, v))
+}
+
+// ReviewStateIDEQ applies the EQ predicate on the "review_state_id" field.
+func ReviewStateIDEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldEQ(FieldReviewStateID, v))
+}
+
+// ReviewStateIDNEQ applies the NEQ predicate on the "review_state_id" field.
+func ReviewStateIDNEQ(v string) predicate.Review {
+	return predicate.Review(sql.FieldNEQ(FieldReviewStateID, v))
+}
+
+// ReviewStateIDIn applies the In predicate on the "review_state_id" field.
+func ReviewStateIDIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldIn(FieldReviewStateID, vs...))
+}
+
+// ReviewStateIDNotIn applies the NotIn predicate on the "review_state_id" field.
+func ReviewStateIDNotIn(vs ...string) predicate.Review {
+	return predicate.Review(sql.FieldNotIn(FieldReviewStateID, vs...))
+}
+
+// ReviewStateIDGT applies the GT predicate on the "review_state_id" field.
+func ReviewStateIDGT(v string) predicate.Review {
+	return predicate.Review(sql.FieldGT(FieldReviewStateID, v))
+}
+
+// ReviewStateIDGTE applies the GTE predicate on the "review_state_id" field.
+func ReviewStateIDGTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldGTE(FieldReviewStateID, v))
+}
+
+// ReviewStateIDLT applies the LT predicate on the "review_state_id" field.
+func ReviewStateIDLT(v string) predicate.Review {
+	return predicate.Review(sql.FieldLT(FieldReviewStateID, v))
+}
+
+// ReviewStateIDLTE applies the LTE predicate on the "review_state_id" field.
+func ReviewStateIDLTE(v string) predicate.Review {
+	return predicate.Review(sql.FieldLTE(FieldReviewStateID, v))
+}
+
+// ReviewStateIDContains applies the Contains predicate on the "review_state_id" field.
+func ReviewStateIDContains(v string) predicate.Review {
+	return predicate.Review(sql.FieldContains(FieldReviewStateID, v))
+}
+
+// ReviewStateIDHasPrefix applies the HasPrefix predicate on the "review_state_id" field.
+func ReviewStateIDHasPrefix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasPrefix(FieldReviewStateID, v))
+}
+
+// ReviewStateIDHasSuffix applies the HasSuffix predicate on the "review_state_id" field.
+func ReviewStateIDHasSuffix(v string) predicate.Review {
+	return predicate.Review(sql.FieldHasSuffix(FieldReviewStateID, v))
+}
+
+// ReviewStateIDIsNil applies the IsNil predicate on the "review_state_id" field.
+func ReviewStateIDIsNil() predicate.Review {
+	return predicate.Review(sql.FieldIsNull(FieldReviewStateID))
+}
+
+// ReviewStateIDNotNil applies the NotNil predicate on the "review_state_id" field.
+func ReviewStateIDNotNil() predicate.Review {
+	return predicate.Review(sql.FieldNotNull(FieldReviewStateID))
+}
+
+// ReviewStateIDEqualFold applies the EqualFold predicate on the "review_state_id" field.
+func ReviewStateIDEqualFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldEqualFold(FieldReviewStateID, v))
+}
+
+// ReviewStateIDContainsFold applies the ContainsFold predicate on the "review_state_id" field.
+func ReviewStateIDContainsFold(v string) predicate.Review {
+	return predicate.Review(sql.FieldContainsFold(FieldReviewStateID, v))
 }
 
 // EnvironmentNameEQ applies the EQ predicate on the "environment_name" field.
@@ -2919,6 +4359,282 @@ func HasEditorsWith(preds ...predicate.Group) predicate.Review {
 	})
 }
 
+// HasInternalOwnerUser applies the HasEdge predicate on the "internal_owner_user" edge.
+func HasInternalOwnerUser() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerUserTable, InternalOwnerUserColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalOwnerUserWith applies the HasEdge predicate on the "internal_owner_user" edge with a given conditions (other predicates).
+func HasInternalOwnerUserWith(preds ...predicate.User) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newInternalOwnerUserStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalOwnerGroup applies the HasEdge predicate on the "internal_owner_group" edge.
+func HasInternalOwnerGroup() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalOwnerGroupWith applies the HasEdge predicate on the "internal_owner_group" edge with a given conditions (other predicates).
+func HasInternalOwnerGroupWith(preds ...predicate.Group) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newInternalOwnerGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalOwnerIdentityHolder applies the HasEdge predicate on the "internal_owner_identity_holder" edge.
+func HasInternalOwnerIdentityHolder() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalOwnerIdentityHolderWith applies the HasEdge predicate on the "internal_owner_identity_holder" edge with a given conditions (other predicates).
+func HasInternalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newInternalOwnerIdentityHolderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewedByUser applies the HasEdge predicate on the "reviewed_by_user" edge.
+func HasReviewedByUser() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByUserTable, ReviewedByUserColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewedByUserWith applies the HasEdge predicate on the "reviewed_by_user" edge with a given conditions (other predicates).
+func HasReviewedByUserWith(preds ...predicate.User) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newReviewedByUserStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewedByGroup applies the HasEdge predicate on the "reviewed_by_group" edge.
+func HasReviewedByGroup() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewedByGroupWith applies the HasEdge predicate on the "reviewed_by_group" edge with a given conditions (other predicates).
+func HasReviewedByGroupWith(preds ...predicate.Group) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newReviewedByGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewedByIdentityHolder applies the HasEdge predicate on the "reviewed_by_identity_holder" edge.
+func HasReviewedByIdentityHolder() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByIdentityHolderTable, ReviewedByIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewedByIdentityHolderWith applies the HasEdge predicate on the "reviewed_by_identity_holder" edge with a given conditions (other predicates).
+func HasReviewedByIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newReviewedByIdentityHolderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDelegateUser applies the HasEdge predicate on the "delegate_user" edge.
+func HasDelegateUser() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DelegateUserTable, DelegateUserColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDelegateUserWith applies the HasEdge predicate on the "delegate_user" edge with a given conditions (other predicates).
+func HasDelegateUserWith(preds ...predicate.User) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newDelegateUserStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDelegateGroup applies the HasEdge predicate on the "delegate_group" edge.
+func HasDelegateGroup() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DelegateGroupTable, DelegateGroupColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDelegateGroupWith applies the HasEdge predicate on the "delegate_group" edge with a given conditions (other predicates).
+func HasDelegateGroupWith(preds ...predicate.Group) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newDelegateGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDelegateIdentityHolder applies the HasEdge predicate on the "delegate_identity_holder" edge.
+func HasDelegateIdentityHolder() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DelegateIdentityHolderTable, DelegateIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDelegateIdentityHolderWith applies the HasEdge predicate on the "delegate_identity_holder" edge with a given conditions (other predicates).
+func HasDelegateIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newDelegateIdentityHolderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewKind applies the HasEdge predicate on the "review_kind" edge.
+func HasReviewKind() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewKindTable, ReviewKindColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewKindWith applies the HasEdge predicate on the "review_kind" edge with a given conditions (other predicates).
+func HasReviewKindWith(preds ...predicate.CustomTypeEnum) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newReviewKindStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewClassification applies the HasEdge predicate on the "review_classification" edge.
+func HasReviewClassification() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewClassificationTable, ReviewClassificationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewClassificationWith applies the HasEdge predicate on the "review_classification" edge with a given conditions (other predicates).
+func HasReviewClassificationWith(preds ...predicate.CustomTypeEnum) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newReviewClassificationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewState applies the HasEdge predicate on the "review_state" edge.
+func HasReviewState() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewStateTable, ReviewStateColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewStateWith applies the HasEdge predicate on the "review_state" edge with a given conditions (other predicates).
+func HasReviewStateWith(preds ...predicate.CustomTypeEnum) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newReviewStateStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEnvironment applies the HasEdge predicate on the "environment" edge.
 func HasEnvironment() predicate.Review {
 	return predicate.Review(func(s *sql.Selector) {
@@ -3302,6 +5018,52 @@ func HasFiles() predicate.Review {
 func HasFilesWith(preds ...predicate.File) predicate.Review {
 	return predicate.Review(func(s *sql.Selector) {
 		step := newFilesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPlatforms applies the HasEdge predicate on the "platforms" edge.
+func HasPlatforms() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlatformsWith applies the HasEdge predicate on the "platforms" edge with a given conditions (other predicates).
+func HasPlatformsWith(preds ...predicate.Platform) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newPlatformsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSystemDetails applies the HasEdge predicate on the "system_details" edge.
+func HasSystemDetails() predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, SystemDetailsTable, SystemDetailsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSystemDetailsWith applies the HasEdge predicate on the "system_details" edge with a given conditions (other predicates).
+func HasSystemDetailsWith(preds ...predicate.SystemDetail) predicate.Review {
+	return predicate.Review(func(s *sql.Selector) {
+		step := newSystemDetailsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

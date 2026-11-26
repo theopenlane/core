@@ -153,6 +153,46 @@ func OwnerID(v string) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// InternalOwner applies equality check predicate on the "internal_owner" field. It's identical to InternalOwnerEQ.
+func InternalOwner(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserID applies equality check predicate on the "internal_owner_user_id" field. It's identical to InternalOwnerUserIDEQ.
+func InternalOwnerUserID(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupID applies equality check predicate on the "internal_owner_group_id" field. It's identical to InternalOwnerGroupIDEQ.
+func InternalOwnerGroupID(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerIdentityHolderID applies equality check predicate on the "internal_owner_identity_holder_id" field. It's identical to InternalOwnerIdentityHolderIDEQ.
+func InternalOwnerIdentityHolderID(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// DelegateName applies equality check predicate on the "delegate_name" field. It's identical to DelegateNameEQ.
+func DelegateName(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDelegateName, v))
+}
+
+// DelegateUserID applies equality check predicate on the "delegate_user_id" field. It's identical to DelegateUserIDEQ.
+func DelegateUserID(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDelegateUserID, v))
+}
+
+// DelegateGroupID applies equality check predicate on the "delegate_group_id" field. It's identical to DelegateGroupIDEQ.
+func DelegateGroupID(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDelegateGroupID, v))
+}
+
+// DelegateIdentityHolderID applies equality check predicate on the "delegate_identity_holder_id" field. It's identical to DelegateIdentityHolderIDEQ.
+func DelegateIdentityHolderID(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDelegateIdentityHolderID, v))
+}
+
 // SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
 func SystemOwned(v bool) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldSystemOwned, v))
@@ -1381,6 +1421,606 @@ func OwnerIDEqualFold(v string) predicate.ControlImplementationHistory {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// InternalOwnerEQ applies the EQ predicate on the "internal_owner" field.
+func InternalOwnerEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerNEQ applies the NEQ predicate on the "internal_owner" field.
+func InternalOwnerNEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldInternalOwner, v))
+}
+
+// InternalOwnerIn applies the In predicate on the "internal_owner" field.
+func InternalOwnerIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerNotIn applies the NotIn predicate on the "internal_owner" field.
+func InternalOwnerNotIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldInternalOwner, vs...))
+}
+
+// InternalOwnerGT applies the GT predicate on the "internal_owner" field.
+func InternalOwnerGT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGT(FieldInternalOwner, v))
+}
+
+// InternalOwnerGTE applies the GTE predicate on the "internal_owner" field.
+func InternalOwnerGTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerLT applies the LT predicate on the "internal_owner" field.
+func InternalOwnerLT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLT(FieldInternalOwner, v))
+}
+
+// InternalOwnerLTE applies the LTE predicate on the "internal_owner" field.
+func InternalOwnerLTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldInternalOwner, v))
+}
+
+// InternalOwnerContains applies the Contains predicate on the "internal_owner" field.
+func InternalOwnerContains(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContains(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasPrefix applies the HasPrefix predicate on the "internal_owner" field.
+func InternalOwnerHasPrefix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldInternalOwner, v))
+}
+
+// InternalOwnerHasSuffix applies the HasSuffix predicate on the "internal_owner" field.
+func InternalOwnerHasSuffix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldInternalOwner, v))
+}
+
+// InternalOwnerIsNil applies the IsNil predicate on the "internal_owner" field.
+func InternalOwnerIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldInternalOwner))
+}
+
+// InternalOwnerNotNil applies the NotNil predicate on the "internal_owner" field.
+func InternalOwnerNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldInternalOwner))
+}
+
+// InternalOwnerEqualFold applies the EqualFold predicate on the "internal_owner" field.
+func InternalOwnerEqualFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerContainsFold applies the ContainsFold predicate on the "internal_owner" field.
+func InternalOwnerContainsFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldInternalOwner, v))
+}
+
+// InternalOwnerUserIDEQ applies the EQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDNEQ applies the NEQ predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIn applies the In predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDNotIn applies the NotIn predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldInternalOwnerUserID, vs...))
+}
+
+// InternalOwnerUserIDGT applies the GT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDGTE applies the GTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDGTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLT applies the LT predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLT(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDLTE applies the LTE predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDLTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContains applies the Contains predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContains(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContains(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasPrefix applies the HasPrefix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasPrefix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDHasSuffix applies the HasSuffix predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDHasSuffix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDIsNil applies the IsNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDNotNil applies the NotNil predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldInternalOwnerUserID))
+}
+
+// InternalOwnerUserIDEqualFold applies the EqualFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDEqualFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerUserIDContainsFold applies the ContainsFold predicate on the "internal_owner_user_id" field.
+func InternalOwnerUserIDContainsFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldInternalOwnerUserID, v))
+}
+
+// InternalOwnerGroupIDEQ applies the EQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDNEQ applies the NEQ predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIn applies the In predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDNotIn applies the NotIn predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldInternalOwnerGroupID, vs...))
+}
+
+// InternalOwnerGroupIDGT applies the GT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDGTE applies the GTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDGTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLT applies the LT predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLT(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDLTE applies the LTE predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDLTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContains applies the Contains predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContains(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContains(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasPrefix applies the HasPrefix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasPrefix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDHasSuffix applies the HasSuffix predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDHasSuffix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDIsNil applies the IsNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDNotNil applies the NotNil predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldInternalOwnerGroupID))
+}
+
+// InternalOwnerGroupIDEqualFold applies the EqualFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDEqualFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerGroupIDContainsFold applies the ContainsFold predicate on the "internal_owner_group_id" field.
+func InternalOwnerGroupIDContainsFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerIdentityHolderIDEQ applies the EQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIn applies the In predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDGT applies the GT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDGTE applies the GTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLT applies the LT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLTE applies the LTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContains applies the Contains predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContains(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContains(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasPrefix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasSuffix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEqualFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContainsFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// DelegateNameEQ applies the EQ predicate on the "delegate_name" field.
+func DelegateNameEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDelegateName, v))
+}
+
+// DelegateNameNEQ applies the NEQ predicate on the "delegate_name" field.
+func DelegateNameNEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldDelegateName, v))
+}
+
+// DelegateNameIn applies the In predicate on the "delegate_name" field.
+func DelegateNameIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldDelegateName, vs...))
+}
+
+// DelegateNameNotIn applies the NotIn predicate on the "delegate_name" field.
+func DelegateNameNotIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldDelegateName, vs...))
+}
+
+// DelegateNameGT applies the GT predicate on the "delegate_name" field.
+func DelegateNameGT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGT(FieldDelegateName, v))
+}
+
+// DelegateNameGTE applies the GTE predicate on the "delegate_name" field.
+func DelegateNameGTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldDelegateName, v))
+}
+
+// DelegateNameLT applies the LT predicate on the "delegate_name" field.
+func DelegateNameLT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLT(FieldDelegateName, v))
+}
+
+// DelegateNameLTE applies the LTE predicate on the "delegate_name" field.
+func DelegateNameLTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldDelegateName, v))
+}
+
+// DelegateNameContains applies the Contains predicate on the "delegate_name" field.
+func DelegateNameContains(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContains(FieldDelegateName, v))
+}
+
+// DelegateNameHasPrefix applies the HasPrefix predicate on the "delegate_name" field.
+func DelegateNameHasPrefix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldDelegateName, v))
+}
+
+// DelegateNameHasSuffix applies the HasSuffix predicate on the "delegate_name" field.
+func DelegateNameHasSuffix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldDelegateName, v))
+}
+
+// DelegateNameIsNil applies the IsNil predicate on the "delegate_name" field.
+func DelegateNameIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldDelegateName))
+}
+
+// DelegateNameNotNil applies the NotNil predicate on the "delegate_name" field.
+func DelegateNameNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldDelegateName))
+}
+
+// DelegateNameEqualFold applies the EqualFold predicate on the "delegate_name" field.
+func DelegateNameEqualFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldDelegateName, v))
+}
+
+// DelegateNameContainsFold applies the ContainsFold predicate on the "delegate_name" field.
+func DelegateNameContainsFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldDelegateName, v))
+}
+
+// DelegateUserIDEQ applies the EQ predicate on the "delegate_user_id" field.
+func DelegateUserIDEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDNEQ applies the NEQ predicate on the "delegate_user_id" field.
+func DelegateUserIDNEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDIn applies the In predicate on the "delegate_user_id" field.
+func DelegateUserIDIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldDelegateUserID, vs...))
+}
+
+// DelegateUserIDNotIn applies the NotIn predicate on the "delegate_user_id" field.
+func DelegateUserIDNotIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldDelegateUserID, vs...))
+}
+
+// DelegateUserIDGT applies the GT predicate on the "delegate_user_id" field.
+func DelegateUserIDGT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGT(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDGTE applies the GTE predicate on the "delegate_user_id" field.
+func DelegateUserIDGTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDLT applies the LT predicate on the "delegate_user_id" field.
+func DelegateUserIDLT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLT(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDLTE applies the LTE predicate on the "delegate_user_id" field.
+func DelegateUserIDLTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDContains applies the Contains predicate on the "delegate_user_id" field.
+func DelegateUserIDContains(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContains(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDHasPrefix applies the HasPrefix predicate on the "delegate_user_id" field.
+func DelegateUserIDHasPrefix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDHasSuffix applies the HasSuffix predicate on the "delegate_user_id" field.
+func DelegateUserIDHasSuffix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDIsNil applies the IsNil predicate on the "delegate_user_id" field.
+func DelegateUserIDIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldDelegateUserID))
+}
+
+// DelegateUserIDNotNil applies the NotNil predicate on the "delegate_user_id" field.
+func DelegateUserIDNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldDelegateUserID))
+}
+
+// DelegateUserIDEqualFold applies the EqualFold predicate on the "delegate_user_id" field.
+func DelegateUserIDEqualFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDContainsFold applies the ContainsFold predicate on the "delegate_user_id" field.
+func DelegateUserIDContainsFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldDelegateUserID, v))
+}
+
+// DelegateGroupIDEQ applies the EQ predicate on the "delegate_group_id" field.
+func DelegateGroupIDEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDNEQ applies the NEQ predicate on the "delegate_group_id" field.
+func DelegateGroupIDNEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDIn applies the In predicate on the "delegate_group_id" field.
+func DelegateGroupIDIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldDelegateGroupID, vs...))
+}
+
+// DelegateGroupIDNotIn applies the NotIn predicate on the "delegate_group_id" field.
+func DelegateGroupIDNotIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldDelegateGroupID, vs...))
+}
+
+// DelegateGroupIDGT applies the GT predicate on the "delegate_group_id" field.
+func DelegateGroupIDGT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGT(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDGTE applies the GTE predicate on the "delegate_group_id" field.
+func DelegateGroupIDGTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDLT applies the LT predicate on the "delegate_group_id" field.
+func DelegateGroupIDLT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLT(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDLTE applies the LTE predicate on the "delegate_group_id" field.
+func DelegateGroupIDLTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDContains applies the Contains predicate on the "delegate_group_id" field.
+func DelegateGroupIDContains(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContains(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDHasPrefix applies the HasPrefix predicate on the "delegate_group_id" field.
+func DelegateGroupIDHasPrefix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDHasSuffix applies the HasSuffix predicate on the "delegate_group_id" field.
+func DelegateGroupIDHasSuffix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDIsNil applies the IsNil predicate on the "delegate_group_id" field.
+func DelegateGroupIDIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldDelegateGroupID))
+}
+
+// DelegateGroupIDNotNil applies the NotNil predicate on the "delegate_group_id" field.
+func DelegateGroupIDNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldDelegateGroupID))
+}
+
+// DelegateGroupIDEqualFold applies the EqualFold predicate on the "delegate_group_id" field.
+func DelegateGroupIDEqualFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDContainsFold applies the ContainsFold predicate on the "delegate_group_id" field.
+func DelegateGroupIDContainsFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldDelegateGroupID, v))
+}
+
+// DelegateIdentityHolderIDEQ applies the EQ predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEQ(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDNEQ applies the NEQ predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDNEQ(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNEQ(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDIn applies the In predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIn(FieldDelegateIdentityHolderID, vs...))
+}
+
+// DelegateIdentityHolderIDNotIn applies the NotIn predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDNotIn(vs ...string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotIn(FieldDelegateIdentityHolderID, vs...))
+}
+
+// DelegateIdentityHolderIDGT applies the GT predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDGT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGT(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDGTE applies the GTE predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDGTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldGTE(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDLT applies the LT predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDLT(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLT(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDLTE applies the LTE predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDLTE(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldLTE(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDContains applies the Contains predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDContains(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContains(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDHasPrefix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasPrefix(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDHasSuffix(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldHasSuffix(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDIsNil applies the IsNil predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldDelegateIdentityHolderID))
+}
+
+// DelegateIdentityHolderIDNotNil applies the NotNil predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldDelegateIdentityHolderID))
+}
+
+// DelegateIdentityHolderIDEqualFold applies the EqualFold predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDEqualFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldEqualFold(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDContainsFold applies the ContainsFold predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDContainsFold(v string) predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldDelegateIdentityHolderID, v))
 }
 
 // SystemOwnedEQ applies the EQ predicate on the "system_owned" field.

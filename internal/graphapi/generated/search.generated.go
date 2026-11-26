@@ -337,6 +337,38 @@ func (ec *executionContext) fieldContext_SearchResults_controls(_ context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_controlImplementations(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_controlImplementations(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ControlImplementations, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlImplementationConnection) graphql.Marshaler {
+			return ec.marshalOControlImplementationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementationConnection(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SearchResults_controlImplementations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ControlImplementationConnection(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_controlObjectives(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1463,6 +1495,11 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			}
 		case "controls":
 			out.Values[i] = ec._SearchResults_controls(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "controlImplementations":
+			out.Values[i] = ec._SearchResults_controlImplementations(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

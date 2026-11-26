@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
@@ -343,6 +344,30 @@ func (r *mutationResolver) UpdateFindingComment(ctx context.Context, id string, 
 	}, nil
 }
 
+// UpdateControlImplementationComment is the resolver for the updateControlImplementationComment field.
+func (r *mutationResolver) UpdateControlImplementationComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.ControlImplementationUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlimplementation"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlimplementation"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).ControlImplementation.Query().Where(controlimplementation.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlimplementation"})
+	}
+
+	return &model.ControlImplementationUpdatePayload{
+		ControlImplementation: objectRes,
+	}, nil
+}
+
 // DeleteNote is the resolver for the deleteNote field.
 func (r *mutationResolver) DeleteNote(ctx context.Context, id string) (*model.NoteDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(id).Exec(ctx); err != nil {
@@ -393,6 +418,45 @@ func (r *createTrustCenterFAQInputResolver) CreateNote(ctx context.Context, obj 
 	}
 
 	obj.NoteID = noteRes.ID
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateControlImplementationInputResolver) AddComment(ctx context.Context, obj *generated.UpdateControlImplementationInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.ControlImplementationID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.ControlImplementationID == nil {
+		return common.NewNotFoundError("controlimplementation")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateControlImplementationInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateControlImplementationInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "comment"})
+	}
 
 	return nil
 }

@@ -249,6 +249,8 @@ func (s Platform) Edges() []ent.Edge {
 		}),
 		defaultEdgeToWithPagination(s, Risk{}),
 		defaultEdgeToWithPagination(s, Control{}),
+		defaultEdgeToWithPagination(s, ControlImplementation{}),
+		defaultEdgeToWithPagination(s, Review{}),
 		defaultEdgeToWithPagination(s, Assessment{}),
 		defaultEdgeToWithPagination(s, Scan{}),
 		defaultEdgeToWithPagination(s, Task{}),

@@ -91,17 +91,23 @@ type SystemDetailEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// Assets holds the value of the assets edge.
 	Assets []*Asset `json:"assets,omitempty"`
+	// ControlImplementations holds the value of the control_implementations edge.
+	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
+	// Reviews holds the value of the reviews edge.
+	Reviews []*Review `json:"reviews,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [8]map[string]int
 
-	namedIntegrationRuns map[string][]*IntegrationRun
-	namedPrograms        map[string][]*Program
-	namedPlatforms       map[string][]*Platform
-	namedEntities        map[string][]*Entity
-	namedAssets          map[string][]*Asset
+	namedIntegrationRuns        map[string][]*IntegrationRun
+	namedPrograms               map[string][]*Program
+	namedPlatforms              map[string][]*Platform
+	namedEntities               map[string][]*Entity
+	namedAssets                 map[string][]*Asset
+	namedControlImplementations map[string][]*ControlImplementation
+	namedReviews                map[string][]*Review
 }
 
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
@@ -158,6 +164,24 @@ func (e SystemDetailEdges) AssetsOrErr() ([]*Asset, error) {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
+}
+
+// ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
+// was not loaded in eager-loading.
+func (e SystemDetailEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
+	if e.loadedTypes[6] {
+		return e.ControlImplementations, nil
+	}
+	return nil, &NotLoadedError{edge: "control_implementations"}
+}
+
+// ReviewsOrErr returns the Reviews value or an error if the edge
+// was not loaded in eager-loading.
+func (e SystemDetailEdges) ReviewsOrErr() ([]*Review, error) {
+	if e.loadedTypes[7] {
+		return e.Reviews, nil
+	}
+	return nil, &NotLoadedError{edge: "reviews"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -395,6 +419,16 @@ func (_m *SystemDetail) QueryAssets() *AssetQuery {
 	return NewSystemDetailClient(_m.config).QueryAssets(_m)
 }
 
+// QueryControlImplementations queries the "control_implementations" edge of the SystemDetail entity.
+func (_m *SystemDetail) QueryControlImplementations() *ControlImplementationQuery {
+	return NewSystemDetailClient(_m.config).QueryControlImplementations(_m)
+}
+
+// QueryReviews queries the "reviews" edge of the SystemDetail entity.
+func (_m *SystemDetail) QueryReviews() *ReviewQuery {
+	return NewSystemDetailClient(_m.config).QueryReviews(_m)
+}
+
 // Update returns a builder for updating this SystemDetail.
 // Note that you need to call SystemDetail.Unwrap() before calling this method if this SystemDetail
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -617,6 +651,54 @@ func (_m *SystemDetail) appendNamedAssets(name string, edges ...*Asset) {
 		_m.Edges.namedAssets[name] = []*Asset{}
 	} else {
 		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
+	}
+}
+
+// NamedControlImplementations returns the ControlImplementations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SystemDetail) NamedControlImplementations(name string) ([]*ControlImplementation, error) {
+	if _m.Edges.namedControlImplementations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControlImplementations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SystemDetail) appendNamedControlImplementations(name string, edges ...*ControlImplementation) {
+	if _m.Edges.namedControlImplementations == nil {
+		_m.Edges.namedControlImplementations = make(map[string][]*ControlImplementation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
+	} else {
+		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
+	}
+}
+
+// NamedReviews returns the Reviews named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SystemDetail) NamedReviews(name string) ([]*Review, error) {
+	if _m.Edges.namedReviews == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReviews[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SystemDetail) appendNamedReviews(name string, edges ...*Review) {
+	if _m.Edges.namedReviews == nil {
+		_m.Edges.namedReviews = make(map[string][]*Review)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReviews[name] = []*Review{}
+	} else {
+		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
 	}
 }
 

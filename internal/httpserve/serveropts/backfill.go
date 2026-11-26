@@ -96,6 +96,12 @@ var backfillRoutines = []backfillRoutine{
 		Enabled: true,
 		Run:     cleanupIntegrationParentTuples,
 	},
+	{
+		Name:    "backfill-classfication",
+		Version: "v1",
+		Enabled: true,
+		Run:     backfillClassifications,
+	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run

@@ -3,6 +3,10 @@ mutation CreateBulkCSVControlImplementation ($input: Upload!) {
 		controlImplementations {
 			createdAt
 			createdBy
+			delegateGroupID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			externalID
@@ -10,6 +14,10 @@ mutation CreateBulkCSVControlImplementation ($input: Upload!) {
 			implementationDate
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			ownerID
 			sourceDefinitionID
@@ -51,6 +59,10 @@ mutation CreateBulkControlImplementation ($input: [CreateControlImplementationIn
 		controlImplementations {
 			createdAt
 			createdBy
+			delegateGroupID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			externalID
@@ -58,6 +70,10 @@ mutation CreateBulkControlImplementation ($input: [CreateControlImplementationIn
 			implementationDate
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			ownerID
 			sourceDefinitionID
@@ -99,6 +115,10 @@ mutation CreateControlImplementation ($input: CreateControlImplementationInput!)
 		controlImplementation {
 			createdAt
 			createdBy
+			delegateGroupID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			externalID
@@ -106,6 +126,10 @@ mutation CreateControlImplementation ($input: CreateControlImplementationInput!)
 			implementationDate
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			ownerID
 			sourceDefinitionID
@@ -195,6 +219,10 @@ query GetControlImplementationByID ($controlImplementationId: ID!) {
 	controlImplementation(id: $controlImplementationId) {
 		createdAt
 		createdBy
+		delegateGroupID
+		delegateIdentityHolderID
+		delegateName
+		delegateUserID
 		details
 		detailsJSON
 		externalID
@@ -202,6 +230,10 @@ query GetControlImplementationByID ($controlImplementationId: ID!) {
 		implementationDate
 		integrationRunID
 		internalNotes
+		internalOwner
+		internalOwnerGroupID
+		internalOwnerIdentityHolderID
+		internalOwnerUserID
 		managedBy
 		ownerID
 		sourceDefinitionID
@@ -286,6 +318,10 @@ mutation UpdateControlImplementation ($updateControlImplementationId: ID!, $inpu
 		controlImplementation {
 			createdAt
 			createdBy
+			delegateGroupID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			externalID
@@ -293,6 +329,10 @@ mutation UpdateControlImplementation ($updateControlImplementationId: ID!, $inpu
 			implementationDate
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			ownerID
 			sourceDefinitionID

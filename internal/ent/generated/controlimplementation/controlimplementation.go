@@ -50,6 +50,22 @@ const (
 	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
+	FieldInternalOwner = "internal_owner"
+	// FieldInternalOwnerUserID holds the string denoting the internal_owner_user_id field in the database.
+	FieldInternalOwnerUserID = "internal_owner_user_id"
+	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
+	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
+	// FieldDelegateName holds the string denoting the delegate_name field in the database.
+	FieldDelegateName = "delegate_name"
+	// FieldDelegateUserID holds the string denoting the delegate_user_id field in the database.
+	FieldDelegateUserID = "delegate_user_id"
+	// FieldDelegateGroupID holds the string denoting the delegate_group_id field in the database.
+	FieldDelegateGroupID = "delegate_group_id"
+	// FieldDelegateIdentityHolderID holds the string denoting the delegate_identity_holder_id field in the database.
+	FieldDelegateIdentityHolderID = "delegate_identity_holder_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
@@ -78,12 +94,30 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeInternalOwnerUser holds the string denoting the internal_owner_user edge name in mutations.
+	EdgeInternalOwnerUser = "internal_owner_user"
+	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
+	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeInternalOwnerIdentityHolder holds the string denoting the internal_owner_identity_holder edge name in mutations.
+	EdgeInternalOwnerIdentityHolder = "internal_owner_identity_holder"
+	// EdgeDelegateUser holds the string denoting the delegate_user edge name in mutations.
+	EdgeDelegateUser = "delegate_user"
+	// EdgeDelegateGroup holds the string denoting the delegate_group edge name in mutations.
+	EdgeDelegateGroup = "delegate_group"
+	// EdgeDelegateIdentityHolder holds the string denoting the delegate_identity_holder edge name in mutations.
+	EdgeDelegateIdentityHolder = "delegate_identity_holder"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeSystemDetails holds the string denoting the system_details edge name in mutations.
+	EdgeSystemDetails = "system_details"
+	// EdgeComments holds the string denoting the comments edge name in mutations.
+	EdgeComments = "comments"
 	// Table holds the table name of the controlimplementation in the database.
 	Table = "control_implementations"
 	// IntegrationRunsTable is the table that holds the integration_runs relation/edge.
@@ -115,6 +149,48 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
+	// InternalOwnerUserTable is the table that holds the internal_owner_user relation/edge.
+	InternalOwnerUserTable = "control_implementations"
+	// InternalOwnerUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	InternalOwnerUserInverseTable = "users"
+	// InternalOwnerUserColumn is the table column denoting the internal_owner_user relation/edge.
+	InternalOwnerUserColumn = "internal_owner_user_id"
+	// InternalOwnerGroupTable is the table that holds the internal_owner_group relation/edge.
+	InternalOwnerGroupTable = "control_implementations"
+	// InternalOwnerGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	InternalOwnerGroupInverseTable = "groups"
+	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
+	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// InternalOwnerIdentityHolderTable is the table that holds the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderTable = "control_implementations"
+	// InternalOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	InternalOwnerIdentityHolderInverseTable = "identity_holders"
+	// InternalOwnerIdentityHolderColumn is the table column denoting the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderColumn = "internal_owner_identity_holder_id"
+	// DelegateUserTable is the table that holds the delegate_user relation/edge.
+	DelegateUserTable = "control_implementations"
+	// DelegateUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	DelegateUserInverseTable = "users"
+	// DelegateUserColumn is the table column denoting the delegate_user relation/edge.
+	DelegateUserColumn = "delegate_user_id"
+	// DelegateGroupTable is the table that holds the delegate_group relation/edge.
+	DelegateGroupTable = "control_implementations"
+	// DelegateGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	DelegateGroupInverseTable = "groups"
+	// DelegateGroupColumn is the table column denoting the delegate_group relation/edge.
+	DelegateGroupColumn = "delegate_group_id"
+	// DelegateIdentityHolderTable is the table that holds the delegate_identity_holder relation/edge.
+	DelegateIdentityHolderTable = "control_implementations"
+	// DelegateIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	DelegateIdentityHolderInverseTable = "identity_holders"
+	// DelegateIdentityHolderColumn is the table column denoting the delegate_identity_holder relation/edge.
+	DelegateIdentityHolderColumn = "delegate_identity_holder_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_control_implementations"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -130,6 +206,23 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_control_implementations"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// SystemDetailsTable is the table that holds the system_details relation/edge. The primary key declared below.
+	SystemDetailsTable = "system_detail_control_implementations"
+	// SystemDetailsInverseTable is the table name for the SystemDetail entity.
+	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
+	SystemDetailsInverseTable = "system_details"
+	// CommentsTable is the table that holds the comments relation/edge.
+	CommentsTable = "notes"
+	// CommentsInverseTable is the table name for the Note entity.
+	// It exists in this package in order to avoid circular dependency with the "note" package.
+	CommentsInverseTable = "notes"
+	// CommentsColumn is the table column denoting the comments relation/edge.
+	CommentsColumn = "control_implementation_comments"
 )
 
 // Columns holds all SQL columns for controlimplementation fields.
@@ -151,6 +244,14 @@ var Columns = []string{
 	FieldSourceKey,
 	FieldExternalID,
 	FieldOwnerID,
+	FieldInternalOwner,
+	FieldInternalOwnerUserID,
+	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
+	FieldDelegateName,
+	FieldDelegateUserID,
+	FieldDelegateGroupID,
+	FieldDelegateIdentityHolderID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
@@ -188,6 +289,12 @@ var (
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"control_implementation_id", "task_id"}
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "control_implementation_id"}
+	// SystemDetailsPrimaryKey and SystemDetailsColumn2 are the table columns denoting the
+	// primary key for the system_details relation (M2M).
+	SystemDetailsPrimaryKey = []string{"system_detail_id", "control_implementation_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -325,6 +432,46 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByInternalOwner orders the results by the internal_owner field.
+func ByInternalOwner(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwner, opts...).ToFunc()
+}
+
+// ByInternalOwnerUserID orders the results by the internal_owner_user_id field.
+func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerUserID, opts...).ToFunc()
+}
+
+// ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
+func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
+// ByDelegateName orders the results by the delegate_name field.
+func ByDelegateName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateName, opts...).ToFunc()
+}
+
+// ByDelegateUserID orders the results by the delegate_user_id field.
+func ByDelegateUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateUserID, opts...).ToFunc()
+}
+
+// ByDelegateGroupID orders the results by the delegate_group_id field.
+func ByDelegateGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateGroupID, opts...).ToFunc()
+}
+
+// ByDelegateIdentityHolderID orders the results by the delegate_identity_holder_id field.
+func ByDelegateIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateIdentityHolderID, opts...).ToFunc()
+}
+
 // BySystemOwned orders the results by the system_owned field.
 func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
@@ -428,6 +575,48 @@ func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByInternalOwnerUserField orders the results by internal_owner_user field.
+func ByInternalOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalOwnerGroupField orders the results by internal_owner_group field.
+func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalOwnerIdentityHolderField orders the results by internal_owner_identity_holder field.
+func ByInternalOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateUserField orders the results by delegate_user field.
+func ByDelegateUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateGroupField orders the results by delegate_group field.
+func ByDelegateGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateIdentityHolderField orders the results by delegate_identity_holder field.
+func ByDelegateIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByControlsCount orders the results by controls count.
 func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -469,6 +658,48 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySystemDetailsCount orders the results by system_details count.
+func BySystemDetailsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSystemDetailsStep(), opts...)
+	}
+}
+
+// BySystemDetails orders the results by system_details terms.
+func BySystemDetails(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCommentsCount orders the results by comments count.
+func ByCommentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCommentsStep(), opts...)
+	}
+}
+
+// ByComments orders the results by comments terms.
+func ByComments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCommentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newIntegrationRunsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -504,6 +735,48 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 	)
 }
+func newInternalOwnerUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerUserTable, InternalOwnerUserColumn),
+	)
+}
+func newInternalOwnerGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
+	)
+}
+func newInternalOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+	)
+}
+func newDelegateUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateUserTable, DelegateUserColumn),
+	)
+}
+func newDelegateGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateGroupTable, DelegateGroupColumn),
+	)
+}
+func newDelegateIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateIdentityHolderTable, DelegateIdentityHolderColumn),
+	)
+}
 func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -523,6 +796,27 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newSystemDetailsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SystemDetailsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SystemDetailsTable, SystemDetailsPrimaryKey...),
+	)
+}
+func newCommentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CommentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
 	)
 }
 

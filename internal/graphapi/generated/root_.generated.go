@@ -59,6 +59,7 @@ type ResolverRoot interface {
 	CreateOrganizationInput() CreateOrganizationInputResolver
 	CreateTrustCenterFAQInput() CreateTrustCenterFAQInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
+	UpdateControlImplementationInput() UpdateControlImplementationInputResolver
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
 	UpdateDiscussionInput() UpdateDiscussionInputResolver
@@ -1160,38 +1161,55 @@ type ComplexityRoot struct {
 	}
 
 	ControlImplementation struct {
-		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt               func(childComplexity int) int
-		CreatedBy               func(childComplexity int) int
-		Details                 func(childComplexity int) int
-		DetailsJSON             func(childComplexity int) int
-		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ExternalID              func(childComplexity int) int
-		ID                      func(childComplexity int) int
-		ImplementationDate      func(childComplexity int) int
-		IntegrationRunID        func(childComplexity int) int
-		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
-		InternalNotes           func(childComplexity int) int
-		ManagedBy               func(childComplexity int) int
-		Owner                   func(childComplexity int) int
-		OwnerID                 func(childComplexity int) int
-		SourceDefinitionID      func(childComplexity int) int
-		SourceDefinitionVersion func(childComplexity int) int
-		SourceInstanceID        func(childComplexity int) int
-		SourceKey               func(childComplexity int) int
-		Status                  func(childComplexity int) int
-		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		SystemInternalID        func(childComplexity int) int
-		SystemOwned             func(childComplexity int) int
-		Tags                    func(childComplexity int) int
-		Tasks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt               func(childComplexity int) int
-		UpdatedBy               func(childComplexity int) int
-		UpdatedByImpersonator   func(childComplexity int) int
-		VerificationDate        func(childComplexity int) int
-		Verified                func(childComplexity int) int
-		Viewers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		BlockedGroups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Comments                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                     func(childComplexity int) int
+		CreatedBy                     func(childComplexity int) int
+		DelegateGroup                 func(childComplexity int) int
+		DelegateGroupID               func(childComplexity int) int
+		DelegateIdentityHolder        func(childComplexity int) int
+		DelegateIdentityHolderID      func(childComplexity int) int
+		DelegateName                  func(childComplexity int) int
+		DelegateUser                  func(childComplexity int) int
+		DelegateUserID                func(childComplexity int) int
+		Details                       func(childComplexity int) int
+		DetailsJSON                   func(childComplexity int) int
+		Editors                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ExternalID                    func(childComplexity int) int
+		ID                            func(childComplexity int) int
+		ImplementationDate            func(childComplexity int) int
+		IntegrationRunID              func(childComplexity int) int
+		IntegrationRuns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
+		InternalNotes                 func(childComplexity int) int
+		InternalOwner                 func(childComplexity int) int
+		InternalOwnerGroup            func(childComplexity int) int
+		InternalOwnerGroupID          func(childComplexity int) int
+		InternalOwnerIdentityHolder   func(childComplexity int) int
+		InternalOwnerIdentityHolderID func(childComplexity int) int
+		InternalOwnerUser             func(childComplexity int) int
+		InternalOwnerUserID           func(childComplexity int) int
+		ManagedBy                     func(childComplexity int) int
+		Owner                         func(childComplexity int) int
+		OwnerID                       func(childComplexity int) int
+		Platforms                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		SourceDefinitionID            func(childComplexity int) int
+		SourceDefinitionVersion       func(childComplexity int) int
+		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
+		Status                        func(childComplexity int) int
+		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemDetails                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SystemDetailOrder, where *generated.SystemDetailWhereInput) int
+		SystemInternalID              func(childComplexity int) int
+		SystemOwned                   func(childComplexity int) int
+		Tags                          func(childComplexity int) int
+		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt                     func(childComplexity int) int
+		UpdatedBy                     func(childComplexity int) int
+		UpdatedByImpersonator         func(childComplexity int) int
+		VerificationDate              func(childComplexity int) int
+		Verified                      func(childComplexity int) int
+		Viewers                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	ControlImplementationBulkCreatePayload struct {
@@ -4089,6 +4107,7 @@ type ComplexityRoot struct {
 		UpdateControl                            func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlComment                     func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateControlImplementation              func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
+		UpdateControlImplementationComment       func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateControlObjective                   func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
 		UpdateCustomDomain                       func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
 		UpdateCustomTypeEnum                     func(childComplexity int, id string, input generated.UpdateCustomTypeEnumInput) int
@@ -4254,6 +4273,7 @@ type ComplexityRoot struct {
 
 	Note struct {
 		Control               func(childComplexity int) int
+		ControlImplementation func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
 		Discussion            func(childComplexity int) int
@@ -4954,6 +4974,7 @@ type ComplexityRoot struct {
 		BusinessOwnerUserID            func(childComplexity int) int
 		BusinessPurpose                func(childComplexity int) int
 		ContainsPii                    func(childComplexity int) int
+		ControlImplementations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		Controls                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CostCenter                     func(childComplexity int) int
 		CreatedAt                      func(childComplexity int) int
@@ -5015,6 +5036,7 @@ type ComplexityRoot struct {
 		PlatformOwnerID                func(childComplexity int) int
 		PurchaseDate                   func(childComplexity int) int
 		Region                         func(childComplexity int) int
+		Reviews                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risks                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Scope                          func(childComplexity int) int
@@ -5389,6 +5411,7 @@ type ComplexityRoot struct {
 		ControlCategoriesByFramework    func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
 		ControlDiff                     func(childComplexity int, input model.ControlDiffInput) int
 		ControlImplementation           func(childComplexity int, id string) int
+		ControlImplementationSearch     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		ControlImplementations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjective                func(childComplexity int, id string) int
 		ControlObjectiveSearch          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -5830,68 +5853,100 @@ type ComplexityRoot struct {
 	}
 
 	Review struct {
-		ActionPlans             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Approved                func(childComplexity int) int
-		ApprovedAt              func(childComplexity int) int
-		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Category                func(childComplexity int) int
-		Classification          func(childComplexity int) int
-		Comments                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt               func(childComplexity int) int
-		CreatedBy               func(childComplexity int) int
-		Details                 func(childComplexity int) int
-		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Environment             func(childComplexity int) int
-		EnvironmentID           func(childComplexity int) int
-		EnvironmentName         func(childComplexity int) int
-		ExternalID              func(childComplexity int) int
-		ExternalOwnerID         func(childComplexity int) int
-		ExternalURI             func(childComplexity int) int
-		Files                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID                      func(childComplexity int) int
-		IntegrationRunID        func(childComplexity int) int
-		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
-		Integrations            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalNotes           func(childComplexity int) int
-		InternalPolicies        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		ManagedBy               func(childComplexity int) int
-		Metadata                func(childComplexity int) int
-		Owner                   func(childComplexity int) int
-		OwnerID                 func(childComplexity int) int
-		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RawPayload              func(childComplexity int) int
-		Remediations            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		ReportedAt              func(childComplexity int) int
-		Reporter                func(childComplexity int) int
-		ReviewedAt              func(childComplexity int) int
-		Reviewer                func(childComplexity int) int
-		ReviewerID              func(childComplexity int) int
-		Risks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Scope                   func(childComplexity int) int
-		ScopeID                 func(childComplexity int) int
-		ScopeName               func(childComplexity int) int
-		Source                  func(childComplexity int) int
-		SourceDefinitionID      func(childComplexity int) int
-		SourceDefinitionVersion func(childComplexity int) int
-		SourceInstanceID        func(childComplexity int) int
-		SourceKey               func(childComplexity int) int
-		State                   func(childComplexity int) int
-		Status                  func(childComplexity int) int
-		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Summary                 func(childComplexity int) int
-		SystemInternalID        func(childComplexity int) int
-		SystemOwned             func(childComplexity int) int
-		Tags                    func(childComplexity int) int
-		Tasks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		Title                   func(childComplexity int) int
-		UpdatedAt               func(childComplexity int) int
-		UpdatedBy               func(childComplexity int) int
-		UpdatedByImpersonator   func(childComplexity int) int
-		Vulnerabilities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		ActionPlans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Approved                      func(childComplexity int) int
+		ApprovedAt                    func(childComplexity int) int
+		Assets                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Category                      func(childComplexity int) int
+		Classification                func(childComplexity int) int
+		Comments                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                     func(childComplexity int) int
+		CreatedBy                     func(childComplexity int) int
+		DelegateGroup                 func(childComplexity int) int
+		DelegateGroupID               func(childComplexity int) int
+		DelegateIdentityHolder        func(childComplexity int) int
+		DelegateIdentityHolderID      func(childComplexity int) int
+		DelegateName                  func(childComplexity int) int
+		DelegateUser                  func(childComplexity int) int
+		DelegateUserID                func(childComplexity int) int
+		Details                       func(childComplexity int) int
+		Editors                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment                   func(childComplexity int) int
+		EnvironmentID                 func(childComplexity int) int
+		EnvironmentName               func(childComplexity int) int
+		ExternalID                    func(childComplexity int) int
+		ExternalOwnerID               func(childComplexity int) int
+		ExternalURI                   func(childComplexity int) int
+		Files                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID                            func(childComplexity int) int
+		IntegrationRunID              func(childComplexity int) int
+		IntegrationRuns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
+		Integrations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes                 func(childComplexity int) int
+		InternalOwner                 func(childComplexity int) int
+		InternalOwnerGroup            func(childComplexity int) int
+		InternalOwnerGroupID          func(childComplexity int) int
+		InternalOwnerIdentityHolder   func(childComplexity int) int
+		InternalOwnerIdentityHolderID func(childComplexity int) int
+		InternalOwnerUser             func(childComplexity int) int
+		InternalOwnerUserID           func(childComplexity int) int
+		InternalPolicies              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		ManagedBy                     func(childComplexity int) int
+		Metadata                      func(childComplexity int) int
+		Owner                         func(childComplexity int) int
+		OwnerID                       func(childComplexity int) int
+		Platforms                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Programs                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RawPayload                    func(childComplexity int) int
+		Remediations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		ReportedAt                    func(childComplexity int) int
+		Reporter                      func(childComplexity int) int
+		ReviewClassification          func(childComplexity int) int
+		ReviewClassificationID        func(childComplexity int) int
+		ReviewClassificationName      func(childComplexity int) int
+		ReviewKind                    func(childComplexity int) int
+		ReviewKindID                  func(childComplexity int) int
+		ReviewKindName                func(childComplexity int) int
+		ReviewState                   func(childComplexity int) int
+		ReviewStateID                 func(childComplexity int) int
+		ReviewStateName               func(childComplexity int) int
+		ReviewedAt                    func(childComplexity int) int
+		ReviewedBy                    func(childComplexity int) int
+		ReviewedByGroup               func(childComplexity int) int
+		ReviewedByGroupID             func(childComplexity int) int
+		ReviewedByIdentityHolder      func(childComplexity int) int
+		ReviewedByIdentityHolderID    func(childComplexity int) int
+		ReviewedByUser                func(childComplexity int) int
+		ReviewedByUserID              func(childComplexity int) int
+		Reviewer                      func(childComplexity int) int
+		ReviewerID                    func(childComplexity int) int
+		Risks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scope                         func(childComplexity int) int
+		ScopeID                       func(childComplexity int) int
+		ScopeName                     func(childComplexity int) int
+		Source                        func(childComplexity int) int
+		SourceDefinitionID            func(childComplexity int) int
+		SourceDefinitionVersion       func(childComplexity int) int
+		SourceInstanceID              func(childComplexity int) int
+		SourceKey                     func(childComplexity int) int
+		State                         func(childComplexity int) int
+		Status                        func(childComplexity int) int
+		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary                       func(childComplexity int) int
+		SystemDetails                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SystemDetailOrder, where *generated.SystemDetailWhereInput) int
+		SystemInternalID              func(childComplexity int) int
+		SystemOwned                   func(childComplexity int) int
+		Tags                          func(childComplexity int) int
+		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Title                         func(childComplexity int) int
+		UpdatedAt                     func(childComplexity int) int
+		UpdatedBy                     func(childComplexity int) int
+		UpdatedByImpersonator         func(childComplexity int) int
+		Vulnerabilities               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	ReviewBulkCreatePayload struct {
@@ -6251,49 +6306,50 @@ type ComplexityRoot struct {
 	}
 
 	SearchResults struct {
-		ActionPlans           func(childComplexity int) int
-		AssessmentResponses   func(childComplexity int) int
-		Assessments           func(childComplexity int) int
-		Assets                func(childComplexity int) int
-		CampaignTargets       func(childComplexity int) int
-		Campaigns             func(childComplexity int) int
-		Contacts              func(childComplexity int) int
-		ControlObjectives     func(childComplexity int) int
-		Controls              func(childComplexity int) int
-		CustomTypeEnums       func(childComplexity int) int
-		EmailTemplates        func(childComplexity int) int
-		Entities              func(childComplexity int) int
-		Evidences             func(childComplexity int) int
-		Findings              func(childComplexity int) int
-		Groups                func(childComplexity int) int
-		IdentityHolders       func(childComplexity int) int
-		Integrations          func(childComplexity int) int
-		InternalPolicies      func(childComplexity int) int
-		Invites               func(childComplexity int) int
-		Narratives            func(childComplexity int) int
-		NotificationTemplates func(childComplexity int) int
-		Organizations         func(childComplexity int) int
-		Page                  func(childComplexity int) int
-		Platforms             func(childComplexity int) int
-		Procedures            func(childComplexity int) int
-		Programs              func(childComplexity int) int
-		Remediations          func(childComplexity int) int
-		Reports               func(childComplexity int) int
-		Reviews               func(childComplexity int) int
-		Risks                 func(childComplexity int) int
-		Scans                 func(childComplexity int) int
-		SearchContext         func(childComplexity int) int
-		Standards             func(childComplexity int) int
-		Subcontrols           func(childComplexity int) int
-		Subprocessors         func(childComplexity int) int
-		Subscribers           func(childComplexity int) int
-		SystemDetails         func(childComplexity int) int
-		TagDefinitions        func(childComplexity int) int
-		Tasks                 func(childComplexity int) int
-		Templates             func(childComplexity int) int
-		TotalCount            func(childComplexity int) int
-		TrustCenterEntities   func(childComplexity int) int
-		Vulnerabilities       func(childComplexity int) int
+		ActionPlans            func(childComplexity int) int
+		AssessmentResponses    func(childComplexity int) int
+		Assessments            func(childComplexity int) int
+		Assets                 func(childComplexity int) int
+		CampaignTargets        func(childComplexity int) int
+		Campaigns              func(childComplexity int) int
+		Contacts               func(childComplexity int) int
+		ControlImplementations func(childComplexity int) int
+		ControlObjectives      func(childComplexity int) int
+		Controls               func(childComplexity int) int
+		CustomTypeEnums        func(childComplexity int) int
+		EmailTemplates         func(childComplexity int) int
+		Entities               func(childComplexity int) int
+		Evidences              func(childComplexity int) int
+		Findings               func(childComplexity int) int
+		Groups                 func(childComplexity int) int
+		IdentityHolders        func(childComplexity int) int
+		Integrations           func(childComplexity int) int
+		InternalPolicies       func(childComplexity int) int
+		Invites                func(childComplexity int) int
+		Narratives             func(childComplexity int) int
+		NotificationTemplates  func(childComplexity int) int
+		Organizations          func(childComplexity int) int
+		Page                   func(childComplexity int) int
+		Platforms              func(childComplexity int) int
+		Procedures             func(childComplexity int) int
+		Programs               func(childComplexity int) int
+		Remediations           func(childComplexity int) int
+		Reports                func(childComplexity int) int
+		Reviews                func(childComplexity int) int
+		Risks                  func(childComplexity int) int
+		Scans                  func(childComplexity int) int
+		SearchContext          func(childComplexity int) int
+		Standards              func(childComplexity int) int
+		Subcontrols            func(childComplexity int) int
+		Subprocessors          func(childComplexity int) int
+		Subscribers            func(childComplexity int) int
+		SystemDetails          func(childComplexity int) int
+		TagDefinitions         func(childComplexity int) int
+		Tasks                  func(childComplexity int) int
+		Templates              func(childComplexity int) int
+		TotalCount             func(childComplexity int) int
+		TrustCenterEntities    func(childComplexity int) int
+		Vulnerabilities        func(childComplexity int) int
 	}
 
 	SearchSnippet struct {
@@ -6698,6 +6754,7 @@ type ComplexityRoot struct {
 	SystemDetail struct {
 		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		AuthorizationBoundary   func(childComplexity int) int
+		ControlImplementations  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		CreatedAt               func(childComplexity int) int
 		CreatedBy               func(childComplexity int) int
 		Description             func(childComplexity int) int
@@ -6714,6 +6771,7 @@ type ComplexityRoot struct {
 		OwnerID                 func(childComplexity int) int
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Reviews                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		RevisionHistory         func(childComplexity int) int
 		SensitivityLevel        func(childComplexity int) int
 		SourceDefinitionID      func(childComplexity int) int
@@ -13704,6 +13762,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementation.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "ControlImplementation.comments":
+		if e.ComplexityRoot.ControlImplementation.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_ControlImplementation_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.ControlImplementation.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
 	case "ControlImplementation.controls":
 		if e.ComplexityRoot.ControlImplementation.Controls == nil {
 			break
@@ -13727,6 +13796,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementation.CreatedBy(childComplexity), true
+	case "ControlImplementation.delegateGroup":
+		if e.ComplexityRoot.ControlImplementation.DelegateGroup == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.DelegateGroup(childComplexity), true
+	case "ControlImplementation.delegateGroupID":
+		if e.ComplexityRoot.ControlImplementation.DelegateGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.DelegateGroupID(childComplexity), true
+	case "ControlImplementation.delegateIdentityHolder":
+		if e.ComplexityRoot.ControlImplementation.DelegateIdentityHolder == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.DelegateIdentityHolder(childComplexity), true
+	case "ControlImplementation.delegateIdentityHolderID":
+		if e.ComplexityRoot.ControlImplementation.DelegateIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.DelegateIdentityHolderID(childComplexity), true
+	case "ControlImplementation.delegateName":
+		if e.ComplexityRoot.ControlImplementation.DelegateName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.DelegateName(childComplexity), true
+	case "ControlImplementation.delegateUser":
+		if e.ComplexityRoot.ControlImplementation.DelegateUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.DelegateUser(childComplexity), true
+	case "ControlImplementation.delegateUserID":
+		if e.ComplexityRoot.ControlImplementation.DelegateUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.DelegateUserID(childComplexity), true
 	case "ControlImplementation.details":
 		if e.ComplexityRoot.ControlImplementation.Details == nil {
 			break
@@ -13791,6 +13902,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementation.InternalNotes(childComplexity), true
+	case "ControlImplementation.internalOwner":
+		if e.ComplexityRoot.ControlImplementation.InternalOwner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.InternalOwner(childComplexity), true
+	case "ControlImplementation.internalOwnerGroup":
+		if e.ComplexityRoot.ControlImplementation.InternalOwnerGroup == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.InternalOwnerGroup(childComplexity), true
+	case "ControlImplementation.internalOwnerGroupID":
+		if e.ComplexityRoot.ControlImplementation.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.InternalOwnerGroupID(childComplexity), true
+	case "ControlImplementation.internalOwnerIdentityHolder":
+		if e.ComplexityRoot.ControlImplementation.InternalOwnerIdentityHolder == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.InternalOwnerIdentityHolder(childComplexity), true
+	case "ControlImplementation.internalOwnerIdentityHolderID":
+		if e.ComplexityRoot.ControlImplementation.InternalOwnerIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.InternalOwnerIdentityHolderID(childComplexity), true
+	case "ControlImplementation.internalOwnerUser":
+		if e.ComplexityRoot.ControlImplementation.InternalOwnerUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.InternalOwnerUser(childComplexity), true
+	case "ControlImplementation.internalOwnerUserID":
+		if e.ComplexityRoot.ControlImplementation.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementation.InternalOwnerUserID(childComplexity), true
 	case "ControlImplementation.managedBy":
 		if e.ComplexityRoot.ControlImplementation.ManagedBy == nil {
 			break
@@ -13809,6 +13962,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementation.OwnerID(childComplexity), true
+	case "ControlImplementation.platforms":
+		if e.ComplexityRoot.ControlImplementation.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_ControlImplementation_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.ControlImplementation.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 	case "ControlImplementation.sourceDefinitionID":
 		if e.ComplexityRoot.ControlImplementation.SourceDefinitionID == nil {
 			break
@@ -13850,6 +14014,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementation.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+	case "ControlImplementation.systemDetails":
+		if e.ComplexityRoot.ControlImplementation.SystemDetails == nil {
+			break
+		}
+
+		args, err := ec.field_ControlImplementation_systemDetails_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.ControlImplementation.SystemDetails(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SystemDetailOrder), args["where"].(*generated.SystemDetailWhereInput)), true
 	case "ControlImplementation.systemInternalID":
 		if e.ComplexityRoot.ControlImplementation.SystemInternalID == nil {
 			break
@@ -30964,6 +31139,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateControlImplementation(childComplexity, args["id"].(string), args["input"].(generated.UpdateControlImplementationInput)), true
+	case "Mutation.updateControlImplementationComment":
+		if e.ComplexityRoot.Mutation.UpdateControlImplementationComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateControlImplementationComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateControlImplementationComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload), args["noteFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateControlObjective":
 		if e.ComplexityRoot.Mutation.UpdateControlObjective == nil {
 			break
@@ -32259,6 +32445,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Note.Control(childComplexity), true
+	case "Note.controlImplementation":
+		if e.ComplexityRoot.Note.ControlImplementation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Note.ControlImplementation(childComplexity), true
 	case "Note.createdAt":
 		if e.ComplexityRoot.Note.CreatedAt == nil {
 			break
@@ -35735,6 +35927,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.ContainsPii(childComplexity), true
+	case "Platform.controlImplementations":
+		if e.ComplexityRoot.Platform.ControlImplementations == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_controlImplementations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Platform.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
 	case "Platform.controls":
 		if e.ComplexityRoot.Platform.Controls == nil {
 			break
@@ -36176,6 +36379,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.Region(childComplexity), true
+	case "Platform.reviews":
+		if e.ComplexityRoot.Platform.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Platform.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
 	case "Platform.risks":
 		if e.ComplexityRoot.Platform.Risks == nil {
 			break
@@ -38249,6 +38463,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.ControlImplementation(childComplexity, args["id"].(string)), true
+	case "Query.controlImplementationSearch":
+		if e.ComplexityRoot.Query.ControlImplementationSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlImplementationSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ControlImplementationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 	case "Query.controlImplementations":
 		if e.ComplexityRoot.Query.ControlImplementations == nil {
 			break
@@ -41703,6 +41928,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Review.CreatedBy(childComplexity), true
+	case "Review.delegateGroup":
+		if e.ComplexityRoot.Review.DelegateGroup == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.DelegateGroup(childComplexity), true
+	case "Review.delegateGroupID":
+		if e.ComplexityRoot.Review.DelegateGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.DelegateGroupID(childComplexity), true
+	case "Review.delegateIdentityHolder":
+		if e.ComplexityRoot.Review.DelegateIdentityHolder == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.DelegateIdentityHolder(childComplexity), true
+	case "Review.delegateIdentityHolderID":
+		if e.ComplexityRoot.Review.DelegateIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.DelegateIdentityHolderID(childComplexity), true
+	case "Review.delegateName":
+		if e.ComplexityRoot.Review.DelegateName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.DelegateName(childComplexity), true
+	case "Review.delegateUser":
+		if e.ComplexityRoot.Review.DelegateUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.DelegateUser(childComplexity), true
+	case "Review.delegateUserID":
+		if e.ComplexityRoot.Review.DelegateUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.DelegateUserID(childComplexity), true
 	case "Review.details":
 		if e.ComplexityRoot.Review.Details == nil {
 			break
@@ -41829,6 +42096,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Review.InternalNotes(childComplexity), true
+	case "Review.internalOwner":
+		if e.ComplexityRoot.Review.InternalOwner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.InternalOwner(childComplexity), true
+	case "Review.internalOwnerGroup":
+		if e.ComplexityRoot.Review.InternalOwnerGroup == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.InternalOwnerGroup(childComplexity), true
+	case "Review.internalOwnerGroupID":
+		if e.ComplexityRoot.Review.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.InternalOwnerGroupID(childComplexity), true
+	case "Review.internalOwnerIdentityHolder":
+		if e.ComplexityRoot.Review.InternalOwnerIdentityHolder == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.InternalOwnerIdentityHolder(childComplexity), true
+	case "Review.internalOwnerIdentityHolderID":
+		if e.ComplexityRoot.Review.InternalOwnerIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.InternalOwnerIdentityHolderID(childComplexity), true
+	case "Review.internalOwnerUser":
+		if e.ComplexityRoot.Review.InternalOwnerUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.InternalOwnerUser(childComplexity), true
+	case "Review.internalOwnerUserID":
+		if e.ComplexityRoot.Review.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.InternalOwnerUserID(childComplexity), true
 	case "Review.internalPolicies":
 		if e.ComplexityRoot.Review.InternalPolicies == nil {
 			break
@@ -41864,6 +42173,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Review.OwnerID(childComplexity), true
+	case "Review.platforms":
+		if e.ComplexityRoot.Review.Platforms == nil {
+			break
+		}
+
+		args, err := ec.field_Review_platforms_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Review.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
 	case "Review.programs":
 		if e.ComplexityRoot.Review.Programs == nil {
 			break
@@ -41904,12 +42224,108 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Review.Reporter(childComplexity), true
+	case "Review.reviewClassification":
+		if e.ComplexityRoot.Review.ReviewClassification == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewClassification(childComplexity), true
+	case "Review.reviewClassificationID":
+		if e.ComplexityRoot.Review.ReviewClassificationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewClassificationID(childComplexity), true
+	case "Review.reviewClassificationName":
+		if e.ComplexityRoot.Review.ReviewClassificationName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewClassificationName(childComplexity), true
+	case "Review.reviewKind":
+		if e.ComplexityRoot.Review.ReviewKind == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewKind(childComplexity), true
+	case "Review.reviewKindID":
+		if e.ComplexityRoot.Review.ReviewKindID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewKindID(childComplexity), true
+	case "Review.reviewKindName":
+		if e.ComplexityRoot.Review.ReviewKindName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewKindName(childComplexity), true
+	case "Review.reviewState":
+		if e.ComplexityRoot.Review.ReviewState == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewState(childComplexity), true
+	case "Review.reviewStateID":
+		if e.ComplexityRoot.Review.ReviewStateID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewStateID(childComplexity), true
+	case "Review.reviewStateName":
+		if e.ComplexityRoot.Review.ReviewStateName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewStateName(childComplexity), true
 	case "Review.reviewedAt":
 		if e.ComplexityRoot.Review.ReviewedAt == nil {
 			break
 		}
 
 		return e.ComplexityRoot.Review.ReviewedAt(childComplexity), true
+	case "Review.reviewedBy":
+		if e.ComplexityRoot.Review.ReviewedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewedBy(childComplexity), true
+	case "Review.reviewedByGroup":
+		if e.ComplexityRoot.Review.ReviewedByGroup == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewedByGroup(childComplexity), true
+	case "Review.reviewedByGroupID":
+		if e.ComplexityRoot.Review.ReviewedByGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewedByGroupID(childComplexity), true
+	case "Review.reviewedByIdentityHolder":
+		if e.ComplexityRoot.Review.ReviewedByIdentityHolder == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewedByIdentityHolder(childComplexity), true
+	case "Review.reviewedByIdentityHolderID":
+		if e.ComplexityRoot.Review.ReviewedByIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewedByIdentityHolderID(childComplexity), true
+	case "Review.reviewedByUser":
+		if e.ComplexityRoot.Review.ReviewedByUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewedByUser(childComplexity), true
+	case "Review.reviewedByUserID":
+		if e.ComplexityRoot.Review.ReviewedByUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.ReviewedByUserID(childComplexity), true
 	case "Review.reviewer":
 		if e.ComplexityRoot.Review.Reviewer == nil {
 			break
@@ -42010,6 +42426,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Review.Summary(childComplexity), true
+	case "Review.systemDetails":
+		if e.ComplexityRoot.Review.SystemDetails == nil {
+			break
+		}
+
+		args, err := ec.field_Review_systemDetails_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Review.SystemDetails(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SystemDetailOrder), args["where"].(*generated.SystemDetailWhereInput)), true
 	case "Review.systemInternalID":
 		if e.ComplexityRoot.Review.SystemInternalID == nil {
 			break
@@ -43846,6 +44273,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SearchResults.Contacts(childComplexity), true
+	case "SearchResults.controlImplementations":
+		if e.ComplexityRoot.SearchResults.ControlImplementations == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResults.ControlImplementations(childComplexity), true
 	case "SearchResults.controlObjectives":
 		if e.ComplexityRoot.SearchResults.ControlObjectives == nil {
 			break
@@ -45869,6 +46302,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetail.AuthorizationBoundary(childComplexity), true
+	case "SystemDetail.controlImplementations":
+		if e.ComplexityRoot.SystemDetail.ControlImplementations == nil {
+			break
+		}
+
+		args, err := ec.field_SystemDetail_controlImplementations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SystemDetail.ControlImplementations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
 	case "SystemDetail.createdAt":
 		if e.ComplexityRoot.SystemDetail.CreatedAt == nil {
 			break
@@ -45985,6 +46429,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetail.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+	case "SystemDetail.reviews":
+		if e.ComplexityRoot.SystemDetail.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_SystemDetail_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SystemDetail.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
 	case "SystemDetail.revisionHistory":
 		if e.ComplexityRoot.SystemDetail.RevisionHistory == nil {
 			break
@@ -68804,6 +69259,38 @@ type ControlImplementation implements Node @modules(names: ["compliance_module"]
   """
   ownerID: ID
   """
+  the internal owner for the control implementation when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the control implementation
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the control implementation
+  """
+  internalOwnerGroupID: ID
+  """
+  the internal owner identity holder id for the control implementation
+  """
+  internalOwnerIdentityHolderID: ID
+  """
+  the delegate for the control implementation when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
+  the delegate user id for the control implementation
+  """
+  delegateUserID: ID
+  """
+  the delegate group id for the control implementation
+  """
+  delegateGroupID: ID
+  """
+  the delegate identity holder id for the control implementation
+  """
+  delegateIdentityHolderID: ID
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -68964,6 +69451,12 @@ type ControlImplementation implements Node @modules(names: ["compliance_module"]
     """
     where: GroupWhereInput
   ): GroupConnection!
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  internalOwnerIdentityHolder: IdentityHolder
+  delegateUser: User
+  delegateGroup: Group
+  delegateIdentityHolder: IdentityHolder
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -69057,6 +69550,99 @@ type ControlImplementation implements Node @modules(names: ["compliance_module"]
     """
     where: TaskWhereInput
   ): TaskConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  systemDetails(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SystemDetails returned from the connection.
+    """
+    orderBy: [SystemDetailOrder!]
+
+    """
+    Filtering options for SystemDetails returned from the connection.
+    """
+    where: SystemDetailWhereInput
+  ): SystemDetailConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -69119,6 +69705,8 @@ enum ControlImplementationOrderField {
   created_at
   updated_at
   external_id
+  internal_owner
+  delegate_name
   STATUS
   implementation_date
   verified
@@ -69316,6 +69904,118 @@ input ControlImplementationWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: ID
+  internalOwnerIdentityHolderIDNEQ: ID
+  internalOwnerIdentityHolderIDIn: [ID!]
+  internalOwnerIdentityHolderIDNotIn: [ID!]
+  internalOwnerIdentityHolderIDContains: ID
+  internalOwnerIdentityHolderIDHasPrefix: ID
+  internalOwnerIdentityHolderIDHasSuffix: ID
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: ID
+  internalOwnerIdentityHolderIDContainsFold: ID
+  """
+  delegate_name field predicates
+  """
+  delegateName: String
+  delegateNameNEQ: String
+  delegateNameIn: [String!]
+  delegateNameNotIn: [String!]
+  delegateNameContains: String
+  delegateNameHasPrefix: String
+  delegateNameHasSuffix: String
+  delegateNameIsNil: Boolean
+  delegateNameNotNil: Boolean
+  delegateNameEqualFold: String
+  delegateNameContainsFold: String
+  """
+  delegate_user_id field predicates
+  """
+  delegateUserID: ID
+  delegateUserIDNEQ: ID
+  delegateUserIDIn: [ID!]
+  delegateUserIDNotIn: [ID!]
+  delegateUserIDContains: ID
+  delegateUserIDHasPrefix: ID
+  delegateUserIDHasSuffix: ID
+  delegateUserIDIsNil: Boolean
+  delegateUserIDNotNil: Boolean
+  delegateUserIDEqualFold: ID
+  delegateUserIDContainsFold: ID
+  """
+  delegate_group_id field predicates
+  """
+  delegateGroupID: ID
+  delegateGroupIDNEQ: ID
+  delegateGroupIDIn: [ID!]
+  delegateGroupIDNotIn: [ID!]
+  delegateGroupIDContains: ID
+  delegateGroupIDHasPrefix: ID
+  delegateGroupIDHasSuffix: ID
+  delegateGroupIDIsNil: Boolean
+  delegateGroupIDNotNil: Boolean
+  delegateGroupIDEqualFold: ID
+  delegateGroupIDContainsFold: ID
+  """
+  delegate_identity_holder_id field predicates
+  """
+  delegateIdentityHolderID: ID
+  delegateIdentityHolderIDNEQ: ID
+  delegateIdentityHolderIDIn: [ID!]
+  delegateIdentityHolderIDNotIn: [ID!]
+  delegateIdentityHolderIDContains: ID
+  delegateIdentityHolderIDHasPrefix: ID
+  delegateIdentityHolderIDHasSuffix: ID
+  delegateIdentityHolderIDIsNil: Boolean
+  delegateIdentityHolderIDNotNil: Boolean
+  delegateIdentityHolderIDEqualFold: ID
+  delegateIdentityHolderIDContainsFold: ID
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -69426,6 +70126,36 @@ input ControlImplementationWhereInput {
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
   """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  internal_owner_identity_holder edge predicates
+  """
+  hasInternalOwnerIdentityHolder: Boolean
+  hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  delegate_user edge predicates
+  """
+  hasDelegateUser: Boolean
+  hasDelegateUserWith: [UserWhereInput!]
+  """
+  delegate_group edge predicates
+  """
+  hasDelegateGroup: Boolean
+  hasDelegateGroupWith: [GroupWhereInput!]
+  """
+  delegate_identity_holder edge predicates
+  """
+  hasDelegateIdentityHolder: Boolean
+  hasDelegateIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
@@ -69440,6 +70170,21 @@ input ControlImplementationWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  system_details edge predicates
+  """
+  hasSystemDetails: Boolean
+  hasSystemDetailsWith: [SystemDetailWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -72117,6 +72862,14 @@ input CreateControlImplementationInput {
   """
   externalID: String
   """
+  the internal owner for the control implementation when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the delegate for the control implementation when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -72153,9 +72906,18 @@ input CreateControlImplementationInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  internalOwnerIdentityHolderID: ID
+  delegateUserID: ID
+  delegateGroupID: ID
+  delegateIdentityHolderID: ID
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   taskIDs: [ID!]
+  platformIDs: [ID!]
+  systemDetailIDs: [ID!]
+  commentIDs: [ID!]
 }
 """
 CreateControlInput is used for create Control object.
@@ -74399,6 +75161,7 @@ input CreateNoteInput {
   reviewID: ID
   vulnerabilityID: ID
   findingID: ID
+  controlImplementationID: ID
   evidenceID: ID
   trustCenterID: ID
   discussionID: ID
@@ -75163,6 +75926,8 @@ input CreatePlatformInput {
   trustBoundaryDiagramIDs: [ID!]
   riskIDs: [ID!]
   controlIDs: [ID!]
+  controlImplementationIDs: [ID!]
+  reviewIDs: [ID!]
   assessmentIDs: [ID!]
   scanIDs: [ID!]
   taskIDs: [ID!]
@@ -75618,6 +76383,18 @@ input CreateReviewInput {
   """
   externalID: String
   """
+  the internal owner for the review when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  who reviewed the review when no user, group, or identity holder is linked
+  """
+  reviewedBy: String
+  """
+  the delegate for the review when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -75625,6 +76402,18 @@ input CreateReviewInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
+  """
+  the kind of the review
+  """
+  reviewKindName: String
+  """
+  the classification of the review
+  """
+  reviewClassificationName: String
+  """
+  the state of the review
+  """
+  reviewStateName: String
   """
   the environment of the review
   """
@@ -75705,6 +76494,18 @@ input CreateReviewInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  internalOwnerIdentityHolderID: ID
+  reviewedByUserID: ID
+  reviewedByGroupID: ID
+  reviewedByIdentityHolderID: ID
+  delegateUserID: ID
+  delegateGroupID: ID
+  delegateIdentityHolderID: ID
+  reviewKindID: ID
+  reviewClassificationID: ID
+  reviewStateID: ID
   environmentID: ID
   scopeID: ID
   integrationIDs: [ID!]
@@ -75722,6 +76523,8 @@ input CreateReviewInput {
   reviewerID: ID
   commentIDs: [ID!]
   fileIDs: [ID!]
+  platformIDs: [ID!]
+  systemDetailIDs: [ID!]
   internalPolicyIDs: [ID!]
 }
 """
@@ -76408,6 +77211,8 @@ input CreateSystemDetailInput {
   platformIDs: [ID!]
   entityIDs: [ID!]
   assetIDs: [ID!]
+  controlImplementationIDs: [ID!]
+  reviewIDs: [ID!]
 }
 """
 CreateTFASettingInput is used for create TFASetting object.
@@ -101786,6 +102591,7 @@ type Note implements Node @modules(names: ["any_module"]) {
   review: Review
   vulnerability: Vulnerability
   finding: Finding
+  controlImplementation: ControlImplementation
   evidence: Evidence
   trustCenter: TrustCenter
   discussion: Discussion
@@ -102147,6 +102953,11 @@ input NoteWhereInput {
   """
   hasFinding: Boolean
   hasFindingWith: [FindingWhereInput!]
+  """
+  control_implementation edge predicates
+  """
+  hasControlImplementation: Boolean
+  hasControlImplementationWith: [ControlImplementationWhereInput!]
   """
   evidence edge predicates
   """
@@ -109477,6 +110288,68 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
     """
     where: ControlWhereInput
   ): ControlConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
   assessments(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -111069,6 +111942,16 @@ input PlatformWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
   """
   assessments edge predicates
   """
@@ -119238,6 +120121,54 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   ownerID: ID
   """
+  the internal owner for the review when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the review
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the review
+  """
+  internalOwnerGroupID: ID
+  """
+  the internal owner identity holder id for the review
+  """
+  internalOwnerIdentityHolderID: ID
+  """
+  who reviewed the review when no user, group, or identity holder is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the review
+  """
+  reviewedByUserID: ID
+  """
+  the group id that reviewed the review
+  """
+  reviewedByGroupID: ID
+  """
+  the identity holder id that reviewed the review
+  """
+  reviewedByIdentityHolderID: ID
+  """
+  the delegate for the review when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  """
+  the delegate user id for the review
+  """
+  delegateUserID: ID
+  """
+  the delegate group id for the review
+  """
+  delegateGroupID: ID
+  """
+  the delegate identity holder id for the review
+  """
+  delegateIdentityHolderID: ID
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -119249,6 +120180,30 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @hidden(if: true)
+  """
+  the kind of the review
+  """
+  reviewKindName: String
+  """
+  the kind of the review
+  """
+  reviewKindID: ID
+  """
+  the classification of the review
+  """
+  reviewClassificationName: String
+  """
+  the classification of the review
+  """
+  reviewClassificationID: ID
+  """
+  the state of the review
+  """
+  reviewStateName: String
+  """
+  the state of the review
+  """
+  reviewStateID: ID
   """
   the environment of the review
   """
@@ -119276,7 +120231,7 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   state of the review
   """
-  state: String
+  state: String @deprecated(reason: "use review_state_name instead")
   """
   status of the review
   """
@@ -119284,11 +120239,11 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   category for the review record
   """
-  category: String
+  category: String @deprecated(reason: "use review_kind_name instead")
   """
   classification or sensitivity of the review record
   """
-  classification: String
+  classification: String @deprecated(reason: "use review_classification_name instead")
   """
   summary text for the review
   """
@@ -119300,7 +120255,7 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   person or system that created the review
   """
-  reporter: String
+  reporter: String @deprecated(reason: "use created_by or responsibility fields instead")
   """
   true when the review has been approved
   """
@@ -119320,7 +120275,7 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   identifier for the user primarily responsible for the review
   """
-  reviewerID: ID
+  reviewerID: ID @deprecated(reason: "use reviewed_by_user_id instead")
   """
   system that produced the review record
   """
@@ -119431,6 +120386,18 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
     """
     where: GroupWhereInput
   ): GroupConnection!
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  internalOwnerIdentityHolder: IdentityHolder
+  reviewedByUser: User
+  reviewedByGroup: Group
+  reviewedByIdentityHolder: IdentityHolder
+  delegateUser: User
+  delegateGroup: Group
+  delegateIdentityHolder: IdentityHolder
+  reviewKind: CustomTypeEnum
+  reviewClassification: CustomTypeEnum
+  reviewState: CustomTypeEnum
   environment: CustomTypeEnum
   scope: CustomTypeEnum
   integrations(
@@ -119808,7 +120775,7 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
   """
   primary reviewer responsible for the record
   """
-  reviewer: User
+  reviewer: User @deprecated(reason: "use reviewed_by_user instead")
   comments(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -119871,6 +120838,68 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
     """
     where: FileWhereInput
   ): FileConnection!
+  platforms(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Platforms returned from the connection.
+    """
+    orderBy: [PlatformOrder!]
+
+    """
+    Filtering options for Platforms returned from the connection.
+    """
+    where: PlatformWhereInput
+  ): PlatformConnection!
+  systemDetails(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SystemDetails returned from the connection.
+    """
+    orderBy: [SystemDetailOrder!]
+
+    """
+    Filtering options for SystemDetails returned from the connection.
+    """
+    where: SystemDetailWhereInput
+  ): SystemDetailConnection!
   internalPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -119953,6 +120982,8 @@ enum ReviewOrderField {
   created_at
   updated_at
   external_id
+  internal_owner
+  delegate_name
   external_owner_id
   title
   state
@@ -120159,6 +121190,174 @@ input ReviewWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: ID
+  internalOwnerIdentityHolderIDNEQ: ID
+  internalOwnerIdentityHolderIDIn: [ID!]
+  internalOwnerIdentityHolderIDNotIn: [ID!]
+  internalOwnerIdentityHolderIDContains: ID
+  internalOwnerIdentityHolderIDHasPrefix: ID
+  internalOwnerIdentityHolderIDHasSuffix: ID
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: ID
+  internalOwnerIdentityHolderIDContainsFold: ID
+  """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: ID
+  reviewedByUserIDNEQ: ID
+  reviewedByUserIDIn: [ID!]
+  reviewedByUserIDNotIn: [ID!]
+  reviewedByUserIDContains: ID
+  reviewedByUserIDHasPrefix: ID
+  reviewedByUserIDHasSuffix: ID
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: ID
+  reviewedByUserIDContainsFold: ID
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: ID
+  reviewedByGroupIDNEQ: ID
+  reviewedByGroupIDIn: [ID!]
+  reviewedByGroupIDNotIn: [ID!]
+  reviewedByGroupIDContains: ID
+  reviewedByGroupIDHasPrefix: ID
+  reviewedByGroupIDHasSuffix: ID
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: ID
+  reviewedByGroupIDContainsFold: ID
+  """
+  reviewed_by_identity_holder_id field predicates
+  """
+  reviewedByIdentityHolderID: ID
+  reviewedByIdentityHolderIDNEQ: ID
+  reviewedByIdentityHolderIDIn: [ID!]
+  reviewedByIdentityHolderIDNotIn: [ID!]
+  reviewedByIdentityHolderIDContains: ID
+  reviewedByIdentityHolderIDHasPrefix: ID
+  reviewedByIdentityHolderIDHasSuffix: ID
+  reviewedByIdentityHolderIDIsNil: Boolean
+  reviewedByIdentityHolderIDNotNil: Boolean
+  reviewedByIdentityHolderIDEqualFold: ID
+  reviewedByIdentityHolderIDContainsFold: ID
+  """
+  delegate_name field predicates
+  """
+  delegateName: String
+  delegateNameNEQ: String
+  delegateNameIn: [String!]
+  delegateNameNotIn: [String!]
+  delegateNameContains: String
+  delegateNameHasPrefix: String
+  delegateNameHasSuffix: String
+  delegateNameIsNil: Boolean
+  delegateNameNotNil: Boolean
+  delegateNameEqualFold: String
+  delegateNameContainsFold: String
+  """
+  delegate_user_id field predicates
+  """
+  delegateUserID: ID
+  delegateUserIDNEQ: ID
+  delegateUserIDIn: [ID!]
+  delegateUserIDNotIn: [ID!]
+  delegateUserIDContains: ID
+  delegateUserIDHasPrefix: ID
+  delegateUserIDHasSuffix: ID
+  delegateUserIDIsNil: Boolean
+  delegateUserIDNotNil: Boolean
+  delegateUserIDEqualFold: ID
+  delegateUserIDContainsFold: ID
+  """
+  delegate_group_id field predicates
+  """
+  delegateGroupID: ID
+  delegateGroupIDNEQ: ID
+  delegateGroupIDIn: [ID!]
+  delegateGroupIDNotIn: [ID!]
+  delegateGroupIDContains: ID
+  delegateGroupIDHasPrefix: ID
+  delegateGroupIDHasSuffix: ID
+  delegateGroupIDIsNil: Boolean
+  delegateGroupIDNotNil: Boolean
+  delegateGroupIDEqualFold: ID
+  delegateGroupIDContainsFold: ID
+  """
+  delegate_identity_holder_id field predicates
+  """
+  delegateIdentityHolderID: ID
+  delegateIdentityHolderIDNEQ: ID
+  delegateIdentityHolderIDIn: [ID!]
+  delegateIdentityHolderIDNotIn: [ID!]
+  delegateIdentityHolderIDContains: ID
+  delegateIdentityHolderIDHasPrefix: ID
+  delegateIdentityHolderIDHasSuffix: ID
+  delegateIdentityHolderIDIsNil: Boolean
+  delegateIdentityHolderIDNotNil: Boolean
+  delegateIdentityHolderIDEqualFold: ID
+  delegateIdentityHolderIDContainsFold: ID
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -120193,6 +121392,90 @@ input ReviewWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  review_kind_name field predicates
+  """
+  reviewKindName: String
+  reviewKindNameNEQ: String
+  reviewKindNameIn: [String!]
+  reviewKindNameNotIn: [String!]
+  reviewKindNameContains: String
+  reviewKindNameHasPrefix: String
+  reviewKindNameHasSuffix: String
+  reviewKindNameIsNil: Boolean
+  reviewKindNameNotNil: Boolean
+  reviewKindNameEqualFold: String
+  reviewKindNameContainsFold: String
+  """
+  review_kind_id field predicates
+  """
+  reviewKindID: ID
+  reviewKindIDNEQ: ID
+  reviewKindIDIn: [ID!]
+  reviewKindIDNotIn: [ID!]
+  reviewKindIDContains: ID
+  reviewKindIDHasPrefix: ID
+  reviewKindIDHasSuffix: ID
+  reviewKindIDIsNil: Boolean
+  reviewKindIDNotNil: Boolean
+  reviewKindIDEqualFold: ID
+  reviewKindIDContainsFold: ID
+  """
+  review_classification_name field predicates
+  """
+  reviewClassificationName: String
+  reviewClassificationNameNEQ: String
+  reviewClassificationNameIn: [String!]
+  reviewClassificationNameNotIn: [String!]
+  reviewClassificationNameContains: String
+  reviewClassificationNameHasPrefix: String
+  reviewClassificationNameHasSuffix: String
+  reviewClassificationNameIsNil: Boolean
+  reviewClassificationNameNotNil: Boolean
+  reviewClassificationNameEqualFold: String
+  reviewClassificationNameContainsFold: String
+  """
+  review_classification_id field predicates
+  """
+  reviewClassificationID: ID
+  reviewClassificationIDNEQ: ID
+  reviewClassificationIDIn: [ID!]
+  reviewClassificationIDNotIn: [ID!]
+  reviewClassificationIDContains: ID
+  reviewClassificationIDHasPrefix: ID
+  reviewClassificationIDHasSuffix: ID
+  reviewClassificationIDIsNil: Boolean
+  reviewClassificationIDNotNil: Boolean
+  reviewClassificationIDEqualFold: ID
+  reviewClassificationIDContainsFold: ID
+  """
+  review_state_name field predicates
+  """
+  reviewStateName: String
+  reviewStateNameNEQ: String
+  reviewStateNameIn: [String!]
+  reviewStateNameNotIn: [String!]
+  reviewStateNameContains: String
+  reviewStateNameHasPrefix: String
+  reviewStateNameHasSuffix: String
+  reviewStateNameIsNil: Boolean
+  reviewStateNameNotNil: Boolean
+  reviewStateNameEqualFold: String
+  reviewStateNameContainsFold: String
+  """
+  review_state_id field predicates
+  """
+  reviewStateID: ID
+  reviewStateIDNEQ: ID
+  reviewStateIDIn: [ID!]
+  reviewStateIDNotIn: [ID!]
+  reviewStateIDContains: ID
+  reviewStateIDHasPrefix: ID
+  reviewStateIDHasSuffix: ID
+  reviewStateIDIsNil: Boolean
+  reviewStateIDNotNil: Boolean
+  reviewStateIDEqualFold: ID
+  reviewStateIDContainsFold: ID
   """
   environment_name field predicates
   """
@@ -120468,6 +121751,66 @@ input ReviewWhereInput {
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
   """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  internal_owner_identity_holder edge predicates
+  """
+  hasInternalOwnerIdentityHolder: Boolean
+  hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  reviewed_by_user edge predicates
+  """
+  hasReviewedByUser: Boolean
+  hasReviewedByUserWith: [UserWhereInput!]
+  """
+  reviewed_by_group edge predicates
+  """
+  hasReviewedByGroup: Boolean
+  hasReviewedByGroupWith: [GroupWhereInput!]
+  """
+  reviewed_by_identity_holder edge predicates
+  """
+  hasReviewedByIdentityHolder: Boolean
+  hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  delegate_user edge predicates
+  """
+  hasDelegateUser: Boolean
+  hasDelegateUserWith: [UserWhereInput!]
+  """
+  delegate_group edge predicates
+  """
+  hasDelegateGroup: Boolean
+  hasDelegateGroupWith: [GroupWhereInput!]
+  """
+  delegate_identity_holder edge predicates
+  """
+  hasDelegateIdentityHolder: Boolean
+  hasDelegateIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  review_kind edge predicates
+  """
+  hasReviewKind: Boolean
+  hasReviewKindWith: [CustomTypeEnumWhereInput!]
+  """
+  review_classification edge predicates
+  """
+  hasReviewClassification: Boolean
+  hasReviewClassificationWith: [CustomTypeEnumWhereInput!]
+  """
+  review_state edge predicates
+  """
+  hasReviewState: Boolean
+  hasReviewStateWith: [CustomTypeEnumWhereInput!]
+  """
   environment edge predicates
   """
   hasEnvironment: Boolean
@@ -120552,6 +121895,16 @@ input ReviewWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  platforms edge predicates
+  """
+  hasPlatforms: Boolean
+  hasPlatformsWith: [PlatformWhereInput!]
+  """
+  system_details edge predicates
+  """
+  hasSystemDetails: Boolean
+  hasSystemDetailsWith: [SystemDetailWhereInput!]
   """
   internal_policies edge predicates
   """
@@ -128046,6 +129399,68 @@ type SystemDetail implements Node @modules(names: ["compliance_module","registry
     """
     where: AssetWhereInput
   ): AssetConnection!
+  controlImplementations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
 }
 """
 A connection to a list of items.
@@ -128414,6 +129829,16 @@ input SystemDetailWhereInput {
   """
   hasAssets: Boolean
   hasAssetsWith: [AssetWhereInput!]
+  """
+  control_implementations edge predicates
+  """
+  hasControlImplementations: Boolean
+  hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -136410,6 +137835,16 @@ input UpdateControlImplementationInput {
   externalID: String
   clearExternalID: Boolean
   """
+  the internal owner for the control implementation when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
+  the delegate for the control implementation when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  clearDelegateName: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -136462,6 +137897,18 @@ input UpdateControlImplementationInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  internalOwnerIdentityHolderID: ID
+  clearInternalOwnerIdentityHolder: Boolean
+  delegateUserID: ID
+  clearDelegateUser: Boolean
+  delegateGroupID: ID
+  clearDelegateGroup: Boolean
+  delegateIdentityHolderID: ID
+  clearDelegateIdentityHolder: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -136471,6 +137918,15 @@ input UpdateControlImplementationInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addSystemDetailIDs: [ID!]
+  removeSystemDetailIDs: [ID!]
+  clearSystemDetails: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateControlInput is used for update Control object.
@@ -139670,6 +141126,8 @@ input UpdateNoteInput {
   clearVulnerability: Boolean
   findingID: ID
   clearFinding: Boolean
+  controlImplementationID: ID
+  clearControlImplementation: Boolean
   evidenceID: ID
   clearEvidence: Boolean
   trustCenterID: ID
@@ -140728,6 +142186,12 @@ input UpdatePlatformInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
   addAssessmentIDs: [ID!]
   removeAssessmentIDs: [ID!]
   clearAssessments: Boolean
@@ -141420,6 +142884,21 @@ input UpdateReviewInput {
   externalID: String
   clearExternalID: Boolean
   """
+  the internal owner for the review when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
+  who reviewed the review when no user, group, or identity holder is linked
+  """
+  reviewedBy: String
+  clearReviewedBy: Boolean
+  """
+  the delegate for the review when no user, group, or identity holder is linked
+  """
+  delegateName: String
+  clearDelegateName: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -141429,6 +142908,21 @@ input UpdateReviewInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the kind of the review
+  """
+  reviewKindName: String
+  clearReviewKindName: Boolean
+  """
+  the classification of the review
+  """
+  reviewClassificationName: String
+  clearReviewClassificationName: Boolean
+  """
+  the state of the review
+  """
+  reviewStateName: String
+  clearReviewStateName: Boolean
   """
   the environment of the review
   """
@@ -141532,6 +143026,30 @@ input UpdateReviewInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  internalOwnerIdentityHolderID: ID
+  clearInternalOwnerIdentityHolder: Boolean
+  reviewedByUserID: ID
+  clearReviewedByUser: Boolean
+  reviewedByGroupID: ID
+  clearReviewedByGroup: Boolean
+  reviewedByIdentityHolderID: ID
+  clearReviewedByIdentityHolder: Boolean
+  delegateUserID: ID
+  clearDelegateUser: Boolean
+  delegateGroupID: ID
+  clearDelegateGroup: Boolean
+  delegateIdentityHolderID: ID
+  clearDelegateIdentityHolder: Boolean
+  reviewKindID: ID
+  clearReviewKind: Boolean
+  reviewClassificationID: ID
+  clearReviewClassification: Boolean
+  reviewStateID: ID
+  clearReviewState: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -141580,6 +143098,12 @@ input UpdateReviewInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addPlatformIDs: [ID!]
+  removePlatformIDs: [ID!]
+  clearPlatforms: Boolean
+  addSystemDetailIDs: [ID!]
+  removeSystemDetailIDs: [ID!]
+  clearSystemDetails: Boolean
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
@@ -142563,6 +144087,12 @@ input UpdateSystemDetailInput {
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
+  addControlImplementationIDs: [ID!]
+  removeControlImplementationIDs: [ID!]
+  clearControlImplementations: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
 }
 """
 UpdateTFASettingInput is used for update TFASetting object.
@@ -155499,6 +157029,11 @@ extend input UpdateFindingInput {
     deleteComment: ID
 }
 
+extend input UpdateControlImplementationInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend input CreateTrustCenterFAQInput {
     createNote: CreateNoteInput
 }
@@ -155736,6 +157271,24 @@ extend type Mutation{
         noteFiles: [Upload!]
         noteFilesMetadata: [FileMetadataInput!]
     ): FindingUpdatePayload!
+    """
+    Update an existing control implementation comment
+    """
+    updateControlImplementationComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
+    ): ControlImplementationUpdatePayload!
     """
     Delete an existing note
     """
@@ -158821,6 +160374,31 @@ type ScanBulkDeletePayload {
         last: Int
     ): ControlConnection
     """
+    Search across ControlImplementation objects
+    """
+    controlImplementationSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ControlImplementationConnection
+    """
     Search across ControlObjective objects
     """
     controlObjectiveSearch(
@@ -159638,6 +161216,7 @@ type SearchResults{
   campaignTargets: CampaignTargetConnection
   contacts: ContactConnection
   controls: ControlConnection
+  controlImplementations: ControlImplementationConnection
   controlObjectives: ControlObjectiveConnection
   customTypeEnums: CustomTypeEnumConnection
   emailTemplates: EmailTemplateConnection
@@ -166615,6 +168194,22 @@ func (ec *executionContext) childFields_ControlImplementation(ctx context.Contex
 		return ec.fieldContext_ControlImplementation_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ControlImplementation_ownerID(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_ControlImplementation_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_ControlImplementation_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_ControlImplementation_internalOwnerGroupID(ctx, field)
+	case "internalOwnerIdentityHolderID":
+		return ec.fieldContext_ControlImplementation_internalOwnerIdentityHolderID(ctx, field)
+	case "delegateName":
+		return ec.fieldContext_ControlImplementation_delegateName(ctx, field)
+	case "delegateUserID":
+		return ec.fieldContext_ControlImplementation_delegateUserID(ctx, field)
+	case "delegateGroupID":
+		return ec.fieldContext_ControlImplementation_delegateGroupID(ctx, field)
+	case "delegateIdentityHolderID":
+		return ec.fieldContext_ControlImplementation_delegateIdentityHolderID(ctx, field)
 	case "systemOwned":
 		return ec.fieldContext_ControlImplementation_systemOwned(ctx, field)
 	case "internalNotes":
@@ -166643,12 +168238,30 @@ func (ec *executionContext) childFields_ControlImplementation(ctx context.Contex
 		return ec.fieldContext_ControlImplementation_editors(ctx, field)
 	case "viewers":
 		return ec.fieldContext_ControlImplementation_viewers(ctx, field)
+	case "internalOwnerUser":
+		return ec.fieldContext_ControlImplementation_internalOwnerUser(ctx, field)
+	case "internalOwnerGroup":
+		return ec.fieldContext_ControlImplementation_internalOwnerGroup(ctx, field)
+	case "internalOwnerIdentityHolder":
+		return ec.fieldContext_ControlImplementation_internalOwnerIdentityHolder(ctx, field)
+	case "delegateUser":
+		return ec.fieldContext_ControlImplementation_delegateUser(ctx, field)
+	case "delegateGroup":
+		return ec.fieldContext_ControlImplementation_delegateGroup(ctx, field)
+	case "delegateIdentityHolder":
+		return ec.fieldContext_ControlImplementation_delegateIdentityHolder(ctx, field)
 	case "controls":
 		return ec.fieldContext_ControlImplementation_controls(ctx, field)
 	case "subcontrols":
 		return ec.fieldContext_ControlImplementation_subcontrols(ctx, field)
 	case "tasks":
 		return ec.fieldContext_ControlImplementation_tasks(ctx, field)
+	case "platforms":
+		return ec.fieldContext_ControlImplementation_platforms(ctx, field)
+	case "systemDetails":
+		return ec.fieldContext_ControlImplementation_systemDetails(ctx, field)
+	case "comments":
+		return ec.fieldContext_ControlImplementation_comments(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ControlImplementation", field.Name)
 }
@@ -171641,6 +173254,8 @@ func (ec *executionContext) childFields_Note(ctx context.Context, field graphql.
 		return ec.fieldContext_Note_vulnerability(ctx, field)
 	case "finding":
 		return ec.fieldContext_Note_finding(ctx, field)
+	case "controlImplementation":
+		return ec.fieldContext_Note_controlImplementation(ctx, field)
 	case "evidence":
 		return ec.fieldContext_Note_evidence(ctx, field)
 	case "trustCenter":
@@ -173141,6 +174756,10 @@ func (ec *executionContext) childFields_Platform(ctx context.Context, field grap
 		return ec.fieldContext_Platform_risks(ctx, field)
 	case "controls":
 		return ec.fieldContext_Platform_controls(ctx, field)
+	case "controlImplementations":
+		return ec.fieldContext_Platform_controlImplementations(ctx, field)
+	case "reviews":
+		return ec.fieldContext_Platform_reviews(ctx, field)
 	case "assessments":
 		return ec.fieldContext_Platform_assessments(ctx, field)
 	case "scans":
@@ -174235,12 +175854,48 @@ func (ec *executionContext) childFields_Review(ctx context.Context, field graphq
 		return ec.fieldContext_Review_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Review_ownerID(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_Review_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_Review_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_Review_internalOwnerGroupID(ctx, field)
+	case "internalOwnerIdentityHolderID":
+		return ec.fieldContext_Review_internalOwnerIdentityHolderID(ctx, field)
+	case "reviewedBy":
+		return ec.fieldContext_Review_reviewedBy(ctx, field)
+	case "reviewedByUserID":
+		return ec.fieldContext_Review_reviewedByUserID(ctx, field)
+	case "reviewedByGroupID":
+		return ec.fieldContext_Review_reviewedByGroupID(ctx, field)
+	case "reviewedByIdentityHolderID":
+		return ec.fieldContext_Review_reviewedByIdentityHolderID(ctx, field)
+	case "delegateName":
+		return ec.fieldContext_Review_delegateName(ctx, field)
+	case "delegateUserID":
+		return ec.fieldContext_Review_delegateUserID(ctx, field)
+	case "delegateGroupID":
+		return ec.fieldContext_Review_delegateGroupID(ctx, field)
+	case "delegateIdentityHolderID":
+		return ec.fieldContext_Review_delegateIdentityHolderID(ctx, field)
 	case "systemOwned":
 		return ec.fieldContext_Review_systemOwned(ctx, field)
 	case "internalNotes":
 		return ec.fieldContext_Review_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_Review_systemInternalID(ctx, field)
+	case "reviewKindName":
+		return ec.fieldContext_Review_reviewKindName(ctx, field)
+	case "reviewKindID":
+		return ec.fieldContext_Review_reviewKindID(ctx, field)
+	case "reviewClassificationName":
+		return ec.fieldContext_Review_reviewClassificationName(ctx, field)
+	case "reviewClassificationID":
+		return ec.fieldContext_Review_reviewClassificationID(ctx, field)
+	case "reviewStateName":
+		return ec.fieldContext_Review_reviewStateName(ctx, field)
+	case "reviewStateID":
+		return ec.fieldContext_Review_reviewStateID(ctx, field)
 	case "environmentName":
 		return ec.fieldContext_Review_environmentName(ctx, field)
 	case "environmentID":
@@ -174293,6 +175948,30 @@ func (ec *executionContext) childFields_Review(ctx context.Context, field graphq
 		return ec.fieldContext_Review_blockedGroups(ctx, field)
 	case "editors":
 		return ec.fieldContext_Review_editors(ctx, field)
+	case "internalOwnerUser":
+		return ec.fieldContext_Review_internalOwnerUser(ctx, field)
+	case "internalOwnerGroup":
+		return ec.fieldContext_Review_internalOwnerGroup(ctx, field)
+	case "internalOwnerIdentityHolder":
+		return ec.fieldContext_Review_internalOwnerIdentityHolder(ctx, field)
+	case "reviewedByUser":
+		return ec.fieldContext_Review_reviewedByUser(ctx, field)
+	case "reviewedByGroup":
+		return ec.fieldContext_Review_reviewedByGroup(ctx, field)
+	case "reviewedByIdentityHolder":
+		return ec.fieldContext_Review_reviewedByIdentityHolder(ctx, field)
+	case "delegateUser":
+		return ec.fieldContext_Review_delegateUser(ctx, field)
+	case "delegateGroup":
+		return ec.fieldContext_Review_delegateGroup(ctx, field)
+	case "delegateIdentityHolder":
+		return ec.fieldContext_Review_delegateIdentityHolder(ctx, field)
+	case "reviewKind":
+		return ec.fieldContext_Review_reviewKind(ctx, field)
+	case "reviewClassification":
+		return ec.fieldContext_Review_reviewClassification(ctx, field)
+	case "reviewState":
+		return ec.fieldContext_Review_reviewState(ctx, field)
 	case "environment":
 		return ec.fieldContext_Review_environment(ctx, field)
 	case "scope":
@@ -174327,6 +176006,10 @@ func (ec *executionContext) childFields_Review(ctx context.Context, field graphq
 		return ec.fieldContext_Review_comments(ctx, field)
 	case "files":
 		return ec.fieldContext_Review_files(ctx, field)
+	case "platforms":
+		return ec.fieldContext_Review_platforms(ctx, field)
+	case "systemDetails":
+		return ec.fieldContext_Review_systemDetails(ctx, field)
 	case "internalPolicies":
 		return ec.fieldContext_Review_internalPolicies(ctx, field)
 	}
@@ -175067,6 +176750,8 @@ func (ec *executionContext) childFields_SearchResults(ctx context.Context, field
 		return ec.fieldContext_SearchResults_contacts(ctx, field)
 	case "controls":
 		return ec.fieldContext_SearchResults_controls(ctx, field)
+	case "controlImplementations":
+		return ec.fieldContext_SearchResults_controlImplementations(ctx, field)
 	case "controlObjectives":
 		return ec.fieldContext_SearchResults_controlObjectives(ctx, field)
 	case "customTypeEnums":
@@ -175981,6 +177666,10 @@ func (ec *executionContext) childFields_SystemDetail(ctx context.Context, field 
 		return ec.fieldContext_SystemDetail_entities(ctx, field)
 	case "assets":
 		return ec.fieldContext_SystemDetail_assets(ctx, field)
+	case "controlImplementations":
+		return ec.fieldContext_SystemDetail_controlImplementations(ctx, field)
+	case "reviews":
+		return ec.fieldContext_SystemDetail_reviews(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type SystemDetail", field.Name)
 }

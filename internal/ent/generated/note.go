@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
@@ -69,21 +70,22 @@ type Note struct {
 	NotifiedAt *time.Time `json:"notified_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NoteQuery when eager-loading is set.
-	Edges                    NoteEdges `json:"edges"`
-	control_comments         *string
-	entity_notes             *string
-	evidence_comments        *string
-	finding_comments         *string
-	internal_policy_comments *string
-	procedure_comments       *string
-	program_notes            *string
-	remediation_comments     *string
-	review_comments          *string
-	risk_comments            *string
-	subcontrol_comments      *string
-	task_comments            *string
-	vulnerability_comments   *string
-	selectValues             sql.SelectValues
+	Edges                           NoteEdges `json:"edges"`
+	control_comments                *string
+	control_implementation_comments *string
+	entity_notes                    *string
+	evidence_comments               *string
+	finding_comments                *string
+	internal_policy_comments        *string
+	procedure_comments              *string
+	program_notes                   *string
+	remediation_comments            *string
+	review_comments                 *string
+	risk_comments                   *string
+	subcontrol_comments             *string
+	task_comments                   *string
+	vulnerability_comments          *string
+	selectValues                    sql.SelectValues
 }
 
 // NoteEdges holds the relations/edges for other nodes in the graph.
@@ -108,6 +110,8 @@ type NoteEdges struct {
 	Vulnerability *Vulnerability `json:"vulnerability,omitempty"`
 	// Finding holds the value of the finding edge.
 	Finding *Finding `json:"finding,omitempty"`
+	// ControlImplementation holds the value of the control_implementation edge.
+	ControlImplementation *ControlImplementation `json:"control_implementation,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence *Evidence `json:"evidence,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
@@ -120,9 +124,9 @@ type NoteEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [16]map[string]int
 
 	namedTrustCenterFaqs map[string][]*TrustCenterFAQ
 	namedFiles           map[string][]*File
@@ -238,12 +242,23 @@ func (e NoteEdges) FindingOrErr() (*Finding, error) {
 	return nil, &NotLoadedError{edge: "finding"}
 }
 
+// ControlImplementationOrErr returns the ControlImplementation value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) ControlImplementationOrErr() (*ControlImplementation, error) {
+	if e.ControlImplementation != nil {
+		return e.ControlImplementation, nil
+	} else if e.loadedTypes[10] {
+		return nil, &NotFoundError{label: controlimplementation.Label}
+	}
+	return nil, &NotLoadedError{edge: "control_implementation"}
+}
+
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e NoteEdges) EvidenceOrErr() (*Evidence, error) {
 	if e.Evidence != nil {
 		return e.Evidence, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: evidence.Label}
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -254,7 +269,7 @@ func (e NoteEdges) EvidenceOrErr() (*Evidence, error) {
 func (e NoteEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -265,7 +280,7 @@ func (e NoteEdges) TrustCenterOrErr() (*TrustCenter, error) {
 func (e NoteEdges) DiscussionOrErr() (*Discussion, error) {
 	if e.Discussion != nil {
 		return e.Discussion, nil
-	} else if e.loadedTypes[12] {
+	} else if e.loadedTypes[13] {
 		return nil, &NotFoundError{label: discussion.Label}
 	}
 	return nil, &NotLoadedError{edge: "discussion"}
@@ -274,7 +289,7 @@ func (e NoteEdges) DiscussionOrErr() (*Discussion, error) {
 // TrustCenterFaqsOrErr returns the TrustCenterFaqs value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) TrustCenterFaqsOrErr() ([]*TrustCenterFAQ, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.TrustCenterFaqs, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_faqs"}
@@ -283,7 +298,7 @@ func (e NoteEdges) TrustCenterFaqsOrErr() ([]*TrustCenterFAQ, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -304,29 +319,31 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case note.ForeignKeys[0]: // control_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[1]: // entity_notes
+		case note.ForeignKeys[1]: // control_implementation_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[2]: // evidence_comments
+		case note.ForeignKeys[2]: // entity_notes
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[3]: // finding_comments
+		case note.ForeignKeys[3]: // evidence_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[4]: // internal_policy_comments
+		case note.ForeignKeys[4]: // finding_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[5]: // procedure_comments
+		case note.ForeignKeys[5]: // internal_policy_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[6]: // program_notes
+		case note.ForeignKeys[6]: // procedure_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[7]: // remediation_comments
+		case note.ForeignKeys[7]: // program_notes
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[8]: // review_comments
+		case note.ForeignKeys[8]: // remediation_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[9]: // risk_comments
+		case note.ForeignKeys[9]: // review_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[10]: // subcontrol_comments
+		case note.ForeignKeys[10]: // risk_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[11]: // task_comments
+		case note.ForeignKeys[11]: // subcontrol_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[12]: // vulnerability_comments
+		case note.ForeignKeys[12]: // task_comments
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[13]: // vulnerability_comments
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -471,82 +488,89 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 			}
 		case note.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_implementation_comments", values[i])
+			} else if value.Valid {
+				_m.control_implementation_comments = new(string)
+				*_m.control_implementation_comments = value.String
+			}
+		case note.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_notes", values[i])
 			} else if value.Valid {
 				_m.entity_notes = new(string)
 				*_m.entity_notes = value.String
 			}
-		case note.ForeignKeys[2]:
+		case note.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field evidence_comments", values[i])
 			} else if value.Valid {
 				_m.evidence_comments = new(string)
 				*_m.evidence_comments = value.String
 			}
-		case note.ForeignKeys[3]:
+		case note.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field finding_comments", values[i])
 			} else if value.Valid {
 				_m.finding_comments = new(string)
 				*_m.finding_comments = value.String
 			}
-		case note.ForeignKeys[4]:
+		case note.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field internal_policy_comments", values[i])
 			} else if value.Valid {
 				_m.internal_policy_comments = new(string)
 				*_m.internal_policy_comments = value.String
 			}
-		case note.ForeignKeys[5]:
+		case note.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field procedure_comments", values[i])
 			} else if value.Valid {
 				_m.procedure_comments = new(string)
 				*_m.procedure_comments = value.String
 			}
-		case note.ForeignKeys[6]:
+		case note.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_notes", values[i])
 			} else if value.Valid {
 				_m.program_notes = new(string)
 				*_m.program_notes = value.String
 			}
-		case note.ForeignKeys[7]:
+		case note.ForeignKeys[8]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_comments", values[i])
 			} else if value.Valid {
 				_m.remediation_comments = new(string)
 				*_m.remediation_comments = value.String
 			}
-		case note.ForeignKeys[8]:
+		case note.ForeignKeys[9]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_comments", values[i])
 			} else if value.Valid {
 				_m.review_comments = new(string)
 				*_m.review_comments = value.String
 			}
-		case note.ForeignKeys[9]:
+		case note.ForeignKeys[10]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_comments", values[i])
 			} else if value.Valid {
 				_m.risk_comments = new(string)
 				*_m.risk_comments = value.String
 			}
-		case note.ForeignKeys[10]:
+		case note.ForeignKeys[11]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_comments", values[i])
 			} else if value.Valid {
 				_m.subcontrol_comments = new(string)
 				*_m.subcontrol_comments = value.String
 			}
-		case note.ForeignKeys[11]:
+		case note.ForeignKeys[12]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field task_comments", values[i])
 			} else if value.Valid {
 				_m.task_comments = new(string)
 				*_m.task_comments = value.String
 			}
-		case note.ForeignKeys[12]:
+		case note.ForeignKeys[13]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_comments", values[i])
 			} else if value.Valid {
@@ -614,6 +638,11 @@ func (_m *Note) QueryVulnerability() *VulnerabilityQuery {
 // QueryFinding queries the "finding" edge of the Note entity.
 func (_m *Note) QueryFinding() *FindingQuery {
 	return NewNoteClient(_m.config).QueryFinding(_m)
+}
+
+// QueryControlImplementation queries the "control_implementation" edge of the Note entity.
+func (_m *Note) QueryControlImplementation() *ControlImplementationQuery {
+	return NewNoteClient(_m.config).QueryControlImplementation(_m)
 }
 
 // QueryEvidence queries the "evidence" edge of the Note entity.

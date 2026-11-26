@@ -29892,43 +29892,51 @@ func (m *ControlHistoryMutation) ResetEdge(name string) error {
 // ControlImplementationHistoryMutation represents an operation that mutates the ControlImplementationHistory nodes in the graph.
 type ControlImplementationHistoryMutation struct {
 	config
-	op                        Op
-	typ                       string
-	id                        *string
-	history_time              *time.Time
-	ref                       *string
-	operation                 *history.OpType
-	created_at                *time.Time
-	updated_at                *time.Time
-	created_by                *string
-	updated_by                *string
-	updated_by_impersonator   *string
-	deleted_at                *time.Time
-	deleted_by                *string
-	tags                      *[]string
-	appendtags                []string
-	source_definition_id      *string
-	source_definition_version *string
-	source_instance_id        *string
-	managed_by                *string
-	integration_run_id        *string
-	source_key                *string
-	external_id               *string
-	owner_id                  *string
-	system_owned              *bool
-	internal_notes            *string
-	system_internal_id        *string
-	status                    *enums.DocumentStatus
-	implementation_date       *time.Time
-	verified                  *bool
-	verification_date         *time.Time
-	details                   *string
-	details_json              *[]interface{}
-	appenddetails_json        []interface{}
-	clearedFields             map[string]struct{}
-	done                      bool
-	oldValue                  func(context.Context) (*ControlImplementationHistory, error)
-	predicates                []predicate.ControlImplementationHistory
+	op                                Op
+	typ                               string
+	id                                *string
+	history_time                      *time.Time
+	ref                               *string
+	operation                         *history.OpType
+	created_at                        *time.Time
+	updated_at                        *time.Time
+	created_by                        *string
+	updated_by                        *string
+	updated_by_impersonator           *string
+	deleted_at                        *time.Time
+	deleted_by                        *string
+	tags                              *[]string
+	appendtags                        []string
+	source_definition_id              *string
+	source_definition_version         *string
+	source_instance_id                *string
+	managed_by                        *string
+	integration_run_id                *string
+	source_key                        *string
+	external_id                       *string
+	owner_id                          *string
+	internal_owner                    *string
+	internal_owner_user_id            *string
+	internal_owner_group_id           *string
+	internal_owner_identity_holder_id *string
+	delegate_name                     *string
+	delegate_user_id                  *string
+	delegate_group_id                 *string
+	delegate_identity_holder_id       *string
+	system_owned                      *bool
+	internal_notes                    *string
+	system_internal_id                *string
+	status                            *enums.DocumentStatus
+	implementation_date               *time.Time
+	verified                          *bool
+	verification_date                 *time.Time
+	details                           *string
+	details_json                      *[]interface{}
+	appenddetails_json                []interface{}
+	clearedFields                     map[string]struct{}
+	done                              bool
+	oldValue                          func(context.Context) (*ControlImplementationHistory, error)
+	predicates                        []predicate.ControlImplementationHistory
 }
 
 var _ ent.Mutation = (*ControlImplementationHistoryMutation)(nil)
@@ -30956,6 +30964,398 @@ func (m *ControlImplementationHistoryMutation) ResetOwnerID() {
 	delete(m.clearedFields, controlimplementationhistory.FieldOwnerID)
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (m *ControlImplementationHistoryMutation) SetInternalOwner(s string) {
+	m.internal_owner = &s
+}
+
+// InternalOwner returns the value of the "internal_owner" field in the mutation.
+func (m *ControlImplementationHistoryMutation) InternalOwner() (r string, exists bool) {
+	v := m.internal_owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwner returns the old "internal_owner" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldInternalOwner(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwner is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwner requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwner: %w", err)
+	}
+	return oldValue.InternalOwner, nil
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (m *ControlImplementationHistoryMutation) ClearInternalOwner() {
+	m.internal_owner = nil
+	m.clearedFields[controlimplementationhistory.FieldInternalOwner] = struct{}{}
+}
+
+// InternalOwnerCleared returns if the "internal_owner" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) InternalOwnerCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldInternalOwner]
+	return ok
+}
+
+// ResetInternalOwner resets all changes to the "internal_owner" field.
+func (m *ControlImplementationHistoryMutation) ResetInternalOwner() {
+	m.internal_owner = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldInternalOwner)
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (m *ControlImplementationHistoryMutation) SetInternalOwnerUserID(s string) {
+	m.internal_owner_user_id = &s
+}
+
+// InternalOwnerUserID returns the value of the "internal_owner_user_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) InternalOwnerUserID() (r string, exists bool) {
+	v := m.internal_owner_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerUserID returns the old "internal_owner_user_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldInternalOwnerUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerUserID: %w", err)
+	}
+	return oldValue.InternalOwnerUserID, nil
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (m *ControlImplementationHistoryMutation) ClearInternalOwnerUserID() {
+	m.internal_owner_user_id = nil
+	m.clearedFields[controlimplementationhistory.FieldInternalOwnerUserID] = struct{}{}
+}
+
+// InternalOwnerUserIDCleared returns if the "internal_owner_user_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) InternalOwnerUserIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldInternalOwnerUserID]
+	return ok
+}
+
+// ResetInternalOwnerUserID resets all changes to the "internal_owner_user_id" field.
+func (m *ControlImplementationHistoryMutation) ResetInternalOwnerUserID() {
+	m.internal_owner_user_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldInternalOwnerUserID)
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (m *ControlImplementationHistoryMutation) SetInternalOwnerGroupID(s string) {
+	m.internal_owner_group_id = &s
+}
+
+// InternalOwnerGroupID returns the value of the "internal_owner_group_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) InternalOwnerGroupID() (r string, exists bool) {
+	v := m.internal_owner_group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerGroupID returns the old "internal_owner_group_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldInternalOwnerGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerGroupID: %w", err)
+	}
+	return oldValue.InternalOwnerGroupID, nil
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (m *ControlImplementationHistoryMutation) ClearInternalOwnerGroupID() {
+	m.internal_owner_group_id = nil
+	m.clearedFields[controlimplementationhistory.FieldInternalOwnerGroupID] = struct{}{}
+}
+
+// InternalOwnerGroupIDCleared returns if the "internal_owner_group_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) InternalOwnerGroupIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldInternalOwnerGroupID]
+	return ok
+}
+
+// ResetInternalOwnerGroupID resets all changes to the "internal_owner_group_id" field.
+func (m *ControlImplementationHistoryMutation) ResetInternalOwnerGroupID() {
+	m.internal_owner_group_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldInternalOwnerGroupID)
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (m *ControlImplementationHistoryMutation) SetInternalOwnerIdentityHolderID(s string) {
+	m.internal_owner_identity_holder_id = &s
+}
+
+// InternalOwnerIdentityHolderID returns the value of the "internal_owner_identity_holder_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) InternalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.internal_owner_identity_holder_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerIdentityHolderID returns the old "internal_owner_identity_holder_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldInternalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.InternalOwnerIdentityHolderID, nil
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (m *ControlImplementationHistoryMutation) ClearInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder_id = nil
+	m.clearedFields[controlimplementationhistory.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderIDCleared returns if the "internal_owner_identity_holder_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) InternalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldInternalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetInternalOwnerIdentityHolderID resets all changes to the "internal_owner_identity_holder_id" field.
+func (m *ControlImplementationHistoryMutation) ResetInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldInternalOwnerIdentityHolderID)
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (m *ControlImplementationHistoryMutation) SetDelegateName(s string) {
+	m.delegate_name = &s
+}
+
+// DelegateName returns the value of the "delegate_name" field in the mutation.
+func (m *ControlImplementationHistoryMutation) DelegateName() (r string, exists bool) {
+	v := m.delegate_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelegateName returns the old "delegate_name" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldDelegateName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelegateName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelegateName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelegateName: %w", err)
+	}
+	return oldValue.DelegateName, nil
+}
+
+// ClearDelegateName clears the value of the "delegate_name" field.
+func (m *ControlImplementationHistoryMutation) ClearDelegateName() {
+	m.delegate_name = nil
+	m.clearedFields[controlimplementationhistory.FieldDelegateName] = struct{}{}
+}
+
+// DelegateNameCleared returns if the "delegate_name" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) DelegateNameCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldDelegateName]
+	return ok
+}
+
+// ResetDelegateName resets all changes to the "delegate_name" field.
+func (m *ControlImplementationHistoryMutation) ResetDelegateName() {
+	m.delegate_name = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldDelegateName)
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (m *ControlImplementationHistoryMutation) SetDelegateUserID(s string) {
+	m.delegate_user_id = &s
+}
+
+// DelegateUserID returns the value of the "delegate_user_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) DelegateUserID() (r string, exists bool) {
+	v := m.delegate_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelegateUserID returns the old "delegate_user_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldDelegateUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelegateUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelegateUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelegateUserID: %w", err)
+	}
+	return oldValue.DelegateUserID, nil
+}
+
+// ClearDelegateUserID clears the value of the "delegate_user_id" field.
+func (m *ControlImplementationHistoryMutation) ClearDelegateUserID() {
+	m.delegate_user_id = nil
+	m.clearedFields[controlimplementationhistory.FieldDelegateUserID] = struct{}{}
+}
+
+// DelegateUserIDCleared returns if the "delegate_user_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) DelegateUserIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldDelegateUserID]
+	return ok
+}
+
+// ResetDelegateUserID resets all changes to the "delegate_user_id" field.
+func (m *ControlImplementationHistoryMutation) ResetDelegateUserID() {
+	m.delegate_user_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldDelegateUserID)
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (m *ControlImplementationHistoryMutation) SetDelegateGroupID(s string) {
+	m.delegate_group_id = &s
+}
+
+// DelegateGroupID returns the value of the "delegate_group_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) DelegateGroupID() (r string, exists bool) {
+	v := m.delegate_group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelegateGroupID returns the old "delegate_group_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldDelegateGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelegateGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelegateGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelegateGroupID: %w", err)
+	}
+	return oldValue.DelegateGroupID, nil
+}
+
+// ClearDelegateGroupID clears the value of the "delegate_group_id" field.
+func (m *ControlImplementationHistoryMutation) ClearDelegateGroupID() {
+	m.delegate_group_id = nil
+	m.clearedFields[controlimplementationhistory.FieldDelegateGroupID] = struct{}{}
+}
+
+// DelegateGroupIDCleared returns if the "delegate_group_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) DelegateGroupIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldDelegateGroupID]
+	return ok
+}
+
+// ResetDelegateGroupID resets all changes to the "delegate_group_id" field.
+func (m *ControlImplementationHistoryMutation) ResetDelegateGroupID() {
+	m.delegate_group_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldDelegateGroupID)
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (m *ControlImplementationHistoryMutation) SetDelegateIdentityHolderID(s string) {
+	m.delegate_identity_holder_id = &s
+}
+
+// DelegateIdentityHolderID returns the value of the "delegate_identity_holder_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) DelegateIdentityHolderID() (r string, exists bool) {
+	v := m.delegate_identity_holder_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelegateIdentityHolderID returns the old "delegate_identity_holder_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldDelegateIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelegateIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelegateIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelegateIdentityHolderID: %w", err)
+	}
+	return oldValue.DelegateIdentityHolderID, nil
+}
+
+// ClearDelegateIdentityHolderID clears the value of the "delegate_identity_holder_id" field.
+func (m *ControlImplementationHistoryMutation) ClearDelegateIdentityHolderID() {
+	m.delegate_identity_holder_id = nil
+	m.clearedFields[controlimplementationhistory.FieldDelegateIdentityHolderID] = struct{}{}
+}
+
+// DelegateIdentityHolderIDCleared returns if the "delegate_identity_holder_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) DelegateIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldDelegateIdentityHolderID]
+	return ok
+}
+
+// ResetDelegateIdentityHolderID resets all changes to the "delegate_identity_holder_id" field.
+func (m *ControlImplementationHistoryMutation) ResetDelegateIdentityHolderID() {
+	m.delegate_identity_holder_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldDelegateIdentityHolderID)
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (m *ControlImplementationHistoryMutation) SetSystemOwned(b bool) {
 	m.system_owned = &b
@@ -31447,7 +31847,7 @@ func (m *ControlImplementationHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlImplementationHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 28)
+	fields := make([]string, 0, 36)
 	if m.history_time != nil {
 		fields = append(fields, controlimplementationhistory.FieldHistoryTime)
 	}
@@ -31504,6 +31904,30 @@ func (m *ControlImplementationHistoryMutation) Fields() []string {
 	}
 	if m.owner_id != nil {
 		fields = append(fields, controlimplementationhistory.FieldOwnerID)
+	}
+	if m.internal_owner != nil {
+		fields = append(fields, controlimplementationhistory.FieldInternalOwner)
+	}
+	if m.internal_owner_user_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldInternalOwnerUserID)
+	}
+	if m.internal_owner_group_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldInternalOwnerGroupID)
+	}
+	if m.internal_owner_identity_holder_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldInternalOwnerIdentityHolderID)
+	}
+	if m.delegate_name != nil {
+		fields = append(fields, controlimplementationhistory.FieldDelegateName)
+	}
+	if m.delegate_user_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldDelegateUserID)
+	}
+	if m.delegate_group_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldDelegateGroupID)
+	}
+	if m.delegate_identity_holder_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldDelegateIdentityHolderID)
 	}
 	if m.system_owned != nil {
 		fields = append(fields, controlimplementationhistory.FieldSystemOwned)
@@ -31578,6 +32002,22 @@ func (m *ControlImplementationHistoryMutation) Field(name string) (ent.Value, bo
 		return m.ExternalID()
 	case controlimplementationhistory.FieldOwnerID:
 		return m.OwnerID()
+	case controlimplementationhistory.FieldInternalOwner:
+		return m.InternalOwner()
+	case controlimplementationhistory.FieldInternalOwnerUserID:
+		return m.InternalOwnerUserID()
+	case controlimplementationhistory.FieldInternalOwnerGroupID:
+		return m.InternalOwnerGroupID()
+	case controlimplementationhistory.FieldInternalOwnerIdentityHolderID:
+		return m.InternalOwnerIdentityHolderID()
+	case controlimplementationhistory.FieldDelegateName:
+		return m.DelegateName()
+	case controlimplementationhistory.FieldDelegateUserID:
+		return m.DelegateUserID()
+	case controlimplementationhistory.FieldDelegateGroupID:
+		return m.DelegateGroupID()
+	case controlimplementationhistory.FieldDelegateIdentityHolderID:
+		return m.DelegateIdentityHolderID()
 	case controlimplementationhistory.FieldSystemOwned:
 		return m.SystemOwned()
 	case controlimplementationhistory.FieldInternalNotes:
@@ -31643,6 +32083,22 @@ func (m *ControlImplementationHistoryMutation) OldField(ctx context.Context, nam
 		return m.OldExternalID(ctx)
 	case controlimplementationhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
+	case controlimplementationhistory.FieldInternalOwner:
+		return m.OldInternalOwner(ctx)
+	case controlimplementationhistory.FieldInternalOwnerUserID:
+		return m.OldInternalOwnerUserID(ctx)
+	case controlimplementationhistory.FieldInternalOwnerGroupID:
+		return m.OldInternalOwnerGroupID(ctx)
+	case controlimplementationhistory.FieldInternalOwnerIdentityHolderID:
+		return m.OldInternalOwnerIdentityHolderID(ctx)
+	case controlimplementationhistory.FieldDelegateName:
+		return m.OldDelegateName(ctx)
+	case controlimplementationhistory.FieldDelegateUserID:
+		return m.OldDelegateUserID(ctx)
+	case controlimplementationhistory.FieldDelegateGroupID:
+		return m.OldDelegateGroupID(ctx)
+	case controlimplementationhistory.FieldDelegateIdentityHolderID:
+		return m.OldDelegateIdentityHolderID(ctx)
 	case controlimplementationhistory.FieldSystemOwned:
 		return m.OldSystemOwned(ctx)
 	case controlimplementationhistory.FieldInternalNotes:
@@ -31803,6 +32259,62 @@ func (m *ControlImplementationHistoryMutation) SetField(name string, value ent.V
 		}
 		m.SetOwnerID(v)
 		return nil
+	case controlimplementationhistory.FieldInternalOwner:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwner(v)
+		return nil
+	case controlimplementationhistory.FieldInternalOwnerUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerUserID(v)
+		return nil
+	case controlimplementationhistory.FieldInternalOwnerGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerGroupID(v)
+		return nil
+	case controlimplementationhistory.FieldInternalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerIdentityHolderID(v)
+		return nil
+	case controlimplementationhistory.FieldDelegateName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelegateName(v)
+		return nil
+	case controlimplementationhistory.FieldDelegateUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelegateUserID(v)
+		return nil
+	case controlimplementationhistory.FieldDelegateGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelegateGroupID(v)
+		return nil
+	case controlimplementationhistory.FieldDelegateIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelegateIdentityHolderID(v)
+		return nil
 	case controlimplementationhistory.FieldSystemOwned:
 		v, ok := value.(bool)
 		if !ok {
@@ -31947,6 +32459,30 @@ func (m *ControlImplementationHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlimplementationhistory.FieldOwnerID) {
 		fields = append(fields, controlimplementationhistory.FieldOwnerID)
 	}
+	if m.FieldCleared(controlimplementationhistory.FieldInternalOwner) {
+		fields = append(fields, controlimplementationhistory.FieldInternalOwner)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldInternalOwnerUserID) {
+		fields = append(fields, controlimplementationhistory.FieldInternalOwnerUserID)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldInternalOwnerGroupID) {
+		fields = append(fields, controlimplementationhistory.FieldInternalOwnerGroupID)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldInternalOwnerIdentityHolderID) {
+		fields = append(fields, controlimplementationhistory.FieldInternalOwnerIdentityHolderID)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldDelegateName) {
+		fields = append(fields, controlimplementationhistory.FieldDelegateName)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldDelegateUserID) {
+		fields = append(fields, controlimplementationhistory.FieldDelegateUserID)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldDelegateGroupID) {
+		fields = append(fields, controlimplementationhistory.FieldDelegateGroupID)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldDelegateIdentityHolderID) {
+		fields = append(fields, controlimplementationhistory.FieldDelegateIdentityHolderID)
+	}
 	if m.FieldCleared(controlimplementationhistory.FieldSystemOwned) {
 		fields = append(fields, controlimplementationhistory.FieldSystemOwned)
 	}
@@ -32039,6 +32575,30 @@ func (m *ControlImplementationHistoryMutation) ClearField(name string) error {
 	case controlimplementationhistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
+	case controlimplementationhistory.FieldInternalOwner:
+		m.ClearInternalOwner()
+		return nil
+	case controlimplementationhistory.FieldInternalOwnerUserID:
+		m.ClearInternalOwnerUserID()
+		return nil
+	case controlimplementationhistory.FieldInternalOwnerGroupID:
+		m.ClearInternalOwnerGroupID()
+		return nil
+	case controlimplementationhistory.FieldInternalOwnerIdentityHolderID:
+		m.ClearInternalOwnerIdentityHolderID()
+		return nil
+	case controlimplementationhistory.FieldDelegateName:
+		m.ClearDelegateName()
+		return nil
+	case controlimplementationhistory.FieldDelegateUserID:
+		m.ClearDelegateUserID()
+		return nil
+	case controlimplementationhistory.FieldDelegateGroupID:
+		m.ClearDelegateGroupID()
+		return nil
+	case controlimplementationhistory.FieldDelegateIdentityHolderID:
+		m.ClearDelegateIdentityHolderID()
+		return nil
 	case controlimplementationhistory.FieldSystemOwned:
 		m.ClearSystemOwned()
 		return nil
@@ -32130,6 +32690,30 @@ func (m *ControlImplementationHistoryMutation) ResetField(name string) error {
 		return nil
 	case controlimplementationhistory.FieldOwnerID:
 		m.ResetOwnerID()
+		return nil
+	case controlimplementationhistory.FieldInternalOwner:
+		m.ResetInternalOwner()
+		return nil
+	case controlimplementationhistory.FieldInternalOwnerUserID:
+		m.ResetInternalOwnerUserID()
+		return nil
+	case controlimplementationhistory.FieldInternalOwnerGroupID:
+		m.ResetInternalOwnerGroupID()
+		return nil
+	case controlimplementationhistory.FieldInternalOwnerIdentityHolderID:
+		m.ResetInternalOwnerIdentityHolderID()
+		return nil
+	case controlimplementationhistory.FieldDelegateName:
+		m.ResetDelegateName()
+		return nil
+	case controlimplementationhistory.FieldDelegateUserID:
+		m.ResetDelegateUserID()
+		return nil
+	case controlimplementationhistory.FieldDelegateGroupID:
+		m.ResetDelegateGroupID()
+		return nil
+	case controlimplementationhistory.FieldDelegateIdentityHolderID:
+		m.ResetDelegateIdentityHolderID()
 		return nil
 	case controlimplementationhistory.FieldSystemOwned:
 		m.ResetSystemOwned()
@@ -119742,58 +120326,76 @@ func (m *ReportMembershipHistoryMutation) ResetEdge(name string) error {
 // ReviewHistoryMutation represents an operation that mutates the ReviewHistory nodes in the graph.
 type ReviewHistoryMutation struct {
 	config
-	op                        Op
-	typ                       string
-	id                        *string
-	history_time              *time.Time
-	ref                       *string
-	operation                 *history.OpType
-	created_at                *time.Time
-	updated_at                *time.Time
-	created_by                *string
-	updated_by                *string
-	updated_by_impersonator   *string
-	deleted_at                *time.Time
-	deleted_by                *string
-	tags                      *[]string
-	appendtags                []string
-	source_definition_id      *string
-	source_definition_version *string
-	source_instance_id        *string
-	managed_by                *string
-	integration_run_id        *string
-	source_key                *string
-	external_id               *string
-	owner_id                  *string
-	system_owned              *bool
-	internal_notes            *string
-	system_internal_id        *string
-	environment_name          *string
-	environment_id            *string
-	scope_name                *string
-	scope_id                  *string
-	external_owner_id         *string
-	title                     *string
-	state                     *string
-	status                    *enums.ReviewStatus
-	category                  *string
-	classification            *string
-	summary                   *string
-	details                   *string
-	reporter                  *string
-	approved                  *bool
-	reviewed_at               *models.DateTime
-	reported_at               *models.DateTime
-	approved_at               *models.DateTime
-	reviewer_id               *string
-	source                    *string
-	external_uri              *string
-	metadata                  *map[string]interface{}
-	raw_payload               *map[string]interface{}
-	clearedFields             map[string]struct{}
-	done                      bool
-	oldValue                  func(context.Context) (*ReviewHistory, error)
-	predicates                []predicate.ReviewHistory
+	op                                Op
+	typ                               string
+	id                                *string
+	history_time                      *time.Time
+	ref                               *string
+	operation                         *history.OpType
+	created_at                        *time.Time
+	updated_at                        *time.Time
+	created_by                        *string
+	updated_by                        *string
+	updated_by_impersonator           *string
+	deleted_at                        *time.Time
+	deleted_by                        *string
+	tags                              *[]string
+	appendtags                        []string
+	source_definition_id              *string
+	source_definition_version         *string
+	source_instance_id                *string
+	managed_by                        *string
+	integration_run_id                *string
+	source_key                        *string
+	external_id                       *string
+	owner_id                          *string
+	internal_owner                    *string
+	internal_owner_user_id            *string
+	internal_owner_group_id           *string
+	internal_owner_identity_holder_id *string
+	reviewed_by                       *string
+	reviewed_by_user_id               *string
+	reviewed_by_group_id              *string
+	reviewed_by_identity_holder_id    *string
+	delegate_name                     *string
+	delegate_user_id                  *string
+	delegate_group_id                 *string
+	delegate_identity_holder_id       *string
+	system_owned                      *bool
+	internal_notes                    *string
+	system_internal_id                *string
+	review_kind_name                  *string
+	review_kind_id                    *string
+	review_classification_name        *string
+	review_classification_id          *string
+	review_state_name                 *string
+	review_state_id                   *string
+	environment_name                  *string
+	environment_id                    *string
+	scope_name                        *string
+	scope_id                          *string
+	external_owner_id                 *string
+	title                             *string
+	state                             *string
+	status                            *enums.ReviewStatus
+	category                          *string
+	classification                    *string
+	summary                           *string
+	details                           *string
+	reporter                          *string
+	approved                          *bool
+	reviewed_at                       *models.DateTime
+	reported_at                       *models.DateTime
+	approved_at                       *models.DateTime
+	reviewer_id                       *string
+	source                            *string
+	external_uri                      *string
+	metadata                          *map[string]interface{}
+	raw_payload                       *map[string]interface{}
+	clearedFields                     map[string]struct{}
+	done                              bool
+	oldValue                          func(context.Context) (*ReviewHistory, error)
+	predicates                        []predicate.ReviewHistory
 }
 
 var _ ent.Mutation = (*ReviewHistoryMutation)(nil)
@@ -120821,6 +121423,594 @@ func (m *ReviewHistoryMutation) ResetOwnerID() {
 	delete(m.clearedFields, reviewhistory.FieldOwnerID)
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (m *ReviewHistoryMutation) SetInternalOwner(s string) {
+	m.internal_owner = &s
+}
+
+// InternalOwner returns the value of the "internal_owner" field in the mutation.
+func (m *ReviewHistoryMutation) InternalOwner() (r string, exists bool) {
+	v := m.internal_owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwner returns the old "internal_owner" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldInternalOwner(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwner is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwner requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwner: %w", err)
+	}
+	return oldValue.InternalOwner, nil
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (m *ReviewHistoryMutation) ClearInternalOwner() {
+	m.internal_owner = nil
+	m.clearedFields[reviewhistory.FieldInternalOwner] = struct{}{}
+}
+
+// InternalOwnerCleared returns if the "internal_owner" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) InternalOwnerCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldInternalOwner]
+	return ok
+}
+
+// ResetInternalOwner resets all changes to the "internal_owner" field.
+func (m *ReviewHistoryMutation) ResetInternalOwner() {
+	m.internal_owner = nil
+	delete(m.clearedFields, reviewhistory.FieldInternalOwner)
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (m *ReviewHistoryMutation) SetInternalOwnerUserID(s string) {
+	m.internal_owner_user_id = &s
+}
+
+// InternalOwnerUserID returns the value of the "internal_owner_user_id" field in the mutation.
+func (m *ReviewHistoryMutation) InternalOwnerUserID() (r string, exists bool) {
+	v := m.internal_owner_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerUserID returns the old "internal_owner_user_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldInternalOwnerUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerUserID: %w", err)
+	}
+	return oldValue.InternalOwnerUserID, nil
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (m *ReviewHistoryMutation) ClearInternalOwnerUserID() {
+	m.internal_owner_user_id = nil
+	m.clearedFields[reviewhistory.FieldInternalOwnerUserID] = struct{}{}
+}
+
+// InternalOwnerUserIDCleared returns if the "internal_owner_user_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) InternalOwnerUserIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldInternalOwnerUserID]
+	return ok
+}
+
+// ResetInternalOwnerUserID resets all changes to the "internal_owner_user_id" field.
+func (m *ReviewHistoryMutation) ResetInternalOwnerUserID() {
+	m.internal_owner_user_id = nil
+	delete(m.clearedFields, reviewhistory.FieldInternalOwnerUserID)
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (m *ReviewHistoryMutation) SetInternalOwnerGroupID(s string) {
+	m.internal_owner_group_id = &s
+}
+
+// InternalOwnerGroupID returns the value of the "internal_owner_group_id" field in the mutation.
+func (m *ReviewHistoryMutation) InternalOwnerGroupID() (r string, exists bool) {
+	v := m.internal_owner_group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerGroupID returns the old "internal_owner_group_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldInternalOwnerGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerGroupID: %w", err)
+	}
+	return oldValue.InternalOwnerGroupID, nil
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (m *ReviewHistoryMutation) ClearInternalOwnerGroupID() {
+	m.internal_owner_group_id = nil
+	m.clearedFields[reviewhistory.FieldInternalOwnerGroupID] = struct{}{}
+}
+
+// InternalOwnerGroupIDCleared returns if the "internal_owner_group_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) InternalOwnerGroupIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldInternalOwnerGroupID]
+	return ok
+}
+
+// ResetInternalOwnerGroupID resets all changes to the "internal_owner_group_id" field.
+func (m *ReviewHistoryMutation) ResetInternalOwnerGroupID() {
+	m.internal_owner_group_id = nil
+	delete(m.clearedFields, reviewhistory.FieldInternalOwnerGroupID)
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (m *ReviewHistoryMutation) SetInternalOwnerIdentityHolderID(s string) {
+	m.internal_owner_identity_holder_id = &s
+}
+
+// InternalOwnerIdentityHolderID returns the value of the "internal_owner_identity_holder_id" field in the mutation.
+func (m *ReviewHistoryMutation) InternalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.internal_owner_identity_holder_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerIdentityHolderID returns the old "internal_owner_identity_holder_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldInternalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.InternalOwnerIdentityHolderID, nil
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (m *ReviewHistoryMutation) ClearInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder_id = nil
+	m.clearedFields[reviewhistory.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderIDCleared returns if the "internal_owner_identity_holder_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) InternalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldInternalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetInternalOwnerIdentityHolderID resets all changes to the "internal_owner_identity_holder_id" field.
+func (m *ReviewHistoryMutation) ResetInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder_id = nil
+	delete(m.clearedFields, reviewhistory.FieldInternalOwnerIdentityHolderID)
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (m *ReviewHistoryMutation) SetReviewedBy(s string) {
+	m.reviewed_by = &s
+}
+
+// ReviewedBy returns the value of the "reviewed_by" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewedBy() (r string, exists bool) {
+	v := m.reviewed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewedBy returns the old "reviewed_by" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewedBy: %w", err)
+	}
+	return oldValue.ReviewedBy, nil
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (m *ReviewHistoryMutation) ClearReviewedBy() {
+	m.reviewed_by = nil
+	m.clearedFields[reviewhistory.FieldReviewedBy] = struct{}{}
+}
+
+// ReviewedByCleared returns if the "reviewed_by" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewedByCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewedBy]
+	return ok
+}
+
+// ResetReviewedBy resets all changes to the "reviewed_by" field.
+func (m *ReviewHistoryMutation) ResetReviewedBy() {
+	m.reviewed_by = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewedBy)
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (m *ReviewHistoryMutation) SetReviewedByUserID(s string) {
+	m.reviewed_by_user_id = &s
+}
+
+// ReviewedByUserID returns the value of the "reviewed_by_user_id" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewedByUserID() (r string, exists bool) {
+	v := m.reviewed_by_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewedByUserID returns the old "reviewed_by_user_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewedByUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewedByUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewedByUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewedByUserID: %w", err)
+	}
+	return oldValue.ReviewedByUserID, nil
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (m *ReviewHistoryMutation) ClearReviewedByUserID() {
+	m.reviewed_by_user_id = nil
+	m.clearedFields[reviewhistory.FieldReviewedByUserID] = struct{}{}
+}
+
+// ReviewedByUserIDCleared returns if the "reviewed_by_user_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewedByUserIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewedByUserID]
+	return ok
+}
+
+// ResetReviewedByUserID resets all changes to the "reviewed_by_user_id" field.
+func (m *ReviewHistoryMutation) ResetReviewedByUserID() {
+	m.reviewed_by_user_id = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewedByUserID)
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (m *ReviewHistoryMutation) SetReviewedByGroupID(s string) {
+	m.reviewed_by_group_id = &s
+}
+
+// ReviewedByGroupID returns the value of the "reviewed_by_group_id" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewedByGroupID() (r string, exists bool) {
+	v := m.reviewed_by_group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewedByGroupID returns the old "reviewed_by_group_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewedByGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewedByGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewedByGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewedByGroupID: %w", err)
+	}
+	return oldValue.ReviewedByGroupID, nil
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (m *ReviewHistoryMutation) ClearReviewedByGroupID() {
+	m.reviewed_by_group_id = nil
+	m.clearedFields[reviewhistory.FieldReviewedByGroupID] = struct{}{}
+}
+
+// ReviewedByGroupIDCleared returns if the "reviewed_by_group_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewedByGroupIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewedByGroupID]
+	return ok
+}
+
+// ResetReviewedByGroupID resets all changes to the "reviewed_by_group_id" field.
+func (m *ReviewHistoryMutation) ResetReviewedByGroupID() {
+	m.reviewed_by_group_id = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewedByGroupID)
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (m *ReviewHistoryMutation) SetReviewedByIdentityHolderID(s string) {
+	m.reviewed_by_identity_holder_id = &s
+}
+
+// ReviewedByIdentityHolderID returns the value of the "reviewed_by_identity_holder_id" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewedByIdentityHolderID() (r string, exists bool) {
+	v := m.reviewed_by_identity_holder_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewedByIdentityHolderID returns the old "reviewed_by_identity_holder_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewedByIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewedByIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewedByIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewedByIdentityHolderID: %w", err)
+	}
+	return oldValue.ReviewedByIdentityHolderID, nil
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (m *ReviewHistoryMutation) ClearReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder_id = nil
+	m.clearedFields[reviewhistory.FieldReviewedByIdentityHolderID] = struct{}{}
+}
+
+// ReviewedByIdentityHolderIDCleared returns if the "reviewed_by_identity_holder_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewedByIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewedByIdentityHolderID]
+	return ok
+}
+
+// ResetReviewedByIdentityHolderID resets all changes to the "reviewed_by_identity_holder_id" field.
+func (m *ReviewHistoryMutation) ResetReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder_id = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewedByIdentityHolderID)
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (m *ReviewHistoryMutation) SetDelegateName(s string) {
+	m.delegate_name = &s
+}
+
+// DelegateName returns the value of the "delegate_name" field in the mutation.
+func (m *ReviewHistoryMutation) DelegateName() (r string, exists bool) {
+	v := m.delegate_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelegateName returns the old "delegate_name" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldDelegateName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelegateName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelegateName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelegateName: %w", err)
+	}
+	return oldValue.DelegateName, nil
+}
+
+// ClearDelegateName clears the value of the "delegate_name" field.
+func (m *ReviewHistoryMutation) ClearDelegateName() {
+	m.delegate_name = nil
+	m.clearedFields[reviewhistory.FieldDelegateName] = struct{}{}
+}
+
+// DelegateNameCleared returns if the "delegate_name" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) DelegateNameCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldDelegateName]
+	return ok
+}
+
+// ResetDelegateName resets all changes to the "delegate_name" field.
+func (m *ReviewHistoryMutation) ResetDelegateName() {
+	m.delegate_name = nil
+	delete(m.clearedFields, reviewhistory.FieldDelegateName)
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (m *ReviewHistoryMutation) SetDelegateUserID(s string) {
+	m.delegate_user_id = &s
+}
+
+// DelegateUserID returns the value of the "delegate_user_id" field in the mutation.
+func (m *ReviewHistoryMutation) DelegateUserID() (r string, exists bool) {
+	v := m.delegate_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelegateUserID returns the old "delegate_user_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldDelegateUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelegateUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelegateUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelegateUserID: %w", err)
+	}
+	return oldValue.DelegateUserID, nil
+}
+
+// ClearDelegateUserID clears the value of the "delegate_user_id" field.
+func (m *ReviewHistoryMutation) ClearDelegateUserID() {
+	m.delegate_user_id = nil
+	m.clearedFields[reviewhistory.FieldDelegateUserID] = struct{}{}
+}
+
+// DelegateUserIDCleared returns if the "delegate_user_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) DelegateUserIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldDelegateUserID]
+	return ok
+}
+
+// ResetDelegateUserID resets all changes to the "delegate_user_id" field.
+func (m *ReviewHistoryMutation) ResetDelegateUserID() {
+	m.delegate_user_id = nil
+	delete(m.clearedFields, reviewhistory.FieldDelegateUserID)
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (m *ReviewHistoryMutation) SetDelegateGroupID(s string) {
+	m.delegate_group_id = &s
+}
+
+// DelegateGroupID returns the value of the "delegate_group_id" field in the mutation.
+func (m *ReviewHistoryMutation) DelegateGroupID() (r string, exists bool) {
+	v := m.delegate_group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelegateGroupID returns the old "delegate_group_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldDelegateGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelegateGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelegateGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelegateGroupID: %w", err)
+	}
+	return oldValue.DelegateGroupID, nil
+}
+
+// ClearDelegateGroupID clears the value of the "delegate_group_id" field.
+func (m *ReviewHistoryMutation) ClearDelegateGroupID() {
+	m.delegate_group_id = nil
+	m.clearedFields[reviewhistory.FieldDelegateGroupID] = struct{}{}
+}
+
+// DelegateGroupIDCleared returns if the "delegate_group_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) DelegateGroupIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldDelegateGroupID]
+	return ok
+}
+
+// ResetDelegateGroupID resets all changes to the "delegate_group_id" field.
+func (m *ReviewHistoryMutation) ResetDelegateGroupID() {
+	m.delegate_group_id = nil
+	delete(m.clearedFields, reviewhistory.FieldDelegateGroupID)
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (m *ReviewHistoryMutation) SetDelegateIdentityHolderID(s string) {
+	m.delegate_identity_holder_id = &s
+}
+
+// DelegateIdentityHolderID returns the value of the "delegate_identity_holder_id" field in the mutation.
+func (m *ReviewHistoryMutation) DelegateIdentityHolderID() (r string, exists bool) {
+	v := m.delegate_identity_holder_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDelegateIdentityHolderID returns the old "delegate_identity_holder_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldDelegateIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDelegateIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDelegateIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDelegateIdentityHolderID: %w", err)
+	}
+	return oldValue.DelegateIdentityHolderID, nil
+}
+
+// ClearDelegateIdentityHolderID clears the value of the "delegate_identity_holder_id" field.
+func (m *ReviewHistoryMutation) ClearDelegateIdentityHolderID() {
+	m.delegate_identity_holder_id = nil
+	m.clearedFields[reviewhistory.FieldDelegateIdentityHolderID] = struct{}{}
+}
+
+// DelegateIdentityHolderIDCleared returns if the "delegate_identity_holder_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) DelegateIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldDelegateIdentityHolderID]
+	return ok
+}
+
+// ResetDelegateIdentityHolderID resets all changes to the "delegate_identity_holder_id" field.
+func (m *ReviewHistoryMutation) ResetDelegateIdentityHolderID() {
+	m.delegate_identity_holder_id = nil
+	delete(m.clearedFields, reviewhistory.FieldDelegateIdentityHolderID)
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (m *ReviewHistoryMutation) SetSystemOwned(b bool) {
 	m.system_owned = &b
@@ -120966,6 +122156,300 @@ func (m *ReviewHistoryMutation) SystemInternalIDCleared() bool {
 func (m *ReviewHistoryMutation) ResetSystemInternalID() {
 	m.system_internal_id = nil
 	delete(m.clearedFields, reviewhistory.FieldSystemInternalID)
+}
+
+// SetReviewKindName sets the "review_kind_name" field.
+func (m *ReviewHistoryMutation) SetReviewKindName(s string) {
+	m.review_kind_name = &s
+}
+
+// ReviewKindName returns the value of the "review_kind_name" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewKindName() (r string, exists bool) {
+	v := m.review_kind_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewKindName returns the old "review_kind_name" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewKindName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewKindName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewKindName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewKindName: %w", err)
+	}
+	return oldValue.ReviewKindName, nil
+}
+
+// ClearReviewKindName clears the value of the "review_kind_name" field.
+func (m *ReviewHistoryMutation) ClearReviewKindName() {
+	m.review_kind_name = nil
+	m.clearedFields[reviewhistory.FieldReviewKindName] = struct{}{}
+}
+
+// ReviewKindNameCleared returns if the "review_kind_name" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewKindNameCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewKindName]
+	return ok
+}
+
+// ResetReviewKindName resets all changes to the "review_kind_name" field.
+func (m *ReviewHistoryMutation) ResetReviewKindName() {
+	m.review_kind_name = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewKindName)
+}
+
+// SetReviewKindID sets the "review_kind_id" field.
+func (m *ReviewHistoryMutation) SetReviewKindID(s string) {
+	m.review_kind_id = &s
+}
+
+// ReviewKindID returns the value of the "review_kind_id" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewKindID() (r string, exists bool) {
+	v := m.review_kind_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewKindID returns the old "review_kind_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewKindID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewKindID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewKindID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewKindID: %w", err)
+	}
+	return oldValue.ReviewKindID, nil
+}
+
+// ClearReviewKindID clears the value of the "review_kind_id" field.
+func (m *ReviewHistoryMutation) ClearReviewKindID() {
+	m.review_kind_id = nil
+	m.clearedFields[reviewhistory.FieldReviewKindID] = struct{}{}
+}
+
+// ReviewKindIDCleared returns if the "review_kind_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewKindIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewKindID]
+	return ok
+}
+
+// ResetReviewKindID resets all changes to the "review_kind_id" field.
+func (m *ReviewHistoryMutation) ResetReviewKindID() {
+	m.review_kind_id = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewKindID)
+}
+
+// SetReviewClassificationName sets the "review_classification_name" field.
+func (m *ReviewHistoryMutation) SetReviewClassificationName(s string) {
+	m.review_classification_name = &s
+}
+
+// ReviewClassificationName returns the value of the "review_classification_name" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewClassificationName() (r string, exists bool) {
+	v := m.review_classification_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewClassificationName returns the old "review_classification_name" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewClassificationName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewClassificationName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewClassificationName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewClassificationName: %w", err)
+	}
+	return oldValue.ReviewClassificationName, nil
+}
+
+// ClearReviewClassificationName clears the value of the "review_classification_name" field.
+func (m *ReviewHistoryMutation) ClearReviewClassificationName() {
+	m.review_classification_name = nil
+	m.clearedFields[reviewhistory.FieldReviewClassificationName] = struct{}{}
+}
+
+// ReviewClassificationNameCleared returns if the "review_classification_name" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewClassificationNameCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewClassificationName]
+	return ok
+}
+
+// ResetReviewClassificationName resets all changes to the "review_classification_name" field.
+func (m *ReviewHistoryMutation) ResetReviewClassificationName() {
+	m.review_classification_name = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewClassificationName)
+}
+
+// SetReviewClassificationID sets the "review_classification_id" field.
+func (m *ReviewHistoryMutation) SetReviewClassificationID(s string) {
+	m.review_classification_id = &s
+}
+
+// ReviewClassificationID returns the value of the "review_classification_id" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewClassificationID() (r string, exists bool) {
+	v := m.review_classification_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewClassificationID returns the old "review_classification_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewClassificationID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewClassificationID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewClassificationID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewClassificationID: %w", err)
+	}
+	return oldValue.ReviewClassificationID, nil
+}
+
+// ClearReviewClassificationID clears the value of the "review_classification_id" field.
+func (m *ReviewHistoryMutation) ClearReviewClassificationID() {
+	m.review_classification_id = nil
+	m.clearedFields[reviewhistory.FieldReviewClassificationID] = struct{}{}
+}
+
+// ReviewClassificationIDCleared returns if the "review_classification_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewClassificationIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewClassificationID]
+	return ok
+}
+
+// ResetReviewClassificationID resets all changes to the "review_classification_id" field.
+func (m *ReviewHistoryMutation) ResetReviewClassificationID() {
+	m.review_classification_id = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewClassificationID)
+}
+
+// SetReviewStateName sets the "review_state_name" field.
+func (m *ReviewHistoryMutation) SetReviewStateName(s string) {
+	m.review_state_name = &s
+}
+
+// ReviewStateName returns the value of the "review_state_name" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewStateName() (r string, exists bool) {
+	v := m.review_state_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewStateName returns the old "review_state_name" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewStateName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewStateName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewStateName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewStateName: %w", err)
+	}
+	return oldValue.ReviewStateName, nil
+}
+
+// ClearReviewStateName clears the value of the "review_state_name" field.
+func (m *ReviewHistoryMutation) ClearReviewStateName() {
+	m.review_state_name = nil
+	m.clearedFields[reviewhistory.FieldReviewStateName] = struct{}{}
+}
+
+// ReviewStateNameCleared returns if the "review_state_name" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewStateNameCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewStateName]
+	return ok
+}
+
+// ResetReviewStateName resets all changes to the "review_state_name" field.
+func (m *ReviewHistoryMutation) ResetReviewStateName() {
+	m.review_state_name = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewStateName)
+}
+
+// SetReviewStateID sets the "review_state_id" field.
+func (m *ReviewHistoryMutation) SetReviewStateID(s string) {
+	m.review_state_id = &s
+}
+
+// ReviewStateID returns the value of the "review_state_id" field in the mutation.
+func (m *ReviewHistoryMutation) ReviewStateID() (r string, exists bool) {
+	v := m.review_state_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewStateID returns the old "review_state_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldReviewStateID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewStateID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewStateID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewStateID: %w", err)
+	}
+	return oldValue.ReviewStateID, nil
+}
+
+// ClearReviewStateID clears the value of the "review_state_id" field.
+func (m *ReviewHistoryMutation) ClearReviewStateID() {
+	m.review_state_id = nil
+	m.clearedFields[reviewhistory.FieldReviewStateID] = struct{}{}
+}
+
+// ReviewStateIDCleared returns if the "review_state_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ReviewStateIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldReviewStateID]
+	return ok
+}
+
+// ResetReviewStateID resets all changes to the "review_state_id" field.
+func (m *ReviewHistoryMutation) ResetReviewStateID() {
+	m.review_state_id = nil
+	delete(m.clearedFields, reviewhistory.FieldReviewStateID)
 }
 
 // SetEnvironmentName sets the "environment_name" field.
@@ -122067,7 +123551,7 @@ func (m *ReviewHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ReviewHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 44)
+	fields := make([]string, 0, 62)
 	if m.history_time != nil {
 		fields = append(fields, reviewhistory.FieldHistoryTime)
 	}
@@ -122125,6 +123609,42 @@ func (m *ReviewHistoryMutation) Fields() []string {
 	if m.owner_id != nil {
 		fields = append(fields, reviewhistory.FieldOwnerID)
 	}
+	if m.internal_owner != nil {
+		fields = append(fields, reviewhistory.FieldInternalOwner)
+	}
+	if m.internal_owner_user_id != nil {
+		fields = append(fields, reviewhistory.FieldInternalOwnerUserID)
+	}
+	if m.internal_owner_group_id != nil {
+		fields = append(fields, reviewhistory.FieldInternalOwnerGroupID)
+	}
+	if m.internal_owner_identity_holder_id != nil {
+		fields = append(fields, reviewhistory.FieldInternalOwnerIdentityHolderID)
+	}
+	if m.reviewed_by != nil {
+		fields = append(fields, reviewhistory.FieldReviewedBy)
+	}
+	if m.reviewed_by_user_id != nil {
+		fields = append(fields, reviewhistory.FieldReviewedByUserID)
+	}
+	if m.reviewed_by_group_id != nil {
+		fields = append(fields, reviewhistory.FieldReviewedByGroupID)
+	}
+	if m.reviewed_by_identity_holder_id != nil {
+		fields = append(fields, reviewhistory.FieldReviewedByIdentityHolderID)
+	}
+	if m.delegate_name != nil {
+		fields = append(fields, reviewhistory.FieldDelegateName)
+	}
+	if m.delegate_user_id != nil {
+		fields = append(fields, reviewhistory.FieldDelegateUserID)
+	}
+	if m.delegate_group_id != nil {
+		fields = append(fields, reviewhistory.FieldDelegateGroupID)
+	}
+	if m.delegate_identity_holder_id != nil {
+		fields = append(fields, reviewhistory.FieldDelegateIdentityHolderID)
+	}
 	if m.system_owned != nil {
 		fields = append(fields, reviewhistory.FieldSystemOwned)
 	}
@@ -122133,6 +123653,24 @@ func (m *ReviewHistoryMutation) Fields() []string {
 	}
 	if m.system_internal_id != nil {
 		fields = append(fields, reviewhistory.FieldSystemInternalID)
+	}
+	if m.review_kind_name != nil {
+		fields = append(fields, reviewhistory.FieldReviewKindName)
+	}
+	if m.review_kind_id != nil {
+		fields = append(fields, reviewhistory.FieldReviewKindID)
+	}
+	if m.review_classification_name != nil {
+		fields = append(fields, reviewhistory.FieldReviewClassificationName)
+	}
+	if m.review_classification_id != nil {
+		fields = append(fields, reviewhistory.FieldReviewClassificationID)
+	}
+	if m.review_state_name != nil {
+		fields = append(fields, reviewhistory.FieldReviewStateName)
+	}
+	if m.review_state_id != nil {
+		fields = append(fields, reviewhistory.FieldReviewStateID)
 	}
 	if m.environment_name != nil {
 		fields = append(fields, reviewhistory.FieldEnvironmentName)
@@ -122246,12 +123784,48 @@ func (m *ReviewHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ExternalID()
 	case reviewhistory.FieldOwnerID:
 		return m.OwnerID()
+	case reviewhistory.FieldInternalOwner:
+		return m.InternalOwner()
+	case reviewhistory.FieldInternalOwnerUserID:
+		return m.InternalOwnerUserID()
+	case reviewhistory.FieldInternalOwnerGroupID:
+		return m.InternalOwnerGroupID()
+	case reviewhistory.FieldInternalOwnerIdentityHolderID:
+		return m.InternalOwnerIdentityHolderID()
+	case reviewhistory.FieldReviewedBy:
+		return m.ReviewedBy()
+	case reviewhistory.FieldReviewedByUserID:
+		return m.ReviewedByUserID()
+	case reviewhistory.FieldReviewedByGroupID:
+		return m.ReviewedByGroupID()
+	case reviewhistory.FieldReviewedByIdentityHolderID:
+		return m.ReviewedByIdentityHolderID()
+	case reviewhistory.FieldDelegateName:
+		return m.DelegateName()
+	case reviewhistory.FieldDelegateUserID:
+		return m.DelegateUserID()
+	case reviewhistory.FieldDelegateGroupID:
+		return m.DelegateGroupID()
+	case reviewhistory.FieldDelegateIdentityHolderID:
+		return m.DelegateIdentityHolderID()
 	case reviewhistory.FieldSystemOwned:
 		return m.SystemOwned()
 	case reviewhistory.FieldInternalNotes:
 		return m.InternalNotes()
 	case reviewhistory.FieldSystemInternalID:
 		return m.SystemInternalID()
+	case reviewhistory.FieldReviewKindName:
+		return m.ReviewKindName()
+	case reviewhistory.FieldReviewKindID:
+		return m.ReviewKindID()
+	case reviewhistory.FieldReviewClassificationName:
+		return m.ReviewClassificationName()
+	case reviewhistory.FieldReviewClassificationID:
+		return m.ReviewClassificationID()
+	case reviewhistory.FieldReviewStateName:
+		return m.ReviewStateName()
+	case reviewhistory.FieldReviewStateID:
+		return m.ReviewStateID()
 	case reviewhistory.FieldEnvironmentName:
 		return m.EnvironmentName()
 	case reviewhistory.FieldEnvironmentID:
@@ -122343,12 +123917,48 @@ func (m *ReviewHistoryMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldExternalID(ctx)
 	case reviewhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
+	case reviewhistory.FieldInternalOwner:
+		return m.OldInternalOwner(ctx)
+	case reviewhistory.FieldInternalOwnerUserID:
+		return m.OldInternalOwnerUserID(ctx)
+	case reviewhistory.FieldInternalOwnerGroupID:
+		return m.OldInternalOwnerGroupID(ctx)
+	case reviewhistory.FieldInternalOwnerIdentityHolderID:
+		return m.OldInternalOwnerIdentityHolderID(ctx)
+	case reviewhistory.FieldReviewedBy:
+		return m.OldReviewedBy(ctx)
+	case reviewhistory.FieldReviewedByUserID:
+		return m.OldReviewedByUserID(ctx)
+	case reviewhistory.FieldReviewedByGroupID:
+		return m.OldReviewedByGroupID(ctx)
+	case reviewhistory.FieldReviewedByIdentityHolderID:
+		return m.OldReviewedByIdentityHolderID(ctx)
+	case reviewhistory.FieldDelegateName:
+		return m.OldDelegateName(ctx)
+	case reviewhistory.FieldDelegateUserID:
+		return m.OldDelegateUserID(ctx)
+	case reviewhistory.FieldDelegateGroupID:
+		return m.OldDelegateGroupID(ctx)
+	case reviewhistory.FieldDelegateIdentityHolderID:
+		return m.OldDelegateIdentityHolderID(ctx)
 	case reviewhistory.FieldSystemOwned:
 		return m.OldSystemOwned(ctx)
 	case reviewhistory.FieldInternalNotes:
 		return m.OldInternalNotes(ctx)
 	case reviewhistory.FieldSystemInternalID:
 		return m.OldSystemInternalID(ctx)
+	case reviewhistory.FieldReviewKindName:
+		return m.OldReviewKindName(ctx)
+	case reviewhistory.FieldReviewKindID:
+		return m.OldReviewKindID(ctx)
+	case reviewhistory.FieldReviewClassificationName:
+		return m.OldReviewClassificationName(ctx)
+	case reviewhistory.FieldReviewClassificationID:
+		return m.OldReviewClassificationID(ctx)
+	case reviewhistory.FieldReviewStateName:
+		return m.OldReviewStateName(ctx)
+	case reviewhistory.FieldReviewStateID:
+		return m.OldReviewStateID(ctx)
 	case reviewhistory.FieldEnvironmentName:
 		return m.OldEnvironmentName(ctx)
 	case reviewhistory.FieldEnvironmentID:
@@ -122535,6 +124145,90 @@ func (m *ReviewHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetOwnerID(v)
 		return nil
+	case reviewhistory.FieldInternalOwner:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwner(v)
+		return nil
+	case reviewhistory.FieldInternalOwnerUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerUserID(v)
+		return nil
+	case reviewhistory.FieldInternalOwnerGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerGroupID(v)
+		return nil
+	case reviewhistory.FieldInternalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerIdentityHolderID(v)
+		return nil
+	case reviewhistory.FieldReviewedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewedBy(v)
+		return nil
+	case reviewhistory.FieldReviewedByUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewedByUserID(v)
+		return nil
+	case reviewhistory.FieldReviewedByGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewedByGroupID(v)
+		return nil
+	case reviewhistory.FieldReviewedByIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewedByIdentityHolderID(v)
+		return nil
+	case reviewhistory.FieldDelegateName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelegateName(v)
+		return nil
+	case reviewhistory.FieldDelegateUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelegateUserID(v)
+		return nil
+	case reviewhistory.FieldDelegateGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelegateGroupID(v)
+		return nil
+	case reviewhistory.FieldDelegateIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDelegateIdentityHolderID(v)
+		return nil
 	case reviewhistory.FieldSystemOwned:
 		v, ok := value.(bool)
 		if !ok {
@@ -122555,6 +124249,48 @@ func (m *ReviewHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSystemInternalID(v)
+		return nil
+	case reviewhistory.FieldReviewKindName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewKindName(v)
+		return nil
+	case reviewhistory.FieldReviewKindID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewKindID(v)
+		return nil
+	case reviewhistory.FieldReviewClassificationName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewClassificationName(v)
+		return nil
+	case reviewhistory.FieldReviewClassificationID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewClassificationID(v)
+		return nil
+	case reviewhistory.FieldReviewStateName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewStateName(v)
+		return nil
+	case reviewhistory.FieldReviewStateID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewStateID(v)
 		return nil
 	case reviewhistory.FieldEnvironmentName:
 		v, ok := value.(string)
@@ -122791,6 +124527,42 @@ func (m *ReviewHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(reviewhistory.FieldOwnerID) {
 		fields = append(fields, reviewhistory.FieldOwnerID)
 	}
+	if m.FieldCleared(reviewhistory.FieldInternalOwner) {
+		fields = append(fields, reviewhistory.FieldInternalOwner)
+	}
+	if m.FieldCleared(reviewhistory.FieldInternalOwnerUserID) {
+		fields = append(fields, reviewhistory.FieldInternalOwnerUserID)
+	}
+	if m.FieldCleared(reviewhistory.FieldInternalOwnerGroupID) {
+		fields = append(fields, reviewhistory.FieldInternalOwnerGroupID)
+	}
+	if m.FieldCleared(reviewhistory.FieldInternalOwnerIdentityHolderID) {
+		fields = append(fields, reviewhistory.FieldInternalOwnerIdentityHolderID)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewedBy) {
+		fields = append(fields, reviewhistory.FieldReviewedBy)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewedByUserID) {
+		fields = append(fields, reviewhistory.FieldReviewedByUserID)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewedByGroupID) {
+		fields = append(fields, reviewhistory.FieldReviewedByGroupID)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewedByIdentityHolderID) {
+		fields = append(fields, reviewhistory.FieldReviewedByIdentityHolderID)
+	}
+	if m.FieldCleared(reviewhistory.FieldDelegateName) {
+		fields = append(fields, reviewhistory.FieldDelegateName)
+	}
+	if m.FieldCleared(reviewhistory.FieldDelegateUserID) {
+		fields = append(fields, reviewhistory.FieldDelegateUserID)
+	}
+	if m.FieldCleared(reviewhistory.FieldDelegateGroupID) {
+		fields = append(fields, reviewhistory.FieldDelegateGroupID)
+	}
+	if m.FieldCleared(reviewhistory.FieldDelegateIdentityHolderID) {
+		fields = append(fields, reviewhistory.FieldDelegateIdentityHolderID)
+	}
 	if m.FieldCleared(reviewhistory.FieldSystemOwned) {
 		fields = append(fields, reviewhistory.FieldSystemOwned)
 	}
@@ -122799,6 +124571,24 @@ func (m *ReviewHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(reviewhistory.FieldSystemInternalID) {
 		fields = append(fields, reviewhistory.FieldSystemInternalID)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewKindName) {
+		fields = append(fields, reviewhistory.FieldReviewKindName)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewKindID) {
+		fields = append(fields, reviewhistory.FieldReviewKindID)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewClassificationName) {
+		fields = append(fields, reviewhistory.FieldReviewClassificationName)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewClassificationID) {
+		fields = append(fields, reviewhistory.FieldReviewClassificationID)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewStateName) {
+		fields = append(fields, reviewhistory.FieldReviewStateName)
+	}
+	if m.FieldCleared(reviewhistory.FieldReviewStateID) {
+		fields = append(fields, reviewhistory.FieldReviewStateID)
 	}
 	if m.FieldCleared(reviewhistory.FieldEnvironmentName) {
 		fields = append(fields, reviewhistory.FieldEnvironmentName)
@@ -122928,6 +124718,42 @@ func (m *ReviewHistoryMutation) ClearField(name string) error {
 	case reviewhistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
+	case reviewhistory.FieldInternalOwner:
+		m.ClearInternalOwner()
+		return nil
+	case reviewhistory.FieldInternalOwnerUserID:
+		m.ClearInternalOwnerUserID()
+		return nil
+	case reviewhistory.FieldInternalOwnerGroupID:
+		m.ClearInternalOwnerGroupID()
+		return nil
+	case reviewhistory.FieldInternalOwnerIdentityHolderID:
+		m.ClearInternalOwnerIdentityHolderID()
+		return nil
+	case reviewhistory.FieldReviewedBy:
+		m.ClearReviewedBy()
+		return nil
+	case reviewhistory.FieldReviewedByUserID:
+		m.ClearReviewedByUserID()
+		return nil
+	case reviewhistory.FieldReviewedByGroupID:
+		m.ClearReviewedByGroupID()
+		return nil
+	case reviewhistory.FieldReviewedByIdentityHolderID:
+		m.ClearReviewedByIdentityHolderID()
+		return nil
+	case reviewhistory.FieldDelegateName:
+		m.ClearDelegateName()
+		return nil
+	case reviewhistory.FieldDelegateUserID:
+		m.ClearDelegateUserID()
+		return nil
+	case reviewhistory.FieldDelegateGroupID:
+		m.ClearDelegateGroupID()
+		return nil
+	case reviewhistory.FieldDelegateIdentityHolderID:
+		m.ClearDelegateIdentityHolderID()
+		return nil
 	case reviewhistory.FieldSystemOwned:
 		m.ClearSystemOwned()
 		return nil
@@ -122936,6 +124762,24 @@ func (m *ReviewHistoryMutation) ClearField(name string) error {
 		return nil
 	case reviewhistory.FieldSystemInternalID:
 		m.ClearSystemInternalID()
+		return nil
+	case reviewhistory.FieldReviewKindName:
+		m.ClearReviewKindName()
+		return nil
+	case reviewhistory.FieldReviewKindID:
+		m.ClearReviewKindID()
+		return nil
+	case reviewhistory.FieldReviewClassificationName:
+		m.ClearReviewClassificationName()
+		return nil
+	case reviewhistory.FieldReviewClassificationID:
+		m.ClearReviewClassificationID()
+		return nil
+	case reviewhistory.FieldReviewStateName:
+		m.ClearReviewStateName()
+		return nil
+	case reviewhistory.FieldReviewStateID:
+		m.ClearReviewStateID()
 		return nil
 	case reviewhistory.FieldEnvironmentName:
 		m.ClearEnvironmentName()
@@ -123065,6 +124909,42 @@ func (m *ReviewHistoryMutation) ResetField(name string) error {
 	case reviewhistory.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
+	case reviewhistory.FieldInternalOwner:
+		m.ResetInternalOwner()
+		return nil
+	case reviewhistory.FieldInternalOwnerUserID:
+		m.ResetInternalOwnerUserID()
+		return nil
+	case reviewhistory.FieldInternalOwnerGroupID:
+		m.ResetInternalOwnerGroupID()
+		return nil
+	case reviewhistory.FieldInternalOwnerIdentityHolderID:
+		m.ResetInternalOwnerIdentityHolderID()
+		return nil
+	case reviewhistory.FieldReviewedBy:
+		m.ResetReviewedBy()
+		return nil
+	case reviewhistory.FieldReviewedByUserID:
+		m.ResetReviewedByUserID()
+		return nil
+	case reviewhistory.FieldReviewedByGroupID:
+		m.ResetReviewedByGroupID()
+		return nil
+	case reviewhistory.FieldReviewedByIdentityHolderID:
+		m.ResetReviewedByIdentityHolderID()
+		return nil
+	case reviewhistory.FieldDelegateName:
+		m.ResetDelegateName()
+		return nil
+	case reviewhistory.FieldDelegateUserID:
+		m.ResetDelegateUserID()
+		return nil
+	case reviewhistory.FieldDelegateGroupID:
+		m.ResetDelegateGroupID()
+		return nil
+	case reviewhistory.FieldDelegateIdentityHolderID:
+		m.ResetDelegateIdentityHolderID()
+		return nil
 	case reviewhistory.FieldSystemOwned:
 		m.ResetSystemOwned()
 		return nil
@@ -123073,6 +124953,24 @@ func (m *ReviewHistoryMutation) ResetField(name string) error {
 		return nil
 	case reviewhistory.FieldSystemInternalID:
 		m.ResetSystemInternalID()
+		return nil
+	case reviewhistory.FieldReviewKindName:
+		m.ResetReviewKindName()
+		return nil
+	case reviewhistory.FieldReviewKindID:
+		m.ResetReviewKindID()
+		return nil
+	case reviewhistory.FieldReviewClassificationName:
+		m.ResetReviewClassificationName()
+		return nil
+	case reviewhistory.FieldReviewClassificationID:
+		m.ResetReviewClassificationID()
+		return nil
+	case reviewhistory.FieldReviewStateName:
+		m.ResetReviewStateName()
+		return nil
+	case reviewhistory.FieldReviewStateID:
+		m.ResetReviewStateID()
 		return nil
 	case reviewhistory.FieldEnvironmentName:
 		m.ResetEnvironmentName()

@@ -22,16 +22,19 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
@@ -301,6 +304,246 @@ func (_u *ReviewUpdate) ClearExternalID() *ReviewUpdate {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *ReviewUpdate) SetInternalOwner(v string) *ReviewUpdate {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableInternalOwner(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *ReviewUpdate) ClearInternalOwner() *ReviewUpdate {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *ReviewUpdate) SetInternalOwnerUserID(v string) *ReviewUpdate {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableInternalOwnerUserID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *ReviewUpdate) ClearInternalOwnerUserID() *ReviewUpdate {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *ReviewUpdate) SetInternalOwnerGroupID(v string) *ReviewUpdate {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableInternalOwnerGroupID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *ReviewUpdate) ClearInternalOwnerGroupID() *ReviewUpdate {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *ReviewUpdate) SetInternalOwnerIdentityHolderID(v string) *ReviewUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *ReviewUpdate) ClearInternalOwnerIdentityHolderID() *ReviewUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *ReviewUpdate) SetReviewedBy(v string) *ReviewUpdate {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewedBy(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *ReviewUpdate) ClearReviewedBy() *ReviewUpdate {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *ReviewUpdate) SetReviewedByUserID(v string) *ReviewUpdate {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewedByUserID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *ReviewUpdate) ClearReviewedByUserID() *ReviewUpdate {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *ReviewUpdate) SetReviewedByGroupID(v string) *ReviewUpdate {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewedByGroupID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *ReviewUpdate) ClearReviewedByGroupID() *ReviewUpdate {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *ReviewUpdate) SetReviewedByIdentityHolderID(v string) *ReviewUpdate {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewedByIdentityHolderID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *ReviewUpdate) ClearReviewedByIdentityHolderID() *ReviewUpdate {
+	_u.mutation.ClearReviewedByIdentityHolderID()
+	return _u
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_u *ReviewUpdate) SetDelegateName(v string) *ReviewUpdate {
+	_u.mutation.SetDelegateName(v)
+	return _u
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableDelegateName(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetDelegateName(*v)
+	}
+	return _u
+}
+
+// ClearDelegateName clears the value of the "delegate_name" field.
+func (_u *ReviewUpdate) ClearDelegateName() *ReviewUpdate {
+	_u.mutation.ClearDelegateName()
+	return _u
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_u *ReviewUpdate) SetDelegateUserID(v string) *ReviewUpdate {
+	_u.mutation.SetDelegateUserID(v)
+	return _u
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableDelegateUserID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetDelegateUserID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateUserID clears the value of the "delegate_user_id" field.
+func (_u *ReviewUpdate) ClearDelegateUserID() *ReviewUpdate {
+	_u.mutation.ClearDelegateUserID()
+	return _u
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_u *ReviewUpdate) SetDelegateGroupID(v string) *ReviewUpdate {
+	_u.mutation.SetDelegateGroupID(v)
+	return _u
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableDelegateGroupID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetDelegateGroupID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateGroupID clears the value of the "delegate_group_id" field.
+func (_u *ReviewUpdate) ClearDelegateGroupID() *ReviewUpdate {
+	_u.mutation.ClearDelegateGroupID()
+	return _u
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_u *ReviewUpdate) SetDelegateIdentityHolderID(v string) *ReviewUpdate {
+	_u.mutation.SetDelegateIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableDelegateIdentityHolderID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetDelegateIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateIdentityHolderID clears the value of the "delegate_identity_holder_id" field.
+func (_u *ReviewUpdate) ClearDelegateIdentityHolderID() *ReviewUpdate {
+	_u.mutation.ClearDelegateIdentityHolderID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ReviewUpdate) SetInternalNotes(v string) *ReviewUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -338,6 +581,126 @@ func (_u *ReviewUpdate) SetNillableSystemInternalID(v *string) *ReviewUpdate {
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *ReviewUpdate) ClearSystemInternalID() *ReviewUpdate {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetReviewKindName sets the "review_kind_name" field.
+func (_u *ReviewUpdate) SetReviewKindName(v string) *ReviewUpdate {
+	_u.mutation.SetReviewKindName(v)
+	return _u
+}
+
+// SetNillableReviewKindName sets the "review_kind_name" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewKindName(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewKindName(*v)
+	}
+	return _u
+}
+
+// ClearReviewKindName clears the value of the "review_kind_name" field.
+func (_u *ReviewUpdate) ClearReviewKindName() *ReviewUpdate {
+	_u.mutation.ClearReviewKindName()
+	return _u
+}
+
+// SetReviewKindID sets the "review_kind_id" field.
+func (_u *ReviewUpdate) SetReviewKindID(v string) *ReviewUpdate {
+	_u.mutation.SetReviewKindID(v)
+	return _u
+}
+
+// SetNillableReviewKindID sets the "review_kind_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewKindID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewKindID(*v)
+	}
+	return _u
+}
+
+// ClearReviewKindID clears the value of the "review_kind_id" field.
+func (_u *ReviewUpdate) ClearReviewKindID() *ReviewUpdate {
+	_u.mutation.ClearReviewKindID()
+	return _u
+}
+
+// SetReviewClassificationName sets the "review_classification_name" field.
+func (_u *ReviewUpdate) SetReviewClassificationName(v string) *ReviewUpdate {
+	_u.mutation.SetReviewClassificationName(v)
+	return _u
+}
+
+// SetNillableReviewClassificationName sets the "review_classification_name" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewClassificationName(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewClassificationName(*v)
+	}
+	return _u
+}
+
+// ClearReviewClassificationName clears the value of the "review_classification_name" field.
+func (_u *ReviewUpdate) ClearReviewClassificationName() *ReviewUpdate {
+	_u.mutation.ClearReviewClassificationName()
+	return _u
+}
+
+// SetReviewClassificationID sets the "review_classification_id" field.
+func (_u *ReviewUpdate) SetReviewClassificationID(v string) *ReviewUpdate {
+	_u.mutation.SetReviewClassificationID(v)
+	return _u
+}
+
+// SetNillableReviewClassificationID sets the "review_classification_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewClassificationID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewClassificationID(*v)
+	}
+	return _u
+}
+
+// ClearReviewClassificationID clears the value of the "review_classification_id" field.
+func (_u *ReviewUpdate) ClearReviewClassificationID() *ReviewUpdate {
+	_u.mutation.ClearReviewClassificationID()
+	return _u
+}
+
+// SetReviewStateName sets the "review_state_name" field.
+func (_u *ReviewUpdate) SetReviewStateName(v string) *ReviewUpdate {
+	_u.mutation.SetReviewStateName(v)
+	return _u
+}
+
+// SetNillableReviewStateName sets the "review_state_name" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewStateName(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewStateName(*v)
+	}
+	return _u
+}
+
+// ClearReviewStateName clears the value of the "review_state_name" field.
+func (_u *ReviewUpdate) ClearReviewStateName() *ReviewUpdate {
+	_u.mutation.ClearReviewStateName()
+	return _u
+}
+
+// SetReviewStateID sets the "review_state_id" field.
+func (_u *ReviewUpdate) SetReviewStateID(v string) *ReviewUpdate {
+	_u.mutation.SetReviewStateID(v)
+	return _u
+}
+
+// SetNillableReviewStateID sets the "review_state_id" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableReviewStateID(v *string) *ReviewUpdate {
+	if v != nil {
+		_u.SetReviewStateID(*v)
+	}
+	return _u
+}
+
+// ClearReviewStateID clears the value of the "review_state_id" field.
+func (_u *ReviewUpdate) ClearReviewStateID() *ReviewUpdate {
+	_u.mutation.ClearReviewStateID()
 	return _u
 }
 
@@ -804,6 +1167,66 @@ func (_u *ReviewUpdate) AddEditors(v ...*Group) *ReviewUpdate {
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *ReviewUpdate) SetInternalOwnerUser(v *User) *ReviewUpdate {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *ReviewUpdate) SetInternalOwnerGroup(v *Group) *ReviewUpdate {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *ReviewUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_u *ReviewUpdate) SetReviewedByUser(v *User) *ReviewUpdate {
+	return _u.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_u *ReviewUpdate) SetReviewedByGroup(v *Group) *ReviewUpdate {
+	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdate) SetReviewedByIdentityHolder(v *IdentityHolder) *ReviewUpdate {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
+}
+
+// SetDelegateUser sets the "delegate_user" edge to the User entity.
+func (_u *ReviewUpdate) SetDelegateUser(v *User) *ReviewUpdate {
+	return _u.SetDelegateUserID(v.ID)
+}
+
+// SetDelegateGroup sets the "delegate_group" edge to the Group entity.
+func (_u *ReviewUpdate) SetDelegateGroup(v *Group) *ReviewUpdate {
+	return _u.SetDelegateGroupID(v.ID)
+}
+
+// SetDelegateIdentityHolder sets the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdate) SetDelegateIdentityHolder(v *IdentityHolder) *ReviewUpdate {
+	return _u.SetDelegateIdentityHolderID(v.ID)
+}
+
+// SetReviewKind sets the "review_kind" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdate) SetReviewKind(v *CustomTypeEnum) *ReviewUpdate {
+	return _u.SetReviewKindID(v.ID)
+}
+
+// SetReviewClassification sets the "review_classification" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdate) SetReviewClassification(v *CustomTypeEnum) *ReviewUpdate {
+	return _u.SetReviewClassificationID(v.ID)
+}
+
+// SetReviewState sets the "review_state" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdate) SetReviewState(v *CustomTypeEnum) *ReviewUpdate {
+	return _u.SetReviewStateID(v.ID)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *ReviewUpdate) SetEnvironment(v *CustomTypeEnum) *ReviewUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -1029,6 +1452,36 @@ func (_u *ReviewUpdate) AddFiles(v ...*File) *ReviewUpdate {
 	return _u.AddFileIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *ReviewUpdate) AddPlatformIDs(ids ...string) *ReviewUpdate {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *ReviewUpdate) AddPlatforms(v ...*Platform) *ReviewUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_u *ReviewUpdate) AddSystemDetailIDs(ids ...string) *ReviewUpdate {
+	_u.mutation.AddSystemDetailIDs(ids...)
+	return _u
+}
+
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_u *ReviewUpdate) AddSystemDetails(v ...*SystemDetail) *ReviewUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSystemDetailIDs(ids...)
+}
+
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (_u *ReviewUpdate) AddInternalPolicyIDs(ids ...string) *ReviewUpdate {
 	_u.mutation.AddInternalPolicyIDs(ids...)
@@ -1110,6 +1563,78 @@ func (_u *ReviewUpdate) RemoveEditors(v ...*Group) *ReviewUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *ReviewUpdate) ClearInternalOwnerUser() *ReviewUpdate {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *ReviewUpdate) ClearInternalOwnerGroup() *ReviewUpdate {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdate) ClearInternalOwnerIdentityHolder() *ReviewUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
+}
+
+// ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
+func (_u *ReviewUpdate) ClearReviewedByUser() *ReviewUpdate {
+	_u.mutation.ClearReviewedByUser()
+	return _u
+}
+
+// ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
+func (_u *ReviewUpdate) ClearReviewedByGroup() *ReviewUpdate {
+	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdate) ClearReviewedByIdentityHolder() *ReviewUpdate {
+	_u.mutation.ClearReviewedByIdentityHolder()
+	return _u
+}
+
+// ClearDelegateUser clears the "delegate_user" edge to the User entity.
+func (_u *ReviewUpdate) ClearDelegateUser() *ReviewUpdate {
+	_u.mutation.ClearDelegateUser()
+	return _u
+}
+
+// ClearDelegateGroup clears the "delegate_group" edge to the Group entity.
+func (_u *ReviewUpdate) ClearDelegateGroup() *ReviewUpdate {
+	_u.mutation.ClearDelegateGroup()
+	return _u
+}
+
+// ClearDelegateIdentityHolder clears the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdate) ClearDelegateIdentityHolder() *ReviewUpdate {
+	_u.mutation.ClearDelegateIdentityHolder()
+	return _u
+}
+
+// ClearReviewKind clears the "review_kind" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdate) ClearReviewKind() *ReviewUpdate {
+	_u.mutation.ClearReviewKind()
+	return _u
+}
+
+// ClearReviewClassification clears the "review_classification" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdate) ClearReviewClassification() *ReviewUpdate {
+	_u.mutation.ClearReviewClassification()
+	return _u
+}
+
+// ClearReviewState clears the "review_state" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdate) ClearReviewState() *ReviewUpdate {
+	_u.mutation.ClearReviewState()
+	return _u
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -1424,6 +1949,48 @@ func (_u *ReviewUpdate) RemoveFiles(v ...*File) *ReviewUpdate {
 	return _u.RemoveFileIDs(ids...)
 }
 
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *ReviewUpdate) ClearPlatforms() *ReviewUpdate {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *ReviewUpdate) RemovePlatformIDs(ids ...string) *ReviewUpdate {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *ReviewUpdate) RemovePlatforms(v ...*Platform) *ReviewUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearSystemDetails clears all "system_details" edges to the SystemDetail entity.
+func (_u *ReviewUpdate) ClearSystemDetails() *ReviewUpdate {
+	_u.mutation.ClearSystemDetails()
+	return _u
+}
+
+// RemoveSystemDetailIDs removes the "system_details" edge to SystemDetail entities by IDs.
+func (_u *ReviewUpdate) RemoveSystemDetailIDs(ids ...string) *ReviewUpdate {
+	_u.mutation.RemoveSystemDetailIDs(ids...)
+	return _u
+}
+
+// RemoveSystemDetails removes "system_details" edges to SystemDetail entities.
+func (_u *ReviewUpdate) RemoveSystemDetails(v ...*SystemDetail) *ReviewUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSystemDetailIDs(ids...)
+}
+
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
 func (_u *ReviewUpdate) ClearInternalPolicies() *ReviewUpdate {
 	_u.mutation.ClearInternalPolicies()
@@ -1609,6 +2176,24 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(review.FieldExternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(review.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(review.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(review.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(review.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.DelegateName(); ok {
+		_spec.SetField(review.FieldDelegateName, field.TypeString, value)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(review.FieldDelegateName, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(review.FieldSystemOwned, field.TypeBool)
 	}
@@ -1623,6 +2208,24 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(review.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewKindName(); ok {
+		_spec.SetField(review.FieldReviewKindName, field.TypeString, value)
+	}
+	if _u.mutation.ReviewKindNameCleared() {
+		_spec.ClearField(review.FieldReviewKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewClassificationName(); ok {
+		_spec.SetField(review.FieldReviewClassificationName, field.TypeString, value)
+	}
+	if _u.mutation.ReviewClassificationNameCleared() {
+		_spec.ClearField(review.FieldReviewClassificationName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewStateName(); ok {
+		_spec.SetField(review.FieldReviewStateName, field.TypeString, value)
+	}
+	if _u.mutation.ReviewStateNameCleared() {
+		_spec.ClearField(review.FieldReviewStateName, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(review.FieldEnvironmentName, field.TypeString, value)
@@ -1863,6 +2466,354 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerUserTable,
+			Columns: []string{review.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerUserTable,
+			Columns: []string{review.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerGroupTable,
+			Columns: []string{review.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerGroupTable,
+			Columns: []string{review.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerIdentityHolderTable,
+			Columns: []string{review.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerIdentityHolderTable,
+			Columns: []string{review.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByUserTable,
+			Columns: []string{review.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByUserTable,
+			Columns: []string{review.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByGroupTable,
+			Columns: []string{review.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByGroupTable,
+			Columns: []string{review.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByIdentityHolderTable,
+			Columns: []string{review.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByIdentityHolderTable,
+			Columns: []string{review.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateUserTable,
+			Columns: []string{review.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateUserTable,
+			Columns: []string{review.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateGroupTable,
+			Columns: []string{review.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateGroupTable,
+			Columns: []string{review.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateIdentityHolderTable,
+			Columns: []string{review.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateIdentityHolderTable,
+			Columns: []string{review.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewKindTable,
+			Columns: []string{review.ReviewKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewKindTable,
+			Columns: []string{review.ReviewKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewClassificationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewClassificationTable,
+			Columns: []string{review.ReviewClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewClassificationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewClassificationTable,
+			Columns: []string{review.ReviewClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewStateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewStateTable,
+			Columns: []string{review.ReviewStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewStateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewStateTable,
+			Columns: []string{review.ReviewStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -2587,6 +3538,96 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.PlatformsTable,
+			Columns: review.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.PlatformsTable,
+			Columns: review.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.PlatformsTable,
+			Columns: review.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SystemDetailsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.SystemDetailsTable,
+			Columns: review.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSystemDetailsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.SystemDetailsTable,
+			Columns: review.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.SystemDetailsTable,
+			Columns: review.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2904,6 +3945,246 @@ func (_u *ReviewUpdateOne) ClearExternalID() *ReviewUpdateOne {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *ReviewUpdateOne) SetInternalOwner(v string) *ReviewUpdateOne {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableInternalOwner(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *ReviewUpdateOne) ClearInternalOwner() *ReviewUpdateOne {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *ReviewUpdateOne) SetInternalOwnerUserID(v string) *ReviewUpdateOne {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableInternalOwnerUserID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *ReviewUpdateOne) ClearInternalOwnerUserID() *ReviewUpdateOne {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *ReviewUpdateOne) SetInternalOwnerGroupID(v string) *ReviewUpdateOne {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableInternalOwnerGroupID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *ReviewUpdateOne) ClearInternalOwnerGroupID() *ReviewUpdateOne {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *ReviewUpdateOne) SetInternalOwnerIdentityHolderID(v string) *ReviewUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *ReviewUpdateOne) ClearInternalOwnerIdentityHolderID() *ReviewUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *ReviewUpdateOne) SetReviewedBy(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewedBy(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *ReviewUpdateOne) ClearReviewedBy() *ReviewUpdateOne {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *ReviewUpdateOne) SetReviewedByUserID(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewedByUserID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *ReviewUpdateOne) ClearReviewedByUserID() *ReviewUpdateOne {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *ReviewUpdateOne) SetReviewedByGroupID(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewedByGroupID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *ReviewUpdateOne) ClearReviewedByGroupID() *ReviewUpdateOne {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *ReviewUpdateOne) SetReviewedByIdentityHolderID(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewedByIdentityHolderID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *ReviewUpdateOne) ClearReviewedByIdentityHolderID() *ReviewUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolderID()
+	return _u
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_u *ReviewUpdateOne) SetDelegateName(v string) *ReviewUpdateOne {
+	_u.mutation.SetDelegateName(v)
+	return _u
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableDelegateName(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetDelegateName(*v)
+	}
+	return _u
+}
+
+// ClearDelegateName clears the value of the "delegate_name" field.
+func (_u *ReviewUpdateOne) ClearDelegateName() *ReviewUpdateOne {
+	_u.mutation.ClearDelegateName()
+	return _u
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_u *ReviewUpdateOne) SetDelegateUserID(v string) *ReviewUpdateOne {
+	_u.mutation.SetDelegateUserID(v)
+	return _u
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableDelegateUserID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetDelegateUserID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateUserID clears the value of the "delegate_user_id" field.
+func (_u *ReviewUpdateOne) ClearDelegateUserID() *ReviewUpdateOne {
+	_u.mutation.ClearDelegateUserID()
+	return _u
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_u *ReviewUpdateOne) SetDelegateGroupID(v string) *ReviewUpdateOne {
+	_u.mutation.SetDelegateGroupID(v)
+	return _u
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableDelegateGroupID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetDelegateGroupID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateGroupID clears the value of the "delegate_group_id" field.
+func (_u *ReviewUpdateOne) ClearDelegateGroupID() *ReviewUpdateOne {
+	_u.mutation.ClearDelegateGroupID()
+	return _u
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_u *ReviewUpdateOne) SetDelegateIdentityHolderID(v string) *ReviewUpdateOne {
+	_u.mutation.SetDelegateIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableDelegateIdentityHolderID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetDelegateIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateIdentityHolderID clears the value of the "delegate_identity_holder_id" field.
+func (_u *ReviewUpdateOne) ClearDelegateIdentityHolderID() *ReviewUpdateOne {
+	_u.mutation.ClearDelegateIdentityHolderID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ReviewUpdateOne) SetInternalNotes(v string) *ReviewUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -2941,6 +4222,126 @@ func (_u *ReviewUpdateOne) SetNillableSystemInternalID(v *string) *ReviewUpdateO
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *ReviewUpdateOne) ClearSystemInternalID() *ReviewUpdateOne {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetReviewKindName sets the "review_kind_name" field.
+func (_u *ReviewUpdateOne) SetReviewKindName(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewKindName(v)
+	return _u
+}
+
+// SetNillableReviewKindName sets the "review_kind_name" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewKindName(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewKindName(*v)
+	}
+	return _u
+}
+
+// ClearReviewKindName clears the value of the "review_kind_name" field.
+func (_u *ReviewUpdateOne) ClearReviewKindName() *ReviewUpdateOne {
+	_u.mutation.ClearReviewKindName()
+	return _u
+}
+
+// SetReviewKindID sets the "review_kind_id" field.
+func (_u *ReviewUpdateOne) SetReviewKindID(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewKindID(v)
+	return _u
+}
+
+// SetNillableReviewKindID sets the "review_kind_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewKindID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewKindID(*v)
+	}
+	return _u
+}
+
+// ClearReviewKindID clears the value of the "review_kind_id" field.
+func (_u *ReviewUpdateOne) ClearReviewKindID() *ReviewUpdateOne {
+	_u.mutation.ClearReviewKindID()
+	return _u
+}
+
+// SetReviewClassificationName sets the "review_classification_name" field.
+func (_u *ReviewUpdateOne) SetReviewClassificationName(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewClassificationName(v)
+	return _u
+}
+
+// SetNillableReviewClassificationName sets the "review_classification_name" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewClassificationName(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewClassificationName(*v)
+	}
+	return _u
+}
+
+// ClearReviewClassificationName clears the value of the "review_classification_name" field.
+func (_u *ReviewUpdateOne) ClearReviewClassificationName() *ReviewUpdateOne {
+	_u.mutation.ClearReviewClassificationName()
+	return _u
+}
+
+// SetReviewClassificationID sets the "review_classification_id" field.
+func (_u *ReviewUpdateOne) SetReviewClassificationID(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewClassificationID(v)
+	return _u
+}
+
+// SetNillableReviewClassificationID sets the "review_classification_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewClassificationID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewClassificationID(*v)
+	}
+	return _u
+}
+
+// ClearReviewClassificationID clears the value of the "review_classification_id" field.
+func (_u *ReviewUpdateOne) ClearReviewClassificationID() *ReviewUpdateOne {
+	_u.mutation.ClearReviewClassificationID()
+	return _u
+}
+
+// SetReviewStateName sets the "review_state_name" field.
+func (_u *ReviewUpdateOne) SetReviewStateName(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewStateName(v)
+	return _u
+}
+
+// SetNillableReviewStateName sets the "review_state_name" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewStateName(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewStateName(*v)
+	}
+	return _u
+}
+
+// ClearReviewStateName clears the value of the "review_state_name" field.
+func (_u *ReviewUpdateOne) ClearReviewStateName() *ReviewUpdateOne {
+	_u.mutation.ClearReviewStateName()
+	return _u
+}
+
+// SetReviewStateID sets the "review_state_id" field.
+func (_u *ReviewUpdateOne) SetReviewStateID(v string) *ReviewUpdateOne {
+	_u.mutation.SetReviewStateID(v)
+	return _u
+}
+
+// SetNillableReviewStateID sets the "review_state_id" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableReviewStateID(v *string) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetReviewStateID(*v)
+	}
+	return _u
+}
+
+// ClearReviewStateID clears the value of the "review_state_id" field.
+func (_u *ReviewUpdateOne) ClearReviewStateID() *ReviewUpdateOne {
+	_u.mutation.ClearReviewStateID()
 	return _u
 }
 
@@ -3407,6 +4808,66 @@ func (_u *ReviewUpdateOne) AddEditors(v ...*Group) *ReviewUpdateOne {
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *ReviewUpdateOne) SetInternalOwnerUser(v *User) *ReviewUpdateOne {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *ReviewUpdateOne) SetInternalOwnerGroup(v *Group) *ReviewUpdateOne {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *ReviewUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_u *ReviewUpdateOne) SetReviewedByUser(v *User) *ReviewUpdateOne {
+	return _u.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_u *ReviewUpdateOne) SetReviewedByGroup(v *Group) *ReviewUpdateOne {
+	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdateOne) SetReviewedByIdentityHolder(v *IdentityHolder) *ReviewUpdateOne {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
+}
+
+// SetDelegateUser sets the "delegate_user" edge to the User entity.
+func (_u *ReviewUpdateOne) SetDelegateUser(v *User) *ReviewUpdateOne {
+	return _u.SetDelegateUserID(v.ID)
+}
+
+// SetDelegateGroup sets the "delegate_group" edge to the Group entity.
+func (_u *ReviewUpdateOne) SetDelegateGroup(v *Group) *ReviewUpdateOne {
+	return _u.SetDelegateGroupID(v.ID)
+}
+
+// SetDelegateIdentityHolder sets the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdateOne) SetDelegateIdentityHolder(v *IdentityHolder) *ReviewUpdateOne {
+	return _u.SetDelegateIdentityHolderID(v.ID)
+}
+
+// SetReviewKind sets the "review_kind" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdateOne) SetReviewKind(v *CustomTypeEnum) *ReviewUpdateOne {
+	return _u.SetReviewKindID(v.ID)
+}
+
+// SetReviewClassification sets the "review_classification" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdateOne) SetReviewClassification(v *CustomTypeEnum) *ReviewUpdateOne {
+	return _u.SetReviewClassificationID(v.ID)
+}
+
+// SetReviewState sets the "review_state" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdateOne) SetReviewState(v *CustomTypeEnum) *ReviewUpdateOne {
+	return _u.SetReviewStateID(v.ID)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *ReviewUpdateOne) SetEnvironment(v *CustomTypeEnum) *ReviewUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -3632,6 +5093,36 @@ func (_u *ReviewUpdateOne) AddFiles(v ...*File) *ReviewUpdateOne {
 	return _u.AddFileIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *ReviewUpdateOne) AddPlatformIDs(ids ...string) *ReviewUpdateOne {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *ReviewUpdateOne) AddPlatforms(v ...*Platform) *ReviewUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_u *ReviewUpdateOne) AddSystemDetailIDs(ids ...string) *ReviewUpdateOne {
+	_u.mutation.AddSystemDetailIDs(ids...)
+	return _u
+}
+
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_u *ReviewUpdateOne) AddSystemDetails(v ...*SystemDetail) *ReviewUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSystemDetailIDs(ids...)
+}
+
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (_u *ReviewUpdateOne) AddInternalPolicyIDs(ids ...string) *ReviewUpdateOne {
 	_u.mutation.AddInternalPolicyIDs(ids...)
@@ -3713,6 +5204,78 @@ func (_u *ReviewUpdateOne) RemoveEditors(v ...*Group) *ReviewUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *ReviewUpdateOne) ClearInternalOwnerUser() *ReviewUpdateOne {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *ReviewUpdateOne) ClearInternalOwnerGroup() *ReviewUpdateOne {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdateOne) ClearInternalOwnerIdentityHolder() *ReviewUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
+}
+
+// ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
+func (_u *ReviewUpdateOne) ClearReviewedByUser() *ReviewUpdateOne {
+	_u.mutation.ClearReviewedByUser()
+	return _u
+}
+
+// ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
+func (_u *ReviewUpdateOne) ClearReviewedByGroup() *ReviewUpdateOne {
+	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdateOne) ClearReviewedByIdentityHolder() *ReviewUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolder()
+	return _u
+}
+
+// ClearDelegateUser clears the "delegate_user" edge to the User entity.
+func (_u *ReviewUpdateOne) ClearDelegateUser() *ReviewUpdateOne {
+	_u.mutation.ClearDelegateUser()
+	return _u
+}
+
+// ClearDelegateGroup clears the "delegate_group" edge to the Group entity.
+func (_u *ReviewUpdateOne) ClearDelegateGroup() *ReviewUpdateOne {
+	_u.mutation.ClearDelegateGroup()
+	return _u
+}
+
+// ClearDelegateIdentityHolder clears the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_u *ReviewUpdateOne) ClearDelegateIdentityHolder() *ReviewUpdateOne {
+	_u.mutation.ClearDelegateIdentityHolder()
+	return _u
+}
+
+// ClearReviewKind clears the "review_kind" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdateOne) ClearReviewKind() *ReviewUpdateOne {
+	_u.mutation.ClearReviewKind()
+	return _u
+}
+
+// ClearReviewClassification clears the "review_classification" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdateOne) ClearReviewClassification() *ReviewUpdateOne {
+	_u.mutation.ClearReviewClassification()
+	return _u
+}
+
+// ClearReviewState clears the "review_state" edge to the CustomTypeEnum entity.
+func (_u *ReviewUpdateOne) ClearReviewState() *ReviewUpdateOne {
+	_u.mutation.ClearReviewState()
+	return _u
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -4027,6 +5590,48 @@ func (_u *ReviewUpdateOne) RemoveFiles(v ...*File) *ReviewUpdateOne {
 	return _u.RemoveFileIDs(ids...)
 }
 
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *ReviewUpdateOne) ClearPlatforms() *ReviewUpdateOne {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *ReviewUpdateOne) RemovePlatformIDs(ids ...string) *ReviewUpdateOne {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *ReviewUpdateOne) RemovePlatforms(v ...*Platform) *ReviewUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearSystemDetails clears all "system_details" edges to the SystemDetail entity.
+func (_u *ReviewUpdateOne) ClearSystemDetails() *ReviewUpdateOne {
+	_u.mutation.ClearSystemDetails()
+	return _u
+}
+
+// RemoveSystemDetailIDs removes the "system_details" edge to SystemDetail entities by IDs.
+func (_u *ReviewUpdateOne) RemoveSystemDetailIDs(ids ...string) *ReviewUpdateOne {
+	_u.mutation.RemoveSystemDetailIDs(ids...)
+	return _u
+}
+
+// RemoveSystemDetails removes "system_details" edges to SystemDetail entities.
+func (_u *ReviewUpdateOne) RemoveSystemDetails(v ...*SystemDetail) *ReviewUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSystemDetailIDs(ids...)
+}
+
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
 func (_u *ReviewUpdateOne) ClearInternalPolicies() *ReviewUpdateOne {
 	_u.mutation.ClearInternalPolicies()
@@ -4242,6 +5847,24 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(review.FieldExternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(review.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(review.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(review.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(review.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.DelegateName(); ok {
+		_spec.SetField(review.FieldDelegateName, field.TypeString, value)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(review.FieldDelegateName, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(review.FieldSystemOwned, field.TypeBool)
 	}
@@ -4256,6 +5879,24 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(review.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewKindName(); ok {
+		_spec.SetField(review.FieldReviewKindName, field.TypeString, value)
+	}
+	if _u.mutation.ReviewKindNameCleared() {
+		_spec.ClearField(review.FieldReviewKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewClassificationName(); ok {
+		_spec.SetField(review.FieldReviewClassificationName, field.TypeString, value)
+	}
+	if _u.mutation.ReviewClassificationNameCleared() {
+		_spec.ClearField(review.FieldReviewClassificationName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewStateName(); ok {
+		_spec.SetField(review.FieldReviewStateName, field.TypeString, value)
+	}
+	if _u.mutation.ReviewStateNameCleared() {
+		_spec.ClearField(review.FieldReviewStateName, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(review.FieldEnvironmentName, field.TypeString, value)
@@ -4496,6 +6137,354 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerUserTable,
+			Columns: []string{review.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerUserTable,
+			Columns: []string{review.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerGroupTable,
+			Columns: []string{review.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerGroupTable,
+			Columns: []string{review.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerIdentityHolderTable,
+			Columns: []string{review.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.InternalOwnerIdentityHolderTable,
+			Columns: []string{review.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByUserTable,
+			Columns: []string{review.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByUserTable,
+			Columns: []string{review.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByGroupTable,
+			Columns: []string{review.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByGroupTable,
+			Columns: []string{review.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByIdentityHolderTable,
+			Columns: []string{review.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewedByIdentityHolderTable,
+			Columns: []string{review.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateUserTable,
+			Columns: []string{review.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateUserTable,
+			Columns: []string{review.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateGroupTable,
+			Columns: []string{review.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateGroupTable,
+			Columns: []string{review.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateIdentityHolderTable,
+			Columns: []string{review.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.DelegateIdentityHolderTable,
+			Columns: []string{review.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewKindTable,
+			Columns: []string{review.ReviewKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewKindTable,
+			Columns: []string{review.ReviewKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewClassificationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewClassificationTable,
+			Columns: []string{review.ReviewClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewClassificationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewClassificationTable,
+			Columns: []string{review.ReviewClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewStateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewStateTable,
+			Columns: []string{review.ReviewStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewStateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewStateTable,
+			Columns: []string{review.ReviewStateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -5213,6 +7202,96 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.PlatformsTable,
+			Columns: review.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.PlatformsTable,
+			Columns: review.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.PlatformsTable,
+			Columns: review.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SystemDetailsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.SystemDetailsTable,
+			Columns: review.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSystemDetailsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.SystemDetailsTable,
+			Columns: review.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.SystemDetailsTable,
+			Columns: review.SystemDetailsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

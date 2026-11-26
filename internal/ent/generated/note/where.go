@@ -1425,6 +1425,29 @@ func HasFindingWith(preds ...predicate.Finding) predicate.Note {
 	})
 }
 
+// HasControlImplementation applies the HasEdge predicate on the "control_implementation" edge.
+func HasControlImplementation() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ControlImplementationTable, ControlImplementationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlImplementationWith applies the HasEdge predicate on the "control_implementation" edge with a given conditions (other predicates).
+func HasControlImplementationWith(preds ...predicate.ControlImplementation) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newControlImplementationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEvidence applies the HasEdge predicate on the "evidence" edge.
 func HasEvidence() predicate.Note {
 	return predicate.Note(func(s *sql.Selector) {

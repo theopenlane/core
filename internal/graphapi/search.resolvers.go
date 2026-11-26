@@ -22,47 +22,48 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
 	var (
-		errors                      []error
-		actionplanResults           *generated.ActionPlanConnection
-		assessmentResults           *generated.AssessmentConnection
-		assessmentresponseResults   *generated.AssessmentResponseConnection
-		assetResults                *generated.AssetConnection
-		campaignResults             *generated.CampaignConnection
-		campaigntargetResults       *generated.CampaignTargetConnection
-		contactResults              *generated.ContactConnection
-		controlResults              *generated.ControlConnection
-		controlobjectiveResults     *generated.ControlObjectiveConnection
-		customtypeenumResults       *generated.CustomTypeEnumConnection
-		emailtemplateResults        *generated.EmailTemplateConnection
-		entityResults               *generated.EntityConnection
-		evidenceResults             *generated.EvidenceConnection
-		findingResults              *generated.FindingConnection
-		groupResults                *generated.GroupConnection
-		identityholderResults       *generated.IdentityHolderConnection
-		integrationResults          *generated.IntegrationConnection
-		internalpolicyResults       *generated.InternalPolicyConnection
-		inviteResults               *generated.InviteConnection
-		narrativeResults            *generated.NarrativeConnection
-		notificationtemplateResults *generated.NotificationTemplateConnection
-		organizationResults         *generated.OrganizationConnection
-		platformResults             *generated.PlatformConnection
-		procedureResults            *generated.ProcedureConnection
-		programResults              *generated.ProgramConnection
-		remediationResults          *generated.RemediationConnection
-		reportResults               *generated.ReportConnection
-		reviewResults               *generated.ReviewConnection
-		riskResults                 *generated.RiskConnection
-		scanResults                 *generated.ScanConnection
-		standardResults             *generated.StandardConnection
-		subcontrolResults           *generated.SubcontrolConnection
-		subprocessorResults         *generated.SubprocessorConnection
-		subscriberResults           *generated.SubscriberConnection
-		systemdetailResults         *generated.SystemDetailConnection
-		tagdefinitionResults        *generated.TagDefinitionConnection
-		taskResults                 *generated.TaskConnection
-		templateResults             *generated.TemplateConnection
-		trustcenterentityResults    *generated.TrustCenterEntityConnection
-		vulnerabilityResults        *generated.VulnerabilityConnection
+		errors                       []error
+		actionplanResults            *generated.ActionPlanConnection
+		assessmentResults            *generated.AssessmentConnection
+		assessmentresponseResults    *generated.AssessmentResponseConnection
+		assetResults                 *generated.AssetConnection
+		campaignResults              *generated.CampaignConnection
+		campaigntargetResults        *generated.CampaignTargetConnection
+		contactResults               *generated.ContactConnection
+		controlResults               *generated.ControlConnection
+		controlimplementationResults *generated.ControlImplementationConnection
+		controlobjectiveResults      *generated.ControlObjectiveConnection
+		customtypeenumResults        *generated.CustomTypeEnumConnection
+		emailtemplateResults         *generated.EmailTemplateConnection
+		entityResults                *generated.EntityConnection
+		evidenceResults              *generated.EvidenceConnection
+		findingResults               *generated.FindingConnection
+		groupResults                 *generated.GroupConnection
+		identityholderResults        *generated.IdentityHolderConnection
+		integrationResults           *generated.IntegrationConnection
+		internalpolicyResults        *generated.InternalPolicyConnection
+		inviteResults                *generated.InviteConnection
+		narrativeResults             *generated.NarrativeConnection
+		notificationtemplateResults  *generated.NotificationTemplateConnection
+		organizationResults          *generated.OrganizationConnection
+		platformResults              *generated.PlatformConnection
+		procedureResults             *generated.ProcedureConnection
+		programResults               *generated.ProgramConnection
+		remediationResults           *generated.RemediationConnection
+		reportResults                *generated.ReportConnection
+		reviewResults                *generated.ReviewConnection
+		riskResults                  *generated.RiskConnection
+		scanResults                  *generated.ScanConnection
+		standardResults              *generated.StandardConnection
+		subcontrolResults            *generated.SubcontrolConnection
+		subprocessorResults          *generated.SubprocessorConnection
+		subscriberResults            *generated.SubscriberConnection
+		systemdetailResults          *generated.SystemDetailConnection
+		tagdefinitionResults         *generated.TagDefinitionConnection
+		taskResults                  *generated.TaskConnection
+		templateResults              *generated.TemplateConnection
+		trustcenterentityResults     *generated.TrustCenterEntityConnection
+		vulnerabilityResults         *generated.VulnerabilityConnection
 	)
 
 	highlightTracker := newContextTracker(query)
@@ -164,6 +165,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, controlResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			controlimplementationResults, err = searchControlImplementations(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, controlimplementationResults, highlightTracker)
 			}
 		},
 		func() {
@@ -604,6 +617,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += controlResults.TotalCount
 	}
+	if controlimplementationResults != nil && len(controlimplementationResults.Edges) > 0 {
+		res.ControlImplementations = controlimplementationResults
+
+		res.TotalCount += controlimplementationResults.TotalCount
+	}
 	if controlobjectiveResults != nil && len(controlobjectiveResults.Edges) > 0 {
 		res.ControlObjectives = controlobjectiveResults
 
@@ -846,6 +864,16 @@ func (r *queryResolver) ControlSearch(ctx context.Context, query string, after *
 
 	// return the results
 	return controlResults, nil
+}
+func (r *queryResolver) ControlImplementationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlImplementationConnection, error) {
+	controlimplementationResults, err := searchControlImplementations(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return controlimplementationResults, nil
 }
 func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlObjectiveConnection, error) {
 	controlobjectiveResults, err := searchControlObjectives(ctx, query, after, first, before, last)

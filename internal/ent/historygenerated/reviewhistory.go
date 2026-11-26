@@ -61,12 +61,48 @@ type ReviewHistory struct {
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the internal owner for the review when no user, group, or identity holder is linked
+	InternalOwner string `json:"internal_owner,omitempty"`
+	// the internal owner user id for the review
+	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
+	// the internal owner group id for the review
+	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the review
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
+	// who reviewed the review when no user, group, or identity holder is linked
+	ReviewedBy string `json:"reviewed_by,omitempty"`
+	// the user id that reviewed the review
+	ReviewedByUserID string `json:"reviewed_by_user_id,omitempty"`
+	// the group id that reviewed the review
+	ReviewedByGroupID string `json:"reviewed_by_group_id,omitempty"`
+	// the identity holder id that reviewed the review
+	ReviewedByIdentityHolderID string `json:"reviewed_by_identity_holder_id,omitempty"`
+	// the delegate for the review when no user, group, or identity holder is linked
+	DelegateName string `json:"delegate_name,omitempty"`
+	// the delegate user id for the review
+	DelegateUserID string `json:"delegate_user_id,omitempty"`
+	// the delegate group id for the review
+	DelegateGroupID string `json:"delegate_group_id,omitempty"`
+	// the delegate identity holder id for the review
+	DelegateIdentityHolderID string `json:"delegate_identity_holder_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the kind of the review
+	ReviewKindName string `json:"review_kind_name,omitempty"`
+	// the kind of the review
+	ReviewKindID string `json:"review_kind_id,omitempty"`
+	// the classification of the review
+	ReviewClassificationName string `json:"review_classification_name,omitempty"`
+	// the classification of the review
+	ReviewClassificationID string `json:"review_classification_id,omitempty"`
+	// the state of the review
+	ReviewStateName string `json:"review_state_name,omitempty"`
+	// the state of the review
+	ReviewStateID string `json:"review_state_id,omitempty"`
 	// the environment of the review
 	EnvironmentName string `json:"environment_name,omitempty"`
 	// the environment of the review
@@ -127,7 +163,7 @@ func (*ReviewHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case reviewhistory.FieldSystemOwned, reviewhistory.FieldApproved:
 			values[i] = new(sql.NullBool)
-		case reviewhistory.FieldID, reviewhistory.FieldRef, reviewhistory.FieldCreatedBy, reviewhistory.FieldUpdatedBy, reviewhistory.FieldUpdatedByImpersonator, reviewhistory.FieldDeletedBy, reviewhistory.FieldSourceDefinitionID, reviewhistory.FieldSourceDefinitionVersion, reviewhistory.FieldSourceInstanceID, reviewhistory.FieldManagedBy, reviewhistory.FieldIntegrationRunID, reviewhistory.FieldSourceKey, reviewhistory.FieldExternalID, reviewhistory.FieldOwnerID, reviewhistory.FieldInternalNotes, reviewhistory.FieldSystemInternalID, reviewhistory.FieldEnvironmentName, reviewhistory.FieldEnvironmentID, reviewhistory.FieldScopeName, reviewhistory.FieldScopeID, reviewhistory.FieldExternalOwnerID, reviewhistory.FieldTitle, reviewhistory.FieldState, reviewhistory.FieldStatus, reviewhistory.FieldCategory, reviewhistory.FieldClassification, reviewhistory.FieldSummary, reviewhistory.FieldDetails, reviewhistory.FieldReporter, reviewhistory.FieldReviewerID, reviewhistory.FieldSource, reviewhistory.FieldExternalURI:
+		case reviewhistory.FieldID, reviewhistory.FieldRef, reviewhistory.FieldCreatedBy, reviewhistory.FieldUpdatedBy, reviewhistory.FieldUpdatedByImpersonator, reviewhistory.FieldDeletedBy, reviewhistory.FieldSourceDefinitionID, reviewhistory.FieldSourceDefinitionVersion, reviewhistory.FieldSourceInstanceID, reviewhistory.FieldManagedBy, reviewhistory.FieldIntegrationRunID, reviewhistory.FieldSourceKey, reviewhistory.FieldExternalID, reviewhistory.FieldOwnerID, reviewhistory.FieldInternalOwner, reviewhistory.FieldInternalOwnerUserID, reviewhistory.FieldInternalOwnerGroupID, reviewhistory.FieldInternalOwnerIdentityHolderID, reviewhistory.FieldReviewedBy, reviewhistory.FieldReviewedByUserID, reviewhistory.FieldReviewedByGroupID, reviewhistory.FieldReviewedByIdentityHolderID, reviewhistory.FieldDelegateName, reviewhistory.FieldDelegateUserID, reviewhistory.FieldDelegateGroupID, reviewhistory.FieldDelegateIdentityHolderID, reviewhistory.FieldInternalNotes, reviewhistory.FieldSystemInternalID, reviewhistory.FieldReviewKindName, reviewhistory.FieldReviewKindID, reviewhistory.FieldReviewClassificationName, reviewhistory.FieldReviewClassificationID, reviewhistory.FieldReviewStateName, reviewhistory.FieldReviewStateID, reviewhistory.FieldEnvironmentName, reviewhistory.FieldEnvironmentID, reviewhistory.FieldScopeName, reviewhistory.FieldScopeID, reviewhistory.FieldExternalOwnerID, reviewhistory.FieldTitle, reviewhistory.FieldState, reviewhistory.FieldStatus, reviewhistory.FieldCategory, reviewhistory.FieldClassification, reviewhistory.FieldSummary, reviewhistory.FieldDetails, reviewhistory.FieldReporter, reviewhistory.FieldReviewerID, reviewhistory.FieldSource, reviewhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case reviewhistory.FieldHistoryTime, reviewhistory.FieldCreatedAt, reviewhistory.FieldUpdatedAt, reviewhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -269,6 +305,78 @@ func (_m *ReviewHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case reviewhistory.FieldInternalOwner:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner", values[i])
+			} else if value.Valid {
+				_m.InternalOwner = value.String
+			}
+		case reviewhistory.FieldInternalOwnerUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_user_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerUserID = value.String
+			}
+		case reviewhistory.FieldInternalOwnerGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerGroupID = value.String
+			}
+		case reviewhistory.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
+			}
+		case reviewhistory.FieldReviewedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by", values[i])
+			} else if value.Valid {
+				_m.ReviewedBy = value.String
+			}
+		case reviewhistory.FieldReviewedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByUserID = value.String
+			}
+		case reviewhistory.FieldReviewedByGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_group_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByGroupID = value.String
+			}
+		case reviewhistory.FieldReviewedByIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByIdentityHolderID = value.String
+			}
+		case reviewhistory.FieldDelegateName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_name", values[i])
+			} else if value.Valid {
+				_m.DelegateName = value.String
+			}
+		case reviewhistory.FieldDelegateUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_user_id", values[i])
+			} else if value.Valid {
+				_m.DelegateUserID = value.String
+			}
+		case reviewhistory.FieldDelegateGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_group_id", values[i])
+			} else if value.Valid {
+				_m.DelegateGroupID = value.String
+			}
+		case reviewhistory.FieldDelegateIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.DelegateIdentityHolderID = value.String
+			}
 		case reviewhistory.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
@@ -288,6 +396,42 @@ func (_m *ReviewHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case reviewhistory.FieldReviewKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_kind_name", values[i])
+			} else if value.Valid {
+				_m.ReviewKindName = value.String
+			}
+		case reviewhistory.FieldReviewKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_kind_id", values[i])
+			} else if value.Valid {
+				_m.ReviewKindID = value.String
+			}
+		case reviewhistory.FieldReviewClassificationName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_classification_name", values[i])
+			} else if value.Valid {
+				_m.ReviewClassificationName = value.String
+			}
+		case reviewhistory.FieldReviewClassificationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_classification_id", values[i])
+			} else if value.Valid {
+				_m.ReviewClassificationID = value.String
+			}
+		case reviewhistory.FieldReviewStateName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_state_name", values[i])
+			} else if value.Valid {
+				_m.ReviewStateName = value.String
+			}
+		case reviewhistory.FieldReviewStateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_state_id", values[i])
+			} else if value.Valid {
+				_m.ReviewStateID = value.String
 			}
 		case reviewhistory.FieldEnvironmentName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -523,6 +667,42 @@ func (_m *ReviewHistory) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("internal_owner=")
+	builder.WriteString(_m.InternalOwner)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_user_id=")
+	builder.WriteString(_m.InternalOwnerUserID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_group_id=")
+	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by=")
+	builder.WriteString(_m.ReviewedBy)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_user_id=")
+	builder.WriteString(_m.ReviewedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_group_id=")
+	builder.WriteString(_m.ReviewedByGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_identity_holder_id=")
+	builder.WriteString(_m.ReviewedByIdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_name=")
+	builder.WriteString(_m.DelegateName)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_user_id=")
+	builder.WriteString(_m.DelegateUserID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_group_id=")
+	builder.WriteString(_m.DelegateGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_identity_holder_id=")
+	builder.WriteString(_m.DelegateIdentityHolderID)
+	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
@@ -535,6 +715,24 @@ func (_m *ReviewHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("review_kind_name=")
+	builder.WriteString(_m.ReviewKindName)
+	builder.WriteString(", ")
+	builder.WriteString("review_kind_id=")
+	builder.WriteString(_m.ReviewKindID)
+	builder.WriteString(", ")
+	builder.WriteString("review_classification_name=")
+	builder.WriteString(_m.ReviewClassificationName)
+	builder.WriteString(", ")
+	builder.WriteString("review_classification_id=")
+	builder.WriteString(_m.ReviewClassificationID)
+	builder.WriteString(", ")
+	builder.WriteString("review_state_name=")
+	builder.WriteString(_m.ReviewStateName)
+	builder.WriteString(", ")
+	builder.WriteString("review_state_id=")
+	builder.WriteString(_m.ReviewStateID)
 	builder.WriteString(", ")
 	builder.WriteString("environment_name=")
 	builder.WriteString(_m.EnvironmentName)
