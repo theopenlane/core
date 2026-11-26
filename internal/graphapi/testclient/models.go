@@ -25075,7 +25075,7 @@ type OrgMembershipWhereInput struct {
 	OrganizationID      *string           `json:"organizationID,omitempty"`
 	UserID              *string           `json:"userID,omitempty"`
 	HasUserWith         []*UserWhereInput `json:"hasUserWith,omitempty"`
-	IncludeHistory      *bool             `json:"includeHistory,omitempty"`
+	IncludeDeleted      *bool             `json:"includeDeleted,omitempty"`
 }
 
 type OrgSubscription struct {

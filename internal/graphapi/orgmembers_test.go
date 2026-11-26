@@ -1291,7 +1291,7 @@ func TestQueryOrgMembers_IncludesHistory(t *testing.T) {
 	_, err = suite.Client.API.RemoveUserFromOrg(localTestOrg.Owner.UserCtx, resp.CreateOrgMembership.OrgMembership.ID)
 	assert.NilError(t, err)
 
-	t.Run("removed user excluded without includeHistory", func(t *testing.T) {
+	t.Run("removed user excluded without includeDeleted", func(t *testing.T) {
 		members, err := suite.Client.API.GetOrgMembersByOrgID(localTestOrg.Member.UserCtx, &testclient.OrgMembershipWhereInput{})
 		assert.NilError(t, err)
 		assert.Check(t, !lo.ContainsBy(members.OrgMemberships.Edges, func(edge *testclient.GetOrgMembersByOrgID_OrgMemberships_Edges) bool {
@@ -1309,7 +1309,7 @@ func TestQueryOrgMembers_IncludesHistory(t *testing.T) {
 					UserID: &memberUser.ID,
 				},
 			},
-			IncludeHistory: new(true),
+			IncludeDeleted: new(true),
 		})
 		assert.NilError(t, err)
 		assert.Check(t, is.Len(resp.OrgMemberships.Edges, 2))
@@ -1333,7 +1333,7 @@ func TestQueryOrgMembers_IncludesHistory(t *testing.T) {
 	t.Run("another org cannot view removed member", func(t *testing.T) {
 		otherResp, err := suite.Client.API.GetOrgMembersByOrgID(otherOrg.Owner.UserCtx, &testclient.OrgMembershipWhereInput{
 			UserID:         &memberUser.ID,
-			IncludeHistory: new(true),
+			IncludeDeleted: new(true),
 		})
 		assert.NilError(t, err)
 		assert.Check(t, is.Len(otherResp.OrgMemberships.Edges, 0))
@@ -1345,7 +1345,7 @@ func TestQueryOrgMembers_IncludesHistory(t *testing.T) {
 
 		resp, err := suite.Client.API.GetOrgMembersByOrgID(localTestOrg.Member.UserCtx, &testclient.OrgMembershipWhereInput{
 			UserID:         &memberUser.ID,
-			IncludeHistory: new(true),
+			IncludeDeleted: new(true),
 		})
 		assert.NilError(t, err)
 		assert.Check(t, is.Len(resp.OrgMemberships.Edges, 1))

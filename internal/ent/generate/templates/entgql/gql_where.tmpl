@@ -124,7 +124,7 @@ import (
 			{{ $field }} []*{{ $names.WhereInput }} `json:"{{ camel $jsonTag }},omitempty"`
 		{{- end }}
 		{{- if eq $n.Name "OrgMembership" }}
-			IncludeHistory *bool `json:"includeHistory,omitempty"`
+			IncludeDeleted *bool `json:"includeDeleted,omitempty"`
 		{{- end }}
 	}
 

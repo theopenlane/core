@@ -4,5 +4,5 @@ extend type OrgMembership {
 }
 
 extend input OrgMembershipWhereInput {
-    includeHistory: Boolean
+    includeDeleted: Boolean
 }

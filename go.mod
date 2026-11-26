@@ -119,7 +119,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.38.6
+	github.com/theopenlane/entx v0.38.7-0.20261125222852-b20bd4d71dbf
 	github.com/theopenlane/go-client v0.17.1
 	github.com/theopenlane/gqlgen-plugins v0.19.4
 	github.com/theopenlane/httpsling v0.3.0
@@ -466,5 +466,3 @@ require (
 	mvdan.cc/sh/v3 v3.14.1 // indirect
 	mvdan.cc/sh/x v0.0.0-20260922090537-aebdf2b86f56 // indirect
 )
-
-replace github.com/theopenlane/entx => ../entx

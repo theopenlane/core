@@ -259,7 +259,7 @@ func isRequestIncludingHistory(ctx context.Context) bool {
 		return false
 	}
 
-	return lo.FromPtr(where.IncludeHistory)
+	return lo.FromPtr(where.IncludeDeleted)
 }
 
 func includeRemovedUserEdges(ctx context.Context, members []*generated.OrgMembership) error {

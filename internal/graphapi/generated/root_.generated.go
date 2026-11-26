@@ -156805,7 +156805,7 @@ type OrgMembershipBulkUpdatePayload {
 }
 
 extend input OrgMembershipWhereInput {
-    includeHistory: Boolean
+    includeDeleted: Boolean
 }`, BuiltIn: false},
 	{Name: "../schema/orgsubscription.graphql", Input: `extend type Query {
     """

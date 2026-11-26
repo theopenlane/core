@@ -55156,7 +55156,7 @@ input OrgMembershipWhereInput {
 	organizationID: String
 	userID: String
 	hasUserWith: [UserWhereInput!]
-	includeHistory: Boolean
+	includeDeleted: Boolean
 }
 type OrgSubscription implements Node {
 	id: ID!
