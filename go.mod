@@ -14,7 +14,7 @@ tool (
 require (
 	ariga.io/atlas v1.3.0
 	ariga.io/entcache v0.1.0
-	cel.dev/cel-go v0.33.2
+	cel.dev/cel-go v0.33.4
 	cloud.google.com/go/securitycenter v1.49.1
 	cloud.google.com/go/storage v1.70.0
 	entgo.io/contrib v0.7.0
@@ -29,16 +29,16 @@ require (
 	github.com/alicebob/miniredis/v2 v2.40.0
 	github.com/alitto/pond/v2 v2.7.3
 	github.com/aws/aws-sdk-go-v2 v1.48.0
-	github.com/aws/aws-sdk-go-v2/config v1.33.18
-	github.com/aws/aws-sdk-go-v2/credentials v1.21.0
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.23.24
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.5.7
+	github.com/aws/aws-sdk-go-v2/config v1.33.21
+	github.com/aws/aws-sdk-go-v2/credentials v1.21.3
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.23.28
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.5.11
 	github.com/aws/aws-sdk-go-v2/service/configservice v1.75.0
 	github.com/aws/aws-sdk-go-v2/service/iam v1.66.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.10
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.116.0
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.87.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.52.0
-	github.com/brianvoe/gofakeit/v7 v7.18.6
+	github.com/aws/aws-sdk-go-v2/service/sts v1.53.0
+	github.com/brianvoe/gofakeit/v7 v7.18.10
 	github.com/cenkalti/backoff/v7 v7.0.3
 	github.com/cloudflare/cloudflare-go/v7 v7.15.0
 	github.com/coder/websocket v1.8.15
@@ -59,7 +59,7 @@ require (
 	github.com/google/go-github/v88 v88.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gqlgo/gqlgenc v0.44.0
+	github.com/gqlgo/gqlgenc v0.44.1
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/golang-lru/v2 v2.0.7
 	github.com/invopop/jsonschema v0.14.0
@@ -73,7 +73,7 @@ require (
 	github.com/knadh/koanf/providers/posflag v1.0.2
 	github.com/knadh/koanf/v2 v2.4.1
 	github.com/labstack/echo-contrib v0.50.1
-	github.com/labstack/echo/v4 v4.16.5
+	github.com/labstack/echo/v4 v4.16.6
 	github.com/labstack/gommon v0.5.0
 	github.com/lestrrat-go/httprc/v3 v3.0.6
 	github.com/lestrrat-go/jwx/v4 v4.6.0
@@ -119,8 +119,8 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.38.4
-	github.com/theopenlane/go-client v0.17.1
+	github.com/theopenlane/entx v0.38.7
+	github.com/theopenlane/go-client v0.17.2
 	github.com/theopenlane/gqlgen-plugins v0.19.4
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.42.3
@@ -134,17 +134,17 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/yuin/goldmark/v2 v2.1.16
 	github.com/zitadel/oidc/v3 v3.52.0
-	github.com/zitadel/zitadel-go/v3 v3.30.0
-	goauthentik.io/api/v3 v3.2026080.5
+	github.com/zitadel/zitadel-go/v3 v3.30.1
+	goauthentik.io/api/v3 v3.2026080.6
 	gocloud.dev v0.49.0
 	golang.org/x/crypto v0.59.0
 	golang.org/x/mod v0.43.0
-	golang.org/x/net v0.62.0
+	golang.org/x/net v0.63.0
 	golang.org/x/oauth2 v0.38.0
 	golang.org/x/sync v0.25.0
 	golang.org/x/term v0.48.0
 	golang.org/x/text v0.44.0
-	golang.org/x/tools v0.52.1-0.20261106145633-d407941a339a
+	golang.org/x/tools v0.53.0
 	google.golang.org/api v0.315.0
 	google.golang.org/grpc v1.85.0
 	google.golang.org/protobuf v1.36.12
@@ -197,7 +197,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.13 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.12 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.12 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.13.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.14.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.39.5 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.44.5 // indirect
 	github.com/aws/smithy-go v1.28.9 // indirect
