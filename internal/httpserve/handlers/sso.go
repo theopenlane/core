@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/rout"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 	"golang.org/x/oauth2"
@@ -23,6 +24,8 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/pkg/metrics"
@@ -32,9 +35,7 @@ import (
 const (
 	authenticatedUserSSOCookieName  = "user_sso"
 	authenticatedUserSSOCookieValue = "1"
-	// needed to differentiate between "testing" sso and other sso flows
-	ssoVerificationCookieValue = "test"
-	stateLength                = 16
+	stateLength                     = 16
 )
 
 var ssoNonceContextKey = contextx.NewKey[nonce]()
@@ -70,16 +71,35 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	if in.IsTest {
-		sessions.SetCookie(ctx.Response().Writer, ssoVerificationCookieValue, authenticatedUserSSOCookieName, cfg)
-	}
-
 	out := apimodels.SSOLoginResponse{
 		Success:     true,
 		RedirectURI: authURL,
 	}
 
 	return h.Success(ctx, out)
+}
+
+func (h *Handler) SSOTestHandler(ctx echo.Context) error {
+	reqCtx := ctx.Request().Context()
+
+	caller, ok := auth.InteractiveUserCallerFromContext(reqCtx)
+	if !ok || caller.OrganizationID == "" {
+		return h.Unauthorized(ctx, ErrUnauthorized)
+	}
+
+	if err := rule.CheckCurrentOrgAccess(reqCtx, nil, rule.CanEditOrganizationSetting); !errors.Is(err, privacy.Allow) {
+		return h.Forbidden(ctx, ErrUnauthorized)
+	}
+
+	authURL, err := h.generateSSOAuthURL(ctx, caller.OrganizationID)
+	if err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	return h.Success(ctx, apimodels.SSOLoginResponse{
+		Success:     true,
+		RedirectURI: authURL,
+	})
 }
 
 // SSOInitiateHandler resolves an organization by its public slug and starts the SSO login flow, keyed by
@@ -121,6 +141,16 @@ func (h *Handler) SSOInitiateHandler(ctx echo.Context) error {
 // SSOCallbackHandler completes the OIDC login flow after the user returns from the IdP
 // It validates state/nonce, exchanges the code for tokens, provisions the user if needed, and issues a session
 func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
+	return h.handleSSOCallback(ctx, false)
+}
+
+// SSOTestCallbackHandler completes the OIDC verification flow before SSO can
+// be enforced for an org
+func (h *Handler) SSOTestCallbackHandler(ctx echo.Context) error {
+	return h.handleSSOCallback(ctx, true)
+}
+
+func (h *Handler) handleSSOCallback(ctx echo.Context, isSSOTest bool) error {
 	reqCtx := ctx.Request().Context()
 
 	in, err := BindAndValidate[apimodels.SSOCallbackRequest](ctx)
@@ -175,6 +205,26 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	if _, ok := tokens.IDTokenClaims.Claims["email_verified"]; ok && !bool(tokens.IDTokenClaims.EmailVerified) {
 		metrics.RecordLogin(false)
 		return h.BadRequest(ctx, ErrSSOEmailNotVerified)
+	}
+
+	if isSSOTest {
+		// we need to double check the user is authenticated if they are testing sso auth
+		caller, ok := auth.InteractiveUserCallerFromContext(reqCtx)
+		if !ok || caller.OrganizationID != in.OrganizationID {
+			return h.Forbidden(ctx, ErrUnauthorized)
+		}
+
+		if !strings.EqualFold(caller.SubjectEmail, tokens.IDTokenClaims.Email) {
+			return h.Forbidden(ctx, ErrUnauthorized)
+		}
+
+		if err := h.setIDPAuthTested(reqCtx, in.OrganizationID); err != nil {
+			return err
+		}
+
+		h.clearAuthFlowCookies(ctx.Response().Writer, "state", "nonce", "organization_id")
+
+		return h.Success(ctx, rout.Reply{Success: true})
 	}
 
 	// an existing user can only be signed in by the identity provider of an organization they already belong to
@@ -235,21 +285,6 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	// no need to log err here
-	testCookie, err := sessions.GetCookie(ctx.Request(), authenticatedUserSSOCookieName)
-
-	var hasSSOCookie bool
-
-	if err == nil && testCookie != nil {
-		hasSSOCookie = true
-	}
-
-	isTestingSSO := hasSSOCookie && testCookie.Value == ssoVerificationCookieValue
-
-	hasSSOTestMarker := hasSSOCookie && (isTestingSSO || testCookie.Value == authenticatedUserSSOCookieValue)
-
-	h.clearAuthFlowCookies(ctx.Response().Writer, authenticatedUserSSOCookieName)
-
 	orgStatus, err := h.fetchSSOStatus(auth.WithInternalReadContext(userCtx), in.OrganizationID, entUser.ID)
 
 	// jit may not have created the user early if it is disabled or domain not allowed
@@ -263,13 +298,11 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	if !isTestingSSO {
-		switch {
-		case entUser.Edges.Setting.IsTfaEnabled:
-			return h.startTFAAuthentication(ctx, entUser.ID, in.OrganizationID)
-		case orgStatus.OrgTFAEnforced:
-			return h.startTFAEnrollment(ctx, entUser, in.OrganizationID)
-		}
+	switch {
+	case entUser.Edges.Setting.IsTfaEnabled:
+		return h.startTFAAuthentication(ctx, entUser.ID, in.OrganizationID)
+	case orgStatus.OrgTFAEnforced:
+		return h.startTFAEnrollment(ctx, entUser, in.OrganizationID)
 	}
 
 	// build the OAuth session request
@@ -326,12 +359,6 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		}
 
 		h.clearAuthFlowCookies(ctx.Response().Writer, "token_id", "token_type")
-	}
-
-	if hasSSOTestMarker {
-		if err := h.setIDPAuthTested(userCtx, in.OrganizationID); err != nil {
-			return err
-		}
 	}
 
 	out := apimodels.LoginResponse{

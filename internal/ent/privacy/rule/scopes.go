@@ -13,11 +13,12 @@ import (
 
 	fgamodel "github.com/theopenlane/core/v2/fga/model"
 
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	"github.com/theopenlane/logx"
 )
 
 const (
@@ -30,6 +31,8 @@ const (
 	CanManageIntegrationsRelation = "can_manage_integrations"
 	// CanManageShareLinkRelation is the organization relation required to create, manage, and read share links
 	CanManageShareLinkRelation = "can_manage_share_link"
+	// CanEditOrganizationSetting is the org setting required to edit an org settings
+	CanEditOrganizationSetting = "can_edit_organization_setting"
 )
 
 // scopedRelation returns the scoped relation based on the object type, relation, and operation. A operation is checked for for create, update, delete. If instead a specific relation should be checked, that should be passed instead of the operation

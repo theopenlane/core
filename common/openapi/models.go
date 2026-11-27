@@ -2000,8 +2000,6 @@ type SSOLoginRequest struct {
 	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	// ReturnURL is the return value
 	ReturnURL string `json:"return" query:"return" description:"return url after authentication" example:"https://app.mitb.com"`
-	// IsTest is the is_test value
-	IsTest bool `json:"is_test" query:"is_test" description:"Used when testing the sso was successfully connected"`
 }
 
 // Validate ensures the required fields are set on the SSOLoginRequest
