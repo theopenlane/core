@@ -1102,7 +1102,7 @@ var EntityFields = struct {
 	// VendorMetadata is the vendor_metadata field
 	VendorMetadata FieldDescriptor
 }{
-	Aliases:                               FieldDescriptor{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases", Clearable: true, SourceManaged: true},
+	Aliases:                               FieldDescriptor{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases", Clearable: true, SourceManaged: true, CaseInsensitive: true},
 	AnnualSpend:                           FieldDescriptor{Name: "annual_spend", Label: "AnnualSpend", Type: "float64", InputKey: "annual_spend", Clearable: true},
 	ApprovedForUse:                        FieldDescriptor{Name: "approved_for_use", Label: "ApprovedForUse", Type: "bool", InputKey: "approved_for_use", Clearable: true},
 	AutoRenews:                            FieldDescriptor{Name: "auto_renews", Label: "AutoRenews", Type: "bool", InputKey: "auto_renews", Clearable: true},
@@ -1134,7 +1134,7 @@ var EntityFields = struct {
 	LogoRemoteURL:                         FieldDescriptor{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Clearable: true, SourceManaged: true},
 	MfaEnforced:                           FieldDescriptor{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced", Clearable: true},
 	MfaSupported:                          FieldDescriptor{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported", Clearable: true},
-	Name:                                  FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true, CaseInsensitive: true},
+	Name:                                  FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true, CaseInsensitive: true, MatchAlternatives: []string{"aliases"}},
 	NextReviewAt:                          FieldDescriptor{Name: "next_review_at", Label: "NextReviewAt", Type: "models.DateTime", InputKey: "next_review_at", Clearable: true},
 	ObservedAt:                            FieldDescriptor{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
 	ProvidedServices:                      FieldDescriptor{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services", Clearable: true, SourceManaged: true},

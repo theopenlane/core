@@ -843,13 +843,9 @@ func prefetchLookupMatches(ctx context.Context, db *ent.Client, ownerID string, 
 // keyLookupRows indexes rows by their lookup alternative key
 func keyLookupRows(schema *entityops.Schema, alt entityops.LookupAlternative, rows []json.RawMessage, keyed map[string][]json.RawMessage) {
 	for _, row := range rows {
-		rowValues := make(entityops.LookupValues, len(alt.Fields))
-		for _, name := range alt.Fields {
-			rowValues[name] = entityops.FieldValue(row, name)
+		for _, key := range entityops.LookupRowKeys(schema, alt, row) {
+			keyed[key] = append(keyed[key], row)
 		}
-
-		key := entityops.EncodeLookupKey(schema, alt, rowValues)
-		keyed[key] = append(keyed[key], row)
 	}
 }
 

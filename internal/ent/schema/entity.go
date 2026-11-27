@@ -66,6 +66,7 @@ func (Entity) Fields() []ent.Field {
 				entgql.OrderField("name"),
 				entx.IntegrationMappingField(),
 				entx.FieldCaseInsensitive(),
+				entx.FieldMatchAlternative("aliases"),
 			),
 		field.String("display_name").
 			Comment("The entity's displayed 'friendly' name").
@@ -96,6 +97,7 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entx.IntegrationMappingField(),
+				entx.FieldCaseInsensitive(),
 			).
 			Annotations(entx.CatalogManagedField()...).
 			Optional(),
@@ -463,7 +465,8 @@ func (e Entity) Annotations() []schema.Annotation {
 			StockPersist().
 			Exclude("entity_type_id", "linked_asset_ids").
 			LookupAlternative("domains").
-			LookupAlternative("name"),
+			LookupAlternative("name").
+			LookupAlternative("aliases"),
 	}
 }
 
