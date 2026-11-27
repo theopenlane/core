@@ -18,7 +18,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core/common v1.2.4
 	github.com/theopenlane/core/v2 v2.17.10
-	github.com/theopenlane/go-client v0.17.1
+	github.com/theopenlane/go-client v0.17.2
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.42.3
 	github.com/theopenlane/utils v0.7.4
@@ -51,7 +51,7 @@ require (
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/gqlgo/gqlgenc v0.44.0 // indirect
+	github.com/gqlgo/gqlgenc v0.44.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.33.0 // indirect
 	github.com/hhrutter/tiff v1.0.8 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect
@@ -109,7 +109,7 @@ require (
 	golang.org/x/crypto v0.59.0 // indirect
 	golang.org/x/exp v0.0.0-20261113113407-e3970619a1a4 // indirect
 	golang.org/x/image v0.48.0 // indirect
-	golang.org/x/net v0.62.0 // indirect
+	golang.org/x/net v0.63.0 // indirect
 	golang.org/x/sync v0.25.0 // indirect
 	golang.org/x/sys v0.50.0 // indirect
 	golang.org/x/text v0.44.0 // indirect
