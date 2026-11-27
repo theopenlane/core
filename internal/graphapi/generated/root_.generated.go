@@ -76741,15 +76741,15 @@ input CreateTrustCenterInput {
   """
   Pirsch domain ID
   """
-  pirschDomainID: String
+  pirschDomainID: String @readOnly
   """
   Pirsch ID code
   """
-  pirschIdentificationCode: String
+  pirschIdentificationCode: String @readOnly
   """
   Pirsch access link
   """
-  pirschAccessLink: String
+  pirschAccessLink: String @readOnly
   """
   preview status of the trust center
   """
@@ -131252,15 +131252,15 @@ type TrustCenter implements Node @modules(names: ["trust_center_module"]) {
   """
   Pirsch domain ID
   """
-  pirschDomainID: String
+  pirschDomainID: String @hidden(if: false)
   """
   Pirsch ID code
   """
-  pirschIdentificationCode: String
+  pirschIdentificationCode: String @hidden(if: false)
   """
   Pirsch access link
   """
-  pirschAccessLink: String
+  pirschAccessLink: String @hidden(if: false)
   """
   preview status of the trust center
   """
@@ -135556,7 +135556,7 @@ input UpdateActionPlanInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the kind of the action_plan
   """
@@ -135709,7 +135709,7 @@ input UpdateAssessmentInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -135851,7 +135851,7 @@ input UpdateAssetInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the type of the asset, e.g. technology, domain, device, etc
   """
@@ -136418,7 +136418,7 @@ input UpdateControlImplementationInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   status of the %s, e.g. draft, published, archived, etc.
   """
@@ -136569,7 +136569,7 @@ input UpdateControlInput {
   category id of the control
   """
   categoryID: String @externalReadOnly(source: FRAMEWORK)
-  clearCategoryID: Boolean
+  clearCategoryID: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   subcategory of the control
   """
@@ -136638,7 +136638,7 @@ input UpdateControlInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the kind of the control
   """
@@ -136801,7 +136801,7 @@ input UpdateControlObjectiveInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the name of the control objective
   """
@@ -136902,7 +136902,7 @@ input UpdateCustomDomainInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the ID of the trust center the domain belongs to, if applicable
   """
@@ -136932,7 +136932,7 @@ input UpdateCustomTypeEnumInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   The description of the custom type
   """
@@ -137441,7 +137441,7 @@ input UpdateEmailTemplateInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   stable identifier for the template
   """
@@ -137587,7 +137587,7 @@ input UpdateEntityInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   whether this system-owned row is published for organizations to adopt
   """
@@ -137927,7 +137927,7 @@ input UpdateEntityTypeInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the name of the entity
   """
@@ -138171,7 +138171,7 @@ input UpdateFileInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the environment of the file
   """
@@ -138402,7 +138402,7 @@ input UpdateFindingInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the environment of the finding
   """
@@ -138973,7 +138973,7 @@ input UpdateHushInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the logical name of the corresponding hush secret or it's general grouping
   """
@@ -139244,7 +139244,7 @@ input UpdateInternalPolicyInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the name of the policy
   """
@@ -139514,7 +139514,7 @@ input UpdateMappedControlInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
@@ -139583,7 +139583,7 @@ input UpdateNarrativeInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the name of the narrative
   """
@@ -139822,7 +139822,7 @@ input UpdateNotificationTemplateInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   stable identifier for the template
   """
@@ -140897,7 +140897,7 @@ input UpdateProcedureInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the kind of the procedure
   """
@@ -141175,7 +141175,7 @@ input UpdateRemediationInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the environment of the remediation
   """
@@ -141428,7 +141428,7 @@ input UpdateReviewInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the environment of the review
   """
@@ -141887,7 +141887,7 @@ input UpdateScanInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   who reviewed the scan when no user, group, or identity holder is linked
   """
@@ -142067,7 +142067,7 @@ input UpdateStandardInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the long name of the standard body
   """
@@ -142247,7 +142247,7 @@ input UpdateSubcontrolInput {
   category id of the control
   """
   categoryID: String @externalReadOnly(source: FRAMEWORK)
-  clearCategoryID: Boolean
+  clearCategoryID: Boolean @externalReadOnly(source: FRAMEWORK)
   """
   subcategory of the control
   """
@@ -142316,7 +142316,7 @@ input UpdateSubcontrolInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the kind of the subcontrol
   """
@@ -142431,7 +142431,7 @@ input UpdateSubprocessorInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   name of the standard body
   """
@@ -142598,7 +142598,7 @@ input UpdateTagDefinitionInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   common aliases or misspellings for the tag definition
   """
@@ -142821,7 +142821,7 @@ input UpdateTemplateInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the environment of the template
   """
@@ -143020,18 +143020,18 @@ input UpdateTrustCenterInput {
   """
   Pirsch domain ID
   """
-  pirschDomainID: String
-  clearPirschDomainID: Boolean
+  pirschDomainID: String @readOnly
+  clearPirschDomainID: Boolean @readOnly
   """
   Pirsch ID code
   """
-  pirschIdentificationCode: String
-  clearPirschIdentificationCode: Boolean
+  pirschIdentificationCode: String @readOnly
+  clearPirschIdentificationCode: Boolean @readOnly
   """
   Pirsch access link
   """
-  pirschAccessLink: String
-  clearPirschAccessLink: Boolean
+  pirschAccessLink: String @readOnly
+  clearPirschAccessLink: Boolean @readOnly
   """
   preview status of the trust center
   """
@@ -143713,7 +143713,7 @@ input UpdateVulnerabilityInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   the environment of the vulnerability
   """
@@ -144042,7 +144042,7 @@ input UpdateWorkflowDefinitionInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
+  clearSystemInternalID: Boolean @readOnly
   """
   Name of the workflow definition
   """

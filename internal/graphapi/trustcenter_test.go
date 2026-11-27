@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/v2/internal/controls"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
@@ -15,6 +17,7 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -604,6 +607,102 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 	}
 
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+}
+
+func TestMutationTrustCenter_AdminOnlyDirective(t *testing.T) {
+	t.Parallel()
+
+	freshOrg := th.CreateFreshOrgWithTrustCenter(t)
+
+	ownerCtx := freshOrg.Owner.UserCtx
+
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(ownerCtx, t)
+	})
+
+	// add existing shared user so we can reuse client
+	(&th.OrgMemberBuilder{
+		Client: suite.Client,
+		UserID: th.SharedTestUser1.ID,
+		Role:   enums.RoleAdmin.String(),
+	}).MustNew(ownerCtx, t)
+
+	t.Run("system admin can update pirsch fields", func(t *testing.T) {
+		input := testclient.UpdateTrustCenterInput{
+			PirschDomainID:           lo.ToPtr(ulids.New().String()),
+			PirschIdentificationCode: lo.ToPtr(ulids.New().String()),
+			PirschAccessLink:         lo.ToPtr("https://pirsch.theopenlane.io/access"),
+		}
+		_, err := suite.Client.API.UpdateTrustCenter(th.SharedSystemAdminUser.UserCtx, freshOrg.TrustCenter.ID, input)
+		assert.NilError(t, err)
+
+		resp, err := suite.Client.API.GetTrustCenterByID(th.SharedSystemAdminUser.UserCtx, freshOrg.TrustCenter.ID)
+		assert.NilError(t, err)
+
+		assert.DeepEqual(t, resp.TrustCenter.PirschDomainID, input.PirschDomainID)
+		assert.DeepEqual(t, resp.TrustCenter.PirschIdentificationCode, input.PirschIdentificationCode)
+		assert.DeepEqual(t, resp.TrustCenter.PirschAccessLink, input.PirschAccessLink)
+	})
+
+	tt := []struct {
+		name  string
+		input testclient.UpdateTrustCenterInput
+	}{
+		{
+			name: "cannot set domain ID",
+			input: testclient.UpdateTrustCenterInput{
+				PirschDomainID: lo.ToPtr(ulids.New().String()),
+			},
+		},
+		{
+			name: "cannot set identification code",
+			input: testclient.UpdateTrustCenterInput{
+				PirschIdentificationCode: lo.ToPtr(ulids.New().String()),
+			},
+		},
+		{
+			name: "cannot set access link",
+			input: testclient.UpdateTrustCenterInput{
+				PirschAccessLink: lo.ToPtr("https://pirsch.theopenlane.io/other-access"),
+			},
+		},
+		{
+			name: "cannot clear domain ID",
+			input: testclient.UpdateTrustCenterInput{
+				ClearPirschDomainID: new(true),
+			},
+		},
+		{
+			name: "cannot clear identification code",
+			input: testclient.UpdateTrustCenterInput{
+				ClearPirschIdentificationCode: new(true),
+			},
+		},
+		{
+			name: "cannot clear access link",
+			input: testclient.UpdateTrustCenterInput{
+				ClearPirschAccessLink: new(true),
+			},
+		},
+		{
+			name: "cannot set all Pirsch fields",
+			input: testclient.UpdateTrustCenterInput{
+				PirschDomainID:           lo.ToPtr(ulids.New().String()),
+				PirschIdentificationCode: lo.ToPtr(ulids.New().String()),
+				PirschAccessLink:         lo.ToPtr("https://pirsch.theopenlane.io/other-access"),
+			},
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+
+			orgAdminCtx := auth.NewTestContextWithOrgID(th.SharedTestUser1.ID, freshOrg.OrganizationID, auth.WithOrganizationRole(auth.AdminRole))
+
+			_, err := suite.Client.API.UpdateTrustCenter(orgAdminCtx, freshOrg.TrustCenter.ID, tc.input)
+			assert.ErrorContains(t, err, "attempted to set read only field")
+		})
+	}
 }
 
 func TestMutationDeleteTrustCenter(t *testing.T) {

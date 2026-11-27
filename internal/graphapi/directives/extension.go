@@ -7,7 +7,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
-	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -155,7 +154,7 @@ func setDirectiveOnInput(f *ast.FieldDefinition, object *ast.Definition, t *ast.
 			f.Directives = append(f.Directives, dir)
 
 			// if the field is marked with the directiveName, we also need to make the clear<FieldName> field marked with the directiveName
-			clearField := "clear" + strcase.UpperCamelCase(f.Name)
+			clearField := "clear" + strings.ToUpper(f.Name[:1]) + f.Name[1:]
 			if t.Fields.ForName(clearField) != nil {
 				t.Fields.ForName(clearField).Directives = append(t.Fields.ForName(clearField).Directives, dir)
 			}
