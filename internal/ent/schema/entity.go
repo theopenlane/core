@@ -65,6 +65,8 @@ func (Entity) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 				entx.IntegrationMappingField(),
+				entx.FieldCaseInsensitive(),
+				entx.FieldMatchAlternative("aliases"),
 			),
 		field.String("display_name").
 			Comment("The entity's displayed 'friendly' name").
@@ -87,6 +89,7 @@ func (Entity) Fields() []ent.Field {
 		field.Strings("domains").
 			Comment("domains associated with the entity").
 			Validate(validator.ValidateDomains()).
+			Annotations(entx.FieldCaseInsensitive()).
 			Annotations(entx.CatalogManagedField()...).
 			Optional(),
 		field.Strings("aliases").
@@ -94,6 +97,7 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entx.IntegrationMappingField(),
+				entx.FieldCaseInsensitive(),
 			).
 			Annotations(entx.CatalogManagedField()...).
 			Optional(),
@@ -459,7 +463,10 @@ func (e Entity) Annotations() []schema.Annotation {
 		entx.NewExportable(),
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			Exclude("entity_type_id", "linked_asset_ids"),
+			Exclude("entity_type_id", "linked_asset_ids").
+			LookupAlternative("domains").
+			LookupAlternative("name").
+			LookupAlternative("aliases"),
 	}
 }
 

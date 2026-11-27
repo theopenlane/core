@@ -51,7 +51,7 @@ func (TagDefinition) Fields() []ent.Field {
 		field.String("name").
 			Comment("The name of the tag definition").
 			Immutable().
-			Annotations(entx.FieldSearchable(), entgql.OrderField("name")).
+			Annotations(entx.FieldSearchable(), entgql.OrderField("name"), entx.FieldMatchAlternative("aliases")).
 			SchemaType(map[string]string{
 				dialect.Postgres: "citext",
 			}).

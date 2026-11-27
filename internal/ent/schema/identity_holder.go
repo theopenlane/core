@@ -65,6 +65,8 @@ func (IdentityHolder) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("email"),
+				entx.FieldCaseInsensitive(),
+				entx.FieldMatchAlternative("email_aliases"),
 			).
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
@@ -89,6 +91,7 @@ func (IdentityHolder) Fields() []ent.Field {
 		field.Strings("email_aliases").
 			Comment("alternate email address for the identity holder in an array").
 			Optional().
+			Annotations(entx.FieldCaseInsensitive()).
 			Validate(func(emails []string) error {
 				for _, e := range emails {
 					_, err := mail.ParseAddress(e)

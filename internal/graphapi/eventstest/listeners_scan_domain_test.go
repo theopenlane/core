@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -232,8 +233,86 @@ func TestImportDomainScanReviewRequiresCreatePermissions(t *testing.T) {
 			}, "import should create the vendor entity")
 
 			if tc.withPlatform {
-				assert.Check(t, domainScanPlatformLinked(ctx, t, platformName, domainScan.ID))
+				waitForCondition(t, func() bool {
+					return domainScanPlatformLinked(ctx, t, platformName, domainScan.ID)
+				}, "import should create the platform linked to the scan")
 			}
+		})
+	}
+}
+
+func TestImportDomainScanReviewReusesExistingVendor(t *testing.T) {
+	org := suite.SeedFreshMinimalOrgUsers(t, false)
+	owner := org.Owner
+	ctx := owner.UserCtx
+
+	domainScan := createProcessingDomainScan(ctx, t, owner.OrganizationID)
+
+	testCases := []struct {
+		name           string
+		existingName   string
+		existingDomain string
+		importedName   string
+		importedDomain string
+	}{
+		{
+			name:           "matches by domain ignoring case",
+			existingName:   "Existing Domain Vendor",
+			existingDomain: "Reuse.Example.com",
+			importedName:   "Scanned Vendor",
+			importedDomain: "reuse.example.com",
+		},
+		{
+			name:         "matches by name ignoring case",
+			existingName: "Existing Name Vendor",
+			importedName: "EXISTING NAME VENDOR",
+		},
+		{
+			name:           "falls back to name when the domain is new",
+			existingName:   "Existing Fallback Vendor",
+			importedName:   "Existing Fallback Vendor",
+			importedDomain: "fallback.example.com",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			create := suite.Client.DB.Entity.Create().
+				SetOwnerID(owner.OrganizationID).
+				SetName(tc.existingName).
+				SetDisplayName(tc.existingName)
+
+			if tc.existingDomain != "" {
+				create.SetDomains([]string{tc.existingDomain})
+			}
+
+			existing, err := create.Save(ctx)
+			assert.NilError(t, err)
+
+			before, err := suite.Client.DB.Entity.Query().Where(entity.OwnerIDEQ(owner.OrganizationID)).Count(ctx)
+			assert.NilError(t, err)
+
+			input := domainScanReviewInput(domainScan.ID, tc.importedName)
+			input.Vendors[0].Domain = lo.EmptyableToPtr(tc.importedDomain)
+
+			_, err = suite.Client.API.ImportDomainScanReview(ctx, input)
+			assert.NilError(t, err)
+
+			waitForCondition(t, func() bool {
+				linked, err := suite.Client.DB.Entity.Query().Where(entity.ID(existing.ID), entity.HasScansWith(scan.ID(domainScan.ID))).Exist(ctx)
+				assert.NilError(t, err)
+
+				return linked
+			}, "import should link the existing vendor to the scan")
+
+			after, err := suite.Client.DB.Entity.Query().Where(entity.OwnerIDEQ(owner.OrganizationID)).Count(ctx)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(after, before))
+
+			reloaded, err := suite.Client.DB.Entity.Get(ctx, existing.ID)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(reloaded.Name, tc.existingName))
+			assert.Check(t, is.Equal(reloaded.DisplayName, tc.existingName))
 		})
 	}
 }

@@ -68,6 +68,7 @@ func (Subcontrol) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("ref_code"),
+				entx.FieldMatchAlternative("aliases"),
 				directives.ExternalSourceDirectiveAnnotation,
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleStatementID,

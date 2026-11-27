@@ -103,6 +103,7 @@ func PrefetchLinkTargets(ctx context.Context, client *generated.Client, ownerID 
 		}
 
 		field := link.Target.KeyMatch.TargetField
+		descriptor, _ := edge.Target.FieldByName(field)
 
 		for _, chunk := range lo.Chunk(values, ingestQueryChunkSize) {
 			rows, err := edge.Target.QueryByKey(ctx, client, ownerID, field, chunk)
@@ -112,13 +113,14 @@ func PrefetchLinkTargets(ctx context.Context, client *generated.Client, ownerID 
 
 			byValue := map[string][]json.RawMessage{}
 			for _, row := range rows {
-				value := lookupValue(row, field)
-				byValue[value] = append(byValue[value], row)
+				for _, value := range rowMatchValues(edge.Target, row, field) {
+					byValue[value] = append(byValue[value], row)
+				}
 			}
 
 			for _, value := range chunk {
 				key := linkTargetCacheKey{schema: edge.Target.Snake, field: field, value: value}
-				cache[key] = append(cache[key], byValue[value]...)
+				cache[key] = append(cache[key], byValue[lookupCacheValue(descriptor, value)]...)
 			}
 		}
 	}

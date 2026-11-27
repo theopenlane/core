@@ -191,6 +191,11 @@ func EdgeExternalIDKey(schema *entityops.Schema, edge string) string {
 	return externalIDMatch.payloadKey(schema, edge)
 }
 
+// EdgeNameKey is the payload key EdgeKeyLinks reads the names schema's edge links to from
+func EdgeNameKey(schema *entityops.Schema, edge string) string {
+	return nameMatch.payloadKey(schema, edge)
+}
+
 // EdgeExternalIDEntry binds a CEL expression producing the external ids schema's edge links to
 func EdgeExternalIDEntry(schema *entityops.Schema, edge, expr string) entityops.MappingEntry {
 	return entityops.MappingEntry{Key: EdgeExternalIDKey(schema, edge), Expr: expr}
