@@ -95,7 +95,7 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 			return errNoPaymentMethodAttached
 		}
 
-		logx.FromContext(ctx).Info().Msg("org has no payment method, but their trial is active, skipping requiring payment method")
+		logx.FromContext(ctx).Info().Msg("org has no payment method, but their subscription is active, skipping requiring payment method")
 
 		return privacy.Skip
 	})
