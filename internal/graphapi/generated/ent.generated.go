@@ -167258,7 +167258,25 @@ func (ec *executionContext) _TrustCenter_pirschDomainID(ctx context.Context, fie
 		func(ctx context.Context) (any, error) {
 			return obj.PirschDomainID, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				ifArg, err := ec.unmarshalOBoolean2ᚖbool(ctx, false)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				if ec.Directives.Hidden == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive hidden is not implemented")
+				}
+				return ec.Directives.Hidden(ctx, obj, directive0, ifArg)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -167281,7 +167299,25 @@ func (ec *executionContext) _TrustCenter_pirschIdentificationCode(ctx context.Co
 		func(ctx context.Context) (any, error) {
 			return obj.PirschIdentificationCode, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				ifArg, err := ec.unmarshalOBoolean2ᚖbool(ctx, false)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				if ec.Directives.Hidden == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive hidden is not implemented")
+				}
+				return ec.Directives.Hidden(ctx, obj, directive0, ifArg)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -167304,7 +167340,25 @@ func (ec *executionContext) _TrustCenter_pirschAccessLink(ctx context.Context, f
 		func(ctx context.Context) (any, error) {
 			return obj.PirschAccessLink, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				ifArg, err := ec.unmarshalOBoolean2ᚖbool(ctx, false)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				if ec.Directives.Hidden == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive hidden is not implemented")
+				}
+				return ec.Directives.Hidden(ctx, obj, directive0, ifArg)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -235720,25 +235774,76 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterInput(ctx context.Con
 			it.Tags = data
 		case "pirschDomainID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pirschDomainID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.PirschDomainID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.PirschDomainID = data
+			} else if tmp == nil {
+				it.PirschDomainID = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "pirschIdentificationCode":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pirschIdentificationCode"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.PirschIdentificationCode = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.PirschIdentificationCode = data
+			} else if tmp == nil {
+				it.PirschIdentificationCode = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "pirschAccessLink":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pirschAccessLink"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.PirschAccessLink = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.PirschAccessLink = data
+			} else if tmp == nil {
+				it.PirschAccessLink = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "previewStatus":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("previewStatus"))
 			data, err := ec.unmarshalOTrustCenterTrustCenterPreviewStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTrustCenterPreviewStatus(ctx, v)
@@ -362383,11 +362488,26 @@ func (ec *executionContext) unmarshalInputUpdateActionPlanInput(ctx context.Cont
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "actionPlanKindName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("actionPlanKindName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -363127,11 +363247,26 @@ func (ec *executionContext) unmarshalInputUpdateAssessmentInput(ctx context.Cont
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "workflowEligibleMarker":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowEligibleMarker"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -363757,11 +363892,26 @@ func (ec *executionContext) unmarshalInputUpdateAssetInput(ctx context.Context, 
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "assetType":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assetType"))
 			data, err := ec.unmarshalOAssetAssetType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssetType(ctx, v)
@@ -366249,11 +366399,26 @@ func (ec *executionContext) unmarshalInputUpdateControlImplementationInput(ctx c
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "status":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
 			data, err := ec.unmarshalOControlImplementationDocumentStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDocumentStatus(ctx, v)
@@ -367029,11 +367194,31 @@ func (ec *executionContext) unmarshalInputUpdateControlInput(ctx context.Context
 			}
 		case "clearCategoryID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCategoryID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				source, err := ec.unmarshalOControlControlSource2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐControlSource(ctx, "FRAMEWORK")
+				if err != nil {
+					var zeroVal bool
+					return zeroVal, err
+				}
+				if ec.Directives.ExternalReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive externalReadOnly is not implemented")
+				}
+				return ec.Directives.ExternalReadOnly(ctx, obj, directive0, source)
 			}
-			it.ClearCategoryID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearCategoryID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "subcategory":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subcategory"))
 			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
@@ -367351,11 +367536,26 @@ func (ec *executionContext) unmarshalInputUpdateControlInput(ctx context.Context
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "controlKindName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlKindName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -368349,11 +368549,26 @@ func (ec *executionContext) unmarshalInputUpdateControlObjectiveInput(ctx contex
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -368876,11 +369091,26 @@ func (ec *executionContext) unmarshalInputUpdateCustomDomainInput(ctx context.Co
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "trustCenterID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trustCenterID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -369044,11 +369274,26 @@ func (ec *executionContext) unmarshalInputUpdateCustomTypeEnumInput(ctx context.
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "description":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -371113,11 +371358,26 @@ func (ec *executionContext) unmarshalInputUpdateEmailTemplateInput(ctx context.C
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "key":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -371694,11 +371954,26 @@ func (ec *executionContext) unmarshalInputUpdateEntityInput(ctx context.Context,
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "externallyVisible":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externallyVisible"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -373222,11 +373497,26 @@ func (ec *executionContext) unmarshalInputUpdateEntityTypeInput(ctx context.Cont
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -374444,11 +374734,26 @@ func (ec *executionContext) unmarshalInputUpdateFileInput(ctx context.Context, o
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -375445,11 +375750,26 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -378299,11 +378619,26 @@ func (ec *executionContext) unmarshalInputUpdateHushInput(ctx context.Context, o
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -379496,11 +379831,26 @@ func (ec *executionContext) unmarshalInputUpdateInternalPolicyInput(ctx context.
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -380796,11 +381146,26 @@ func (ec *executionContext) unmarshalInputUpdateMappedControlInput(ctx context.C
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "mappingType":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("mappingType"))
 			data, err := ec.unmarshalOMappedControlMappingType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐMappingType(ctx, v)
@@ -381153,11 +381518,26 @@ func (ec *executionContext) unmarshalInputUpdateNarrativeInput(ctx context.Conte
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -382175,11 +382555,26 @@ func (ec *executionContext) unmarshalInputUpdateNotificationTemplateInput(ctx co
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "key":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -387165,11 +387560,26 @@ func (ec *executionContext) unmarshalInputUpdateProcedureInput(ctx context.Conte
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "procedureKindName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("procedureKindName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -388623,11 +389033,26 @@ func (ec *executionContext) unmarshalInputUpdateRemediationInput(ctx context.Con
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -389771,11 +390196,26 @@ func (ec *executionContext) unmarshalInputUpdateReviewInput(ctx context.Context,
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -391920,11 +392360,26 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "reviewedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -392795,11 +393250,26 @@ func (ec *executionContext) unmarshalInputUpdateStandardInput(ctx context.Contex
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -393704,11 +394174,31 @@ func (ec *executionContext) unmarshalInputUpdateSubcontrolInput(ctx context.Cont
 			}
 		case "clearCategoryID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCategoryID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				source, err := ec.unmarshalOControlControlSource2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐControlSource(ctx, "FRAMEWORK")
+				if err != nil {
+					var zeroVal bool
+					return zeroVal, err
+				}
+				if ec.Directives.ExternalReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive externalReadOnly is not implemented")
+				}
+				return ec.Directives.ExternalReadOnly(ctx, obj, directive0, source)
 			}
-			it.ClearCategoryID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearCategoryID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "subcategory":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subcategory"))
 			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
@@ -394026,11 +394516,26 @@ func (ec *executionContext) unmarshalInputUpdateSubcontrolInput(ctx context.Cont
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "subcontrolKindName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subcontrolKindName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -394793,11 +395298,26 @@ func (ec *executionContext) unmarshalInputUpdateSubprocessorInput(ctx context.Co
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -395530,11 +396050,26 @@ func (ec *executionContext) unmarshalInputUpdateTagDefinitionInput(ctx context.C
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "aliases":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("aliases"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
@@ -396599,11 +397134,26 @@ func (ec *executionContext) unmarshalInputUpdateTemplateInput(ctx context.Contex
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -397513,46 +398063,142 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterInput(ctx context.Con
 			it.ClearTags = data
 		case "pirschDomainID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pirschDomainID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.PirschDomainID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.PirschDomainID = data
+			} else if tmp == nil {
+				it.PirschDomainID = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "clearPirschDomainID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPirschDomainID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearPirschDomainID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearPirschDomainID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "pirschIdentificationCode":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pirschIdentificationCode"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.PirschIdentificationCode = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.PirschIdentificationCode = data
+			} else if tmp == nil {
+				it.PirschIdentificationCode = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "clearPirschIdentificationCode":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPirschIdentificationCode"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearPirschIdentificationCode = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearPirschIdentificationCode = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "pirschAccessLink":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pirschAccessLink"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.PirschAccessLink = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.PirschAccessLink = data
+			} else if tmp == nil {
+				it.PirschAccessLink = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "clearPirschAccessLink":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPirschAccessLink"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearPirschAccessLink = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearPirschAccessLink = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "previewStatus":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("previewStatus"))
 			data, err := ec.unmarshalOTrustCenterTrustCenterPreviewStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTrustCenterPreviewStatus(ctx, v)
@@ -400424,11 +401070,26 @@ func (ec *executionContext) unmarshalInputUpdateVulnerabilityInput(ctx context.C
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -401800,11 +402461,26 @@ func (ec *executionContext) unmarshalInputUpdateWorkflowDefinitionInput(ctx cont
 			}
 		case "clearSystemInternalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
 			}
-			it.ClearSystemInternalID = data
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearSystemInternalID = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)

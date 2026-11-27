@@ -75,7 +75,7 @@ func NewReadOnlyDirective() entgql.Directive {
 
 // ReadOnlyDirectiveAnnotation is an annotation that can be used to mark a field as read only
 var ReadOnlyDirectiveAnnotation = entgql.Directives(
-	NewReadOnlyDirective(),
+	NewHiddenDirective(false),
 )
 
 // ReadOnlyDirective is the implementation for the readOnly directive that can be used to mark input fields as read only
@@ -93,12 +93,7 @@ var ReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Resolver) 
 		return next(ctx)
 	}
 
-	if checkFieldSet(ctx, noSkip) {
-		return nil, ErrReadOnlyField
-	}
-
-	// otherwise, continue to the next resolver
-	return next(ctx)
+	return nil, ErrReadOnlyField
 }
 
 // NewExternalReadyOnlyDirective returns a new hidden directive with the value set
@@ -252,9 +247,4 @@ var skipCreateOperations = func(operationContext *graphql.OperationContext) bool
 	// skip if the source is nil, this means the directive was applied to an object
 	// and not a field, so we don't need to check if the field is being set
 	return strings.Contains(operationContext.Operation.Name, "Create")
-}
-
-// noSkip is a helper function that can be used to never skip any operations
-var noSkip = func(_ *graphql.OperationContext) bool {
-	return false
 }

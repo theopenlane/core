@@ -19648,15 +19648,15 @@ type TrustCenterHistory implements Node {
   """
   Pirsch domain ID
   """
-  pirschDomainID: String
+  pirschDomainID: String @hidden(if: false)
   """
   Pirsch ID code
   """
-  pirschIdentificationCode: String
+  pirschIdentificationCode: String @hidden(if: false)
   """
   Pirsch access link
   """
-  pirschAccessLink: String
+  pirschAccessLink: String @hidden(if: false)
   """
   preview status of the trust center
   """

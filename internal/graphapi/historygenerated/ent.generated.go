@@ -59288,7 +59288,25 @@ func (ec *executionContext) _TrustCenterHistory_pirschDomainID(ctx context.Conte
 		func(ctx context.Context) (any, error) {
 			return obj.PirschDomainID, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				ifArg, err := ec.unmarshalOBoolean2ᚖbool(ctx, false)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				if ec.Directives.Hidden == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive hidden is not implemented")
+				}
+				return ec.Directives.Hidden(ctx, obj, directive0, ifArg)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -59311,7 +59329,25 @@ func (ec *executionContext) _TrustCenterHistory_pirschIdentificationCode(ctx con
 		func(ctx context.Context) (any, error) {
 			return obj.PirschIdentificationCode, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				ifArg, err := ec.unmarshalOBoolean2ᚖbool(ctx, false)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				if ec.Directives.Hidden == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive hidden is not implemented")
+				}
+				return ec.Directives.Hidden(ctx, obj, directive0, ifArg)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -59334,7 +59370,25 @@ func (ec *executionContext) _TrustCenterHistory_pirschAccessLink(ctx context.Con
 		func(ctx context.Context) (any, error) {
 			return obj.PirschAccessLink, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				ifArg, err := ec.unmarshalOBoolean2ᚖbool(ctx, false)
+				if err != nil {
+					var zeroVal string
+					return zeroVal, err
+				}
+				if ec.Directives.Hidden == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive hidden is not implemented")
+				}
+				return ec.Directives.Hidden(ctx, obj, directive0, ifArg)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},

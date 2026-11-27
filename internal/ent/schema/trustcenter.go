@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/graphapi/directives"
 )
 
 const (
@@ -73,12 +74,21 @@ func (TrustCenter) Fields() []ent.Field {
 			Optional(),
 		field.String("pirsch_domain_id").
 			Comment("Pirsch domain ID").
+			Annotations(
+				directives.ReadOnlyDirectiveAnnotation,
+			).
 			Optional(),
 		field.String("pirsch_identification_code").
 			Comment("Pirsch ID code").
+			Annotations(
+				directives.ReadOnlyDirectiveAnnotation,
+			).
 			Optional(),
 		field.String("pirsch_access_link").
 			Comment("Pirsch access link").
+			Annotations(
+				directives.ReadOnlyDirectiveAnnotation,
+			).
 			Validate(validator.ValidateURL()).
 			Optional(),
 		field.Enum("preview_status").
