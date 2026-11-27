@@ -82,7 +82,7 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 		}
 
 		if client.EntitlementManager == nil {
-			return errNoPaymentMethodAttached
+			return nil
 		}
 
 		activeOrgs, err := client.OrgSubscription.Query().
