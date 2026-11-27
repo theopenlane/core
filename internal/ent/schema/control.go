@@ -60,6 +60,7 @@ func (Control) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entx.FieldWebhookPayloadField(),
 				entgql.OrderField("ref_code"),
+				entx.FieldMatchAlternative("aliases"),
 				directives.ExternalSourceDirectiveAnnotation,
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleControlID,
