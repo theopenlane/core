@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"entgo.io/ent"
+	"github.com/samber/lo"
 
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/iam/auth"
@@ -24,10 +25,14 @@ var (
 	errNoPaymentMethodAttached = errors.New("A valid payment method is required to create tokens. Contact your organization admin to add one in billing.") //nolint:staticcheck,revive
 )
 
+type paymentRequiredMutation interface {
+	OrganizationsIDs() []string
+}
+
 // RequirePaymentMethod makes sure the organization has a payment method ( card or any other)
 // added to stripe already
 func RequirePaymentMethod() privacy.MutationRuleFunc {
-	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
+	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
 		client := generated.FromContext(ctx)
 
 		caller, ok := auth.CallerFromContext(ctx)
@@ -40,42 +45,58 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 			return privacy.Skip
 		}
 
-		orgSetting, err := client.OrganizationSetting.Query().
-			Where(organizationsetting.OrganizationID(caller.OrganizationID)).
-			Select(organizationsetting.FieldPaymentMethodAdded).
-			Only(ctx)
+		// early return
+		_, domain, hasEmailAt := strings.Cut(caller.SubjectEmail, "@")
+		if hasEmailAt && slices.Contains(client.EntConfig.Billing.BypassEmailDomains, domain) {
+			return privacy.Skip
+		}
+
+		orgIDs := []string{caller.OrganizationID}
+
+		if orgMutation, ok := m.(paymentRequiredMutation); ok {
+			orgIDs = append(orgIDs, orgMutation.OrganizationsIDs()...)
+		}
+
+		orgIDs = lo.Uniq(orgIDs)
+
+		queryCtx := auth.WithInternalReadCrossOrgContext(ctx)
+
+		// get all orgs with a payment method. get the set difference between all the orgs provided in the mutation
+		// and these paid ones then we can check those to see if they have an active sub.
+		orgsWithPaymentMethod, err := client.OrganizationSetting.Query().
+			Where(
+				organizationsetting.OrganizationIDIn(orgIDs...),
+				organizationsetting.PaymentMethodAdded(true),
+			).
+			Select(organizationsetting.FieldOrganizationID).
+			Strings(queryCtx)
 		if err != nil {
 			logx.FromContext(ctx).Err(err).Msg("failed to fetch organization from db")
 
 			return err
 		}
 
-		if orgSetting.PaymentMethodAdded {
-			// evaluate next rule
+		missingOrgIDs := lo.Without(orgIDs, orgsWithPaymentMethod...)
+		if len(missingOrgIDs) == 0 {
 			return privacy.Skip
 		}
 
-		emailDomain := strings.SplitAfter(caller.SubjectEmail, "@")[1]
-
-		if slices.Contains(client.EntConfig.Billing.BypassEmailDomains, emailDomain) {
+		if client.EntitlementManager == nil {
 			return privacy.Skip
 		}
 
-		// if enititlements enabled, additional check for active sub instead of requireming payment method
-		if client.EntitlementManager != nil {
-			// fallback to check on org sub status, an active status
-			orgSubscription, err := client.OrgSubscription.Query().
-				Where(orgsubscription.OwnerID(caller.OrganizationID)).
-				Select(orgsubscription.FieldStripeSubscriptionStatus).
-				Only(ctx)
-
-			if err == nil && orgSubscription.StripeSubscriptionStatus == string(stripe.SubscriptionStatusActive) {
-				logx.FromContext(ctx).Info().Msg("org has no payment method, but their trial is active, skipping requiring payment method")
-
-				return privacy.Skip
-			}
+		activeOrgs, err := client.OrgSubscription.Query().
+			Where(
+				orgsubscription.OwnerIDIn(missingOrgIDs...),
+				orgsubscription.StripeSubscriptionStatusEQ(string(stripe.SubscriptionStatusActive)),
+			).
+			Count(queryCtx)
+		if err != nil || activeOrgs < len(missingOrgIDs) {
+			return errNoPaymentMethodAttached
 		}
 
-		return errNoPaymentMethodAttached
+		logx.FromContext(ctx).Info().Msg("org has no payment method, but their subscription is active, skipping requiring payment method")
+
+		return privacy.Skip
 	})
 }

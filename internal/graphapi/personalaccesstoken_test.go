@@ -8,10 +8,12 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 
@@ -433,4 +435,73 @@ func TestLastUsedPersonalAccessToken(t *testing.T) {
 		Client: suite.Client.DB.PersonalAccessToken,
 		ID:     token.ID,
 	}).MustDelete(th.SharedTestUser1.UserCtx, t)
+}
+
+func TestPAT_CrossOrganizationMutation(t *testing.T) {
+	t.Parallel()
+
+	multiOrgUser := suite.UserBuilder(context.Background(), t)
+
+	noPaymentMethodOrg := (&th.OrganizationBuilder{
+		Client: suite.Client,
+	}).MustNew(multiOrgUser.UserCtx, t)
+
+	noPaymentOrgCtx := th.SetUserContext(
+		auth.NewTestContextWithOrgID(multiOrgUser.ID, noPaymentMethodOrg.ID, auth.WithOrganizationRole(auth.OwnerRole)),
+		suite.Client.DB,
+	)
+
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(multiOrgUser.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(noPaymentOrgCtx, t)
+	})
+
+	err := suite.Client.DB.OrganizationSetting.Update().
+		Where(organizationsetting.OrganizationID(multiOrgUser.OrganizationID)).
+		SetPaymentMethodAdded(true).
+		Exec(th.SetInternalContext(multiOrgUser.UserCtx, suite.Client.DB))
+	assert.NilError(t, err)
+
+	entCfg := *suite.Client.DB.EntConfig
+	entCfg.Billing.RequirePaymentMethod = true
+
+	db := *suite.Client.DB
+	db.EntConfig = &entCfg
+
+	client, err := testutils.TestClient(&db, suite.Client.ObjectStore)
+	assert.NilError(t, err)
+
+	validOrgCtx := th.SetUserContext(auth.WithCaller(context.Background(), &auth.Caller{
+		SubjectID:        multiOrgUser.ID,
+		SubjectEmail:     multiOrgUser.UserInfo.Email,
+		OrganizationID:   multiOrgUser.OrganizationID,
+		OrganizationIDs:  []string{multiOrgUser.OrganizationID},
+		OrganizationRole: auth.OwnerRole,
+	}), &db)
+
+	existingResp, err := client.CreatePersonalAccessToken(validOrgCtx, testclient.CreatePersonalAccessTokenInput{
+		Name:            "valid pat",
+		OrganizationIDs: []string{multiOrgUser.OrganizationID},
+	})
+	assert.NilError(t, err)
+
+	t.Run("cannot create PAT for org without a payment method", func(t *testing.T) {
+		_, err := client.CreatePersonalAccessToken(validOrgCtx, testclient.CreatePersonalAccessTokenInput{
+			Name:            "invalid pat",
+			OrganizationIDs: []string{noPaymentMethodOrg.ID},
+		})
+
+		assert.ErrorContains(t, err, "valid payment method is required")
+	})
+
+	t.Run("cannot update valid PAT edges to add org without a payment method", func(t *testing.T) {
+		_, err := client.UpdatePersonalAccessToken(validOrgCtx, existingResp.CreatePersonalAccessToken.PersonalAccessToken.ID, testclient.UpdatePersonalAccessTokenInput{
+			AddOrganizationIDs: []string{noPaymentMethodOrg.ID},
+		})
+
+		assert.ErrorContains(t, err, "valid payment method is required")
+	})
+
+	(&th.Cleanup[*generated.PersonalAccessTokenDeleteOne]{Client: suite.Client.DB.PersonalAccessToken, ID: existingResp.CreatePersonalAccessToken.PersonalAccessToken.ID}).
+		MustDelete(multiOrgUser.UserCtx, t)
 }
