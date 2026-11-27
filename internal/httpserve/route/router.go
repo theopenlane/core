@@ -418,6 +418,8 @@ func RegisterRoutes(router *Router) error {
 		registerCSRFHandler,
 		registerWebfingerHandler,
 		registerSSOLoginHandler,
+		registerSSOTestHandler,
+		registerSSOTestCallbackHandler,
 		registerSSOInitiateHandler,
 		registerSSOCallbackHandler,
 		registerSSOTokenAuthorizeHandler,
