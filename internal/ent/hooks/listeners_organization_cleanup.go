@@ -25,7 +25,8 @@ func OrganizationCleanupListeners() []gala.Registration {
 			Schema:     entityops.SchemaOrganization,
 			Operations: []string{entityops.OpSoftDelete},
 			Caller: func(_ *auth.Caller, payload entityops.MutationPayload) *auth.Caller {
-				return auth.NewOrgInternalCaller(payload.EntityID)
+				return auth.NewOrgInternalCaller(payload.EntityID).
+					WithCapabilities(auth.CapSystemSweep)
 			},
 			ContextKeys: []func(context.Context) context.Context{
 				entx.SkipSoftDelete,
