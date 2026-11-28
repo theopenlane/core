@@ -16,7 +16,7 @@ import (
 
 	"github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
