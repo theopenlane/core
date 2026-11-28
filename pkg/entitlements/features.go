@@ -3,7 +3,7 @@ package entitlements
 import (
 	"context"
 
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 )
 
 // GetFeatureByLookupKey retrieves the first entitlements feature matching the lookup key.

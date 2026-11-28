@@ -14,7 +14,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 	"gotest.tools/v3/assert"
 
 	"github.com/redis/go-redis/v9"

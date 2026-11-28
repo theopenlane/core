@@ -4,7 +4,7 @@ import (
 	"bytes"
 
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 )
 
 // MockStripeBackend mock for Stripe Backend interface

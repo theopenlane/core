@@ -9,7 +9,7 @@ import (
 
 	"github.com/riverqueue/river"
 	"github.com/samber/lo"
-	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v87"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
